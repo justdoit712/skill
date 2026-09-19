@@ -1,3 +1,0 @@
-Phase Stability of Vacancy-Rich SnSe Synthesized by MBE
-
-We synthesized SnSe films with controlled Se vacancy concentrations by molecular beam epitaxy. Experimental synthesis shows severe phase separation above 5% Se vacancy concentration, inconsistent with single-phase assumptions. Below this threshold, single-phase SnSe is maintained with tunable carrier density.
