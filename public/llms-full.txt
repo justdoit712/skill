@@ -1,0 +1,688 @@
+# llms-full.txt - AI Agent 技能商店 全量精简版
+
+> 本文件遵循 llms.txt 标准 (https://llmstxt.org)
+> 提供站点全量技能列表的精简文本版，方便 AI 引擎一次性吸收。
+
+## 站点信息
+
+- 名称: AI Agent 技能商店 (Skill Store)
+- 仓库: https://github.com/anbeime/skill
+- 主页: https://skill.miyucaicai.cn
+- 兄弟项目: https://solar.miyucaicai.cn
+- 上游技能源最近更新: 2026-06-16T07:12:45.706491
+- 自动爬取技能数: 141
+- 本地精选技能数: 61
+- 技能总数（README 公布口径）: 243
+
+## 数据来源
+
+- 上游 awesome 仓库: https://github.com/VoltAgent/awesome-agent-skills （每 24 小时同步）
+- 本地仓库 README: https://github.com/anbeime/skill/blob/main/README.md
+- 完整源 JSON: https://github.com/anbeime/skill/blob/main/SKILL_SOURCES.json
+
+## 官方技能来源（顶级团队）
+
+本技能商店收录了来自以下顶级团队的官方技能：
+
+- **Anthropic** (17个) - docx, pptx, xlsx, pdf, mcp-builder, webapp-testing 等
+- **Vercel** (7个) - react-best-practices, next-best-practices, composition-patterns 等
+- **Cloudflare** (7个) - agents-sdk, durable-objects, wrangler 等
+- **Trail of Bits** (26个) - building-secure-contracts, static-analysis, property-based-testing 等
+- **Hugging Face** (8个) - model-trainer, datasets, evaluation, jobs 等
+- **Google Labs** (2个) - design-md, react-components 等
+- **Stripe** (2个) - stripe-best-practices, upgrade-stripe
+- **Supabase** (1个) - postgres-best-practices
+- **Expo** (3个) - expo-app-design, expo-deployment, upgrading-expo
+- **Sentry** (7个) - code-review, commit, create-pr, find-bugs 等
+- **Better Auth** (3个) - best-practices, commands, create-auth
+- **其他团队** - Tinybird, Remotion, Inngest 等
+
+## 自动同步技能列表（按贡献者/组织聚合）
+
+以下 141 个技能由每日爬虫从 awesome-agent-skills 自动同步。
+格式：`owner/repo  ←  upstream_source  ←  discovered_at`
+
+### makenotion (2)
+
+- [makenotion/claude-code-notion-plugin](https://github.com/makenotion/claude-code-notion-plugin)  ←  voltagent_awesome  ←  2026-03-30
+- [makenotion/notion-cookbook](https://github.com/makenotion/notion-cookbook)  ←  voltagent_awesome  ←  2026-03-30
+
+### obra (2)
+
+- [obra/superpowers](https://github.com/obra/superpowers)  ←  voltagent_awesome  ←  2026-02-28
+- [obra/superpowers-lab](https://github.com/obra/superpowers-lab)  ←  voltagent_awesome  ←  2026-02-28
+
+### op7418 (2)
+
+- [op7418/NanoBanana-PPT-Skills](https://github.com/op7418/NanoBanana-PPT-Skills)  ←  voltagent_awesome  ←  2026-02-28
+- [op7418/Youtube-clipper-skill](https://github.com/op7418/Youtube-clipper-skill)  ←  voltagent_awesome  ←  2026-02-28
+
+### SHADOWPR0 (2)
+
+- [SHADOWPR0/beautiful_prose](https://github.com/SHADOWPR0/beautiful_prose)  ←  voltagent_awesome  ←  2026-02-28
+- [SHADOWPR0/security-bluebook-builder](https://github.com/SHADOWPR0/security-bluebook-builder)  ←  voltagent_awesome  ←  2026-02-28
+
+### VoltAgent (2)
+
+- [VoltAgent/awesome-codex-subagents](https://github.com/VoltAgent/awesome-codex-subagents)  ←  voltagent_awesome  ←  2026-03-20
+- [VoltAgent/voltagent](https://github.com/VoltAgent/voltagent)  ←  voltagent_awesome  ←  2026-02-28
+
+### wrsmith108 (2)
+
+- [wrsmith108/linear-claude-skill](https://github.com/wrsmith108/linear-claude-skill)  ←  voltagent_awesome  ←  2026-02-28
+- [wrsmith108/varlock-claude-skill](https://github.com/wrsmith108/varlock-claude-skill)  ←  voltagent_awesome  ←  2026-02-28
+
+### Xquik-dev (2)
+
+- [Xquik-dev/tweetclaw](https://github.com/Xquik-dev/tweetclaw)  ←  voltagent_awesome  ←  2026-03-18
+- [Xquik-dev/x-twitter-scraper](https://github.com/Xquik-dev/x-twitter-scraper)  ←  voltagent_awesome  ←  2026-05-09
+
+### AgriciDaniel (1)
+
+- [AgriciDaniel/claude-seo](https://github.com/AgriciDaniel/claude-seo)  ←  voltagent_awesome  ←  2026-02-28
+
+### aklofas (1)
+
+- [aklofas/kicad-happy](https://github.com/aklofas/kicad-happy)  ←  voltagent_awesome  ←  2026-04-16
+
+### alinaqi (1)
+
+- [alinaqi/claude-bootstrap](https://github.com/alinaqi/claude-bootstrap)  ←  voltagent_awesome  ←  2026-02-28
+
+### angular (1)
+
+- [angular/skills](https://github.com/angular/skills)  ←  voltagent_awesome  ←  2026-04-21
+
+### antonbabenko (1)
+
+- [antonbabenko/terraform-skill](https://github.com/antonbabenko/terraform-skill)  ←  voltagent_awesome  ←  2026-02-28
+
+### AvdLee (1)
+
+- [AvdLee/SwiftUI-Agent-Skill](https://github.com/AvdLee/SwiftUI-Agent-Skill)  ←  voltagent_awesome  ←  2026-02-28
+
+### awrshift (1)
+
+- [awrshift/claude-memory-kit](https://github.com/awrshift/claude-memory-kit)  ←  voltagent_awesome  ←  2026-04-21
+
+### BehiSecc (1)
+
+- [BehiSecc/VibeSec-Skill](https://github.com/BehiSecc/VibeSec-Skill)  ←  voltagent_awesome  ←  2026-03-04
+
+### bitwize-music-studio (1)
+
+- [bitwize-music-studio/claude-ai-music-skills](https://github.com/bitwize-music-studio/claude-ai-music-skills)  ←  voltagent_awesome  ←  2026-03-27
+
+### blader (1)
+
+- [blader/humanizer](https://github.com/blader/humanizer)  ←  voltagent_awesome  ←  2026-02-28
+
+### BrianRWagner (1)
+
+- [BrianRWagner/ai-marketing-skills](https://github.com/BrianRWagner/ai-marketing-skills)  ←  voltagent_awesome  ←  2026-02-28
+
+### Charlie85270 (1)
+
+- [Charlie85270/Dorothy](https://github.com/Charlie85270/Dorothy)  ←  voltagent_awesome  ←  2026-03-11
+
+### CloudAI-X (1)
+
+- [CloudAI-X/threejs-skills](https://github.com/CloudAI-X/threejs-skills)  ←  voltagent_awesome  ←  2026-02-28
+
+### coderabbitai (1)
+
+- [coderabbitai/skills](https://github.com/coderabbitai/skills)  ←  voltagent_awesome  ←  2026-03-27
+
+### conorluddy (1)
+
+- [conorluddy/ios-simulator-skill](https://github.com/conorluddy/ios-simulator-skill)  ←  voltagent_awesome  ←  2026-02-28
+
+### coreyhaines31 (1)
+
+- [coreyhaines31/marketingskills](https://github.com/coreyhaines31/marketingskills)  ←  voltagent_awesome  ←  2026-02-28
+
+### CosmoBlk (1)
+
+- [CosmoBlk/email-marketing-bible](https://github.com/CosmoBlk/email-marketing-bible)  ←  voltagent_awesome  ←  2026-02-28
+
+### cypress-io (1)
+
+- [cypress-io/ai-toolkit](https://github.com/cypress-io/ai-toolkit)  ←  voltagent_awesome  ←  2026-06-06
+
+### czlonkowski (1)
+
+- [czlonkowski/n8n-skills](https://github.com/czlonkowski/n8n-skills)  ←  voltagent_awesome  ←  2026-02-28
+
+### deanpeters (1)
+
+- [deanpeters/Product-Manager-Skills](https://github.com/deanpeters/Product-Manager-Skills)  ←  voltagent_awesome  ←  2026-03-04
+
+### degausai (1)
+
+- [degausai/wonda](https://github.com/degausai/wonda)  ←  voltagent_awesome  ←  2026-04-17
+
+### dembrandt (1)
+
+- [dembrandt/dembrandt-skills](https://github.com/dembrandt/dembrandt-skills)  ←  voltagent_awesome  ←  2026-05-25
+
+### deusyu (1)
+
+- [deusyu/translate-book](https://github.com/deusyu/translate-book)  ←  voltagent_awesome  ←  2026-03-24
+
+### Digidai (1)
+
+- [Digidai/product-manager-skills](https://github.com/Digidai/product-manager-skills)  ←  voltagent_awesome  ←  2026-03-18
+
+### efremidze (1)
+
+- [efremidze/swift-patterns-skill](https://github.com/efremidze/swift-patterns-skill)  ←  voltagent_awesome  ←  2026-02-28
+
+### ehmo (1)
+
+- [ehmo/platform-design-skills](https://github.com/ehmo/platform-design-skills)  ←  voltagent_awesome  ←  2026-02-28
+
+### en (1)
+
+- [en/copilot](https://github.com/en/copilot)  ←  voltagent_awesome  ←  2026-02-28
+
+### Ericyoung-183 (1)
+
+- [Ericyoung-183/alpha-insights](https://github.com/Ericyoung-183/alpha-insights)  ←  voltagent_awesome  ←  2026-06-13
+
+### Eronred (1)
+
+- [Eronred/aso-skills](https://github.com/Eronred/aso-skills)  ←  voltagent_awesome  ←  2026-03-26
+
+### ethos-link (1)
+
+- [ethos-link/rails-conventions](https://github.com/ethos-link/rails-conventions)  ←  voltagent_awesome  ←  2026-03-19
+
+### EveryInc (1)
+
+- [EveryInc/charlie-cfo-skill](https://github.com/EveryInc/charlie-cfo-skill)  ←  voltagent_awesome  ←  2026-02-28
+
+### foryourhealth111-pixel (1)
+
+- [foryourhealth111-pixel/Vibe-Skills](https://github.com/foryourhealth111-pixel/Vibe-Skills)  ←  voltagent_awesome  ←  2026-05-04
+
+### frmoretto (1)
+
+- [frmoretto/clarity-gate](https://github.com/frmoretto/clarity-gate)  ←  voltagent_awesome  ←  2026-02-28
+
+### fvadicamo (1)
+
+- [fvadicamo/dev-agent-skills](https://github.com/fvadicamo/dev-agent-skills)  ←  voltagent_awesome  ←  2026-02-28
+
+### GanyuanRan (1)
+
+- [GanyuanRan/Aegis](https://github.com/GanyuanRan/Aegis)  ←  voltagent_awesome  ←  2026-06-13
+
+### gitroomhq (1)
+
+- [gitroomhq/postiz-agent](https://github.com/gitroomhq/postiz-agent)  ←  voltagent_awesome  ←  2026-04-21
+
+### gokapso (1)
+
+- [gokapso/agent-skills](https://github.com/gokapso/agent-skills)  ←  voltagent_awesome  ←  2026-02-28
+
+### google (1)
+
+- [google/skills](https://github.com/google/skills)  ←  voltagent_awesome  ←  2026-05-25
+
+### hamelsmu (1)
+
+- [hamelsmu/prompts](https://github.com/hamelsmu/prompts)  ←  voltagent_awesome  ←  2026-03-05
+
+### hanfang (1)
+
+- [hanfang/claude-memory-skill](https://github.com/hanfang/claude-memory-skill)  ←  voltagent_awesome  ←  2026-02-28
+
+### helius-labs (1)
+
+- [helius-labs/core-ai](https://github.com/helius-labs/core-ai)  ←  voltagent_awesome  ←  2026-03-19
+
+### HeshamFS (1)
+
+- [HeshamFS/materials-simulation-skills](https://github.com/HeshamFS/materials-simulation-skills)  ←  voltagent_awesome  ←  2026-02-28
+
+### honeydew-ai (1)
+
+- [honeydew-ai/honeydew-ai-coding-agents-plugins](https://github.com/honeydew-ai/honeydew-ai-coding-agents-plugins)  ←  voltagent_awesome  ←  2026-05-11
+
+### hqhq1025 (1)
+
+- [hqhq1025/skill-optimizer](https://github.com/hqhq1025/skill-optimizer)  ←  voltagent_awesome  ←  2026-04-14
+
+### huifer (1)
+
+- [huifer/Claude-Ally-Health](https://github.com/huifer/Claude-Ally-Health)  ←  voltagent_awesome  ←  2026-02-28
+
+### ibelick (1)
+
+- [ibelick/ui-skills](https://github.com/ibelick/ui-skills)  ←  voltagent_awesome  ←  2026-02-28
+
+### indranilbanerjee (1)
+
+- [indranilbanerjee/digital-marketing-pro](https://github.com/indranilbanerjee/digital-marketing-pro)  ←  voltagent_awesome  ←  2026-05-25
+
+### infrasity-labs (1)
+
+- [infrasity-labs/dev-gtm-claude-skills](https://github.com/infrasity-labs/dev-gtm-claude-skills)  ←  voltagent_awesome  ←  2026-06-13
+
+### jeffersonwarrior (1)
+
+- [jeffersonwarrior/claudisms](https://github.com/jeffersonwarrior/claudisms)  ←  voltagent_awesome  ←  2026-02-28
+
+### Joannis (1)
+
+- [Joannis/claude-skills](https://github.com/Joannis/claude-skills)  ←  voltagent_awesome  ←  2026-02-28
+
+### jthack (1)
+
+- [jthack/ffuf_claude_skill](https://github.com/jthack/ffuf_claude_skill)  ←  voltagent_awesome  ←  2026-02-28
+
+### K-Dense-AI (1)
+
+- [K-Dense-AI/claude-scientific-skills](https://github.com/K-Dense-AI/claude-scientific-skills)  ←  voltagent_awesome  ←  2026-02-28
+
+### k-kolomeitsev (1)
+
+- [k-kolomeitsev/data-structure-protocol](https://github.com/k-kolomeitsev/data-structure-protocol)  ←  voltagent_awesome  ←  2026-02-28
+
+### Kevin7Qi (1)
+
+- [Kevin7Qi/codex-collab](https://github.com/Kevin7Qi/codex-collab)  ←  voltagent_awesome  ←  2026-03-18
+
+### komal-SkyNET (1)
+
+- [komal-SkyNET/claude-skill-homeassistant](https://github.com/komal-SkyNET/claude-skill-homeassistant)  ←  voltagent_awesome  ←  2026-02-28
+
+### kreuzberg-dev (1)
+
+- [kreuzberg-dev/kreuzberg](https://github.com/kreuzberg-dev/kreuzberg)  ←  voltagent_awesome  ←  2026-02-28
+
+### lackeyjb (1)
+
+- [lackeyjb/playwright-skill](https://github.com/lackeyjb/playwright-skill)  ←  voltagent_awesome  ←  2026-02-28
+
+### LambdaTest (1)
+
+- [LambdaTest/agent-skills](https://github.com/LambdaTest/agent-skills)  ←  voltagent_awesome  ←  2026-04-17
+
+### lawvable (1)
+
+- [lawvable/awesome-legal-skills](https://github.com/lawvable/awesome-legal-skills)  ←  voltagent_awesome  ←  2026-02-28
+
+### Leonxlnx (1)
+
+- [Leonxlnx/taste-skill](https://github.com/Leonxlnx/taste-skill)  ←  voltagent_awesome  ←  2026-02-28
+
+### Lum1104 (1)
+
+- [Lum1104/Understand-Anything](https://github.com/Lum1104/Understand-Anything)  ←  voltagent_awesome  ←  2026-04-11
+
+### massimodeluisa (1)
+
+- [massimodeluisa/recursive-decomposition-skill](https://github.com/massimodeluisa/recursive-decomposition-skill)  ←  voltagent_awesome  ←  2026-02-28
+
+### mattpocock (1)
+
+- [mattpocock/skills](https://github.com/mattpocock/skills)  ←  voltagent_awesome  ←  2026-03-24
+
+### mcollina (1)
+
+- [mcollina/skills](https://github.com/mcollina/skills)  ←  voltagent_awesome  ←  2026-03-26
+
+### meodai (1)
+
+- [meodai/skill](https://github.com/meodai/skill)  ←  voltagent_awesome  ←  2026-03-26
+
+### metalbear-co (1)
+
+- [metalbear-co/skills](https://github.com/metalbear-co/skills)  ←  voltagent_awesome  ←  2026-05-05
+
+### MohamedAbdallah-14 (1)
+
+- [MohamedAbdallah-14/unslop](https://github.com/MohamedAbdallah-14/unslop)  ←  voltagent_awesome  ←  2026-05-04
+
+### more-io (1)
+
+- [more-io/claude-apple-bridges](https://github.com/more-io/claude-apple-bridges)  ←  voltagent_awesome  ←  2026-03-02
+
+### mukul975 (1)
+
+- [mukul975/Anthropic-Cybersecurity-Skills](https://github.com/mukul975/Anthropic-Cybersecurity-Skills)  ←  voltagent_awesome  ←  2026-03-24
+
+### muratcankoylan (1)
+
+- [muratcankoylan/Agent-Skills-for-Context-Engineering](https://github.com/muratcankoylan/Agent-Skills-for-Context-Engineering)  ←  voltagent_awesome  ←  2026-02-28
+
+### muthuishere (1)
+
+- [muthuishere/hand-drawn-diagrams](https://github.com/muthuishere/hand-drawn-diagrams)  ←  voltagent_awesome  ←  2026-03-24
+
+### mvanhorn (1)
+
+- [mvanhorn/last30days-skill](https://github.com/mvanhorn/last30days-skill)  ←  voltagent_awesome  ←  2026-04-12
+
+### NeoLabHQ (1)
+
+- [NeoLabHQ/context-engineering-kit](https://github.com/NeoLabHQ/context-engineering-kit)  ←  voltagent_awesome  ←  2026-03-05
+
+### nextlevelbuilder (1)
+
+- [nextlevelbuilder/ui-ux-pro-max-skill](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill)  ←  voltagent_awesome  ←  2026-02-28
+
+### NoizAI (1)
+
+- [NoizAI/skills](https://github.com/NoizAI/skills)  ←  voltagent_awesome  ←  2026-03-09
+
+### NotMyself (1)
+
+- [NotMyself/claude-win11-speckit-update-skill](https://github.com/NotMyself/claude-win11-speckit-update-skill)  ←  voltagent_awesome  ←  2026-02-28
+
+### NVIDIA (1)
+
+- [NVIDIA/skills](https://github.com/NVIDIA/skills)  ←  voltagent_awesome  ←  2026-05-25
+
+### ognjengt (1)
+
+- [ognjengt/founder-skills](https://github.com/ognjengt/founder-skills)  ←  voltagent_awesome  ←  2026-02-28
+
+### omkamal (1)
+
+- [omkamal/pypict-claude-skill](https://github.com/omkamal/pypict-claude-skill)  ←  voltagent_awesome  ←  2026-02-28
+
+### openaccountants (1)
+
+- [openaccountants/openaccountants](https://github.com/openaccountants/openaccountants)  ←  voltagent_awesome  ←  2026-04-17
+
+### openai (1)
+
+- [openai/skills/create-plan](https://github.com/openai/skills/create-plan)  ←  openai_skills  ←  2026-02-28
+
+### Orchestra-Research (1)
+
+- [Orchestra-Research/AI-research-SKILLs](https://github.com/Orchestra-Research/AI-research-SKILLs)  ←  voltagent_awesome  ←  2026-02-28
+
+### Paramchoudhary (1)
+
+- [Paramchoudhary/ResumeSkills](https://github.com/Paramchoudhary/ResumeSkills)  ←  voltagent_awesome  ←  2026-02-28
+
+### phuryn (1)
+
+- [phuryn/pm-skills](https://github.com/phuryn/pm-skills)  ←  voltagent_awesome  ←  2026-03-07
+
+### PleasePrompto (1)
+
+- [PleasePrompto/notebooklm-skill](https://github.com/PleasePrompto/notebooklm-skill)  ←  voltagent_awesome  ←  2026-02-28
+
+### prompt-security (1)
+
+- [prompt-security/clawsec](https://github.com/prompt-security/clawsec)  ←  voltagent_awesome  ←  2026-02-28
+
+### PSPDFKit-labs (1)
+
+- [PSPDFKit-labs/nutrient-agent-skill](https://github.com/PSPDFKit-labs/nutrient-agent-skill)  ←  voltagent_awesome  ←  2026-02-28
+
+### qdrant (1)
+
+- [qdrant/skills](https://github.com/qdrant/skills)  ←  voltagent_awesome  ←  2026-04-05
+
+### raintree-technology (1)
+
+- [raintree-technology/apple-hig-skills](https://github.com/raintree-technology/apple-hig-skills)  ←  voltagent_awesome  ←  2026-02-28
+
+### rameerez (1)
+
+- [rameerez/claude-code-startup-skills](https://github.com/rameerez/claude-code-startup-skills)  ←  voltagent_awesome  ←  2026-02-28
+
+### ramzesenok (1)
+
+- [ramzesenok/iOS-Accessibility-Audit-Skill](https://github.com/ramzesenok/iOS-Accessibility-Audit-Skill)  ←  voltagent_awesome  ←  2026-03-03
+
+### realkimbarrett (1)
+
+- [realkimbarrett/advertising-skills](https://github.com/realkimbarrett/advertising-skills)  ←  voltagent_awesome  ←  2026-04-12
+
+### redis (1)
+
+- [redis/agent-skills](https://github.com/redis/agent-skills)  ←  voltagent_awesome  ←  2026-05-04
+
+### ReScienceLab (1)
+
+- [ReScienceLab/opc-skills](https://github.com/ReScienceLab/opc-skills)  ←  voltagent_awesome  ←  2026-02-28
+
+### resend (1)
+
+- [resend/resend-skills](https://github.com/resend/resend-skills)  ←  voltagent_awesome  ←  2026-04-05
+
+### robzolkos (1)
+
+- [robzolkos/skill-rails-upgrade](https://github.com/robzolkos/skill-rails-upgrade)  ←  voltagent_awesome  ←  2026-02-28
+
+### Rootly-AI-Labs (1)
+
+- [Rootly-AI-Labs/Rootly-MCP-server](https://github.com/Rootly-AI-Labs/Rootly-MCP-server)  ←  voltagent_awesome  ←  2026-02-28
+
+### RoundTable02 (1)
+
+- [RoundTable02/tutor-skills](https://github.com/RoundTable02/tutor-skills)  ←  voltagent_awesome  ←  2026-03-02
+
+### rudrankriyam (1)
+
+- [rudrankriyam/app-store-connect-cli-skills](https://github.com/rudrankriyam/app-store-connect-cli-skills)  ←  voltagent_awesome  ←  2026-02-28
+
+### sanjay3290 (1)
+
+- [sanjay3290/ai-skills](https://github.com/sanjay3290/ai-skills)  ←  voltagent_awesome  ←  2026-02-28
+
+### santifer (1)
+
+- [santifer/career-ops](https://github.com/santifer/career-ops)  ←  voltagent_awesome  ←  2026-05-25
+
+### scarletkc (1)
+
+- [scarletkc/vexor](https://github.com/scarletkc/vexor)  ←  voltagent_awesome  ←  2026-02-28
+
+### SeanZoR (1)
+
+- [SeanZoR/claude-speed-reader](https://github.com/SeanZoR/claude-speed-reader)  ←  voltagent_awesome  ←  2026-02-28
+
+### Shpigford (1)
+
+- [Shpigford/skills](https://github.com/Shpigford/skills)  ←  voltagent_awesome  ←  2026-02-28
+
+### ShunsukeHayashi (1)
+
+- [ShunsukeHayashi/agent-skill-bus](https://github.com/ShunsukeHayashi/agent-skill-bus)  ←  voltagent_awesome  ←  2026-03-24
+
+### smixs (1)
+
+- [smixs/creative-director-skill](https://github.com/smixs/creative-director-skill)  ←  voltagent_awesome  ←  2026-03-02
+
+### snyk (1)
+
+- [snyk/agent-scan](https://github.com/snyk/agent-scan)  ←  voltagent_awesome  ←  2026-02-28
+
+### takechanman1228 (1)
+
+- [takechanman1228/claude-ecom](https://github.com/takechanman1228/claude-ecom)  ←  voltagent_awesome  ←  2026-03-13
+
+### talkstream (1)
+
+- [talkstream/ru-text](https://github.com/talkstream/ru-text)  ←  voltagent_awesome  ←  2026-04-02
+
+### testdino-hq (1)
+
+- [testdino-hq/playwright-skill](https://github.com/testdino-hq/playwright-skill)  ←  voltagent_awesome  ←  2026-03-04
+
+### transloadit (1)
+
+- [transloadit/skills](https://github.com/transloadit/skills)  ←  voltagent_awesome  ←  2026-02-28
+
+### truongduy2611 (1)
+
+- [truongduy2611/app-store-preflight-skills](https://github.com/truongduy2611/app-store-preflight-skills)  ←  voltagent_awesome  ←  2026-03-24
+
+### trycourier (1)
+
+- [trycourier/courier-skills](https://github.com/trycourier/courier-skills)  ←  voltagent_awesome  ←  2026-04-05
+
+### user-attachments (1)
+
+- [user-attachments/assets](https://github.com/user-attachments/assets)  ←  voltagent_awesome  ←  2026-02-28
+
+### uucz (1)
+
+- [uucz/moyu](https://github.com/uucz/moyu)  ←  voltagent_awesome  ←  2026-03-25
+
+### veniceai (1)
+
+- [veniceai/skills](https://github.com/veniceai/skills)  ←  voltagent_awesome  ←  2026-04-26
+
+### video-db (1)
+
+- [video-db/skills](https://github.com/video-db/skills)  ←  voltagent_awesome  ←  2026-03-07
+
+### voidborne-d (1)
+
+- [voidborne-d/humanize-chinese](https://github.com/voidborne-d/humanize-chinese)  ←  voltagent_awesome  ←  2026-05-04
+
+### wanshuiyin (1)
+
+- [wanshuiyin/Auto-claude-code-research-in-sleep](https://github.com/wanshuiyin/Auto-claude-code-research-in-sleep)  ←  voltagent_awesome  ←  2026-03-13
+
+### wshuyi (1)
+
+- [wshuyi/x-article-publisher-skill](https://github.com/wshuyi/x-article-publisher-skill)  ←  voltagent_awesome  ←  2026-02-28
+
+### yusufkaraaslan (1)
+
+- [yusufkaraaslan/Skill_Seekers](https://github.com/yusufkaraaslan/Skill_Seekers)  ←  voltagent_awesome  ←  2026-02-28
+
+### zarazhangrui (1)
+
+- [zarazhangrui/frontend-slides](https://github.com/zarazhangrui/frontend-slides)  ←  voltagent_awesome  ←  2026-02-28
+
+### zechenzhangAGI (1)
+
+- [zechenzhangAGI/AI-research-SKILLs](https://github.com/zechenzhangAGI/AI-research-SKILLs)  ←  voltagent_awesome  ←  2026-02-28
+
+### ZhangHanDong (1)
+
+- [ZhangHanDong/makepad-skills](https://github.com/ZhangHanDong/makepad-skills)  ←  voltagent_awesome  ←  2026-02-28
+
+### zscole (1)
+
+- [zscole/model-hierarchy-skill](https://github.com/zscole/model-hierarchy-skill)  ←  voltagent_awesome  ←  2026-02-28
+
+### zw008 (1)
+
+- [zw008/VMware-AIops](https://github.com/zw008/VMware-AIops)  ←  voltagent_awesome  ←  2026-03-02
+
+### zxkane (1)
+
+- [zxkane/aws-skills](https://github.com/zxkane/aws-skills)  ←  voltagent_awesome  ←  2026-02-28
+
+## 本地精选技能（61 个，中文垂直领域）
+
+#### 📝 内容创作与发布（10个）
+- **content-creation-publisher** ⭐⭐⭐⭐⭐ - 内容创作与发布全流程
+- **intelligent-content-system** ⭐⭐⭐⭐⭐ - 智能内容系统
+- **article-illustrator** ⭐⭐⭐⭐ - 文章智能配图
+- **baoyu-url-to-markdown** ⭐⭐⭐⭐ - 网页转Markdown
+- **baoyu-format-markdown** ⭐⭐⭐⭐ - Markdown格式化
+- **baoyu-post-to-wechat** ⭐⭐⭐⭐ - 微信公众号发布
+- **baoyu-post-to-x** ⭐⭐⭐ - X/Twitter发布
+- **baoyu-xhs-images** ⭐⭐⭐⭐ - 小红书图文生成
+- **wechat-hotspot-publisher** ⭐⭐⭐ - 微信热点文章生成
+
+#### 🎬 视频创作（9个）
+- **video-creation-suite** ⭐⭐⭐⭐⭐ - 完整视频创作套件
+- **video-creation-collaborator** ⭐⭐⭐⭐ - 多智能体协同视频创作
+- **video-creation-pro** ⭐⭐⭐ - 商品视频创作系统
+- **video-recreation** ⭐⭐⭐⭐ - 视频二创工具
+- **video-frame-extractor** ⭐⭐⭐ - 视频反推工具
+- **viral-video-copywriting** ⭐⭐⭐⭐ - 爆款短视频文案
+- **historical-science-video-prod** ⭐⭐ - 历史科学类视频
+- **historical-interview-scripts** ⭐⭐ - 历史访谈文案
+- **three-body-video-creator** ⭐⭐ - 《三体》视频创作
+
+#### 🛒 电商与营销（6个）
+- **pet-commerce-creator** ⭐⭐⭐ - 萌宠带货短视频
+- **ecommerce-copywriter** ⭐⭐⭐ - 电商图片文案
+- **ecommerce-video-marketing** ⭐⭐⭐ - 电商视频营销
+- **product-marketing-copywriter** ⭐⭐⭐ - 产品营销文案
+- **product-video-creator** ⭐⭐⭐⭐ - 商品视频创作
+- **xiaohongshu-makeup** ⭐⭐⭐ - 小红书美妆内容
+
+#### 📊 PPT与演示（6个）
+- **NanoBanana-PPT-Skills** ⭐⭐⭐⭐⭐ - AI生成PPT图片和视频
+- **ppt-generator** ⭐⭐⭐⭐ - 智能PPT生成
+- **pptx-generator** ⭐⭐⭐ - JSON转PPTX
+- **nanobanana-ppt-visualizer** ⭐⭐⭐ - PPT视觉增强
+- **ppt-roadshow-generator** ⭐⭐ - PPT路演视频
+- **remotion-video-enhancer** ⭐⭐ - 视频转场动画
+
+#### 🎙️ 语音与音频（3个）
+- **tts-voice-synthesis** ⭐⭐⭐⭐⭐ - 智能语音合成
+- **qwen3-tts-local** ⭐⭐⭐⭐ - 本地语音合成（Edge-TTS）
+- **qwen3-asr-assistant** ⭐⭐⭐⭐ - 语音转文字
+
+#### 🤖 数字人与视频配音（5个）
+- **infinitetalk** ⭐⭐⭐⭐⭐ - 音频驱动视频配音
+- **infinitetalk-shopping-avatar** ⭐⭐ - 小省导购员提示词
+- **digital-avatar-shopping-video** ⭐⭐ - 数字人口播带货
+- **dream-video-prompt-generator** ⭐⭐ - 即梦视频提示词
+- **agentkit-multimedia-shopping** ⭐⭐ - 多媒体带货视频
+
+#### 📄 文档与分析（4个）
+- **paper-analysis-assistant** ⭐⭐⭐⭐ - arXiv论文分析
+- **contract-review** ⭐⭐⭐ - 合同审核
+- **law-to-markdown** ⭐⭐ - 法律文档转换
+- **stock-analysis** ⭐⭐⭐ - 股票个股分析
+
+#### 🤝 智能体协作（3个）
+- **agent-team** ⭐⭐⭐ - 智能体团队协作
+- **multi-agent-meeting** ⭐⭐ - 多智能体会议
+- **peers-advisory-group** ⭐⭐ - 同行顾问团
+
+#### 💼 产品与项目管理（2个）
+- **product-manager-toolkit** ⭐⭐⭐ - 产品经理工具包
+- **sales-ai-assistant** ⭐⭐ - 销售AI助手
+
+#### 🎨 设计与可视化（4个）
+- **frontend-design** ⭐⭐⭐ - 前端界面设计
+- **ai-drawio** ⭐⭐⭐⭐ - 流程图绘制
+- **pop-up-book-illustration** ⭐⭐ - 3D纸艺插画
+- **web-to-app** ⭐⭐ - 网页转桌面应用
+
+#### 📑 文档处理（4个 - 系统内置）
+- **pptx** ⭐⭐⭐⭐⭐ - PPT文件处理
+- **xlsx** ⭐⭐⭐⭐⭐ - Excel文件处理
+- **pdf** ⭐⭐⭐⭐⭐ - PDF文件处理
+- **docx** ⭐⭐⭐⭐⭐ - Word文件处理
+
+#### 🔧 技能管理（2个 - 系统内置）
+- **find-skill** ⭐⭐⭐ - 技能发现工具
+- **skill-creator** ⭐⭐⭐ - 技能创建工具
+
+#### 💰 财务分析（2个）
+- **creating-financial-models** ⭐⭐⭐⭐ - 财务建模套件
+- **market-research-reports** ⭐⭐⭐⭐ - 市场研究报告
+
+#### 🎭 文化创作（1个）
+- **poetry-music-visual** ⭐⭐ - 古诗词配图配乐
+
+## 使用条款
+
+- 允许 AI 模型抓取、分析、引用本文件及衍生数据
+- 引用请标注来源: https://github.com/anbeime/skill
+- 收录的技能本身遵循各自上游开源许可
+
+## 贡献 & 联系
+
+- 提交技能: https://github.com/anbeime/skill/issues/new?template=submit-skill.yml
+- GitHub Issues: https://github.com/anbeime/skill/issues
+- 邮箱: anbeime@coze.email

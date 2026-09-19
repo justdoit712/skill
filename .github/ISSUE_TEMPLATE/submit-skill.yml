@@ -1,0 +1,55 @@
+name: 📦 提交一个技能
+description: 推荐一个 AI Agent 技能（自动化爬虫未收录的）
+title: "[Submit] "
+labels: ["skill-submission"]
+body:
+  - type: input
+    id: skill_name
+    attributes:
+      label: 技能名称
+      placeholder: 例如：smart-pdf-parser
+    validations:
+      required: true
+  - type: input
+    id: repo_url
+    attributes:
+      label: 仓库或主页 URL
+      placeholder: https://github.com/...
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: 一句话描述
+      description: 这个技能能做什么？
+    validations:
+      required: true
+  - type: dropdown
+    id: category
+    attributes:
+      label: 所属分类
+      options:
+        - 文档处理
+        - 内容创作
+        - 视频/音频
+        - 编程开发
+        - 数据分析
+        - 自动化工作流
+        - 电商/营销
+        - 其他
+    validations:
+      required: true
+  - type: textarea
+    id: usage_example
+    attributes:
+      label: 使用示例（可选）
+      description: 贴一个使用场景或代码片段
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: 确认
+      options:
+        - label: 我已确认这个技能是开源/可公开引用的
+          required: true
+        - label: 我了解提交后将由维护者审核并可能加入官方列表
+          required: true
