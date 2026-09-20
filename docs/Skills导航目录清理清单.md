@@ -1,6 +1,6 @@
 # Skills 导航目录 清理清单（可执行）
 
-依据：`docs/Skills导航目录二开需求.md` §8.2–§8.8、§7.1、§7.4；配套 `docs/Skills导航目录实施文档.md`。
+依据：`docs/Skills导航目录二开需求.md` §8.2–§8.8、§7.1、§7.4。
 状态：**波次 1、2、3 已执行**（2026-09-20），删除阶段结束；波次 0 部分完成。
 
 ## 执行记录
@@ -138,7 +138,7 @@
 | `docs/`（5） | `D盘tool目录整理完成报告.md`、`整理完成总结.md`、`技能管理数据库.md`、`技能清理与迁移指南.md`、`技能数量差异分析报告.md` |
 | `docs/`（3） | `best-practices.md`、`quickstart.md`、`specification.md`（可用内容先整合） |
 
-**保留**：`docs/Skills导航目录二开需求.md`、`docs/Skills导航目录实施文档.md`、本清单。不使用通配符批量删除 Markdown。
+**保留**：`docs/Skills导航目录二开需求.md` 与本清单。不使用通配符批量删除 Markdown。
 
 ---
 
