@@ -90,6 +90,7 @@ def candidate_from_repo(
     discovery_method: str = "",
     search_term: str = "",
     discovered_at: str = "",
+    content_fingerprint: str | None = None,
 ) -> Candidate:
     """由仓库信息构造候选，稳定 ID 与发现依据一并填好。"""
     return Candidate(
@@ -105,6 +106,7 @@ def candidate_from_repo(
         discovery_methods=[discovery_method] if discovery_method else [],
         search_terms=[search_term] if search_term else [],
         discovered_at=discovered_at,
+        content_fingerprint=content_fingerprint,
     )
 
 
