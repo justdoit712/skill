@@ -1,8 +1,15 @@
 name: 📦 提交一个技能
-description: 推荐一个 AI Agent 技能（自动化爬虫未收录的）
+description: 推荐一个 AI Agent 技能（自动采集未收录的）
 title: "[Submit] "
 labels: ["skill-submission"]
 body:
+  - type: markdown
+    attributes:
+      value: |
+        本仓库是公开的 Skills 导航目录，只收录技能的名称、原始链接、中文简述与分类，
+        **不下载、不镜像、不安装、不执行技能包**。
+        投稿仅创建一条待检查记录，可能加入目录，不代表任何官方身份或专业认证。
+
   - type: input
     id: skill_name
     attributes:
@@ -10,46 +17,96 @@ body:
       placeholder: 例如：smart-pdf-parser
     validations:
       required: true
+
   - type: input
-    id: repo_url
+    id: skill_link
     attributes:
-      label: 仓库或主页 URL
-      placeholder: https://github.com/...
+      label: SKILL.md 或技能目录链接
+      description: 指向上游仓库中的具体文件或目录，不是仓库首页
+      placeholder: https://github.com/owner/repo/blob/main/skills/xxx/SKILL.md
     validations:
       required: true
+
+  - type: input
+    id: upstream_author
+    attributes:
+      label: 原始作者或仓库
+      placeholder: 例如：owner/repo
+    validations:
+      required: true
+
+  - type: dropdown
+    id: source_type
+    attributes:
+      label: 来源类型
+      options:
+        - 官方（待核实）
+        - 社区
+    validations:
+      required: true
+
   - type: textarea
-    id: description
+    id: purpose
     attributes:
-      label: 一句话描述
-      description: 这个技能能做什么？
+      label: 用途
+      description: 这个技能做什么？典型使用场景是什么？
     validations:
       required: true
+
   - type: dropdown
     id: category
     attributes:
-      label: 所属分类
+      label: 主分类
+      description: 与 config/taxonomy.json 的十个主分类一致
       options:
-        - 文档处理
-        - 内容创作
-        - 视频/音频
         - 编程开发
-        - 数据分析
-        - 自动化工作流
-        - 电商/营销
-        - 其他
+        - 文档办公
+        - 内容创作
+        - 产品与设计
+        - 自动化
+        - 云服务与运维
+        - 安全
+        - 金融与投资
+        - 心理健康
+        - 身体健康
     validations:
       required: true
-  - type: textarea
-    id: usage_example
+
+  - type: input
+    id: evidence
     attributes:
-      label: 使用示例（可选）
-      description: 贴一个使用场景或代码片段
+      label: 依据链接或文件位置
+      description: 支持上述用途判断的证据，例如 SKILL.md 中的具体章节
+    validations:
+      required: true
+
+  - type: input
+    id: dependencies
+    attributes:
+      label: 依赖说明（可选）
+      description: 上游明确声明的特殊工具、运行环境与依赖；未说明的请留空，不要推测
+
+  - type: input
+    id: license
+    attributes:
+      label: 许可（可选）
+      description: 能确认就填，无法确认写“未知”
+
+  - type: checkboxes
+    id: disclosure
+    attributes:
+      label: 能力披露
+      description: 涉及以下能力时必须勾选，供评估时重点复核
+      options:
+        - label: 该技能涉及金融、健康或交易执行能力
+        - label: 该技能包含实盘自动下单或专业临床诊断决策功能
+
   - type: checkboxes
     id: terms
     attributes:
       label: 确认
       options:
-        - label: 我已确认这个技能是开源/可公开引用的
+        - label: 我已确认该技能可公开引用，且我提供的是链接而非技能包
           required: true
-        - label: 我了解提交后将由维护者审核并可能加入官方列表
+        - label: 我了解投稿只创建待检查记录，可能加入目录，不代表官方认证
           required: true

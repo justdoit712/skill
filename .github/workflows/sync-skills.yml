@@ -1,69 +1,45 @@
-name: Sync Skills from Upstream
+name: Sync Skills
+
+# 顶层入口。依据需求 §7.2，单次运行承载以下步骤（同一 workflow 内显式依赖，
+# 不靠机器人提交触发第二次 push）：
+#   1 检出与预检 → 2 发现与预筛 → 3 预留额度 → 4 评估和生成
+#   → 5 验证与提交 → 6 发布同一产物 → 7 部署验证
+#
+# 采集与评估流程尚未实现，见 docs/Skills导航目录实施文档.md 阶段 C。
+# 因此当前仅支持手动触发，且运行时会明确失败——不产生"成功但什么都没做"的假象。
+#
+# 定时触发在阶段 C 启用，依据 §7.1 为每周日北京时间 10:00：
+#   schedule:
+#     - cron: '0 2 * * 0'
 
 on:
-  # 旧流程已停用定时触发：scripts/sync_skills.py 会重建已删除的 SKILL_SOURCES.json，
-  # 并与本地清理相互覆盖。新流程按需求 §7.1 改为每周日北京 10:00（UTC 0 2 * * 0），
-  # 待实施阶段 5 重写本工作流时启用。
   workflow_dispatch:
-    inputs:
-      dry_run:
-        description: 'Dry run mode (no actual changes)'
-        required: false
-        default: 'false'
-        type: choice
-        options:
-          - 'true'
-          - 'false'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: skills-sync
+  cancel-in-progress: false
 
 jobs:
   sync:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
-      - name: Checkout repository
+      - name: 检出
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Set up Python
+      - name: 设置 Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      - name: Run sync script
-        run: python scripts/sync_skills.py
-        env:
-          DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
+      - name: 安装依赖
+        run: pip install -r requirements.txt
 
-      - name: Check for changes
-        id: check_changes
+      - name: 采集、评估与生成（尚未实现）
         run: |
-          if [ -n "$(git status --porcelain)" ]; then
-            echo "has_changes=true" >> $GITHUB_OUTPUT
-          else
-            echo "has_changes=false" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Commit and push changes
-        if: steps.check_changes.outputs.has_changes == 'true' && github.event.inputs.dry_run != 'true'
-        run: |
-          git config user.name "GitHub Actions Bot"
-          git config user.email "actions@github.com"
-          git add SKILL_SOURCES.json README.md
-          git commit -m "🔄 Auto-sync: Update skill sources from upstream [$(date +%Y-%m-%d)]"
-          git push
-
-      - name: Summary
-        run: |
-          echo "## 📊 Sync Summary" >> $GITHUB_STEP_SUMMARY
-          if [ "${{ steps.check_changes.outputs.has_changes }}" == "true" ]; then
-            echo "✅ Changes detected and committed" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "ℹ️ No changes detected" >> $GITHUB_STEP_SUMMARY
-          fi
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Upstream Sources:**" >> $GITHUB_STEP_SUMMARY
-          echo "- OpenAI Skills" >> $GITHUB_STEP_SUMMARY
-          echo "- VoltAgent Awesome Agent Skills" >> $GITHUB_STEP_SUMMARY
+          echo "::error::新流程尚未实现。见 docs/Skills导航目录实施文档.md 阶段 B、C。"
+          exit 1

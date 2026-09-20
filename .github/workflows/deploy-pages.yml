@@ -1,9 +1,17 @@
 name: Deploy to GitHub Pages
 
+# 由顶层入口 .github/workflows/sync-skills.yml 通过 workflow_call 显式调用，
+# 不再自行监听 push —— 避免出现两个独立部署入口发布不同版本（需求 §7.2）。
+# 人工"仅发布"请求同样走顶层入口，不直接触发本工作流。
+#
+# 契约（§7.2 步骤 6）：
+#   只发布同一次运行中已生成的 public/ 产物，并携带该次数据提交的 SHA 与索引摘要。
+#   不得重新稀疏检出仓库里的旧 public/，也不得在缺少数据与生成器的环境中构建。
+#
+# 具体实现属阶段 C，见 docs/Skills导航目录实施文档.md。
+
 on:
-  push:
-    branches: [main]
-  workflow_dispatch:
+  workflow_call:
 
 permissions:
   contents: read
@@ -12,28 +20,15 @@ permissions:
 
 concurrency:
   group: pages
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   deploy:
+    runs-on: ubuntu-latest
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          sparse-checkout: public
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: public
-
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+      - name: 发布（尚未接入）
+        run: |
+          echo "::error::发布流程尚未接入。见 docs/Skills导航目录实施文档.md 阶段 C。"
+          exit 1

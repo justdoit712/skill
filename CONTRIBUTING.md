@@ -1,92 +1,72 @@
 # 贡献指南
 
-感谢你对技能商店的关注！欢迎贡献技能、工具和文档。
+本仓库是一个**公开的 Skills 导航目录**：只收录技能的名称、原始链接、中文简述、分类与评估依据，
+**不下载、不镜像、不安装、不执行任何技能包**（见需求 §1）。
 
-## 贡献技能
+因此投稿的是**链接与说明**，不是技能包本身。
 
-### 快速流程
+## 投稿一个技能
 
-1. **复制模板**
-   ```bash
-   cp -r skills/_template skills/your-skill/your-skill
-   ```
+通过 [提交 Issue](https://github.com/justdoit712/skill/issues/new?template=submit-skill.yml) 投稿。
 
-2. **编辑 SKILL.md** — 替换所有占位符为实际内容
+| 字段 | 说明 |
+|---|---|
+| 技能名称 | 上游使用的名称 |
+| SKILL.md 或技能目录链接 | 指向上游仓库中的**具体文件或目录**，不是仓库首页 |
+| 原始作者或仓库 | 上游出处 |
+| 来源类型 | 官方（待核实）／社区 |
+| 用途 | 做什么、典型使用场景 |
+| 主分类 | 下表十个分类中选一个 |
+| 依据链接或文件位置 | 支持上述用途判断的证据 |
+| 依赖说明 | 上游**明确声明**的特殊工具、运行环境与依赖；未说明的不要推测 |
+| 许可 | 能确认就填，无法确认写"未知" |
+| 能力披露 | 涉及金融、健康或交易执行能力时必填 |
 
-3. **验证**
-   ```bash
-   python tools/skill_validator.py validate skills/your-skill
-   ```
+投稿只创建一条**待检查记录**，不直接进入推荐区，也不代表任何官方身份或专业认证。
 
-4. **提交 PR** — 描述你的技能用途和使用场景
+## 主分类
 
-### 命名规范
+| 主分类 | 收录内容 |
+|---|---|
+| 编程开发 | 前后端、重构、调试、测试、代码审查 |
+| 文档办公 | Word、PDF、Excel、PPT 等 |
+| 内容创作 | 文章、图片、视频、音频 |
+| 产品与设计 | 需求分析、界面设计、原型 |
+| 自动化 | 浏览器操作、文件处理、工具集成、工作流 |
+| 云服务与运维 | 部署、CI/CD、基础设施 |
+| 安全 | 漏洞检测、代码安全、审计 |
+| 金融与投资 | 宏观、股票、期货、大宗商品及研究和策略辅助 |
+| 心理健康 | 情绪记录、压力管理、心理健康信息理解 |
+| 身体健康 | 睡眠、运动、饮食及身体健康信息理解 |
 
-- 技能名：全小写 + 连字符，如 `code-review`、`data-export`
-- 目录名：与技能名一致
-- 标签：全小写，无空格
+**不收录**：DSH 插件；实盘自动下单类技能；面向专业临床诊断与治疗决策的技能。科研、通用数据分析、
+AI 开发不作为独立收录方向——直接服务上述用途的技能仍可纳入（例如股票数据分析归入金融）。
 
-### 目录结构
+## 评估方式
 
-采用双重嵌套结构：
+收录的条目会经过六项检查，每项为 `pass` / `fail` / `unknown` 并附证据位置：范围匹配、用途明确、
+说明完整、证据可追溯、依赖透明、风险复核。全部通过才进入推荐区；存在 `unknown` 或说明不完整的
+留在候选区并注明原因。
 
-```
-skills/
-└── your-skill/
-    └── your-skill/
-        ├── SKILL.md          ← 核心（必需）
-        ├── assets/           ← 图片等资源（可选）
-        └── references/       ← 参考文档（可选）
-```
+已推荐技能的内容发生变化后，会保留推荐状态并醒目标记"内容已变化，待复核"；复核不通过则降级。
+AI 辅助评估不等于功能测试或安全审计。
 
-### SKILL.md 要求
+## 纠错
 
-- 必须以 YAML frontmatter 开头（`---`）
-- `name` 和 `description` 为必填字段
-- 正文至少 10 行，至少包含一个 `#` 标题
-- 建议包含：任务目标、使用方式、核心逻辑、注意事项、示例
+条目信息有误、链接失效、上游已变更，或你希望自己的技能从目录中移除，请提 Issue 说明。
 
-详见 [规范文档](docs/specification.md)。
+## 不接受的贡献
 
-## 贡献工具
-
-欢迎改进验证工具或添加新工具：
-
-1. 工具代码放在 `tools/` 目录下
-2. 每个工具有独立的 README.md
-3. 保持 Python 3.8+ 兼容
-
-## 贡献文档
-
-文档放在 `docs/` 目录下，使用 Markdown 格式：
-
-- `specification.md` — 规范文档
-- `best-practices.md` — 最佳实践
-- `quickstart.md` — 快速入门
-
-## PR 检查清单
-
-提交 PR 前请确认：
-
-- [ ] 运行 `python tools/skill_validator.py validate` 无错误
-- [ ] 技能名全小写、连字符分隔
-- [ ] `SKILL.md` 有完整的 YAML frontmatter
-- [ ] 正文包含至少一个示例
-- [ ] 没有修改不相关的文件
-- [ ] commit message 清晰（如 `feat: add code-review skill`）
+- 直接提交技能包、脚本或素材（本仓库不保存技能包）
+- 要求跳过评估直接进入推荐区
+- 在 Issue 中粘贴密钥、凭据或私人数据
 
 ## Commit 规范
 
 | 前缀 | 用途 | 示例 |
 |------|------|------|
-| `feat:` | 新增功能/技能 | `feat: add code-review skill` |
-| `fix:` | 修复问题 | `fix: correct yaml parsing in validator` |
-| `docs:` | 文档更新 | `docs: update quickstart guide` |
-| `chore:` | 杂项维护 | `chore: update dependencies` |
-| `refactor:` | 重构 | `refactor: simplify validator logic` |
-
-## 问题反馈
-
-- 发现 Bug：请提 Issue，附上复现步骤和验证工具输出
-- 功能建议：欢迎在 Issue 中讨论
-- 技能请求：可以提 Issue 请求特定技能
+| `feat:` | 新增功能 | `feat: add domain prescreen` |
+| `fix:` | 修复问题 | `fix: correct dedupe key` |
+| `docs:` | 文档更新 | `docs: update runbook` |
+| `chore:` | 杂项维护 | `chore: pin dependencies` |
+| `refactor:` | 重构 | `refactor: split fetch and parse` |
