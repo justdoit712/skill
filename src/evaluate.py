@@ -66,10 +66,29 @@ class ModelCallResult:
 
 
 def resolve_api_key(model_cfg: dict) -> str | None:
-    """从环境变量取凭据。凭据不写入任何配置文件。"""
-    env_name = ((model_cfg.get("auth") or {}).get("api_key_env")) or "LLM_API_KEY"
-    value = os.environ.get(env_name)
-    return value.strip() if value else None
+    """解析凭据：先环境变量，后本地私密配置文件。
+
+    环境变量优先，这样部署环境（GitHub Secrets 注入）总能覆盖本地遗留值，
+    不会被陈旧配置遮蔽。文件里的字面量只服务本机运行。
+    """
+    auth = model_cfg.get("auth") or {}
+    env_name = auth.get("api_key_env") or "LLM_API_KEY"
+    value = (os.environ.get(env_name) or "").strip()
+    if value:
+        return value
+    literal = (auth.get("api_key") or "").strip()
+    return literal or None
+
+
+def api_key_source(model_cfg: dict) -> str:
+    """凭据来源描述，用于报错与日志。**不输出凭据本身。**"""
+    auth = model_cfg.get("auth") or {}
+    env_name = auth.get("api_key_env") or "LLM_API_KEY"
+    if (os.environ.get(env_name) or "").strip():
+        return f"环境变量 {env_name}"
+    if (auth.get("api_key") or "").strip():
+        return "配置文件中的 api_key"
+    return f"未设置（环境变量 {env_name} 与配置 api_key 均为空）"
 
 
 def build_prompt(candidate: Candidate, text: str, rules: dict, taxonomy: dict) -> tuple[str, str]:
@@ -161,11 +180,10 @@ def call_model(
     """调用模型。凭据缺失时直接失败，不伪造结果（§5.3）。"""
     key = api_key or resolve_api_key(model_cfg)
     if not key:
-        env_name = ((model_cfg.get("auth") or {}).get("api_key_env")) or "LLM_API_KEY"
         return ModelCallResult(
             ok=False,
             reason_code=REASON_MODEL_ERROR,
-            error=f"缺少凭据：环境变量 {env_name} 未设置",
+            error="缺少凭据：" + api_key_source(model_cfg),
             notes=["无凭据时不调用模型，也不伪造中文简介与评估（§5.2）"],
         )
 

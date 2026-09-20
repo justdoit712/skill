@@ -115,6 +115,10 @@ class ConfigIntegrityTest(unittest.TestCase):
         for marker in ("sk-", "bearer ey", "secret\":", "password"):
             self.assertNotIn(marker, blob, f"示例配置疑似含凭据标记 {marker}")
 
+    def test_example_config_keeps_api_key_empty(self) -> None:
+        """model.example.json 会被提交，其 api_key 必须保持为空。"""
+        self.assertIsNone(self.model["auth"].get("api_key"))
+
 
 if __name__ == "__main__":
     unittest.main()
