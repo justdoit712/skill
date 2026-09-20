@@ -1,0 +1,238 @@
+{
+  "rules_version": "1.0.0",
+  "source": "docs/Skills导航目录二开需求.md §5.2",
+  "note": "固定的评估输出，用于测试决策逻辑，不调用模型。样本类别与 config/rules.json 的 validation_samples 一一对应。",
+  "cases": [
+    {
+      "id": "low_star_complete",
+      "desc": "低 Star 但内容完整的技能",
+      "evaluation": {
+        "scope_match": { "value": "pass", "evidence": "SKILL.md 描述代码审查用途" },
+        "purpose_clarity": { "value": "pass", "evidence": "SKILL.md#任务目标" },
+        "instruction_completeness": { "value": "pass", "evidence": "SKILL.md 含步骤与示例" },
+        "evidence_traceability": { "value": "pass", "evidence": "介绍与实际内容一致" },
+        "dependency_transparency": { "value": "pass", "evidence": "声明无需外部依赖" },
+        "risk_review": { "value": "pass", "evidence": "无可疑行为" },
+        "domain_checks": {},
+        "reason_codes": [],
+        "rules_version": "1.0.0",
+        "source_fingerprint": "sha256:aaaa0001"
+      },
+      "expected_decision": "recommended",
+      "expected_reason_codes": []
+    },
+    {
+      "id": "empty_template",
+      "desc": "空模板",
+      "evaluation": {
+        "scope_match": { "value": "fail", "evidence": "仅有占位符，无实际任务" },
+        "purpose_clarity": { "value": "unknown", "evidence": "无内容" },
+        "instruction_completeness": { "value": "fail", "evidence": "正文为占位符" },
+        "evidence_traceability": { "value": "unknown", "evidence": "无内容" },
+        "dependency_transparency": { "value": "unknown", "evidence": "无内容" },
+        "risk_review": { "value": "unknown", "evidence": "无内容" },
+        "domain_checks": {},
+        "reason_codes": ["NOT_A_SKILL"],
+        "rules_version": "1.0.0",
+        "source_fingerprint": "sha256:aaaa0002"
+      },
+      "expected_decision": "excluded",
+      "expected_reason_codes": ["NOT_A_SKILL"]
+    },
+    {
+      "id": "dsh_plugin",
+      "desc": "DSH 插件",
+      "evaluation": {
+        "scope_match": { "value": "fail", "evidence": "属 DSH 插件" },
+        "purpose_clarity": { "value": "pass", "evidence": "用途明确" },
+        "instruction_completeness": { "value": "pass", "evidence": "说明完整" },
+        "evidence_traceability": { "value": "pass", "evidence": "来源可追溯" },
+        "dependency_transparency": { "value": "pass", "evidence": "依赖已声明" },
+        "risk_review": { "value": "fail", "evidence": "与收录范围冲突" },
+        "domain_checks": {},
+        "reason_codes": ["DSH_PLUGIN"],
+        "rules_version": "1.0.0",
+        "source_fingerprint": "sha256:aaaa0003"
+      },
+      "expected_decision": "excluded",
+      "expected_reason_codes": ["DSH_PLUGIN"]
+    },
+    {
+      "id": "missing_dependency",
+      "desc": "缺失依赖",
+      "evaluation": {
+        "scope_match": { "value": "pass", "evidence": "属文档办公" },
+        "purpose_clarity": { "value": "pass", "evidence": "用途明确" },
+        "instruction_completeness": { "value": "pass", "evidence": "步骤完整" },
+        "evidence_traceability": { "value": "pass", "evidence": "来源可追溯" },
+        "dependency_transparency": { "value": "unknown", "evidence": "上游未声明依赖" },
+        "risk_review": { "value": "pass", "evidence": "无可疑行为" },
+        "domain_checks": {},
+        "reason_codes": ["MISSING_DEPENDENCY"],
+        "rules_version": "1.0.0",
+        "source_fingerprint": "sha256:aaaa0004"
+      },
+      "expected_decision": "candidate",
+      "expected_reason_codes": ["MISSING_DEPENDENCY"]
+    },
+    {
+      "id": "exaggerated_return",
+      "desc": "夸大收益",
+      "evaluation": {
+        "scope_match": { "value": "pass", "evidence": "属金融与投资" },
+        "purpose_clarity": { "value": "pass", "evidence": "用途明确" },
+        "instruction_completeness": { "value": "pass", "evidence": "步骤完整" },
+        "evidence_traceability": { "value": "pass", "evidence": "来源可追溯" },
+        "dependency_transparency": { "value": "pass", "evidence": "依赖已声明" },
+        "risk_review": { "value": "fail", "evidence": "宣称保证收益" },
+        "domain_checks": {
+          "finance": { "value": "fail", "evidence": "承诺收益，违反 §5.2 金融专项" }
+        },
+        "reason_codes": ["EXAGGERATED_CLAIM"],
+        "rules_version": "1.0.0",
+        "source_fingerprint": "sha256:aaaa0005"
+      },
+      "expected_decision": "candidate",
+      "expected_reason_codes": ["EXAGGERATED_CLAIM"]
+    },
+    {
+      "id": "auto_trading",
+      "desc": "自动下单",
+      "evaluation": {
+        "scope_match": { "value": "fail", "evidence": "核心功能为实盘下单" },
+        "purpose_clarity": { "value": "pass", "evidence": "用途明确" },
+        "instruction_completeness": { "value": "pass", "evidence": "步骤完整" },
+        "evidence_traceability": { "value": "pass", "evidence": "来源可追溯" },
+        "dependency_transparency": { "value": "pass", "evidence": "依赖已声明" },
+        "risk_review": { "value": "fail", "evidence": "不可分割的实盘下单核心功能" },
+        "domain_checks": {},
+        "reason_codes": ["LIVE_TRADING"],
+        "rules_version": "1.0.0",
+        "source_fingerprint": "sha256:aaaa0006"
+      },
+      "expected_decision": "excluded",
+      "expected_reason_codes": ["LIVE_TRADING"]
+    },
+    {
+      "id": "health_without_evidence",
+      "desc": "缺少健康依据",
+      "evaluation": {
+        "scope_match": { "value": "pass", "evidence": "属身体健康" },
+        "purpose_clarity": { "value": "pass", "evidence": "用途明确" },
+        "instruction_completeness": { "value": "pass", "evidence": "步骤完整" },
+        "evidence_traceability": { "value": "fail", "evidence": "结论无依据" },
+        "dependency_transparency": { "value": "pass", "evidence": "依赖已声明" },
+        "risk_review": { "value": "unknown", "evidence": "仅免责声明，无实质依据" },
+        "domain_checks": {
+          "health": { "value": "fail", "evidence": "只有免责声明，不算通过" }
+        },
+        "reason_codes": ["HEALTH_WITHOUT_EVIDENCE"],
+        "rules_version": "1.0.0",
+        "source_fingerprint": "sha256:aaaa0007"
+      },
+      "expected_decision": "candidate",
+      "expected_reason_codes": ["HEALTH_WITHOUT_EVIDENCE"]
+    },
+    {
+      "id": "clinical_decision",
+      "desc": "临床决策",
+      "evaluation": {
+        "scope_match": { "value": "fail", "evidence": "面向专业临床诊断" },
+        "purpose_clarity": { "value": "pass", "evidence": "用途明确" },
+        "instruction_completeness": { "value": "pass", "evidence": "步骤完整" },
+        "evidence_traceability": { "value": "pass", "evidence": "来源可追溯" },
+        "dependency_transparency": { "value": "pass", "evidence": "依赖已声明" },
+        "risk_review": { "value": "fail", "evidence": "用于治疗决策" },
+        "domain_checks": {},
+        "reason_codes": ["CLINICAL_DECISION"],
+        "rules_version": "1.0.0",
+        "source_fingerprint": "sha256:aaaa0008"
+      },
+      "expected_decision": "excluded",
+      "expected_reason_codes": ["CLINICAL_DECISION"]
+    },
+    {
+      "id": "in_scope_normal",
+      "desc": "正常范围内的样例",
+      "evaluation": {
+        "scope_match": { "value": "pass", "evidence": "属自动化" },
+        "purpose_clarity": { "value": "pass", "evidence": "SKILL.md#任务目标" },
+        "instruction_completeness": { "value": "pass", "evidence": "含步骤、依赖与示例" },
+        "evidence_traceability": { "value": "pass", "evidence": "来源可追溯且内容相符" },
+        "dependency_transparency": { "value": "pass", "evidence": "声明需 Node 18+" },
+        "risk_review": { "value": "pass", "evidence": "无可疑行为" },
+        "domain_checks": {},
+        "reason_codes": [],
+        "rules_version": "1.0.0",
+        "source_fingerprint": "sha256:aaaa0009"
+      },
+      "expected_decision": "recommended",
+      "expected_reason_codes": []
+    }
+  ],
+  "extra_cases": [
+    {
+      "id": "no_evidence",
+      "desc": "六项全 pass 但缺可定位证据，不得推荐",
+      "evaluation": {
+        "scope_match": { "value": "pass", "evidence": "" },
+        "purpose_clarity": { "value": "pass", "evidence": "x" },
+        "instruction_completeness": { "value": "pass", "evidence": "x" },
+        "evidence_traceability": { "value": "pass", "evidence": "x" },
+        "dependency_transparency": { "value": "pass", "evidence": "x" },
+        "risk_review": { "value": "pass", "evidence": "x" },
+        "domain_checks": {},
+        "reason_codes": [],
+        "rules_version": "1.0.0",
+        "source_fingerprint": "sha256:aaaab001"
+      },
+      "expected_decision": "candidate"
+    },
+    {
+      "id": "processing_failure",
+      "desc": "网络失败不当作质量判定",
+      "evaluation": {
+        "scope_match": { "value": "unknown", "evidence": "" },
+        "purpose_clarity": { "value": "unknown", "evidence": "" },
+        "instruction_completeness": { "value": "unknown", "evidence": "" },
+        "evidence_traceability": { "value": "unknown", "evidence": "" },
+        "dependency_transparency": { "value": "unknown", "evidence": "" },
+        "risk_review": { "value": "unknown", "evidence": "" },
+        "domain_checks": {},
+        "reason_codes": ["NETWORK_ERROR"],
+        "rules_version": "1.0.0",
+        "source_fingerprint": "sha256:aaaab002"
+      },
+      "expected_decision": "processing_failure"
+    },
+    {
+      "id": "structure_invalid",
+      "desc": "输出结构缺字段",
+      "evaluation": {
+        "scope_match": { "value": "pass", "evidence": "x" },
+        "reason_codes": [],
+        "rules_version": "1.0.0"
+      },
+      "expected_decision": "processing_failure"
+    },
+    {
+      "id": "backtest_not_applicable",
+      "desc": "无回测功能时金融专项记为不适用，不阻塞推荐",
+      "evaluation": {
+        "scope_match": { "value": "pass", "evidence": "属金融与投资" },
+        "purpose_clarity": { "value": "pass", "evidence": "x" },
+        "instruction_completeness": { "value": "pass", "evidence": "x" },
+        "evidence_traceability": { "value": "pass", "evidence": "x" },
+        "dependency_transparency": { "value": "pass", "evidence": "x" },
+        "risk_review": { "value": "pass", "evidence": "x" },
+        "domain_checks": {
+          "finance": { "value": "not_applicable", "evidence": "无回测功能" }
+        },
+        "reason_codes": [],
+        "rules_version": "1.0.0",
+        "source_fingerprint": "sha256:aaaab003"
+      },
+      "expected_decision": "recommended"
+    }
+  ]
+}
