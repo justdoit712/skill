@@ -327,6 +327,12 @@ def phase_evaluate(
     cap = int(cfg["rules"].get("weekly_quota") or DEFAULT_LIMIT_EVALUATIONS)
     ledger = BudgetLedger.load(state_path, cap)
 
+    # 单次运行的 token 消耗兜底闸：达到后停止后续模型调用，
+    # 已预留的名额不退还（§7.3：失败仍占本周额度）
+    token_cap = int((cfg["model"].get("limits") or {}).get("max_total_tokens_per_run") or 0)
+    tokens_used = 0
+    token_stopped: list[str] = []
+
     staged: dict[str, str] = {}
     staged_path = state_path / TEXTS_DIRNAME / "staged.json"
     if staged_path.exists():
@@ -354,6 +360,14 @@ def phase_evaluate(
             skipped += 1
             continue
 
+        if token_cap and tokens_used >= token_cap:
+            token_stopped.append(candidate.skill_id)
+            results[candidate.skill_id] = {
+                "status": "stopped",
+                "note": f"已达单次运行 token 上限 {token_cap}，本轮不再调用模型",
+            }
+            continue
+
         text = staged.get(candidate.skill_id)
         if text is None:
             fetched = fetch_fn(candidate.url or candidate.repo_url, sleep=sleep)
@@ -371,6 +385,9 @@ def phase_evaluate(
             candidate, text, model_cfg=cfg["model"], rules=cfg["rules"],
             taxonomy=cfg["taxonomy"], api_key=api_key, sleep=sleep,
         )
+        call = outcome.get("call")
+        if call is not None:
+            tokens_used += int(getattr(call, "total_tokens", 0) or 0)
         if not outcome["ok"]:
             ledger.fail(eid, outcome["reason_code"], outcome["error"] or "", started)
             results[candidate.skill_id] = {"status": "failed", "note": outcome["error"]}
@@ -468,6 +485,9 @@ def phase_evaluate(
         "week": week,
         "evaluated": evaluated,
         "skipped": skipped,
+        "tokens_used": tokens_used,
+        "token_cap": token_cap or None,
+        "token_stopped": token_stopped,
         "results": results,
         "entries_before": len(previous_entries),
         "entries_after": len(merged),

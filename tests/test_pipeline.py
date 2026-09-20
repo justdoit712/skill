@@ -14,6 +14,7 @@
 from __future__ import annotations
 
 import json
+import shutil
 import tempfile
 import unittest
 from pathlib import Path
@@ -100,6 +101,30 @@ def one_candidate(skill_id_repo: str = "widget", owner: str = "acme", **kwargs):
     )
 
 
+class FakeCall:
+    """替身调用结果，只需要 total_tokens 供上限累计。"""
+
+    def __init__(self, total_tokens: int) -> None:
+        self.total_tokens = total_tokens
+
+
+def fake_evaluate_with_tokens(tokens_per_call: int, evaluation: dict | None = None):
+    calls: list[str] = []
+
+    def _evaluate(candidate, text, **kwargs):
+        calls.append(candidate.skill_id)
+        return {
+            "ok": True,
+            "evaluation": evaluation if evaluation is not None else passing_evaluation(),
+            "call": FakeCall(tokens_per_call),
+            "reason_code": None,
+            "error": None,
+        }
+
+    _evaluate.calls = calls
+    return _evaluate
+
+
 class PipelineHarness(unittest.TestCase):
     def setUp(self) -> None:
         self._tmp = tempfile.TemporaryDirectory()
@@ -111,6 +136,21 @@ class PipelineHarness(unittest.TestCase):
 
     def tearDown(self) -> None:
         self._tmp.cleanup()
+
+    def temp_config(self, **limits_overrides) -> Path:
+        """把真实 config 复制到临时目录，并按需覆盖模型 limits。"""
+        cfg_dir = self.root / "config"
+        if not cfg_dir.exists():
+            shutil.copytree(ROOT / "config", cfg_dir)
+        model_path = cfg_dir / "model.local.json"
+        if not model_path.exists():
+            model_path.write_text(
+                (cfg_dir / "model.example.json").read_text(encoding="utf-8"), encoding="utf-8"
+            )
+        model = json.loads(model_path.read_text(encoding="utf-8"))
+        model.setdefault("limits", {}).update(limits_overrides)
+        model_path.write_text(json.dumps(model, ensure_ascii=False, indent=2), encoding="utf-8")
+        return cfg_dir
 
     def write_previous_catalog(self, entries: list[dict]) -> None:
         self.data.mkdir(parents=True, exist_ok=True)
@@ -294,6 +334,60 @@ class FingerprintAndHistoryTest(PipelineHarness):
         self.evaluate()
         report2 = json.loads(reports[0].read_text(encoding="utf-8"))
         self.assertEqual(report2["counts"][NEW], 0, "重复运行仍被记作新增")
+
+
+# ---------------------------------------------------------------- token 上限
+
+
+class RunTokenCapTest(PipelineHarness):
+    """单次运行的 token 消耗兜底闸：达到后停止后续模型调用，已预留名额不退还。"""
+
+    def reserve_many(self, cfg_dir: Path, count: int) -> None:
+        candidates = [one_candidate(f"repo{i}") for i in range(count)]
+        result = phase_reserve(
+            config_dir=cfg_dir, data_dir=self.data, state_dir=self.state,
+            discover_fn=fake_discover(candidates), fetch_fn=fake_fetch(),
+        )
+        self.assertTrue(result["ok"])
+        self.assertEqual(result["reserved"], count)
+
+    def evaluate_with(self, cfg_dir: Path, spy):
+        return phase_evaluate(
+            config_dir=cfg_dir, data_dir=self.data, public_dir=self.public,
+            state_dir=self.state, evaluate_fn=spy, fetch_fn=fake_fetch(),
+        )
+
+    def test_stops_once_cap_reached(self) -> None:
+        cfg_dir = self.temp_config(max_total_tokens_per_run=20000)
+        self.reserve_many(cfg_dir, 3)
+        spy = fake_evaluate_with_tokens(15000)
+
+        result = self.evaluate_with(cfg_dir, spy)
+
+        self.assertEqual(len(spy.calls), 2, "达到上限后不得继续调用模型")
+        self.assertEqual(result["tokens_used"], 30000)
+        self.assertEqual(result["token_cap"], 20000)
+        self.assertEqual(len(result["token_stopped"]), 1)
+        self.assertEqual(result["evaluated"], 2)
+
+    def test_cap_does_not_release_reserved_slots(self) -> None:
+        """§7.3：达到上限而停止的条目仍占本周额度。"""
+        cfg_dir = self.temp_config(max_total_tokens_per_run=20000)
+        self.reserve_many(cfg_dir, 3)
+        result = self.evaluate_with(cfg_dir, fake_evaluate_with_tokens(15000))
+        self.assertEqual(result["quota"]["used"], 3, "名额被错误释放")
+
+    def test_generous_cap_never_triggers(self) -> None:
+        cfg_dir = self.temp_config(max_total_tokens_per_run=100000000)
+        self.reserve_many(cfg_dir, 3)
+        result = self.evaluate_with(cfg_dir, fake_evaluate_with_tokens(15000))
+        self.assertEqual(len(result["token_stopped"]), 0)
+        self.assertEqual(result["evaluated"], 3)
+        self.assertEqual(result["tokens_used"], 45000)
+
+    def test_shipped_config_carries_the_cap(self) -> None:
+        example = json.loads((ROOT / "config" / "model.example.json").read_text(encoding="utf-8"))
+        self.assertEqual(example["limits"]["max_total_tokens_per_run"], 100000000)
 
 
 # ---------------------------------------------------------------- 条目与报告
