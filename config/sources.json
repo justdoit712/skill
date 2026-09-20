@@ -113,10 +113,14 @@
       "skill_paths": [],
       "license_status": "unchecked",
       "constraints": [
-        "§4.3 领域表未列 Hugging Face 的对应领域，domain_ids 暂留空",
-        "其内容多属 AI/ML 开发，而 §3.1 规定 AI 开发不作为独立收录方向",
-        "须逐技能判别是否直接服务已列十类，否则排除"
-      ]
+        "§4.3 领域表未列 Hugging Face 的对应领域；实测其 25 个技能全部落在「AI 开发」或「科研」两条排除方向内"
+      ],
+      "exclusion": {
+        "excluded": true,
+        "reason_code": "NOT_STANDALONE_DIRECTION",
+        "decided_at": "2026-09-20",
+        "note": "用户确认不属于收录范围，整库排除。保留本条记录以防经其他渠道重新进入（同 §8.3 对 DSH 的处置原则）。"
+      }
     },
     {
       "id": "google_labs_code_stitch_skills",

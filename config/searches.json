@@ -79,7 +79,7 @@
   },
   "global_exclusions": {
     "query_terms": ["-dsh", "-clawhub"],
-    "orgs": ["awesome-dsh-plugin"],
+    "orgs": ["awesome-dsh-plugin", "huggingface"],
     "repos": ["justdoit712/skill"],
     "post_filter": [
       "按 config/taxonomy.json 的 hard_exclusions 排除 DSH 插件、实盘自动下单、面向专业临床诊断与治疗决策的技能",

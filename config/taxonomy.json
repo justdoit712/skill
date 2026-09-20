@@ -55,17 +55,54 @@
     }
   ],
   "not_standalone_directions": {
-    "ids": [
-      "research",
-      "general_data",
-      "ai_dev"
-    ],
-    "names": [
-      "科研",
-      "通用数据分析",
-      "AI 开发"
-    ],
-    "rule": "不作为独立收录方向；直接服务上述主分类的技能仍可纳入，例如股票数据分析归入金融，不因包含数据处理就排除。"
+    "rule": "不作为独立收录方向；直接服务上述主分类的技能仍可纳入，例如股票数据分析归入金融，不因包含数据处理就排除。判据是技能的用途，不是它使用了什么技术。",
+    "directions": [
+      {
+        "id": "research",
+        "name": "科研",
+        "definition": "目的为产出学术研究成果：文献综述、实验管理、论文写作与投稿、研究数据处理。",
+        "excluded_examples": [
+          "论文写作助手",
+          "实验记录管理",
+          "huggingface-papers",
+          "huggingface-paper-publisher"
+        ],
+        "included_examples": [
+          "查询医学文献并解释体检指标 → 身体健康",
+          "汇总财报做行业研究 → 金融与投资"
+        ]
+      },
+      {
+        "id": "general_data",
+        "name": "通用数据分析",
+        "definition": "没有特定领域归属的数据处理：通用表格清洗、通用可视化、通用统计。",
+        "excluded_examples": [
+          "通用 CSV 清洗工具",
+          "通用图表生成器"
+        ],
+        "included_examples": [
+          "股票数据分析 → 金融与投资",
+          "体检指标趋势分析 → 身体健康"
+        ]
+      },
+      {
+        "id": "ai_dev",
+        "name": "AI 开发",
+        "definition": "目的为构建、训练、评估或部署 AI 系统本身：模型训练与微调、数据集构建、模型评估、推理与部署、Agent 脚手架、MCP 服务构建、面向构建者的 prompt 工程。技能内部调用 LLM 不构成排除理由。",
+        "decided_at": "2026-09-20",
+        "decision": "用户确认不属于收录范围，采字面读法：造 AI 的技能一律不收。",
+        "excluded_examples": [
+          "huggingface/skills 全部 25 个技能（训练与评估 7、平台与部署 11、构建与其他 5、论文 2）",
+          "anthropics/skills 中构建 Agent 或 MCP 类的技能，例如 mcp-builder",
+          "模型微调、数据集构建、推理服务、向量库搭建"
+        ],
+        "included_examples": [
+          "用 LLM 审查代码 → 编程开发",
+          "用 LLM 写周报 → 文档办公",
+          "用 LLM 生成配图 → 内容创作"
+        ]
+      }
+    ]
   },
   "hard_exclusions": [
     {

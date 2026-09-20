@@ -104,7 +104,8 @@
       "DSH_PLUGIN": "DSH 插件",
       "LIVE_TRADING": "含不可分割的实盘下单核心功能",
       "CLINICAL_DECISION": "面向专业临床诊断或治疗决策",
-      "CREDENTIAL_EXFILTRATION": "存在凭据外传行为"
+      "CREDENTIAL_EXFILTRATION": "存在凭据外传行为",
+      "NOT_STANDALONE_DIRECTION": "仅属科研、通用数据分析或 AI 开发，未直接服务任何主分类"
     },
     "candidate": {
       "INCOMPLETE_INSTRUCTIONS": "说明不完整",
