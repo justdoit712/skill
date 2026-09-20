@@ -1,0 +1,321 @@
+{
+  "version": "1.0.0",
+  "source": "docs/Skills导航目录二开需求.md §4.1、§4.3",
+  "verified_at": "2026-09-20",
+  "verification_method": "GitHub 搜索 API（未认证）。verification_status 只表示仓库存在、URL 可达，不代表已完成内容、许可与具体技能路径的审查。",
+  "field_notes": {
+    "id": "稳定标识，去重与引用使用",
+    "url": "来源入口。合集仓库指向仓库根，单技能指向 SKILL.md",
+    "source_type": "official 官方仓库 / community_list 社区清单 / community 社区单技能 / search 由搜索发现",
+    "tier": "来源层级：1 官方基础、2 社区线索、3 GitHub 搜索（§4.1）",
+    "domain_ids": "对应 config/taxonomy.json 的 main_categories.id；空数组表示领域未定，须逐技能判别",
+    "discovery_method": "如何发现的：spec_initial_candidate 需求文档初始候选 / provided_lead 已给线索 / github_search API 搜索",
+    "verification_status": "verified 已核实存在 / not_found 查询未找到 / unverified 未核实",
+    "skill_paths": "已定位的具体技能路径；空数组表示仍需展开",
+    "license_status": "unchecked 未核对 / 具体许可标识"
+  },
+  "sources": [
+    {
+      "id": "anthropics_skills",
+      "url": "https://github.com/anthropics/skills",
+      "source_type": "official",
+      "tier": 1,
+      "domain_ids": ["dev", "docs", "content", "product", "automation"],
+      "discovery_method": "spec_initial_candidate",
+      "verification_status": "verified",
+      "verified_at": "2026-09-20",
+      "verification_query": "org:anthropics skill in:name",
+      "observed": { "stars": 177180 },
+      "skill_paths": [],
+      "license_status": "unchecked",
+      "constraints": [
+        "展开到具体技能，按实际用途分类",
+        "不能把官方整库都归入同一类别"
+      ]
+    },
+    {
+      "id": "vercel_labs_skills",
+      "url": "https://github.com/vercel-labs/skills",
+      "source_type": "official",
+      "tier": 1,
+      "domain_ids": ["dev", "product"],
+      "discovery_method": "github_search",
+      "verification_status": "verified",
+      "verified_at": "2026-09-20",
+      "verification_query": "org:vercel-labs skill",
+      "observed": { "stars": 32035 },
+      "skill_paths": [],
+      "license_status": "unchecked",
+      "constraints": [
+        "需求文档写作「Vercel」，实际组织为 vercel-labs；org:vercel 下未找到名称含 skill 的仓库",
+        "展开到具体技能，按实际用途分类"
+      ]
+    },
+    {
+      "id": "vercel_labs_agent_skills",
+      "url": "https://github.com/vercel-labs/agent-skills",
+      "source_type": "official",
+      "tier": 1,
+      "domain_ids": ["dev", "product"],
+      "discovery_method": "github_search",
+      "verification_status": "verified",
+      "verified_at": "2026-09-20",
+      "verification_query": "org:vercel-labs skill",
+      "observed": { "stars": 31377 },
+      "skill_paths": [],
+      "license_status": "unchecked",
+      "constraints": ["与 vercel-labs/skills 去重，避免同一技能重复收录"]
+    },
+    {
+      "id": "cloudflare_skills",
+      "url": "https://github.com/cloudflare/skills",
+      "source_type": "official",
+      "tier": 1,
+      "domain_ids": ["cloud", "dev"],
+      "discovery_method": "spec_initial_candidate",
+      "verification_status": "verified",
+      "verified_at": "2026-09-20",
+      "verification_query": "org:cloudflare skill in:name",
+      "observed": { "stars": 2868 },
+      "skill_paths": [],
+      "license_status": "unchecked",
+      "constraints": ["核验云环境和工具依赖"]
+    },
+    {
+      "id": "trailofbits_skills",
+      "url": "https://github.com/trailofbits/skills",
+      "source_type": "official",
+      "tier": 1,
+      "domain_ids": ["security"],
+      "discovery_method": "spec_initial_candidate",
+      "verification_status": "verified",
+      "verified_at": "2026-09-20",
+      "verification_query": "org:trailofbits skill in:name",
+      "observed": { "stars": 7166 },
+      "skill_paths": [],
+      "license_status": "unchecked",
+      "constraints": [
+        "区分审计用途与其他能力",
+        "检查脚本和权限说明"
+      ]
+    },
+    {
+      "id": "huggingface_skills",
+      "url": "https://github.com/huggingface/skills",
+      "source_type": "official",
+      "tier": 1,
+      "domain_ids": [],
+      "discovery_method": "spec_initial_candidate",
+      "verification_status": "verified",
+      "verified_at": "2026-09-20",
+      "verification_query": "org:huggingface skill in:name",
+      "observed": { "stars": 11070 },
+      "skill_paths": [],
+      "license_status": "unchecked",
+      "constraints": [
+        "§4.3 领域表未列 Hugging Face 的对应领域，domain_ids 暂留空",
+        "其内容多属 AI/ML 开发，而 §3.1 规定 AI 开发不作为独立收录方向",
+        "须逐技能判别是否直接服务已列十类，否则排除"
+      ]
+    },
+    {
+      "id": "google_labs_code_stitch_skills",
+      "url": "https://github.com/google-labs-code/stitch-skills",
+      "source_type": "official",
+      "tier": 1,
+      "domain_ids": ["product", "dev"],
+      "discovery_method": "github_search",
+      "verification_status": "verified",
+      "verified_at": "2026-09-20",
+      "verification_query": "org:google-labs-code skill",
+      "observed": { "stars": 8343 },
+      "skill_paths": [],
+      "license_status": "unchecked",
+      "constraints": [
+        "需求文档写作「Google Labs」，org:googlelabs 返回 422，实际组织为 google-labs-code"
+      ]
+    },
+    {
+      "id": "supabase_agent_skills",
+      "url": "https://github.com/supabase/agent-skills",
+      "source_type": "official",
+      "tier": 1,
+      "domain_ids": ["dev", "cloud"],
+      "discovery_method": "spec_initial_candidate",
+      "verification_status": "verified",
+      "verified_at": "2026-09-20",
+      "verification_query": "org:supabase skill in:name",
+      "observed": { "stars": 2637 },
+      "skill_paths": [],
+      "license_status": "unchecked",
+      "constraints": ["核验云环境和工具依赖"]
+    },
+    {
+      "id": "expo_skills",
+      "url": "https://github.com/expo/skills",
+      "source_type": "official",
+      "tier": 1,
+      "domain_ids": ["dev"],
+      "discovery_method": "spec_initial_candidate",
+      "verification_status": "verified",
+      "verified_at": "2026-09-20",
+      "verification_query": "org:expo skill in:name",
+      "observed": { "stars": 2584 },
+      "skill_paths": [],
+      "license_status": "unchecked",
+      "constraints": ["标注上游声明的运行环境与依赖，不猜测兼容性"]
+    },
+    {
+      "id": "getsentry_skills",
+      "url": "https://github.com/getsentry/skills",
+      "source_type": "official",
+      "tier": 1,
+      "domain_ids": ["dev", "cloud", "security"],
+      "discovery_method": "spec_initial_candidate",
+      "verification_status": "verified",
+      "verified_at": "2026-09-20",
+      "verification_query": "org:getsentry skill in:name",
+      "observed": { "stars": 999 },
+      "skill_paths": [],
+      "license_status": "unchecked",
+      "constraints": ["需求文档写作「Sentry」，实际组织为 getsentry"]
+    },
+    {
+      "id": "better_auth_skills",
+      "url": "https://github.com/better-auth/skills",
+      "source_type": "official",
+      "tier": 1,
+      "domain_ids": ["dev", "security"],
+      "discovery_method": "spec_initial_candidate",
+      "verification_status": "verified",
+      "verified_at": "2026-09-20",
+      "verification_query": "org:better-auth skill in:name",
+      "observed": { "stars": 219 },
+      "skill_paths": [],
+      "license_status": "unchecked",
+      "constraints": ["认证类技能须检查凭据处理方式"]
+    },
+    {
+      "id": "stripe_skills",
+      "url": null,
+      "source_type": "official",
+      "tier": 1,
+      "domain_ids": ["finance", "dev"],
+      "discovery_method": "spec_initial_candidate",
+      "verification_status": "not_found",
+      "verified_at": "2026-09-20",
+      "verification_query": "org:stripe skill（全字段）、org:stripe skill in:name",
+      "observed": { "stars": null },
+      "skill_paths": [],
+      "license_status": "unchecked",
+      "constraints": [
+        "需求文档把 Stripe 列为官方候选，但在 stripe 组织下未找到名称、描述或 README 含 skill 的仓库",
+        "如后续确认存在，须补齐 url 并改 verification_status；在此之前不得凭旧 README 的「Stripe (2个)」说法收录"
+      ]
+    },
+    {
+      "id": "gauss314_skills",
+      "url": "https://github.com/gauss314/skills",
+      "source_type": "community_list",
+      "tier": 2,
+      "domain_ids": ["finance"],
+      "discovery_method": "provided_lead",
+      "verification_status": "verified",
+      "verified_at": "2026-09-20",
+      "verification_query": "HTTP GET raw README（200，25572 B）",
+      "observed": { "stars": null },
+      "skill_paths": [],
+      "license_status": "unchecked",
+      "constraints": [
+        "社区合集，需展开",
+        "同库含交易执行技能，不能全库收录",
+        "不将调用官方数据接口误称为官方技能"
+      ]
+    },
+    {
+      "id": "market_news_analyst",
+      "url": "https://github.com/tradermonty/claude-trading-skills/blob/main/skills/market-news-analyst/SKILL.md",
+      "source_type": "community",
+      "tier": 2,
+      "domain_ids": ["finance"],
+      "discovery_method": "provided_lead",
+      "verification_status": "verified",
+      "verified_at": "2026-09-20",
+      "verification_query": "HTTP GET SKILL.md（200，27053 B）",
+      "observed": { "stars": null },
+      "skill_paths": ["skills/market-news-analyst/SKILL.md"],
+      "license_status": "unchecked",
+      "constraints": [
+        "政策、地缘事件、能源与贵金属关联",
+        "需核验其引用及信息时效规则",
+        "逐技能筛选，拒绝实盘下单"
+      ]
+    },
+    {
+      "id": "futures_research",
+      "url": "https://github.com/thousandcents/futures-research/blob/main/SKILL.md",
+      "source_type": "community",
+      "tier": 2,
+      "domain_ids": ["finance"],
+      "discovery_method": "provided_lead",
+      "verification_status": "verified",
+      "verified_at": "2026-09-20",
+      "verification_query": "HTTP GET SKILL.md（200，62798 B）",
+      "observed": { "stars": null },
+      "skill_paths": ["SKILL.md"],
+      "license_status": "unchecked",
+      "constraints": [
+        "期货投研、现货与基差等",
+        "需检查实际功能边界与依赖",
+        "区分事实、推断和预测；不得承诺收益"
+      ]
+    },
+    {
+      "id": "mental_health_psychoeducation",
+      "url": "https://github.com/JK-0001/skills/blob/main/mental-health-psychoeducation/SKILL.md",
+      "source_type": "community",
+      "tier": 2,
+      "domain_ids": ["mental_health"],
+      "discovery_method": "provided_lead",
+      "verification_status": "verified",
+      "verified_at": "2026-09-20",
+      "verification_query": "HTTP GET SKILL.md（200，23961 B）",
+      "observed": { "stars": null },
+      "skill_paths": ["mental-health-psychoeducation/SKILL.md"],
+      "license_status": "unchecked",
+      "constraints": [
+        "心理健康教育与应对信息",
+        "含药物和自评相关内容，须核验是否超出本项目边界",
+        "医疗声明和隐私要求单独评估，不直接推荐"
+      ]
+    },
+    {
+      "id": "skillmedev_skills",
+      "url": "https://github.com/SkillMedev/skills",
+      "source_type": "community_list",
+      "tier": 2,
+      "domain_ids": ["physical_health", "mental_health"],
+      "discovery_method": "provided_lead",
+      "verification_status": "verified",
+      "verified_at": "2026-09-20",
+      "verification_query": "HTTP GET raw README（200，130314 B）",
+      "observed": { "stars": null },
+      "skill_paths": [],
+      "license_status": "unchecked",
+      "constraints": [
+        "社区合集，需展开和核验依据",
+        "不能以目录描述替代技能评估",
+        "排除临床决策、处方或疗效承诺"
+      ]
+    }
+  ],
+  "tier_3_search": {
+    "source_type": "search",
+    "tier": 3,
+    "description": "GitHub 搜索主动发现，查询词与排除规则见 config/searches.json。",
+    "constraints": [
+      "搜索规则可维护、可逐步改进",
+      "命中后仍需判别实际用途，不把上游 README 内出现的任意 GitHub 链接当作技能"
+    ]
+  }
+}

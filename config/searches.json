@@ -1,0 +1,92 @@
+{
+  "version": "1.0.0",
+  "source": "docs/Skills导航目录二开需求.md §4.2、§4.3",
+  "constraint": "每个领域配置中英文搜索词，搜索至少约束到 SKILL.md 文件。",
+  "note": "词表是发现手段，命中后仍需判别实际用途。金融、心理健康、身体健康三类包含 §4.3 直接给出的词条，其余由 §3.1 的收录内容派生。",
+  "api": {
+    "endpoint": "GET https://api.github.com/search/repositories?q={query}",
+    "auth": "未认证 / 带 token（GitHub Actions 使用最小权限运行时 token）",
+    "rate_limits": {
+      "unauthenticated": { "search": "10 次/分钟", "core": "60 次/小时" },
+      "authenticated": { "search": "30 次/分钟", "core": "5000 次/小时" }
+    },
+    "pagination": "per_page 上限 100，page 递增；结果超过 1000 条时 GitHub 限制搜索深度，需细分查询词而不是翻页到底",
+    "implementation_note": "未认证额度不足以跑全量发现。本地只能抽样验证逻辑，全量采集必须在 Actions 中带 token 运行。"
+  },
+  "file_constraint": {
+    "requirement": "至少约束到 SKILL.md",
+    "query_template": "{term} \"SKILL.md\"",
+    "repo_search_limit": "仓库搜索不校验文件名，把 SKILL.md 作为词条只能提高命中率，无法精确限定到文件",
+    "precise_option": "代码搜索支持 filename:SKILL.md，可精确限定，但必须认证（见 api.auth）"
+  },
+  "spec_provided_terms": [
+    "宏观/macro",
+    "地缘/geopolitical",
+    "大宗商品/commodities",
+    "期货/futures",
+    "黄金/gold",
+    "白银/silver",
+    "心理教育/psychoeducation",
+    "压力/stress",
+    "睡眠/sleep",
+    "运动/exercise",
+    "营养/nutrition"
+  ],
+  "per_domain": {
+    "dev": {
+      "zh": ["代码审查", "重构", "调试", "测试", "前端", "后端"],
+      "en": ["code review", "refactor", "debugging", "testing", "frontend", "backend"]
+    },
+    "docs": {
+      "zh": ["文档处理", "表格", "演示文稿"],
+      "en": ["document", "word", "pdf", "excel", "powerpoint", "pptx", "xlsx", "docx"]
+    },
+    "content": {
+      "zh": ["文章写作", "配图", "视频创作", "音频"],
+      "en": ["article", "image", "video", "audio", "writing"]
+    },
+    "product": {
+      "zh": ["需求分析", "界面设计", "原型"],
+      "en": ["requirements", "ui design", "prototype", "wireframe"]
+    },
+    "automation": {
+      "zh": ["浏览器操作", "文件处理", "工作流"],
+      "en": ["browser automation", "file processing", "workflow", "integration"]
+    },
+    "cloud": {
+      "zh": ["部署", "基础设施"],
+      "en": ["deployment", "ci/cd", "infrastructure", "terraform"]
+    },
+    "security": {
+      "zh": ["漏洞检测", "代码安全", "审计"],
+      "en": ["vulnerability", "code security", "audit", "static analysis"]
+    },
+    "finance": {
+      "zh": ["宏观", "地缘", "大宗商品", "期货", "黄金", "白银", "股票", "财报", "汇率", "利率", "回测", "能源"],
+      "en": ["macro", "geopolitical", "commodities", "futures", "gold", "silver", "stock", "earnings", "forex", "interest rate", "backtest", "energy"],
+      "spec_provided": ["宏观", "地缘", "大宗商品", "期货", "黄金", "白银"]
+    },
+    "mental_health": {
+      "zh": ["心理教育", "压力", "情绪", "情绪记录", "正念"],
+      "en": ["psychoeducation", "stress", "mood", "mood tracking", "mindfulness"],
+      "spec_provided": ["心理教育", "压力"]
+    },
+    "physical_health": {
+      "zh": ["睡眠", "运动", "营养", "饮食", "习惯养成"],
+      "en": ["sleep", "exercise", "nutrition", "diet", "habit"],
+      "spec_provided": ["睡眠", "运动", "营养"]
+    }
+  },
+  "global_exclusions": {
+    "query_terms": ["-dsh", "-clawhub"],
+    "orgs": ["awesome-dsh-plugin"],
+    "repos": ["justdoit712/skill"],
+    "post_filter": [
+      "按 config/taxonomy.json 的 hard_exclusions 排除 DSH 插件、实盘自动下单、面向专业临床诊断与治疗决策的技能",
+      "按 not_standalone_directions 排除仅属科研、通用数据分析、AI 开发的条目",
+      "普通仓库、空模板、插件容器或整个合集不能计为一个独立技能",
+      "只有 MCP 服务、无独立技能说明的普通工具不计入",
+      "合集仓库尽量展开到具体技能；多个来源指向同一技能时去重并保留全部发现依据"
+    ]
+  }
+}
