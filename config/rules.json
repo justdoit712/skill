@@ -121,6 +121,12 @@
       "PARSE_ERROR": "内容解析失败",
       "MODEL_ERROR": "模型调用失败或超时"
     },
+    "fetch": {
+      "UPSTREAM_GONE": "上游已移除或不可访问（404/410）。属条目状态，不是质量判定，详见 §6 与 §7 的报告分类",
+      "HTTP_ERROR": "HTTP 状态异常（404/410 之外），属采集失败",
+      "NETWORK_ERROR": "网络连接或超时失败。与 processing_failure 同名，指同一类失败",
+      "TRUNCATED": "内容超过单条读取量上限被截断。截断内容不得用于作出推荐结论，应记为 unknown"
+    },
     "review": {
       "CONTENT_CHANGED": "上游内容已变化，保留推荐状态并标记待复核"
     }

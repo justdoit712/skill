@@ -1,0 +1,24 @@
+{
+  "model_config_version": "1.0.0",
+  "source": "docs/Skills导航目录二开需求.md §7.4",
+  "note": "不含凭据的配置示例。真实配置写入 config/model.local.json（已被 .gitignore 排除）；凭据只经环境变量从 GitHub Secrets 注入，不进入仓库、日志或网页。模型服务与模型名可替换，暂不绑定供应商。",
+  "provider": "example-provider",
+  "endpoint": "https://api.example.com/v1/chat/completions",
+  "model": "example-model-name",
+  "auth": {
+    "type": "bearer",
+    "api_key_env": "LLM_API_KEY"
+  },
+  "request": {
+    "timeout_seconds": 60,
+    "max_attempts": 2,
+    "temperature": 0,
+    "response_format": "json"
+  },
+  "limits": {
+    "max_input_bytes": 262144,
+    "max_output_tokens": 2048,
+    "max_calls_per_week": 50,
+    "note": "max_calls_per_week 与 config/rules.json 的 weekly_quota 一致；额度账本见需求 §7.3。max_attempts 对应「每个名额最多 2 次调用尝试」。"
+  }
+}
