@@ -1,5 +1,5 @@
 {
-  "rules_version": "1.0.0",
+  "rules_version": "1.0.1",
   "source": "docs/Skills导航目录二开需求.md §5.2",
   "note": "评估规则与阈值的唯一来源。规则变更后须把受影响条目加入同一复核队列，并计入每周额度（§10.1）。AI 辅助评估不等于功能测试或安全审计。",
   "weekly_quota": 50,
@@ -44,7 +44,8 @@
     {
       "id": "evidence_traceability",
       "name": "证据可追溯",
-      "question": "介绍与实际内容是否相符，来源是否可追溯？"
+      "question": "上游介绍与实际内容是否相符？",
+      "note": "发现来源由本目录记录，不需要技能自证出处。不要因为 SKILL.md 未引用外部文献或数据来源就判 fail 或 unknown；本项只考察介绍与内容是否一致。"
     },
     {
       "id": "dependency_transparency",
