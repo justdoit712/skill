@@ -1,18 +1,21 @@
 # Skills 导航目录 清理清单（可执行）
 
 依据：`docs/Skills导航目录二开需求.md` §8.2–§8.8、§7.1、§7.4；配套 `docs/Skills导航目录实施文档.md`。
-状态：**波次 1 已执行**（2026-09-20）；波次 0 部分完成，波次 2、3 未执行。
+状态：**波次 1、2、3 已执行**（2026-09-20），删除阶段结束；波次 0 部分完成。
 
 ## 执行记录
 
 | 时间 | 波次 | 结果 |
 |---|---|---|
-| 2026-09-20 | 0（部分） | 记录 10 个第三方许可证类型（§1.1）；按 §1.3 建议放弃 `SKILL_SOURCES.json` 线索提取 |
+| 2026-09-20 | 0（部分） | 记录 10 个第三方许可证类型（§1.1）；按 §1.3 建议放弃 `SKILL_SOURCES.json` 线索提取；按 §1.4 评估全部旧代码，结论为无可迁移内容 |
 | 2026-09-20 | 1 | 删除 24 个路径、932 个跟踪文件；工作区 349.8 MB → 94.7 MB |
+| 2026-09-20 | 2 | 删除 22 个旧文档，**未等新 README**：逐份核对后确认全部为已删产品（小跃/小易伴侣）与旧爬虫产物，无可整合内容，§8.5 的门禁在此不成立 |
+| 2026-09-20 | 3 | 删除 17 个路径、25 个文件（旧爬虫链路、Windows 入口、`tools/`、`data/` 与 `public/data/` 旧数据）。页面无任何 `fetch`/`.json` 引用，`public/data/` 为孤儿数据，确认可删 |
+| 2026-09-20 | 补漏 | §8.3 的「`scripts/sync_skills.py` 中 DSH 配置」为**文件内片段删除**，本清单初版只列整文件删除项而遗漏；现已移除上游源、生成模板分组与自身仓库排除映射三处，`py_compile` 校验通过 |
 | 挂起 | 1 | `vercel.json`、`.vercelignore` **未删除**，前置条件未满足（§2.2） |
-| 未开始 | 2、3 | 旧文档、旧运行链路与旧数据 |
+| 待重写 | — | `README.md` 仍有 3358 行含 `dsh`（占 4484 行的 75%），随新 README 重写清除（§8.3） |
 
-已确认的不可逆项：`projects/assistant/assets/logo/` 下 13 个被忽略文件共 137.2 MB（§1.2）已按决定删除，无法从 git 恢复。
+删除阶段结束时仓库为 31 个文件（含 `.idea/` 10 个），此前为 996 个跟踪文件。已确认的不可逆项：`projects/assistant/assets/logo/` 下 13 个被忽略文件共 137.2 MB（§1.2）已按决定删除，无法从 git 恢复。
 
 ---
 
@@ -74,13 +77,18 @@
 
 文件内 `dsh` 出现 7197 次，旧索引很可能以被排除对象为主体。**建议直接放弃提取**，改用 §4.3 的初始来源表作种子；若坚持提取，只保留人工确认的非 DSH、非本仓库条目，不继承任何"可信/推荐"状态（§4.2）。
 
-### 1.4 可复用代码
+### 1.4 可复用代码 —— 已评估，结论：无可迁移内容
 
-| 文件 | 可复用部分 | 处理 |
+按 §8.4 在删除前逐项评估（2026-09-20）：
+
+| 文件 | 内容 | 结论 |
 |---|---|---|
-| `scripts/sync_skills.py` | 采集与来源配置结构 | 迁移后重写为新入口，或新模块就绪后移除（§8.6） |
-| `tools/skill_validator.py`、`tools/skill_validator/` | Markdown/元数据解析逻辑 | 迁移必要部分后删除旧入口（§8.4） |
-| `main.py`、`crawler.py`、`data_manager.py`、`config.py` | 抓取、重试、存储 | 迁移有用逻辑后删除（§8.4） |
+| `scripts/sync_skills.py` | `fetch_content`、`extract_github_repos`、`parse_awesome_list`、`update_readme` | 保留待重写（§8.6）。其"从 README 正则抽 GitHub 链接"正是 §4.2 明令禁止的做法（不把上游 README 里任意链接当技能），不可复用 |
+| `tools/skill_validator/` | `_split_frontmatter`、`_parse_yaml_frontmatter`、`_parse_content`、`to_prompt` | 元数据解析已优先用 PyYAML（与 §7.4 一致），手写回退冗余；按标题切段/抽代码块合计约 30 行，将按 PyYAML 重写。**不迁移** |
+| `crawler.py`、`data_manager.py`、`main.py`、`config.py` | 单源抓取、JSON/CSV 存储、CLI 入口、常量 | 新流程为多源配置 + GitHub 搜索 API + 不同数据模型（catalog/queue/state/reports），结构不适用。**不迁移** |
+| `scheduler.py`、`api_client.py`、`api_server_example.py` | 常驻调度、REST 同步、Flask 服务 | §7.4 明确移除常驻调度与服务。**不迁移** |
+
+全部文件均保留在 Git 历史中，若新流程确需其中某段逻辑，可随时 `git show <原始提交>:<路径>` 取回，因此"迁移"不是一次性决策。
 
 ### 1.5 README 的许可证表述
 

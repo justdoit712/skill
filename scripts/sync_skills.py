@@ -23,11 +23,6 @@ UPSTREAM_SOURCES = {
         "url": "https://raw.githubusercontent.com/VoltAgent/awesome-agent-skills/main/README.md",
         "type": "awesome_list"
     },
-    "awesome_dsh_plugin": {
-        "name": "Awesome DSH Plugin",
-        "url": "https://raw.githubusercontent.com/awesome-dsh-plugin/awesome-dsh-plugin/main/README.md",
-        "type": "awesome_list"
-    },
     "mattpocock_skills": {
         "name": "Matt Pocock Skills",
         "url": "https://raw.githubusercontent.com/mattpocock/skills/main/README.md",
@@ -120,7 +115,6 @@ def update_readme(sources_data):
 
 - [OpenAI Skills](https://github.com/openai/skills)
 - [VoltAgent Awesome Agent Skills](https://github.com/VoltAgent/awesome-agent-skills)
-- [Awesome DSH Plugin](https://github.com/awesome-dsh-plugin/awesome-dsh-plugin)
 - [Matt Pocock Skills](https://github.com/mattpocock/skills)
 
 ### 技能仓库列表
@@ -174,7 +168,6 @@ def update_readme(sources_data):
 # 各上游对应的自身仓库（用于 awesome list 排除自身）
 SELF_REPOS = {
     "voltagent_awesome": ("VoltAgent", "awesome-agent-skills"),
-    "awesome_dsh_plugin": ("awesome-dsh-plugin", "awesome-dsh-plugin"),
     "mattpocock_skills": ("mattpocock", "skills"),
 }
 
