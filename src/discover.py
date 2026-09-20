@@ -212,6 +212,7 @@ def _expand_candidates(
     sleep,
     outcomes: list[SearchOutcome],
     discovered_at: str,
+    progress=None,
 ) -> list[Candidate]:
     """把仓库级候选细化到具体 SKILL.md（§4.2）。
 
@@ -236,6 +237,8 @@ def _expand_candidates(
                 cache[key] = ([], None)
                 limited = True
             else:
+                if progress:
+                    progress(f"展开仓库 {expanded + 1}：{key}")
                 paths, error = expand_repo_skills(candidate.owner, candidate.repo, session=session, sleep=sleep)
                 cache[key] = (paths, error)
                 expanded += 1
@@ -299,6 +302,7 @@ def discover(
     min_interval_seconds: float = DEFAULT_MIN_INTERVAL_SECONDS,
     sleep=time.sleep,
     discovered_at: str | None = None,
+    progress=None,
 ) -> tuple[list[Candidate], list[SearchOutcome]]:
     """执行来源种子与搜索查询，并按需展开到具体技能。
 
@@ -332,6 +336,8 @@ def discover(
         if max_queries is not None:
             queries = queries[:max_queries]
         for index, query in enumerate(queries):
+            if progress:
+                progress(f"搜索 {index + 1}/{len(queries)}：{query.term}")
             if index and min_interval_seconds > 0:
                 sleep(min_interval_seconds)
             outcome = github_search(
@@ -345,7 +351,7 @@ def discover(
         if expand:
             candidates = _expand_candidates(
                 candidates, session=sess, limit=expand_limit, sleep=sleep,
-                outcomes=outcomes, discovered_at=stamped,
+                outcomes=outcomes, discovered_at=stamped, progress=progress,
             )
     finally:
         if owns_session:

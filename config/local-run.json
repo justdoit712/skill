@@ -1,0 +1,9 @@
+{
+  "target_recommended": 50,
+  "max_total_tokens": 100000000,
+  "max_evaluations": null,
+  "limit_queries": null,
+  "expand_limit": null,
+  "max_consecutive_failures": 3,
+  "note": "本地手动运行：目标为本次新增推荐数。输入与输出合计达到 100M Token 后停止下一次请求；最后一次请求可能超出上限。null 表示评估次数/查询数/展开仓库数不额外限制，但本次发现的每个候选最多处理一次。模型请求不自动重试；usage 缺失时停止。Actions 周额度仍为 50。"
+}

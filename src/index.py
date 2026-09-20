@@ -77,11 +77,17 @@ def build_entry(
     content_changed_at: str | None = None,
     upstream_status: str = UPSTREAM_OK,
     license_id: str | None = None,
+    needs_review: bool = False,
+    review_note: str | None = None,
+    pending_review: dict | None = None,
 ) -> dict:
     """构造一个索引条目。
 
     §6 要求「上游未说明的不得推测为全平台兼容」，因此平台与依赖字段未声明时
     一律为 None 或空列表，并保留 declared 语义。
+
+    needs_review / review_note / pending_review 由调用方按 §5.2 的待复核规则给出：
+    条目自身不判断内容是否变化，只负责如实保存结论与原评估快照。
     """
     ctx = context or CatalogContext()
     prescreen_result = prescreen_result or PrescreenResult(skill_id=candidate.skill_id, decision="queued")
@@ -103,7 +109,6 @@ def build_entry(
     for code in prescreen_result.reason_codes:
         if code not in reason_codes:
             reason_codes.append(code)
-    review = evaluation.get("review") or {}
 
     source_type = next(
         (ctx.source_types.get(sid) for sid in candidate.source_ids if ctx.source_types.get(sid)),
@@ -131,8 +136,10 @@ def build_entry(
             "terms": list(candidate.search_terms),
         },
         "status": status,
-        "needs_review": bool(review.get("needs_review", False)),
-        "review_note": review.get("note"),
+        "needs_review": bool(needs_review),
+        "review_note": review_note,
+        # §5.2/§6：待复核时要能展示「原评估对应的版本」——旧指纹、旧简述、旧分类与复核原因
+        "pending_review": pending_review,
         "flags": list(prescreen_result.flags),
         "reason_codes": reason_codes,
         "limitations": evaluation.get("limitations"),
@@ -246,6 +253,9 @@ def _display(entry: dict) -> dict:
         "status": entry["status"],
         "needs_review": entry["needs_review"],
         "review_note": entry["review_note"],
+        # §6：待复核要清楚区分上游当前版本与原评估版本
+        "pending_review": entry.get("pending_review"),
+        "reason_codes": entry["reason_codes"],
         "limitations": entry["limitations"],
         "first_seen": entry["first_seen"],
         "last_checked": entry["last_checked"],

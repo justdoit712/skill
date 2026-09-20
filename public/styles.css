@@ -109,6 +109,18 @@ body {
 .tag-cand { background: #f3f4f6; }
 .tag-review { background: var(--warn-soft); border-color: #eac54f; color: var(--warn); font-weight: 600; }
 
+/* 待复核：原评估版本快照，默认收起但可展开核对 */
+.review-box {
+  margin: 0 0 8px;
+  padding: 8px 12px;
+  border: 1px solid #eac54f;
+  border-radius: 6px;
+  background: var(--warn-soft);
+  font-size: 13px;
+}
+.review-box summary { cursor: pointer; color: var(--warn); font-weight: 600; }
+.review-box p { margin: 6px 0 0; color: var(--text); }
+
 .none { color: var(--muted); padding: 24px 0; }
 
 /* ---------- 空状态与说明 ---------- */

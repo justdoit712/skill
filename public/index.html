@@ -121,6 +121,31 @@
     });
   }
 
+  function day(value) {
+    return text(value) ? String(value).slice(0, 10) : null;
+  }
+
+  function reviewBlock(entry) {
+    var prior = entry.pending_review;
+    if (!prior) return "";
+
+    var head = [];
+    if (text(prior.evaluated_at)) head.push("评估时间 " + escapeHtml(day(prior.evaluated_at)));
+    if (text(prior.rules_version)) head.push("规则版本 " + escapeHtml(prior.rules_version));
+    if (text(prior.content_fingerprint)) {
+      head.push("对应版本 " + escapeHtml(String(prior.content_fingerprint).slice(0, 18)) + "…");
+    }
+
+    var body = [];
+    if (text(prior.summary_zh)) body.push("<p>原简述：" + escapeHtml(prior.summary_zh) + "</p>");
+    if (text(prior.main_category)) body.push("<p>原分类：" + escapeHtml(prior.main_category) + "</p>");
+    if (text(prior.limitations)) body.push("<p>原限制：" + escapeHtml(prior.limitations) + "</p>");
+
+    return '<details class="review-box"><summary>原评估版本' +
+      (head.length ? "（" + head.join(" · ") + "）" : "") +
+      "</summary>" + (body.join("") || "<p>原评估未保留可展示的简述。</p>") + "</details>";
+  }
+
   function render(entries) {
     var visible = entries.filter(matches);
     el.list.innerHTML = "";
@@ -137,9 +162,11 @@
       var cat = entry.main_category ? entry.main_category.name : "未分类";
       var bits = ['<span class="tag tag-cat">' + escapeHtml(cat) + "</span>"];
       if (entry.needs_review) {
-        bits.push('<span class="tag tag-review">内容已变化，待复核</span>');
+        // §5.2：保留推荐状态但必须醒目提示，不能让人误以为已通过复核
+        bits.push('<span class="tag tag-review">内容已变化，待复核' +
+          (entry.status === "recommended" ? "（推荐状态待复核）" : "（已降级）") + "</span>");
       }
-      if (entry.status === "candidate") {
+      if (entry.status === "candidate" && !entry.needs_review) {
         bits.push('<span class="tag tag-cand">候选</span>');
       }
       if (entry.source_type) {
@@ -161,6 +188,9 @@
       if (text(entry.first_seen)) dates.push("首次发现 " + escapeHtml(entry.first_seen.slice(0, 10)));
       if (text(entry.last_checked)) dates.push("最近检查 " + escapeHtml(entry.last_checked.slice(0, 10)));
       if (text(entry.content_changed_at)) dates.push("内容变更 " + escapeHtml(entry.content_changed_at.slice(0, 10)));
+      if (text(entry.upstream_status) && entry.upstream_status !== "ok") {
+        dates.push("上游状态 " + escapeHtml(entry.upstream_status));
+      }
 
       li.innerHTML =
         '<h3><a href="' + escapeHtml(entry.url || "#") + '" target="_blank" rel="noopener noreferrer">' +
@@ -169,7 +199,9 @@
         '<p class="sum">' + escapeHtml(text(entry.summary_zh) || "（暂无中文简述）") + "</p>" +
         '<p class="tags">' + bits.join("") + "</p>" +
         (meta.length ? '<p class="detail">' + meta.join(" · ") + "</p>" : "") +
-        (entry.review_note ? '<p class="detail review">待复核：' + escapeHtml(entry.review_note) + "</p>" : "") +
+        (entry.needs_review ? '<p class="detail review">待复核：' +
+          escapeHtml(entry.review_note || "上游内容已变化，等待复核。") + "</p>" : "") +
+        reviewBlock(entry) +
         (dates.length ? '<p class="dates">' + dates.join(" · ") + "</p>" : "");
       el.list.appendChild(li);
     });

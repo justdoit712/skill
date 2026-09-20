@@ -23,6 +23,9 @@ logs/
 # 运行期暂存：上游原文，仅在同一 runner 内复用，不入库
 data/state/texts/
 
+# 本地手动运行的额度、用量报告与锁；不混入 Actions 周账本
+data/local/
+
 # IDE 与系统
 .vscode/
 .idea/
