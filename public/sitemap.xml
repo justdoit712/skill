@@ -1,43 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  按实际页面与发布地址生成（§8.6）。当前只有一个页面：站点的根。
+  更新报告以 data/reports/ 与 public/reports/ 下的周报形式产生，属静态文件而非独立页面，
+  因此不列入本文件；若将来新增页面，在此追加。
+-->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://skill.miyucaicai.cn/</loc>
-    <changefreq>daily</changefreq>
+    <loc>https://justdoit712.github.io/skill/</loc>
+    <changefreq>weekly</changefreq>
     <priority>1.0</priority>
-  </url>
-  <url>
-    <loc>https://skill.miyucaicai.cn/skills.html</loc>
-    <changefreq>daily</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://skill.miyucaicai.cn/skills-en.html</loc>
-    <changefreq>daily</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://skill.miyucaicai.cn/local-skills.html</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://skill.miyucaicai.cn/projects.html</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://skill.miyucaicai.cn/index-en.html</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://skill.miyucaicai.cn/llms.txt</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://skill.miyucaicai.cn/llms-full.txt</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
   </url>
 </urlset>

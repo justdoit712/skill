@@ -1,5 +1,5 @@
-# robots.txt for skill.miyucaicai.cn
-# AI Agent 技能商店 - 主动放行主流 AI 引擎爬虫，最大化 GEO 收录
+# robots.txt for justdoit712.github.io/skill/
+# Skills 导航目录 —— 主动放行主流 AI 引擎爬虫
 
 # ============ 海外 AI 引擎 ============
 User-agent: GPTBot
@@ -88,4 +88,4 @@ Allow: /
 User-agent: *
 Allow: /
 
-Sitemap: https://skill.miyucaicai.cn/sitemap.xml
+Sitemap: https://justdoit712.github.io/skill/sitemap.xml
