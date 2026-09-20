@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import re
 import unittest
 from pathlib import Path
@@ -52,6 +53,32 @@ class SyncWorkflowTest(unittest.TestCase):
 
     def test_top_level_entry_calls_the_pipeline(self) -> None:
         self.assertIn("python -m src.pipeline", self.runs)
+
+    def test_two_phases_with_commit_between_them(self) -> None:
+        """§7.2 步骤 3：额度预留必须先 commit/push，之后才可付费调用。
+
+        否则 runner 中断或 push 失败时，下次运行读不到已消耗额度，会重复计费。
+        """
+        steps = self.doc["jobs"]["sync"]["steps"]
+        names = [s.get("name", "") for s in steps if isinstance(s, dict)]
+        reserve = next(i for i, n in enumerate(names) if "阶段一" in n)
+        commit_state = next(i for i, n in enumerate(names) if "推送额度预留" in n)
+        call_model = next(i for i, n in enumerate(names) if "阶段二" in n)
+        self.assertLess(reserve, commit_state, "预留必须在提交之前")
+        self.assertLess(commit_state, call_model, "提交推送必须在调用模型之前")
+
+        commit_run = steps[commit_state].get("run", "")
+        self.assertIn("git push", commit_run)
+        self.assertIn("exit 1", commit_run, "推送失败必须中止，不得继续付费调用")
+
+    def test_model_key_only_reaches_the_evaluate_phase(self) -> None:
+        steps = self.doc["jobs"]["sync"]["steps"]
+        for step in steps:
+            if not isinstance(step, dict):
+                continue
+            has_key = "LLM_API_KEY" in json.dumps(step.get("env", {}))
+            if has_key:
+                self.assertIn("阶段二", step.get("name", ""), "凭据只应注入评估阶段")
 
     def test_precheck_stops_before_paid_calls(self) -> None:
         """缺凭据时必须在调用模型之前中止。"""

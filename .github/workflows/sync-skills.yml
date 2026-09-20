@@ -1,12 +1,15 @@
 name: Sync Skills
 
-# 顶层入口。依据需求 §7.2，单次运行承载七步：
-#   1 检出与预检 → 2 发现与预筛 → 3 预留额度 → 4 评估和生成
-#   → 5 验证与提交 → 6 发布同一产物 → 7 部署验证
-# 不靠机器人提交触发第二次 push：GITHUB_TOKEN 触发的 push 不会启动新 workflow。
+# 顶层入口。依据需求 §7.2，单次运行承载七步，并**分成两个阶段执行**：
+#   阶段一（reserve）：1 检出与预检 → 2 发现与预筛 → 3 预留额度 → 提交并推送
+#   阶段二（evaluate）：4 评估和生成 → 5 验证与提交 → 6 发布同一产物 → 7 部署验证
 #
+# 阶段一与阶段二之间必须有一次成功的提交推送：额度账本只有在推送之后才对下一次
+# 运行可见。若途中中断或 push 失败，流程在阶段二之前停止，不会产生付费调用，
+# 也就不会出现"消耗了额度但账本没记上"的重复计费。
+#
+# 不靠机器人提交触发第二次 push：GITHUB_TOKEN 触发的 push 不会启动新 workflow。
 # 定时为每周日北京时间 10:00（UTC 0 2 * * 0）。手动与定时共享同一额度账本（§7.3）。
-# 被调用的 deploy-pages.yml 不再申请同一 concurrency 锁，避免相互阻塞。
 
 on:
   schedule:
@@ -25,6 +28,10 @@ on:
         description: '本批最多评估数'
         required: false
         default: '50'
+      expand_limit:
+        description: '本轮最多展开多少个仓库到具体技能，留空为不限'
+        required: false
+        default: ''
 
 permissions:
   contents: read
@@ -55,30 +62,63 @@ jobs:
       - name: 安装依赖
         run: pip install -r requirements.txt
 
-      - name: 预检与运行（预留额度先于付费调用）
-        id: run
+      - name: 组装参数
+        id: args
         env:
-          LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
-          DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
           LIMIT_QUERIES: ${{ github.event.inputs.limit_queries }}
           LIMIT_EVALUATIONS: ${{ github.event.inputs.limit_evaluations || '50' }}
+          EXPAND_LIMIT: ${{ github.event.inputs.expand_limit }}
         run: |
           set -euo pipefail
           args="--config-dir config --data-dir data --public-dir public"
           if [ -n "${LIMIT_QUERIES}" ]; then args="$args --limit-queries ${LIMIT_QUERIES}"; fi
           if [ -n "${LIMIT_EVALUATIONS}" ]; then args="$args --limit-evaluations ${LIMIT_EVALUATIONS}"; fi
-          if [ "${DRY_RUN}" = "true" ]; then
-            python -m src.pipeline --dry-run $args
-            echo "dry_run=true" >> "$GITHUB_OUTPUT"
-          else
-            test -n "${LLM_API_KEY}" || { echo "::error::缺少 LLM_API_KEY（应来自 Secrets）"; exit 1; }
-            python -m src.pipeline --json $args | tee run-result.json
-            echo "dry_run=false" >> "$GITHUB_OUTPUT"
-          fi
+          if [ -n "${EXPAND_LIMIT}" ]; then args="$args --expand-limit ${EXPAND_LIMIT}"; fi
+          echo "args=$args" >> "$GITHUB_OUTPUT"
           echo "week=$(python -c 'from src.budget import week_id; print(week_id())')" >> "$GITHUB_OUTPUT"
 
+      - name: 干跑（不调用模型、不写账本）
+        if: github.event.inputs.dry_run == 'true'
+        run: |
+          set -euo pipefail
+          python -m src.pipeline --dry-run ${{ steps.args.outputs.args }}
+
+      - name: 阶段一 · 发现、预筛与预留额度
+        id: reserve
+        if: github.event.inputs.dry_run != 'true'
+        run: |
+          set -euo pipefail
+          python -m src.pipeline --phase reserve --json ${{ steps.args.outputs.args }} | tee reserve.json
+          echo "dry_run=false" >> "$GITHUB_OUTPUT"
+
+      - name: 提交并推送额度预留（必须先于任何付费调用）
+        if: github.event.inputs.dry_run != 'true'
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for p in data/state data/queue.json; do
+            if [ -e "$p" ]; then git add -- "$p"; fi
+          done
+          if git diff --cached --quiet; then
+            echo "额度无变化，无需推送"
+          else
+            git commit -m "chore(state): 预留额度 ${{ steps.args.outputs.week }}"
+            git pull --rebase --autostash
+            git push || { echo "::error::额度预留推送失败，已停止，不进行付费调用"; exit 1; }
+          fi
+
+      - name: 阶段二 · 评估、索引与周报
+        if: github.event.inputs.dry_run != 'true'
+        env:
+          LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
+        run: |
+          set -euo pipefail
+          test -n "${LLM_API_KEY}" || { echo "::error::缺少 LLM_API_KEY（应来自 Secrets）"; exit 1; }
+          python -m src.pipeline --phase evaluate --json ${{ steps.args.outputs.args }} | tee evaluate.json
+
       - name: 验证索引与页面数据同源
-        if: steps.run.outputs.dry_run == 'false'
+        if: github.event.inputs.dry_run != 'true'
         run: |
           set -euo pipefail
           for f in data/catalog.json public/data/catalog.json; do
@@ -95,8 +135,8 @@ jobs:
           print('同源校验通过：条目', len(ids), '页面展示', len(exposed))
           PY
 
-      - name: 提交（显式范围，禁止 git add .）
-        if: steps.run.outputs.dry_run == 'false'
+      - name: 提交结果（显式范围，禁止 git add .）
+        if: github.event.inputs.dry_run != 'true'
         run: |
           set -euo pipefail
           git config user.name "github-actions[bot]"
@@ -107,12 +147,13 @@ jobs:
           if git diff --cached --quiet; then
             echo "无变更需要提交"
           else
-            git commit -m "chore(sync): 每周采集与评估 ${{ steps.run.outputs.week }}"
+            git commit -m "chore(sync): 每周采集与评估 ${{ steps.args.outputs.week }}"
+            git pull --rebase --autostash
             git push
           fi
 
       - name: 上传页面产物（供部署 job 使用同一产物）
-        if: steps.run.outputs.dry_run == 'false'
+        if: github.event.inputs.dry_run != 'true'
         uses: actions/upload-artifact@v4
         with:
           name: pages-public

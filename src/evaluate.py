@@ -281,7 +281,26 @@ def _strip_fence(text: str) -> str:
     return stripped.strip()
 
 
-def parse_evaluation(content: str, rules: dict, source_fingerprint: str | None) -> dict:
+def normalize_main_category(raw_value, taxonomy: dict) -> str:
+    """把模型给出的主分类归一为 taxonomy 的 id。
+
+    提示词要求主分类取十个中文名之一，而规则与配置使用 id；不归一则领域专项检查
+    无法匹配（§5.2 要求相关领域检查全部通过才可推荐）。
+    """
+    allowed = taxonomy.get("main_categories", [])
+    value = "" if raw_value is None else str(raw_value).strip()
+    for category in allowed:
+        if value and value in (category["id"], category["name"]):
+            return category["id"]
+    raise ValueError(
+        "main_category 缺失或不在允许的主分类内：" + repr(raw_value)
+        + "；允许 " + "、".join(c["name"] for c in allowed)
+    )
+
+
+def parse_evaluation(
+    content: str, rules: dict, source_fingerprint: str | None, taxonomy: dict | None = None
+) -> dict:
     """解析模型输出并校验结构。结构无效时抛 ValueError，由调用方记为处理失败。"""
     try:
         raw = json.loads(_strip_fence(content))
@@ -300,6 +319,8 @@ def parse_evaluation(content: str, rules: dict, source_fingerprint: str | None) 
         raise ValueError("以下检查项缺失或取值非法：" + "、".join(invalid))
 
     evaluation = dict(raw)
+    if taxonomy is not None:
+        evaluation["main_category"] = normalize_main_category(raw.get("main_category"), taxonomy)
     evaluation["rules_version"] = rules.get("rules_version")
     evaluation["source_fingerprint"] = source_fingerprint
     evaluation.setdefault("domain_checks", {})
@@ -335,7 +356,9 @@ def evaluate(
         }
 
     try:
-        evaluation = parse_evaluation(call.content or "", rules, candidate.content_fingerprint)
+        evaluation = parse_evaluation(
+            call.content or "", rules, candidate.content_fingerprint, taxonomy
+        )
     except ValueError as exc:
         return {
             "ok": False,

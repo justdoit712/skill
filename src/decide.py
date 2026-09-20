@@ -32,6 +32,22 @@ def _evidence_of(entry) -> str:
     return ""
 
 
+def domain_check_key(domain_id: str) -> str:
+    """领域 id 到专项检查键的映射。心理健康与身体健康共用 health。"""
+    return "health" if str(domain_id).endswith("health") else str(domain_id)
+
+
+def required_domain_checks(main_category: str | None, rules: dict) -> list[str]:
+    """该条目所属领域必须补齐的专项检查键。
+
+    §5.2 要求"相关领域检查全部通过"才可推荐，因此空对象不能算通过。
+    """
+    applies_to = (rules.get("domain_checks") or {}).get("applies_to") or []
+    if not main_category or main_category not in applies_to:
+        return []
+    return [domain_check_key(main_category)]
+
+
 def decide(evaluation: dict, rules: dict) -> dict:
     """给出决策。
 
@@ -87,7 +103,23 @@ def decide(evaluation: dict, rules: dict) -> dict:
         out["notes"].append("缺少可定位证据；不得用模型自报置信度替代证据")
         return out
 
-    domain_checks = evaluation.get("domain_checks") or {}
+    domain_checks = evaluation.get("domain_checks")
+    if not isinstance(domain_checks, dict):
+        domain_checks = {}
+
+    # 领域专项检查不得被空对象绕过：所属领域必须给出对应结果
+    main_category = evaluation.get("main_category")
+    missing_domain = [
+        key for key in required_domain_checks(main_category, rules) if key not in domain_checks
+    ]
+    if missing_domain:
+        out["decision"] = DECISION_CANDIDATE
+        out["blocking_checks"] = missing_domain
+        out["notes"].append(
+            "所属领域（" + str(main_category) + "）缺少专项检查结果，不得推荐"
+        )
+        return out
+
     failing_domains = [
         key for key, entry in domain_checks.items() if _value_of(entry) not in NON_BLOCKING_DOMAIN_VALUES
     ]

@@ -18,7 +18,7 @@ from datetime import datetime, timezone
 
 import requests
 
-from .dedupe import candidate_from_repo
+from .dedupe import candidate_from_repo, parse_github_url
 from .fetch import (
     REASON_HTTP_ERROR,
     REASON_NETWORK_ERROR,
@@ -28,6 +28,8 @@ from .fetch import (
 from .models import Candidate
 
 GITHUB_SEARCH_ENDPOINT = "https://api.github.com/search/repositories"
+GITHUB_TREE_ENDPOINT = "https://api.github.com/repos/{owner}/{repo}/git/trees/{ref}"
+GITHUB_REPO_ENDPOINT = "https://api.github.com/repos/{owner}/{repo}"
 DEFAULT_PER_PAGE = 30
 DEFAULT_TIMEOUT_SECONDS = 30.0
 DEFAULT_MAX_ATTEMPTS = 3
@@ -36,6 +38,7 @@ DEFAULT_EXCLUDE_TERMS = ("-dsh", "-clawhub")
 # in:readme 是必需项：仓库搜索默认只匹配 name/description/topics，不含 README，
 # 实测不加该限定词时命中为 0。见 config/searches.json 的 file_constraint。
 DEFAULT_QUERY_TEMPLATE = '{term} "SKILL.md" in:readme'
+SKILL_FILENAME = "SKILL.md"
 RETRYABLE_STATUS = frozenset({403, 408, 429, 500, 502, 503, 504})
 
 
@@ -178,9 +181,102 @@ def github_search(
     return outcome
 
 
+def _skill_name_from_path(path: str, fallback: str) -> str:
+    parts = [p for p in path.split("/") if p]
+    if len(parts) >= 2:
+        return parts[-2]
+    return fallback
+
+
+def _expand_candidates(
+    candidates: list[Candidate],
+    *,
+    session: requests.Session,
+    limit: int | None,
+    sleep,
+    outcomes: list[SearchOutcome],
+    discovered_at: str,
+) -> list[Candidate]:
+    """把仓库级候选细化到具体 SKILL.md（§4.2）。
+
+    - 已有路径的候选原样保留
+    - 仓库里没有任何 SKILL.md 的，**不计为独立技能**，从候选中剔除并记入结果
+    - 展开失败（限流、网络）时保留仓库级候选，不静默丢弃
+    """
+    out: list[Candidate] = []
+    cache: dict[str, tuple[list[str], str | None]] = {}
+    expanded = 0
+
+    for candidate in candidates:
+        if candidate.path:
+            out.append(candidate)
+            continue
+
+        key = f"{candidate.owner}/{candidate.repo}"
+        limited = False
+        if key not in cache:
+            if limit is not None and expanded >= limit:
+                # 达到展开上限是刻意边界，不是采集失败：候选保留在仓库级，下次继续展开
+                cache[key] = ([], None)
+                limited = True
+            else:
+                paths, error = expand_repo_skills(candidate.owner, candidate.repo, session=session, sleep=sleep)
+                cache[key] = (paths, error)
+                expanded += 1
+
+        paths, error = cache[key]
+        probe = Query(domain_id="expand", term=key, q=key)
+
+        if limited:
+            outcomes.append(
+                SearchOutcome(
+                    query=probe, ok=True, total_count=0,
+                    error="达到本轮展开上限，仍按仓库级候选保留，下次继续展开",
+                )
+            )
+            out.append(candidate)
+            continue
+
+        if error:
+            outcomes.append(SearchOutcome(query=probe, ok=False, reason_code=REASON_HTTP_ERROR, error=error))
+            out.append(candidate)
+            continue
+
+        if not paths:
+            outcomes.append(
+                SearchOutcome(
+                    query=probe, ok=True, total_count=0,
+                    error="仓库内无 SKILL.md，不计为独立技能",
+                )
+            )
+            continue
+
+        for path in paths:
+            out.append(
+                candidate_from_repo(
+                    candidate.owner,
+                    candidate.repo,
+                    path=path,
+                    url=f"https://github.com/{candidate.owner}/{candidate.repo}/blob/HEAD/{path}",
+                    repo_url=candidate.repo_url,
+                    name=_skill_name_from_path(path, candidate.name),
+                    description=candidate.description,
+                    source_id=candidate.source_ids[0] if candidate.source_ids else "",
+                    discovery_method=candidate.discovery_methods[0] if candidate.discovery_methods else "",
+                    search_term=candidate.search_terms[0] if candidate.search_terms else "",
+                    discovered_at=candidate.discovered_at or discovered_at,
+                )
+            )
+
+    return out
+
+
 def discover(
     searches: dict,
     *,
+    sources: dict | None = None,
+    expand: bool = False,
+    expand_limit: int | None = None,
     session: requests.Session | None = None,
     max_queries: int | None = None,
     per_page: int = DEFAULT_PER_PAGE,
@@ -188,29 +284,51 @@ def discover(
     sleep=time.sleep,
     discovered_at: str | None = None,
 ) -> tuple[list[Candidate], list[SearchOutcome]]:
-    """按配置执行查询，返回 (候选, 每次查询的结果)。
+    """执行来源种子与搜索查询，并按需展开到具体技能。
 
-    max_queries 用于本地抽样；min_interval_seconds 用于规避限流。
+    返回 (候选, 每次查询的结果)。expand 会为仓库级候选查询其 SKILL.md 路径，
+    使评估对象是具体技能而不是合集首页（§4.2）。
     """
-    queries = build_queries(searches)
-    if max_queries is not None:
-        queries = queries[:max_queries]
-
+    stamped = discovered_at or _utc_now()
     owns_session = session is None
     sess = session if session is not None else requests.Session()
 
     candidates: list[Candidate] = []
     outcomes: list[SearchOutcome] = []
     try:
+        # 1. 来源种子：官方仓库与社区线索（config/sources.json）
+        if sources:
+            seeds = candidates_from_sources(sources, discovered_at=stamped)
+            outcomes.append(
+                SearchOutcome(
+                    query=Query(domain_id="sources", term="sources.json", q="sources.json"),
+                    ok=True,
+                    candidates=list(seeds),
+                    total_count=len(seeds),
+                )
+            )
+            candidates.extend(seeds)
+
+        # 2. 主动搜索（config/searches.json）
+        queries = build_queries(searches)
+        if max_queries is not None:
+            queries = queries[:max_queries]
         for index, query in enumerate(queries):
             if index and min_interval_seconds > 0:
                 sleep(min_interval_seconds)
             outcome = github_search(
-                query, session=sess, per_page=per_page, sleep=sleep, discovered_at=discovered_at
+                query, session=sess, per_page=per_page, sleep=sleep, discovered_at=stamped
             )
             outcomes.append(outcome)
             if outcome.ok:
                 candidates.extend(outcome.candidates)
+
+        # 3. 展开到具体技能
+        if expand:
+            candidates = _expand_candidates(
+                candidates, session=sess, limit=expand_limit, sleep=sleep,
+                outcomes=outcomes, discovered_at=stamped,
+            )
     finally:
         if owns_session:
             sess.close()
@@ -223,3 +341,118 @@ def load_searches(config_dir: str = "config") -> dict:
     from pathlib import Path
 
     return json.loads((Path(config_dir) / "searches.json").read_text(encoding="utf-8"))
+
+
+# --------------------------------------------------------------------------
+# 展开到具体技能（§4.2：合集仓库尽量展开到具体技能，不能把仓库数冒充技能数）
+# --------------------------------------------------------------------------
+
+
+def _api_get(
+    url: str,
+    *,
+    session: requests.Session,
+    timeout: float,
+    max_attempts: int,
+    sleep,
+) -> tuple[bool, dict | None, str | None]:
+    """带重试的 GitHub API GET，返回 (ok, payload, error)。"""
+    for attempt in range(1, max_attempts + 1):
+        try:
+            response = session.get(url, timeout=timeout)
+        except requests.exceptions.RequestException as exc:
+            if attempt < max_attempts:
+                sleep(_backoff_seconds(attempt))
+                continue
+            return False, None, f"{type(exc).__name__}: {exc}"
+        try:
+            if response.status_code >= 400:
+                if response.status_code in RETRYABLE_STATUS and attempt < max_attempts:
+                    response.close()
+                    sleep(_backoff_seconds(attempt))
+                    continue
+                return False, None, f"HTTP {response.status_code}"
+            return True, response.json(), None
+        finally:
+            response.close()
+    return False, None, "重试次数耗尽"
+
+
+def expand_repo_skills(
+    owner: str,
+    repo: str,
+    *,
+    session: requests.Session | None = None,
+    timeout: float = DEFAULT_TIMEOUT_SECONDS,
+    max_attempts: int = DEFAULT_MAX_ATTEMPTS,
+    sleep=time.sleep,
+) -> tuple[list[str], str | None]:
+    """列出一个仓库里所有 SKILL.md 的路径。
+
+    返回 (路径列表, 错误)。空列表且错误为 None 表示仓库里确实没有 SKILL.md——
+    这种仓库按 §4.2 不能计为一个独立技能。
+    """
+    owns = session is None
+    sess = session if session is not None else requests.Session()
+    sess.headers.setdefault("User-Agent", USER_AGENT)
+    sess.headers.setdefault("Accept", "application/vnd.github+json")
+    try:
+        ok, repo_info, error = _api_get(
+            GITHUB_REPO_ENDPOINT.format(owner=owner, repo=repo),
+            session=sess, timeout=timeout, max_attempts=max_attempts, sleep=sleep,
+        )
+        if not ok:
+            return [], error
+        branch = (repo_info or {}).get("default_branch") or "HEAD"
+
+        ok, tree, error = _api_get(
+            GITHUB_TREE_ENDPOINT.format(owner=owner, repo=repo, ref=branch) + "?recursive=1",
+            session=sess, timeout=timeout, max_attempts=max_attempts, sleep=sleep,
+        )
+        if not ok:
+            return [], error
+
+        paths = [
+            item.get("path", "")
+            for item in (tree or {}).get("tree", [])
+            if item.get("type") == "blob" and item.get("path", "").endswith(SKILL_FILENAME)
+        ]
+        return sorted(paths), None
+    finally:
+        if owns:
+            sess.close()
+
+
+def candidates_from_sources(sources_cfg: dict, *, discovered_at: str | None = None) -> list[Candidate]:
+    """由 config/sources.json 生成种子候选：官方仓库、社区清单与已定位的单技能。"""
+    stamped = discovered_at or _utc_now()
+    out: list[Candidate] = []
+
+    for source in sources_cfg.get("sources", []):
+        if (source.get("exclusion") or {}).get("excluded"):
+            continue
+        url = source.get("url")
+        if not url:
+            continue
+        owner, repo, path, _ = parse_github_url(url)
+        if not owner or not repo:
+            continue
+
+        common = {
+            "source_id": source["id"],
+            "discovery_method": source.get("discovery_method") or "provided_lead",
+            "discovered_at": stamped,
+        }
+        known_paths = source.get("skill_paths") or []
+        if known_paths:
+            for known in known_paths:
+                out.append(
+                    candidate_from_repo(
+                        owner, repo, path=known, url=url,
+                        name=known.rsplit("/", 1)[-1] or repo, **common,
+                    )
+                )
+        else:
+            out.append(candidate_from_repo(owner, repo, url=url, path=path, **common))
+
+    return out

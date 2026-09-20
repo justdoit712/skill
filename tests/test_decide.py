@@ -74,5 +74,43 @@ class BoundaryTest(unittest.TestCase):
         self.assertNotEqual(result["decision"], DECISION_EXCLUDED)
 
 
+class DomainCheckEnforcementTest(unittest.TestCase):
+    """§5.2 要求"相关领域检查全部通过"才可推荐，空对象不能算通过。"""
+
+    def base(self, category: str, domain_checks: dict | None = None) -> dict:
+        evaluation = json.loads(json.dumps(FIXTURE["cases"][0]["evaluation"]))
+        evaluation["main_category"] = category
+        evaluation["domain_checks"] = domain_checks if domain_checks is not None else {}
+        return evaluation
+
+    def test_finance_without_domain_check_is_not_recommended(self) -> None:
+        result = decide(self.base("finance"), RULES)
+        self.assertEqual(result["decision"], DECISION_CANDIDATE)
+        self.assertIn("finance", result["blocking_checks"])
+
+    def test_health_check_required_for_both_health_categories(self) -> None:
+        for category in ("mental_health", "physical_health"):
+            with self.subTest(category=category):
+                result = decide(self.base(category), RULES)
+                self.assertEqual(result["decision"], DECISION_CANDIDATE)
+                self.assertIn("health", result["blocking_checks"])
+
+    def test_finance_with_passing_domain_check_is_recommended(self) -> None:
+        evaluation = self.base("finance", {"finance": {"value": "pass", "evidence": "来源与时间已记录"}})
+        self.assertEqual(decide(evaluation, RULES)["decision"], DECISION_RECOMMENDED)
+
+    def test_not_applicable_still_counts_as_present(self) -> None:
+        evaluation = self.base("finance", {"finance": {"value": "not_applicable", "evidence": "无回测功能"}})
+        self.assertEqual(decide(evaluation, RULES)["decision"], DECISION_RECOMMENDED)
+
+    def test_non_domain_category_needs_no_domain_check(self) -> None:
+        self.assertEqual(decide(self.base("dev"), RULES)["decision"], DECISION_RECOMMENDED)
+
+    def test_domain_checks_not_a_dict_does_not_bypass(self) -> None:
+        evaluation = self.base("finance")
+        evaluation["domain_checks"] = []
+        self.assertEqual(decide(evaluation, RULES)["decision"], DECISION_CANDIDATE)
+
+
 if __name__ == "__main__":
     unittest.main()

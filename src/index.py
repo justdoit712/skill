@@ -149,6 +149,31 @@ def build_entry(
     }
 
 
+def index_by_id(entries: list[dict] | None) -> dict[str, dict]:
+    return {e["skill_id"]: e for e in (entries or []) if e.get("skill_id")}
+
+
+def merge_entries(previous_entries: list[dict] | None, new_entries: list[dict]) -> list[dict]:
+    """把本轮结果合并进既有索引（§7：网络失败时保留上次有效数据，不做批量删除）。
+
+    - 本轮重新发现的条目**覆盖**旧条目，但沿用其 first_seen
+    - 本轮**未出现**的条目原样保留：没有证据说明它已消失，不得当作下架
+    - 顺序：先本轮结果，后保留条目
+    """
+    previous = index_by_id(previous_entries)
+    merged: list[dict] = []
+
+    for entry in new_entries:
+        old = previous.pop(entry["skill_id"], None)
+        if old:
+            entry = dict(entry)
+            entry["first_seen"] = old.get("first_seen") or entry.get("first_seen")
+        merged.append(entry)
+
+    merged.extend(previous.values())
+    return merged
+
+
 def build_catalog(entries: list[dict], *, context: CatalogContext) -> dict:
     """汇总为唯一索引。"""
     counts: dict[str, int] = {}
