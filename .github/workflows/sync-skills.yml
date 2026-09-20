@@ -1,22 +1,33 @@
 name: Sync Skills
 
-# 顶层入口。依据需求 §7.2，单次运行承载以下步骤（同一 workflow 内显式依赖，
-# 不靠机器人提交触发第二次 push）：
+# 顶层入口。依据需求 §7.2，单次运行承载七步：
 #   1 检出与预检 → 2 发现与预筛 → 3 预留额度 → 4 评估和生成
 #   → 5 验证与提交 → 6 发布同一产物 → 7 部署验证
+# 不靠机器人提交触发第二次 push：GITHUB_TOKEN 触发的 push 不会启动新 workflow。
 #
-# 采集与评估流程尚未实现，见 docs/Skills导航目录实施文档.md 阶段 C。
-# 因此当前仅支持手动触发，且运行时会明确失败——不产生"成功但什么都没做"的假象。
-#
-# 定时触发在阶段 C 启用，依据 §7.1 为每周日北京时间 10:00：
-#   schedule:
-#     - cron: '0 2 * * 0'
+# 定时为每周日北京时间 10:00（UTC 0 2 * * 0）。手动与定时共享同一额度账本（§7.3）。
+# 被调用的 deploy-pages.yml 不再申请同一 concurrency 锁，避免相互阻塞。
 
 on:
+  schedule:
+    - cron: '0 2 * * 0'
   workflow_dispatch:
+    inputs:
+      dry_run:
+        description: '只验证配置与计算计划：不调用模型、不写账本、不提交、不部署'
+        type: boolean
+        default: false
+      limit_queries:
+        description: '限制搜索查询数，留空为全部（本地抽样用）'
+        required: false
+        default: ''
+      limit_evaluations:
+        description: '本批最多评估数'
+        required: false
+        default: '50'
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: skills-sync
@@ -25,8 +36,13 @@ concurrency:
 jobs:
   sync:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      dry_run: ${{ steps.run.outputs.dry_run }}
+      week: ${{ steps.run.outputs.week }}
     steps:
-      - name: 检出
+      - name: 检出（完整，含 config、data、public）
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
@@ -39,7 +55,75 @@ jobs:
       - name: 安装依赖
         run: pip install -r requirements.txt
 
-      - name: 采集、评估与生成（尚未实现）
+      - name: 预检与运行（预留额度先于付费调用）
+        id: run
+        env:
+          LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
+          DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
+          LIMIT_QUERIES: ${{ github.event.inputs.limit_queries }}
+          LIMIT_EVALUATIONS: ${{ github.event.inputs.limit_evaluations || '50' }}
         run: |
-          echo "::error::新流程尚未实现。见 docs/Skills导航目录实施文档.md 阶段 B、C。"
-          exit 1
+          set -euo pipefail
+          args="--config-dir config --data-dir data --public-dir public"
+          if [ -n "${LIMIT_QUERIES}" ]; then args="$args --limit-queries ${LIMIT_QUERIES}"; fi
+          if [ -n "${LIMIT_EVALUATIONS}" ]; then args="$args --limit-evaluations ${LIMIT_EVALUATIONS}"; fi
+          if [ "${DRY_RUN}" = "true" ]; then
+            python -m src.pipeline --dry-run $args
+            echo "dry_run=true" >> "$GITHUB_OUTPUT"
+          else
+            test -n "${LLM_API_KEY}" || { echo "::error::缺少 LLM_API_KEY（应来自 Secrets）"; exit 1; }
+            python -m src.pipeline --json $args | tee run-result.json
+            echo "dry_run=false" >> "$GITHUB_OUTPUT"
+          fi
+          echo "week=$(python -c 'from src.budget import week_id; print(week_id())')" >> "$GITHUB_OUTPUT"
+
+      - name: 验证索引与页面数据同源
+        if: steps.run.outputs.dry_run == 'false'
+        run: |
+          set -euo pipefail
+          for f in data/catalog.json public/data/catalog.json; do
+            test -s "$f" || { echo "::error::$f 缺失或为空"; exit 1; }
+          done
+          python - <<'PY'
+          import json
+          index = json.load(open('data/catalog.json', encoding='utf-8'))
+          page = json.load(open('public/data/catalog.json', encoding='utf-8'))
+          assert page['generated_at'] == index['generated_at'], '页面数据与索引不同源'
+          ids = {e['skill_id'] for e in index['entries']}
+          exposed = {e['skill_id'] for e in page['recommended'] + page['candidates']}
+          assert exposed <= ids, '页面数据出现索引中不存在的条目'
+          print('同源校验通过：条目', len(ids), '页面展示', len(exposed))
+          PY
+
+      - name: 提交（显式范围，禁止 git add .）
+        if: steps.run.outputs.dry_run == 'false'
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for p in data/catalog.json data/queue.json data/reports data/state public/data public/reports; do
+            if [ -e "$p" ]; then git add -- "$p"; fi
+          done
+          if git diff --cached --quiet; then
+            echo "无变更需要提交"
+          else
+            git commit -m "chore(sync): 每周采集与评估 ${{ steps.run.outputs.week }}"
+            git push
+          fi
+
+      - name: 上传页面产物（供部署 job 使用同一产物）
+        if: steps.run.outputs.dry_run == 'false'
+        uses: actions/upload-artifact@v4
+        with:
+          name: pages-public
+          path: public
+          retention-days: 7
+
+  deploy:
+    needs: sync
+    if: needs.sync.outputs.dry_run == 'false'
+    uses: ./.github/workflows/deploy-pages.yml
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
