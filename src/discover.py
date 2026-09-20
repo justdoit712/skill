@@ -12,6 +12,7 @@
 from __future__ import annotations
 
 import json
+import os
 import time
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
@@ -39,6 +40,20 @@ DEFAULT_EXCLUDE_TERMS = ("-dsh", "-clawhub")
 # 实测不加该限定词时命中为 0。见 config/searches.json 的 file_constraint。
 DEFAULT_QUERY_TEMPLATE = '{term} "SKILL.md" in:readme'
 SKILL_FILENAME = "SKILL.md"
+GITHUB_TOKEN_ENV = "GITHUB_TOKEN"
+
+
+def apply_github_auth(session: requests.Session) -> bool:
+    """有 GITHUB_TOKEN 就带上。
+
+    未认证时搜索 10 次/分钟、core 60 次/小时；展开一个仓库要 2 次 core 调用，
+    因此未认证时每小时只能展开约 30 个仓库。认证后为 30 次/分钟与 5000 次/小时。
+    """
+    token = (os.environ.get(GITHUB_TOKEN_ENV) or "").strip()
+    if token:
+        session.headers["Authorization"] = f"Bearer {token}"
+        return True
+    return False
 RETRYABLE_STATUS = frozenset({403, 408, 429, 500, 502, 503, 504})
 
 
@@ -111,6 +126,7 @@ def github_search(
     sess = session if session is not None else requests.Session()
     sess.headers.setdefault("User-Agent", USER_AGENT)
     sess.headers.setdefault("Accept", "application/vnd.github+json")
+    apply_github_auth(sess)
 
     stamped = discovered_at or _utc_now()
     outcome = SearchOutcome(query=query, ok=False)
@@ -292,6 +308,8 @@ def discover(
     stamped = discovered_at or _utc_now()
     owns_session = session is None
     sess = session if session is not None else requests.Session()
+    sess.headers.setdefault("User-Agent", USER_AGENT)
+    apply_github_auth(sess)
 
     candidates: list[Candidate] = []
     outcomes: list[SearchOutcome] = []
@@ -396,6 +414,7 @@ def expand_repo_skills(
     sess = session if session is not None else requests.Session()
     sess.headers.setdefault("User-Agent", USER_AGENT)
     sess.headers.setdefault("Accept", "application/vnd.github+json")
+    apply_github_auth(sess)
     try:
         ok, repo_info, error = _api_get(
             GITHUB_REPO_ENDPOINT.format(owner=owner, repo=repo),

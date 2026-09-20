@@ -28,6 +28,10 @@ on:
         description: '本批最多评估数'
         required: false
         default: '50'
+      limit_fetches:
+        description: '本轮最多抓取多少条上游内容，留空则跟随本批评估名额'
+        required: false
+        default: ''
       expand_limit:
         description: '本轮最多展开多少个仓库到具体技能，留空为不限'
         required: false
@@ -67,18 +71,22 @@ jobs:
         env:
           LIMIT_QUERIES: ${{ github.event.inputs.limit_queries }}
           LIMIT_EVALUATIONS: ${{ github.event.inputs.limit_evaluations || '50' }}
+          LIMIT_FETCHES: ${{ github.event.inputs.limit_fetches }}
           EXPAND_LIMIT: ${{ github.event.inputs.expand_limit }}
         run: |
           set -euo pipefail
           args="--config-dir config --data-dir data --public-dir public"
           if [ -n "${LIMIT_QUERIES}" ]; then args="$args --limit-queries ${LIMIT_QUERIES}"; fi
           if [ -n "${LIMIT_EVALUATIONS}" ]; then args="$args --limit-evaluations ${LIMIT_EVALUATIONS}"; fi
+          if [ -n "${LIMIT_FETCHES}" ]; then args="$args --limit-fetches ${LIMIT_FETCHES}"; fi
           if [ -n "${EXPAND_LIMIT}" ]; then args="$args --expand-limit ${EXPAND_LIMIT}"; fi
           echo "args=$args" >> "$GITHUB_OUTPUT"
           echo "week=$(python -c 'from src.budget import week_id; print(week_id())')" >> "$GITHUB_OUTPUT"
 
       - name: 干跑（不调用模型、不写账本）
         if: github.event.inputs.dry_run == 'true'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
           python -m src.pipeline --dry-run ${{ steps.args.outputs.args }}
@@ -86,6 +94,10 @@ jobs:
       - name: 阶段一 · 发现、预筛与预留额度
         id: reserve
         if: github.event.inputs.dry_run != 'true'
+        env:
+          # 带上 token 才能把搜索限额从 10/分钟提到 30/分钟、core 从 60/小时提到 5000/小时，
+          # 否则"展开到具体技能"每小时只能处理约 30 个仓库
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
           python -m src.pipeline --phase reserve --json ${{ steps.args.outputs.args }} | tee reserve.json

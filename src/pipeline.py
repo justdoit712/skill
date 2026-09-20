@@ -113,6 +113,7 @@ def prepare(
     config_dir: str | Path = "config",
     limit_queries: int | None = None,
     limit_evaluations: int = DEFAULT_LIMIT_EVALUATIONS,
+    limit_fetches: int | None = None,
     expand: bool = True,
     expand_limit: int | None = None,
     state_dir: Path | None = None,
@@ -120,7 +121,12 @@ def prepare(
     discover_fn=discover,
     fetch_fn=fetch_text,
 ) -> dict:
-    """发现、抓取内容、计算指纹并预筛。不写账本、不调用模型。"""
+    """发现 → 无内容预筛 → 按上限抓取 → 指纹 → 带内容复筛。不写账本、不调用模型。
+
+    抓取只针对本批可能被评估的候选：先用**无内容**预筛筛掉明显不合格的，再抓取。
+    只有真正抓到内容的候选才带指纹，也才可能进入评估批次（评估 ID 依赖内容指纹，§7.3）。
+    limit_fetches 为 None 时跟随本批评估名额，因此默认不会为永不评估的候选白抓。
+    """
     candidates, outcomes = discover_fn(
         cfg["searches"],
         sources=cfg["sources"],
@@ -129,39 +135,74 @@ def prepare(
         max_queries=limit_queries,
         sleep=sleep,
     )
+    merged = dedupe(candidates)
 
-    # 抓取内容：指纹必须在这里算出来，评估 ID 才能反映内容版本（§7.3）
+    # 第一轮预筛：不需要内容就能判定，先筛掉明显不合格的，避免浪费抓取
+    first_pass = [(candidate, prescreen(candidate, cfg["prescreen"], None)) for candidate in merged]
+    eligible = [candidate for candidate, result in first_pass if result.decision == DECISION_QUEUED]
+
+    slots = min(limit_evaluations, len(eligible))
+    cap = slots if limit_fetches is None else max(0, limit_fetches)
+    to_fetch = eligible[:cap]
+
     staged: dict[str, str] = {}
     texts_dir = (state_dir / TEXTS_DIRNAME) if state_dir else None
     if texts_dir:
         texts_dir.mkdir(parents=True, exist_ok=True)
 
     enriched: list[tuple[Candidate, PrescreenResult, dict]] = []
-    for candidate in dedupe(candidates):
+    fetched_count = 0
+    for candidate in to_fetch:
         fetched = fetch_fn(candidate.url or candidate.repo_url, sleep=sleep)
-        note = {"ok": fetched.ok, "bytes": fetched.bytes_read, "reason_code": fetched.reason_code}
-        if fetched.ok and fetched.text:
-            candidate.content_fingerprint = content_fingerprint(fetched.text)
+        text = fetched.text if (fetched.ok and fetched.text) else None
+        note = {"ok": bool(text), "bytes": fetched.bytes_read, "reason_code": fetched.reason_code}
+        if text:
+            candidate.content_fingerprint = content_fingerprint(text)
             note["truncated"] = fetched.truncated
+            fetched_count += 1
             if texts_dir is not None:
-                staged[candidate.skill_id] = fetched.text
-        enriched.append((candidate, prescreen(candidate, cfg["prescreen"], fetched.text), note))
+                staged[candidate.skill_id] = text
+        enriched.append((candidate, prescreen(candidate, cfg["prescreen"], text), note))
 
-    # 暂存材料：仅在同一 runner 内复用，不提交
+    # 超出抓取上限的合格候选：留在队列，等后续运行处理
+    for candidate in eligible[cap:]:
+        enriched.append(
+            (
+                candidate,
+                prescreen(candidate, cfg["prescreen"], None),
+                {"ok": False, "bytes": 0, "reason_code": None,
+                 "skipped": "超出本次抓取上限，留待后续运行"},
+            )
+        )
+
+    # 第一轮即被排除的候选仍进入索引，状态为 excluded
+    for candidate, result in first_pass:
+        if result.decision != DECISION_QUEUED:
+            enriched.append(
+                (candidate, result, {"ok": False, "bytes": 0, "reason_code": None,
+                                     "skipped": "预筛排除，未抓取"})
+            )
+
     if texts_dir is not None and staged:
-        payload = json.dumps(staged, ensure_ascii=False)
-        (texts_dir / "staged.json").write_text(payload, encoding="utf-8")
+        (texts_dir / "staged.json").write_text(
+            json.dumps(staged, ensure_ascii=False), encoding="utf-8"
+        )
 
     queued = [(c, p, f) for c, p, f in enriched if p.decision == DECISION_QUEUED]
     excluded = [(c, p, f) for c, p, f in enriched if p.decision != DECISION_QUEUED]
+    # 没有内容指纹的候选不能进入评估批次，否则评估 ID 会退化为 nofingerprint
+    batch = [(c, p, f) for c, p, f in queued if c.content_fingerprint]
 
     return {
         "outcomes": outcomes,
         "queued": queued,
+        "batch": batch,
         "excluded": excluded,
         "discovery_total": len(candidates),
         "discovery_failed": sum(1 for o in outcomes if not o.ok),
-        "evaluation_slots": min(limit_evaluations, len(queued)),
+        "fetch_cap": cap,
+        "fetched": fetched_count,
+        "evaluation_slots": min(slots, len(batch)),
     }
 
 
@@ -228,6 +269,7 @@ def phase_reserve(
     state_dir: str | Path | None = None,
     limit_queries: int | None = None,
     limit_evaluations: int = DEFAULT_LIMIT_EVALUATIONS,
+    limit_fetches: int | None = None,
     expand: bool = True,
     expand_limit: int | None = None,
     sleep=time.sleep,
@@ -244,9 +286,15 @@ def phase_reserve(
     if problems:
         return {"ok": False, "stage": "precheck", "problems": problems}
 
+    # 抓取上限：命令行优先，其次取 config/rules.json 的 run_limits，最后跟随本批名额
+    fetch_limit = limit_fetches
+    if fetch_limit is None:
+        fetch_limit = (cfg["rules"].get("run_limits") or {}).get("max_fetches_per_run")
+
     plan = prepare(
         cfg, config_dir=config_dir, limit_queries=limit_queries,
-        limit_evaluations=limit_evaluations, expand=expand, expand_limit=expand_limit,
+        limit_evaluations=limit_evaluations, limit_fetches=fetch_limit,
+        expand=expand, expand_limit=expand_limit,
         state_dir=state_path, sleep=sleep, discover_fn=discover_fn, fetch_fn=fetch_fn,
     )
 
@@ -264,7 +312,7 @@ def phase_reserve(
     ledger = BudgetLedger.load(state_path, cap)
     ledger.mark_in_progress_as_needs_recovery(started)
 
-    batch = plan["queued"][: plan["evaluation_slots"]]
+    batch = plan["batch"][: plan["evaluation_slots"]]
     entries = [
         {
             "evaluation_id": evaluation_id(candidate, cfg["model"], cfg["rules"]),
@@ -290,6 +338,9 @@ def phase_reserve(
         "candidates": plan["discovery_total"],
         "queued": len(plan["queued"]),
         "excluded": len(plan["excluded"]),
+        "fetched": plan["fetched"],
+        "fetch_cap": plan["fetch_cap"],
+        "evaluation_slots": plan["evaluation_slots"],
         "reserved": len(reserved),
         "quota": ledger.snapshot(),
         "discovery_failed": plan["discovery_failed"],
@@ -326,6 +377,7 @@ def phase_evaluate(
     queue = _read_queue(state_path)
     cap = int(cfg["rules"].get("weekly_quota") or DEFAULT_LIMIT_EVALUATIONS)
     ledger = BudgetLedger.load(state_path, cap)
+    reserved_ids = set(ledger.reserved)
 
     # 单次运行的 token 消耗兜底闸：达到后停止后续模型调用，
     # 已预留的名额不退还（§7.3：失败仍占本周额度）
@@ -348,6 +400,9 @@ def phase_evaluate(
     for item in queue.get("queued", []):
         candidate = _candidate_from_payload(item["candidate"])
         eid = evaluation_id(candidate, cfg["model"], cfg["rules"])
+
+        if eid not in reserved_ids:
+            continue  # 本批未预留（例如超出抓取上限），留给后续运行
 
         existing = ledger.get(eid) or {}
         if existing.get("status") == "completed":
@@ -507,6 +562,7 @@ def dry_run(
     config_dir: str | Path = "config",
     limit_queries: int | None = None,
     limit_evaluations: int = DEFAULT_LIMIT_EVALUATIONS,
+    limit_fetches: int | None = None,
     expand: bool = True,
     expand_limit: int | None = None,
     sleep=time.sleep,
@@ -517,9 +573,14 @@ def dry_run(
     if problems:
         return {"ok": False, "stage": "precheck", "problems": problems, "dry_run": True}
 
+    fetch_limit = limit_fetches
+    if fetch_limit is None:
+        fetch_limit = (cfg["rules"].get("run_limits") or {}).get("max_fetches_per_run")
+
     plan = prepare(
         cfg, config_dir=config_dir, limit_queries=limit_queries,
-        limit_evaluations=limit_evaluations, expand=expand, expand_limit=expand_limit,
+        limit_evaluations=limit_evaluations, limit_fetches=fetch_limit,
+        expand=expand, expand_limit=expand_limit,
         state_dir=None, sleep=sleep,
     )
     return {
@@ -529,6 +590,8 @@ def dry_run(
         "candidates": plan["discovery_total"],
         "queued": len(plan["queued"]),
         "excluded": len(plan["excluded"]),
+        "fetched": plan["fetched"],
+        "fetch_cap": plan["fetch_cap"],
         "evaluation_slots": plan["evaluation_slots"],
         "model": cfg["model"].get("model"),
         "credentials_present": bool(resolve_api_key(cfg["model"])),
@@ -547,6 +610,9 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--dry-run", action="store_true", help="只验证配置与计算计划")
     parser.add_argument("--limit-queries", type=int, default=None)
     parser.add_argument("--limit-evaluations", type=int, default=DEFAULT_LIMIT_EVALUATIONS)
+    parser.add_argument("--limit-fetches", type=int, default=None,
+                        help="本轮最多抓取多少条上游内容；留空则跟随本批评估名额，"
+                             "或取 config/rules.json 的 run_limits.max_fetches_per_run")
     parser.add_argument("--expand-limit", type=int, default=None, help="本轮最多展开多少个仓库")
     parser.add_argument("--no-expand", action="store_true", help="不展开到具体技能（仅调试用）")
     parser.add_argument("--config-dir", default="config")
@@ -559,6 +625,7 @@ def main(argv: list[str] | None = None) -> int:
     common = dict(
         config_dir=args.config_dir, data_dir=args.data_dir, state_dir=args.state_dir,
         limit_queries=args.limit_queries, limit_evaluations=args.limit_evaluations,
+        limit_fetches=args.limit_fetches,
         expand=not args.no_expand, expand_limit=args.expand_limit,
     )
 
@@ -586,9 +653,9 @@ def main(argv: list[str] | None = None) -> int:
         print(f"运行中止于 {result.get('stage')}：{result.get('problems') or result.get('error')}")
     elif result.get("dry_run"):
         print(
-            f"dry_run 通过：候选 {result['candidates']}、待评估 {result['queued']}、"
-            f"预筛排除 {result['excluded']}、本批名额 {result['evaluation_slots']}、"
-            f"采集失败 {result['discovery_failed']}、凭据 "
+            f"dry_run 通过：候选 {result['candidates']}、合格 {result['queued']}、"
+            f"预筛排除 {result['excluded']}、抓取 {result['fetched']}/{result['fetch_cap']}、"
+            f"本批名额 {result['evaluation_slots']}、采集失败 {result['discovery_failed']}、凭据 "
             f"{'已就绪' if result['credentials_present'] else '缺失'}"
         )
     else:

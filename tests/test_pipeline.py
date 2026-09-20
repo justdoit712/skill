@@ -390,6 +390,106 @@ class RunTokenCapTest(PipelineHarness):
         self.assertEqual(example["limits"]["max_total_tokens_per_run"], 100000000)
 
 
+# ---------------------------------------------------------------- 抓取上限
+
+
+class FetchCapTest(PipelineHarness):
+    """抓取数量必须可控：默认跟随本批名额，显式设置则为硬上限。
+
+    抓取只针对可能被评估的候选——先用无内容预筛筛掉不合格的，再抓，避免白抓。
+    """
+
+    def discover_many(self, count: int):
+        return fake_discover([one_candidate(f"repo{i}") for i in range(count)])
+
+    def counting_fetch(self):
+        seen: list[str] = []
+
+        def _fetch(url, **kwargs):
+            seen.append(url)
+            return FetchResult(url=url, ok=True, status=200, text=SKILL_TEXT,
+                               bytes_read=len(SKILL_TEXT.encode("utf-8")))
+
+        _fetch.seen = seen
+        return _fetch
+
+    def test_default_follows_evaluation_slots(self) -> None:
+        spy = self.counting_fetch()
+        result = phase_reserve(
+            config_dir=ROOT / "config", data_dir=self.data, state_dir=self.state,
+            discover_fn=self.discover_many(10), fetch_fn=spy, limit_evaluations=4,
+        )
+        self.assertTrue(result["ok"])
+        self.assertEqual(len(spy.seen), 4, "默认不应抓取超过本批名额的数量")
+        self.assertEqual(result["fetched"], 4)
+        self.assertEqual(result["fetch_cap"], 4)
+
+    def test_explicit_cap_limits_fetches(self) -> None:
+        spy = self.counting_fetch()
+        result = phase_reserve(
+            config_dir=ROOT / "config", data_dir=self.data, state_dir=self.state,
+            discover_fn=self.discover_many(10), fetch_fn=spy,
+            limit_evaluations=50, limit_fetches=3,
+        )
+        self.assertEqual(len(spy.seen), 3)
+        self.assertEqual(result["fetch_cap"], 3)
+        self.assertEqual(result["evaluation_slots"], 3, "只有抓到内容的候选才进入评估批次")
+
+    def test_unfetched_candidates_stay_queued(self) -> None:
+        result = phase_reserve(
+            config_dir=ROOT / "config", data_dir=self.data, state_dir=self.state,
+            discover_fn=self.discover_many(10), fetch_fn=self.counting_fetch(),
+            limit_evaluations=50, limit_fetches=2,
+        )
+        self.assertEqual(result["queued"], 10, "未抓取的合格候选应留在队列")
+        queue = json.loads((self.state / "queue.json").read_text(encoding="utf-8"))
+        self.assertEqual(len(queue["queued"]), 10)
+
+    def test_excluded_candidates_are_never_fetched(self) -> None:
+        """预筛排除的先筛掉，不浪费抓取。"""
+        spy = self.counting_fetch()
+        candidates = [
+            candidate_from_repo("someone", "x", path="_template",
+                                url="https://github.com/someone/x/tree/main/_template"),
+            one_candidate("good"),
+        ]
+        phase_reserve(
+            config_dir=ROOT / "config", data_dir=self.data, state_dir=self.state,
+            discover_fn=fake_discover(candidates), fetch_fn=spy, limit_evaluations=50,
+        )
+        self.assertEqual(len(spy.seen), 1, "被预筛排除的候选不应被抓取")
+        self.assertTrue(spy.seen[0].endswith("good"))
+
+    def test_config_default_is_used_when_cli_absent(self) -> None:
+        cfg_dir = self.temp_config()
+        rules_path = cfg_dir / "rules.json"
+        rules = json.loads(rules_path.read_text(encoding="utf-8"))
+        rules.setdefault("run_limits", {})["max_fetches_per_run"] = 2
+        rules_path.write_text(json.dumps(rules, ensure_ascii=False, indent=2), encoding="utf-8")
+
+        spy = self.counting_fetch()
+        phase_reserve(
+            config_dir=cfg_dir, data_dir=self.data, state_dir=self.state,
+            discover_fn=self.discover_many(10), fetch_fn=spy, limit_evaluations=50,
+        )
+        self.assertEqual(len(spy.seen), 2, "应取 config/rules.json 的 run_limits")
+
+    def test_cli_overrides_config(self) -> None:
+        cfg_dir = self.temp_config()
+        rules_path = cfg_dir / "rules.json"
+        rules = json.loads(rules_path.read_text(encoding="utf-8"))
+        rules.setdefault("run_limits", {})["max_fetches_per_run"] = 5
+        rules_path.write_text(json.dumps(rules, ensure_ascii=False, indent=2), encoding="utf-8")
+
+        spy = self.counting_fetch()
+        phase_reserve(
+            config_dir=cfg_dir, data_dir=self.data, state_dir=self.state,
+            discover_fn=self.discover_many(10), fetch_fn=spy,
+            limit_evaluations=50, limit_fetches=1,
+        )
+        self.assertEqual(len(spy.seen), 1, "命令行应覆盖配置")
+
+
 # ---------------------------------------------------------------- 条目与报告
 
 
