@@ -15,9 +15,10 @@
   },
   "file_constraint": {
     "requirement": "至少约束到 SKILL.md",
-    "query_template": "{term} \"SKILL.md\"",
-    "repo_search_limit": "仓库搜索不校验文件名，把 SKILL.md 作为词条只能提高命中率，无法精确限定到文件",
-    "precise_option": "代码搜索支持 filename:SKILL.md，可精确限定，但必须认证（见 api.auth）"
+    "query_template": "{term} \"SKILL.md\" in:readme",
+    "repo_search_limit": "仓库搜索默认只匹配 name、description 与 topics，不含 README。实测：macro \"SKILL.md\" 返回 0 条，加 in:readme 后返回 5075 条，中文词 代码审查 \"SKILL.md\" in:readme 返回 3001 条。因此 in:readme 是必需项，不是可选优化。",
+    "verified_at": "2026-09-20",
+    "precise_option": "代码搜索支持 filename:SKILL.md，可精确限定到文件，但必须认证（见 api.auth）"
   },
   "spec_provided_terms": [
     "宏观/macro",
