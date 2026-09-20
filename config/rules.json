@@ -1,0 +1,191 @@
+{
+  "rules_version": "1.0.0",
+  "source": "docs/Skills导航目录二开需求.md §5.2",
+  "note": "评估规则与阈值的唯一来源。规则变更后须把受影响条目加入同一复核队列，并计入每周额度（§10.1）。AI 辅助评估不等于功能测试或安全审计。",
+  "weekly_quota": 50,
+  "output_schema": {
+    "required_fields": [
+      "scope_match",
+      "purpose_clarity",
+      "instruction_completeness",
+      "evidence_traceability",
+      "dependency_transparency",
+      "risk_review",
+      "domain_checks",
+      "reason_codes",
+      "rules_version",
+      "source_fingerprint"
+    ],
+    "check_value_domain": [
+      "pass",
+      "fail",
+      "unknown"
+    ],
+    "evidence_rule": "每项须附对应链接、文件位置或简短依据，证据必须可定位。",
+    "forbidden": "不得用模型自报置信度替代证据。"
+  },
+  "checks": [
+    {
+      "id": "scope_match",
+      "name": "范围匹配",
+      "question": "是否属于 config/taxonomy.json 的收录领域？",
+      "fail_when": "命中 hard_exclusions，或仅属 not_standalone_directions 而不直接服务任何主分类"
+    },
+    {
+      "id": "purpose_clarity",
+      "name": "用途明确",
+      "question": "任务与典型使用场景是否说清？"
+    },
+    {
+      "id": "instruction_completeness",
+      "name": "说明完整",
+      "question": "步骤、依赖或示例是否足以支持对用途的理解？"
+    },
+    {
+      "id": "evidence_traceability",
+      "name": "证据可追溯",
+      "question": "介绍与实际内容是否相符，来源是否可追溯？"
+    },
+    {
+      "id": "dependency_transparency",
+      "name": "依赖透明",
+      "question": "上游是否明确声明特殊工具、运行环境与依赖？",
+      "pass_note": "纯文本技能明确声明无外部依赖，同样可通过本项；上游未说明的不得推测为全平台兼容。"
+    },
+    {
+      "id": "risk_review",
+      "name": "风险复核",
+      "question": "是否存在明显可疑行为或与收录范围冲突的功能？"
+    }
+  ],
+  "decisions": {
+    "recommended": "上述六项均为 pass，相关领域检查全部通过，输出结构有效且证据可定位。",
+    "candidate": "属于范围内但存在 unknown、说明不完整或尚需核验；须注明原因，不得用模型自报置信度替代证据。",
+    "excluded": "明确不属于范围、非 Skill、DSH 插件、实盘下单、临床决策、凭据外传等硬性拒绝项。普通说明质量不足不等于恶意。",
+    "processing_failure": "网络、解析和模型错误属于处理失败，不当作质量判定；已有推荐按内容变化待复核规则处理。"
+  },
+  "domain_checks": {
+    "applies_to": [
+      "finance",
+      "mental_health",
+      "physical_health"
+    ],
+    "finance": {
+      "requirements": [
+        "记录数据来源、数据时间与市场适用性",
+        "区分事实、推断和预测",
+        "不得承诺收益",
+        "涉及回测的技能应说明成本、数据偏差与样本外验证等限制"
+      ],
+      "not_applicable": "没有回测功能时，回测相关检查明确记为不适用，而非记为 fail",
+      "hard_fail": "不可包含不可分割的实盘下单核心功能",
+      "scope_note": "不以交易市场限定信息范围，需覆盖国内外事件及跨市场关联"
+    },
+    "health": {
+      "applies_to": [
+        "mental_health",
+        "physical_health"
+      ],
+      "requirements": [
+        "实质性健康结论有可追溯依据",
+        "不承诺治愈，不替代专业诊断或处方",
+        "涉及紧急情形时有适当的寻求专业帮助边界",
+        "需要保存或传输健康数据时，说明位置、用途、权限与删除方式"
+      ],
+      "not_pass": "只有免责声明而缺少实质依据，不算通过。",
+      "hard_fail": "面向专业临床诊断、治疗决策的技能",
+      "candidate_when": "范围不明确或证据不足时进入候选"
+    }
+  },
+  "reason_codes": {
+    "exclusion": {
+      "OUT_OF_SCOPE": "明确不属于 §3.1 收录领域",
+      "NOT_A_SKILL": "非独立技能：普通仓库、空模板、插件容器或整个合集",
+      "DSH_PLUGIN": "DSH 插件",
+      "LIVE_TRADING": "含不可分割的实盘下单核心功能",
+      "CLINICAL_DECISION": "面向专业临床诊断或治疗决策",
+      "CREDENTIAL_EXFILTRATION": "存在凭据外传行为"
+    },
+    "candidate": {
+      "INCOMPLETE_INSTRUCTIONS": "说明不完整",
+      "INSUFFICIENT_EVIDENCE": "证据不足或无法定位",
+      "UNRESOLVED_UNKNOWN": "存在无法判定的检查项",
+      "MISSING_DEPENDENCY": "依赖未声明或不可获得",
+      "EXAGGERATED_CLAIM": "存在明显夸大表述（如承诺收益）",
+      "HEALTH_WITHOUT_EVIDENCE": "健康结论缺少实质依据",
+      "NEEDS_VERIFICATION": "尚需核验，范围内但暂不推荐"
+    },
+    "processing_failure": {
+      "NETWORK_ERROR": "网络请求失败",
+      "PARSE_ERROR": "内容解析失败",
+      "MODEL_ERROR": "模型调用失败或超时"
+    },
+    "review": {
+      "CONTENT_CHANGED": "上游内容已变化，保留推荐状态并标记待复核"
+    }
+  },
+  "content_change_policy": {
+    "on_change": "保留推荐状态，醒目标记「内容已变化，待复核」，并展示原评估对应的版本与评估时间。",
+    "on_recheck_pass": "更新评估依据并清除待复核标记。",
+    "on_recheck_fail": "降级至候选区。",
+    "on_out_of_scope": "移出活跃目录，并保留状态变更记录。",
+    "on_quota_or_failure": "保持待复核标记，不自动生成通过结论。",
+    "distinguish": "内容指纹变化才算技能更新，不能仅凭仓库最近提交判断。"
+  },
+  "validation_samples": [
+    {
+      "id": "low_star_complete",
+      "desc": "低 Star 但内容完整的技能",
+      "expected": "recommended",
+      "note": "不得因 Star 低而机械排除（§9.4）。"
+    },
+    {
+      "id": "empty_template",
+      "desc": "空模板",
+      "expected": "excluded",
+      "reason_code": "NOT_A_SKILL"
+    },
+    {
+      "id": "dsh_plugin",
+      "desc": "DSH 插件",
+      "expected": "excluded",
+      "reason_code": "DSH_PLUGIN"
+    },
+    {
+      "id": "missing_dependency",
+      "desc": "缺失依赖",
+      "expected": "candidate",
+      "reason_code": "MISSING_DEPENDENCY"
+    },
+    {
+      "id": "exaggerated_return",
+      "desc": "夸大收益",
+      "expected": "candidate",
+      "reason_code": "EXAGGERATED_CLAIM"
+    },
+    {
+      "id": "auto_trading",
+      "desc": "自动下单",
+      "expected": "excluded",
+      "reason_code": "LIVE_TRADING"
+    },
+    {
+      "id": "health_without_evidence",
+      "desc": "缺少健康依据",
+      "expected": "candidate",
+      "reason_code": "HEALTH_WITHOUT_EVIDENCE"
+    },
+    {
+      "id": "clinical_decision",
+      "desc": "临床决策",
+      "expected": "excluded",
+      "reason_code": "CLINICAL_DECISION"
+    },
+    {
+      "id": "in_scope_normal",
+      "desc": "正常范围内的样例",
+      "expected": "recommended_or_candidate",
+      "note": "用于确认规则不会误杀正常条目。"
+    }
+  ]
+}

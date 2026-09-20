@@ -1,0 +1,100 @@
+{
+  "version": "1.0.0",
+  "source": "docs/Skills导航目录二开需求.md §3.1",
+  "note": "主分类的唯一来源。.github/ISSUE_TEMPLATE/submit-skill.yml 的分类选项必须与本文件 main_categories 的 name 列表逐项一致；预筛的领域过滤同样以此为准。",
+  "main_categories": [
+    {
+      "id": "dev",
+      "name": "编程开发",
+      "scope": "前后端、重构、调试、测试、代码审查"
+    },
+    {
+      "id": "docs",
+      "name": "文档办公",
+      "scope": "Word、PDF、Excel、PPT 等"
+    },
+    {
+      "id": "content",
+      "name": "内容创作",
+      "scope": "文章、图片、视频、音频"
+    },
+    {
+      "id": "product",
+      "name": "产品与设计",
+      "scope": "需求分析、界面设计、原型"
+    },
+    {
+      "id": "automation",
+      "name": "自动化",
+      "scope": "浏览器操作、文件处理、工具集成、工作流"
+    },
+    {
+      "id": "cloud",
+      "name": "云服务与运维",
+      "scope": "部署、CI/CD、基础设施"
+    },
+    {
+      "id": "security",
+      "name": "安全",
+      "scope": "漏洞检测、代码安全、审计"
+    },
+    {
+      "id": "finance",
+      "name": "金融与投资",
+      "scope": "宏观、股票、期货、大宗商品及研究和策略辅助"
+    },
+    {
+      "id": "mental_health",
+      "name": "心理健康",
+      "scope": "情绪记录、压力管理、心理健康信息理解"
+    },
+    {
+      "id": "physical_health",
+      "name": "身体健康",
+      "scope": "睡眠、运动、饮食及身体健康信息理解"
+    }
+  ],
+  "not_standalone_directions": {
+    "ids": [
+      "research",
+      "general_data",
+      "ai_dev"
+    ],
+    "names": [
+      "科研",
+      "通用数据分析",
+      "AI 开发"
+    ],
+    "rule": "不作为独立收录方向；直接服务上述主分类的技能仍可纳入，例如股票数据分析归入金融，不因包含数据处理就排除。"
+  },
+  "hard_exclusions": [
+    {
+      "id": "dsh_plugin",
+      "name": "DSH 插件",
+      "rule": "无论由哪条渠道发现均排除，并需从采集规则中排除以防经其他来源重新进入。"
+    },
+    {
+      "id": "live_trading",
+      "name": "实盘自动下单类技能",
+      "rule": "若实盘下单是不可分割的核心能力，则不因其中还包含允许功能而推荐。"
+    },
+    {
+      "id": "clinical_decision",
+      "name": "面向专业临床诊断、治疗决策的技能",
+      "rule": "同上，属不可分割核心能力时一并排除。"
+    }
+  ],
+  "cardinality": {
+    "main_category": "每个条目恰好一个主分类",
+    "tags": "多个用途标签",
+    "recorded_separately": [
+      "来源可信度",
+      "用途分类",
+      "适用平台"
+    ]
+  },
+  "tags": {
+    "status": "pending",
+    "note": "§3.1 只规定「一个主分类和多个用途标签」，未给出标签词表。词表待与 §5.2 的 domain_checks 一并在样本验证时确定，此处不预先编造。"
+  }
+}
