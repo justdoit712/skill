@@ -20,31 +20,40 @@
 
 <main class="wrap">
 
+  <div class="view-tabs-wrap">
+    <div class="tabs" role="tablist" aria-label="分区切换">
+      <button id="tab-recommended" class="tab is-active" role="tab" aria-selected="true">
+        <span>推荐区</span>
+        <span id="count-recommended" class="tab-badge">0</span>
+      </button>
+      <button id="tab-candidate" class="tab" role="tab" aria-selected="false">
+        <span>候选区</span>
+        <span id="count-candidate" class="tab-badge">0</span>
+      </button>
+      <button id="tab-manual" class="tab" role="tab" aria-selected="false">
+        <span>收藏区</span>
+        <span id="count-manual" class="tab-badge">0</span>
+      </button>
+    </div>
+  </div>
+
   <section class="controls" aria-label="筛选">
-    <div class="control">
+    <div class="control control-search">
       <label for="q">关键词</label>
-      <input id="q" type="search" placeholder="名称、简述或作者" autocomplete="off">
+      <input id="q" type="search" placeholder="搜索名称、简述或作者…" autocomplete="off">
     </div>
-    <div class="control">
+    <div class="control control-cat">
       <label for="category">主分类</label>
-      <select id="category"><option value="">全部</option></select>
+      <select id="category"><option value="">全部分类</option></select>
     </div>
-    <div class="control">
+    <div class="control control-source">
       <label for="source">来源</label>
       <select id="source">
-        <option value="">全部</option>
+        <option value="">全部来源</option>
         <option value="official">官方仓库</option>
         <option value="community_list">社区清单</option>
         <option value="community">社区单技能</option>
       </select>
-    </div>
-    <div class="control">
-      <label>分区</label>
-      <div class="tabs" role="tablist">
-        <button id="tab-recommended" class="tab is-active" role="tab" aria-selected="true">推荐区</button>
-        <button id="tab-candidate" class="tab" role="tab" aria-selected="false">候选区</button>
-        <button id="tab-manual" class="tab" role="tab" aria-selected="false">收藏区</button>
-      </div>
     </div>
   </section>
 
@@ -77,6 +86,38 @@
 
 </main>
 
+<!-- 底部悬浮同步栏 -->
+<aside id="sync-bar" class="sync-bar" hidden>
+  <div class="sync-bar-text">
+    <span>已暂存变更：</span>
+    <span id="sync-summary" class="sync-badge">0 项</span>
+  </div>
+  <div style="display: flex; gap: 8px;">
+    <button id="btn-open-sync" class="sync-bar-btn primary">查看并同步到仓库</button>
+    <button id="btn-clear-sync" class="sync-bar-btn ghost" title="放弃所有未保存的本地修改">清空</button>
+  </div>
+</aside>
+
+<!-- 同步配置弹窗 -->
+<div id="sync-modal" class="modal-overlay" hidden>
+  <div class="modal-content" role="dialog" aria-labelledby="modal-title" aria-modal="true">
+    <div class="modal-head">
+      <h3 id="modal-title">同步人工干预配置 (overrides.json)</h3>
+      <button id="btn-close-modal" class="modal-close" aria-label="关闭">&times;</button>
+    </div>
+    <div class="modal-body">
+      <p>本站部署于 GitHub Pages 静态环境。请将以下生成的配置同步保存至仓库中。点击下方绿色按钮将<strong>自动复制配置到剪贴板并直达 GitHub 网页在线编辑页</strong>，粘贴后提交即可生效！</p>
+      <pre><code id="json-preview" class="json-preview"></code></pre>
+      <p id="copy-status" style="font-size: 12px; color: #16a34a; font-weight: 600; min-height: 18px; margin: 0;"></p>
+    </div>
+    <div class="modal-actions">
+      <button id="btn-download-json" class="btn-secondary">💾 下载 JSON</button>
+      <button id="btn-copy-json" class="btn-secondary">📋 仅复制</button>
+      <button id="btn-goto-github" class="btn-gh">🚀 复制并去 GitHub 保存</button>
+    </div>
+  </div>
+</div>
+
 <footer class="site-footer">
   <div class="wrap">
     <p>条目未经实测；金融与健康类条目不构成投资建议或医疗建议，被收录也不代表专业认证。</p>
@@ -88,7 +129,17 @@
 (function () {
   "use strict";
 
-  var state = { data: null, tab: "recommended", q: "", category: "", source: "" };
+  var STORAGE_KEY = "skill_overrides_v1";
+  var state = { data: null, tab: "recommended", q: "", category: "", source: "", allEntries: {} };
+  var overridesState = {
+    baselinePicks: {},
+    baselineExclusions: {},
+    stagedPicks: {},
+    removedPicks: new Set(),
+    stagedExclusions: {},
+    removedExclusions: new Set()
+  };
+
   var el = {
     list: document.getElementById("list"),
     status: document.getElementById("status"),
@@ -100,8 +151,29 @@
     source: document.getElementById("source"),
     tabRec: document.getElementById("tab-recommended"),
     tabCand: document.getElementById("tab-candidate"),
-    tabManual: document.getElementById("tab-manual")
+    tabManual: document.getElementById("tab-manual"),
+    badgeRec: document.getElementById("count-recommended"),
+    badgeCand: document.getElementById("count-candidate"),
+    badgeManual: document.getElementById("count-manual"),
+    syncBar: document.getElementById("sync-bar"),
+    syncSummary: document.getElementById("sync-summary"),
+    btnOpenSync: document.getElementById("btn-open-sync"),
+    btnClearSync: document.getElementById("btn-clear-sync"),
+    syncModal: document.getElementById("sync-modal"),
+    btnCloseModal: document.getElementById("btn-close-modal"),
+    jsonPreview: document.getElementById("json-preview"),
+    copyStatus: document.getElementById("copy-status"),
+    btnCopyJson: document.getElementById("btn-copy-json"),
+    btnDownloadJson: document.getElementById("btn-download-json"),
+    btnGotoGithub: document.getElementById("btn-goto-github")
   };
+
+  function todayStr() {
+    var d = new Date();
+    var m = String(d.getMonth() + 1).padStart(2, "0");
+    var day = String(d.getDate()).padStart(2, "0");
+    return d.getFullYear() + "-" + m + "-" + day;
+  }
 
   function text(value) {
     return value === null || value === undefined || value === "" ? null : String(value);
@@ -150,6 +222,134 @@
       "</summary>" + (body.join("") || "<p>原评估未保留可展示的简述。</p>") + "</details>";
   }
 
+  function isPicked(skill_id) {
+    if (overridesState.removedPicks.has(skill_id)) return false;
+    if (overridesState.stagedPicks[skill_id]) return true;
+    return Boolean(overridesState.baselinePicks[skill_id]);
+  }
+
+  function isExcluded(skill_id) {
+    if (overridesState.removedExclusions.has(skill_id)) return false;
+    if (overridesState.stagedExclusions[skill_id]) return true;
+    return Boolean(overridesState.baselineExclusions[skill_id]);
+  }
+
+  function saveStorage() {
+    try {
+      var data = {
+        stagedPicks: overridesState.stagedPicks,
+        stagedExclusions: overridesState.stagedExclusions,
+        removedPicks: Array.from(overridesState.removedPicks),
+        removedExclusions: Array.from(overridesState.removedExclusions)
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    } catch (e) {}
+  }
+
+  function loadStorage() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return;
+      var saved = JSON.parse(raw);
+      if (saved.stagedPicks) overridesState.stagedPicks = saved.stagedPicks;
+      if (saved.stagedExclusions) overridesState.stagedExclusions = saved.stagedExclusions;
+      if (saved.removedPicks) overridesState.removedPicks = new Set(saved.removedPicks);
+      if (saved.removedExclusions) overridesState.removedExclusions = new Set(saved.removedExclusions);
+    } catch (e) {}
+  }
+
+  function togglePick(sid) {
+    var entry = state.allEntries[sid];
+    if (!entry) return;
+
+    if (isPicked(sid)) {
+      delete overridesState.stagedPicks[sid];
+      if (overridesState.baselinePicks[sid]) {
+        overridesState.removedPicks.add(sid);
+      }
+    } else {
+      overridesState.removedPicks.delete(sid);
+      overridesState.removedExclusions.delete(sid);
+      delete overridesState.stagedExclusions[sid];
+      overridesState.stagedPicks[sid] = {
+        skill_id: sid,
+        reason: "用户收藏",
+        added_at: todayStr(),
+        from: state.tab
+      };
+    }
+    saveStorage();
+    apply();
+  }
+
+  function blockSkill(sid, cardEl) {
+    var entry = state.allEntries[sid];
+    if (!entry) return;
+
+    overridesState.removedPicks.delete(sid);
+    delete overridesState.stagedPicks[sid];
+    if (overridesState.baselinePicks[sid]) {
+      overridesState.removedPicks.add(sid);
+    }
+    overridesState.removedExclusions.delete(sid);
+    overridesState.stagedExclusions[sid] = {
+      skill_id: sid,
+      reason: "用户屏蔽/删除",
+      added_at: todayStr()
+    };
+    saveStorage();
+
+    if (cardEl) {
+      cardEl.classList.add("is-dismissing");
+      setTimeout(function () {
+        apply();
+      }, 250);
+    } else {
+      apply();
+    }
+  }
+
+  function calculateChangesCount() {
+    return Object.keys(overridesState.stagedPicks).length +
+      overridesState.removedPicks.size +
+      Object.keys(overridesState.stagedExclusions).length +
+      overridesState.removedExclusions.size;
+  }
+
+  function updateSyncBar() {
+    var total = calculateChangesCount();
+    if (total > 0) {
+      el.syncBar.hidden = false;
+      var parts = [];
+      var pCount = Object.keys(overridesState.stagedPicks).length + overridesState.removedPicks.size;
+      var eCount = Object.keys(overridesState.stagedExclusions).length + overridesState.removedExclusions.size;
+      if (pCount > 0) parts.push("收藏 " + pCount);
+      if (eCount > 0) parts.push("屏蔽 " + eCount);
+      el.syncSummary.textContent = parts.join(" · ") || (total + " 项");
+    } else {
+      el.syncBar.hidden = true;
+    }
+  }
+
+  function generateOverridesJson() {
+    var picks = Object.assign({}, overridesState.baselinePicks);
+    overridesState.removedPicks.forEach(function (sid) { delete picks[sid]; });
+    Object.assign(picks, overridesState.stagedPicks);
+
+    var exclusions = Object.assign({}, overridesState.baselineExclusions);
+    overridesState.removedExclusions.forEach(function (sid) { delete exclusions[sid]; });
+    Object.assign(exclusions, overridesState.stagedExclusions);
+
+    var payload = {
+      overrides_version: "1.0.0",
+      source: "docs/运行说明.md §9",
+      note: "人工干预名单（overrides）：由用户手工维护。manual_picks 长期保留在收藏区；manual_exclusions 为人工排除黑名单，流水线扫描到直接跳过（0 模型调用）。",
+      manual_picks: Object.values(picks),
+      manual_exclusions: Object.values(exclusions)
+    };
+    return JSON.stringify(payload, null, 2);
+  }
+
   function render(entries) {
     var visible = entries.filter(matches);
     el.list.innerHTML = "";
@@ -160,20 +360,21 @@
     }
 
     visible.forEach(function (entry) {
+      var sid = entry.skill_id;
+      var picked = isPicked(sid);
       var li = document.createElement("li");
       li.className = "card";
 
       var cat = entry.main_category ? entry.main_category.name : "未分类";
       var bits = ['<span class="tag tag-cat">' + escapeHtml(cat) + "</span>"];
-      if (entry.manual_pick) {
+      if (picked) {
         bits.push('<span class="tag tag-manual">收藏</span>');
       }
       if (entry.needs_review) {
-        // §5.2：保留推荐状态但必须醒目提示，不能让人误以为已通过复核
         bits.push('<span class="tag tag-review">内容已变化，待复核' +
           (entry.status === "recommended" ? "（推荐状态待复核）" : "（已降级）") + "</span>");
       }
-      if (entry.status === "candidate" && !entry.needs_review && !entry.manual_pick) {
+      if (entry.status === "candidate" && !entry.needs_review && !picked) {
         bits.push('<span class="tag tag-cand">候选</span>');
       }
       if (entry.source_type) {
@@ -192,9 +393,9 @@
       if (text(entry.license)) meta.push("许可：" + escapeHtml(entry.license));
 
       var manualHtml = "";
-      if (entry.manual_pick && entry.manual_note) {
-        var note = entry.manual_note;
-        manualHtml += '<p class="detail manual">收藏理由：' + escapeHtml(note.reason || "") +
+      if (picked) {
+        var note = (overridesState.stagedPicks[sid]) || (entry.manual_note) || (overridesState.baselinePicks[sid]) || {};
+        manualHtml += '<p class="detail manual">收藏理由：' + escapeHtml(note.reason || "人工收藏") +
           (note.added_at ? '（' + escapeHtml(note.added_at) + '）' : '') + '</p>';
         if (entry.content_changed_at) {
           manualHtml += '<p class="detail changed">上游内容已变化（' + escapeHtml(entry.content_changed_at.slice(0, 10)) + '），尚未复核；本条为人工收藏，程序不会自动重评。</p>';
@@ -209,7 +410,6 @@
         if (entry.upstream_status && entry.upstream_status !== "ok") {
           manualHtml += '<p class="detail warning-box">上游不可访问' + (entry.last_checked ? '（' + escapeHtml(entry.last_checked.slice(0, 10)) + '）' : '') + '。</p>';
         }
-        manualHtml += '<p class="detail hint">移出收藏区：删除 <code>config/overrides.json</code> 中该条目的对象。</p>';
       }
 
       var dates = [];
@@ -220,9 +420,18 @@
         dates.push("上游状态 " + escapeHtml(entry.upstream_status));
       }
 
+      var favBtnClass = picked ? "btn-action btn-fav is-active" : "btn-action btn-fav";
+      var favBtnText = picked ? "★ 已收藏" : "★ 收藏";
+
       li.innerHTML =
-        '<h3><a href="' + escapeHtml(entry.url || "#") + '" target="_blank" rel="noopener noreferrer">' +
-        escapeHtml(entry.name) + "</a></h3>" +
+        '<div class="card-head">' +
+          '<h3><a href="' + escapeHtml(entry.url || "#") + '" target="_blank" rel="noopener noreferrer">' +
+          escapeHtml(entry.name) + "</a></h3>" +
+          '<div class="card-actions">' +
+            '<button type="button" class="' + favBtnClass + '" data-action="fav" data-id="' + escapeHtml(sid) + '">' + favBtnText + '</button>' +
+            '<button type="button" class="btn-action btn-block" data-action="block" data-id="' + escapeHtml(sid) + '" title="屏蔽并移入黑名单">🚫 屏蔽</button>' +
+          '</div>' +
+        '</div>' +
         '<p class="by">' + escapeHtml(entry.author || "") + "</p>" +
         '<p class="sum">' + escapeHtml(text(entry.summary_zh) || "（暂无中文简述）") + "</p>" +
         '<p class="tags">' + bits.join("") + "</p>" +
@@ -236,21 +445,93 @@
     });
   }
 
+  el.list.addEventListener("click", function (e) {
+    var btn = e.target.closest("button[data-action]");
+    if (!btn) return;
+    var action = btn.getAttribute("data-action");
+    var sid = btn.getAttribute("data-id");
+    if (!sid) return;
+
+    if (action === "fav") {
+      togglePick(sid);
+    } else if (action === "block") {
+      var card = btn.closest(".card");
+      blockSkill(sid, card);
+    }
+  });
+
   function apply() {
     if (!state.data) return;
-    var entries = state.tab === "recommended" ? (state.data.recommended || [])
-                : (state.tab === "candidate" ? (state.data.candidates || [])
-                : (state.data.manual || []));
-    render(entries);
+
+    var activeManual = [];
+    var activeRecommended = [];
+    var activeCandidates = [];
+
+    Object.keys(state.allEntries).forEach(function (sid) {
+      var entry = state.allEntries[sid];
+      if (isExcluded(sid)) {
+        return;
+      }
+      if (isPicked(sid)) {
+        activeManual.push(entry);
+      } else {
+        if (entry._baselineTab === "recommended") {
+          activeRecommended.push(entry);
+        } else {
+          activeCandidates.push(entry);
+        }
+      }
+    });
+
+    if (el.badgeRec) el.badgeRec.textContent = activeRecommended.length;
+    if (el.badgeCand) el.badgeCand.textContent = activeCandidates.length;
+    if (el.badgeManual) el.badgeManual.textContent = activeManual.length;
+
+    var currentList = state.tab === "recommended" ? activeRecommended
+                    : (state.tab === "candidate" ? activeCandidates
+                    : activeManual);
+    render(currentList);
     var shown = el.list.querySelectorAll(".card").length;
-    var total = entries.length;
     el.meta.hidden = false;
-    el.meta.textContent = "本区共 " + total + " 条，当前显示 " + shown + " 条。";
+    el.meta.textContent = "本区共 " + currentList.length + " 条，当前显示 " + shown + " 条。";
+
+    updateSyncBar();
   }
 
   function boot(data) {
     state.data = data;
     el.status.hidden = true;
+
+    state.allEntries = {};
+    (data.recommended || []).forEach(function (e) {
+      e._baselineTab = "recommended";
+      state.allEntries[e.skill_id] = e;
+    });
+    (data.candidates || []).forEach(function (e) {
+      e._baselineTab = "candidate";
+      state.allEntries[e.skill_id] = e;
+    });
+    (data.manual || []).forEach(function (e) {
+      e._baselineTab = "manual";
+      state.allEntries[e.skill_id] = e;
+      overridesState.baselinePicks[e.skill_id] = {
+        skill_id: e.skill_id,
+        reason: (e.manual_note && e.manual_note.reason) || "人工收藏",
+        added_at: (e.manual_note && e.manual_note.added_at) || todayStr(),
+        from: (e.manual_note && e.manual_note.from) || "recommended"
+      };
+    });
+
+    if (data.overrides) {
+      (data.overrides.manual_picks || []).forEach(function (p) {
+        if (p && p.skill_id) overridesState.baselinePicks[p.skill_id] = p;
+      });
+      (data.overrides.manual_exclusions || []).forEach(function (ex) {
+        if (ex && ex.skill_id) overridesState.baselineExclusions[ex.skill_id] = ex;
+      });
+    }
+
+    loadStorage();
 
     (data.categories || []).forEach(function (c) {
       var opt = document.createElement("option");
@@ -258,14 +539,6 @@
       opt.textContent = c.id + "（" + c.count + "）";
       el.category.appendChild(opt);
     });
-
-    var counts = data.counts || {};
-    el.meta.hidden = false;
-    el.meta.textContent =
-      "推荐 " + (counts.recommended || 0) + " · 候选 " + (counts.candidate || 0) +
-      " · 收藏 " + (counts.manual || 0) +
-      " · 未评估 " + (counts.pending || 0) + " · 处理失败 " + (counts.processing_failure || 0) +
-      " · 生成于 " + (data.generated_at || "未知") + " · 规则版本 " + (data.rules_version || "未知");
 
     apply();
   }
@@ -294,6 +567,68 @@
   el.tabRec.addEventListener("click", function () { setTab("recommended"); });
   el.tabCand.addEventListener("click", function () { setTab("candidate"); });
   el.tabManual.addEventListener("click", function () { setTab("manual"); });
+
+  // 同步弹窗与浮条交互
+  function openSyncModal() {
+    var jsonStr = generateOverridesJson();
+    el.jsonPreview.textContent = jsonStr;
+    el.copyStatus.textContent = "";
+    el.syncModal.hidden = false;
+  }
+
+  function closeSyncModal() {
+    el.syncModal.hidden = true;
+  }
+
+  el.btnOpenSync.addEventListener("click", openSyncModal);
+  el.btnCloseModal.addEventListener("click", closeSyncModal);
+  el.syncModal.addEventListener("click", function (e) {
+    if (e.target === el.syncModal) closeSyncModal();
+  });
+
+  el.btnClearSync.addEventListener("click", function () {
+    if (!confirm("确定要放弃所有未同步到仓库的本地修改吗？")) return;
+    localStorage.removeItem(STORAGE_KEY);
+    overridesState.stagedPicks = {};
+    overridesState.stagedExclusions = {};
+    overridesState.removedPicks.clear();
+    overridesState.removedExclusions.clear();
+    apply();
+  });
+
+  el.btnCopyJson.addEventListener("click", function () {
+    var jsonStr = el.jsonPreview.textContent;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(jsonStr).then(function () {
+        el.copyStatus.textContent = "✅ 已成功复制 JSON 到剪贴板！";
+      });
+    } else {
+      el.copyStatus.textContent = "请直接全选上方文本框进行复制。";
+    }
+  });
+
+  el.btnDownloadJson.addEventListener("click", function () {
+    var jsonStr = el.jsonPreview.textContent;
+    var blob = new Blob([jsonStr], { type: "application/json;charset=utf-8" });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = "overrides.json";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    el.copyStatus.textContent = "✅ 已下载 overrides.json 文件。";
+  });
+
+  el.btnGotoGithub.addEventListener("click", function () {
+    var jsonStr = el.jsonPreview.textContent;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(jsonStr).catch(function () {});
+    }
+    el.copyStatus.textContent = "🚀 已复制最新配置！正在打开 GitHub 在线编辑页…";
+    window.open("https://github.com/justdoit712/skill/edit/main/config/overrides.json", "_blank");
+  });
 
   fetch("data/catalog.json", { cache: "no-store" })
     .then(function (r) {

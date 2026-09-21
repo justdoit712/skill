@@ -49,6 +49,7 @@ from .models import Candidate, PrescreenResult
 from .overrides import (
     apply_manual_overrides,
     apply_manual_overrides_to_entry,
+    get_manual_exclusions,
     get_manual_picks,
     load_overrides,
     validate_overrides,
@@ -884,10 +885,18 @@ def phase_evaluate(
 
     manual_picks_dict = get_manual_picks((cfg or {}).get("overrides") or {})
     manual_picks_set = set(manual_picks_dict.keys())
+    manual_exclusions_dict = get_manual_exclusions((cfg or {}).get("overrides") or {})
+    manual_exclusions_set = set(manual_exclusions_dict.keys())
 
     for item in queue.get("pending", []):
         candidate = _candidate_from_payload(item["candidate"])
         eid = evaluation_id(candidate, cfg["model"], cfg["rules"])
+
+        if candidate.skill_id in manual_exclusions_set:
+            # 人工排除条目直接跳过，不调用模型
+            results[candidate.skill_id] = {"status": "skipped", "note": "人工排除黑名单条目直接跳过"}
+            skipped += 1
+            continue
 
         if candidate.skill_id in manual_picks_set:
             # §4.4: 人工收藏条目不调用模型重新评估（0 模型调用）
@@ -1026,8 +1035,8 @@ def phase_evaluate(
         )
 
     merged = merge_entries(previous_entries, fresh)
-    apply_manual_overrides(merged, manual_picks_dict)
-    catalog = build_catalog(merged, context=context)
+    apply_manual_overrides(merged, manual_picks_dict, manual_exclusions_dict)
+    catalog = build_catalog(merged, context=context, overrides=(cfg or {}).get("overrides"))
     manifest = write_catalog(
         catalog,
         data_path=data_path / "catalog.json",

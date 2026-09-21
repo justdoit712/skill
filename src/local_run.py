@@ -17,7 +17,7 @@ from .discover import discover
 from .evaluate import RETRYABLE_STATUS, build_prompt, evaluate, evaluation_id, resolve_api_key
 from .fetch import fetch_text
 from .index import CatalogContext, build_catalog, build_entry, index_by_id, write_catalog
-from .overrides import apply_manual_overrides_to_entry, get_manual_picks
+from .overrides import apply_manual_overrides_to_entry, get_manual_exclusions, get_manual_picks
 from .pipeline import admission_decision, load_all_config, precheck, review_state
 from .prescreen import prescreen
 from .report import build_report, write_report
@@ -110,10 +110,11 @@ def _collect(root, local, settings, cfg, discover_fn, fetch_fn, evaluate_fn, log
     max_retries = settings.get("max_retries", 5)
     max_attempts = max_retries + 1
     manual_picks = get_manual_picks(cfg.get("overrides") or {})
+    manual_exclusions = get_manual_exclusions(cfg.get("overrides") or {})
     baseline = _read(root / "data" / "catalog.json", {"entries": []})
     entries = index_by_id(baseline.get("entries") or [])
     for e in entries.values():
-        apply_manual_overrides_to_entry(e, manual_picks)
+        apply_manual_overrides_to_entry(e, manual_picks, manual_exclusions)
     old_recommended = {k for k, v in entries.items() if v.get("status") == "recommended" and not v.get("manual_pick")}
     report = {
         "run_id": run_id, "started_at": now_local().isoformat(), "status": "running",
@@ -185,10 +186,10 @@ def _collect(root, local, settings, cfg, discover_fn, fetch_fn, evaluate_fn, log
             for key in ("summary_zh", "main_category", "tags", "platform_declared",
                         "dependencies_declared", "evaluation_rules_version", "limitations", "license"):
                 entry[key] = previous.get(key)
-        apply_manual_overrides_to_entry(entry, manual_picks)
+        apply_manual_overrides_to_entry(entry, manual_picks, manual_exclusions)
         entries[candidate.skill_id] = entry
         dirty = True
-        write_catalog(build_catalog(list(entries.values()), context=context),
+        write_catalog(build_catalog(list(entries.values()), context=context, overrides=cfg.get("overrides")),
                       data_path=root / "data" / "catalog.json",
                       public_path=root / "public" / "data" / "catalog.json")
 

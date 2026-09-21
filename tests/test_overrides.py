@@ -27,6 +27,7 @@ from src.models import Candidate, PrescreenResult
 from src.overrides import (
     apply_manual_overrides,
     apply_manual_overrides_to_entry,
+    get_manual_exclusions,
     get_manual_picks,
     load_overrides,
     validate_overrides,
@@ -402,6 +403,94 @@ class OverridesPipelineBehaviorTest(unittest.TestCase):
             manual_picks={"org/manual-0:SKILL.md"},
         )
         self.assertEqual(ordered[0]["candidate"]["skill_id"], "org/manual-0:SKILL.md")
+
+
+class ManualExclusionsTest(unittest.TestCase):
+    """人工排除黑名单（manual_exclusions）测试。"""
+
+    def test_valid_exclusions_pass(self):
+        data = {
+            "overrides_version": "1.0.0",
+            "manual_picks": [],
+            "manual_exclusions": [
+                {
+                    "skill_id": "bad/repo:skills/bad/SKILL.md",
+                    "reason": "已弃用，不想收录",
+                    "added_at": "2026-09-21",
+                }
+            ],
+        }
+        errors = validate_overrides(data)
+        self.assertEqual(errors, [])
+        active = get_manual_exclusions(data)
+        self.assertIn("bad/repo:skills/bad/SKILL.md", active)
+
+    def test_retired_exclusion_is_filtered(self):
+        data = {
+            "overrides_version": "1.0.0",
+            "manual_picks": [],
+            "manual_exclusions": [
+                {
+                    "skill_id": "bad/repo:skills/bad/SKILL.md",
+                    "reason": "测试软删除",
+                    "added_at": "2026-09-21",
+                    "retired_at": "2026-09-22",
+                }
+            ],
+        }
+        self.assertEqual(validate_overrides(data), [])
+        active = get_manual_exclusions(data)
+        self.assertEqual(active, {})
+
+    def test_conflict_between_picks_and_exclusions(self):
+        data = {
+            "overrides_version": "1.0.0",
+            "manual_picks": [
+                {
+                    "skill_id": "conflict/repo:SKILL.md",
+                    "reason": "收藏它",
+                    "added_at": "2026-09-21",
+                }
+            ],
+            "manual_exclusions": [
+                {
+                    "skill_id": "conflict/repo:SKILL.md",
+                    "reason": "排除它",
+                    "added_at": "2026-09-21",
+                }
+            ],
+        }
+        errors = validate_overrides(data)
+        self.assertTrue(any("同时存在于收藏区与排除区" in e for e in errors))
+
+    def test_apply_exclusions_to_entry(self):
+        entry = {
+            "skill_id": "bad/repo:SKILL.md",
+            "status": "recommended",
+            "manual_pick": True,
+            "reason_codes": [],
+        }
+        exclusions = {"bad/repo:SKILL.md": {"reason": "黑名单"}}
+        apply_manual_overrides_to_entry(entry, manual_picks={}, manual_exclusions=exclusions)
+        self.assertEqual(entry["status"], "excluded")
+        self.assertFalse(entry["manual_pick"])
+        self.assertIn("MANUAL_EXCLUDED", entry["reason_codes"])
+
+    def test_prescreen_excludes_blacklisted_skill(self):
+        from src.prescreen import PrescreenConfig, prescreen
+        cand = Candidate(
+            skill_id="blocked/repo:SKILL.md",
+            owner="blocked",
+            repo="repo",
+            path="SKILL.md",
+            name="Blocked Skill",
+            url="https://github.com/blocked/repo",
+            source_ids=["official"],
+        )
+        cfg = PrescreenConfig(manual_exclusions={"blocked/repo:SKILL.md"})
+        result = prescreen(cand, cfg)
+        self.assertTrue(result.excluded)
+        self.assertIn("MANUAL_EXCLUDED", result.reason_codes)
 
 
 if __name__ == "__main__":

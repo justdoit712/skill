@@ -185,19 +185,24 @@ def merge_entries(previous_entries: list[dict] | None, new_entries: list[dict]) 
     return merged
 
 
-def build_catalog(entries: list[dict], *, context: CatalogContext) -> dict:
+def build_catalog(
+    entries: list[dict], *, context: CatalogContext, overrides: dict | None = None
+) -> dict:
     """汇总为唯一索引。"""
     counts: dict[str, int] = {}
     for entry in entries:
         counts[entry["status"]] = counts.get(entry["status"], 0) + 1
 
-    return {
+    res = {
         "catalog_version": CATALOG_VERSION,
         "rules_version": context.rules_version,
         "generated_at": context.generated_at or _iso_now(),
         "counts": counts,
         "entries": entries,
     }
+    if overrides:
+        res["overrides"] = overrides
+    return res
 
 
 def build_page_data(catalog: dict) -> dict:
@@ -226,7 +231,7 @@ def build_page_data(catalog: dict) -> dict:
         elif entry.get("status") == STATUS_PROCESSING_FAILURE:
             failed += 1
 
-    return {
+    res = {
         "generated_at": catalog.get("generated_at"),
         "rules_version": catalog.get("rules_version"),
         "counts": {
@@ -245,6 +250,9 @@ def build_page_data(catalog: dict) -> dict:
         "recommended": recommended,
         "candidates": candidates,
     }
+    if catalog.get("overrides"):
+        res["overrides"] = catalog["overrides"]
+    return res
 
 
 def _display(entry: dict) -> dict:

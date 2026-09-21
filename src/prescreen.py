@@ -62,6 +62,7 @@ class PrescreenConfig:
     out_of_scope_repos: set[str] = field(default_factory=set)
     domain_terms: dict[str, list[str]] = field(default_factory=dict)
     domain_names: dict[str, str] = field(default_factory=dict)
+    manual_exclusions: set[str] = field(default_factory=set)
 
     @property
     def hard_exclusion_ids(self) -> list[str]:
@@ -73,12 +74,22 @@ class PrescreenConfig:
 
 
 def load_config(config_dir: str | Path = "config") -> PrescreenConfig:
-    """加载并交叉引用四个配置文件。"""
+    """加载并交叉引用四个配置文件及人工覆盖。"""
     base = Path(config_dir)
     taxonomy = json.loads((base / "taxonomy.json").read_text(encoding="utf-8"))
     rules = json.loads((base / "rules.json").read_text(encoding="utf-8"))
     searches = json.loads((base / "searches.json").read_text(encoding="utf-8"))
     sources = json.loads((base / "sources.json").read_text(encoding="utf-8"))
+
+    manual_exclusions: set[str] = set()
+    overrides_file = base / "overrides.json"
+    if overrides_file.exists():
+        try:
+            from .overrides import load_overrides, get_manual_exclusions
+            overrides = load_overrides(overrides_file)
+            manual_exclusions = set(get_manual_exclusions(overrides).keys())
+        except Exception:
+            pass
 
     gx = searches.get("global_exclusions", {})
     self_repos = {r.lower() for r in gx.get("repos", []) if r}
@@ -113,6 +124,7 @@ def load_config(config_dir: str | Path = "config") -> PrescreenConfig:
         out_of_scope_repos=out_of_scope_repos,
         domain_terms=domain_terms,
         domain_names=domain_names,
+        manual_exclusions=manual_exclusions,
     )
 
 
@@ -148,6 +160,15 @@ def prescreen(candidate: Candidate, cfg: PrescreenConfig, text: str | None = Non
     text 为可选的上游原文；预筛不依赖它也能给出结论。
     """
     result = _result(candidate, DECISION_QUEUED)
+
+    # 0. 人工排除黑名单（manual_exclusions）：最高优先级，直接跳过
+    if candidate.skill_id in cfg.manual_exclusions:
+        return _exclude(
+            result,
+            "MANUAL_EXCLUDED",
+            "已在 config/overrides.json 中被用户人工排除/删除，直接跳过",
+        )
+
     haystack = " ".join(
         part for part in (candidate.name, candidate.description, candidate.path, candidate.url) if part
     )

@@ -1,6 +1,7 @@
 {
   "overrides_version": "1.0.0",
   "source": "docs/运行说明.md §9",
-  "note": "人工收藏名单：这里列出的技能只由用户手工维护。程序不得自动增删、不得自动降级、不得因此重新调用模型。删除条目即等效于用户主动移出收藏区。",
-  "manual_picks": []
+  "note": "人工干预名单（overrides）：由用户手工维护。manual_picks 长期保留在收藏区；manual_exclusions 为人工排除黑名单，流水线扫描到直接跳过（0 模型调用）。",
+  "manual_picks": [],
+  "manual_exclusions": []
 }
