@@ -51,7 +51,7 @@ class LocalRunTest(unittest.TestCase):
         self.cfg["model"]["auth"] = {"api_key": "test-secret-never-print", "api_key_env": "SKILL_TEST_UNUSED_KEY"}
         self.settings = {"target_recommended": 2, "max_total_tokens": 100000000,
                          "max_evaluations": None, "limit_queries": 0,
-                         "expand_limit": None, "max_consecutive_failures": 3}
+                         "expand_limit": None, "max_consecutive_failures": 3, "max_retries": 0}
         self.calls = []
         self.urls = []
         self.logs = []
@@ -125,6 +125,100 @@ class LocalRunTest(unittest.TestCase):
         self.assertEqual(report["usage"]["total_tokens"], 300)
         self.assertEqual(report["failed_evaluations"], 3)
         self.assertNotIn("test-secret-never-print", json.dumps(report))
+
+    def test_network_failure_logs_safe_details_and_stops_on_unknown_usage(self):
+        def failure(candidate, text, **kwargs):
+            self.calls.append(candidate.skill_id)
+            return {"ok": False, "reason_code": "NETWORK_ERROR", "error": "test-secret-never-print",
+                    "call": ModelCallResult(error_type="ReadTimeout", latency_ms=30000, attempts=1,
+                                            error="test-secret-never-print")}
+        report = self.collect(evaluate_fn=failure)
+        self.assertEqual(report["stop_reason"], "usage_unknown")
+        self.assertEqual(len(self.calls), 1)
+        self.assertEqual(report["calls"][0]["diagnostics"]["error_type"], "ReadTimeout")
+        self.assertEqual(report["calls"][0]["diagnostics"]["latency_ms"], 30000)
+        messages = "\n".join(self.logs)
+        self.assertIn("NETWORK_ERROR", messages)
+        self.assertIn("ReadTimeout", messages)
+        self.assertIn("30.0", messages)
+        self.assertNotIn("test-secret-never-print", messages + json.dumps(report))
+
+    def network_failure(self, candidate, text, **kwargs):
+        self.calls.append(candidate.skill_id)
+        return {"ok": False, "reason_code": "NETWORK_ERROR", "error": "private detail",
+                "call": ModelCallResult(error_type="ReadTimeout", attempts=1)}
+
+    def test_five_retries_recover_then_continue_to_next_skill(self):
+        self.settings["max_retries"] = 5
+        def recover(candidate, text, **kwargs):
+            if len(self.calls) < 5:
+                return self.network_failure(candidate, text, **kwargs)
+            return self.evaluate(candidate, text, **kwargs)
+        report = self.collect(count=3, evaluate_fn=recover)
+        self.assertEqual(report["stop_reason"], "target_reached", report)
+        self.assertEqual(report["new_recommended"], 2)
+        self.assertEqual(report["evaluations"], 2)
+        self.assertEqual(report["usage"]["requests"], 7)
+        self.assertEqual(report["usage"]["total_tokens"], 200)
+        self.assertEqual(report["usage"]["unknown_usage_requests"], 5)
+        self.assertGreater(report["unknown_usage_reserved_tokens"], 0)
+        self.assertEqual(report["budget_tokens"], 200 + report["unknown_usage_reserved_tokens"])
+        self.assertIn("重连 5/5", "\n".join(self.logs))
+        self.assertEqual([c["attempt"] for c in report["calls"]], [1, 2, 3, 4, 5, 6, 1])
+
+    def test_retry_exhaustion_stops_after_six_requests_and_rerun_does_not_reset(self):
+        self.settings["max_retries"] = 5
+        first = self.collect(count=1, evaluate_fn=self.network_failure)
+        self.assertEqual(len(self.calls), 6)
+        self.assertEqual(first["stop_reason"], "retry_exhausted")
+        self.assertEqual(first["failed_evaluations"], 1)
+        self.assertEqual(first["failed_requests"], 6)
+        second = self.collect(count=1)
+        self.assertEqual(second["evaluations"], 0)
+        self.assertEqual(second["blocked_records"], 1)
+        self.assertEqual(len(self.calls), 6)
+
+    def test_new_retry_setting_can_resume_previously_failed_request(self):
+        first = self.collect(count=1, evaluate_fn=self.network_failure)
+        self.assertEqual(first["usage"]["requests"], 1)
+        self.settings.update(max_retries=5, target_recommended=1)
+        second = self.collect(count=1)
+        self.assertEqual(second["stop_reason"], "target_reached")
+        self.assertEqual(second["calls"][0]["attempt"], 2)
+        self.assertEqual(second["usage"]["requests"], 1)
+
+    def test_unknown_usage_reservation_can_stop_retries_at_budget(self):
+        self.settings.update(max_retries=5, max_total_tokens=150)
+        report = self.collect(evaluate_fn=self.network_failure)
+        self.assertEqual(report["stop_reason"], "token_limit")
+        self.assertEqual(len(self.calls), 1)
+        self.assertGreaterEqual(report["budget_tokens"], 150)
+        self.assertEqual(report["usage"]["total_tokens"], 0)
+
+    def test_non_retryable_http_error_does_not_retry(self):
+        self.settings["max_retries"] = 5
+        def unauthorized(candidate, text, **kwargs):
+            self.calls.append(candidate.skill_id)
+            return {"ok": False, "reason_code": "MODEL_ERROR", "error": "private detail",
+                    "call": ModelCallResult(http_status=401, attempts=1)}
+        report = self.collect(evaluate_fn=unauthorized)
+        self.assertEqual(len(self.calls), 1)
+        self.assertEqual(report["stop_reason"], "usage_unknown")
+        self.assertIn("HTTP 401", "\n".join(self.logs))
+
+    def test_retryable_http_response_counts_all_reported_tokens(self):
+        self.settings.update(max_retries=5, target_recommended=1)
+        def temporary(candidate, text, **kwargs):
+            result = self.evaluate(candidate, text, **kwargs)
+            if len(self.calls) == 1:
+                result.update(ok=False, reason_code="MODEL_ERROR")
+                result["call"].http_status = 503
+            return result
+        report = self.collect(evaluate_fn=temporary)
+        self.assertEqual(report["stop_reason"], "target_reached")
+        self.assertEqual(report["usage"]["total_tokens"], 200)
+        self.assertEqual(report["usage"]["requests"], 2)
+        self.assertEqual(report["unknown_usage_reserved_tokens"], 0)
 
     def test_rerun_reuses_evaluations_and_counts_only_new_recommendations(self):
         first = self.collect(count=3)

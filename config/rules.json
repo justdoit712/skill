@@ -5,6 +5,7 @@
   "weekly_quota": 50,
   "run_limits": {
     "max_fetches_per_run": null,
+    "max_manual_checks_per_run": 10,
     "note": "单次运行最多抓取多少条上游内容。null 表示跟随本批评估名额（抓到内容的候选才会进入评估批次，因此默认不浪费抓取）。设为具体数字即为硬上限。本项不是评估规则，不影响 rules_version 与评估 ID。"
   },
   "output_schema": {

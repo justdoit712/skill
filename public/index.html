@@ -43,6 +43,7 @@
       <div class="tabs" role="tablist">
         <button id="tab-recommended" class="tab is-active" role="tab" aria-selected="true">推荐区</button>
         <button id="tab-candidate" class="tab" role="tab" aria-selected="false">候选区</button>
+        <button id="tab-manual" class="tab" role="tab" aria-selected="false">收藏区</button>
       </div>
     </div>
   </section>
@@ -66,6 +67,8 @@
       <dd>六项检查全部通过，且证据可定位、领域专项检查通过。页面默认展示本区。</dd>
       <dt>候选区</dt>
       <dd>属于收录范围但存在 <code>unknown</code>、说明不完整或尚需核验，均注明原因。</dd>
+      <dt>收藏区</dt>
+      <dd>由用户手工指定并长期保留的条目。三区互斥，上游变化不自动重评或降级，程序不自动移出。</dd>
       <dt>内容已变化，待复核</dt>
       <dd>已推荐技能的上游内容发生变化。保留推荐状态并醒目标记，同时展示原评估对应的版本；复核不通过则降级。</dd>
     </dl>
@@ -96,7 +99,8 @@
     category: document.getElementById("category"),
     source: document.getElementById("source"),
     tabRec: document.getElementById("tab-recommended"),
-    tabCand: document.getElementById("tab-candidate")
+    tabCand: document.getElementById("tab-candidate"),
+    tabManual: document.getElementById("tab-manual")
   };
 
   function text(value) {
@@ -161,12 +165,15 @@
 
       var cat = entry.main_category ? entry.main_category.name : "未分类";
       var bits = ['<span class="tag tag-cat">' + escapeHtml(cat) + "</span>"];
+      if (entry.manual_pick) {
+        bits.push('<span class="tag tag-manual">收藏</span>');
+      }
       if (entry.needs_review) {
         // §5.2：保留推荐状态但必须醒目提示，不能让人误以为已通过复核
         bits.push('<span class="tag tag-review">内容已变化，待复核' +
           (entry.status === "recommended" ? "（推荐状态待复核）" : "（已降级）") + "</span>");
       }
-      if (entry.status === "candidate" && !entry.needs_review) {
+      if (entry.status === "candidate" && !entry.needs_review && !entry.manual_pick) {
         bits.push('<span class="tag tag-cand">候选</span>');
       }
       if (entry.source_type) {
@@ -184,6 +191,27 @@
       if (text(entry.limitations)) meta.push("限制：" + escapeHtml(entry.limitations));
       if (text(entry.license)) meta.push("许可：" + escapeHtml(entry.license));
 
+      var manualHtml = "";
+      if (entry.manual_pick && entry.manual_note) {
+        var note = entry.manual_note;
+        manualHtml += '<p class="detail manual">收藏理由：' + escapeHtml(note.reason || "") +
+          (note.added_at ? '（' + escapeHtml(note.added_at) + '）' : '') + '</p>';
+        if (entry.content_changed_at) {
+          manualHtml += '<p class="detail changed">上游内容已变化（' + escapeHtml(entry.content_changed_at.slice(0, 10)) + '），尚未复核；本条为人工收藏，程序不会自动重评。</p>';
+        }
+        var autoExcluded = entry.status === "excluded" || (note.auto_status === "excluded");
+        if (autoExcluded) {
+          var reasons = (entry.reason_codes || []).join("、");
+          manualHtml += '<p class="detail warning-box">程序判定为排除项' + (reasons ? '（' + escapeHtml(reasons) + '）' : '') + '，本条为人工收藏，请自行确认风险。</p>';
+        } else if (entry.status === "processing_failure") {
+          manualHtml += '<p class="detail warning-box">评估未完成。</p>';
+        }
+        if (entry.upstream_status && entry.upstream_status !== "ok") {
+          manualHtml += '<p class="detail warning-box">上游不可访问' + (entry.last_checked ? '（' + escapeHtml(entry.last_checked.slice(0, 10)) + '）' : '') + '。</p>';
+        }
+        manualHtml += '<p class="detail hint">移出收藏区：删除 <code>config/overrides.json</code> 中该条目的对象。</p>';
+      }
+
       var dates = [];
       if (text(entry.first_seen)) dates.push("首次发现 " + escapeHtml(entry.first_seen.slice(0, 10)));
       if (text(entry.last_checked)) dates.push("最近检查 " + escapeHtml(entry.last_checked.slice(0, 10)));
@@ -199,6 +227,7 @@
         '<p class="sum">' + escapeHtml(text(entry.summary_zh) || "（暂无中文简述）") + "</p>" +
         '<p class="tags">' + bits.join("") + "</p>" +
         (meta.length ? '<p class="detail">' + meta.join(" · ") + "</p>" : "") +
+        manualHtml +
         (entry.needs_review ? '<p class="detail review">待复核：' +
           escapeHtml(entry.review_note || "上游内容已变化，等待复核。") + "</p>" : "") +
         reviewBlock(entry) +
@@ -209,7 +238,9 @@
 
   function apply() {
     if (!state.data) return;
-    var entries = state.tab === "recommended" ? state.data.recommended : state.data.candidates;
+    var entries = state.tab === "recommended" ? (state.data.recommended || [])
+                : (state.tab === "candidate" ? (state.data.candidates || [])
+                : (state.data.manual || []));
     render(entries);
     var shown = el.list.querySelectorAll(".card").length;
     var total = entries.length;
@@ -232,6 +263,7 @@
     el.meta.hidden = false;
     el.meta.textContent =
       "推荐 " + (counts.recommended || 0) + " · 候选 " + (counts.candidate || 0) +
+      " · 收藏 " + (counts.manual || 0) +
       " · 未评估 " + (counts.pending || 0) + " · 处理失败 " + (counts.processing_failure || 0) +
       " · 生成于 " + (data.generated_at || "未知") + " · 规则版本 " + (data.rules_version || "未知");
 
@@ -247,18 +279,21 @@
   el.q.addEventListener("input", function (e) { state.q = e.target.value.trim(); apply(); });
   el.category.addEventListener("change", function (e) { state.category = e.target.value; apply(); });
   el.source.addEventListener("change", function (e) { state.source = e.target.value; apply(); });
-  el.tabRec.addEventListener("click", function () {
-    state.tab = "recommended";
-    el.tabRec.classList.add("is-active"); el.tabCand.classList.remove("is-active");
-    el.tabRec.setAttribute("aria-selected", "true"); el.tabCand.setAttribute("aria-selected", "false");
+
+  function setTab(tab) {
+    state.tab = tab;
+    el.tabRec.classList.toggle("is-active", tab === "recommended");
+    el.tabCand.classList.toggle("is-active", tab === "candidate");
+    el.tabManual.classList.toggle("is-active", tab === "manual");
+    el.tabRec.setAttribute("aria-selected", tab === "recommended" ? "true" : "false");
+    el.tabCand.setAttribute("aria-selected", tab === "candidate" ? "true" : "false");
+    el.tabManual.setAttribute("aria-selected", tab === "manual" ? "true" : "false");
     apply();
-  });
-  el.tabCand.addEventListener("click", function () {
-    state.tab = "candidate";
-    el.tabCand.classList.add("is-active"); el.tabRec.classList.remove("is-active");
-    el.tabCand.setAttribute("aria-selected", "true"); el.tabRec.setAttribute("aria-selected", "false");
-    apply();
-  });
+  }
+
+  el.tabRec.addEventListener("click", function () { setTab("recommended"); });
+  el.tabCand.addEventListener("click", function () { setTab("candidate"); });
+  el.tabManual.addEventListener("click", function () { setTab("manual"); });
 
   fetch("data/catalog.json", { cache: "no-store" })
     .then(function (r) {

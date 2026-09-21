@@ -46,6 +46,13 @@ from .index import (
     write_catalog,
 )
 from .models import Candidate, PrescreenResult
+from .overrides import (
+    apply_manual_overrides,
+    apply_manual_overrides_to_entry,
+    get_manual_picks,
+    load_overrides,
+    validate_overrides,
+)
 from .prescreen import DECISION_EXCLUDED, DECISION_QUEUED, load_config, prescreen
 from .report import build_report, write_report
 
@@ -77,6 +84,7 @@ def load_all_config(config_dir: str | Path = "config") -> dict:
     prescreen_cfg = load_config(base)
     model_path = base / "model.local.json"
     model_cfg = _load_json(model_path) if model_path.exists() else _load_json(base / "model.example.json")
+    overrides_cfg = load_overrides(base / "overrides.json")
     return {
         "prescreen": prescreen_cfg,
         "taxonomy": prescreen_cfg.taxonomy,
@@ -84,6 +92,7 @@ def load_all_config(config_dir: str | Path = "config") -> dict:
         "searches": load_searches(str(base)),
         "sources": _load_json(base / "sources.json"),
         "model": model_cfg,
+        "overrides": overrides_cfg,
         "source_types": {
             s["id"]: s.get("source_type") for s in _load_json(base / "sources.json").get("sources", [])
         },
@@ -101,6 +110,8 @@ def precheck(cfg: dict) -> list[str]:
         problems.append("searches.json 未定义任何领域的查询词")
     if not cfg["model"].get("endpoint") or not cfg["model"].get("model"):
         problems.append("模型配置缺 endpoint 或 model")
+    if "overrides" in cfg:
+        problems.extend(validate_overrides(cfg["overrides"]))
     return problems
 
 
@@ -176,20 +187,30 @@ def _skill_of(item: dict) -> str:
 
 
 def _ordered_pending(
-    items: list[dict], *, catalogued: dict, source_types: dict, recheck: set[str] | None = None
+    items: list[dict],
+    *,
+    catalogued: dict,
+    source_types: dict,
+    recheck: set[str] | None = None,
+    manual_picks: set[str] | None = None,
 ) -> list[dict]:
     """按 §5.2/§5.3 的优先级排序，并按 skill_id 去重（同一技能只排一次）。
 
-    优先级：内容已有变化的条目 > 已收录待评估 > 新候选 > 本轮抽查的已评估条目。
+    优先级：内容已有变化的条目 > 人工收藏条目 > 已收录待评估 > 新候选 > 本轮抽查的已评估条目。
     抽查是让"已推荐内容变化"最终能被发现的通道：已评估条目出队后不再是队列主体，
     否则积压会被同一批已评估条目反复占据，新候选永远轮不到评估。
     """
     recheck = recheck or set()
+    manual_picks = manual_picks or set()
 
     def rank(item: dict) -> int:
-        # 只在**已知**内容变化或待复核时插队；其余条目一律按公平轮转推进，
-        # "已评估"的条目本就会在 evaluate 阶段出队，不需要额外的顺位层
-        return 0 if (item.get("content_changed") or item.get("needs_review")) else 1
+        # 只在**已知**内容变化或待复核时插队；收藏条目排在普通抽查与新候选之前（§4.6）
+        if item.get("content_changed") or item.get("needs_review"):
+            return 0
+        skill = _skill_of(item)
+        if item.get("manual_pick") or (skill and skill in manual_picks):
+            return 1
+        return 2
 
     ordered: list[dict] = []
     seen: set[str] = set()
@@ -423,7 +444,12 @@ def _accumulate_plan(
             and _settled_for(ledger, skill_id, fingerprint, cfg or {})
         )
 
+    manual_picks_dict = get_manual_picks((cfg or {}).get("overrides") or {})
+    manual_picks_set = set(manual_picks_dict.keys())
+    max_manual_checks = int(((cfg or {}).get("rules") or {}).get("run_limits", {}).get("max_manual_checks_per_run", 10) or 10)
+
     fresh: dict[str, dict] = {}
+    manual_recheck: list[str] = []
     recheck: list[str] = []
     rechecked: set[str] = set()
     for index, (candidate, prescreen_result) in enumerate(first_pass):
@@ -434,12 +460,17 @@ def _accumulate_plan(
             candidate.skill_id, candidate.content_fingerprint, old.get("baseline_fingerprint")
         )
         if settled(candidate.skill_id, baseline):
-            # 已评估且内容与基线一致：不作为队列主体。只按有限名额抽查，
-            # 让"已推荐内容发生变化"最终能被发现（§7.2），同时不饿死新候选（§5.3）
-            if len(recheck) >= MAX_RECHECKS_PER_RUN:
-                continue
-            recheck.append(candidate.skill_id)
-            rechecked.add(candidate.skill_id)
+            # 已评估且内容与基线一致：不作为队列主体。按名额抽查（§4.6、§5.3）
+            if candidate.skill_id in manual_picks_set:
+                if len(manual_recheck) >= max_manual_checks:
+                    continue
+                manual_recheck.append(candidate.skill_id)
+                rechecked.add(candidate.skill_id)
+            else:
+                if len(recheck) >= MAX_RECHECKS_PER_RUN:
+                    continue
+                recheck.append(candidate.skill_id)
+                rechecked.add(candidate.skill_id)
         item = _candidate_payload(
             candidate, prescreen_result,
             {"ok": False, "bytes": 0, "reason_code": None, "skipped": "尚未抓取"},
@@ -448,6 +479,7 @@ def _accumulate_plan(
         item["content_fingerprint"] = old.get("content_fingerprint")
         item["candidate"]["content_fingerprint"] = item["content_fingerprint"]
         item["recheck"] = candidate.skill_id in rechecked
+        item["manual_pick"] = candidate.skill_id in manual_picks_set
         # seq 只从队列继承；新候选按本轮发现顺序排在后面，避免抢到不该有的靠前顺位
         item["seq"] = old.get("seq", len(previous) + index)
         item["first_queued_at"] = old.get("first_queued_at") or stamped
@@ -460,7 +492,7 @@ def _accumulate_plan(
     # 新候选永远得不到评估（§5.3）。名额不足时直接不排本轮抽查，下轮再说。
     regular = [item for item in fresh.values() if not item.get("recheck")]
     ordered_regular = _ordered_pending(
-        regular, catalogued=catalogued, source_types=source_types
+        regular, catalogued=catalogued, source_types=source_types, manual_picks=manual_picks_set
     )
     rechecks = sorted(rechecked)
     if cap is not None and len(ordered_regular) >= cap:
@@ -850,9 +882,18 @@ def phase_evaluate(
     skipped = 0
     settled_items: list[str] = []
 
+    manual_picks_dict = get_manual_picks((cfg or {}).get("overrides") or {})
+    manual_picks_set = set(manual_picks_dict.keys())
+
     for item in queue.get("pending", []):
         candidate = _candidate_from_payload(item["candidate"])
         eid = evaluation_id(candidate, cfg["model"], cfg["rules"])
+
+        if candidate.skill_id in manual_picks_set:
+            # §4.4: 人工收藏条目不调用模型重新评估（0 模型调用）
+            results[candidate.skill_id] = {"status": "skipped", "note": "人工收藏条目不调用模型重新评估"}
+            skipped += 1
+            continue
 
         if _mark_settled(item, cfg, ledger):
             # 这份内容已经评估过：直接出队，不抓取、不占名额（§5.3）
@@ -985,6 +1026,7 @@ def phase_evaluate(
         )
 
     merged = merge_entries(previous_entries, fresh)
+    apply_manual_overrides(merged, manual_picks_dict)
     catalog = build_catalog(merged, context=context)
     manifest = write_catalog(
         catalog,

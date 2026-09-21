@@ -5,6 +5,9 @@ from __future__ import annotations
 import inspect
 import os
 import unittest
+from unittest.mock import Mock
+
+import requests
 
 from src.evaluate import api_key_source, resolve_api_key
 
@@ -113,6 +116,35 @@ class NoLeakInSourceTest(unittest.TestCase):
         blob = f"{result.error or ''}{result.notes}"
         self.assertNotIn(FAKE_FILE_KEY, blob)
         self.assertNotIn(ENV_NAME + "=", blob)
+
+
+class ModelDiagnosticsTest(unittest.TestCase):
+    def test_network_exception_keeps_type_for_safe_logging(self):
+        from src.evaluate import call_model
+
+        session = Mock()
+        session.post.side_effect = requests.exceptions.ReadTimeout("sensitive response detail")
+        result = call_model({"model": "test", "endpoint": "https://example.invalid",
+                             "request": {"max_attempts": 1}}, "system", "user",
+                            api_key="test-only", session=session)
+        self.assertEqual(result.reason_code, "NETWORK_ERROR")
+        self.assertEqual(result.error_type, "ReadTimeout")
+        self.assertIsNone(result.http_status)
+        self.assertEqual(result.usage, {})
+        self.assertEqual(session.post.call_count, 1)
+
+    def test_http_error_keeps_status_without_exposing_response_body(self):
+        from src.evaluate import call_model
+
+        response = Mock(status_code=429, text="sensitive response detail")
+        session = Mock()
+        session.post.return_value = response
+        result = call_model({"model": "test", "endpoint": "https://example.invalid",
+                             "request": {"max_attempts": 1}}, "system", "user",
+                            api_key="test-only", session=session)
+        self.assertEqual(result.reason_code, "MODEL_ERROR")
+        self.assertEqual(result.http_status, 429)
+        self.assertIsNone(result.error_type)
 
 
 if __name__ == "__main__":

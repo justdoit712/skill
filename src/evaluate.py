@@ -54,6 +54,9 @@ class ModelCallResult:
     reason_code: str | None = None
     error: str | None = None
     notes: list[str] = field(default_factory=list)
+    # 可安全持久化的诊断字段；不包含服务端正文、请求 URL 或认证头。
+    error_type: str | None = None
+    http_status: int | None = None
 
     @property
     def reasoning_tokens(self) -> int:
@@ -220,6 +223,9 @@ def call_model(
     try:
         for attempt in range(1, max_attempts + 1):
             result.attempts = attempt
+            result.error_type = None
+            result.http_status = None
+            result.error = None
             try:
                 response = sess.post(
                     model_cfg.get("endpoint"),
@@ -228,6 +234,7 @@ def call_model(
                     timeout=timeout,
                 )
             except requests.exceptions.RequestException as exc:
+                result.error_type = type(exc).__name__
                 result.error = f"{type(exc).__name__}: {exc}"
                 if attempt < max_attempts:
                     sleep(min(2.0 ** (attempt - 1), 8.0))
@@ -238,6 +245,7 @@ def call_model(
 
             try:
                 status = response.status_code
+                result.http_status = status
                 if status >= 400:
                     body = response.text[:300]
                     result.error = f"HTTP {status}: {body}"

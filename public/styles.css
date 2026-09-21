@@ -107,7 +107,19 @@ body {
 }
 .tag-cat { background: var(--accent-soft); border-color: var(--accent-soft); color: var(--accent); }
 .tag-cand { background: #f3f4f6; }
+.tag-manual { background: #e0f2fe; border-color: #bae6fd; color: #0369a1; font-weight: 600; }
 .tag-review { background: var(--warn-soft); border-color: #eac54f; color: var(--warn); font-weight: 600; }
+
+.card .detail.manual { color: #0369a1; font-weight: 500; }
+.card .detail.changed { color: var(--warn); }
+.card .detail.warning-box {
+  background: var(--warn-soft);
+  border: 1px solid #eac54f;
+  padding: 6px 10px;
+  border-radius: 6px;
+  color: var(--warn);
+  font-weight: 500;
+}
 
 /* 待复核：原评估版本快照，默认收起但可展开核对 */
 .review-box {

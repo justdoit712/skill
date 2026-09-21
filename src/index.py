@@ -80,6 +80,8 @@ def build_entry(
     needs_review: bool = False,
     review_note: str | None = None,
     pending_review: dict | None = None,
+    manual_pick: bool = False,
+    manual_note: dict | None = None,
 ) -> dict:
     """构造一个索引条目。
 
@@ -136,7 +138,9 @@ def build_entry(
             "terms": list(candidate.search_terms),
         },
         "status": status,
-        "needs_review": bool(needs_review),
+        "manual_pick": bool(manual_pick),
+        "manual_note": manual_note,
+        "needs_review": bool(needs_review) if not manual_pick else False,
         "review_note": review_note,
         # §5.2/§6：待复核时要能展示「原评估对应的版本」——旧指纹、旧简述、旧分类与复核原因
         "pending_review": pending_review,
@@ -197,7 +201,8 @@ def build_catalog(entries: list[dict], *, context: CatalogContext) -> dict:
 
 
 def build_page_data(catalog: dict) -> dict:
-    """由索引生成页面数据（§6：默认展示推荐区，支持候选区切换）。"""
+    """由索引生成页面数据（§6：默认展示推荐区，支持候选区与收藏区切换）。"""
+    manual: list[dict] = []
     recommended: list[dict] = []
     candidates: list[dict] = []
     pending = 0
@@ -209,13 +214,16 @@ def build_page_data(catalog: dict) -> dict:
         if category.get("id"):
             category_counts[category["id"]] = category_counts.get(category["id"], 0) + 1
 
-        if entry["status"] == STATUS_RECOMMENDED:
+        # §4.3 判定顺序，命中即停，保证互斥
+        if entry.get("manual_pick"):
+            manual.append(_display(entry))
+        elif entry.get("status") == STATUS_RECOMMENDED:
             recommended.append(_display(entry))
-        elif entry["status"] == STATUS_CANDIDATE:
+        elif entry.get("status") == STATUS_CANDIDATE:
             candidates.append(_display(entry))
-        elif entry["status"] == STATUS_PENDING:
+        elif entry.get("status") == STATUS_PENDING:
             pending += 1
-        elif entry["status"] == STATUS_PROCESSING_FAILURE:
+        elif entry.get("status") == STATUS_PROCESSING_FAILURE:
             failed += 1
 
     return {
@@ -224,14 +232,16 @@ def build_page_data(catalog: dict) -> dict:
         "counts": {
             "recommended": len(recommended),
             "candidate": len(candidates),
+            "manual": len(manual),
             # §6：未评估或失败状态如实展示，不隐藏也不冒充已评估
             "pending": pending,
             "processing_failure": failed,
-            "total_evaluated": len(recommended) + len(candidates),
+            "total_evaluated": len(recommended) + len(candidates) + len(manual),
         },
         "categories": [
             {"id": key, "count": value} for key, value in sorted(category_counts.items())
         ],
+        "manual": manual,
         "recommended": recommended,
         "candidates": candidates,
     }
@@ -251,6 +261,8 @@ def _display(entry: dict) -> dict:
         "dependencies_declared": entry["dependencies_declared"],
         "source_type": entry["source_type"],
         "status": entry["status"],
+        "manual_pick": bool(entry.get("manual_pick")),
+        "manual_note": entry.get("manual_note"),
         "needs_review": entry["needs_review"],
         "review_note": entry["review_note"],
         # §6：待复核要清楚区分上游当前版本与原评估版本

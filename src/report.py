@@ -64,9 +64,11 @@ def build_report(
             )
 
         if old.get("status") != entry.get("status"):
-            status_changed.append(
-                {"skill_id": skill_id, "from": old.get("status"), "to": entry.get("status")}
-            )
+            # §6：收藏条目的变化只记信息，不计入推荐状态变化
+            if not (old.get("manual_pick") or entry.get("manual_pick")):
+                status_changed.append(
+                    {"skill_id": skill_id, "from": old.get("status"), "to": entry.get("status")}
+                )
 
         if entry.get("upstream_status") == UPSTREAM_GONE and old.get("upstream_status") == UPSTREAM_OK:
             removed.append(_brief(entry))
@@ -101,7 +103,10 @@ def build_report(
         UPSTREAM_REMOVED: removed,
         COLLECTION_FAILED: failures,
         "recommended_total": sum(
-            1 for entry in current.values() if entry.get("status") == STATUS_RECOMMENDED
+            1 for entry in current.values() if entry.get("status") == STATUS_RECOMMENDED and not entry.get("manual_pick")
+        ),
+        "manual_total": sum(
+            1 for entry in current.values() if entry.get("manual_pick")
         ),
         "quota": meta.get("quota"),
     }
@@ -113,6 +118,7 @@ def _brief(entry: dict) -> dict:
         "name": entry.get("name"),
         "url": entry.get("url"),
         "status": entry.get("status"),
+        "manual_pick": bool(entry.get("manual_pick")),
     }
 
 
