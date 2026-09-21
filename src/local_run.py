@@ -19,6 +19,20 @@ from .fetch import fetch_text
 from .index import CatalogContext, build_catalog, build_entry, index_by_id, write_catalog
 from .overrides import apply_manual_overrides_to_entry, get_manual_exclusions, get_manual_picks
 from .pipeline import admission_decision, load_all_config, precheck, review_state
+from .pool import (
+    STATUS_DONE,
+    STATUS_EXCLUDED,
+    STATUS_FETCH_FAILED,
+    STATUS_NOT_SKILL,
+    STATUS_PENDING,
+    append_new_candidates,
+    create_pool_from_candidates,
+    get_pending_candidates,
+    is_pool_expired,
+    load_pool,
+    save_pool,
+    update_candidate_status,
+)
 from .prescreen import prescreen
 from .report import build_report, write_report
 from .usage import UsageTotals
@@ -54,6 +68,12 @@ def _valid_settings(settings: dict) -> None:
         minimum = 0 if name == "limit_queries" else 1
         if value is not None and (isinstance(value, bool) or not isinstance(value, int) or value < minimum):
             raise ValueError(f"{name} 必须 >= {minimum}，或设为 null")
+    watermark = settings.get("pool_watermark", 20)
+    if isinstance(watermark, bool) or not isinstance(watermark, int) or watermark < 0:
+        raise ValueError("pool_watermark 必须是非负整数")
+    max_age = settings.get("pool_max_age_days", 7)
+    if isinstance(max_age, bool) or not isinstance(max_age, int) or max_age < 1:
+        raise ValueError("pool_max_age_days 必须是正整数")
 
 
 def _retryable(result: dict) -> bool:
@@ -143,23 +163,30 @@ def _collect(root, local, settings, cfg, discover_fn, fetch_fn, evaluate_fn, log
             if sid not in old_recommended and e.get("status") == "recommended" and not e.get("needs_review") and not e.get("manual_pick")
         ]
         report["new_recommended"] = len(report["recommendations"])
+        if pool is not None:
+            report["pool_stats"] = pool.stats()
         _write_json_atomic(run_dir / "report.json", report)
         _write_json_atomic(local / "latest-run.json", report)
         lines = ["# 本地运行报告", "", f"- 运行：{run_id}",
-                 f"- 状态：{STOP_LABELS.get(report['stop_reason'], '运行中')}",
-                 f"- 本次新增推荐：{report['new_recommended']} / {settings['target_recommended']}",
-                 f"- 评估次数：{report['evaluations']}；复用已有评估：{report['cached']}",
-                 f"- 请求次数（含重试）：{usage.requests}；失败请求：{report['failed_requests']}",
-                 f"- 已知输入 Token：{usage.prompt_tokens:,}",
-                 f"- 已知输出 Token：{usage.completion_tokens:,}",
-                 f"- 已知总 Token：{usage.total_tokens:,} / {settings['max_total_tokens']:,}",
-                 f"- 未知用量预留预算：{report['unknown_usage_reserved_tokens']:,} Token（估算，不是实际用量）",
-                 f"- 预算占用合计：{report['budget_tokens']:,} Token",
-                 f"- 推理 Token：{usage.reasoning_tokens:,}（已包含在输出内）",
-                 f"- 用量未知请求：{usage.unknown_usage_requests}",
-                 f"- 分项不完整请求：{usage.incomplete_breakdown_requests}",
-                 "", "未知用量按输入字节数＋最大输出＋消息余量预留预算；这不是精确计费。Token 上限在每次请求结束后检查。金额以服务商账单为准。",
-                 "", "## 本次新增推荐", ""]
+                 f"- 状态：{STOP_LABELS.get(report['stop_reason'], '运行中')}"]
+        if pool is not None:
+            pst = pool.stats()
+            lines.append(f"- 候选池：共 {pst['total']} 条，待处理 {pst['pending']} 条（已完成 {pst['done']}，排除 {pst['excluded']}，抓取失败 {pst['fetch_failed']}，非技能 {pst['not_skill']}）")
+        lines.extend([
+            f"- 本次新增推荐：{report['new_recommended']} / {settings['target_recommended']}",
+            f"- 评估次数：{report['evaluations']}；复用已有评估：{report['cached']}",
+            f"- 请求次数（含重试）：{usage.requests}；失败请求：{report['failed_requests']}",
+            f"- 已知输入 Token：{usage.prompt_tokens:,}",
+            f"- 已知输出 Token：{usage.completion_tokens:,}",
+            f"- 已知总 Token：{usage.total_tokens:,} / {settings['max_total_tokens']:,}",
+            f"- 未知用量预留预算：{report['unknown_usage_reserved_tokens']:,} Token（估算，不是实际用量）",
+            f"- 预算占用合计：{report['budget_tokens']:,} Token",
+            f"- 推理 Token：{usage.reasoning_tokens:,}（已包含在输出内）",
+            f"- 用量未知请求：{usage.unknown_usage_requests}",
+            f"- 分项不完整请求：{usage.incomplete_breakdown_requests}",
+            "", "未知用量按输入字节数＋最大输出＋消息余量预留预算；这不是精确计费。Token 上限在每次请求结束后检查。金额以服务商账单为准。",
+            "", "## 本次新增推荐", "",
+        ])
         for item in report["recommendations"]:
             # 上游名称是数据，避免作为 Markdown 链接/标题语法执行。
             name = str(item["name"] or item["skill_id"]).replace("[", "（").replace("]", "）").replace("\n", " ")
@@ -197,27 +224,63 @@ def _collect(root, local, settings, cfg, discover_fn, fetch_fn, evaluate_fn, log
     active_eid = None
     active_call = None
     unknown_reserve = 0
+    pool_path = local / "pool.json"
+    force_refresh = settings.get("refresh_pool", False)
+    watermark = settings.get("pool_watermark", 20)
+    max_age_days = settings.get("pool_max_age_days", 7)
+    pool = None
     try:
         save()
         log(f"目标：新增 {settings['target_recommended']} 个推荐技能；上限 {settings['max_total_tokens']:,} Token。")
-        log("正在搜索并展开真实 SKILL.md；搜索阶段不调用模型。")
-        candidates, outcomes = discover_fn(
-            cfg["searches"], sources=cfg["sources"], expand=True,
-            max_queries=settings.get("limit_queries"), expand_limit=settings.get("expand_limit"),
-            sleep=sleep, progress=log,
-        )
-        pool = dedupe(candidates)
-        # 优先寻找新增推荐，其次处理已有推荐；同组内官方来源优先。
-        pool.sort(key=lambda c: (c.skill_id in old_recommended,
-                                not any(cfg["source_types"].get(s) == "official" for s in c.source_ids)))
+        if not force_refresh:
+            pool = load_pool(pool_path)
+            if pool is not None and is_pool_expired(pool, max_age_days=max_age_days):
+                log(f"本地候选池已超过 {max_age_days} 天有效期，重新运行发现并重建候选池...")
+                pool = None
+
+        if pool is None:
+            if force_refresh:
+                log("已指定 --refresh-pool，强制清空旧池并重新运行网络搜索...")
+            else:
+                log("未检测到有效本地候选池，正在首次搜索并展开真实 SKILL.md...")
+            log("搜索阶段不调用模型。")
+            candidates, outcomes = discover_fn(
+                cfg["searches"], sources=cfg["sources"], expand=True,
+                max_queries=settings.get("limit_queries"), expand_limit=settings.get("expand_limit"),
+                sleep=sleep, progress=log,
+            )
+            report["discovery_failures"] = sum(not item.ok for item in outcomes)
+            pool = create_pool_from_candidates(candidates, old_recommended, cfg["source_types"])
+            save_pool(pool_path, pool)
+            log(f"候选池已构建并保存至 {pool_path}，共 {len(pool)} 条候选（全部待处理）。")
+        else:
+            pending_count = pool.pending_count
+            log(f"加载已有候选池：共 {len(pool)} 条，已处理 {len(pool) - pending_count} 条，待处理 {pending_count} 条。")
+            if pending_count < watermark:
+                log(f"待处理候选数量 ({pending_count}) 低于水位线 ({watermark})，正在增量搜索补水...")
+                candidates, outcomes = discover_fn(
+                    cfg["searches"], sources=cfg["sources"], expand=True,
+                    max_queries=settings.get("limit_queries"), expand_limit=settings.get("expand_limit"),
+                    sleep=sleep, progress=log,
+                )
+                report["discovery_failures"] = sum(not item.ok for item in outcomes)
+                added = append_new_candidates(pool, candidates, old_recommended, cfg["source_types"])
+                save_pool(pool_path, pool)
+                log(f"增量补水完成，新增 {added} 条候选入池，当前池总量 {len(pool)} 条，待处理 {pool.pending_count} 条。")
+            else:
+                log(f"待处理候选充足（{pending_count} >= 水位线 {watermark}），跳过网络搜索，秒级启动。")
+                report["discovery_failures"] = 0
+
         report["discovered"] = len(pool)
-        report["discovery_failures"] = sum(not item.ok for item in outcomes)
         # 本地账本保存调用记录；每次运行的停止额度由 report 与 usage 管理。
         # 不读写 data/state/budget.json，不改变 Actions 的 50/周。
         ledger.cap = ledger.reserved_count + max(1, len(pool))
         ledger.save()
         save()
-        for candidate in pool:
+        pending_items = get_pending_candidates(pool)
+        for item in pending_items:
+            candidate = item.candidate
+            seq = item.seq
             if report["new_recommended"] >= settings["target_recommended"]:
                 report["stop_reason"] = "target_reached"
                 break
@@ -231,14 +294,18 @@ def _collect(root, local, settings, cfg, discover_fn, fetch_fn, evaluate_fn, log
             # 展开失败的仓库首页不是一个 Skill，不能拿 README 或 HTML 冒充评估材料。
             if not candidate.path.endswith("SKILL.md"):
                 report["not_skill_files"] += 1
+                update_candidate_status(pool, seq, STATUS_NOT_SKILL)
+                save_pool(pool_path, pool)
                 continue
             pres = prescreen(candidate, cfg["prescreen"], None)
             if pres.excluded:
                 report["prescreen_excluded"] += 1
                 publish(candidate, pres)
+                update_candidate_status(pool, seq, STATUS_EXCLUDED)
+                save_pool(pool_path, pool)
                 save()
                 continue
-            log(f"检查 {report['checked']}/{len(pool)}：{candidate.skill_id}")
+            log(f"检查 #{seq}（本轮进度 {report['checked']}/{len(pending_items)}，全池 {len(pool)}）：{candidate.skill_id}")
             if "/blob/" not in candidate.url:
                 candidate.url = f"https://github.com/{candidate.owner}/{candidate.repo}/blob/HEAD/{candidate.path}"
             url = candidate.url.replace("https://github.com/", "https://raw.githubusercontent.com/", 1).replace("/blob/", "/", 1)
@@ -246,6 +313,8 @@ def _collect(root, local, settings, cfg, discover_fn, fetch_fn, evaluate_fn, log
                                max_bytes=int(cfg["model"].get("limits", {}).get("max_input_bytes") or 262144))
             if not fetched.ok or not fetched.text or fetched.truncated:
                 report["fetch_failed"] += 1
+                update_candidate_status(pool, seq, STATUS_FETCH_FAILED)
+                save_pool(pool_path, pool)
                 # 获取失败没有证据支持新结论；保留已有目录条目。
                 save()
                 continue
@@ -255,6 +324,8 @@ def _collect(root, local, settings, cfg, discover_fn, fetch_fn, evaluate_fn, log
             if pres.excluded:
                 report["prescreen_excluded"] += 1
                 publish(candidate, pres)
+                update_candidate_status(pool, seq, STATUS_EXCLUDED)
+                save_pool(pool_path, pool)
                 save()
                 continue
             eid = evaluation_id(candidate, cfg["model"], cfg["rules"])
@@ -264,11 +335,15 @@ def _collect(root, local, settings, cfg, discover_fn, fetch_fn, evaluate_fn, log
                 # §4.4: 人工收藏条目：更新真实指纹与变更时间，但不调用模型重新评估（0 模型调用）
                 outcome = record.get("outcome") or ({"decision": (entries.get(candidate.skill_id) or {}).get("status")} if candidate.skill_id in entries else None)
                 publish(candidate, pres, outcome=outcome)
+                update_candidate_status(pool, seq, STATUS_DONE)
+                save_pool(pool_path, pool)
                 save()
                 continue
             if record.get("status") == "completed":
                 report["cached"] += 1
                 publish(candidate, pres, record["outcome"])
+                update_candidate_status(pool, seq, STATUS_DONE)
+                save_pool(pool_path, pool)
                 save()
                 continue
             resumable_failure = bool(
@@ -354,6 +429,8 @@ def _collect(root, local, settings, cfg, discover_fn, fetch_fn, evaluate_fn, log
                 active_call["decision"] = outcome["decision"]
                 publish(candidate, pres, outcome)
                 consecutive_failures = 0
+                update_candidate_status(pool, seq, STATUS_DONE)
+                save_pool(pool_path, pool)
             else:
                 report["failed_evaluations"] += 1
                 consecutive_failures += 1
@@ -384,6 +461,8 @@ def _collect(root, local, settings, cfg, discover_fn, fetch_fn, evaluate_fn, log
         report["stop_reason"] = "error"
         report["error_type"] = type(exc).__name__
     finally:
+        if pool is not None:
+            save_pool(pool_path, pool)
         if active_eid:
             ledger.mark_needs_recovery(active_eid, "运行中断或异常，禁止自动重复付费请求")
             if active_call["usage"] is None:
@@ -409,15 +488,20 @@ def main(argv=None, *, root: Path | None = None) -> int:
     parser.add_argument("--max-retries", type=int, help="首次失败后的最多重连次数，默认 5")
     parser.add_argument("--limit-queries", type=int)
     parser.add_argument("--expand-limit", type=int)
+    parser.add_argument("--refresh-pool", action="store_true", help="强制丢弃现有候选池并重新运行网络搜索发现")
+    parser.add_argument("--pool-watermark", type=int, help="候选池待处理数量低于此水位线时自动增量补水，默认 20")
     args = parser.parse_args(argv)
     log = lambda message: print(message, flush=True)
     try:
         settings = _read(root / "config" / "local-run.json")
         for argument, key in (("target", "target_recommended"), ("max_tokens", "max_total_tokens"),
                               ("max_evaluations", "max_evaluations"), ("limit_queries", "limit_queries"),
-                              ("expand_limit", "expand_limit"), ("max_retries", "max_retries")):
+                              ("expand_limit", "expand_limit"), ("max_retries", "max_retries"),
+                              ("pool_watermark", "pool_watermark")):
             if getattr(args, argument) is not None:
                 settings[key] = getattr(args, argument)
+        if args.refresh_pool:
+            settings["refresh_pool"] = True
         _valid_settings(settings)
         cfg = load_all_config(root / "config")
         problems = precheck(cfg)
@@ -437,6 +521,9 @@ def main(argv=None, *, root: Path | None = None) -> int:
         usage = result["usage"]
         log(STOP_LABELS[result["stop_reason"]])
         log(f"本次新增推荐：{result['new_recommended']}/{settings['target_recommended']}；评估 {result['evaluations']} 次。")
+        if result.get("pool_stats"):
+            pst = result["pool_stats"]
+            log(f"候选池状态：总计 {pst['total']} 条，待处理 {pst['pending']} 条，已完成 {pst['done']} 条，排除 {pst['excluded']} 条。")
         log(f"请求 {usage['requests']} 次（含重试），失败请求 {result['failed_requests']} 次。")
         log(f"已知输入 {usage['prompt_tokens']:,} / 输出 {usage['completion_tokens']:,} / 合计 {usage['total_tokens']:,} Token。")
         log(f"其中推理 {usage['reasoning_tokens']:,}（已含在输出中）；用量未知请求 {usage['unknown_usage_requests']}。")

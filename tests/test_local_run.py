@@ -75,9 +75,9 @@ class LocalRunTest(unittest.TestCase):
         return {"ok": True, "evaluation": ev,
                 "call": ModelCallResult(usage={"prompt_tokens": 80, "completion_tokens": 20, "total_tokens": 100}, attempts=1)}
 
-    def collect(self, count=6, evaluate_fn=None, fetch_fn=None, candidates=None):
+    def collect(self, count=6, evaluate_fn=None, fetch_fn=None, candidates=None, discover_fn=None):
         return run_local(self.root, self.settings, cfg=self.cfg,
-                         discover_fn=lambda *a, **kw: (candidates if candidates is not None else [self.candidate(i) for i in range(count)], []),
+                         discover_fn=discover_fn or (lambda *a, **kw: (candidates if candidates is not None else [self.candidate(i) for i in range(count)], [])),
                          fetch_fn=fetch_fn or self.fetch, evaluate_fn=evaluate_fn or self.evaluate,
                          log=self.logs.append, sleep=lambda n: None)
 
@@ -279,6 +279,100 @@ class LocalRunTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "已有本地任务"):
             self.collect()
 
+    def test_pool_persistence_and_resuming_from_breakpoint(self):
+        """验证断点续跑：第一轮处理前 2 个，第二轮直接跳过网络搜索，从第 3 个（tool-2）继续。"""
+        # 第一轮：目标 2 个，池子放入 5 个候选
+        first = self.collect(count=5)
+        self.assertEqual(first["stop_reason"], "target_reached")
+        self.assertEqual(first["new_recommended"], 2)
+        self.assertEqual(len(self.calls), 2)
+        self.assertEqual(self.calls, [
+            "example/skills:skills/tool-0/SKILL.md",
+            "example/skills:skills/tool-1/SKILL.md",
+        ])
+
+        pool_file = self.root / "data" / "local" / "pool.json"
+        self.assertTrue(pool_file.exists())
+        pool_data = json.loads(pool_file.read_text(encoding="utf-8"))
+        self.assertEqual(pool_data["stats"]["total"], 5)
+        self.assertEqual(pool_data["stats"]["done"], 2)
+        self.assertEqual(pool_data["stats"]["pending"], 3)
+
+        # 第二轮：设置 watermark=1（pending 3 >= 1，跳过搜索），discover_fn 若被调用直接报错
+        self.settings.update(target_recommended=2, pool_watermark=1)
+        second_calls = []
+        def fail_if_searched(*args, **kwargs):
+            raise AssertionError("当待处理候选充足时，不应调用网络搜索！")
+
+        second = run_local(
+            self.root, self.settings, cfg=self.cfg,
+            discover_fn=fail_if_searched,
+            fetch_fn=self.fetch,
+            evaluate_fn=self.evaluate,
+            log=self.logs.append, sleep=lambda n: None,
+        )
+
+        self.assertEqual(second["stop_reason"], "target_reached")
+        self.assertEqual(second["new_recommended"], 2)
+        # 本轮只应评估 tool-2 与 tool-3，绝不重复评估 tool-0 或 tool-1
+        self.assertEqual(self.calls[2:], [
+            "example/skills:skills/tool-2/SKILL.md",
+            "example/skills:skills/tool-3/SKILL.md",
+        ])
+
+        # 核验 pool.json 更新：前 4 个 done，最后 1 个 pending
+        pool_data2 = json.loads(pool_file.read_text(encoding="utf-8"))
+        self.assertEqual(pool_data2["stats"]["done"], 4)
+        self.assertEqual(pool_data2["stats"]["pending"], 1)
+
+    def test_pool_watermark_triggers_refill_when_pending_low(self):
+        """当待处理候选低于水位线时，触发增量补水。"""
+        # 第一轮：2 个候选，全部处理完毕
+        self.collect(count=2)
+        pool_file = self.root / "data" / "local" / "pool.json"
+        pool_data = json.loads(pool_file.read_text(encoding="utf-8"))
+        self.assertEqual(pool_data["stats"]["pending"], 0)
+
+        # 第二轮：待处理为 0 < watermark(20)，提供新候选 tool-2, tool-3
+        discovered_flag = []
+        def refill_discover(*args, **kwargs):
+            discovered_flag.append(True)
+            return ([self.candidate(i) for i in range(4)], [])
+
+        self.settings.update(target_recommended=1, pool_watermark=20)
+        self.collect(discover_fn=refill_discover)
+        self.assertTrue(discovered_flag, "低于水位线时应触发增量补水")
+
+        pool_data2 = json.loads(pool_file.read_text(encoding="utf-8"))
+        self.assertEqual(pool_data2["stats"]["total"], 4)
+        self.assertEqual(pool_data2["stats"]["done"], 3)  # tool-0, 1, 2 done
+        self.assertEqual(pool_data2["stats"]["pending"], 1)  # tool-3 pending
+
+    def test_refresh_pool_forces_rebuild(self):
+        """--refresh-pool 强制丢弃旧池并重新构建。"""
+        self.collect(count=4)
+        pool_file = self.root / "data" / "local" / "pool.json"
+        pool_data = json.loads(pool_file.read_text(encoding="utf-8"))
+        self.assertEqual(pool_data["stats"]["done"], 2)
+
+        # 设置 refresh_pool 标志
+        self.settings["refresh_pool"] = True
+        self.calls.clear()
+        refreshed = self.collect(count=4)
+        self.assertEqual(refreshed["stop_reason"], "target_reached")
+        # 刷新后重新排布优先级：已有推荐排在后面，未推荐的 tool-2、tool-3 优先评估并达成目标
+        self.assertEqual(refreshed["new_recommended"], 2)
+        self.assertEqual(self.calls, [
+            "example/skills:skills/tool-2/SKILL.md",
+            "example/skills:skills/tool-3/SKILL.md",
+        ])
+        pool_data2 = json.loads(pool_file.read_text(encoding="utf-8"))
+        # 新池优先评估了 tool-2 和 tool-3，因此 done 为 2，已有推荐待处理 pending 为 2
+        self.assertEqual(pool_data2["stats"]["done"], 2)
+        self.assertEqual(pool_data2["stats"]["pending"], 2)
+        self.assertEqual([c["candidate"]["name"] for c in pool_data2["candidates"][:2]], ["tool-2", "tool-3"])
+
 
 if __name__ == "__main__":
     unittest.main()
+
