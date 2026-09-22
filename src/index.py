@@ -186,7 +186,11 @@ def merge_entries(previous_entries: list[dict] | None, new_entries: list[dict]) 
 
 
 def build_catalog(
-    entries: list[dict], *, context: CatalogContext, overrides: dict | None = None
+    entries: list[dict],
+    *,
+    context: CatalogContext,
+    overrides: dict | None = None,
+    snoozed: dict | None = None,
 ) -> dict:
     """汇总为唯一索引。"""
     counts: dict[str, int] = {}
@@ -202,6 +206,8 @@ def build_catalog(
     }
     if overrides:
         res["overrides"] = overrides
+    if snoozed:
+        res["snoozed"] = snoozed
     return res
 
 
@@ -252,6 +258,8 @@ def build_page_data(catalog: dict) -> dict:
     }
     if catalog.get("overrides"):
         res["overrides"] = catalog["overrides"]
+    if catalog.get("snoozed"):
+        res["snoozed"] = catalog["snoozed"]
     return res
 
 
@@ -271,6 +279,7 @@ def _display(entry: dict) -> dict:
         "status": entry["status"],
         "manual_pick": bool(entry.get("manual_pick")),
         "manual_note": entry.get("manual_note"),
+        "snooze": entry.get("snooze"),
         "needs_review": entry["needs_review"],
         "review_note": entry["review_note"],
         # §6：待复核要清楚区分上游当前版本与原评估版本
@@ -312,3 +321,80 @@ def write_catalog(
         "counts": page_data["counts"],
         "generated_at": catalog.get("generated_at"),
     }
+
+
+def sync_config_to_catalog(
+    root_dir: str | Path = ".",
+    catalog_path: str | Path | None = None,
+    public_catalog_path: str | Path | None = None,
+    overrides_path: str | Path | None = None,
+    snoozed_path: str | Path | None = None,
+) -> dict:
+    """仅同步 overrides.json 和 snoozed.json 到已有的 catalog.json。
+
+    严格遵循设计原则：
+    - 不联网、0 模型调用、不消耗 Token、不写账本；
+    - 独立分流，完全不依赖 LLM API Key 或模型凭据；
+    - 绝不修改条目的原评估内容（中文简述、分类、评估证据等）和原检查时间；
+    - 自动剔除过期或已撤销条目上的残留 snooze 标记。
+    """
+    from .overrides import apply_manual_overrides, get_manual_exclusions, get_manual_picks, load_overrides, validate_overrides
+    from .snooze import apply_snooze_overrides, get_active_snoozed, load_snooze, validate_snooze
+
+    root = Path(root_dir)
+    data_file = Path(catalog_path) if catalog_path else root / "data" / "catalog.json"
+    public_file = Path(public_catalog_path) if public_catalog_path else root / "public" / "data" / "catalog.json"
+    overrides_file = Path(overrides_path) if overrides_path else root / "config" / "overrides.json"
+    snooze_file = Path(snoozed_path) if snoozed_path else root / "config" / "snoozed.json"
+
+    if not data_file.exists():
+        raise FileNotFoundError(f"主索引文件不存在：{data_file}")
+
+    catalog = json.loads(data_file.read_text(encoding="utf-8"))
+    entries = catalog.get("entries") or []
+    known_skill_ids = {e.get("skill_id") for e in entries if e.get("skill_id")}
+
+    overrides = load_overrides(overrides_file)
+    override_errors = validate_overrides(overrides, known_skill_ids)
+    if override_errors:
+        raise ValueError("overrides.json 校验失败：" + "；".join(override_errors))
+
+    active_picks = get_manual_picks(overrides)
+    active_exclusions = get_manual_exclusions(overrides)
+
+    snooze_cfg = load_snooze(snooze_file)
+    snooze_errors = validate_snooze(
+        snooze_cfg,
+        known_skill_ids=known_skill_ids,
+        active_pick_ids=set(active_picks.keys()),
+        active_exclusion_ids=set(active_exclusions.keys()),
+    )
+    if snooze_errors:
+        raise ValueError("snoozed.json 校验失败：" + "；".join(snooze_errors))
+
+    # 应用人工收藏与黑名单
+    apply_manual_overrides(entries, overrides)
+    # 应用活跃冷冻（自动清理非活跃的残留 snooze）
+    apply_snooze_overrides(entries, snooze_cfg)
+
+    catalog["overrides"] = overrides
+    catalog["snoozed"] = snooze_cfg
+
+    # 重新计算各分类统计
+    rec = sum(1 for e in entries if e.get("status") == "recommended" and not e.get("manual_pick"))
+    cand = sum(1 for e in entries if e.get("status") == "candidate" and not e.get("manual_pick"))
+    manual = sum(1 for e in entries if e.get("manual_pick"))
+    excl = sum(1 for e in entries if e.get("status") == "excluded")
+    catalog["counts"] = {
+        "recommended": rec,
+        "candidate": cand,
+        "manual": manual,
+        "excluded": excl,
+    }
+
+    manifest = write_catalog(catalog, data_path=data_file, public_path=public_file)
+    manifest["counts"]["excluded"] = excl
+    active_snoozed_count = len(get_active_snoozed(snooze_cfg))
+    manifest["active_snoozed"] = active_snoozed_count
+    return manifest
+

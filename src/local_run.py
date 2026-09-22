@@ -19,6 +19,7 @@ from .fetch import fetch_text
 from .index import CatalogContext, build_catalog, build_entry, index_by_id, write_catalog
 from .overrides import apply_manual_overrides_to_entry, get_manual_exclusions, get_manual_picks
 from .pipeline import admission_decision, load_all_config, precheck, review_state
+from .snooze import apply_snooze_overrides, get_active_snoozed, load_snooze
 from .pool import (
     STATUS_DONE,
     STATUS_EXCLUDED,
@@ -214,9 +215,10 @@ def _collect(root, local, settings, cfg, discover_fn, fetch_fn, evaluate_fn, log
                         "dependencies_declared", "evaluation_rules_version", "limitations", "license"):
                 entry[key] = previous.get(key)
         apply_manual_overrides_to_entry(entry, manual_picks, manual_exclusions)
+        apply_snooze_overrides([entry], active_snoozed)
         entries[candidate.skill_id] = entry
         dirty = True
-        write_catalog(build_catalog(list(entries.values()), context=context, overrides=cfg.get("overrides")),
+        write_catalog(build_catalog(list(entries.values()), context=context, overrides=cfg.get("overrides"), snoozed=cfg.get("snoozed")),
                       data_path=root / "data" / "catalog.json",
                       public_path=root / "public" / "data" / "catalog.json")
 
@@ -224,11 +226,21 @@ def _collect(root, local, settings, cfg, discover_fn, fetch_fn, evaluate_fn, log
     active_eid = None
     active_call = None
     unknown_reserve = 0
+    active_snoozed = get_active_snoozed(cfg.get("snoozed") or {})
     pool_path = local / "pool.json"
     force_refresh = settings.get("refresh_pool", False)
     watermark = settings.get("pool_watermark", 20)
     max_age_days = settings.get("pool_max_age_days", 7)
     pool = None
+
+    def count_actionable(p) -> int:
+        return sum(
+            1 for it in p.items
+            if it.status == STATUS_PENDING
+            and it.candidate.skill_id not in active_snoozed
+            and it.candidate.skill_id not in manual_exclusions
+        )
+
     try:
         save()
         log(f"目标：新增 {settings['target_recommended']} 个推荐技能；上限 {settings['max_total_tokens']:,} Token。")
@@ -254,10 +266,11 @@ def _collect(root, local, settings, cfg, discover_fn, fetch_fn, evaluate_fn, log
             save_pool(pool_path, pool)
             log(f"候选池已构建并保存至 {pool_path}，共 {len(pool)} 条候选（全部待处理）。")
         else:
+            actionable_count = count_actionable(pool)
             pending_count = pool.pending_count
-            log(f"加载已有候选池：共 {len(pool)} 条，已处理 {len(pool) - pending_count} 条，待处理 {pending_count} 条。")
-            if pending_count < watermark:
-                log(f"待处理候选数量 ({pending_count}) 低于水位线 ({watermark})，正在增量搜索补水...")
+            log(f"加载已有候选池：共 {len(pool)} 条，待处理 {pending_count} 条（可处理 {actionable_count} 条）。")
+            if actionable_count < watermark:
+                log(f"可处理候选数量 ({actionable_count}) 低于水位线 ({watermark})，正在增量搜索补水...")
                 candidates, outcomes = discover_fn(
                     cfg["searches"], sources=cfg["sources"], expand=True,
                     max_queries=settings.get("limit_queries"), expand_limit=settings.get("expand_limit"),
@@ -266,9 +279,10 @@ def _collect(root, local, settings, cfg, discover_fn, fetch_fn, evaluate_fn, log
                 report["discovery_failures"] = sum(not item.ok for item in outcomes)
                 added = append_new_candidates(pool, candidates, old_recommended, cfg["source_types"])
                 save_pool(pool_path, pool)
-                log(f"增量补水完成，新增 {added} 条候选入池，当前池总量 {len(pool)} 条，待处理 {pool.pending_count} 条。")
+                actionable_count = count_actionable(pool)
+                log(f"增量补水完成，新增 {added} 条候选入池，当前池总量 {len(pool)} 条，可处理候选 {actionable_count} 条。")
             else:
-                log(f"待处理候选充足（{pending_count} >= 水位线 {watermark}），跳过网络搜索，秒级启动。")
+                log(f"可处理候选充足（{actionable_count} >= 水位线 {watermark}），跳过网络搜索，秒级启动。")
                 report["discovery_failures"] = 0
 
         report["discovered"] = len(pool)
@@ -281,6 +295,11 @@ def _collect(root, local, settings, cfg, discover_fn, fetch_fn, evaluate_fn, log
         for item in pending_items:
             candidate = item.candidate
             seq = item.seq
+            if candidate.skill_id in active_snoozed:
+                # 审查问题 2：跳过处于活跃冷冻期的候选，保持 pending 状态，不调模型、不写账本，解冻后恢复
+                continue
+            if candidate.skill_id in manual_exclusions:
+                continue
             if report["new_recommended"] >= settings["target_recommended"]:
                 report["stop_reason"] = "target_reached"
                 break
@@ -488,10 +507,26 @@ def main(argv=None, *, root: Path | None = None) -> int:
     parser.add_argument("--max-retries", type=int, help="首次失败后的最多重连次数，默认 5")
     parser.add_argument("--limit-queries", type=int)
     parser.add_argument("--expand-limit", type=int)
+    parser.add_argument("--sync-config", action="store_true", help="纯离线重建：无需模型凭据与网络，将 config/*.json 同步到 data 与 public/data")
     parser.add_argument("--refresh-pool", action="store_true", help="强制丢弃现有候选池并重新运行网络搜索发现")
     parser.add_argument("--pool-watermark", type=int, help="候选池待处理数量低于此水位线时自动增量补水，默认 20")
     args = parser.parse_args(argv)
     log = lambda message: print(message, flush=True)
+
+    if args.sync_config:
+        try:
+            from .index import sync_config_to_catalog
+            manifest = sync_config_to_catalog(root)
+            counts = manifest["counts"]
+            log("离线配置同步完成！")
+            log(f"统计：推荐 {counts.get('recommended', 0)} · 候选 {counts.get('candidate', 0)} · 收藏 {counts.get('manual', 0)} · 排除 {counts.get('excluded', 0)}（当前活跃冷冻 {manifest.get('active_snoozed', 0)} 条）")
+            log(f"已更新主索引：{manifest['catalog_path']}")
+            log(f"已生成页面数据：{manifest['page_path']}")
+            log("部署到 GitHub Pages 请执行：git add config/ data/ public/data/ && git commit -m 'chore: sync config' && git push")
+            return 0
+        except Exception as exc:
+            log(f"同步失败（{type(exc).__name__}）：{exc}")
+            return 1
     try:
         settings = _read(root / "config" / "local-run.json")
         for argument, key in (("target", "target_recommended"), ("max_tokens", "max_total_tokens"),

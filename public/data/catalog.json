@@ -2,12 +2,12 @@
   "generated_at": "2026-09-21T02:01:22.196060+08:00",
   "rules_version": "1.0.1",
   "counts": {
-    "recommended": 51,
+    "recommended": 36,
     "candidate": 21,
-    "manual": 0,
+    "manual": 12,
     "pending": 0,
     "processing_failure": 0,
-    "total_evaluated": 72
+    "total_evaluated": 69
   },
   "categories": [
     {
@@ -39,45 +39,530 @@
       "count": 21
     }
   ],
-  "manual": [],
-  "recommended": [
+  "manual": [
     {
-      "skill_id": "anthropics/skills:skills/algorithmic-art/SKILL.md",
-      "name": "algorithmic-art",
-      "url": "https://github.com/anthropics/skills/blob/HEAD/skills/algorithmic-art/SKILL.md",
+      "skill_id": "anthropics/skills:skills/docx/SKILL.md",
+      "name": "docx",
+      "url": "https://github.com/anthropics/skills/blob/HEAD/skills/docx/SKILL.md",
       "author": "anthropics",
-      "summary_zh": "通过 p5.js 和种子随机与交互式参数创建生成艺术，适用于用户请求用代码创作生成艺术、算法艺术、流场或粒子系统等场景。",
+      "summary_zh": "创建、编辑、读取和转换 Word 文档（.docx/.dotx），支持格式排版、批注、修订跟踪与内容提取，适用于生成报告、信函、备忘录等办公文档。",
+      "main_category": {
+        "id": "docs",
+        "name": "文档办公"
+      },
+      "tags": [
+        "Word",
+        "docx",
+        "文档处理",
+        "办公自动化"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "docx (npm, preinstalled)",
+        "pandoc",
+        "LibreOffice (soffice)",
+        "pdftoppm (Poppler)"
+      ],
+      "source_type": "official",
+      "status": "recommended",
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-22",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      },
+      "snooze": null,
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "reason_codes": [],
+      "limitations": "不支持 PDF、电子表格、Google Docs；旧版 .doc 需先转换为 .docx；docx-js 不能打开现有文件；部分场景下接受修订可能残留空段落（空项目符号）；依赖外部工具链。",
+      "first_seen": "2026-09-20T16:59:36+00:00",
+      "last_checked": "2026-09-21T01:20:40.017366+08:00",
+      "content_changed_at": null,
+      "upstream_status": "ok",
+      "license": null
+    },
+    {
+      "skill_id": "anthropics/skills:skills/mcp-builder/SKILL.md",
+      "name": "mcp-builder",
+      "url": "https://github.com/anthropics/skills/blob/HEAD/skills/mcp-builder/SKILL.md",
+      "author": "anthropics",
+      "summary_zh": "提供创建高质量 MCP 服务器的开发指南，覆盖研究、实现、测试与评估，用于集成外部 API 或服务。",
+      "main_category": {
+        "id": "dev",
+        "name": "编程开发"
+      },
+      "tags": [
+        "mcp",
+        "server",
+        "api集成",
+        "开发指南"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "TypeScript SDK",
+        "Python SDK",
+        "FastMCP",
+        "MCP Inspector"
+      ],
+      "source_type": "official",
+      "status": "recommended",
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-22",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      },
+      "snooze": null,
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "reason_codes": [],
+      "limitations": "指南依赖参考文件，具体实现需按语言指南进行；未包含具体 API 服务细节。",
+      "first_seen": "2026-09-20T16:59:36+00:00",
+      "last_checked": "2026-09-21T01:22:53.506382+08:00",
+      "content_changed_at": null,
+      "upstream_status": "ok",
+      "license": null
+    },
+    {
+      "skill_id": "anthropics/skills:skills/pptx/SKILL.md",
+      "name": "pptx",
+      "url": "https://github.com/anthropics/skills/blob/HEAD/skills/pptx/SKILL.md",
+      "author": "anthropics",
+      "summary_zh": "该技能用于创建、编辑、读取和分析 PowerPoint 演示文稿（.pptx/.potx），涵盖从模板生成、内容修改到视觉 QA 的全流程，适用于制作幻灯片、解析演示文稿内容等场景。",
+      "main_category": {
+        "id": "docs",
+        "name": "文档办公"
+      },
+      "tags": [
+        "PPT",
+        "演示文稿",
+        "幻灯片",
+        "文档生成"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "pptxgenjs",
+        "markitdown[pptx]",
+        "Pillow",
+        "defusedxml",
+        "lxml",
+        "LibreOffice (soffice)",
+        "pdftoppm (Poppler)"
+      ],
+      "source_type": "official",
+      "status": "recommended",
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-22",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      },
+      "snooze": null,
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "reason_codes": [],
+      "limitations": "字体渲染在 LibreOffice 预览中可能不准确；操作需遵循特定脚本和规则，直接编辑 XML 有风险；依赖较多，需预先安装。",
+      "first_seen": "2026-09-20T16:59:36+00:00",
+      "last_checked": "2026-09-21T01:24:03.458704+08:00",
+      "content_changed_at": null,
+      "upstream_status": "ok",
+      "license": null
+    },
+    {
+      "skill_id": "anthropics/skills:skills/slack-gif-creator/SKILL.md",
+      "name": "slack-gif-creator",
+      "url": "https://github.com/anthropics/skills/blob/HEAD/skills/slack-gif-creator/SKILL.md",
+      "author": "anthropics",
+      "summary_zh": "用于创建针对 Slack 优化的动画 GIF 的工具箱，提供尺寸/参数约束、PIL 绘图与动画概念；典型场景是用户请求“给 Slack 做一个某人做某事的 GIF”。",
       "main_category": {
         "id": "content",
         "name": "内容创作"
       },
       "tags": [
-        "生成艺术",
-        "算法艺术",
-        "p5.js",
-        "交互式参数",
-        "创意编码"
+        "GIF",
+        "Slack",
+        "动画",
+        "PIL",
+        "图像生成"
       ],
-      "platform_declared": "claude.ai / 任意现代浏览器",
+      "platform_declared": null,
       "dependencies_declared": [
-        "p5.js (CDN 1.7.0)",
-        "templates/viewer.html"
+        "pillow",
+        "imageio",
+        "numpy"
       ],
       "source_type": "official",
       "status": "recommended",
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-22",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      },
+      "snooze": null,
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
       "reason_codes": [],
-      "limitations": "需依赖模板文件；仅适用于创作原创算法艺术，应避免复制现有艺术家作品；产物为自包含 HTML，依赖 p5.js CDN。",
-      "first_seen": "2026-09-20T16:26:13+00:00",
-      "last_checked": "2026-09-21T00:45:33.948003+08:00",
+      "limitations": "不提供预制图形、不使用 emoji 字体渲染；需要用户自行绘制或上传图片；文件大小优化需在用户要求时实施。",
+      "first_seen": "2026-09-20T16:59:36+00:00",
+      "last_checked": "2026-09-21T01:25:10.241623+08:00",
       "content_changed_at": null,
       "upstream_status": "ok",
       "license": null
     },
+    {
+      "skill_id": "anthropics/skills:skills/theme-factory/SKILL.md",
+      "name": "theme-factory",
+      "url": "https://github.com/anthropics/skills/blob/HEAD/skills/theme-factory/SKILL.md",
+      "author": "anthropics",
+      "summary_zh": "主题工厂：为幻灯片、文档、报告、HTML 落地页等成品应用专业配色与字体主题，提供 10 个预设主题并支持即时生成自定义主题。典型场景：为演示文稿快速统一视觉风格。",
+      "main_category": {
+        "id": "docs",
+        "name": "文档办公"
+      },
+      "tags": [
+        "主题",
+        "样式",
+        "演示文稿",
+        "配色",
+        "字体",
+        "幻灯片",
+        "文档美化"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "source_type": "official",
+      "status": "recommended",
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-22",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      },
+      "snooze": null,
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "reason_codes": [],
+      "limitations": "仅提供视觉主题应用，不涉及内容生成；依赖 themes/ 目录和 theme-showcase.pdf；自定义主题需人工确认。",
+      "first_seen": "2026-09-20T16:59:36+00:00",
+      "last_checked": "2026-09-21T01:25:56.313919+08:00",
+      "content_changed_at": null,
+      "upstream_status": "ok",
+      "license": null
+    },
+    {
+      "skill_id": "anthropics/skills:skills/web-artifacts-builder/SKILL.md",
+      "name": "web-artifacts-builder",
+      "url": "https://github.com/anthropics/skills/blob/HEAD/skills/web-artifacts-builder/SKILL.md",
+      "author": "anthropics",
+      "summary_zh": "用于创建复杂的 claude.ai HTML artifacts 的前端工具套件，基于 React、Tailwind、shadcn/ui，适合需要状态管理、路由或 shadcn/ui 组件的复杂 artifact。",
+      "main_category": {
+        "id": "dev",
+        "name": "编程开发"
+      },
+      "tags": [
+        "frontend",
+        "html-artifacts",
+        "react",
+        "tailwind",
+        "shadcn-ui",
+        "claude-artifacts"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "React 18",
+        "TypeScript",
+        "Vite",
+        "Parcel",
+        "Tailwind CSS",
+        "shadcn/ui",
+        "Node 18+"
+      ],
+      "source_type": "official",
+      "status": "recommended",
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-22",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      },
+      "snooze": null,
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "reason_codes": [],
+      "limitations": "不适合简单单文件 HTML/JSX artifacts；需要 Node 18+ 环境；构建流程依赖 bash 脚本和自动安装依赖。",
+      "first_seen": "2026-09-20T16:59:36+00:00",
+      "last_checked": "2026-09-21T01:26:22.732568+08:00",
+      "content_changed_at": null,
+      "upstream_status": "ok",
+      "license": null
+    },
+    {
+      "skill_id": "anthropics/skills:skills/xlsx/SKILL.md",
+      "name": "xlsx",
+      "url": "https://github.com/anthropics/skills/blob/HEAD/skills/xlsx/SKILL.md",
+      "author": "anthropics",
+      "summary_zh": "该技能用于创建、编辑和分析电子表格文件（如 xlsx, csv），利用 openpyxl/pandas 等工具处理数据、公式、格式转换，典型场景包括数据清洗、报表生成和金融模型构建。",
+      "main_category": {
+        "id": "docs",
+        "name": "文档办公"
+      },
+      "tags": [
+        "spreadsheet",
+        "excel",
+        "data-processing",
+        "financial-modeling"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "openpyxl",
+        "pandas",
+        "markitdown",
+        "LibreOffice (soffice)"
+      ],
+      "source_type": "official",
+      "status": "recommended",
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-22",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      },
+      "snooze": null,
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "reason_codes": [],
+      "limitations": "公式兼容性受 LibreOffice 限制（不支持 XLOOKUP、XMATCH、SORT、FILTER 等）；openpyxl 写入公式无缓存值需运行 recalc.py 重算；重新保存含外部链接的工作簿会丢失链接。",
+      "first_seen": "2026-09-20T16:59:36+00:00",
+      "last_checked": "2026-09-21T01:27:09.313514+08:00",
+      "content_changed_at": null,
+      "upstream_status": "ok",
+      "license": null
+    },
+    {
+      "skill_id": "vercel-labs/agent-skills:skills/react-best-practices/SKILL.md",
+      "name": "react-best-practices",
+      "url": "https://github.com/vercel-labs/agent-skills/blob/HEAD/skills/react-best-practices/SKILL.md",
+      "author": "vercel-labs",
+      "summary_zh": "提供 React 与 Next.js 性能优化最佳实践规则，用于编写、审查或重构前端代码时提升性能。",
+      "main_category": {
+        "id": "dev",
+        "name": "编程开发"
+      },
+      "tags": [
+        "React",
+        "Next.js",
+        "性能优化",
+        "代码审查",
+        "前端开发"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "source_type": "official",
+      "status": "recommended",
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-22",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      },
+      "snooze": null,
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "reason_codes": [],
+      "limitations": "仅提供规则索引和简要说明，详细规则内容需查看 rules/ 目录或 AGENTS.md；未提供依赖与平台声明。",
+      "first_seen": "2026-09-20T16:59:36+00:00",
+      "last_checked": "2026-09-21T01:30:07.121744+08:00",
+      "content_changed_at": null,
+      "upstream_status": "ok",
+      "license": null
+    },
+    {
+      "skill_id": "vercel-labs/agent-skills:skills/react-native-skills/SKILL.md",
+      "name": "react-native-skills",
+      "url": "https://github.com/vercel-labs/agent-skills/blob/HEAD/skills/react-native-skills/SKILL.md",
+      "author": "vercel-labs",
+      "summary_zh": "提供 React Native 与 Expo 移动应用开发的最佳实践，涵盖列表性能、动画、导航、UI 模式、状态管理等领域。适用于构建 React Native 组件、优化性能、实现动画和配置原生模块等场景。",
+      "main_category": {
+        "id": "dev",
+        "name": "编程开发"
+      },
+      "tags": [
+        "react-native",
+        "expo",
+        "mobile",
+        "best-practices",
+        "performance",
+        "animation",
+        "ui"
+      ],
+      "platform_declared": "React Native / Expo",
+      "dependencies_declared": [],
+      "source_type": "official",
+      "status": "recommended",
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-22",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      },
+      "snooze": null,
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "reason_codes": [],
+      "limitations": "仅提供规则索引和快速参考，详细规则文件需另行读取；缺少具体实现细节与代码示例。",
+      "first_seen": "2026-09-20T16:59:36+00:00",
+      "last_checked": "2026-09-21T01:30:44.744031+08:00",
+      "content_changed_at": null,
+      "upstream_status": "ok",
+      "license": null
+    },
+    {
+      "skill_id": "vercel-labs/agent-skills:skills/react-view-transitions/SKILL.md",
+      "name": "react-view-transitions",
+      "url": "https://github.com/vercel-labs/agent-skills/blob/HEAD/skills/react-view-transitions/SKILL.md",
+      "author": "vercel-labs",
+      "summary_zh": "提供使用 React View Transition API 实现原生级动画的指南，适用于页面过渡、路由变化、共享元素动画、组件进出动画、列表重排等场景。",
+      "main_category": {
+        "id": "dev",
+        "name": "编程开发"
+      },
+      "tags": [
+        "react",
+        "view-transitions",
+        "animation",
+        "nextjs",
+        "ui"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "react@canary",
+        "react-dom@canary",
+        "next.js (optional)"
+      ],
+      "source_type": "official",
+      "status": "recommended",
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-22",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      },
+      "snooze": null,
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "reason_codes": [],
+      "limitations": "需要较新的浏览器支持（Chromium 125+、Firefox 144+、Safari 18.2+）；React 稳定版不支持 ViewTransition，需 canary 版本（Next.js 除外）；存在嵌套 VT 不触发内部 enter/exit、Next.js 中无 per-item staggered animations 等限制。",
+      "first_seen": "2026-09-20T16:59:36+00:00",
+      "last_checked": "2026-09-21T01:31:27.046487+08:00",
+      "content_changed_at": null,
+      "upstream_status": "ok",
+      "license": null
+    },
+    {
+      "skill_id": "vercel-labs/agent-skills:skills/web-design-guidelines/SKILL.md",
+      "name": "web-design-guidelines",
+      "url": "https://github.com/vercel-labs/agent-skills/blob/HEAD/skills/web-design-guidelines/SKILL.md",
+      "author": "vercel-labs",
+      "summary_zh": "审查 UI 代码是否符合 Web Interface Guidelines，适用于用户要求检查界面、可访问性、设计审计等场景。",
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "tags": [
+        "UI审查",
+        "可访问性",
+        "设计规范",
+        "Web界面"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "WebFetch"
+      ],
+      "source_type": "official",
+      "status": "recommended",
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-22",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      },
+      "snooze": null,
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "reason_codes": [],
+      "limitations": "依赖远程指南源，需网络访问；具体规则和输出格式由远程内容定义。",
+      "first_seen": "2026-09-20T16:59:36+00:00",
+      "last_checked": "2026-09-21T01:32:28.242398+08:00",
+      "content_changed_at": null,
+      "upstream_status": "ok",
+      "license": null
+    },
+    {
+      "skill_id": "vercel-labs/agent-skills:skills/writing-guidelines/SKILL.md",
+      "name": "writing-guidelines",
+      "url": "https://github.com/vercel-labs/agent-skills/blob/HEAD/skills/writing-guidelines/SKILL.md",
+      "author": "vercel-labs",
+      "summary_zh": "该技能依据外部写作指南审查文档/散文的规范符合性，适用于要求检查写作风格或进行文档审查的场景。",
+      "main_category": {
+        "id": "docs",
+        "name": "文档办公"
+      },
+      "tags": [
+        "写作审查",
+        "风格检查",
+        "文档"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "WebFetch"
+      ],
+      "source_type": "official",
+      "status": "recommended",
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-22",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      },
+      "snooze": null,
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "reason_codes": [],
+      "limitations": "依赖外部指南URL的可用性与内容；需要网络获取WebFetch能力；指南内容可能变化。",
+      "first_seen": "2026-09-20T16:59:36+00:00",
+      "last_checked": "2026-09-21T01:33:43.300806+08:00",
+      "content_changed_at": null,
+      "upstream_status": "ok",
+      "license": null
+    }
+  ],
+  "recommended": [
     {
       "skill_id": "anthropics/skills:skills/claude-api/SKILL.md",
       "name": "claude-api",
@@ -121,6 +606,7 @@
       "status": "recommended",
       "manual_pick": false,
       "manual_note": null,
+      "snooze": null,
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -155,6 +641,7 @@
       "status": "recommended",
       "manual_pick": false,
       "manual_note": null,
+      "snooze": null,
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -162,44 +649,6 @@
       "limitations": "需要用户提供充分上下文；部分功能依赖可选的 Claude 集成（artifacts、子代理、连接器），在无这些环境时采用手动替代流程。",
       "first_seen": "2026-09-20T16:59:36+00:00",
       "last_checked": "2026-09-21T01:19:28.138168+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
-      "skill_id": "anthropics/skills:skills/docx/SKILL.md",
-      "name": "docx",
-      "url": "https://github.com/anthropics/skills/blob/HEAD/skills/docx/SKILL.md",
-      "author": "anthropics",
-      "summary_zh": "创建、编辑、读取和转换 Word 文档（.docx/.dotx），支持格式排版、批注、修订跟踪与内容提取，适用于生成报告、信函、备忘录等办公文档。",
-      "main_category": {
-        "id": "docs",
-        "name": "文档办公"
-      },
-      "tags": [
-        "Word",
-        "docx",
-        "文档处理",
-        "办公自动化"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "docx (npm, preinstalled)",
-        "pandoc",
-        "LibreOffice (soffice)",
-        "pdftoppm (Poppler)"
-      ],
-      "source_type": "official",
-      "status": "recommended",
-      "manual_pick": false,
-      "manual_note": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [],
-      "limitations": "不支持 PDF、电子表格、Google Docs；旧版 .doc 需先转换为 .docx；docx-js 不能打开现有文件；部分场景下接受修订可能残留空段落（空项目符号）；依赖外部工具链。",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-21T01:20:40.017366+08:00",
       "content_changed_at": null,
       "upstream_status": "ok",
       "license": null
@@ -228,6 +677,7 @@
       "status": "recommended",
       "manual_pick": false,
       "manual_note": null,
+      "snooze": null,
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -235,240 +685,6 @@
       "limitations": "仅提供设计原则与流程指导，未声明平台/框架兼容性与具体依赖；实际实现需自行适配。",
       "first_seen": "2026-09-20T16:59:36+00:00",
       "last_checked": "2026-09-21T01:21:36.753630+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
-      "skill_id": "anthropics/skills:skills/mcp-builder/SKILL.md",
-      "name": "mcp-builder",
-      "url": "https://github.com/anthropics/skills/blob/HEAD/skills/mcp-builder/SKILL.md",
-      "author": "anthropics",
-      "summary_zh": "提供创建高质量 MCP 服务器的开发指南，覆盖研究、实现、测试与评估，用于集成外部 API 或服务。",
-      "main_category": {
-        "id": "dev",
-        "name": "编程开发"
-      },
-      "tags": [
-        "mcp",
-        "server",
-        "api集成",
-        "开发指南"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "TypeScript SDK",
-        "Python SDK",
-        "FastMCP",
-        "MCP Inspector"
-      ],
-      "source_type": "official",
-      "status": "recommended",
-      "manual_pick": false,
-      "manual_note": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [],
-      "limitations": "指南依赖参考文件，具体实现需按语言指南进行；未包含具体 API 服务细节。",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-21T01:22:53.506382+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
-      "skill_id": "anthropics/skills:skills/pptx/SKILL.md",
-      "name": "pptx",
-      "url": "https://github.com/anthropics/skills/blob/HEAD/skills/pptx/SKILL.md",
-      "author": "anthropics",
-      "summary_zh": "该技能用于创建、编辑、读取和分析 PowerPoint 演示文稿（.pptx/.potx），涵盖从模板生成、内容修改到视觉 QA 的全流程，适用于制作幻灯片、解析演示文稿内容等场景。",
-      "main_category": {
-        "id": "docs",
-        "name": "文档办公"
-      },
-      "tags": [
-        "PPT",
-        "演示文稿",
-        "幻灯片",
-        "文档生成"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "pptxgenjs",
-        "markitdown[pptx]",
-        "Pillow",
-        "defusedxml",
-        "lxml",
-        "LibreOffice (soffice)",
-        "pdftoppm (Poppler)"
-      ],
-      "source_type": "official",
-      "status": "recommended",
-      "manual_pick": false,
-      "manual_note": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [],
-      "limitations": "字体渲染在 LibreOffice 预览中可能不准确；操作需遵循特定脚本和规则，直接编辑 XML 有风险；依赖较多，需预先安装。",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-21T01:24:03.458704+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
-      "skill_id": "anthropics/skills:skills/slack-gif-creator/SKILL.md",
-      "name": "slack-gif-creator",
-      "url": "https://github.com/anthropics/skills/blob/HEAD/skills/slack-gif-creator/SKILL.md",
-      "author": "anthropics",
-      "summary_zh": "用于创建针对 Slack 优化的动画 GIF 的工具箱，提供尺寸/参数约束、PIL 绘图与动画概念；典型场景是用户请求“给 Slack 做一个某人做某事的 GIF”。",
-      "main_category": {
-        "id": "content",
-        "name": "内容创作"
-      },
-      "tags": [
-        "GIF",
-        "Slack",
-        "动画",
-        "PIL",
-        "图像生成"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "pillow",
-        "imageio",
-        "numpy"
-      ],
-      "source_type": "official",
-      "status": "recommended",
-      "manual_pick": false,
-      "manual_note": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [],
-      "limitations": "不提供预制图形、不使用 emoji 字体渲染；需要用户自行绘制或上传图片；文件大小优化需在用户要求时实施。",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-21T01:25:10.241623+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
-      "skill_id": "anthropics/skills:skills/theme-factory/SKILL.md",
-      "name": "theme-factory",
-      "url": "https://github.com/anthropics/skills/blob/HEAD/skills/theme-factory/SKILL.md",
-      "author": "anthropics",
-      "summary_zh": "主题工厂：为幻灯片、文档、报告、HTML 落地页等成品应用专业配色与字体主题，提供 10 个预设主题并支持即时生成自定义主题。典型场景：为演示文稿快速统一视觉风格。",
-      "main_category": {
-        "id": "docs",
-        "name": "文档办公"
-      },
-      "tags": [
-        "主题",
-        "样式",
-        "演示文稿",
-        "配色",
-        "字体",
-        "幻灯片",
-        "文档美化"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [],
-      "source_type": "official",
-      "status": "recommended",
-      "manual_pick": false,
-      "manual_note": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [],
-      "limitations": "仅提供视觉主题应用，不涉及内容生成；依赖 themes/ 目录和 theme-showcase.pdf；自定义主题需人工确认。",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-21T01:25:56.313919+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
-      "skill_id": "anthropics/skills:skills/web-artifacts-builder/SKILL.md",
-      "name": "web-artifacts-builder",
-      "url": "https://github.com/anthropics/skills/blob/HEAD/skills/web-artifacts-builder/SKILL.md",
-      "author": "anthropics",
-      "summary_zh": "用于创建复杂的 claude.ai HTML artifacts 的前端工具套件，基于 React、Tailwind、shadcn/ui，适合需要状态管理、路由或 shadcn/ui 组件的复杂 artifact。",
-      "main_category": {
-        "id": "dev",
-        "name": "编程开发"
-      },
-      "tags": [
-        "frontend",
-        "html-artifacts",
-        "react",
-        "tailwind",
-        "shadcn-ui",
-        "claude-artifacts"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "React 18",
-        "TypeScript",
-        "Vite",
-        "Parcel",
-        "Tailwind CSS",
-        "shadcn/ui",
-        "Node 18+"
-      ],
-      "source_type": "official",
-      "status": "recommended",
-      "manual_pick": false,
-      "manual_note": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [],
-      "limitations": "不适合简单单文件 HTML/JSX artifacts；需要 Node 18+ 环境；构建流程依赖 bash 脚本和自动安装依赖。",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-21T01:26:22.732568+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
-      "skill_id": "anthropics/skills:skills/xlsx/SKILL.md",
-      "name": "xlsx",
-      "url": "https://github.com/anthropics/skills/blob/HEAD/skills/xlsx/SKILL.md",
-      "author": "anthropics",
-      "summary_zh": "该技能用于创建、编辑和分析电子表格文件（如 xlsx, csv），利用 openpyxl/pandas 等工具处理数据、公式、格式转换，典型场景包括数据清洗、报表生成和金融模型构建。",
-      "main_category": {
-        "id": "docs",
-        "name": "文档办公"
-      },
-      "tags": [
-        "spreadsheet",
-        "excel",
-        "data-processing",
-        "financial-modeling"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "openpyxl",
-        "pandas",
-        "markitdown",
-        "LibreOffice (soffice)"
-      ],
-      "source_type": "official",
-      "status": "recommended",
-      "manual_pick": false,
-      "manual_note": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [],
-      "limitations": "公式兼容性受 LibreOffice 限制（不支持 XLOOKUP、XMATCH、SORT、FILTER 等）；openpyxl 写入公式无缓存值需运行 recalc.py 重算；重新保存含外部链接的工作簿会丢失链接。",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-21T01:27:09.313514+08:00",
       "content_changed_at": null,
       "upstream_status": "ok",
       "license": null
@@ -503,6 +719,7 @@
       "status": "recommended",
       "manual_pick": false,
       "manual_note": null,
+      "snooze": null,
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -510,114 +727,6 @@
       "limitations": "需网络权限，部分环境可能需额外配置；无认证回退方案仅限特定沙盒环境。",
       "first_seen": "2026-09-20T16:59:36+00:00",
       "last_checked": "2026-09-21T01:29:37.530547+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
-      "skill_id": "vercel-labs/agent-skills:skills/react-best-practices/SKILL.md",
-      "name": "react-best-practices",
-      "url": "https://github.com/vercel-labs/agent-skills/blob/HEAD/skills/react-best-practices/SKILL.md",
-      "author": "vercel-labs",
-      "summary_zh": "提供 React 与 Next.js 性能优化最佳实践规则，用于编写、审查或重构前端代码时提升性能。",
-      "main_category": {
-        "id": "dev",
-        "name": "编程开发"
-      },
-      "tags": [
-        "React",
-        "Next.js",
-        "性能优化",
-        "代码审查",
-        "前端开发"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [],
-      "source_type": "official",
-      "status": "recommended",
-      "manual_pick": false,
-      "manual_note": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [],
-      "limitations": "仅提供规则索引和简要说明，详细规则内容需查看 rules/ 目录或 AGENTS.md；未提供依赖与平台声明。",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-21T01:30:07.121744+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
-      "skill_id": "vercel-labs/agent-skills:skills/react-native-skills/SKILL.md",
-      "name": "react-native-skills",
-      "url": "https://github.com/vercel-labs/agent-skills/blob/HEAD/skills/react-native-skills/SKILL.md",
-      "author": "vercel-labs",
-      "summary_zh": "提供 React Native 与 Expo 移动应用开发的最佳实践，涵盖列表性能、动画、导航、UI 模式、状态管理等领域。适用于构建 React Native 组件、优化性能、实现动画和配置原生模块等场景。",
-      "main_category": {
-        "id": "dev",
-        "name": "编程开发"
-      },
-      "tags": [
-        "react-native",
-        "expo",
-        "mobile",
-        "best-practices",
-        "performance",
-        "animation",
-        "ui"
-      ],
-      "platform_declared": "React Native / Expo",
-      "dependencies_declared": [],
-      "source_type": "official",
-      "status": "recommended",
-      "manual_pick": false,
-      "manual_note": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [],
-      "limitations": "仅提供规则索引和快速参考，详细规则文件需另行读取；缺少具体实现细节与代码示例。",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-21T01:30:44.744031+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
-      "skill_id": "vercel-labs/agent-skills:skills/react-view-transitions/SKILL.md",
-      "name": "react-view-transitions",
-      "url": "https://github.com/vercel-labs/agent-skills/blob/HEAD/skills/react-view-transitions/SKILL.md",
-      "author": "vercel-labs",
-      "summary_zh": "提供使用 React View Transition API 实现原生级动画的指南，适用于页面过渡、路由变化、共享元素动画、组件进出动画、列表重排等场景。",
-      "main_category": {
-        "id": "dev",
-        "name": "编程开发"
-      },
-      "tags": [
-        "react",
-        "view-transitions",
-        "animation",
-        "nextjs",
-        "ui"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "react@canary",
-        "react-dom@canary",
-        "next.js (optional)"
-      ],
-      "source_type": "official",
-      "status": "recommended",
-      "manual_pick": false,
-      "manual_note": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [],
-      "limitations": "需要较新的浏览器支持（Chromium 125+、Firefox 144+、Safari 18.2+）；React 稳定版不支持 ViewTransition，需 canary 版本（Next.js 除外）；存在嵌套 VT 不触发内部 enter/exit、Next.js 中无 per-item staggered animations 等限制。",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-21T01:31:27.046487+08:00",
       "content_changed_at": null,
       "upstream_status": "ok",
       "license": null
@@ -646,6 +755,7 @@
       "status": "recommended",
       "manual_pick": false,
       "manual_note": null,
+      "snooze": null,
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -684,6 +794,7 @@
       "status": "recommended",
       "manual_pick": false,
       "manual_note": null,
+      "snooze": null,
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -691,75 +802,6 @@
       "limitations": "仅支持带指标依据的候选；Hono/Remix/unknown 默认阻止；Astro 支持有限；路由级指标依赖 Observability Plus；不能对无流量项目排序路由修复。",
       "first_seen": "2026-09-20T16:59:36+00:00",
       "last_checked": "2026-09-21T01:32:05.989703+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
-      "skill_id": "vercel-labs/agent-skills:skills/web-design-guidelines/SKILL.md",
-      "name": "web-design-guidelines",
-      "url": "https://github.com/vercel-labs/agent-skills/blob/HEAD/skills/web-design-guidelines/SKILL.md",
-      "author": "vercel-labs",
-      "summary_zh": "审查 UI 代码是否符合 Web Interface Guidelines，适用于用户要求检查界面、可访问性、设计审计等场景。",
-      "main_category": {
-        "id": "product",
-        "name": "产品与设计"
-      },
-      "tags": [
-        "UI审查",
-        "可访问性",
-        "设计规范",
-        "Web界面"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "WebFetch"
-      ],
-      "source_type": "official",
-      "status": "recommended",
-      "manual_pick": false,
-      "manual_note": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [],
-      "limitations": "依赖远程指南源，需网络访问；具体规则和输出格式由远程内容定义。",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-21T01:32:28.242398+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
-      "skill_id": "vercel-labs/agent-skills:skills/writing-guidelines/SKILL.md",
-      "name": "writing-guidelines",
-      "url": "https://github.com/vercel-labs/agent-skills/blob/HEAD/skills/writing-guidelines/SKILL.md",
-      "author": "vercel-labs",
-      "summary_zh": "该技能依据外部写作指南审查文档/散文的规范符合性，适用于要求检查写作风格或进行文档审查的场景。",
-      "main_category": {
-        "id": "docs",
-        "name": "文档办公"
-      },
-      "tags": [
-        "写作审查",
-        "风格检查",
-        "文档"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "WebFetch"
-      ],
-      "source_type": "official",
-      "status": "recommended",
-      "manual_pick": false,
-      "manual_note": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [],
-      "limitations": "依赖外部指南URL的可用性与内容；需要网络获取WebFetch能力；指南内容可能变化。",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-21T01:33:43.300806+08:00",
       "content_changed_at": null,
       "upstream_status": "ok",
       "license": null
@@ -792,6 +834,7 @@
       "status": "recommended",
       "manual_pick": false,
       "manual_note": null,
+      "snooze": null,
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -830,6 +873,7 @@
       "status": "recommended",
       "manual_pick": false,
       "manual_note": null,
+      "snooze": null,
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -866,6 +910,7 @@
       "status": "recommended",
       "manual_pick": false,
       "manual_note": null,
+      "snooze": null,
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -904,6 +949,7 @@
       "status": "recommended",
       "manual_pick": false,
       "manual_note": null,
+      "snooze": null,
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -937,6 +983,7 @@
       "status": "recommended",
       "manual_pick": false,
       "manual_note": null,
+      "snooze": null,
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -975,6 +1022,7 @@
       "status": "recommended",
       "manual_pick": false,
       "manual_note": null,
+      "snooze": null,
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -1013,6 +1061,7 @@
       "status": "recommended",
       "manual_pick": false,
       "manual_note": null,
+      "snooze": null,
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -1050,6 +1099,7 @@
       "status": "recommended",
       "manual_pick": false,
       "manual_note": null,
+      "snooze": null,
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -1087,6 +1137,7 @@
       "status": "recommended",
       "manual_pick": false,
       "manual_note": null,
+      "snooze": null,
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -1131,6 +1182,7 @@
       "status": "recommended",
       "manual_pick": false,
       "manual_note": null,
+      "snooze": null,
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -1166,6 +1218,7 @@
       "status": "recommended",
       "manual_pick": false,
       "manual_note": null,
+      "snooze": null,
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -1205,6 +1258,7 @@
       "status": "recommended",
       "manual_pick": false,
       "manual_note": null,
+      "snooze": null,
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -1242,6 +1296,7 @@
       "status": "recommended",
       "manual_pick": false,
       "manual_note": null,
+      "snooze": null,
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -1286,6 +1341,7 @@
       "status": "recommended",
       "manual_pick": false,
       "manual_note": null,
+      "snooze": null,
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -1323,6 +1379,7 @@
       "status": "recommended",
       "manual_pick": false,
       "manual_note": null,
+      "snooze": null,
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -1357,6 +1414,7 @@
       "status": "recommended",
       "manual_pick": false,
       "manual_note": null,
+      "snooze": null,
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -1393,6 +1451,7 @@
       "status": "recommended",
       "manual_pick": false,
       "manual_note": null,
+      "snooze": null,
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -1434,6 +1493,7 @@
       "status": "recommended",
       "manual_pick": false,
       "manual_note": null,
+      "snooze": null,
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -1473,6 +1533,7 @@
       "status": "recommended",
       "manual_pick": false,
       "manual_note": null,
+      "snooze": null,
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -1511,6 +1572,7 @@
       "status": "recommended",
       "manual_pick": false,
       "manual_note": null,
+      "snooze": null,
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -1550,6 +1612,7 @@
       "status": "recommended",
       "manual_pick": false,
       "manual_note": null,
+      "snooze": null,
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -1557,49 +1620,6 @@
       "limitations": "需要 Burp Suite Professional 和第三方扩展；响应体可能非常大，必须严格截断输出；搜索结果可能因扩展未加载而出现假阴性。",
       "first_seen": "2026-09-20T16:59:36+00:00",
       "last_checked": "2026-09-21T01:50:52.777179+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
-      "skill_id": "trailofbits/skills:plugins/c-review/skills/c-review/SKILL.md",
-      "name": "c-review",
-      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/c-review/skills/c-review/SKILL.md",
-      "author": "trailofbits",
-      "summary_zh": "对 C/C++ 用户态代码进行安全审查，发现内存损坏、整数溢出、竞态条件等漏洞，适用于审计原生应用、守护进程和服务。",
-      "main_category": {
-        "id": "security",
-        "name": "安全"
-      },
-      "tags": [
-        "安全审查",
-        "C/C++",
-        "代码审计",
-        "内存安全"
-      ],
-      "platform_declared": [
-        "Linux",
-        "macOS",
-        "Windows"
-      ],
-      "dependencies_declared": [
-        "uv",
-        "CLAUDE_PLUGIN_ROOT（或 ~/.claude 回退）",
-        "workflows/c-review.js",
-        "scripts/enumerate_units.py",
-        "scripts/assemble_findings.py"
-      ],
-      "source_type": "official",
-      "status": "recommended",
-      "manual_pick": false,
-      "manual_note": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [],
-      "limitations": "不适用于内核驱动、托管语言、无 libc 的嵌入式代码；审查结果未经误报复核，严重性为审查者单方意见。",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-21T01:51:19.720016+08:00",
       "content_changed_at": null,
       "upstream_status": "ok",
       "license": null
@@ -1631,6 +1651,7 @@
       "status": "recommended",
       "manual_pick": false,
       "manual_note": null,
+      "snooze": null,
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -1671,6 +1692,7 @@
       "status": "recommended",
       "manual_pick": false,
       "manual_note": null,
+      "snooze": null,
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -1713,6 +1735,7 @@
       "status": "recommended",
       "manual_pick": false,
       "manual_note": null,
+      "snooze": null,
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -1748,6 +1771,7 @@
       "status": "recommended",
       "manual_pick": false,
       "manual_note": null,
+      "snooze": null,
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -1755,53 +1779,6 @@
       "limitations": "依赖预定义的审查子代理和 Task 调度工具；不执行具体审计规则，仅合并结果；未声明平台兼容性。",
       "first_seen": "2026-09-20T16:59:36+00:00",
       "last_checked": "2026-09-21T01:55:01.665990+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
-      "skill_id": "trailofbits/skills:plugins/constant-time-analysis/skills/constant-time-analysis/SKILL.md",
-      "name": "constant-time-analysis",
-      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/constant-time-analysis/skills/constant-time-analysis/SKILL.md",
-      "author": "trailofbits",
-      "summary_zh": "该技能用于静态检测密码代码中的时序侧信道漏洞，通过编译并分析汇编或字节码中的变时指令，适用于审查 C/C++/Go/Rust 等语言的加密实现。",
-      "main_category": {
-        "id": "security",
-        "name": "安全"
-      },
-      "tags": [
-        "安全审计",
-        "密码学",
-        "侧信道分析",
-        "静态分析"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "uv",
-        "gcc/clang",
-        "go",
-        "rustc",
-        "swiftc",
-        "javac",
-        "kotlinc",
-        ".NET SDK",
-        "ilspycmd",
-        "PHP VLD",
-        "Node.js",
-        "Python 3",
-        "Ruby"
-      ],
-      "source_type": "official",
-      "status": "recommended",
-      "manual_pick": false,
-      "manual_note": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [],
-      "limitations": "仅静态分析，无法检测缓存等微架构侧信道；无数据流分析，需要人工 triage；结果依赖于编译器、优化级别和架构。",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-21T01:55:27.342285+08:00",
       "content_changed_at": null,
       "upstream_status": "ok",
       "license": null
@@ -1841,6 +1818,7 @@
       "status": "recommended",
       "manual_pick": false,
       "manual_note": null,
+      "snooze": null,
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -1875,6 +1853,7 @@
       "status": "recommended",
       "manual_pick": false,
       "manual_note": null,
+      "snooze": null,
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -1923,6 +1902,7 @@
       "status": "recommended",
       "manual_pick": false,
       "manual_note": null,
+      "snooze": null,
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -1958,6 +1938,7 @@
       "status": "recommended",
       "manual_pick": false,
       "manual_note": null,
+      "snooze": null,
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -1996,6 +1977,7 @@
       "status": "recommended",
       "manual_pick": false,
       "manual_note": null,
+      "snooze": null,
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -2031,6 +2013,7 @@
       "status": "candidate",
       "manual_pick": false,
       "manual_note": null,
+      "snooze": null,
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -2067,6 +2050,7 @@
       "status": "candidate",
       "manual_pick": false,
       "manual_note": null,
+      "snooze": null,
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -2105,6 +2089,7 @@
       "status": "candidate",
       "manual_pick": false,
       "manual_note": null,
+      "snooze": null,
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -2140,6 +2125,7 @@
       "status": "candidate",
       "manual_pick": false,
       "manual_note": null,
+      "snooze": null,
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -2174,6 +2160,7 @@
       "status": "candidate",
       "manual_pick": false,
       "manual_note": null,
+      "snooze": null,
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -2221,6 +2208,7 @@
       "status": "candidate",
       "manual_pick": false,
       "manual_note": null,
+      "snooze": null,
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -2264,6 +2252,7 @@
       "status": "candidate",
       "manual_pick": false,
       "manual_note": null,
+      "snooze": null,
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -2300,6 +2289,7 @@
       "status": "candidate",
       "manual_pick": false,
       "manual_note": null,
+      "snooze": null,
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -2335,6 +2325,7 @@
       "status": "candidate",
       "manual_pick": false,
       "manual_note": null,
+      "snooze": null,
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -2370,6 +2361,7 @@
       "status": "candidate",
       "manual_pick": false,
       "manual_note": null,
+      "snooze": null,
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -2410,6 +2402,7 @@
       "status": "candidate",
       "manual_pick": false,
       "manual_note": null,
+      "snooze": null,
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -2449,6 +2442,7 @@
       "status": "candidate",
       "manual_pick": false,
       "manual_note": null,
+      "snooze": null,
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -2485,6 +2479,7 @@
       "status": "candidate",
       "manual_pick": false,
       "manual_note": null,
+      "snooze": null,
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -2526,6 +2521,7 @@
       "status": "candidate",
       "manual_pick": false,
       "manual_note": null,
+      "snooze": null,
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -2559,6 +2555,7 @@
       "status": "candidate",
       "manual_pick": false,
       "manual_note": null,
+      "snooze": null,
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -2597,6 +2594,7 @@
       "status": "candidate",
       "manual_pick": false,
       "manual_note": null,
+      "snooze": null,
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -2631,6 +2629,7 @@
       "status": "candidate",
       "manual_pick": false,
       "manual_note": null,
+      "snooze": null,
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -2676,6 +2675,7 @@
       "status": "candidate",
       "manual_pick": false,
       "manual_note": null,
+      "snooze": null,
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -2708,6 +2708,7 @@
       "status": "candidate",
       "manual_pick": false,
       "manual_note": null,
+      "snooze": null,
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -2747,6 +2748,7 @@
       "status": "candidate",
       "manual_pick": false,
       "manual_note": null,
+      "snooze": null,
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -2790,6 +2792,7 @@
       "status": "candidate",
       "manual_pick": false,
       "manual_note": null,
+      "snooze": null,
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -2801,5 +2804,108 @@
       "upstream_status": "ok",
       "license": null
     }
-  ]
+  ],
+  "overrides": {
+    "overrides_version": "1.0.0",
+    "source": "docs/运行说明.md §9",
+    "note": "人工干预名单（overrides）：由用户手工维护。manual_picks 长期保留在收藏区；manual_exclusions 为人工排除黑名单，流水线扫描到直接跳过（0 模型调用）。",
+    "manual_picks": [
+      {
+        "skill_id": "anthropics/skills:skills/docx/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-22",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/mcp-builder/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-22",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/pptx/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-22",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/slack-gif-creator/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-22",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/theme-factory/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-22",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/web-artifacts-builder/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-22",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/xlsx/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-22",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "vercel-labs/agent-skills:skills/react-best-practices/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-22",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "vercel-labs/agent-skills:skills/react-native-skills/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-22",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "vercel-labs/agent-skills:skills/react-view-transitions/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-22",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "vercel-labs/agent-skills:skills/web-design-guidelines/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-22",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "vercel-labs/agent-skills:skills/writing-guidelines/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-22",
+        "from": "recommended"
+      }
+    ],
+    "manual_exclusions": [
+      {
+        "skill_id": "anthropics/skills:skills/algorithmic-art/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-22"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/c-review/skills/c-review/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-22"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/constant-time-analysis/skills/constant-time-analysis/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-22"
+      }
+    ]
+  },
+  "snoozed": {
+    "snooze_version": "1.0.0",
+    "source": "docs/运行说明.md §10",
+    "note": "临时冷冻/暂不关注名单：条目冷冻期默认为 150 天（snoozed_at <= today < expires_at）。冷冻期内前端隐藏且流水线跳过（0 Token 消耗）；到期当天自动解冻恢复展示。",
+    "default_snooze_days": 150,
+    "snoozed": []
+  }
 }

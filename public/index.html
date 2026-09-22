@@ -102,11 +102,15 @@
 <div id="sync-modal" class="modal-overlay" hidden>
   <div class="modal-content" role="dialog" aria-labelledby="modal-title" aria-modal="true">
     <div class="modal-head">
-      <h3 id="modal-title">同步人工干预配置 (overrides.json)</h3>
+      <h3 id="modal-title">同步配置到仓库</h3>
       <button id="btn-close-modal" class="modal-close" aria-label="关闭">&times;</button>
     </div>
     <div class="modal-body">
-      <p>本站部署于 GitHub Pages 静态环境。请将以下生成的配置同步保存至仓库中。点击下方绿色按钮将<strong>自动复制配置到剪贴板并直达 GitHub 网页在线编辑页</strong>，粘贴后提交即可生效！</p>
+      <div class="modal-tab-bar" role="tablist">
+        <button id="tab-modal-overrides" class="modal-tab-btn is-active" type="button">overrides.json (收藏/屏蔽)</button>
+        <button id="tab-modal-snoozed" class="modal-tab-btn" type="button">snoozed.json (暂不看 150天)</button>
+      </div>
+      <p id="modal-desc">本站部署于 GitHub Pages 静态环境。请将以下生成的配置同步保存至仓库中。点击下方绿色按钮将<strong>自动复制配置到剪贴板并直达 GitHub 网页在线编辑页</strong>，粘贴后提交即可生效！</p>
       <pre><code id="json-preview" class="json-preview"></code></pre>
       <p id="copy-status" style="font-size: 12px; color: #16a34a; font-weight: 600; min-height: 18px; margin: 0;"></p>
     </div>
@@ -118,8 +122,26 @@
   </div>
 </div>
 
+<!-- 冷冻名单管理弹窗 -->
+<div id="snoozed-modal" class="modal-overlay" hidden>
+  <div class="modal-content" role="dialog" aria-labelledby="snoozed-modal-title" aria-modal="true">
+    <div class="modal-head">
+      <h3 id="snoozed-modal-title">已冷冻条目 (暂不关注 150 天)</h3>
+      <button id="btn-close-snoozed-modal" class="modal-close" aria-label="关闭">&times;</button>
+    </div>
+    <div class="modal-body">
+      <p>以下技能已被设置为暂不关注。在冷冻期内不会出现在推荐区或候选区，到期当天自动恢复显示与候选处理。您也可以在此随时手动恢复。</p>
+      <div id="snoozed-list" class="snoozed-list"></div>
+    </div>
+    <div class="modal-actions">
+      <button id="btn-close-snoozed-bottom" class="btn-secondary">关闭</button>
+    </div>
+  </div>
+</div>
+
 <footer class="site-footer">
   <div class="wrap">
+    <p id="snoozed-footer-wrap" class="snoozed-footer">当前有 <strong id="count-snoozed-active">0</strong> 个条目处于 150 天冷冻期。<a id="btn-open-snoozed" href="javascript:void(0)">查看冷冻名单与恢复</a></p>
     <p>条目未经实测；金融与健康类条目不构成投资建议或医疗建议，被收录也不代表专业认证。</p>
     <p>中文简述与评估为本站衍生内容，各技能仍适用其原始许可。<a href="https://github.com/justdoit712/skill/blob/main/LICENSE-CONTENT.md" target="_blank" rel="noopener noreferrer">内容许可</a> · <a href="https://github.com/justdoit712/skill/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">代码许可</a></p>
   </div>
@@ -129,7 +151,7 @@
 (function () {
   "use strict";
 
-  var STORAGE_KEY = "skill_overrides_v1";
+  var STORAGE_KEY = "skill_overrides_v2";
   var state = { data: null, tab: "recommended", q: "", category: "", source: "", allEntries: {} };
   var overridesState = {
     baselinePicks: {},
@@ -137,7 +159,10 @@
     stagedPicks: {},
     removedPicks: new Set(),
     stagedExclusions: {},
-    removedExclusions: new Set()
+    removedExclusions: new Set(),
+    baselineSnoozed: {},
+    stagedSnoozed: {},
+    removedSnoozed: new Set()
   };
 
   var el = {
@@ -161,18 +186,51 @@
     btnClearSync: document.getElementById("btn-clear-sync"),
     syncModal: document.getElementById("sync-modal"),
     btnCloseModal: document.getElementById("btn-close-modal"),
+    modalTitle: document.getElementById("modal-title"),
+    modalDesc: document.getElementById("modal-desc"),
+    tabModalOverrides: document.getElementById("tab-modal-overrides"),
+    tabModalSnoozed: document.getElementById("tab-modal-snoozed"),
     jsonPreview: document.getElementById("json-preview"),
     copyStatus: document.getElementById("copy-status"),
     btnCopyJson: document.getElementById("btn-copy-json"),
     btnDownloadJson: document.getElementById("btn-download-json"),
-    btnGotoGithub: document.getElementById("btn-goto-github")
+    btnGotoGithub: document.getElementById("btn-goto-github"),
+    snoozedModal: document.getElementById("snoozed-modal"),
+    btnCloseSnoozedModal: document.getElementById("btn-close-snoozed-modal"),
+    btnCloseSnoozedBottom: document.getElementById("btn-close-snoozed-bottom"),
+    btnOpenSnoozed: document.getElementById("btn-open-snoozed"),
+    countSnoozedActive: document.getElementById("count-snoozed-active"),
+    snoozedList: document.getElementById("snoozed-list")
   };
 
-  function todayStr() {
+  var currentModalTab = "overrides";
+
+  function shanghaiTodayStr() {
     var d = new Date();
-    var m = String(d.getMonth() + 1).padStart(2, "0");
-    var day = String(d.getDate()).padStart(2, "0");
-    return d.getFullYear() + "-" + m + "-" + day;
+    var formatter = new Intl.DateTimeFormat("en-CA", {
+      timeZone: "Asia/Shanghai",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit"
+    });
+    return formatter.format(d);
+  }
+
+  function computeExpiresAt(snoozedAtStr, days) {
+    days = days || 150;
+    var parts = snoozedAtStr.split("-").map(Number);
+    var d = new Date(Date.UTC(parts[0], parts[1] - 1, parts[2]));
+    d.setUTCDate(d.getUTCDate() + days);
+    var y = d.getUTCFullYear();
+    var m = String(d.getUTCMonth() + 1).padStart(2, "0");
+    var day = String(d.getUTCDate()).padStart(2, "0");
+    return y + "-" + m + "-" + day;
+  }
+
+  function isSnoozeActive(item, today) {
+    today = today || shanghaiTodayStr();
+    if (!item || !item.snoozed_at || !item.expires_at) return false;
+    return item.snoozed_at <= today && today < item.expires_at;
   }
 
   function text(value) {
@@ -234,13 +292,36 @@
     return Boolean(overridesState.baselineExclusions[skill_id]);
   }
 
+  function isSnoozed(skill_id) {
+    if (overridesState.removedSnoozed.has(skill_id)) return false;
+    var item = overridesState.stagedSnoozed[skill_id] || overridesState.baselineSnoozed[skill_id];
+    if (!item) return false;
+    return isSnoozeActive(item);
+  }
+
+  function getEffectiveSnoozedList() {
+    var snoozedMap = Object.assign({}, overridesState.baselineSnoozed);
+    overridesState.removedSnoozed.forEach(function (sid) { delete snoozedMap[sid]; });
+    Object.assign(snoozedMap, overridesState.stagedSnoozed);
+    var today = shanghaiTodayStr();
+    var res = [];
+    Object.values(snoozedMap).forEach(function (item) {
+      if (isSnoozeActive(item, today) && !isPicked(item.skill_id) && !isExcluded(item.skill_id)) {
+        res.push(item);
+      }
+    });
+    return res;
+  }
+
   function saveStorage() {
     try {
       var data = {
         stagedPicks: overridesState.stagedPicks,
         stagedExclusions: overridesState.stagedExclusions,
         removedPicks: Array.from(overridesState.removedPicks),
-        removedExclusions: Array.from(overridesState.removedExclusions)
+        removedExclusions: Array.from(overridesState.removedExclusions),
+        stagedSnoozed: overridesState.stagedSnoozed,
+        removedSnoozed: Array.from(overridesState.removedSnoozed)
       };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
     } catch (e) {}
@@ -248,13 +329,15 @@
 
   function loadStorage() {
     try {
-      var raw = localStorage.getItem(STORAGE_KEY);
+      var raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem("skill_overrides_v1");
       if (!raw) return;
       var saved = JSON.parse(raw);
       if (saved.stagedPicks) overridesState.stagedPicks = saved.stagedPicks;
       if (saved.stagedExclusions) overridesState.stagedExclusions = saved.stagedExclusions;
       if (saved.removedPicks) overridesState.removedPicks = new Set(saved.removedPicks);
       if (saved.removedExclusions) overridesState.removedExclusions = new Set(saved.removedExclusions);
+      if (saved.stagedSnoozed) overridesState.stagedSnoozed = saved.stagedSnoozed;
+      if (saved.removedSnoozed) overridesState.removedSnoozed = new Set(saved.removedSnoozed);
     } catch (e) {}
   }
 
@@ -271,10 +354,15 @@
       overridesState.removedPicks.delete(sid);
       overridesState.removedExclusions.delete(sid);
       delete overridesState.stagedExclusions[sid];
+      // 收藏时自动清除冷冻状态
+      delete overridesState.stagedSnoozed[sid];
+      if (overridesState.baselineSnoozed[sid]) {
+        overridesState.removedSnoozed.add(sid);
+      }
       overridesState.stagedPicks[sid] = {
         skill_id: sid,
         reason: "用户收藏",
-        added_at: todayStr(),
+        added_at: shanghaiTodayStr(),
         from: state.tab
       };
     }
@@ -291,11 +379,16 @@
     if (overridesState.baselinePicks[sid]) {
       overridesState.removedPicks.add(sid);
     }
+    // 屏蔽时自动清除冷冻状态
+    delete overridesState.stagedSnoozed[sid];
+    if (overridesState.baselineSnoozed[sid]) {
+      overridesState.removedSnoozed.add(sid);
+    }
     overridesState.removedExclusions.delete(sid);
     overridesState.stagedExclusions[sid] = {
       skill_id: sid,
       reason: "用户屏蔽/删除",
-      added_at: todayStr()
+      added_at: shanghaiTodayStr()
     };
     saveStorage();
 
@@ -309,11 +402,61 @@
     }
   }
 
+  function snoozeSkill(sid, cardEl) {
+    var entry = state.allEntries[sid];
+    if (!entry) return;
+
+    // 冷冻时清除收藏和屏蔽，保持互斥
+    overridesState.removedPicks.delete(sid);
+    delete overridesState.stagedPicks[sid];
+    if (overridesState.baselinePicks[sid]) {
+      overridesState.removedPicks.add(sid);
+    }
+    overridesState.removedExclusions.delete(sid);
+    delete overridesState.stagedExclusions[sid];
+    if (overridesState.baselineExclusions[sid]) {
+      overridesState.removedExclusions.add(sid);
+    }
+
+    var sAt = shanghaiTodayStr();
+    var expAt = computeExpiresAt(sAt, 150);
+
+    overridesState.removedSnoozed.delete(sid);
+    overridesState.stagedSnoozed[sid] = {
+      skill_id: sid,
+      snoozed_at: sAt,
+      expires_at: expAt,
+      days: 150,
+      reason: "用户暂不关注"
+    };
+    saveStorage();
+
+    if (cardEl) {
+      cardEl.classList.add("is-dismissing");
+      setTimeout(function () {
+        apply();
+      }, 250);
+    } else {
+      apply();
+    }
+  }
+
+  function unsnoozeSkill(sid) {
+    delete overridesState.stagedSnoozed[sid];
+    if (overridesState.baselineSnoozed[sid]) {
+      overridesState.removedSnoozed.add(sid);
+    }
+    saveStorage();
+    apply();
+  }
+
   function calculateChangesCount() {
     return Object.keys(overridesState.stagedPicks).length +
       overridesState.removedPicks.size +
       Object.keys(overridesState.stagedExclusions).length +
-      overridesState.removedExclusions.size;
+      overridesState.removedExclusions.size +
+      Object.keys(overridesState.stagedSnoozed).length +
+      overridesState.removedSnoozed.size;
   }
 
   function updateSyncBar() {
@@ -322,8 +465,10 @@
       el.syncBar.hidden = false;
       var parts = [];
       var pCount = Object.keys(overridesState.stagedPicks).length + overridesState.removedPicks.size;
+      var sCount = Object.keys(overridesState.stagedSnoozed).length + overridesState.removedSnoozed.size;
       var eCount = Object.keys(overridesState.stagedExclusions).length + overridesState.removedExclusions.size;
       if (pCount > 0) parts.push("收藏 " + pCount);
+      if (sCount > 0) parts.push("暂不看 " + sCount);
       if (eCount > 0) parts.push("屏蔽 " + eCount);
       el.syncSummary.textContent = parts.join(" · ") || (total + " 项");
     } else {
@@ -346,6 +491,21 @@
       note: "人工干预名单（overrides）：由用户手工维护。manual_picks 长期保留在收藏区；manual_exclusions 为人工排除黑名单，流水线扫描到直接跳过（0 模型调用）。",
       manual_picks: Object.values(picks),
       manual_exclusions: Object.values(exclusions)
+    };
+    return JSON.stringify(payload, null, 2);
+  }
+
+  function generateSnoozedJson() {
+    var snoozed = Object.assign({}, overridesState.baselineSnoozed);
+    overridesState.removedSnoozed.forEach(function (sid) { delete snoozed[sid]; });
+    Object.assign(snoozed, overridesState.stagedSnoozed);
+
+    var payload = {
+      snooze_version: "1.0.0",
+      default_snooze_days: 150,
+      source: "docs/运行说明.md §9.2",
+      note: "临时不关注名单（snoozed）：由用户在网页端维护。在 snoozed_at <= today < expires_at 期间冷冻（默认150天），到期当天自动恢复显示与候选处理。流水线扫描时跳过模型调用，0 额外模型 token 消耗。",
+      snoozed: Object.values(snoozed)
     };
     return JSON.stringify(payload, null, 2);
   }
@@ -423,14 +583,24 @@
       var favBtnClass = picked ? "btn-action btn-fav is-active" : "btn-action btn-fav";
       var favBtnText = picked ? "★ 已收藏" : "★ 收藏";
 
+      // 收藏区仅展示收藏与屏蔽按钮；推荐区与候选区展示收藏、暂不看、屏蔽
+      var actionsHtml = "";
+      if (state.tab === "manual") {
+        actionsHtml =
+          '<button type="button" class="' + favBtnClass + '" data-action="fav" data-id="' + escapeHtml(sid) + '">' + favBtnText + '</button>' +
+          '<button type="button" class="btn-action btn-block" data-action="block" data-id="' + escapeHtml(sid) + '" title="屏蔽并移入黑名单">🚫 屏蔽</button>';
+      } else {
+        actionsHtml =
+          '<button type="button" class="' + favBtnClass + '" data-action="fav" data-id="' + escapeHtml(sid) + '">' + favBtnText + '</button>' +
+          '<button type="button" class="btn-action btn-snooze" data-action="snooze" data-id="' + escapeHtml(sid) + '" title="暂不关注（冷冻150天，到期自动恢复）">⏳ 暂不看</button>' +
+          '<button type="button" class="btn-action btn-block" data-action="block" data-id="' + escapeHtml(sid) + '" title="屏蔽并移入黑名单">🚫 屏蔽</button>';
+      }
+
       li.innerHTML =
         '<div class="card-head">' +
           '<h3><a href="' + escapeHtml(entry.url || "#") + '" target="_blank" rel="noopener noreferrer">' +
           escapeHtml(entry.name) + "</a></h3>" +
-          '<div class="card-actions">' +
-            '<button type="button" class="' + favBtnClass + '" data-action="fav" data-id="' + escapeHtml(sid) + '">' + favBtnText + '</button>' +
-            '<button type="button" class="btn-action btn-block" data-action="block" data-id="' + escapeHtml(sid) + '" title="屏蔽并移入黑名单">🚫 屏蔽</button>' +
-          '</div>' +
+          '<div class="card-actions">' + actionsHtml + '</div>' +
         '</div>' +
         '<p class="by">' + escapeHtml(entry.author || "") + "</p>" +
         '<p class="sum">' + escapeHtml(text(entry.summary_zh) || "（暂无中文简述）") + "</p>" +
@@ -457,7 +627,56 @@
     } else if (action === "block") {
       var card = btn.closest(".card");
       blockSkill(sid, card);
+    } else if (action === "snooze") {
+      var card = btn.closest(".card");
+      snoozeSkill(sid, card);
     }
+  });
+
+  function renderSnoozedModalList() {
+    var list = getEffectiveSnoozedList();
+    el.snoozedList.innerHTML = "";
+    if (!list.length) {
+      el.snoozedList.innerHTML = '<p style="text-align:center;color:#94a3b8;margin:16px 0;">当前没有处于冷冻期的条目。</p>';
+      return;
+    }
+    var today = shanghaiTodayStr();
+    list.forEach(function (item) {
+      var entry = state.allEntries[item.skill_id];
+      var name = entry ? entry.name : item.skill_id;
+      var url = entry ? (entry.url || "#") : "#";
+
+      var pToday = today.split("-").map(Number);
+      var pExp = item.expires_at.split("-").map(Number);
+      var msPerDay = 24 * 60 * 60 * 1000;
+      var dToday = Date.UTC(pToday[0], pToday[1] - 1, pToday[2]);
+      var dExp = Date.UTC(pExp[0], pExp[1] - 1, pExp[2]);
+      var remainDays = Math.max(0, Math.round((dExp - dToday) / msPerDay));
+
+      var row = document.createElement("div");
+      row.className = "snoozed-row";
+      row.innerHTML =
+        '<div class="snoozed-row-info">' +
+          '<div class="snoozed-row-id">' +
+            '<a href="' + escapeHtml(url) + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(name) + '</a>' +
+          '</div>' +
+          '<div class="snoozed-row-dates">' +
+            '冷冻于 ' + escapeHtml(item.snoozed_at) + ' · 到期恢复 ' + escapeHtml(item.expires_at) +
+            '（还剩 ' + remainDays + ' 天）' +
+          '</div>' +
+        '</div>' +
+        '<button type="button" class="btn-action" data-action="unsnooze" data-id="' + escapeHtml(item.skill_id) + '">恢复显示</button>';
+      el.snoozedList.appendChild(row);
+    });
+  }
+
+  el.snoozedList.addEventListener("click", function (e) {
+    var btn = e.target.closest("button[data-action='unsnooze']");
+    if (!btn) return;
+    var sid = btn.getAttribute("data-id");
+    if (!sid) return;
+    unsnoozeSkill(sid);
+    renderSnoozedModalList();
   });
 
   function apply() {
@@ -475,6 +694,9 @@
       if (isPicked(sid)) {
         activeManual.push(entry);
       } else {
+        if (isSnoozed(sid)) {
+          return;
+        }
         if (entry._baselineTab === "recommended") {
           activeRecommended.push(entry);
         } else {
@@ -494,6 +716,11 @@
     var shown = el.list.querySelectorAll(".card").length;
     el.meta.hidden = false;
     el.meta.textContent = "本区共 " + currentList.length + " 条，当前显示 " + shown + " 条。";
+
+    var effectiveSnoozed = getEffectiveSnoozedList();
+    if (el.countSnoozedActive) {
+      el.countSnoozedActive.textContent = effectiveSnoozed.length;
+    }
 
     updateSyncBar();
   }
@@ -517,7 +744,7 @@
       overridesState.baselinePicks[e.skill_id] = {
         skill_id: e.skill_id,
         reason: (e.manual_note && e.manual_note.reason) || "人工收藏",
-        added_at: (e.manual_note && e.manual_note.added_at) || todayStr(),
+        added_at: (e.manual_note && e.manual_note.added_at) || shanghaiTodayStr(),
         from: (e.manual_note && e.manual_note.from) || "recommended"
       };
     });
@@ -530,6 +757,21 @@
         if (ex && ex.skill_id) overridesState.baselineExclusions[ex.skill_id] = ex;
       });
     }
+
+    if (data.snoozed) {
+      var sList = Array.isArray(data.snoozed) ? data.snoozed : (data.snoozed.snoozed || []);
+      sList.forEach(function (sn) {
+        if (sn && sn.skill_id) overridesState.baselineSnoozed[sn.skill_id] = sn;
+      });
+    }
+
+    Object.values(state.allEntries).forEach(function (e) {
+      if (e.snooze && e.snooze.expires_at) {
+        if (!overridesState.baselineSnoozed[e.skill_id]) {
+          overridesState.baselineSnoozed[e.skill_id] = e.snooze;
+        }
+      }
+    });
 
     loadStorage();
 
@@ -568,17 +810,53 @@
   el.tabCand.addEventListener("click", function () { setTab("candidate"); });
   el.tabManual.addEventListener("click", function () { setTab("manual"); });
 
-  // 同步弹窗与浮条交互
-  function openSyncModal() {
-    var jsonStr = generateOverridesJson();
-    el.jsonPreview.textContent = jsonStr;
+  // 同步弹窗双 Tab 与交互
+  function updateModalContent() {
+    el.tabModalOverrides.classList.toggle("is-active", currentModalTab === "overrides");
+    el.tabModalSnoozed.classList.toggle("is-active", currentModalTab === "snoozed");
+
+    if (currentModalTab === "overrides") {
+      el.modalTitle.textContent = "同步人工干预配置 (overrides.json)";
+      el.modalDesc.innerHTML = "本站部署于 GitHub Pages 静态环境。请将以下生成的<strong>收藏与屏蔽配置</strong>同步保存至仓库。点击下方绿色按钮将<strong>自动复制配置并直达 overrides.json 编辑页</strong>，粘贴提交即可生效！";
+      el.jsonPreview.textContent = generateOverridesJson();
+      el.btnDownloadJson.textContent = "💾 下载 overrides.json";
+      el.btnGotoGithub.textContent = "🚀 复制并去 GitHub 保存 (overrides.json)";
+    } else {
+      el.modalTitle.textContent = "同步暂不关注配置 (snoozed.json)";
+      el.modalDesc.innerHTML = "本站部署于 GitHub Pages 静态环境。请将以下生成的<strong>150 天冷冻配置</strong>同步保存至仓库。冷冻期内流水线零模型消耗跳过，到期当天自动恢复。点击下方绿色按钮将<strong>自动复制配置并直达 snoozed.json 编辑页</strong>，粘贴提交即可生效！";
+      el.jsonPreview.textContent = generateSnoozedJson();
+      el.btnDownloadJson.textContent = "💾 下载 snoozed.json";
+      el.btnGotoGithub.textContent = "🚀 复制并去 GitHub 保存 (snoozed.json)";
+    }
     el.copyStatus.textContent = "";
+  }
+
+  function openSyncModal() {
+    var pCount = Object.keys(overridesState.stagedPicks).length + overridesState.removedPicks.size;
+    var eCount = Object.keys(overridesState.stagedExclusions).length + overridesState.removedExclusions.size;
+    var sCount = Object.keys(overridesState.stagedSnoozed).length + overridesState.removedSnoozed.size;
+    if (sCount > 0 && pCount === 0 && eCount === 0) {
+      currentModalTab = "snoozed";
+    } else {
+      currentModalTab = "overrides";
+    }
+    updateModalContent();
     el.syncModal.hidden = false;
   }
 
   function closeSyncModal() {
     el.syncModal.hidden = true;
   }
+
+  el.tabModalOverrides.addEventListener("click", function () {
+    currentModalTab = "overrides";
+    updateModalContent();
+  });
+
+  el.tabModalSnoozed.addEventListener("click", function () {
+    currentModalTab = "snoozed";
+    updateModalContent();
+  });
 
   el.btnOpenSync.addEventListener("click", openSyncModal);
   el.btnCloseModal.addEventListener("click", closeSyncModal);
@@ -588,11 +866,14 @@
 
   el.btnClearSync.addEventListener("click", function () {
     if (!confirm("确定要放弃所有未同步到仓库的本地修改吗？")) return;
-    localStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem("skill_overrides_v2");
+    localStorage.removeItem("skill_overrides_v1");
     overridesState.stagedPicks = {};
     overridesState.stagedExclusions = {};
+    overridesState.stagedSnoozed = {};
     overridesState.removedPicks.clear();
     overridesState.removedExclusions.clear();
+    overridesState.removedSnoozed.clear();
     apply();
   });
 
@@ -609,26 +890,47 @@
 
   el.btnDownloadJson.addEventListener("click", function () {
     var jsonStr = el.jsonPreview.textContent;
+    var fileName = currentModalTab === "overrides" ? "overrides.json" : "snoozed.json";
     var blob = new Blob([jsonStr], { type: "application/json;charset=utf-8" });
     var url = URL.createObjectURL(blob);
     var a = document.createElement("a");
     a.href = url;
-    a.download = "overrides.json";
+    a.download = fileName;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-    el.copyStatus.textContent = "✅ 已下载 overrides.json 文件。";
+    el.copyStatus.textContent = "✅ 已下载 " + fileName + " 文件。";
   });
 
   el.btnGotoGithub.addEventListener("click", function () {
     var jsonStr = el.jsonPreview.textContent;
+    var fileName = currentModalTab === "overrides" ? "overrides.json" : "snoozed.json";
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(jsonStr).catch(function () {});
     }
     el.copyStatus.textContent = "🚀 已复制最新配置！正在打开 GitHub 在线编辑页…";
-    window.open("https://github.com/justdoit712/skill/edit/main/config/overrides.json", "_blank");
+    window.open("https://github.com/justdoit712/skill/edit/main/config/" + fileName, "_blank");
   });
+
+  // 冷冻条目查看与恢复弹窗交互
+  function openSnoozedModal() {
+    renderSnoozedModalList();
+    el.snoozedModal.hidden = false;
+  }
+
+  function closeSnoozedModal() {
+    el.snoozedModal.hidden = true;
+  }
+
+  if (el.btnOpenSnoozed) el.btnOpenSnoozed.addEventListener("click", openSnoozedModal);
+  if (el.btnCloseSnoozedModal) el.btnCloseSnoozedModal.addEventListener("click", closeSnoozedModal);
+  if (el.btnCloseSnoozedBottom) el.btnCloseSnoozedBottom.addEventListener("click", closeSnoozedModal);
+  if (el.snoozedModal) {
+    el.snoozedModal.addEventListener("click", function (e) {
+      if (e.target === el.snoozedModal) closeSnoozedModal();
+    });
+  }
 
   fetch("data/catalog.json", { cache: "no-store" })
     .then(function (r) {

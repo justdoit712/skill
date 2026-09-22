@@ -1,0 +1,70 @@
+name: Sync Config & Deploy Pages
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'config/overrides.json'
+      - 'config/snoozed.json'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pages-config-sync
+  cancel-in-progress: false
+
+jobs:
+  sync-config:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出仓库
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 设置 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: 安装依赖
+        run: pip install -r requirements.txt
+
+      - name: 离线同步配置到索引与页面（0 模型调用）
+        run: |
+          set -euo pipefail
+          python run_local.py --sync-config
+
+      - name: 提交并推送最新索引（如果存在变更）
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for p in data/catalog.json public/data/catalog.json; do
+            if [ -e "$p" ]; then git add -- "$p"; fi
+          done
+          if git diff --cached --quiet; then
+            echo "索引无变更，无需提交"
+          else
+            git commit -m "chore(config): 同步人工干预与冷冻配置到索引"
+            git pull --rebase --autostash
+            git push
+          fi
+
+      - name: 上传页面产物
+        uses: actions/upload-artifact@v4
+        with:
+          name: pages-public
+          path: public
+          retention-days: 1
+
+  deploy:
+    needs: sync-config
+    uses: ./.github/workflows/deploy-pages.yml
+    permissions:
+      contents: read
+      pages: write
+      id-token: write

@@ -3,9 +3,10 @@
   "rules_version": "1.0.1",
   "generated_at": "2026-09-21T02:01:22.196060+08:00",
   "counts": {
+    "recommended": 36,
     "candidate": 21,
-    "recommended": 51,
-    "excluded": 1
+    "manual": 12,
+    "excluded": 4
   },
   "entries": [
     {
@@ -94,14 +95,16 @@
         ],
         "terms": []
       },
-      "status": "recommended",
+      "status": "excluded",
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
       "flags": [
         "NO_DOMAIN_TERM_MATCH"
       ],
-      "reason_codes": [],
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "limitations": "需依赖模板文件；仅适用于创作原创算法艺术，应避免复制现有艺术家作品；产物为自包含 HTML，依赖 p5.js CDN。",
       "evaluation_rules_version": "1.0.1",
       "first_seen": "2026-09-20T16:26:13+00:00",
@@ -446,8 +449,13 @@
       "upstream_status": "ok",
       "license": null,
       "excluded": false,
-      "manual_pick": false,
-      "manual_note": null
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-22",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      }
     },
     {
       "skill_id": "anthropics/skills:skills/frontend-design/SKILL.md",
@@ -604,8 +612,13 @@
       "upstream_status": "ok",
       "license": null,
       "excluded": false,
-      "manual_pick": false,
-      "manual_note": null
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-22",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      }
     },
     {
       "skill_id": "anthropics/skills:skills/pdf/SKILL.md",
@@ -729,8 +742,13 @@
       "upstream_status": "ok",
       "license": null,
       "excluded": false,
-      "manual_pick": false,
-      "manual_note": null
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-22",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      }
     },
     {
       "skill_id": "anthropics/skills:skills/skill-creator/SKILL.md",
@@ -841,8 +859,13 @@
       "upstream_status": "ok",
       "license": null,
       "excluded": false,
-      "manual_pick": false,
-      "manual_note": null
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-22",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      }
     },
     {
       "skill_id": "anthropics/skills:skills/theme-factory/SKILL.md",
@@ -894,8 +917,13 @@
       "upstream_status": "ok",
       "license": null,
       "excluded": false,
-      "manual_pick": false,
-      "manual_note": null
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-22",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      }
     },
     {
       "skill_id": "anthropics/skills:skills/web-artifacts-builder/SKILL.md",
@@ -954,8 +982,13 @@
       "upstream_status": "ok",
       "license": null,
       "excluded": false,
-      "manual_pick": false,
-      "manual_note": null
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-22",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      }
     },
     {
       "skill_id": "anthropics/skills:skills/webapp-testing/SKILL.md",
@@ -1062,8 +1095,13 @@
       "upstream_status": "ok",
       "license": null,
       "excluded": false,
-      "manual_pick": false,
-      "manual_note": null
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-22",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      }
     },
     {
       "skill_id": "anthropics/skills:template/SKILL.md",
@@ -1319,8 +1357,13 @@
       "upstream_status": "ok",
       "license": null,
       "excluded": false,
-      "manual_pick": false,
-      "manual_note": null
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-22",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      }
     },
     {
       "skill_id": "vercel-labs/agent-skills:skills/react-native-skills/SKILL.md",
@@ -1372,8 +1415,13 @@
       "upstream_status": "ok",
       "license": null,
       "excluded": false,
-      "manual_pick": false,
-      "manual_note": null
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-22",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      }
     },
     {
       "skill_id": "vercel-labs/agent-skills:skills/react-view-transitions/SKILL.md",
@@ -1427,8 +1475,13 @@
       "upstream_status": "ok",
       "license": null,
       "excluded": false,
-      "manual_pick": false,
-      "manual_note": null
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-22",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      }
     },
     {
       "skill_id": "vercel-labs/agent-skills:skills/vercel-cli-with-tokens/SKILL.md",
@@ -1586,8 +1639,13 @@
       "upstream_status": "ok",
       "license": null,
       "excluded": false,
-      "manual_pick": false,
-      "manual_note": null
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-22",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      }
     },
     {
       "skill_id": "vercel-labs/agent-skills:skills/writing-guidelines/SKILL.md",
@@ -1637,8 +1695,13 @@
       "upstream_status": "ok",
       "license": null,
       "excluded": false,
-      "manual_pick": false,
-      "manual_note": null
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-22",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      }
     },
     {
       "skill_id": "cloudflare/skills:skills/agents-sdk/SKILL.md",
@@ -3214,14 +3277,16 @@
         ],
         "terms": []
       },
-      "status": "recommended",
+      "status": "excluded",
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
       "flags": [
         "NO_DOMAIN_TERM_MATCH"
       ],
-      "reason_codes": [],
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "limitations": "不适用于内核驱动、托管语言、无 libc 的嵌入式代码；审查结果未经误报复核，严重性为审查者单方意见。",
       "evaluation_rules_version": "1.0.1",
       "first_seen": "2026-09-20T16:59:36+00:00",
@@ -3612,14 +3677,16 @@
         ],
         "terms": []
       },
-      "status": "recommended",
+      "status": "excluded",
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
       "flags": [
         "NO_DOMAIN_TERM_MATCH"
       ],
-      "reason_codes": [],
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "limitations": "仅静态分析，无法检测缓存等微架构侧信道；无数据流分析，需要人工 triage；结果依赖于编译器、优化级别和架构。",
       "evaluation_rules_version": "1.0.1",
       "first_seen": "2026-09-20T16:59:36+00:00",
@@ -4032,5 +4099,108 @@
       "manual_pick": false,
       "manual_note": null
     }
-  ]
+  ],
+  "overrides": {
+    "overrides_version": "1.0.0",
+    "source": "docs/运行说明.md §9",
+    "note": "人工干预名单（overrides）：由用户手工维护。manual_picks 长期保留在收藏区；manual_exclusions 为人工排除黑名单，流水线扫描到直接跳过（0 模型调用）。",
+    "manual_picks": [
+      {
+        "skill_id": "anthropics/skills:skills/docx/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-22",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/mcp-builder/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-22",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/pptx/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-22",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/slack-gif-creator/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-22",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/theme-factory/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-22",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/web-artifacts-builder/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-22",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/xlsx/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-22",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "vercel-labs/agent-skills:skills/react-best-practices/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-22",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "vercel-labs/agent-skills:skills/react-native-skills/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-22",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "vercel-labs/agent-skills:skills/react-view-transitions/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-22",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "vercel-labs/agent-skills:skills/web-design-guidelines/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-22",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "vercel-labs/agent-skills:skills/writing-guidelines/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-22",
+        "from": "recommended"
+      }
+    ],
+    "manual_exclusions": [
+      {
+        "skill_id": "anthropics/skills:skills/algorithmic-art/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-22"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/c-review/skills/c-review/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-22"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/constant-time-analysis/skills/constant-time-analysis/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-22"
+      }
+    ]
+  },
+  "snoozed": {
+    "snooze_version": "1.0.0",
+    "source": "docs/运行说明.md §10",
+    "note": "临时冷冻/暂不关注名单：条目冷冻期默认为 150 天（snoozed_at <= today < expires_at）。冷冻期内前端隐藏且流水线跳过（0 Token 消耗）；到期当天自动解冻恢复展示。",
+    "default_snooze_days": 150,
+    "snoozed": []
+  }
 }

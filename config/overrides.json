@@ -2,6 +2,95 @@
   "overrides_version": "1.0.0",
   "source": "docs/运行说明.md §9",
   "note": "人工干预名单（overrides）：由用户手工维护。manual_picks 长期保留在收藏区；manual_exclusions 为人工排除黑名单，流水线扫描到直接跳过（0 模型调用）。",
-  "manual_picks": [],
-  "manual_exclusions": []
+  "manual_picks": [
+    {
+      "skill_id": "anthropics/skills:skills/docx/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-22",
+      "from": "recommended"
+    },
+    {
+      "skill_id": "anthropics/skills:skills/mcp-builder/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-22",
+      "from": "recommended"
+    },
+    {
+      "skill_id": "anthropics/skills:skills/pptx/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-22",
+      "from": "recommended"
+    },
+    {
+      "skill_id": "anthropics/skills:skills/slack-gif-creator/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-22",
+      "from": "recommended"
+    },
+    {
+      "skill_id": "anthropics/skills:skills/theme-factory/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-22",
+      "from": "recommended"
+    },
+    {
+      "skill_id": "anthropics/skills:skills/web-artifacts-builder/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-22",
+      "from": "recommended"
+    },
+    {
+      "skill_id": "anthropics/skills:skills/xlsx/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-22",
+      "from": "recommended"
+    },
+    {
+      "skill_id": "vercel-labs/agent-skills:skills/react-best-practices/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-22",
+      "from": "recommended"
+    },
+    {
+      "skill_id": "vercel-labs/agent-skills:skills/react-native-skills/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-22",
+      "from": "recommended"
+    },
+    {
+      "skill_id": "vercel-labs/agent-skills:skills/react-view-transitions/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-22",
+      "from": "recommended"
+    },
+    {
+      "skill_id": "vercel-labs/agent-skills:skills/web-design-guidelines/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-22",
+      "from": "recommended"
+    },
+    {
+      "skill_id": "vercel-labs/agent-skills:skills/writing-guidelines/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-22",
+      "from": "recommended"
+    }
+  ],
+  "manual_exclusions": [
+    {
+      "skill_id": "anthropics/skills:skills/algorithmic-art/SKILL.md",
+      "reason": "用户屏蔽/删除",
+      "added_at": "2026-09-22"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/c-review/skills/c-review/SKILL.md",
+      "reason": "用户屏蔽/删除",
+      "added_at": "2026-09-22"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/constant-time-analysis/skills/constant-time-analysis/SKILL.md",
+      "reason": "用户屏蔽/删除",
+      "added_at": "2026-09-22"
+    }
+  ]
 }

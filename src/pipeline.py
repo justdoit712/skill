@@ -56,6 +56,12 @@ from .overrides import (
 )
 from .prescreen import DECISION_EXCLUDED, DECISION_QUEUED, load_config, prescreen
 from .report import build_report, write_report
+from .snooze import (
+    apply_snooze_overrides,
+    get_active_snoozed,
+    load_snooze,
+    validate_snooze,
+)
 
 DEFAULT_LIMIT_EVALUATIONS = 50
 TEXTS_DIRNAME = "texts"
@@ -86,6 +92,7 @@ def load_all_config(config_dir: str | Path = "config") -> dict:
     model_path = base / "model.local.json"
     model_cfg = _load_json(model_path) if model_path.exists() else _load_json(base / "model.example.json")
     overrides_cfg = load_overrides(base / "overrides.json")
+    snooze_cfg = load_snooze(base / "snoozed.json")
     return {
         "prescreen": prescreen_cfg,
         "taxonomy": prescreen_cfg.taxonomy,
@@ -94,6 +101,7 @@ def load_all_config(config_dir: str | Path = "config") -> dict:
         "sources": _load_json(base / "sources.json"),
         "model": model_cfg,
         "overrides": overrides_cfg,
+        "snoozed": snooze_cfg,
         "source_types": {
             s["id"]: s.get("source_type") for s in _load_json(base / "sources.json").get("sources", [])
         },
@@ -113,6 +121,10 @@ def precheck(cfg: dict) -> list[str]:
         problems.append("模型配置缺 endpoint 或 model")
     if "overrides" in cfg:
         problems.extend(validate_overrides(cfg["overrides"]))
+    if "snoozed" in cfg:
+        active_picks = set(get_manual_picks((cfg or {}).get("overrides") or {}).keys())
+        active_excl = set(get_manual_exclusions((cfg or {}).get("overrides") or {}).keys())
+        problems.extend(validate_snooze(cfg["snoozed"], active_pick_ids=active_picks, active_exclusion_ids=active_excl))
     return problems
 
 
@@ -363,10 +375,16 @@ def prepare(
             json.dumps(staged, ensure_ascii=False), encoding="utf-8"
         )
 
+    active_snoozed_dict = get_active_snoozed((cfg or {}).get("snoozed") or {})
+    active_snoozed_set = set(active_snoozed_dict.keys())
     queued = [(c, p, f) for c, p, f in enriched if p.decision == DECISION_QUEUED]
     excluded = [(c, p, f) for c, p, f in enriched if p.decision != DECISION_QUEUED]
-    # 没有内容指纹的候选不能进入评估批次，否则评估 ID 会退化为 nofingerprint
-    batch = [(c, p, f) for c, p, f in queued if c.content_fingerprint]
+    # 没有内容指纹或处于活跃冷冻期的候选不能进入评估批次，否则会产生无效预留或消耗 Token
+    batch = [
+        (c, p, f)
+        for c, p, f in queued
+        if c.content_fingerprint and c.skill_id not in active_snoozed_set
+    ]
 
     return {
         "outcomes": outcomes,
@@ -887,6 +905,8 @@ def phase_evaluate(
     manual_picks_set = set(manual_picks_dict.keys())
     manual_exclusions_dict = get_manual_exclusions((cfg or {}).get("overrides") or {})
     manual_exclusions_set = set(manual_exclusions_dict.keys())
+    active_snoozed_dict = get_active_snoozed((cfg or {}).get("snoozed") or {})
+    active_snoozed_set = set(active_snoozed_dict.keys())
 
     for item in queue.get("pending", []):
         candidate = _candidate_from_payload(item["candidate"])
@@ -901,6 +921,12 @@ def phase_evaluate(
         if candidate.skill_id in manual_picks_set:
             # §4.4: 人工收藏条目不调用模型重新评估（0 模型调用）
             results[candidate.skill_id] = {"status": "skipped", "note": "人工收藏条目不调用模型重新评估"}
+            skipped += 1
+            continue
+
+        if candidate.skill_id in active_snoozed_set:
+            # 临时冷冻条目直接跳过，不调用模型
+            results[candidate.skill_id] = {"status": "skipped", "note": "临时冷冻条目直接跳过"}
             skipped += 1
             continue
 
@@ -1019,24 +1045,37 @@ def phase_evaluate(
 
     fresh: list[dict] = []
     for item in queue.get("pending", []):
+        cand = _candidate_from_payload(item["candidate"])
+        if cand.skill_id in active_snoozed_set:
+            # 审查问题 2 关键修复：冷冻条目严禁进入 fresh 重建，直接保留 previous_entries 原数据！
+            continue
         fresh.append(
             entry_for(
-                _candidate_from_payload(item["candidate"]),
+                cand,
                 _prescreen_from_payload(item["prescreen"]),
                 item.get("fetch"),
             )
         )
     for item in queue.get("excluded", []):
+        cand = _candidate_from_payload(item["candidate"])
+        if cand.skill_id in active_snoozed_set:
+            continue
         fresh.append(
             entry_for(
-                _candidate_from_payload(item["candidate"]),
+                cand,
                 _prescreen_from_payload(item["prescreen"]),
             )
         )
 
     merged = merge_entries(previous_entries, fresh)
     apply_manual_overrides(merged, manual_picks_dict, manual_exclusions_dict)
-    catalog = build_catalog(merged, context=context, overrides=(cfg or {}).get("overrides"))
+    apply_snooze_overrides(merged, (cfg or {}).get("snoozed"))
+    catalog = build_catalog(
+        merged,
+        context=context,
+        overrides=(cfg or {}).get("overrides"),
+        snoozed=(cfg or {}).get("snoozed"),
+    )
     manifest = write_catalog(
         catalog,
         data_path=data_path / "catalog.json",

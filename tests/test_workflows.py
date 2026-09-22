@@ -144,5 +144,25 @@ class DeployWorkflowTest(unittest.TestCase):
         )
 
 
+class SyncConfigDeployWorkflowTest(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.doc = load("sync-config-deploy.yml")
+        cls.trig = triggers(cls.doc)
+        cls.runs = step_runs(cls.doc, "sync-config")
+
+    def test_triggers_on_config_push_and_dispatch(self) -> None:
+        self.assertIn("push", self.trig)
+        paths = self.trig["push"]["paths"]
+        self.assertIn("config/overrides.json", paths)
+        self.assertIn("config/snoozed.json", paths)
+        self.assertIn("workflow_dispatch", self.trig)
+
+    def test_executes_offline_sync_and_reuses_deploy_pages(self) -> None:
+        self.assertIn("python run_local.py --sync-config", self.runs)
+        self.assertIn("deploy-pages.yml", str(self.doc["jobs"]["deploy"]))
+
+
 if __name__ == "__main__":
     unittest.main()
+

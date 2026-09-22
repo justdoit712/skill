@@ -263,6 +263,11 @@ code {
   color: #dc2626;
   border-color: #fecaca;
 }
+.btn-snooze:hover {
+  background: #f0fdf4;
+  color: #0f766e;
+  border-color: #99f6e4;
+}
 .card.is-dismissing {
   opacity: 0;
   transform: scale(0.98);
@@ -415,6 +420,72 @@ code {
   cursor: pointer;
 }
 .btn-secondary:hover { background: var(--bg); }
+
+.modal-tab-bar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 8px;
+}
+.modal-tab-btn {
+  background: none;
+  border: 1px solid transparent;
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 6px;
+  cursor: pointer;
+  color: var(--muted);
+}
+.modal-tab-btn.is-active {
+  background: #f1f5f9;
+  color: var(--text);
+  border-color: var(--border);
+  font-weight: 600;
+}
+.snoozed-footer {
+  margin-top: 10px;
+  font-size: 12px;
+  color: #64748b;
+}
+.snoozed-footer a {
+  color: var(--accent);
+  text-decoration: underline;
+  cursor: pointer;
+}
+.snoozed-list {
+  max-height: 280px;
+  overflow-y: auto;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px 12px;
+  background: #fafbfd;
+}
+.snoozed-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #edf2f7;
+  font-size: 13px;
+}
+.snoozed-row:last-child {
+  border-bottom: none;
+}
+.snoozed-row-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.snoozed-row-id {
+  font-weight: 600;
+  color: var(--text);
+}
+.snoozed-row-dates {
+  font-size: 11px;
+  color: #64748b;
+}
 
 @media (max-width: 760px) {
   .controls { grid-template-columns: 1fr 1fr; }

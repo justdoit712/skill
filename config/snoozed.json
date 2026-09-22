@@ -1,0 +1,7 @@
+{
+  "snooze_version": "1.0.0",
+  "source": "docs/运行说明.md §10",
+  "note": "临时冷冻/暂不关注名单：条目冷冻期默认为 150 天（snoozed_at <= today < expires_at）。冷冻期内前端隐藏且流水线跳过（0 Token 消耗）；到期当天自动解冻恢复展示。",
+  "default_snooze_days": 150,
+  "snoozed": []
+}
