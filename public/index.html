@@ -727,21 +727,6 @@
     renderSnoozedModalList();
   });
 
-  function apply() {
-    if (!state.data) return;
-
-    var activeManual = [];
-    var activeRecommended = [];
-    var activeCandidates = [];
-
-    Object.keys(state.allEntries).forEach(function (sid) {
-      var entry = state.allEntries[sid];
-      if (isExcluded(sid)) {
-        return;
-      }
-      if (isPicked(sid)) {
-        activeManual.push(entry);
-      } else {
   function renderFindView(report) {
     el.list.innerHTML = "";
     if (!report || (!report.shortlist && !report.alternatives)) {
