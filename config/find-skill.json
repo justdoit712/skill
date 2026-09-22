@@ -1,6 +1,6 @@
 {
   "limit": 5,
   "max_evaluations": 20,
-  "max_tokens": 20000000,
-  "note": "定向查找 Skill 配置：limit 为短名单推荐展示数；max_evaluations 为单次最多评估候选数；max_tokens 为模型用量停止熔断阈值（支持 20000000 或 \"20m\"、\"20 000 000\"）。可在命令行通过 --limit、--max-evaluations、--max-tokens 临时覆盖。"
+  "max_tokens": "200 000 000 0",
+  "note": "定向查找 Skill 配置：limit 为短名单推荐展示数；max_evaluations 为单次最多评估候选数；max_tokens 为模型用量停止熔断阈值。可在命令行通过 --limit、--max-evaluations、--max-tokens 临时覆盖。"
 }

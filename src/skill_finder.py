@@ -310,28 +310,13 @@ def fetch_candidate_materials(
 
 
 def _parse_int_val(val: Any, default: int) -> int:
-    """支持 int 以及带空格、下划线、逗号或单位后缀（如 '200 000'、'20m'、'20M'、'500k'）。"""
+    """支持 int 以及带空格、下划线、千分位逗号的表示（如 '200 000'、'200_000'、'200,000'）。"""
     if val is None:
         return default
     if isinstance(val, (int, float)):
         return int(val)
     if isinstance(val, str):
-        clean = val.replace(" ", "").replace("_", "").replace(",", "").strip().lower()
-        if clean.endswith("m"):
-            try:
-                return int(float(clean[:-1]) * 1_000_000)
-            except ValueError:
-                pass
-        elif clean.endswith("k"):
-            try:
-                return int(float(clean[:-1]) * 1_000)
-            except ValueError:
-                pass
-        elif clean.endswith("b") or clean.endswith("g"):
-            try:
-                return int(float(clean[:-1]) * 1_000_000_000)
-            except ValueError:
-                pass
+        clean = val.replace(" ", "").replace("_", "").replace(",", "").strip()
         try:
             return int(clean)
         except ValueError:
