@@ -401,6 +401,14 @@ def execute_find_skill(
         markdown_text = render_find_markdown_report(report)
         (run_dir / "report.md").write_text(markdown_text, encoding="utf-8")
 
+        # 同步写入 public/data/find-report.json，供前端页面直接可视化展示
+        public_data_dir = root / "public" / "data"
+        if public_data_dir.exists():
+            try:
+                _write_json_atomic(public_data_dir / "find-report.json", report)
+            except Exception:
+                pass
+
     save_current_report()
 
     try:

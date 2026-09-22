@@ -540,3 +540,149 @@ code {
   .tab { flex: 1; justify-content: center; padding: 7px 8px; }
   .sync-bar { width: 92%; justify-content: space-between; padding: 8px 14px; }
 }
+
+/* ---------- 定向查找视图 ---------- */
+.find-overview-card {
+  list-style: none;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+}
+.find-overview-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.find-topic-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+}
+.find-topic-title span {
+  color: var(--accent);
+}
+.find-stats-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  font-size: 13px;
+  color: var(--muted);
+  background: #f8fafc;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #edf2f7;
+}
+.find-stats-row strong {
+  color: var(--text);
+}
+.find-criteria-box {
+  margin-top: 14px;
+  font-size: 13px;
+}
+.find-criteria-box summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--accent);
+  outline: none;
+}
+.find-criteria-list {
+  margin: 8px 0 0;
+  padding-left: 18px;
+  color: var(--muted);
+}
+.find-criteria-list li {
+  margin-bottom: 4px;
+}
+.find-criteria-list strong {
+  color: var(--text);
+}
+.tag-find-strong {
+  background: #dcfce7;
+  color: #15803d;
+  font-weight: 600;
+}
+.tag-find-doc {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+.find-section-divider {
+  list-style: none;
+  margin: 24px 0 12px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.find-section-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+.find-evidence-box {
+  margin-top: 12px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 10px 12px;
+  font-size: 13px;
+}
+.find-evidence-box summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: #0f766e;
+  outline: none;
+}
+.find-evidence-item {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dashed #e2e8f0;
+}
+.find-evidence-item:first-of-type {
+  border-top: none;
+  padding-top: 4px;
+}
+.find-evidence-loc {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 12px;
+  color: #475569;
+}
+.find-evidence-quote {
+  margin: 4px 0 0;
+  padding: 4px 8px;
+  background: #ffffff;
+  border-left: 3px solid #14b8a6;
+  font-size: 12px;
+  color: #334155;
+  border-radius: 0 4px 4px 0;
+}
+.find-why-box {
+  margin: 8px 0;
+  font-size: 13px;
+  color: #1e293b;
+  background: #f1f5f9;
+  padding: 6px 10px;
+  border-radius: 4px;
+}
+.find-gap-text {
+  margin-top: 6px;
+  font-size: 13px;
+  color: #b45309;
+}
+.find-empty-box {
+  text-align: center;
+  padding: 48px 20px;
+}
+.find-empty-icon {
+  font-size: 40px;
+  margin-bottom: 12px;
+}
