@@ -370,7 +370,7 @@ class SnoozeLocalPoolWatermarkTest(unittest.TestCase):
 
 
 class SnoozeOfflineSyncConfigTest(unittest.TestCase):
-    """测试 python run_local.py --sync-config 离线同步功能。"""
+    """测试 python tools/run_local.py --sync-config 离线同步功能。"""
 
     def test_sync_config_offline_execution(self):
         with tempfile.TemporaryDirectory() as tmpdir:

@@ -159,7 +159,7 @@ class SyncConfigDeployWorkflowTest(unittest.TestCase):
         self.assertIn("workflow_dispatch", self.trig)
 
     def test_executes_offline_sync_and_reuses_deploy_pages(self) -> None:
-        self.assertIn("python run_local.py --sync-config", self.runs)
+        self.assertIn("python tools/run_local.py --sync-config", self.runs)
         self.assertIn("deploy-pages.yml", str(self.doc["jobs"]["deploy"]))
 
 

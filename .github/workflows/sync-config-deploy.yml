@@ -36,7 +36,7 @@ jobs:
       - name: 离线同步配置到索引与页面（0 模型调用）
         run: |
           set -euo pipefail
-          python run_local.py --sync-config
+          python tools/run_local.py --sync-config
 
       - name: 提交并推送最新索引（如果存在变更）
         run: |

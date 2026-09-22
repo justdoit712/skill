@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Local Skills - 50 recommended" type="PythonConfigurationType" factoryName="Python">
+  <configuration default="false" name="Find Skill - Interactive" type="PythonConfigurationType" factoryName="Python">
     <module name="skill" />
-    <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tools/run_local.py" />
+    <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tools/find_skill.py" />
     <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
     <option name="PARAMETERS" value="" />
     <option name="SDK_HOME" value="$PROJECT_DIR$/.venv/Scripts/python.exe" />

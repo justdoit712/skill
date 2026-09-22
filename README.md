@@ -17,11 +17,11 @@ Agent 团队框架、ClawHub 同步、本地包备份与助手推广——已清
 
 ## 在本地运行
 
-在 PyCharm 中选择项目的 `.venv` 解释器，打开 [run_local.py](run_local.py)，右键 **Run**。
+在 PyCharm 中选择项目的 `.venv` 解释器，打开 [run_local.py](tools/run_local.py)，右键 **Run**。
 已提供共享运行配置 `Local Skills - 50 recommended`。启动前可先执行：
 
 ```powershell
-.\.venv\Scripts\python.exe run_local.py --check
+.\.venv\Scripts\python.exe tools/run_local.py --check
 ```
 
 默认目标是**本次新增 50 个推荐技能**，允许评估超过 50 个候选；本次输入＋输出合计上限
@@ -38,14 +38,14 @@ Token 上限在每次请求后检查，最后一次请求可能超出上限。
 
 ## 定向查找特定需求 Skill
 
-当需要针对特定任务（例如："生成高质量 Prompt"、"Postgres 性能优化"、"React Native 跨平台测试"）寻找最匹配且真实可用的 Skill 时，可以使用独立的定向查找工具 [find_skill.py](find_skill.py)：
+当需要针对特定任务（例如："生成高质量 Prompt"、"Postgres 性能优化"、"React Native 跨平台测试"）寻找最匹配且真实可用的 Skill 时，可以使用独立的定向查找工具 [find_skill.py](tools/find_skill.py)：
 
 ```powershell
 # 交互式输入需求
-.\.venv\Scripts\python.exe find_skill.py
+.\.venv\Scripts\python.exe tools/find_skill.py
 
 # 命令行直接指定需求与候选参数
-.\.venv\Scripts\python.exe find_skill.py "生成高质量 Prompt" --limit 5 --max-evaluations 20 --max-tokens 200000
+.\.venv\Scripts\python.exe tools/find_skill.py "生成高质量 Prompt" --limit 5 --max-evaluations 20 --max-tokens 200000
 ```
 
 ### 特性与运行边界
