@@ -22,15 +22,14 @@ from dataclasses import dataclass, field
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
-try:  # Windows 上若无 tzdata，退回固定偏移
-    from zoneinfo import ZoneInfo
-
-    SHANGHAI_TZ = ZoneInfo("Asia/Shanghai")
-    TZ_SOURCE = "zoneinfo:Asia/Shanghai"
-except Exception:  # pragma: no cover - 取决于运行环境
-    # 上海自 1991 年起不再使用夏令时，固定 +08:00 与真实时区等价
-    SHANGHAI_TZ = timezone(timedelta(hours=8), name="Asia/Shanghai")
-    TZ_SOURCE = "fixed:+08:00"
+from src.infra.files import write_json_atomic
+from src.shared.runtime import (
+    SHANGHAI_TZ,
+    TZ_SOURCE,
+    iso_now,
+    now_local,
+    week_id,
+)
 
 BUDGET_VERSION = "1.0.0"
 LEDGER_FILENAME = "budget.json"
@@ -51,33 +50,14 @@ class QuotaExceeded(RuntimeError):
     """本周剩余额度不足以完成本批预留。"""
 
 
-def now_local() -> datetime:
-    return datetime.now(SHANGHAI_TZ)
-
-
-def week_id(moment: datetime | None = None) -> str:
-    """ISO 周标识，按 Asia/Shanghai 计算。跨年周由 ISO 规则处理。"""
-    local = (moment or now_local()).astimezone(SHANGHAI_TZ)
-    iso = local.isocalendar()
-    return f"{iso.year}-W{iso.week:02d}"
-
-
 def evaluation_filename(evaluation_id: str) -> str:
     """评估 ID 含 | 与 : 等字符，落盘用其摘要作文件名。"""
     digest = hashlib.sha256(evaluation_id.encode("utf-8")).hexdigest()[:24]
     return f"{digest}.json"
 
 
-def _iso(moment: datetime | None = None) -> str:
-    return (moment or now_local()).replace(microsecond=0).isoformat()
-
-
-def _write_json_atomic(path: Path, payload: dict) -> None:
-    """原子写：先写临时文件再替换，避免进程被杀时留下半个文件。"""
-    path.parent.mkdir(parents=True, exist_ok=True)
-    tmp = path.with_suffix(path.suffix + ".tmp")
-    tmp.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
-    os.replace(tmp, path)
+_iso = iso_now
+_write_json_atomic = write_json_atomic
 
 
 @dataclass
@@ -135,7 +115,7 @@ class BudgetLedger:
 
     def save(self, moment: datetime | None = None) -> None:
         self.updated_at = _iso(moment)
-        _write_json_atomic(
+        write_json_atomic(
             self.ledger_path,
             {
                 "budget_version": BUDGET_VERSION,
@@ -163,7 +143,7 @@ class BudgetLedger:
     def _save_record(self, evaluation_id: str, record: dict, moment: datetime | None = None) -> None:
         record["evaluation_id"] = evaluation_id
         record["updated_at"] = _iso(moment)
-        _write_json_atomic(self.record_path(evaluation_id), record)
+        write_json_atomic(self.record_path(evaluation_id), record)
 
     # ---------- 额度 ----------
 

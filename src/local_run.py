@@ -9,8 +9,9 @@ import os
 from pathlib import Path
 import time
 from uuid import uuid4
-
-from .budget import BudgetLedger, _write_json_atomic, evaluation_filename, now_local
+from src.infra.files import write_json_atomic
+from src.shared.runtime import now_local
+from .budget import BudgetLedger, evaluation_filename
 from .decide import decide
 from .dedupe import content_fingerprint, dedupe
 from .discover import discover
@@ -166,8 +167,8 @@ def _collect(root, local, settings, cfg, discover_fn, fetch_fn, evaluate_fn, log
         report["new_recommended"] = len(report["recommendations"])
         if pool is not None:
             report["pool_stats"] = pool.stats()
-        _write_json_atomic(run_dir / "report.json", report)
-        _write_json_atomic(local / "latest-run.json", report)
+        write_json_atomic(run_dir / "report.json", report)
+        write_json_atomic(local / "latest-run.json", report)
         lines = ["# 本地运行报告", "", f"- 运行：{run_id}",
                  f"- 状态：{STOP_LABELS.get(report['stop_reason'], '运行中')}"]
         if pool is not None:

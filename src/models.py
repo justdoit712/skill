@@ -8,19 +8,12 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
+from src.shared.models import CandidateIdentity
+
 
 @dataclass
-class Candidate:
-    """一个待评估的技能候选。"""
-
-    skill_id: str
-    owner: str
-    repo: str
-    path: str = ""
-    url: str = ""
-    repo_url: str = ""
-    name: str = ""
-    description: str = ""
+class Candidate(CandidateIdentity):
+    """一个待评估的技能候选（包含目录业务属性与发现线索）。"""
 
     # 发现依据：来自哪个来源、用什么方式、命中哪些查询词（§4.2 要求保留全部发现依据）
     source_ids: list[str] = field(default_factory=list)
@@ -29,9 +22,6 @@ class Candidate:
 
     # 领域线索：命中的主分类 id，可能为空（预筛不做结论）
     domain_hints: list[str] = field(default_factory=list)
-
-    discovered_at: str = ""
-    content_fingerprint: str | None = None
 
 
 @dataclass
@@ -53,3 +43,6 @@ class PrescreenResult:
     @property
     def queued(self) -> bool:
         return self.decision == "queued"
+
+
+__all__ = ["Candidate", "CandidateIdentity", "PrescreenResult"]

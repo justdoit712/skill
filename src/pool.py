@@ -17,8 +17,8 @@ from datetime import datetime, timedelta
 import json
 from pathlib import Path
 from typing import Any
-
-from .budget import _write_json_atomic, now_local
+from src.infra.files import write_json_atomic
+from src.shared.runtime import now_local
 from .dedupe import dedupe
 from .models import Candidate
 
@@ -172,7 +172,7 @@ def load_pool(path: Path) -> CandidatePool | None:
 
 
 def save_pool(path: Path, pool: CandidatePool) -> None:
-    _write_json_atomic(Path(path), pool_to_dict(pool))
+    write_json_atomic(Path(path), pool_to_dict(pool))
 
 
 def is_pool_expired(pool: CandidatePool, max_age_days: int = 7) -> bool:
