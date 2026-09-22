@@ -195,9 +195,13 @@ def probes():
         (base / "data/state/texts/staged.json").unlink()
         outcome = phase_evaluate(config_dir=cfg, data_dir=base / "data", public_dir=base / "public",
                                  fetch_fn=fetch_text(new_text), evaluate_fn=evaluate, sleep=lambda _: None)
-        assert len(calls) == 1, outcome
-        results["A7_refetch_identity"] = {"evaluated": outcome["evaluated"], "calls": calls,
-                                         "fingerprint_mismatch_reached_evaluator": calls[0]["declared_fingerprint"] != calls[0]["actual_fingerprint"]}
+        fingerprint_mismatch_prevented = len(calls) == 0 and outcome.get("skipped", 0) >= 1
+        results["A7_refetch_identity"] = {
+            "evaluated": outcome["evaluated"],
+            "skipped": outcome.get("skipped", 0),
+            "calls": calls,
+            "fingerprint_mismatch_prevented": fingerprint_mismatch_prevented,
+        }
     return results
 
 
