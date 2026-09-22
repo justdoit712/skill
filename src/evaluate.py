@@ -23,6 +23,7 @@ import requests
 from .decide import NON_BLOCKING_DOMAIN_VALUES
 from .fetch import REASON_HTTP_ERROR, REASON_NETWORK_ERROR
 from .models import Candidate
+from .schema_utils import normalize_skill_type, normalize_string_list
 
 REASON_MODEL_ERROR = "MODEL_ERROR"
 REASON_PARSE_ERROR = "PARSE_ERROR"
@@ -131,6 +132,18 @@ def build_prompt(candidate: Candidate, text: str, rules: dict, taxonomy: dict) -
             "",
             "主分类只能取以下之一：" + "、".join(domain_names),
             "",
+            "形态分类（skill_type）：根据实质形态选取以下英文枚举之一，若证据不足或混合无法明确区分必须输出 null，严禁猜测：",
+            "- tool_script：可执行脚本、命令行工具、自动化脚本",
+            "- guideline：操作规范、工作流指南、提示词规范",
+            "- template：文档模板、配置模板、代码脚手架",
+            "- reference：速查表、手册、API 字典",
+            "- null：证据不足时使用",
+            "",
+            "结构化示例与亮点要求：",
+            "- example_requests：用户示例请求（数组，最多2条，每条不超过100字），基于材料中明确提及的典型任务或场景提取（如“写一封辞职信”、“查询股票K线”），严禁编造材料中没有的虚假功能；没有明确场景时输出 []",
+            "- key_features：核心亮点（数组，最多3条，每条不超过60字），提取材料中有明确证据支持的事实性特征短语；没有时输出 []",
+            "- summary_zh：一至两句中文简述，说明做什么及适用场景（注意：仅依据材料事实描述，不扩写未经证明的能力）",
+            "",
             "命中硬性拒绝项时，在 reason_codes 中填写对应码：" + "、".join(exclusion_codes),
             "存在需复核但不足以排除的情况时，可用这些码："
             + "、".join(sorted(rules.get("reason_codes", {}).get("candidate", {}))),
@@ -141,6 +154,9 @@ def build_prompt(candidate: Candidate, text: str, rules: dict, taxonomy: dict) -
                     **{c["id"]: {"value": "pass|fail|unknown", "evidence": "证据位置或片段"} for c in checks},
                     "domain_checks": {"finance": {"value": "pass|fail|unknown|not_applicable", "evidence": ""}},
                     "summary_zh": "一至两句中文简述，说明做什么及典型使用场景",
+                    "skill_type": "tool_script|guideline|template|reference|null",
+                    "example_requests": ["用户典型请求示例1", "用户典型请求示例2"],
+                    "key_features": ["核心亮点1", "核心亮点2", "核心亮点3"],
                     "main_category": "上列主分类之一",
                     "tags": ["用途标签"],
                     "platform_declared": None,
@@ -351,6 +367,15 @@ def parse_evaluation(
     evaluation["source_fingerprint"] = source_fingerprint
     evaluation.setdefault("domain_checks", {})
     evaluation.setdefault("reason_codes", [])
+    evaluation["skill_type"] = normalize_skill_type(raw.get("skill_type"))
+    evaluation["example_requests"] = normalize_string_list(
+        raw.get("example_requests"), max_items=2, max_length=100
+    )
+    evaluation["key_features"] = normalize_string_list(
+        raw.get("key_features"), max_items=3, max_length=60
+    )
+    raw_summary = raw.get("summary_zh")
+    evaluation["summary_zh"] = str(raw_summary).strip() if raw_summary and str(raw_summary).strip() else None
     return evaluation
 
 

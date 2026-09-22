@@ -59,7 +59,12 @@
       "license": null,
       "excluded": false,
       "manual_pick": false,
-      "manual_note": null
+      "manual_note": null,
+      "skill_type": null,
+      "example_requests": [
+        "“询问如何使用 Claude、Claude Code 等产品功能或寻求学习资源”"
+      ],
+      "key_features": []
     },
     {
       "skill_id": "anthropics/skills:skills/algorithmic-art/SKILL.md",
@@ -115,7 +120,12 @@
       "license": null,
       "excluded": false,
       "manual_pick": false,
-      "manual_note": null
+      "manual_note": null,
+      "skill_type": null,
+      "example_requests": [
+        "“用代码创作生成艺术、算法艺术、流场或粒子系统”"
+      ],
+      "key_features": []
     },
     {
       "skill_id": "anthropics/skills:skills/brand-guidelines/SKILL.md",
@@ -170,7 +180,12 @@
       "license": null,
       "excluded": false,
       "manual_pick": false,
-      "manual_note": null
+      "manual_note": null,
+      "skill_type": "guideline",
+      "example_requests": [],
+      "key_features": [
+        "提供 Anthropic 官方品牌颜色与字体指南"
+      ]
     },
     {
       "skill_id": "anthropics/skills:skills/canvas-design/SKILL.md",
@@ -223,7 +238,14 @@
       "license": null,
       "excluded": false,
       "manual_pick": false,
-      "manual_note": null
+      "manual_note": null,
+      "skill_type": null,
+      "example_requests": [
+        "“制作海报、艺术设计等静态视觉内容”"
+      ],
+      "key_features": [
+        "通过创建设计哲学并表达为PDF/PNG视觉艺术"
+      ]
     },
     {
       "skill_id": "anthropics/skills:skills/claude-api/SKILL.md",
@@ -294,7 +316,15 @@
       "license": null,
       "excluded": false,
       "manual_pick": false,
-      "manual_note": null
+      "manual_note": null,
+      "skill_type": "reference",
+      "example_requests": [
+        "“构建和调试 Claude LLM 应用”"
+      ],
+      "key_features": [
+        "覆盖模型选择、定价、参数、流式、工具调用、MCP、托管代理、缓存、token 计数和模型迁移等",
+        "提供 Claude API / Anthropic SDK 的参考指南"
+      ]
     },
     {
       "skill_id": "anthropics/skills:skills/discernment-nudge/SKILL.md",
@@ -344,7 +374,12 @@
       "license": null,
       "excluded": false,
       "manual_pick": false,
-      "manual_note": null
+      "manual_note": null,
+      "skill_type": null,
+      "example_requests": [
+        "“决策、建议、估算”"
+      ],
+      "key_features": []
     },
     {
       "skill_id": "anthropics/skills:skills/doc-coauthoring/SKILL.md",
@@ -395,7 +430,14 @@
       "license": null,
       "excluded": false,
       "manual_pick": false,
-      "manual_note": null
+      "manual_note": null,
+      "skill_type": null,
+      "example_requests": [
+        "“撰写文档、提案、技术规格、决策文档”"
+      ],
+      "key_features": [
+        "引导用户通过背景收集、细化结构与读者测试三个阶段协作撰写文档"
+      ]
     },
     {
       "skill_id": "anthropics/skills:skills/docx/SKILL.md",
@@ -455,7 +497,15 @@
         "reason": "用户收藏",
         "from": "recommended",
         "auto_status": "recommended"
-      }
+      },
+      "skill_type": null,
+      "example_requests": [
+        "“生成报告、信函、备忘录等办公文档”"
+      ],
+      "key_features": [
+        "支持格式排版、批注、修订跟踪与内容提取",
+        "创建、编辑、读取和转换 Word 文档"
+      ]
     },
     {
       "skill_id": "anthropics/skills:skills/frontend-design/SKILL.md",
@@ -507,7 +557,14 @@
       "license": null,
       "excluded": false,
       "manual_pick": false,
-      "manual_note": null
+      "manual_note": null,
+      "skill_type": "guideline",
+      "example_requests": [
+        "“需要避免模板化外观的界面设计”"
+      ],
+      "key_features": [
+        "涵盖配色、字体、布局、动效与文案"
+      ]
     },
     {
       "skill_id": "anthropics/skills:skills/internal-comms/SKILL.md",
@@ -558,7 +615,12 @@
       "license": null,
       "excluded": false,
       "manual_pick": false,
-      "manual_note": null
+      "manual_note": null,
+      "skill_type": null,
+      "example_requests": [],
+      "key_features": [
+        "帮助编写公司内部沟通文档"
+      ]
     },
     {
       "skill_id": "anthropics/skills:skills/mcp-builder/SKILL.md",
@@ -618,7 +680,13 @@
         "reason": "用户收藏",
         "from": "recommended",
         "auto_status": "recommended"
-      }
+      },
+      "skill_type": "guideline",
+      "example_requests": [],
+      "key_features": [
+        "覆盖研究、实现、测试与评估",
+        "提供创建高质量 MCP 服务器的开发指南"
+      ]
     },
     {
       "skill_id": "anthropics/skills:skills/pdf/SKILL.md",
@@ -685,7 +753,13 @@
       "license": null,
       "excluded": false,
       "manual_pick": false,
-      "manual_note": null
+      "manual_note": null,
+      "skill_type": null,
+      "example_requests": [],
+      "key_features": [
+        "提供 PDF 文件的读取、提取、合并、拆分、旋转、水印、创建、表单填写、加密解密和 OCR 等操作指南与代码示例",
+        "提供 PDF 文件的读取、提取、合并、拆分、旋转、水印、创建、表单填写、加密解密和 OCR 等操作指南与代码"
+      ]
     },
     {
       "skill_id": "anthropics/skills:skills/pptx/SKILL.md",
@@ -748,7 +822,14 @@
         "reason": "用户收藏",
         "from": "recommended",
         "auto_status": "recommended"
-      }
+      },
+      "skill_type": null,
+      "example_requests": [
+        "“制作幻灯片、解析演示文稿内容”"
+      ],
+      "key_features": [
+        "涵盖从模板生成、内容修改到视觉 QA 的全流程"
+      ]
     },
     {
       "skill_id": "anthropics/skills:skills/skill-creator/SKILL.md",
@@ -805,7 +886,14 @@
       "license": null,
       "excluded": false,
       "manual_pick": false,
-      "manual_note": null
+      "manual_note": null,
+      "skill_type": null,
+      "example_requests": [
+        "“需要构建或迭代技能的用户”"
+      ],
+      "key_features": [
+        "用于创建、修改和评估 Claude 技能"
+      ]
     },
     {
       "skill_id": "anthropics/skills:skills/slack-gif-creator/SKILL.md",
@@ -865,7 +953,15 @@
         "reason": "用户收藏",
         "from": "recommended",
         "auto_status": "recommended"
-      }
+      },
+      "skill_type": null,
+      "example_requests": [
+        "“给 Slack 做一个某人做某事的 GIF”"
+      ],
+      "key_features": [
+        "提供尺寸/参数约束",
+        "用于创建针对 Slack 优化的动画 GIF 的工具"
+      ]
     },
     {
       "skill_id": "anthropics/skills:skills/theme-factory/SKILL.md",
@@ -923,7 +1019,13 @@
         "reason": "用户收藏",
         "from": "recommended",
         "auto_status": "recommended"
-      }
+      },
+      "skill_type": null,
+      "example_requests": [],
+      "key_features": [
+        "支持即时生成自定义主题",
+        "主题工厂：为幻灯片、文档、报告、HTML 落地页等成品应用"
+      ]
     },
     {
       "skill_id": "anthropics/skills:skills/web-artifacts-builder/SKILL.md",
@@ -988,7 +1090,12 @@
         "reason": "用户收藏",
         "from": "recommended",
         "auto_status": "recommended"
-      }
+      },
+      "skill_type": null,
+      "example_requests": [],
+      "key_features": [
+        "用于创建复杂的 claude.ai HTML artifacts 的前端工具"
+      ]
     },
     {
       "skill_id": "anthropics/skills:skills/webapp-testing/SKILL.md",
@@ -1041,7 +1148,12 @@
       "license": null,
       "excluded": false,
       "manual_pick": false,
-      "manual_note": null
+      "manual_note": null,
+      "skill_type": null,
+      "example_requests": [],
+      "key_features": [
+        "用于测试和调试本地 Web 应用的工具"
+      ]
     },
     {
       "skill_id": "anthropics/skills:skills/xlsx/SKILL.md",
@@ -1101,7 +1213,12 @@
         "reason": "用户收藏",
         "from": "recommended",
         "auto_status": "recommended"
-      }
+      },
+      "skill_type": null,
+      "example_requests": [],
+      "key_features": [
+        "用于创建、编辑和分析电子表格文件"
+      ]
     },
     {
       "skill_id": "anthropics/skills:template/SKILL.md",
@@ -1143,7 +1260,10 @@
       "license": null,
       "excluded": true,
       "manual_pick": false,
-      "manual_note": null
+      "manual_note": null,
+      "skill_type": null,
+      "example_requests": [],
+      "key_features": []
     },
     {
       "skill_id": "vercel-labs/skills:skills/find-skills/SKILL.md",
@@ -1195,7 +1315,12 @@
       "license": null,
       "excluded": false,
       "manual_pick": false,
-      "manual_note": null
+      "manual_note": null,
+      "skill_type": null,
+      "example_requests": [],
+      "key_features": [
+        "帮助用户发现和安装开源 agent skills 的元技能"
+      ]
     },
     {
       "skill_id": "vercel-labs/agent-skills:skills/composition-patterns/SKILL.md",
@@ -1249,7 +1374,12 @@
       "license": null,
       "excluded": false,
       "manual_pick": false,
-      "manual_note": null
+      "manual_note": null,
+      "skill_type": null,
+      "example_requests": [],
+      "key_features": [
+        "提供 React 组件组合模式指南"
+      ]
     },
     {
       "skill_id": "vercel-labs/agent-skills:skills/deploy-to-vercel/SKILL.md",
@@ -1307,7 +1437,14 @@
       "license": null,
       "excluded": false,
       "manual_pick": false,
-      "manual_note": null
+      "manual_note": null,
+      "skill_type": null,
+      "example_requests": [
+        "“多种代理环境”"
+      ],
+      "key_features": [
+        "支持 git push、CLI 及无认证回退方案"
+      ]
     },
     {
       "skill_id": "vercel-labs/agent-skills:skills/react-best-practices/SKILL.md",
@@ -1363,7 +1500,10 @@
         "reason": "用户收藏",
         "from": "recommended",
         "auto_status": "recommended"
-      }
+      },
+      "skill_type": null,
+      "example_requests": [],
+      "key_features": []
     },
     {
       "skill_id": "vercel-labs/agent-skills:skills/react-native-skills/SKILL.md",
@@ -1421,7 +1561,15 @@
         "reason": "用户收藏",
         "from": "recommended",
         "auto_status": "recommended"
-      }
+      },
+      "skill_type": null,
+      "example_requests": [
+        "“构建 React Native 组件、优化性能、实现动画和配置原生模块”"
+      ],
+      "key_features": [
+        "涵盖列表性能、动画、导航、UI 模式、状态管理等领域",
+        "提供 React Native 与 Expo 移动应用"
+      ]
     },
     {
       "skill_id": "vercel-labs/agent-skills:skills/react-view-transitions/SKILL.md",
@@ -1481,7 +1629,14 @@
         "reason": "用户收藏",
         "from": "recommended",
         "auto_status": "recommended"
-      }
+      },
+      "skill_type": null,
+      "example_requests": [
+        "“页面过渡、路由变化、共享元素动画、组件进出动画、列表重排”"
+      ],
+      "key_features": [
+        "提供使用 React View Transition API 实现原生级动画的指南"
+      ]
     },
     {
       "skill_id": "vercel-labs/agent-skills:skills/vercel-cli-with-tokens/SKILL.md",
@@ -1533,7 +1688,12 @@
       "license": null,
       "excluded": false,
       "manual_pick": false,
-      "manual_note": null
+      "manual_note": null,
+      "skill_type": null,
+      "example_requests": [
+        "“非交互式登录的部署、环境变量管理、域名管理、部署检查”"
+      ],
+      "key_features": []
     },
     {
       "skill_id": "vercel-labs/agent-skills:skills/vercel-optimize/SKILL.md",
@@ -1588,7 +1748,12 @@
       "license": null,
       "excluded": false,
       "manual_pick": false,
-      "manual_note": null
+      "manual_note": null,
+      "skill_type": null,
+      "example_requests": [],
+      "key_features": [
+        "覆盖 Next.js、SvelteKit、Nuxt 及有限 Astro 支持"
+      ]
     },
     {
       "skill_id": "vercel-labs/agent-skills:skills/web-design-guidelines/SKILL.md",
@@ -1645,7 +1810,14 @@
         "reason": "用户收藏",
         "from": "recommended",
         "auto_status": "recommended"
-      }
+      },
+      "skill_type": null,
+      "example_requests": [
+        "“用户要求检查界面、可访问性、设计审计”"
+      ],
+      "key_features": [
+        "审查 UI 代码"
+      ]
     },
     {
       "skill_id": "vercel-labs/agent-skills:skills/writing-guidelines/SKILL.md",
@@ -1701,7 +1873,14 @@
         "reason": "用户收藏",
         "from": "recommended",
         "auto_status": "recommended"
-      }
+      },
+      "skill_type": "guideline",
+      "example_requests": [
+        "“检查写作风格或进行文档审查”"
+      ],
+      "key_features": [
+        "依据外部写作指南审查文档/散文的规范"
+      ]
     },
     {
       "skill_id": "cloudflare/skills:skills/agents-sdk/SKILL.md",
@@ -1757,7 +1936,13 @@
       "license": null,
       "excluded": false,
       "manual_pick": false,
-      "manual_note": null
+      "manual_note": null,
+      "skill_type": null,
+      "example_requests": [],
+      "key_features": [
+        "提供持久状态、RPC、调度、工作流、MCP 集成等 API 参考和示例",
+        "用于构建、调试和审查 Cloudflare Agents SDK 应用"
+      ]
     },
     {
       "skill_id": "cloudflare/skills:skills/cloudflare-email-service/SKILL.md",
@@ -1812,7 +1997,13 @@
       "license": null,
       "excluded": false,
       "manual_pick": false,
-      "manual_note": null
+      "manual_note": null,
+      "skill_type": null,
+      "example_requests": [],
+      "key_features": [
+        "覆盖从 Workers、外部应用、AI Agent 发送及收件处理等典型场景",
+        "提供 Cloudflare Email Sending 与 Email Routing 的集成、设置、故障排查指南"
+      ]
     },
     {
       "skill_id": "cloudflare/skills:skills/cloudflare-one-migrations/SKILL.md",
@@ -1865,7 +2056,12 @@
       "license": null,
       "excluded": false,
       "manual_pick": false,
-      "manual_note": null
+      "manual_note": null,
+      "skill_type": null,
+      "example_requests": [
+        "“网络与安全团队梳理迁移方案”"
+      ],
+      "key_features": []
     },
     {
       "skill_id": "cloudflare/skills:skills/cloudflare-one/SKILL.md",
@@ -1920,7 +2116,12 @@
       "license": null,
       "excluded": false,
       "manual_pick": false,
-      "manual_note": null
+      "manual_note": null,
+      "skill_type": null,
+      "example_requests": [],
+      "key_features": [
+        "涵盖架构、策略、隧道、设备客户端、DLP、CASB 等场景"
+      ]
     },
     {
       "skill_id": "cloudflare/skills:skills/cloudflare/SKILL.md",
@@ -1970,7 +2171,12 @@
       "license": null,
       "excluded": false,
       "manual_pick": false,
-      "manual_note": null
+      "manual_note": null,
+      "skill_type": null,
+      "example_requests": [
+        "“架构设计与云产品选型”"
+      ],
+      "key_features": []
     },
     {
       "skill_id": "cloudflare/skills:skills/durable-objects/SKILL.md",
@@ -2025,7 +2231,12 @@
       "license": null,
       "excluded": false,
       "manual_pick": false,
-      "manual_note": null
+      "manual_note": null,
+      "skill_type": null,
+      "example_requests": [],
+      "key_features": [
+        "用于构建、调试和审查 Cloudflare Durable Objects 代码"
+      ]
     },
     {
       "skill_id": "cloudflare/skills:skills/nextjs-on-cloudflare/SKILL.md",
@@ -2080,7 +2291,12 @@
       "license": null,
       "excluded": false,
       "manual_pick": false,
-      "manual_note": null
+      "manual_note": null,
+      "skill_type": null,
+      "example_requests": [],
+      "key_features": [
+        "用于在 Cloudflare Workers 上构建、迁移和部署 Next.js 应用"
+      ]
     },
     {
       "skill_id": "cloudflare/skills:skills/sandbox-migrate-to-next/SKILL.md",
@@ -2137,7 +2353,14 @@
       "license": null,
       "excluded": false,
       "manual_pick": false,
-      "manual_note": null
+      "manual_note": null,
+      "skill_type": null,
+      "example_requests": [
+        "“为 1.0 稳定版做准备的应用”"
+      ],
+      "key_features": [
+        "指导将 Cloudflare Sandbox 应用"
+      ]
     },
     {
       "skill_id": "cloudflare/skills:skills/sandbox-next/SKILL.md",
@@ -2191,7 +2414,14 @@
       "license": null,
       "excluded": false,
       "manual_pick": false,
-      "manual_note": null
+      "manual_note": null,
+      "skill_type": null,
+      "example_requests": [
+        "“需要隔离 Linux 环境运行代码”"
+      ],
+      "key_features": [
+        "指导在 Cloudflare Workers 上使用 @cloudflare/sandbox@next SDK 构建或维"
+      ]
     },
     {
       "skill_id": "cloudflare/skills:skills/sandbox-stable/SKILL.md",
@@ -2245,7 +2475,12 @@
       "license": null,
       "excluded": false,
       "manual_pick": false,
-      "manual_note": null
+      "manual_note": null,
+      "skill_type": null,
+      "example_requests": [],
+      "key_features": [
+        "用于在 Cloudflare Sandbox stable @cloudflare/sandbox 包上构建或维护应用"
+      ]
     },
     {
       "skill_id": "cloudflare/skills:skills/turnstile-spin/SKILL.md",
@@ -2306,7 +2541,12 @@
       "license": null,
       "excluded": false,
       "manual_pick": false,
-      "manual_note": null
+      "manual_note": null,
+      "skill_type": null,
+      "example_requests": [
+        "“保护表单、登录、注册等用户触发请求”"
+      ],
+      "key_features": []
     },
     {
       "skill_id": "cloudflare/skills:skills/web-perf/SKILL.md",
@@ -2362,7 +2602,10 @@
       "license": null,
       "excluded": false,
       "manual_pick": false,
-      "manual_note": null
+      "manual_note": null,
+      "skill_type": null,
+      "example_requests": [],
+      "key_features": []
     },
     {
       "skill_id": "cloudflare/skills:skills/workers-best-practices/SKILL.md",
@@ -2414,7 +2657,12 @@
       "license": null,
       "excluded": false,
       "manual_pick": false,
-      "manual_note": null
+      "manual_note": null,
+      "skill_type": null,
+      "example_requests": [],
+      "key_features": [
+        "涵盖配置、可观测性、反模式和验证"
+      ]
     },
     {
       "skill_id": "cloudflare/skills:skills/wrangler/SKILL.md",
@@ -2470,7 +2718,12 @@
       "license": null,
       "excluded": false,
       "manual_pick": false,
-      "manual_note": null
+      "manual_note": null,
+      "skill_type": null,
+      "example_requests": [
+        "“Cloudflare Workers 部署、配置修改和故障排查”"
+      ],
+      "key_features": []
     },
     {
       "skill_id": "trailofbits/skills:plugins/agentic-actions-auditor/skills/agentic-actions-auditor/SKILL.md",
@@ -2523,7 +2776,12 @@
       "license": null,
       "excluded": false,
       "manual_pick": false,
-      "manual_note": null
+      "manual_note": null,
+      "skill_type": null,
+      "example_requests": [
+        "“CI/CD 安全审查”"
+      ],
+      "key_features": []
     },
     {
       "skill_id": "trailofbits/skills:plugins/audit-context-building/skills/audit-context-building/SKILL.md",
@@ -2579,7 +2837,12 @@
       "license": null,
       "excluded": false,
       "manual_pick": false,
-      "manual_note": null
+      "manual_note": null,
+      "skill_type": null,
+      "example_requests": [],
+      "key_features": [
+        "在代码审计或威胁建模前构建代码"
+      ]
     },
     {
       "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/algorand-vulnerability-scanner/SKILL.md",
@@ -2633,7 +2896,12 @@
       "license": null,
       "excluded": false,
       "manual_pick": false,
-      "manual_note": null
+      "manual_note": null,
+      "skill_type": null,
+      "example_requests": [
+        "“安全审计和代码审查”"
+      ],
+      "key_features": []
     },
     {
       "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/audit-prep-assistant/SKILL.md",
@@ -2694,7 +2962,14 @@
       "license": null,
       "excluded": false,
       "manual_pick": false,
-      "manual_note": null
+      "manual_note": null,
+      "skill_type": null,
+      "example_requests": [
+        "“即将接受外部安全审计的项目”"
+      ],
+      "key_features": [
+        "覆盖率、清理死代码、完善文档等"
+      ]
     },
     {
       "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/cairo-vulnerability-scanner/SKILL.md",
@@ -2748,7 +3023,12 @@
       "license": null,
       "excluded": false,
       "manual_pick": false,
-      "manual_note": null
+      "manual_note": null,
+      "skill_type": null,
+      "example_requests": [
+        "“StarkNet 项目审计和安全评估”"
+      ],
+      "key_features": []
     },
     {
       "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/code-maturity-assessor/SKILL.md",
@@ -2798,7 +3078,14 @@
       "license": null,
       "excluded": false,
       "manual_pick": false,
-      "manual_note": null
+      "manual_note": null,
+      "skill_type": null,
+      "example_requests": [
+        "“安全审计和项目评估”"
+      ],
+      "key_features": [
+        "评估智能合约或区块链代码"
+      ]
     },
     {
       "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/cosmos-vulnerability-scanner/SKILL.md",
@@ -2849,7 +3136,12 @@
       "license": null,
       "excluded": false,
       "manual_pick": false,
-      "manual_note": null
+      "manual_note": null,
+      "skill_type": null,
+      "example_requests": [
+        "“审计自定义模块、审查 IBC 集成或链上线前安全评估”"
+      ],
+      "key_features": []
     },
     {
       "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/guidelines-advisor/SKILL.md",
@@ -2902,7 +3194,12 @@
       "license": null,
       "excluded": false,
       "manual_pick": false,
-      "manual_note": null
+      "manual_note": null,
+      "skill_type": null,
+      "example_requests": [],
+      "key_features": [
+        "这是一个基于 Trail of Bits 最佳实践的智能合约开发顾问技能"
+      ]
     },
     {
       "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/secure-workflow-guide/SKILL.md",
@@ -2960,7 +3257,14 @@
       "license": null,
       "excluded": false,
       "manual_pick": false,
-      "manual_note": null
+      "manual_note": null,
+      "skill_type": null,
+      "example_requests": [
+        "“端到端安全审计、部署前检查或每次代码签入”"
+      ],
+      "key_features": [
+        "涵盖 Slither 扫描、特殊功能检查、可视化安全图表、安全属性记录与人工审查"
+      ]
     },
     {
       "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/solana-vulnerability-scanner/SKILL.md",
@@ -3015,7 +3319,12 @@
       "license": null,
       "excluded": false,
       "manual_pick": false,
-      "manual_note": null
+      "manual_note": null,
+      "skill_type": null,
+      "example_requests": [
+        "“审计、预上线安全评估”"
+      ],
+      "key_features": []
     },
     {
       "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/substrate-vulnerability-scanner/SKILL.md",
@@ -3071,7 +3380,12 @@
       "license": null,
       "excluded": false,
       "manual_pick": false,
-      "manual_note": null
+      "manual_note": null,
+      "skill_type": null,
+      "example_requests": [
+        "“审计自定义pallet或FRAME代码”"
+      ],
+      "key_features": []
     },
     {
       "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/token-integration-analyzer/SKILL.md",
@@ -3126,7 +3440,14 @@
       "license": null,
       "excluded": false,
       "manual_pick": false,
-      "manual_note": null
+      "manual_note": null,
+      "skill_type": null,
+      "example_requests": [
+        "“代币集成或审计”"
+      ],
+      "key_features": [
+        "支持 ERC20/ERC721 标准符合性、20+ 异常代币模式、链上稀缺性分析"
+      ]
     },
     {
       "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/ton-vulnerability-scanner/SKILL.md",
@@ -3179,7 +3500,14 @@
       "license": null,
       "excluded": false,
       "manual_pick": false,
-      "manual_note": null
+      "manual_note": null,
+      "skill_type": null,
+      "example_requests": [
+        "“TON dApp 上线前安全审计”"
+      ],
+      "key_features": [
+        "审计 TON 区块链 FunC 智能合约的安全技能"
+      ]
     },
     {
       "skill_id": "trailofbits/skills:plugins/burpsuite-project-parser/skills/burpsuite-project-parser/SKILL.md",
@@ -3235,7 +3563,14 @@
       "license": null,
       "excluded": false,
       "manual_pick": false,
-      "manual_note": null
+      "manual_note": null,
+      "skill_type": null,
+      "example_requests": [
+        "“安全测试与审计”"
+      ],
+      "key_features": [
+        "用于从命令行搜索和提取 Burp Suite 项目文件"
+      ]
     },
     {
       "skill_id": "trailofbits/skills:plugins/c-review/skills/c-review/SKILL.md",
@@ -3297,7 +3632,14 @@
       "license": null,
       "excluded": false,
       "manual_pick": false,
-      "manual_note": null
+      "manual_note": null,
+      "skill_type": null,
+      "example_requests": [
+        "“审计原生应用、守护进程和服务”"
+      ],
+      "key_features": [
+        "对 C/C++ 用户态代码"
+      ]
     },
     {
       "skill_id": "trailofbits/skills:plugins/claude-in-chrome-troubleshooting/skills/chrome-mcp-troubleshooting/SKILL.md",
@@ -3352,7 +3694,12 @@
       "license": null,
       "excluded": false,
       "manual_pick": false,
-      "manual_note": null
+      "manual_note": null,
+      "skill_type": null,
+      "example_requests": [
+        "“macOS 环境中 MCP 工具连接失败或不稳定”"
+      ],
+      "key_features": []
     },
     {
       "skill_id": "trailofbits/skills:plugins/code-improver/skills/code-improver/SKILL.md",
@@ -3409,7 +3756,14 @@
       "license": null,
       "excluded": false,
       "manual_pick": false,
-      "manual_note": null
+      "manual_note": null,
+      "skill_type": null,
+      "example_requests": [
+        "“按指定审查者迭代修复代码、技能或模块”"
+      ],
+      "key_features": [
+        "code-improver 通过用户指定的审查者与修复子代理循环改进代码"
+      ]
     },
     {
       "skill_id": "trailofbits/skills:plugins/code-improver/skills/pr-improver/SKILL.md",
@@ -3468,7 +3822,12 @@
       "license": null,
       "excluded": false,
       "manual_pick": false,
-      "manual_note": null
+      "manual_note": null,
+      "skill_type": null,
+      "example_requests": [
+        "“在创建或更新 PR 前清理分支”"
+      ],
+      "key_features": []
     },
     {
       "skill_id": "trailofbits/skills:plugins/code-improver/skills/skill-improver/SKILL.md",
@@ -3528,7 +3887,12 @@
       "license": null,
       "excluded": false,
       "manual_pick": false,
-      "manual_note": null
+      "manual_note": null,
+      "skill_type": null,
+      "example_requests": [
+        "“修复技能质量问题、迭代精炼技能或升级后恢复循环”"
+      ],
+      "key_features": []
     },
     {
       "skill_id": "trailofbits/skills:plugins/code-improver/tests/fixtures/pr-review-toolkit/skills/review-pr/SKILL.md",
@@ -3579,7 +3943,13 @@
       "license": null,
       "excluded": false,
       "manual_pick": false,
-      "manual_note": null
+      "manual_note": null,
+      "skill_type": null,
+      "example_requests": [],
+      "key_features": [
+        "覆盖和文档准确性",
+        "用于审查当前分支相对基础分支的代码"
+      ]
     },
     {
       "skill_id": "trailofbits/skills:plugins/code-improver/tests/fixtures/review-panel/skills/panel-review/SKILL.md",
@@ -3631,7 +4001,14 @@
       "license": null,
       "excluded": false,
       "manual_pick": false,
-      "manual_note": null
+      "manual_note": null,
+      "skill_type": null,
+      "example_requests": [
+        "“请求运行 panel review 的代码审查”"
+      ],
+      "key_features": [
+        "启动一组专家审计子代理对代码"
+      ]
     },
     {
       "skill_id": "trailofbits/skills:plugins/constant-time-analysis/skills/constant-time-analysis/SKILL.md",
@@ -3697,7 +4074,14 @@
       "license": null,
       "excluded": false,
       "manual_pick": false,
-      "manual_note": null
+      "manual_note": null,
+      "skill_type": null,
+      "example_requests": [
+        "“审查 C/C++/Go/Rust 等语言的加密实现”"
+      ],
+      "key_features": [
+        "用于静态检测密码代码"
+      ]
     },
     {
       "skill_id": "trailofbits/skills:plugins/culture-index/skills/interpreting-culture-index/SKILL.md",
@@ -3751,7 +4135,12 @@
       "license": null,
       "excluded": false,
       "manual_pick": false,
-      "manual_note": null
+      "manual_note": null,
+      "skill_type": null,
+      "example_requests": [],
+      "key_features": [
+        "支持个人分析、团队构成、倦怠检测、招聘和冲突调解等场景"
+      ]
     },
     {
       "skill_id": "trailofbits/skills:plugins/devcontainer-setup/skills/devcontainer-setup/SKILL.md",
@@ -3814,7 +4203,14 @@
       "license": null,
       "excluded": false,
       "manual_pick": false,
-      "manual_note": null
+      "manual_note": null,
+      "skill_type": null,
+      "example_requests": [
+        "“搭建隔离开发环境或沙箱化 Claude Code 工作区”"
+      ],
+      "key_features": [
+        "为项目生成带 Claude Code 和 Python/Node/Rust/Go 工具"
+      ]
     },
     {
       "skill_id": "trailofbits/skills:plugins/differential-review/skills/differential-review/SKILL.md",
@@ -3865,7 +4261,14 @@
       "license": null,
       "excluded": false,
       "manual_pick": false,
-      "manual_note": null
+      "manual_note": null,
+      "skill_type": null,
+      "example_requests": [
+        "“安全漏洞审查、回归检查和变更影响评估”"
+      ],
+      "key_features": [
+        "覆盖率分析生成 Markdown 报告"
+      ]
     },
     {
       "skill_id": "trailofbits/skills:plugins/dimensional-analysis/skills/dimensional-analysis/SKILL.md",
@@ -3930,7 +4333,12 @@
       "license": null,
       "excluded": false,
       "manual_pick": false,
-      "manual_note": null
+      "manual_note": null,
+      "skill_type": null,
+      "example_requests": [
+        "“DeFi、区块链及其他数值计算代码，用于发现单位不匹配和公式错误”"
+      ],
+      "key_features": []
     },
     {
       "skill_id": "trailofbits/skills:plugins/dwarf-expert/skills/dwarf-expert/SKILL.md",
@@ -3990,7 +4398,10 @@
       "license": null,
       "excluded": false,
       "manual_pick": false,
-      "manual_note": null
+      "manual_note": null,
+      "skill_type": null,
+      "example_requests": [],
+      "key_features": []
     },
     {
       "skill_id": "trailofbits/skills:plugins/entry-point-analyzer/skills/entry-point-analyzer/SKILL.md",
@@ -4042,7 +4453,12 @@
       "license": null,
       "excluded": false,
       "manual_pick": false,
-      "manual_note": null
+      "manual_note": null,
+      "skill_type": null,
+      "example_requests": [],
+      "key_features": [
+        "智能合约安全审计辅助技能"
+      ]
     },
     {
       "skill_id": "trailofbits/skills:plugins/firebase-apk-scanner/skills/firebase-apk-scanner/SKILL.md",
@@ -4097,7 +4513,12 @@
       "license": null,
       "excluded": false,
       "manual_pick": false,
-      "manual_note": null
+      "manual_note": null,
+      "skill_type": null,
+      "example_requests": [
+        "“授权移动应用安全审计和渗透测试”"
+      ],
+      "key_features": []
     }
   ],
   "overrides": {

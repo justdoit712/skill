@@ -127,7 +127,7 @@ def fake_evaluate_with_tokens(tokens_per_call: int, evaluation: dict | None = No
 
 class PipelineHarness(unittest.TestCase):
     def setUp(self) -> None:
-        self._tmp = tempfile.TemporaryDirectory()
+        self._tmp = tempfile.TemporaryDirectory(ignore_cleanup_errors=True)
         self.root = Path(self._tmp.name)
         self.data = self.root / "data"
         self.public = self.root / "public"

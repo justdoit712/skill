@@ -46,6 +46,14 @@
       "url": "https://github.com/anthropics/skills/blob/HEAD/skills/docx/SKILL.md",
       "author": "anthropics",
       "summary_zh": "创建、编辑、读取和转换 Word 文档（.docx/.dotx），支持格式排版、批注、修订跟踪与内容提取，适用于生成报告、信函、备忘录等办公文档。",
+      "skill_type": null,
+      "example_requests": [
+        "“生成报告、信函、备忘录等办公文档”"
+      ],
+      "key_features": [
+        "支持格式排版、批注、修订跟踪与内容提取",
+        "创建、编辑、读取和转换 Word 文档"
+      ],
       "main_category": {
         "id": "docs",
         "name": "文档办公"
@@ -90,6 +98,12 @@
       "url": "https://github.com/anthropics/skills/blob/HEAD/skills/mcp-builder/SKILL.md",
       "author": "anthropics",
       "summary_zh": "提供创建高质量 MCP 服务器的开发指南，覆盖研究、实现、测试与评估，用于集成外部 API 或服务。",
+      "skill_type": "guideline",
+      "example_requests": [],
+      "key_features": [
+        "覆盖研究、实现、测试与评估",
+        "提供创建高质量 MCP 服务器的开发指南"
+      ],
       "main_category": {
         "id": "dev",
         "name": "编程开发"
@@ -134,6 +148,13 @@
       "url": "https://github.com/anthropics/skills/blob/HEAD/skills/pptx/SKILL.md",
       "author": "anthropics",
       "summary_zh": "该技能用于创建、编辑、读取和分析 PowerPoint 演示文稿（.pptx/.potx），涵盖从模板生成、内容修改到视觉 QA 的全流程，适用于制作幻灯片、解析演示文稿内容等场景。",
+      "skill_type": null,
+      "example_requests": [
+        "“制作幻灯片、解析演示文稿内容”"
+      ],
+      "key_features": [
+        "涵盖从模板生成、内容修改到视觉 QA 的全流程"
+      ],
       "main_category": {
         "id": "docs",
         "name": "文档办公"
@@ -181,6 +202,14 @@
       "url": "https://github.com/anthropics/skills/blob/HEAD/skills/slack-gif-creator/SKILL.md",
       "author": "anthropics",
       "summary_zh": "用于创建针对 Slack 优化的动画 GIF 的工具箱，提供尺寸/参数约束、PIL 绘图与动画概念；典型场景是用户请求“给 Slack 做一个某人做某事的 GIF”。",
+      "skill_type": null,
+      "example_requests": [
+        "“给 Slack 做一个某人做某事的 GIF”"
+      ],
+      "key_features": [
+        "提供尺寸/参数约束",
+        "用于创建针对 Slack 优化的动画 GIF 的工具"
+      ],
       "main_category": {
         "id": "content",
         "name": "内容创作"
@@ -225,6 +254,12 @@
       "url": "https://github.com/anthropics/skills/blob/HEAD/skills/theme-factory/SKILL.md",
       "author": "anthropics",
       "summary_zh": "主题工厂：为幻灯片、文档、报告、HTML 落地页等成品应用专业配色与字体主题，提供 10 个预设主题并支持即时生成自定义主题。典型场景：为演示文稿快速统一视觉风格。",
+      "skill_type": null,
+      "example_requests": [],
+      "key_features": [
+        "支持即时生成自定义主题",
+        "主题工厂：为幻灯片、文档、报告、HTML 落地页等成品应用"
+      ],
       "main_category": {
         "id": "docs",
         "name": "文档办公"
@@ -267,6 +302,11 @@
       "url": "https://github.com/anthropics/skills/blob/HEAD/skills/web-artifacts-builder/SKILL.md",
       "author": "anthropics",
       "summary_zh": "用于创建复杂的 claude.ai HTML artifacts 的前端工具套件，基于 React、Tailwind、shadcn/ui，适合需要状态管理、路由或 shadcn/ui 组件的复杂 artifact。",
+      "skill_type": null,
+      "example_requests": [],
+      "key_features": [
+        "用于创建复杂的 claude.ai HTML artifacts 的前端工具"
+      ],
       "main_category": {
         "id": "dev",
         "name": "编程开发"
@@ -316,6 +356,11 @@
       "url": "https://github.com/anthropics/skills/blob/HEAD/skills/xlsx/SKILL.md",
       "author": "anthropics",
       "summary_zh": "该技能用于创建、编辑和分析电子表格文件（如 xlsx, csv），利用 openpyxl/pandas 等工具处理数据、公式、格式转换，典型场景包括数据清洗、报表生成和金融模型构建。",
+      "skill_type": null,
+      "example_requests": [],
+      "key_features": [
+        "用于创建、编辑和分析电子表格文件"
+      ],
       "main_category": {
         "id": "docs",
         "name": "文档办公"
@@ -360,6 +405,9 @@
       "url": "https://github.com/vercel-labs/agent-skills/blob/HEAD/skills/react-best-practices/SKILL.md",
       "author": "vercel-labs",
       "summary_zh": "提供 React 与 Next.js 性能优化最佳实践规则，用于编写、审查或重构前端代码时提升性能。",
+      "skill_type": null,
+      "example_requests": [],
+      "key_features": [],
       "main_category": {
         "id": "dev",
         "name": "编程开发"
@@ -400,6 +448,14 @@
       "url": "https://github.com/vercel-labs/agent-skills/blob/HEAD/skills/react-native-skills/SKILL.md",
       "author": "vercel-labs",
       "summary_zh": "提供 React Native 与 Expo 移动应用开发的最佳实践，涵盖列表性能、动画、导航、UI 模式、状态管理等领域。适用于构建 React Native 组件、优化性能、实现动画和配置原生模块等场景。",
+      "skill_type": null,
+      "example_requests": [
+        "“构建 React Native 组件、优化性能、实现动画和配置原生模块”"
+      ],
+      "key_features": [
+        "涵盖列表性能、动画、导航、UI 模式、状态管理等领域",
+        "提供 React Native 与 Expo 移动应用"
+      ],
       "main_category": {
         "id": "dev",
         "name": "编程开发"
@@ -442,6 +498,13 @@
       "url": "https://github.com/vercel-labs/agent-skills/blob/HEAD/skills/react-view-transitions/SKILL.md",
       "author": "vercel-labs",
       "summary_zh": "提供使用 React View Transition API 实现原生级动画的指南，适用于页面过渡、路由变化、共享元素动画、组件进出动画、列表重排等场景。",
+      "skill_type": null,
+      "example_requests": [
+        "“页面过渡、路由变化、共享元素动画、组件进出动画、列表重排”"
+      ],
+      "key_features": [
+        "提供使用 React View Transition API 实现原生级动画的指南"
+      ],
       "main_category": {
         "id": "dev",
         "name": "编程开发"
@@ -486,6 +549,13 @@
       "url": "https://github.com/vercel-labs/agent-skills/blob/HEAD/skills/web-design-guidelines/SKILL.md",
       "author": "vercel-labs",
       "summary_zh": "审查 UI 代码是否符合 Web Interface Guidelines，适用于用户要求检查界面、可访问性、设计审计等场景。",
+      "skill_type": null,
+      "example_requests": [
+        "“用户要求检查界面、可访问性、设计审计”"
+      ],
+      "key_features": [
+        "审查 UI 代码"
+      ],
       "main_category": {
         "id": "product",
         "name": "产品与设计"
@@ -527,6 +597,13 @@
       "url": "https://github.com/vercel-labs/agent-skills/blob/HEAD/skills/writing-guidelines/SKILL.md",
       "author": "vercel-labs",
       "summary_zh": "该技能依据外部写作指南审查文档/散文的规范符合性，适用于要求检查写作风格或进行文档审查的场景。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "“检查写作风格或进行文档审查”"
+      ],
+      "key_features": [
+        "依据外部写作指南审查文档/散文的规范"
+      ],
       "main_category": {
         "id": "docs",
         "name": "文档办公"
@@ -569,6 +646,14 @@
       "url": "https://github.com/anthropics/skills/blob/HEAD/skills/claude-api/SKILL.md",
       "author": "anthropics",
       "summary_zh": "提供 Claude API / Anthropic SDK 的参考指南，覆盖模型选择、定价、参数、流式、工具调用、MCP、托管代理、缓存、token 计数和模型迁移等，典型用于构建和调试 Claude LLM 应用。",
+      "skill_type": "reference",
+      "example_requests": [
+        "“构建和调试 Claude LLM 应用”"
+      ],
+      "key_features": [
+        "覆盖模型选择、定价、参数、流式、工具调用、MCP、托管代理、缓存、token 计数和模型迁移等",
+        "提供 Claude API / Anthropic SDK 的参考指南"
+      ],
       "main_category": {
         "id": "dev",
         "name": "编程开发"
@@ -624,6 +709,13 @@
       "url": "https://github.com/anthropics/skills/blob/HEAD/skills/doc-coauthoring/SKILL.md",
       "author": "anthropics",
       "summary_zh": "引导用户通过背景收集、细化结构与读者测试三个阶段协作撰写文档，适用于撰写文档、提案、技术规格、决策文档等场景。",
+      "skill_type": null,
+      "example_requests": [
+        "“撰写文档、提案、技术规格、决策文档”"
+      ],
+      "key_features": [
+        "引导用户通过背景收集、细化结构与读者测试三个阶段协作撰写文档"
+      ],
       "main_category": {
         "id": "docs",
         "name": "文档办公"
@@ -659,6 +751,13 @@
       "url": "https://github.com/anthropics/skills/blob/HEAD/skills/frontend-design/SKILL.md",
       "author": "anthropics",
       "summary_zh": "为构建或改版前端 UI 提供有辨识度的视觉设计指导，涵盖配色、字体、布局、动效与文案；适用于需要避免模板化外观的界面设计场景。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "“需要避免模板化外观的界面设计”"
+      ],
+      "key_features": [
+        "涵盖配色、字体、布局、动效与文案"
+      ],
       "main_category": {
         "id": "product",
         "name": "产品与设计"
@@ -695,6 +794,13 @@
       "url": "https://github.com/vercel-labs/agent-skills/blob/HEAD/skills/deploy-to-vercel/SKILL.md",
       "author": "vercel-labs",
       "summary_zh": "将应用或网站部署到 Vercel，支持 git push、CLI 及无认证回退方案，适用于多种代理环境。",
+      "skill_type": null,
+      "example_requests": [
+        "“多种代理环境”"
+      ],
+      "key_features": [
+        "支持 git push、CLI 及无认证回退方案"
+      ],
       "main_category": {
         "id": "cloud",
         "name": "云服务与运维"
@@ -737,6 +843,11 @@
       "url": "https://github.com/vercel-labs/agent-skills/blob/HEAD/skills/vercel-cli-with-tokens/SKILL.md",
       "author": "vercel-labs",
       "summary_zh": "该技能用于通过Vercel CLI和基于token的认证方式部署和管理Vercel项目，适用于非交互式登录的部署、环境变量管理、域名管理、部署检查等场景。",
+      "skill_type": null,
+      "example_requests": [
+        "“非交互式登录的部署、环境变量管理、域名管理、部署检查”"
+      ],
+      "key_features": [],
       "main_category": {
         "id": "cloud",
         "name": "云服务与运维"
@@ -773,6 +884,11 @@
       "url": "https://github.com/vercel-labs/agent-skills/blob/HEAD/skills/vercel-optimize/SKILL.md",
       "author": "vercel-labs",
       "summary_zh": "对已部署的 Vercel 项目进行可观测性优先的成本与性能审计，覆盖 Next.js、SvelteKit、Nuxt 及有限 Astro 支持，基于指标和门控生成带证据的建议。",
+      "skill_type": null,
+      "example_requests": [],
+      "key_features": [
+        "覆盖 Next.js、SvelteKit、Nuxt 及有限 Astro 支持"
+      ],
       "main_category": {
         "id": "cloud",
         "name": "云服务与运维"
@@ -812,6 +928,12 @@
       "url": "https://github.com/cloudflare/skills/blob/HEAD/skills/agents-sdk/SKILL.md",
       "author": "cloudflare",
       "summary_zh": "用于构建、调试和审查 Cloudflare Agents SDK 应用程序，提供持久状态、RPC、调度、工作流、MCP 集成等 API 参考和示例。",
+      "skill_type": null,
+      "example_requests": [],
+      "key_features": [
+        "提供持久状态、RPC、调度、工作流、MCP 集成等 API 参考和示例",
+        "用于构建、调试和审查 Cloudflare Agents SDK 应用"
+      ],
       "main_category": {
         "id": "dev",
         "name": "编程开发"
@@ -852,6 +974,12 @@
       "url": "https://github.com/cloudflare/skills/blob/HEAD/skills/cloudflare-email-service/SKILL.md",
       "author": "cloudflare",
       "summary_zh": "提供 Cloudflare Email Sending 与 Email Routing 的集成、设置、故障排查指南，覆盖从 Workers、外部应用、AI Agent 发送及收件处理等典型场景。",
+      "skill_type": null,
+      "example_requests": [],
+      "key_features": [
+        "覆盖从 Workers、外部应用、AI Agent 发送及收件处理等典型场景",
+        "提供 Cloudflare Email Sending 与 Email Routing 的集成、设置、故障排查指南"
+      ],
       "main_category": {
         "id": "cloud",
         "name": "云服务与运维"
@@ -891,6 +1019,11 @@
       "url": "https://github.com/cloudflare/skills/blob/HEAD/skills/cloudflare-one-migrations/SKILL.md",
       "author": "cloudflare",
       "summary_zh": "该技能用于评估和规划从现有 VPN/SWG/SASE 平台到 Cloudflare One 的迁移，包括策略映射、差异差距和分阶段上线，适用于网络与安全团队梳理迁移方案。",
+      "skill_type": null,
+      "example_requests": [
+        "“网络与安全团队梳理迁移方案”"
+      ],
+      "key_features": [],
       "main_category": {
         "id": "security",
         "name": "安全"
@@ -928,6 +1061,11 @@
       "url": "https://github.com/cloudflare/skills/blob/HEAD/skills/cloudflare-one/SKILL.md",
       "author": "cloudflare",
       "summary_zh": "用于设计、配置、排障或审查 Cloudflare One Zero Trust 和 SASE 部署，涵盖架构、策略、隧道、设备客户端、DLP、CASB 等场景。",
+      "skill_type": null,
+      "example_requests": [],
+      "key_features": [
+        "涵盖架构、策略、隧道、设备客户端、DLP、CASB 等场景"
+      ],
       "main_category": {
         "id": "security",
         "name": "安全"
@@ -967,6 +1105,11 @@
       "url": "https://github.com/cloudflare/skills/blob/HEAD/skills/cloudflare/SKILL.md",
       "author": "cloudflare",
       "summary_zh": "帮助智能体发现并选择 Cloudflare 产品，适用于架构设计与云产品选型场景。",
+      "skill_type": null,
+      "example_requests": [
+        "“架构设计与云产品选型”"
+      ],
+      "key_features": [],
       "main_category": {
         "id": "cloud",
         "name": "云服务与运维"
@@ -1001,6 +1144,11 @@
       "url": "https://github.com/cloudflare/skills/blob/HEAD/skills/durable-objects/SKILL.md",
       "author": "cloudflare",
       "summary_zh": "用于构建、调试和审查 Cloudflare Durable Objects 代码，典型场景包括有状态协调、强一致性存储、持久连接和定时任务等边缘计算应用。",
+      "skill_type": null,
+      "example_requests": [],
+      "key_features": [
+        "用于构建、调试和审查 Cloudflare Durable Objects 代码"
+      ],
       "main_category": {
         "id": "dev",
         "name": "编程开发"
@@ -1040,6 +1188,11 @@
       "url": "https://github.com/cloudflare/skills/blob/HEAD/skills/nextjs-on-cloudflare/SKILL.md",
       "author": "cloudflare",
       "summary_zh": "用于在 Cloudflare Workers 上构建、迁移和部署 Next.js 应用，推荐使用 vinext；典型场景包括新项目搭建、现有应用迁移及开发部署。",
+      "skill_type": null,
+      "example_requests": [],
+      "key_features": [
+        "用于在 Cloudflare Workers 上构建、迁移和部署 Next.js 应用"
+      ],
       "main_category": {
         "id": "dev",
         "name": "编程开发"
@@ -1079,6 +1232,13 @@
       "url": "https://github.com/cloudflare/skills/blob/HEAD/skills/sandbox-next/SKILL.md",
       "author": "cloudflare",
       "summary_zh": "指导在 Cloudflare Workers 上使用 @cloudflare/sandbox@next SDK 构建或维护沙箱应用，适用于需要隔离 Linux 环境运行代码的场景。",
+      "skill_type": null,
+      "example_requests": [
+        "“需要隔离 Linux 环境运行代码”"
+      ],
+      "key_features": [
+        "指导在 Cloudflare Workers 上使用 @cloudflare/sandbox@next SDK 构建或维"
+      ],
       "main_category": {
         "id": "dev",
         "name": "编程开发"
@@ -1117,6 +1277,11 @@
       "url": "https://github.com/cloudflare/skills/blob/HEAD/skills/sandbox-stable/SKILL.md",
       "author": "cloudflare",
       "summary_zh": "用于在 Cloudflare Sandbox stable @cloudflare/sandbox 包上构建或维护应用，提供包线确认、API 契约和文档检索路径，适合已有应用维护和开发前检查。",
+      "skill_type": null,
+      "example_requests": [],
+      "key_features": [
+        "用于在 Cloudflare Sandbox stable @cloudflare/sandbox 包上构建或维护应用"
+      ],
       "main_category": {
         "id": "cloud",
         "name": "云服务与运维"
@@ -1155,6 +1320,11 @@
       "url": "https://github.com/cloudflare/skills/blob/HEAD/skills/turnstile-spin/SKILL.md",
       "author": "cloudflare",
       "summary_zh": "为现有前端与后端设置、修复或迁移 Cloudflare Turnstile 机器人验证，包含前端挂件嵌入和服务器端 Siteverify 校验，典型用于保护表单、登录、注册等用户触发请求。",
+      "skill_type": null,
+      "example_requests": [
+        "“保护表单、登录、注册等用户触发请求”"
+      ],
+      "key_features": [],
       "main_category": {
         "id": "dev",
         "name": "编程开发"
@@ -1200,6 +1370,11 @@
       "url": "https://github.com/cloudflare/skills/blob/HEAD/skills/workers-best-practices/SKILL.md",
       "author": "cloudflare",
       "summary_zh": "提供 Cloudflare Workers 生产环境最佳实践，用于编写、审查或配置 Workers 代码，涵盖配置、可观测性、反模式和验证。",
+      "skill_type": null,
+      "example_requests": [],
+      "key_features": [
+        "涵盖配置、可观测性、反模式和验证"
+      ],
       "main_category": {
         "id": "dev",
         "name": "编程开发"
@@ -1236,6 +1411,11 @@
       "url": "https://github.com/cloudflare/skills/blob/HEAD/skills/wrangler/SKILL.md",
       "author": "cloudflare",
       "summary_zh": "用于运行和排查 Wrangler CLI 命令，配置 Cloudflare Worker 项目的本地开发、部署和资源管理，适用于 Cloudflare Workers 部署、配置修改和故障排查等场景。",
+      "skill_type": null,
+      "example_requests": [
+        "“Cloudflare Workers 部署、配置修改和故障排查”"
+      ],
+      "key_features": [],
       "main_category": {
         "id": "cloud",
         "name": "云服务与运维"
@@ -1276,6 +1456,11 @@
       "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/building-secure-contracts/skills/algorand-vulnerability-scanner/SKILL.md",
       "author": "trailofbits",
       "summary_zh": "该技能用于扫描 Algorand 智能合约（TEAL/PyTeal）中的 11 种常见安全漏洞，适用于安全审计和代码审查场景。",
+      "skill_type": null,
+      "example_requests": [
+        "“安全审计和代码审查”"
+      ],
+      "key_features": [],
       "main_category": {
         "id": "security",
         "name": "安全"
@@ -1314,6 +1499,13 @@
       "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/building-secure-contracts/skills/audit-prep-assistant/SKILL.md",
       "author": "trailofbits",
       "summary_zh": "该技能帮助开发者在安全审计前按 Trail of Bits 清单准备代码库，包括设定审查目标、运行静态分析、提升测试覆盖率、清理死代码、完善文档等，适用于即将接受外部安全审计的项目。",
+      "skill_type": null,
+      "example_requests": [
+        "“即将接受外部安全审计的项目”"
+      ],
+      "key_features": [
+        "覆盖率、清理死代码、完善文档等"
+      ],
       "main_category": {
         "id": "security",
         "name": "安全"
@@ -1359,6 +1551,11 @@
       "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/building-secure-contracts/skills/cairo-vulnerability-scanner/SKILL.md",
       "author": "trailofbits",
       "summary_zh": "扫描 Cairo/StarkNet 智能合约中的 6 类关键漏洞，适用于 StarkNet 项目审计和安全评估。",
+      "skill_type": null,
+      "example_requests": [
+        "“StarkNet 项目审计和安全评估”"
+      ],
+      "key_features": [],
       "main_category": {
         "id": "security",
         "name": "安全"
@@ -1397,6 +1594,11 @@
       "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/building-secure-contracts/skills/cosmos-vulnerability-scanner/SKILL.md",
       "author": "trailofbits",
       "summary_zh": "用于扫描 Cosmos SDK 模块和 CosmWasm 合约中的共识关键漏洞（链停止、资金损失、状态分歧），适用于审计自定义模块、审查 IBC 集成或链上线前安全评估。",
+      "skill_type": null,
+      "example_requests": [
+        "“审计自定义模块、审查 IBC 集成或链上线前安全评估”"
+      ],
+      "key_features": [],
       "main_category": {
         "id": "security",
         "name": "安全"
@@ -1432,6 +1634,11 @@
       "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/building-secure-contracts/skills/guidelines-advisor/SKILL.md",
       "author": "trailofbits",
       "summary_zh": "这是一个基于 Trail of Bits 最佳实践的智能合约开发顾问技能，用于分析代码库并生成文档、架构与实现审查、依赖与测试评估及优先级建议。典型场景是审查 Solidity/Rust/Cairo 等智能合约项目的开发规范与安全性。",
+      "skill_type": null,
+      "example_requests": [],
+      "key_features": [
+        "这是一个基于 Trail of Bits 最佳实践的智能合约开发顾问技能"
+      ],
       "main_category": {
         "id": "security",
         "name": "安全"
@@ -1469,6 +1676,13 @@
       "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/building-secure-contracts/skills/secure-workflow-guide/SKILL.md",
       "author": "trailofbits",
       "summary_zh": "指导智能合约安全开发工作流，涵盖 Slither 扫描、特殊功能检查、可视化安全图表、安全属性记录与人工审查，适用于端到端安全审计、部署前检查或每次代码签入。",
+      "skill_type": null,
+      "example_requests": [
+        "“端到端安全审计、部署前检查或每次代码签入”"
+      ],
+      "key_features": [
+        "涵盖 Slither 扫描、特殊功能检查、可视化安全图表、安全属性记录与人工审查"
+      ],
       "main_category": {
         "id": "security",
         "name": "安全"
@@ -1511,6 +1725,11 @@
       "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/building-secure-contracts/skills/substrate-vulnerability-scanner/SKILL.md",
       "author": "trailofbits",
       "summary_zh": "扫描Substrate/Polkadot runtime pallets中的7类关键安全漏洞，适用于审计自定义pallet或FRAME代码。",
+      "skill_type": null,
+      "example_requests": [
+        "“审计自定义pallet或FRAME代码”"
+      ],
+      "key_features": [],
       "main_category": {
         "id": "security",
         "name": "安全"
@@ -1551,6 +1770,13 @@
       "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/building-secure-contracts/skills/token-integration-analyzer/SKILL.md",
       "author": "trailofbits",
       "summary_zh": "基于 Trail of Bits 代币集成清单的代币实现与集成安全分析，支持 ERC20/ERC721 标准符合性、20+ 异常代币模式、链上稀缺性分析，适用于代币集成或审计场景。",
+      "skill_type": null,
+      "example_requests": [
+        "“代币集成或审计”"
+      ],
+      "key_features": [
+        "支持 ERC20/ERC721 标准符合性、20+ 异常代币模式、链上稀缺性分析"
+      ],
       "main_category": {
         "id": "security",
         "name": "安全"
@@ -1590,6 +1816,13 @@
       "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/burpsuite-project-parser/skills/burpsuite-project-parser/SKILL.md",
       "author": "trailofbits",
       "summary_zh": "用于从命令行搜索和提取 Burp Suite 项目文件中的 HTTP 流量、安全审计发现等数据，适用于安全测试与审计场景。",
+      "skill_type": null,
+      "example_requests": [
+        "“安全测试与审计”"
+      ],
+      "key_features": [
+        "用于从命令行搜索和提取 Burp Suite 项目文件"
+      ],
       "main_category": {
         "id": "security",
         "name": "安全"
@@ -1630,6 +1863,11 @@
       "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/claude-in-chrome-troubleshooting/skills/chrome-mcp-troubleshooting/SKILL.md",
       "author": "trailofbits",
       "summary_zh": "该技能用于诊断和修复 Claude in Chrome MCP 扩展连接问题，特别针对 Claude.app 与 Claude Code 原生主机冲突，适用于 macOS 环境中 MCP 工具连接失败或不稳定的场景。",
+      "skill_type": null,
+      "example_requests": [
+        "“macOS 环境中 MCP 工具连接失败或不稳定”"
+      ],
+      "key_features": [],
       "main_category": {
         "id": "dev",
         "name": "编程开发"
@@ -1669,6 +1907,13 @@
       "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/code-improver/skills/code-improver/SKILL.md",
       "author": "trailofbits",
       "summary_zh": "code-improver 通过用户指定的审查者与修复子代理循环改进代码目标，直至审查无关键/主要问题，适用于按指定审查者迭代修复代码、技能或模块的场景。",
+      "skill_type": null,
+      "example_requests": [
+        "“按指定审查者迭代修复代码、技能或模块”"
+      ],
+      "key_features": [
+        "code-improver 通过用户指定的审查者与修复子代理循环改进代码"
+      ],
       "main_category": {
         "id": "dev",
         "name": "编程开发"
@@ -1710,6 +1955,11 @@
       "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/code-improver/skills/pr-improver/SKILL.md",
       "author": "trailofbits",
       "summary_zh": "PR Improver 自动对当前分支变更运行审查-修复循环，直到 PR 审查无严重/主要问题，适用于在创建或更新 PR 前清理分支。",
+      "skill_type": null,
+      "example_requests": [
+        "“在创建或更新 PR 前清理分支”"
+      ],
+      "key_features": [],
       "main_category": {
         "id": "dev",
         "name": "编程开发"
@@ -1753,6 +2003,13 @@
       "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/code-improver/tests/fixtures/review-panel/skills/panel-review/SKILL.md",
       "author": "trailofbits",
       "summary_zh": "启动一组专家审计子代理对代码目标进行审查并合并报告，适用于请求运行 panel review 的代码审查场景。",
+      "skill_type": null,
+      "example_requests": [
+        "“请求运行 panel review 的代码审查”"
+      ],
+      "key_features": [
+        "启动一组专家审计子代理对代码"
+      ],
       "main_category": {
         "id": "dev",
         "name": "编程开发"
@@ -1789,6 +2046,13 @@
       "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/devcontainer-setup/skills/devcontainer-setup/SKILL.md",
       "author": "trailofbits",
       "summary_zh": "为项目生成带 Claude Code 和 Python/Node/Rust/Go 工具链的 devcontainer 配置，适用于搭建隔离开发环境或沙箱化 Claude Code 工作区。",
+      "skill_type": null,
+      "example_requests": [
+        "“搭建隔离开发环境或沙箱化 Claude Code 工作区”"
+      ],
+      "key_features": [
+        "为项目生成带 Claude Code 和 Python/Node/Rust/Go 工具"
+      ],
       "main_category": {
         "id": "dev",
         "name": "编程开发"
@@ -1836,6 +2100,13 @@
       "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/differential-review/skills/differential-review/SKILL.md",
       "author": "trailofbits",
       "summary_zh": "对代码变更（PR/提交/差异）进行安全导向的差异审查，适应不同代码库规模，利用 git blame、影响范围和测试覆盖率分析生成 Markdown 报告，典型用于安全漏洞审查、回归检查和变更影响评估。",
+      "skill_type": null,
+      "example_requests": [
+        "“安全漏洞审查、回归检查和变更影响评估”"
+      ],
+      "key_features": [
+        "覆盖率分析生成 Markdown 报告"
+      ],
       "main_category": {
         "id": "security",
         "name": "安全"
@@ -1871,6 +2142,11 @@
       "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/dimensional-analysis/skills/dimensional-analysis/SKILL.md",
       "author": "trailofbits",
       "summary_zh": "对代码库执行量纲分析，添加单位、维度和小数缩放注释，适用于 DeFi、区块链及其他数值计算代码，用于发现单位不匹配和公式错误。",
+      "skill_type": null,
+      "example_requests": [
+        "“DeFi、区块链及其他数值计算代码，用于发现单位不匹配和公式错误”"
+      ],
+      "key_features": [],
       "main_category": {
         "id": "dev",
         "name": "编程开发"
@@ -1920,6 +2196,11 @@
       "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/entry-point-analyzer/skills/entry-point-analyzer/SKILL.md",
       "author": "trailofbits",
       "summary_zh": "智能合约安全审计辅助技能，识别并分类所有状态变更入口点（公共、角色受限、仅合约），生成结构化报告。典型使用场景为开始审计时映射攻击面。",
+      "skill_type": null,
+      "example_requests": [],
+      "key_features": [
+        "智能合约安全审计辅助技能"
+      ],
       "main_category": {
         "id": "security",
         "name": "安全"
@@ -1956,6 +2237,11 @@
       "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/firebase-apk-scanner/skills/firebase-apk-scanner/SKILL.md",
       "author": "trailofbits",
       "summary_zh": "该技能用于扫描 Android APK 中的 Firebase 配置并检测开放数据库、存储桶、认证缺陷和暴露的云函数等安全漏洞，适用于授权移动应用安全审计和渗透测试。",
+      "skill_type": null,
+      "example_requests": [
+        "“授权移动应用安全审计和渗透测试”"
+      ],
+      "key_features": [],
       "main_category": {
         "id": "security",
         "name": "安全"
@@ -1997,6 +2283,11 @@
       "url": "https://github.com/anthropics/skills/blob/HEAD/skills/academy-guide/SKILL.md",
       "author": "anthropics",
       "summary_zh": "该技能用于在回答有关 Claude 产品使用问题时，从 Claude Academy 目录中推荐匹配的课程、教程或用例，作为正常答案的补充。典型场景是用户询问如何使用 Claude、Claude Code 等产品功能或寻求学习资源时。",
+      "skill_type": null,
+      "example_requests": [
+        "“询问如何使用 Claude、Claude Code 等产品功能或寻求学习资源”"
+      ],
+      "key_features": [],
       "main_category": {
         "id": "docs",
         "name": "文档办公"
@@ -2033,6 +2324,11 @@
       "url": "https://github.com/anthropics/skills/blob/HEAD/skills/brand-guidelines/SKILL.md",
       "author": "anthropics",
       "summary_zh": "提供 Anthropic 官方品牌颜色与字体指南，用于将公司视觉标准应用到文档、演示等设计工件。",
+      "skill_type": "guideline",
+      "example_requests": [],
+      "key_features": [
+        "提供 Anthropic 官方品牌颜色与字体指南"
+      ],
       "main_category": {
         "id": "product",
         "name": "产品与设计"
@@ -2072,6 +2368,13 @@
       "url": "https://github.com/anthropics/skills/blob/HEAD/skills/canvas-design/SKILL.md",
       "author": "anthropics",
       "summary_zh": "该技能通过创建设计哲学并表达为PDF/PNG视觉艺术作品，适用于制作海报、艺术设计等静态视觉内容。",
+      "skill_type": null,
+      "example_requests": [
+        "“制作海报、艺术设计等静态视觉内容”"
+      ],
+      "key_features": [
+        "通过创建设计哲学并表达为PDF/PNG视觉艺术"
+      ],
       "main_category": {
         "id": "content",
         "name": "内容创作"
@@ -2109,6 +2412,11 @@
       "url": "https://github.com/anthropics/skills/blob/HEAD/skills/discernment-nudge/SKILL.md",
       "author": "anthropics",
       "summary_zh": "该技能在 AI 给出实质性回答后附加 2-3 个针对性跟进问题，帮助用户检查事实、推理和缺失上下文，适用于决策、建议、估算等场景。",
+      "skill_type": null,
+      "example_requests": [
+        "“决策、建议、估算”"
+      ],
+      "key_features": [],
       "main_category": {
         "id": "content",
         "name": "内容创作"
@@ -2143,6 +2451,11 @@
       "url": "https://github.com/anthropics/skills/blob/HEAD/skills/internal-comms/SKILL.md",
       "author": "anthropics",
       "summary_zh": "帮助编写公司内部沟通文档，如3P更新、公司通讯、FAQ、状态报告等，按公司偏好的格式和语气撰写。",
+      "skill_type": null,
+      "example_requests": [],
+      "key_features": [
+        "帮助编写公司内部沟通文档"
+      ],
       "main_category": {
         "id": "docs",
         "name": "文档办公"
@@ -2178,6 +2491,12 @@
       "url": "https://github.com/anthropics/skills/blob/HEAD/skills/pdf/SKILL.md",
       "author": "anthropics",
       "summary_zh": "提供 PDF 文件的读取、提取、合并、拆分、旋转、水印、创建、表单填写、加密解密和 OCR 等操作指南与代码示例。",
+      "skill_type": null,
+      "example_requests": [],
+      "key_features": [
+        "提供 PDF 文件的读取、提取、合并、拆分、旋转、水印、创建、表单填写、加密解密和 OCR 等操作指南与代码示例",
+        "提供 PDF 文件的读取、提取、合并、拆分、旋转、水印、创建、表单填写、加密解密和 OCR 等操作指南与代码"
+      ],
       "main_category": {
         "id": "docs",
         "name": "文档办公"
@@ -2229,6 +2548,13 @@
       "url": "https://github.com/anthropics/skills/blob/HEAD/skills/skill-creator/SKILL.md",
       "author": "anthropics",
       "summary_zh": "用于创建、修改和评估 Claude 技能，包括起草 SKILL.md、运行测试、基准比较和优化描述触发准确性，适用于需要构建或迭代技能的用户。",
+      "skill_type": null,
+      "example_requests": [
+        "“需要构建或迭代技能的用户”"
+      ],
+      "key_features": [
+        "用于创建、修改和评估 Claude 技能"
+      ],
       "main_category": {
         "id": "dev",
         "name": "编程开发"
@@ -2270,6 +2596,11 @@
       "url": "https://github.com/anthropics/skills/blob/HEAD/skills/webapp-testing/SKILL.md",
       "author": "anthropics",
       "summary_zh": "用于测试和调试本地 Web 应用的工具集，通过编写 Python Playwright 脚本验证前端功能、捕获截图和浏览器日志。",
+      "skill_type": null,
+      "example_requests": [],
+      "key_features": [
+        "用于测试和调试本地 Web 应用的工具"
+      ],
       "main_category": {
         "id": "dev",
         "name": "编程开发"
@@ -2307,6 +2638,11 @@
       "url": "https://github.com/vercel-labs/skills/blob/HEAD/skills/find-skills/SKILL.md",
       "author": "vercel-labs",
       "summary_zh": "帮助用户发现和安装开源 agent skills 的元技能；当用户询问是否有现成技能或希望扩展能力时，通过 npx skills 搜索、验证质量并推荐安装。",
+      "skill_type": null,
+      "example_requests": [],
+      "key_features": [
+        "帮助用户发现和安装开源 agent skills 的元技能"
+      ],
       "main_category": {
         "id": "automation",
         "name": "自动化"
@@ -2343,6 +2679,11 @@
       "url": "https://github.com/vercel-labs/agent-skills/blob/HEAD/skills/composition-patterns/SKILL.md",
       "author": "vercel-labs",
       "summary_zh": "提供 React 组件组合模式指南，用于重构布尔属性过多的组件、构建灵活组件库和设计可复用 API，典型使用场景包括组件架构设计、状态管理与 React 19 迁移。",
+      "skill_type": null,
+      "example_requests": [],
+      "key_features": [
+        "提供 React 组件组合模式指南"
+      ],
       "main_category": {
         "id": "dev",
         "name": "编程开发"
@@ -2381,6 +2722,13 @@
       "url": "https://github.com/cloudflare/skills/blob/HEAD/skills/sandbox-migrate-to-next/SKILL.md",
       "author": "cloudflare",
       "summary_zh": "指导将 Cloudflare Sandbox 应用从 stable @cloudflare/sandbox 迁移到 @cloudflare/sandbox@next（SDK 1.0 预览版），包括代码替换、部署切换和验证，适用于为 1.0 稳定版做准备的应用。",
+      "skill_type": null,
+      "example_requests": [
+        "“为 1.0 稳定版做准备的应用”"
+      ],
+      "key_features": [
+        "指导将 Cloudflare Sandbox 应用"
+      ],
       "main_category": {
         "id": "dev",
         "name": "编程开发"
@@ -2422,6 +2770,9 @@
       "url": "https://github.com/cloudflare/skills/blob/HEAD/skills/web-perf/SKILL.md",
       "author": "cloudflare",
       "summary_zh": "用于审计、诊断和优化网站加载与交互性能，包括 Core Web Vitals 和 Lighthouse 性能评分，典型场景为对网页进行性能分析并给出优化建议。",
+      "skill_type": null,
+      "example_requests": [],
+      "key_features": [],
       "main_category": {
         "id": "dev",
         "name": "编程开发"
@@ -2462,6 +2813,11 @@
       "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/agentic-actions-auditor/skills/agentic-actions-auditor/SKILL.md",
       "author": "trailofbits",
       "summary_zh": "该技能用于静态审计 GitHub Actions 工作流中调用 AI coding agent（如 Claude Code Action、Gemini CLI、OpenAI Codex）的安全风险，检测提示注入、危险沙箱配置、通配符允许列表等攻击向量，适用于 CI/CD 安全审查场景。",
+      "skill_type": null,
+      "example_requests": [
+        "“CI/CD 安全审查”"
+      ],
+      "key_features": [],
       "main_category": {
         "id": "security",
         "name": "安全"
@@ -2499,6 +2855,11 @@
       "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/audit-context-building/skills/audit-context-building/SKILL.md",
       "author": "trailofbits",
       "summary_zh": "在代码审计或威胁建模前构建代码库理解，记录函数假设、保证与依赖，供后续漏洞挖掘阶段使用。",
+      "skill_type": null,
+      "example_requests": [],
+      "key_features": [
+        "在代码审计或威胁建模前构建代码"
+      ],
       "main_category": {
         "id": "security",
         "name": "安全"
@@ -2539,6 +2900,13 @@
       "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/building-secure-contracts/skills/code-maturity-assessor/SKILL.md",
       "author": "trailofbits",
       "summary_zh": "评估智能合约或区块链代码库的成熟度，基于Trail of Bits的9类别框架输出评分卡和改进路线图，适用于安全审计和项目评估。",
+      "skill_type": null,
+      "example_requests": [
+        "“安全审计和项目评估”"
+      ],
+      "key_features": [
+        "评估智能合约或区块链代码"
+      ],
       "main_category": {
         "id": "security",
         "name": "安全"
@@ -2573,6 +2941,11 @@
       "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/building-secure-contracts/skills/solana-vulnerability-scanner/SKILL.md",
       "author": "trailofbits",
       "summary_zh": "该技能用于系统扫描 Solana 程序（含 Anchor）的 6 类关键安全漏洞，包括任意 CPI、PDA 验证缺失等，适用于审计、预上线安全评估等场景。",
+      "skill_type": null,
+      "example_requests": [
+        "“审计、预上线安全评估”"
+      ],
+      "key_features": [],
       "main_category": {
         "id": "security",
         "name": "安全"
@@ -2612,6 +2985,13 @@
       "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/building-secure-contracts/skills/ton-vulnerability-scanner/SKILL.md",
       "author": "trailofbits",
       "summary_zh": "审计 TON 区块链 FunC 智能合约的安全技能，扫描整数作布尔、伪造 Jetton 合约和无 Gas 检查转发 TON 三种漏洞，适用于 TON dApp 上线前安全审计。",
+      "skill_type": null,
+      "example_requests": [
+        "“TON dApp 上线前安全审计”"
+      ],
+      "key_features": [
+        "审计 TON 区块链 FunC 智能合约的安全技能"
+      ],
       "main_category": {
         "id": "security",
         "name": "安全"
@@ -2649,6 +3029,11 @@
       "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/code-improver/skills/skill-improver/SKILL.md",
       "author": "trailofbits",
       "summary_zh": "skill-improver 通过调用 code-improver:improve 工作流，对 Claude Code 技能进行自动化审查-修复循环，直到审查无 critical/major 问题，并带有跨轮次发现台账、升级机制与范围守护。典型用于修复技能质量问题、迭代精炼技能或升级后恢复循环。",
+      "skill_type": null,
+      "example_requests": [
+        "“修复技能质量问题、迭代精炼技能或升级后恢复循环”"
+      ],
+      "key_features": [],
       "main_category": {
         "id": "automation",
         "name": "自动化"
@@ -2693,6 +3078,12 @@
       "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/code-improver/tests/fixtures/pr-review-toolkit/skills/review-pr/SKILL.md",
       "author": "trailofbits",
       "summary_zh": "该技能用于审查当前分支相对基础分支的代码变更，检查正确性、测试覆盖和文档准确性，典型场景是响应分支、diff 或 PR 审查请求。",
+      "skill_type": null,
+      "example_requests": [],
+      "key_features": [
+        "覆盖和文档准确性",
+        "用于审查当前分支相对基础分支的代码"
+      ],
       "main_category": {
         "id": "dev",
         "name": "编程开发"
@@ -2728,6 +3119,11 @@
       "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/culture-index/skills/interpreting-culture-index/SKILL.md",
       "author": "trailofbits",
       "summary_zh": "解读 Culture Index 调查和行为画像数据，支持个人分析、团队构成、倦怠检测、招聘和冲突调解等场景。",
+      "skill_type": null,
+      "example_requests": [],
+      "key_features": [
+        "支持个人分析、团队构成、倦怠检测、招聘和冲突调解等场景"
+      ],
       "main_category": {
         "id": "docs",
         "name": "文档办公"
@@ -2766,6 +3162,9 @@
       "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/dwarf-expert/skills/dwarf-expert/SKILL.md",
       "author": "trailofbits",
       "summary_zh": "分析编译后二进制中的 DWARF 调试信息，用于检查 .debug_* 节、DIE 树或 DW_TAG_/DW_AT_ 条目，常见于调试信息验证、DWARF 标准查询或编写解析 DWARF 的代码。",
+      "skill_type": null,
+      "example_requests": [],
+      "key_features": [],
       "main_category": {
         "id": "dev",
         "name": "编程开发"

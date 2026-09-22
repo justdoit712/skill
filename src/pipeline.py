@@ -764,6 +764,9 @@ def previous_evaluation_snapshot(previous: dict | None) -> dict | None:
         "content_fingerprint": previous.get("content_fingerprint"),
         "status": previous.get("status"),
         "summary_zh": previous.get("summary_zh"),
+        "skill_type": previous.get("skill_type"),
+        "example_requests": list(previous.get("example_requests") or []),
+        "key_features": list(previous.get("key_features") or []),
         "main_category": category.get("id"),
         "tags": list(previous.get("tags") or []),
         "limitations": previous.get("limitations"),
@@ -1025,6 +1028,23 @@ def phase_evaluate(
         previous = previous_by_id.get(candidate.skill_id)
         changed = bool((fetch_note or {}).get("content_changed"))
         state = review_state(previous, changed, (decision or {}).get("decision"))
+
+        # 同一内容版本下，旧评估缓存若缺少新结构化字段，保留已有增强结果；上游内容变化后绝不继承
+        if (
+            previous
+            and not changed
+            and previous.get("content_fingerprint")
+            and candidate.content_fingerprint
+            and previous["content_fingerprint"] == candidate.content_fingerprint
+        ):
+            evaluation = dict(evaluation)
+            if "skill_type" not in evaluation or evaluation.get("skill_type") is None:
+                evaluation["skill_type"] = previous.get("skill_type")
+            if not evaluation.get("example_requests") and previous.get("example_requests"):
+                evaluation["example_requests"] = previous.get("example_requests")
+            if not evaluation.get("key_features") and previous.get("key_features"):
+                evaluation["key_features"] = previous.get("key_features")
+
         return build_entry(
             candidate,
             prescreen_result=pres,

@@ -203,15 +203,41 @@ def _collect(root, local, settings, cfg, discover_fn, fetch_fn, evaluate_fn, log
                        and previous["content_fingerprint"] != candidate.content_fingerprint)
         state = review_state(previous, changed, outcome.get("decision"))
         context.generated_at = now_local().isoformat()
+        evaluation = outcome.get("evaluation")
+        if (
+            previous
+            and not changed
+            and previous.get("content_fingerprint")
+            and candidate.content_fingerprint
+            and previous["content_fingerprint"] == candidate.content_fingerprint
+            and evaluation is not None
+        ):
+            evaluation = dict(evaluation)
+            if "skill_type" not in evaluation or evaluation.get("skill_type") is None:
+                evaluation["skill_type"] = previous.get("skill_type")
+            if not evaluation.get("example_requests") and previous.get("example_requests"):
+                evaluation["example_requests"] = previous.get("example_requests")
+            if not evaluation.get("key_features") and previous.get("key_features"):
+                evaluation["key_features"] = previous.get("key_features")
+
         entry = build_entry(
             candidate, prescreen_result=pres,
             decision=admission_decision(outcome if outcome else None, pres, previous, state),
-            evaluation=outcome.get("evaluation"), context=context,
+            evaluation=evaluation, context=context,
             first_seen=(previous or {}).get("first_seen"), upstream_status=upstream_status, **state,
         )
-        # 待复核仍展示原摘要和依据，不能用空评估覆盖。
-        if previous and not outcome and not pres.excluded:
-            for key in ("summary_zh", "main_category", "tags", "platform_declared",
+        # 待复核仍展示原摘要和依据，不能用空评估覆盖；但仅在内容未发生变化（新旧指纹均非空且相等）时继承。
+        if (
+            previous
+            and not changed
+            and previous.get("content_fingerprint")
+            and candidate.content_fingerprint
+            and previous["content_fingerprint"] == candidate.content_fingerprint
+            and not outcome
+            and not pres.excluded
+        ):
+            for key in ("summary_zh", "skill_type", "example_requests", "key_features",
+                        "main_category", "tags", "platform_declared",
                         "dependencies_declared", "evaluation_rules_version", "limitations", "license"):
                 entry[key] = previous.get(key)
         apply_manual_overrides_to_entry(entry, manual_picks, manual_exclusions)
@@ -508,10 +534,27 @@ def main(argv=None, *, root: Path | None = None) -> int:
     parser.add_argument("--limit-queries", type=int)
     parser.add_argument("--expand-limit", type=int)
     parser.add_argument("--sync-config", action="store_true", help="纯离线重建：无需模型凭据与网络，将 config/*.json 同步到 data 与 public/data")
+    parser.add_argument("--enrich-catalog", action="store_true", help="离线结构化增强：从现有数据中提取形态、示例请求与亮点，不修改原中文简述")
     parser.add_argument("--refresh-pool", action="store_true", help="强制丢弃现有候选池并重新运行网络搜索发现")
     parser.add_argument("--pool-watermark", type=int, help="候选池待处理数量低于此水位线时自动增量补水，默认 20")
     args = parser.parse_args(argv)
     log = lambda message: print(message, flush=True)
+
+    if args.enrich_catalog:
+        try:
+            from .enrich import enrich_catalog
+            stats = enrich_catalog(root)
+            log("离线数据增强完成！")
+            log(f"统计：处理 {stats['total']} 条，具有有效中文简述 {stats['with_summary']} 条")
+            log(f"增强结果：示例请求 {stats['with_example_requests']} 条 · 核心亮点 {stats['with_key_features']} 条 · 明确形态 {stats['with_skill_type']} 条")
+            log("原始 summary_zh 完整保留，未做任何修改。")
+            log(f"已更新主索引：{stats['catalog_path']}")
+            log(f"已生成页面数据：{stats['page_path']}")
+            log("部署到 GitHub Pages 请执行：git add data/ public/data/ && git commit -m 'chore: enrich catalog' && git push")
+            return 0
+        except Exception as exc:
+            log(f"增强失败（{type(exc).__name__}）：{exc}")
+            return 1
 
     if args.sync_config:
         try:

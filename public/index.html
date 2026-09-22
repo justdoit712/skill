@@ -243,13 +243,23 @@
     });
   }
 
+  var SKILL_TYPE_LABELS = {
+    tool_script: "工具脚本",
+    guideline: "规范指南",
+    template: "文档模板",
+    reference: "查阅手册"
+  };
+
   function matches(entry) {
     if (state.source && entry.source_type !== state.source) return false;
     var cat = entry.main_category && entry.main_category.id;
     if (state.category && cat !== state.category) return false;
     if (!state.q) return true;
     var needle = state.q.toLowerCase();
-    var haystack = [entry.name, entry.summary_zh, entry.author].concat(entry.tags || []);
+    var haystack = [entry.name, entry.summary_zh, entry.author]
+      .concat(entry.tags || [])
+      .concat(entry.example_requests || [])
+      .concat(entry.key_features || []);
     return haystack.some(function (part) {
       return part && String(part).toLowerCase().indexOf(needle) !== -1;
     });
@@ -272,6 +282,15 @@
 
     var body = [];
     if (text(prior.summary_zh)) body.push("<p>原简述：" + escapeHtml(prior.summary_zh) + "</p>");
+    if (text(prior.skill_type) && SKILL_TYPE_LABELS[prior.skill_type]) {
+      body.push("<p>原形态：" + escapeHtml(SKILL_TYPE_LABELS[prior.skill_type]) + "</p>");
+    }
+    if ((prior.example_requests || []).length) {
+      body.push("<p>原示例：" + escapeHtml(prior.example_requests.join("；")) + "</p>");
+    }
+    if ((prior.key_features || []).length) {
+      body.push("<p>原亮点：" + escapeHtml(prior.key_features.join("；")) + "</p>");
+    }
     if (text(prior.main_category)) body.push("<p>原分类：" + escapeHtml(prior.main_category) + "</p>");
     if (text(prior.limitations)) body.push("<p>原限制：" + escapeHtml(prior.limitations) + "</p>");
 
@@ -527,6 +546,10 @@
 
       var cat = entry.main_category ? entry.main_category.name : "未分类";
       var bits = ['<span class="tag tag-cat">' + escapeHtml(cat) + "</span>"];
+      if (entry.skill_type && SKILL_TYPE_LABELS[entry.skill_type]) {
+        bits.push('<span class="tag tag-type tag-type-' + escapeHtml(entry.skill_type) + '">' +
+          escapeHtml(SKILL_TYPE_LABELS[entry.skill_type]) + '</span>');
+      }
       if (picked) {
         bits.push('<span class="tag tag-manual">收藏</span>');
       }
@@ -551,6 +574,22 @@
       }
       if (text(entry.limitations)) meta.push("限制：" + escapeHtml(entry.limitations));
       if (text(entry.license)) meta.push("许可：" + escapeHtml(entry.license));
+
+      var examplesHtml = "";
+      if ((entry.example_requests || []).length) {
+        var reqItems = entry.example_requests.map(function (req) {
+          return '<span class="example-item">' + escapeHtml(req) + '</span>';
+        }).join("");
+        examplesHtml = '<div class="card-examples"><span class="example-label">示例请求：</span>' + reqItems + '</div>';
+      }
+
+      var featuresHtml = "";
+      if ((entry.key_features || []).length) {
+        var featItems = entry.key_features.map(function (feat) {
+          return '<span class="feature-item">' + escapeHtml(feat) + '</span>';
+        }).join("");
+        featuresHtml = '<div class="card-features"><span class="feature-label">亮点：</span>' + featItems + '</div>';
+      }
 
       var manualHtml = "";
       if (picked) {
@@ -604,6 +643,8 @@
         '</div>' +
         '<p class="by">' + escapeHtml(entry.author || "") + "</p>" +
         '<p class="sum">' + escapeHtml(text(entry.summary_zh) || "（暂无中文简述）") + "</p>" +
+        examplesHtml +
+        featuresHtml +
         '<p class="tags">' + bits.join("") + "</p>" +
         (meta.length ? '<p class="detail">' + meta.join(" · ") + "</p>" : "") +
         manualHtml +

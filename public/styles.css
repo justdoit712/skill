@@ -161,6 +161,46 @@ body {
 .tag-manual { background: #e0f2fe; border-color: #bae6fd; color: #0369a1; font-weight: 600; }
 .tag-review { background: var(--warn-soft); border-color: #eac54f; color: var(--warn); font-weight: 600; }
 
+/* 形态分类标签 */
+.tag-type { font-weight: 500; }
+.tag-type-tool_script { background: #ecfdf5; border-color: #a7f3d0; color: #047857; }
+.tag-type-guideline { background: #f5f3ff; border-color: #ddd6fe; color: #6d28d9; }
+.tag-type-template { background: #fffbeb; border-color: #fde68a; color: #b45309; }
+.tag-type-reference { background: #f0f9ff; border-color: #bae6fd; color: #0284c7; }
+
+/* 示例请求与亮点 */
+.card-examples, .card-features {
+  margin: 0 0 8px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+}
+.card-examples .example-label, .card-features .feature-label {
+  color: var(--muted);
+  font-weight: 500;
+  font-size: 12px;
+}
+.card-examples .example-item {
+  display: inline-block;
+  background: #f8fafc;
+  border: 1px dashed #cbd5e1;
+  color: #334155;
+  border-radius: 4px;
+  padding: 1px 7px;
+  font-size: 12px;
+}
+.card-features .feature-item {
+  display: inline-block;
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  color: #475569;
+  border-radius: 4px;
+  padding: 1px 7px;
+  font-size: 12px;
+}
+
 .card .detail.manual { color: #0369a1; font-weight: 500; }
 .card .detail.changed { color: var(--warn); }
 .card .detail.warning-box {

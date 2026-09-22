@@ -20,6 +20,7 @@ from .decide import (
     DECISION_RECOMMENDED,
 )
 from .models import Candidate, PrescreenResult
+from .schema_utils import normalize_skill_type, normalize_string_list
 
 CATALOG_VERSION = "1.0.0"
 
@@ -125,6 +126,13 @@ def build_entry(
         "author": candidate.owner,
         # §6：中文简述来自评估；未评估时留空并明示状态，不编造
         "summary_zh": evaluation.get("summary_zh"),
+        "skill_type": normalize_skill_type(evaluation.get("skill_type")),
+        "example_requests": normalize_string_list(
+            evaluation.get("example_requests"), max_items=2, max_length=100
+        ),
+        "key_features": normalize_string_list(
+            evaluation.get("key_features"), max_items=3, max_length=60
+        ),
         "main_category": main_category,
         "candidate_domains": list(prescreen_result.domains),
         "tags": list(evaluation.get("tags") or []),
@@ -271,6 +279,9 @@ def _display(entry: dict) -> dict:
         "url": entry["url"],
         "author": entry["author"],
         "summary_zh": entry["summary_zh"],
+        "skill_type": entry.get("skill_type"),
+        "example_requests": entry.get("example_requests") or [],
+        "key_features": entry.get("key_features") or [],
         "main_category": entry["main_category"],
         "tags": entry["tags"],
         "platform_declared": entry["platform_declared"],
