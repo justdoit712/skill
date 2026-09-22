@@ -459,7 +459,7 @@ def expand_repo_skills(
         paths = [
             item.get("path", "")
             for item in (tree or {}).get("tree", [])
-            if item.get("type") == "blob" and item.get("path", "").endswith(SKILL_FILENAME)
+            if item.get("type") == "blob" and item.get("path", "").split("/")[-1] == SKILL_FILENAME
         ]
         if is_truncated:
             return sorted(paths), "TREE_TRUNCATED: GitHub API 返回的文件树已被截断，展开结果可能不完整"

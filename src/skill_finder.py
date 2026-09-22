@@ -74,6 +74,8 @@ STATUS_MODEL_FAILURES = "model_failures"
 STATUS_USAGE_UNKNOWN = "usage_unknown"
 STATUS_INTERRUPTED = "interrupted"
 STATUS_ERROR = "error"
+STATUS_STOPPED = "stopped"
+STATUS_INVALID_CONFIG = "invalid_config"
 
 
 def _read_json_file(path: Path, default=None) -> Any:
@@ -181,17 +183,74 @@ def search_github_repos_for_query(
             sess.close()
 
 
+def _round_robin_merge_repos(
+    query_repo_lists: list[list[dict[str, str]]],
+    max_repos: int = MAX_REPOS_TO_EXPAND,
+) -> list[dict[str, str]]:
+    """多查询结果交织轮转合并，消除第一个查询垄断结果的缺陷。"""
+    discovered: list[dict[str, str]] = []
+    seen_keys: set[str] = set()
+    max_depth = max((len(lst) for lst in query_repo_lists), default=0)
+
+    for depth in range(max_depth):
+        for r_list in query_repo_lists:
+            if depth < len(r_list):
+                r = r_list[depth]
+                key = f"{r['owner']}/{r['repo']}"
+                if key not in seen_keys:
+                    seen_keys.add(key)
+                    discovered.append(r)
+                    if len(discovered) >= max_repos:
+                        return discovered
+    return discovered
+
+
+def _interleave_paths(
+    related: list[str],
+    generic: list[str],
+    max_count: int = MAX_FILES_PER_REPO,
+) -> list[str]:
+    """合集仓库按 2 个相关路径 + 1 个通用路径交替提取，单库上限 max_count。"""
+    res: list[str] = []
+    r_idx = 0
+    g_idx = 0
+    while len(res) < max_count and (r_idx < len(related) or g_idx < len(generic)):
+        # 尝试取最多 2 个相关
+        for _ in range(2):
+            if r_idx < len(related) and len(res) < max_count:
+                res.append(related[r_idx])
+                r_idx += 1
+        # 尝试取 1 个通用
+        if g_idx < len(generic) and len(res) < max_count:
+            res.append(generic[g_idx])
+            g_idx += 1
+        # 若某一方已耗尽，取另一方填满
+        if r_idx >= len(related) and g_idx < len(generic):
+            while g_idx < len(generic) and len(res) < max_count:
+                res.append(generic[g_idx])
+                g_idx += 1
+        elif g_idx >= len(generic) and r_idx < len(related):
+            while r_idx < len(related) and len(res) < max_count:
+                res.append(related[r_idx])
+                r_idx += 1
+    return res
+
+
 def expand_and_collect_candidates(
     repos: list[dict[str, str]],
     *,
+    keywords: set[str] | None = None,
     max_repos: int = MAX_REPOS_TO_EXPAND,
     sleep=time.sleep,
     log=print,
 ) -> tuple[list[Candidate], list[dict[str, Any]]]:
-    """展开仓库文件树，收集具体 SKILL.md 候选。"""
+    """展开仓库文件树，收集具体 SKILL.md 候选。
+    若存在相关关键词，按 2 个相关路径 + 1 个通用路径交替提取。
+    """
     candidates: list[Candidate] = []
     expansion_logs: list[dict[str, Any]] = []
     seen_skills: set[str] = set()
+    kw_set = {k.lower() for k in (keywords or set()) if len(k) >= 2}
 
     for r in repos[:max_repos]:
         owner, repo = r["owner"], r["repo"]
@@ -199,17 +258,36 @@ def expand_and_collect_candidates(
         paths, err = expand_repo_skills(owner, repo, sleep=sleep)
         truncated = bool(err and err.startswith("TREE_TRUNCATED"))
 
+        # 精确 basename 为 SKILL.md（排除 NOT_SKILL.md、SKILL.md.bak 等）
+        valid_paths = [p for p in paths if p.split("/")[-1] == "SKILL.md"]
+
         expansion_logs.append(
             {
                 "repo": key,
                 "ok": err is None or truncated,
-                "skills_found": len(paths),
+                "skills_found": len(valid_paths),
                 "truncated": truncated,
                 "error": err,
             }
         )
 
-        for p in paths:
+        if not valid_paths:
+            continue
+
+        if kw_set:
+            related = []
+            generic = []
+            for p in valid_paths:
+                p_lower = p.lower()
+                if any(k in p_lower for k in kw_set):
+                    related.append(p)
+                else:
+                    generic.append(p)
+            selected_paths = _interleave_paths(related, generic, max_count=MAX_FILES_PER_REPO)
+        else:
+            selected_paths = valid_paths[:MAX_FILES_PER_REPO]
+
+        for p in selected_paths:
             sid = make_skill_id(owner, repo, p)
             if sid not in seen_skills:
                 seen_skills.add(sid)
@@ -268,6 +346,17 @@ def extract_referenced_md_paths(base_path: str, markdown_text: str) -> list[str]
     return found
 
 
+def _is_html_content(text: str) -> bool:
+    """判定文本是否为 HTML 网页（如登录页或错误页），防止伪材料进入评估。"""
+    s = text.lstrip().lower()
+    return (
+        s.startswith("<!doctype html")
+        or s.startswith("<html")
+        or ("<head>" in s and "<body" in s)
+        or ("<title>" in s and "</title>" in s and "<form" in s)
+    )
+
+
 def fetch_candidate_materials(
     candidate: Candidate,
     *,
@@ -275,6 +364,9 @@ def fetch_candidate_materials(
     sleep=time.sleep,
 ) -> tuple[bool, dict[str, str], str | None]:
     """抓取主 SKILL.md 及可选的关联引用说明文件（合计 <= 96 KiB）。"""
+    if candidate.path.split("/")[-1] != "SKILL.md":
+        return False, {}, "NOT_A_SKILL_MD"
+
     fn = fetch_fn or fetch_text
     raw_url = candidate.url.replace("https://github.com/", "https://raw.githubusercontent.com/", 1).replace(
         "/blob/", "/", 1
@@ -285,6 +377,9 @@ def fetch_candidate_materials(
         return False, {}, fetched.reason_code or "FETCH_FAILED"
 
     primary_text = fetched.text
+    if _is_html_content(primary_text):
+        return False, {}, "HTML_CONTENT_REJECTED"
+
     candidate.content_fingerprint = content_fingerprint(primary_text)
     materials: dict[str, str] = {candidate.path: primary_text}
     total_bytes = len(primary_text.encode("utf-8"))
@@ -297,7 +392,7 @@ def fetch_candidate_materials(
             break
         ref_raw_url = f"https://raw.githubusercontent.com/{candidate.owner}/{candidate.repo}/HEAD/{ref_p}"
         ref_fetched = fn(ref_raw_url, max_bytes=remaining_budget, sleep=sleep)
-        if ref_fetched.ok and ref_fetched.text and not ref_fetched.truncated:
+        if ref_fetched.ok and ref_fetched.text and not ref_fetched.truncated and not _is_html_content(ref_fetched.text):
             materials[ref_p] = ref_fetched.text
             total_bytes += len(ref_fetched.text.encode("utf-8"))
 
@@ -309,19 +404,99 @@ def fetch_candidate_materials(
 # --------------------------------------------------------------------------
 
 
-def _parse_int_val(val: Any, default: int) -> int:
-    """支持 int 以及带空格、下划线、千分位逗号的表示（如 '200 000'、'200_000'、'200,000'）。"""
+def _parse_int_val(val: Any, default: int, field_name: str = "参数") -> int:
+    """支持 int 以及带空格、下划线、千分位逗号的表示（如 '200 000'、'200_000'、'200,000'）。
+    遇到非法字符、负数或布尔值时抛出 ValueError，严禁静默吞错。"""
     if val is None:
         return default
+    if isinstance(val, bool):
+        raise ValueError(f"{field_name} 不能是布尔值: {val}")
     if isinstance(val, (int, float)):
-        return int(val)
+        int_val = int(val)
+        if int_val < 0:
+            raise ValueError(f"{field_name} 不能为负数: {val}")
+        return int_val
     if isinstance(val, str):
         clean = val.replace(" ", "").replace("_", "").replace(",", "").strip()
+        if not clean:
+            return default
         try:
-            return int(clean)
-        except ValueError:
-            pass
-    return default
+            int_val = int(clean)
+        except ValueError as exc:
+            raise ValueError(f"{field_name} 包含非法字符无法解析为整数: {val!r}") from exc
+        if int_val < 0:
+            raise ValueError(f"{field_name} 不能为负数: {val}")
+        return int_val
+    raise ValueError(f"{field_name} 类型不支持: {type(val).__name__}")
+
+
+def finalize_run(
+    report: dict[str, Any],
+    stop_reason: str,
+    *,
+    status: str | None = None,
+    evaluated_items: list[dict[str, Any]] | None = None,
+    plan: dict[str, Any] | None = None,
+    limit: int = DEFAULT_LIMIT,
+    run_dir: Path | None = None,
+    root_dir: Path | None = None,
+    usage: UsageTotals | None = None,
+    evaluation_attempts: int | None = None,
+    evaluated_count: int | None = None,
+    log=print,
+) -> dict[str, Any]:
+    """中心化收尾函数：
+    1. 无论何种停止原因，只要存在已评估候选，重新执行 rank_find_results(..., plan=plan)
+    2. 生成规范的 shortlist 与 alternatives
+    3. 生成 Markdown 与 JSON 报告并持久化
+    4. 规范状态与停止原因
+    """
+    if status is None:
+        if stop_reason in (STATUS_TARGET_REACHED, STATUS_CANDIDATES_EXHAUSTED, STATUS_COMPLETED):
+            status = STATUS_COMPLETED
+        elif stop_reason in (STATUS_TOKEN_LIMIT, STATUS_EVALUATION_LIMIT, STATUS_USAGE_UNKNOWN, STATUS_MODEL_FAILURES):
+            status = STATUS_STOPPED
+        elif stop_reason == STATUS_INTERRUPTED:
+            status = STATUS_INTERRUPTED
+        elif stop_reason in ("plan_failed", "search_failed") or "error" in stop_reason.lower():
+            status = STATUS_ERROR
+        else:
+            status = report.get("status") or STATUS_COMPLETED
+
+    report["status"] = status
+    report["stop_reason"] = stop_reason
+
+    items = evaluated_items if evaluated_items is not None else report.get("evaluations", [])
+    plan_dict = plan if plan is not None else (report.get("plan") or {"criteria": []})
+
+    shortlist, alternatives = rank_find_results(items, plan=plan_dict, limit=limit)
+    report["shortlist"] = shortlist
+    report["alternatives"] = alternatives
+    report["shortlist_count"] = len(shortlist)
+    report["alternatives_count"] = len(alternatives)
+    report["evaluated_count"] = evaluated_count if evaluated_count is not None else len(items)
+    if evaluation_attempts is not None:
+        report["evaluation_attempts"] = evaluation_attempts
+
+    if usage is not None:
+        report["usage"] = usage.snapshot()
+
+    report["updated_at"] = now_local().isoformat()
+
+    if run_dir is not None and run_dir.exists():
+        _write_json_atomic(run_dir / "report.json", report)
+        markdown_text = render_find_markdown_report(report)
+        (run_dir / "report.md").write_text(markdown_text, encoding="utf-8")
+
+        if root_dir is not None:
+            public_data_dir = Path(root_dir) / "public" / "data"
+            if public_data_dir.exists():
+                try:
+                    _write_json_atomic(public_data_dir / "find-report.json", report)
+                except Exception:
+                    pass
+
+    return report
 
 
 def execute_find_skill(
@@ -338,14 +513,27 @@ def execute_find_skill(
     """执行定向查找全流程并生成报告。"""
     root = Path(root_dir).resolve()
     run_cfg = load_finder_run_config(root / "config")
-    final_limit = limit if limit is not None else _parse_int_val(run_cfg.get("limit"), DEFAULT_LIMIT)
-    final_max_evaluations = max_evaluations if max_evaluations is not None else _parse_int_val(run_cfg.get("max_evaluations"), DEFAULT_MAX_EVALUATIONS)
-    final_max_tokens = max_tokens if max_tokens is not None else _parse_int_val(run_cfg.get("max_tokens"), DEFAULT_MAX_TOKENS)
 
-    started_at = now_local()
-    run_id = started_at.strftime("%Y%m%d-%H%M%S-") + uuid4().hex[:6]
-    run_dir = root / "data" / "local" / "find-skills" / run_id
-    run_dir.mkdir(parents=True, exist_ok=True)
+    # 1. 前置参数防御性校验（不建目录、不静默吞错）
+    clean_topic = (topic or "").strip()
+    if not clean_topic:
+        raise ValueError("必须提供有效非空的查找需求 topic")
+
+    final_limit = (
+        _parse_int_val(limit, DEFAULT_LIMIT, "limit")
+        if limit is not None
+        else _parse_int_val(run_cfg.get("limit"), DEFAULT_LIMIT, "limit")
+    )
+    final_max_evaluations = (
+        _parse_int_val(max_evaluations, DEFAULT_MAX_EVALUATIONS, "max_evaluations")
+        if max_evaluations is not None
+        else _parse_int_val(run_cfg.get("max_evaluations"), DEFAULT_MAX_EVALUATIONS, "max_evaluations")
+    )
+    final_max_tokens = (
+        _parse_int_val(max_tokens, DEFAULT_MAX_TOKENS, "max_tokens")
+        if max_tokens is not None
+        else _parse_int_val(run_cfg.get("max_tokens"), DEFAULT_MAX_TOKENS, "max_tokens")
+    )
 
     if final_limit < 1:
         raise ValueError("limit 必须是正整数")
@@ -361,11 +549,21 @@ def execute_find_skill(
     if not api_key:
         raise ValueError("缺少模型 API Key，请设置环境变量 LLM_API_KEY 或配置 model.local.json")
 
+    # 确保模型调用单次无底层嵌套重试
+    cfg = deepcopy(cfg)
+    cfg.setdefault("request", {})["max_attempts"] = 1
+
+    # 2. 校验全部通过后，才创建运行输出目录
+    started_at = now_local()
+    run_id = started_at.strftime("%Y%m%d-%H%M%S-") + uuid4().hex[:6]
+    run_dir = root / "data" / "local" / "find-skills" / run_id
+    run_dir.mkdir(parents=True, exist_ok=True)
+
     usage = UsageTotals()
     report: dict[str, Any] = {
         "run_id": run_id,
         "started_at": started_at.isoformat(),
-        "topic": topic.strip(),
+        "topic": clean_topic,
         "status": "running",
         "parameters": {
             "limit": final_limit,
@@ -380,6 +578,7 @@ def execute_find_skill(
             "candidates_found": 0,
             "expansions": [],
         },
+        "evaluation_attempts": 0,
         "evaluated_count": 0,
         "shortlist_count": 0,
         "alternatives_count": 0,
@@ -401,7 +600,6 @@ def execute_find_skill(
         markdown_text = render_find_markdown_report(report)
         (run_dir / "report.md").write_text(markdown_text, encoding="utf-8")
 
-        # 同步写入 public/data/find-report.json，供前端页面直接可视化展示
         public_data_dir = root / "public" / "data"
         if public_data_dir.exists():
             try:
@@ -411,61 +609,147 @@ def execute_find_skill(
 
     save_current_report()
 
+    evaluated_items: list[dict[str, Any]] = []
+    evaluation_attempts = 0
+    plan = None
+
     try:
         # 1. 需求规划
-        log(f"正在分析需求并规划搜索策略：'{topic}'...")
-        plan_sys, plan_user = build_plan_prompt(topic)
+        log(f"正在分析需求并规划搜索策略：'{clean_topic}'...")
+        plan_sys, plan_user = build_plan_prompt(clean_topic)
         cfg_plan = deepcopy(cfg)
         cfg_plan.setdefault("limits", {})["max_output_tokens"] = PLAN_MAX_OUTPUT_TOKENS
         call_plan = call_model(cfg_plan, plan_sys, plan_user, api_key=api_key, sleep=sleep)
         usage.add(call_plan)
         save_current_report()
 
-        if not call_plan.ok or not call_plan.content:
-            report["status"] = STATUS_ERROR
-            report["stop_reason"] = f"查询规划模型调用失败：{call_plan.error}"
-            save_current_report()
-            return report
+        # 校验规划未知用量 (F1)
+        call_usage = getattr(call_plan, "usage", None)
+        if not call_usage or not isinstance(call_usage, dict) or call_usage.get("total_tokens") is None:
+            log("规划模型调用缺少有效 usage，触发零容忍熔断停机。")
+            return finalize_run(
+                report,
+                stop_reason=STATUS_USAGE_UNKNOWN,
+                status=STATUS_STOPPED,
+                evaluated_items=evaluated_items,
+                plan=plan,
+                limit=final_limit,
+                run_dir=run_dir,
+                root_dir=root,
+                usage=usage,
+                evaluation_attempts=evaluation_attempts,
+                evaluated_count=len(evaluated_items),
+                log=log,
+            )
 
-        plan = parse_query_plan(call_plan.content)
+        if not call_plan.ok or not call_plan.content:
+            log(f"查询规划模型调用失败：{call_plan.error}")
+            return finalize_run(
+                report,
+                stop_reason="plan_failed",
+                status=STATUS_ERROR,
+                evaluated_items=evaluated_items,
+                plan=plan,
+                limit=final_limit,
+                run_dir=run_dir,
+                root_dir=root,
+                usage=usage,
+                evaluation_attempts=evaluation_attempts,
+                evaluated_count=len(evaluated_items),
+                log=log,
+            )
+
+        try:
+            plan = parse_query_plan(call_plan.content)
+        except Exception as exc:
+            log(f"查询规划解析失败：{exc}")
+            return finalize_run(
+                report,
+                stop_reason="plan_failed",
+                status=STATUS_ERROR,
+                evaluated_items=evaluated_items,
+                plan=plan,
+                limit=final_limit,
+                run_dir=run_dir,
+                root_dir=root,
+                usage=usage,
+                evaluation_attempts=evaluation_attempts,
+                evaluated_count=len(evaluated_items),
+                log=log,
+            )
+
         report["plan"] = plan
         log(f"规划意图：{plan['intent']}")
         log(f"生成搜索短语（共 {len(plan['queries'])} 条）：{', '.join(plan['queries'])}")
         save_current_report()
 
-        # 2. GitHub 搜索
-        discovered_repos: list[dict[str, str]] = []
-        seen_repo_keys: set[str] = set()
+        # 2. GitHub 搜索（各词独立检索后轮转交织 F4）
+        query_repo_lists: list[list[dict[str, str]]] = []
+        all_search_failed = True
 
         for q in plan["queries"]:
             log(f"检索 GitHub: '{q}'...")
             ok, r_list, err = search_github_repos_for_query(q, sleep=sleep)
+            if ok:
+                all_search_failed = False
             report["search"]["queries_executed"].append(
                 {"query": q, "ok": ok, "repos_returned": len(r_list), "error": err}
             )
-            for r in r_list:
-                key = f"{r['owner']}/{r['repo']}"
-                if key not in seen_repo_keys:
-                    seen_repo_keys.add(key)
-                    discovered_repos.append(r)
-            if len(discovered_repos) >= MAX_REPOS_TO_EXPAND:
-                break
+            query_repo_lists.append(r_list)
 
+        if all_search_failed and plan["queries"]:
+            log("所有搜索短语的 GitHub 检索均失败。")
+            return finalize_run(
+                report,
+                stop_reason="search_failed",
+                status=STATUS_ERROR,
+                evaluated_items=evaluated_items,
+                plan=plan,
+                limit=final_limit,
+                run_dir=run_dir,
+                root_dir=root,
+                usage=usage,
+                evaluation_attempts=evaluation_attempts,
+                evaluated_count=len(evaluated_items),
+                log=log,
+            )
+
+        discovered_repos = _round_robin_merge_repos(query_repo_lists, max_repos=MAX_REPOS_TO_EXPAND)
         report["search"]["repos_discovered"] = len(discovered_repos)
-        log(f"发现候选仓库：共 {len(discovered_repos)} 个不同仓库。")
+        log(f"发现候选仓库：共 {len(discovered_repos)} 个不同仓库（轮转去重后）。")
         save_current_report()
 
         if not discovered_repos:
-            report["status"] = STATUS_COMPLETED
-            report["stop_reason"] = STATUS_CANDIDATES_EXHAUSTED
-            save_current_report()
             log("未检索到相关仓库。")
-            return report
+            return finalize_run(
+                report,
+                stop_reason=STATUS_CANDIDATES_EXHAUSTED,
+                status=STATUS_COMPLETED,
+                evaluated_items=evaluated_items,
+                plan=plan,
+                limit=final_limit,
+                run_dir=run_dir,
+                root_dir=root,
+                usage=usage,
+                evaluation_attempts=evaluation_attempts,
+                evaluated_count=len(evaluated_items),
+                log=log,
+            )
 
         # 3. 展开仓库获取 SKILL.md
+        search_keywords: set[str] = set()
+        for text in [clean_topic] + plan.get("queries", []):
+            for token in re.findall(r"[\w\u4e00-\u9fa5]+", text.lower()):
+                if len(token) >= 2:
+                    search_keywords.add(token)
+
         log("正在扫描各仓库中的真实 SKILL.md 文件...")
         raw_candidates, expansion_logs = expand_and_collect_candidates(
-            discovered_repos, max_repos=MAX_REPOS_TO_EXPAND, sleep=sleep, log=log
+            discovered_repos,
+            keywords=search_keywords,
+            max_repos=MAX_REPOS_TO_EXPAND,
+            sleep=sleep,
+            log=log,
         )
         report["search"]["expansions"] = expansion_logs
         report["search"]["candidates_found"] = len(raw_candidates)
@@ -473,30 +757,75 @@ def execute_find_skill(
         save_current_report()
 
         if not raw_candidates:
-            report["status"] = STATUS_COMPLETED
-            report["stop_reason"] = STATUS_CANDIDATES_EXHAUSTED
-            save_current_report()
             log("各仓库中均未定位到有效的 SKILL.md 技能文件。")
-            return report
+            return finalize_run(
+                report,
+                stop_reason=STATUS_CANDIDATES_EXHAUSTED,
+                status=STATUS_COMPLETED,
+                evaluated_items=evaluated_items,
+                plan=plan,
+                limit=final_limit,
+                run_dir=run_dir,
+                root_dir=root,
+                usage=usage,
+                evaluation_attempts=evaluation_attempts,
+                evaluated_count=len(evaluated_items),
+                log=log,
+            )
 
-        # 4. 候选轮转排序与抓取评估
+        # 4. 候选轮转调度与抓取评估
         scheduled_candidates = schedule_candidates_fairly(raw_candidates)
-        evaluated_items: list[dict[str, Any]] = []
         consecutive_failures = 0
 
         cfg_eval = deepcopy(cfg)
         cfg_eval.setdefault("limits", {})["max_output_tokens"] = EVAL_MAX_OUTPUT_TOKENS
 
         for idx, cand in enumerate(scheduled_candidates, start=1):
-            if len(evaluated_items) >= final_max_evaluations:
-                report["stop_reason"] = STATUS_EVALUATION_LIMIT
-                break
+            if evaluation_attempts >= final_max_evaluations:
+                return finalize_run(
+                    report,
+                    stop_reason=STATUS_EVALUATION_LIMIT,
+                    status=STATUS_STOPPED,
+                    evaluated_items=evaluated_items,
+                    plan=plan,
+                    limit=final_limit,
+                    run_dir=run_dir,
+                    root_dir=root,
+                    usage=usage,
+                    evaluation_attempts=evaluation_attempts,
+                    evaluated_count=len(evaluated_items),
+                    log=log,
+                )
             if usage.total_tokens >= final_max_tokens:
-                report["stop_reason"] = STATUS_TOKEN_LIMIT
-                break
+                return finalize_run(
+                    report,
+                    stop_reason=STATUS_TOKEN_LIMIT,
+                    status=STATUS_STOPPED,
+                    evaluated_items=evaluated_items,
+                    plan=plan,
+                    limit=final_limit,
+                    run_dir=run_dir,
+                    root_dir=root,
+                    usage=usage,
+                    evaluation_attempts=evaluation_attempts,
+                    evaluated_count=len(evaluated_items),
+                    log=log,
+                )
             if consecutive_failures >= 20:
-                report["stop_reason"] = STATUS_MODEL_FAILURES
-                break
+                return finalize_run(
+                    report,
+                    stop_reason=STATUS_MODEL_FAILURES,
+                    status=STATUS_STOPPED,
+                    evaluated_items=evaluated_items,
+                    plan=plan,
+                    limit=final_limit,
+                    run_dir=run_dir,
+                    root_dir=root,
+                    usage=usage,
+                    evaluation_attempts=evaluation_attempts,
+                    evaluated_count=len(evaluated_items),
+                    log=log,
+                )
 
             log(f"抓取材料 [{idx}/{len(scheduled_candidates)}]：{cand.skill_id}...")
             ok, materials, fetch_err = fetch_candidate_materials(cand, sleep=sleep)
@@ -504,17 +833,40 @@ def execute_find_skill(
                 log(f"材料获取跳过（{fetch_err}）：{cand.skill_id}")
                 continue
 
-            # 构造评估 Prompt
+            # 先占名额后请求 (F1)
+            evaluation_attempts += 1
+            report["evaluation_attempts"] = evaluation_attempts
+            save_current_report()
+
             cand_info = {
                 "name": cand.name,
                 "repo_url": cand.repo_url,
                 "path": cand.path,
                 "description": cand.description,
             }
-            eval_sys, eval_user = build_evaluation_prompt(cand_info, materials, plan, topic)
+            eval_sys, eval_user = build_evaluation_prompt(cand_info, materials, plan, clean_topic)
 
             call_res = call_model(cfg_eval, eval_sys, eval_user, api_key=api_key, sleep=sleep)
             usage.add(call_res)
+
+            # 校验单次评估未知用量 (F1)
+            call_res_usage = getattr(call_res, "usage", None)
+            if not call_res_usage or not isinstance(call_res_usage, dict) or call_res_usage.get("total_tokens") is None:
+                log(f"条目 {cand.skill_id} 评估返回未知用量，触发零容忍熔断停机。")
+                return finalize_run(
+                    report,
+                    stop_reason=STATUS_USAGE_UNKNOWN,
+                    status=STATUS_STOPPED,
+                    evaluated_items=evaluated_items,
+                    plan=plan,
+                    limit=final_limit,
+                    run_dir=run_dir,
+                    root_dir=root,
+                    usage=usage,
+                    evaluation_attempts=evaluation_attempts,
+                    evaluated_count=len(evaluated_items),
+                    log=log,
+                )
 
             if not call_res.ok or not call_res.content:
                 consecutive_failures += 1
@@ -524,7 +876,6 @@ def execute_find_skill(
 
             try:
                 raw_eval = parse_skill_evaluation(call_res.content, plan["criteria"])
-                # 客观证据核验与结论重算
                 verified_eval = verify_and_adjust_evaluation(raw_eval, materials, plan["criteria"])
                 consecutive_failures = 0
 
@@ -548,44 +899,67 @@ def execute_find_skill(
                     f"-> 匹配度: {verified_eval['match']} | 说明质量: {verified_eval['documentation']} "
                     f"（累计消耗: {usage.total_tokens:,} Token）"
                 )
+                save_current_report()
             except Exception as exc:
                 consecutive_failures += 1
                 log(f"评估解析失败（{exc}）：{cand.skill_id}")
+                save_current_report()
+                continue
 
-            save_current_report()
+        # 5. 循环自然结束
+        shortlist, alternatives = rank_find_results(evaluated_items, plan=plan, limit=final_limit)
+        stop_reason = STATUS_TARGET_REACHED if len(shortlist) >= final_limit else STATUS_CANDIDATES_EXHAUSTED
 
-        # 5. 排序与短名单归纳
-        shortlist, alternatives = rank_find_results(evaluated_items, plan, limit=final_limit)
-        report["shortlist"] = shortlist
-        report["alternatives"] = alternatives
-        report["shortlist_count"] = len(shortlist)
-        report["alternatives_count"] = len(alternatives)
-
-        if not report["stop_reason"]:
-            if len(shortlist) >= final_limit:
-                report["stop_reason"] = STATUS_TARGET_REACHED
-            else:
-                report["stop_reason"] = STATUS_COMPLETED
-
-        report["status"] = STATUS_COMPLETED
-        save_current_report()
-
-        log(f"\n查找完成！优先推荐短名单：{len(shortlist)} 项，相关备选：{len(alternatives)} 项。")
-        log(f"完整报告已生成：{report['report_paths']['md']}")
-        return report
+        res_report = finalize_run(
+            report,
+            stop_reason=stop_reason,
+            status=STATUS_COMPLETED,
+            evaluated_items=evaluated_items,
+            plan=plan,
+            limit=final_limit,
+            run_dir=run_dir,
+            root_dir=root,
+            usage=usage,
+            evaluation_attempts=evaluation_attempts,
+            evaluated_count=len(evaluated_items),
+            log=log,
+        )
+        log(f"\n查找完成！优先推荐短名单：{len(res_report['shortlist'])} 项，相关备选：{len(res_report['alternatives'])} 项。")
+        log(f"完整报告已生成：{res_report['report_paths']['md']}")
+        return res_report
 
     except KeyboardInterrupt:
-        report["status"] = STATUS_COMPLETED
-        report["stop_reason"] = STATUS_INTERRUPTED
-        save_current_report()
         log("\n用户主动中断查找；已完成的结果与 Token 用量已成功保存。")
-        return report
+        return finalize_run(
+            report,
+            stop_reason=STATUS_INTERRUPTED,
+            status=STATUS_INTERRUPTED,
+            evaluated_items=evaluated_items,
+            plan=plan,
+            limit=final_limit,
+            run_dir=run_dir,
+            root_dir=root,
+            usage=usage,
+            evaluation_attempts=evaluation_attempts,
+            evaluated_count=len(evaluated_items),
+            log=log,
+        )
     except Exception as exc:
-        report["status"] = STATUS_ERROR
-        report["stop_reason"] = f"未处理异常：{type(exc).__name__}: {exc}"
-        save_current_report()
         log(f"\n查找异常中止：{exc}")
-        return report
+        return finalize_run(
+            report,
+            stop_reason=f"未处理异常：{type(exc).__name__}: {exc}",
+            status=STATUS_ERROR,
+            evaluated_items=evaluated_items,
+            plan=plan,
+            limit=final_limit,
+            run_dir=run_dir,
+            root_dir=root,
+            usage=usage,
+            evaluation_attempts=evaluation_attempts,
+            evaluated_count=len(evaluated_items),
+            log=log,
+        )
 
 
 # --------------------------------------------------------------------------
@@ -686,20 +1060,47 @@ def render_find_markdown_report(report: dict[str, Any]) -> str:
 
 def main(argv: list[str] | None = None, *, root: Path | None = None) -> int:
     root_path = Path(root or Path(__file__).resolve().parents[1]).resolve()
-    run_cfg = load_finder_run_config(root_path / "config")
-    cfg_limit = _parse_int_val(run_cfg.get("limit"), DEFAULT_LIMIT)
-    cfg_max_eval = _parse_int_val(run_cfg.get("max_evaluations"), DEFAULT_MAX_EVALUATIONS)
-    cfg_max_tokens = _parse_int_val(run_cfg.get("max_tokens"), DEFAULT_MAX_TOKENS)
-    cfg_topic = (run_cfg.get("topic") or "").strip()
+    try:
+        run_cfg = load_finder_run_config(root_path / "config")
+        cfg_limit = _parse_int_val(run_cfg.get("limit"), DEFAULT_LIMIT, "limit")
+        cfg_max_eval = _parse_int_val(run_cfg.get("max_evaluations"), DEFAULT_MAX_EVALUATIONS, "max_evaluations")
+        cfg_max_tokens = _parse_int_val(run_cfg.get("max_tokens"), DEFAULT_MAX_TOKENS, "max_tokens")
+        cfg_topic = (run_cfg.get("topic") or "").strip()
+    except ValueError as exc:
+        print(f"配置参数错误：{exc}", file=sys.stderr)
+        return 2
 
-    topic_help = f"想要查找的技能需求（默认取自 config/find-skill.json: '{cfg_topic}'）" if cfg_topic else "想要查找的技能需求（如：生成高质量 Prompt）"
+    topic_help = (
+        f"想要查找的技能需求（默认取自 config/find-skill.json: '{cfg_topic}'）"
+        if cfg_topic
+        else "想要查找的技能需求（如：生成高质量 Prompt）"
+    )
 
     parser = argparse.ArgumentParser(description="定向查找特定需求的 AI Agent Skill 并生成短名单对比报告")
     parser.add_argument("topic", nargs="?", help=topic_help)
-    parser.add_argument("--limit", type=lambda v: _parse_int_val(v, DEFAULT_LIMIT), default=None, help=f"优先查看的短名单数量（默认 {cfg_limit}，取自 config/find-skill.json）")
-    parser.add_argument("--max-evaluations", type=lambda v: _parse_int_val(v, DEFAULT_MAX_EVALUATIONS), default=None, help=f"本次最多评估的技能数量（默认 {cfg_max_eval}，取自 config/find-skill.json）")
-    parser.add_argument("--max-tokens", type=lambda v: _parse_int_val(v, DEFAULT_MAX_TOKENS), default=None, help=f"本次模型调用的 Token 消耗停止阈值（默认 {cfg_max_tokens:,}，取自 config/find-skill.json）")
-    args = parser.parse_args(argv)
+    parser.add_argument(
+        "--limit",
+        type=lambda v: _parse_int_val(v, DEFAULT_LIMIT, "limit"),
+        default=None,
+        help=f"优先查看的短名单数量（默认 {cfg_limit}）",
+    )
+    parser.add_argument(
+        "--max-evaluations",
+        type=lambda v: _parse_int_val(v, DEFAULT_MAX_EVALUATIONS, "max_evaluations"),
+        default=None,
+        help=f"本次最多评估的技能数量（默认 {cfg_max_eval}）",
+    )
+    parser.add_argument(
+        "--max-tokens",
+        type=lambda v: _parse_int_val(v, DEFAULT_MAX_TOKENS, "max_tokens"),
+        default=None,
+        help=f"本次模型调用的 Token 消耗停止阈值（默认 {cfg_max_tokens:,}）",
+    )
+
+    try:
+        args = parser.parse_args(argv)
+    except SystemExit as exc:
+        return exc.code if isinstance(exc.code, int) else 2
 
     topic = (args.topic or cfg_topic).strip()
     if not topic:
@@ -709,7 +1110,7 @@ def main(argv: list[str] | None = None, *, root: Path | None = None) -> int:
                 topic = input("> ").strip()
             except (KeyboardInterrupt, EOFError):
                 print("\n操作取消。")
-                return 1
+                return 130
         if not topic:
             parser.error("必须提供需求 topic 参数（或在 config/find-skill.json 中配置 topic，或在交互终端中输入）")
 
@@ -721,8 +1122,30 @@ def main(argv: list[str] | None = None, *, root: Path | None = None) -> int:
             max_tokens=args.max_tokens,
             root_dir=root_path,
         )
-        return 0 if report.get("status") == STATUS_COMPLETED else 1
+    except KeyboardInterrupt:
+        return 130
+    except ValueError as exc:
+        print(f"参数错误：{exc}", file=sys.stderr)
+        return 2
     except Exception as exc:
         print(f"启动错误：{exc}", file=sys.stderr)
         return 1
+
+    status = report.get("status")
+    stop_reason = report.get("stop_reason")
+
+    if status == STATUS_INTERRUPTED or stop_reason == STATUS_INTERRUPTED:
+        return 130
+    if status == STATUS_STOPPED or stop_reason in (
+        STATUS_TOKEN_LIMIT,
+        STATUS_EVALUATION_LIMIT,
+        STATUS_USAGE_UNKNOWN,
+        STATUS_MODEL_FAILURES,
+    ):
+        return 2
+    if status == STATUS_ERROR or stop_reason in ("search_failed", "plan_failed"):
+        return 1
+    if status == STATUS_COMPLETED:
+        return 0
+    return 0
 

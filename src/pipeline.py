@@ -970,7 +970,15 @@ def phase_evaluate(
             text = fetched.text
             fresh = content_fingerprint(text)
             if candidate.content_fingerprint and fresh != candidate.content_fingerprint:
-                results.setdefault(candidate.skill_id, {})["fingerprint_changed"] = True
+                results[candidate.skill_id] = {
+                    "status": "skipped",
+                    "fingerprint_changed": True,
+                    "note": f"上游内容已变化（预留: {candidate.content_fingerprint} vs 当前: {fresh}），跳过本次评估，待重新排队",
+                }
+                skipped += 1
+                item["status"] = "pending"
+                item["content_changed"] = True
+                continue
 
         ledger.begin_attempt(eid, started)
         outcome = evaluate_fn(

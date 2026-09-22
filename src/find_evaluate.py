@@ -9,6 +9,7 @@
 
 from __future__ import annotations
 
+import copy
 import json
 import re
 from typing import Any
@@ -173,9 +174,8 @@ def parse_query_plan(content: str) -> dict[str, Any]:
     if not criteria:
         raise ValueError("criteria 中未解析出有效准则")
 
-    # 若模型漏标 required，默认将第一条核心能力定为 required
     if not has_required:
-        criteria[0]["kind"] = KIND_REQUIRED
+        raise ValueError("规划准则中缺少必需能力 (required criteria)，禁止擅自将质量信号升级为必需项")
 
     return {
         "intent": intent,
@@ -383,58 +383,49 @@ def parse_skill_evaluation(content: str, plan_criteria: list[dict[str, Any]]) ->
 
 def verify_evidence_snippet(
     source_path: str,
-    start_line: int,
-    end_line: int,
+    start_line: Any,
+    end_line: Any,
     quote: str,
     materials: dict[str, str],
 ) -> tuple[bool, str]:
-    """核对单条证据在真实材料中的真实性。
-
-    核验规则：
-    1. source_path 必须在 materials 中（支持末尾路径匹配）；
-    2. quote 必须非空且具有实质内容；
-    3. 行号有效时，在指定行范围及附近做规整空白匹配；
-    4. 行号无效或轻微越界时，若规整化 quote 在整篇文本中明确存在，也可判定通过并纠正；
-    5. 若 quote 完全不存在于材料中，判定为伪造失败。
+    """严格核验单条引文证据：
+    1. 字段对齐实际输出协议：source_path / quote / start_line / end_line
+    2. 严格类型检查：行号必须是 int 且绝不能为 bool（bool 是 int 子类）
+    3. 引文文本不能为空或纯空白
+    4. 路径必须完全一致（规范化路径，不允许多余前缀或跨文件）
+    5. 行号必须在材料有效行范围内（1 <= start_line <= end_line <= total_lines）
+    6. 行号区间内必须精确包含引文文本（支持换行与连续空白标准化，但不允许删改文字）
     """
-    mat_key = None
-    for k in materials:
-        if k == source_path or k.endswith(source_path) or source_path.endswith(k):
-            mat_key = k
-            break
+    clean_path = (source_path or "").strip()
+    if not clean_path or clean_path not in materials:
+        return False, f"引用的文件未在已读取材料中找到: {clean_path}"
 
-    if mat_key is None:
-        return False, f"引用的文件路径不存在：{source_path}"
+    # 严密防范 Python 中 isinstance(True, int) == True 的陷阱
+    if isinstance(start_line, bool) or not isinstance(start_line, int):
+        return False, "start_line 必须为非布尔整数"
+    if isinstance(end_line, bool) or not isinstance(end_line, int):
+        return False, "end_line 必须为非布尔整数"
 
-    text = materials[mat_key]
+    clean_quote = (quote or "").strip()
+    if not clean_quote:
+        return False, "quote 引文内容不能为空或纯空白"
+
+    text = materials[clean_path]
     lines = text.splitlines()
     total_lines = len(lines)
 
-    norm_quote = _normalize_space(quote)
-    if not norm_quote or len(norm_quote) < 3:
-        return False, "引文内容为空或过短"
+    if not (1 <= start_line <= end_line <= total_lines):
+        return False, f"行号范围越界: [{start_line}, {end_line}]，文件共 {total_lines} 行"
 
-    # 1. 尝试在指定行号范围内匹配（允许行号有 +-3 行的容差）
-    if 1 <= start_line <= total_lines:
-        s_idx = max(0, start_line - 3)
-        e_idx = min(total_lines, max(start_line, end_line) + 3)
-        window_text = _normalize_space(" ".join(lines[s_idx:e_idx]))
-        if norm_quote in window_text or window_text in norm_quote:
-            return True, "在指定行号窗口内核验通过"
+    # 提取行号区间内的实际文本并规范化
+    target_block = " ".join(lines[start_line - 1 : end_line])
+    normalized_block = re.sub(r"\s+", " ", target_block)
+    normalized_quote = re.sub(r"\s+", " ", clean_quote)
 
-    # 2. 全文规整匹配（防止模型数错行号）
-    full_norm_text = _normalize_space(text)
-    if norm_quote in full_norm_text:
-        return True, "全文内容核验通过（行号可能轻微偏移）"
+    if normalized_quote not in normalized_block:
+        return False, "指定行号区间内未找到完整匹配的引文内容"
 
-    # 3. 截取引文核心短语（超过 15 字时截取子串判断）
-    if len(norm_quote) > 20:
-        sub1 = norm_quote[:20]
-        sub2 = norm_quote[-20:]
-        if sub1 in full_norm_text or sub2 in full_norm_text:
-            return True, "引文核心关键句核验通过"
-
-    return False, f"材料中未找到对应引文：'{norm_quote[:30]}...'"
+    return True, "核验通过"
 
 
 def verify_and_adjust_evaluation(
@@ -449,7 +440,7 @@ def verify_and_adjust_evaluation(
     2. 所有 required 准则必须全部通过且有有效证据，才允许判定为 strong；
     3. 只要有任何 required 准则为 unsupported 或降为 unknown，强制降为 partial（或 none）。
     """
-    res = dict(evaluation)
+    res = copy.deepcopy(evaluation)
     criteria_map = {c["id"]: c for c in plan_criteria}
     adjusted_results: list[dict[str, Any]] = []
 
@@ -509,11 +500,11 @@ def verify_and_adjust_evaluation(
     if original_match == MATCH_STRONG:
         if not all_required_supported:
             # 关键防御：存在未证实的必需项，剥夺 strong 资格
-            res["match"] = MATCH_NONE if any_required_unsupported else MATCH_PARTIAL
-            if res.get("limitations") is not None:
+            res["match"] = MATCH_NONE if (any_required_unsupported or supported_count == 0) else MATCH_PARTIAL
+            if res.get("limitations") is not None and isinstance(res["limitations"], list):
                 res["limitations"].append("部分必需能力在材料中缺少直接可核验的文字依据")
     elif original_match == MATCH_PARTIAL:
-        if supported_count == 0 and any_required_unsupported:
+        if supported_count == 0:
             res["match"] = MATCH_NONE
     elif original_match == MATCH_NONE:
         pass
@@ -528,7 +519,7 @@ def verify_and_adjust_evaluation(
 
 def rank_find_results(
     evaluated_items: list[dict[str, Any]],
-    plan: dict[str, Any],
+    plan: dict[str, Any] | None = None,
     limit: int = 5,
 ) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
     """对已完成评估的条目进行优先级排序。
@@ -543,8 +534,9 @@ def rank_find_results(
     - shortlist：最多 limit 个，从 strong 且 documentation != insufficient 中选取；
     - alternatives：partial 的相关条目，单列展示差距。
     """
+    plan_dict = plan or {}
     quality_signal_ids = {
-        c["id"] for c in plan.get("criteria", []) if c.get("kind") == KIND_QUALITY_SIGNAL
+        c["id"] for c in plan_dict.get("criteria", []) if c.get("kind") == KIND_QUALITY_SIGNAL
     }
 
     def sort_key(item: dict[str, Any]):
@@ -556,7 +548,11 @@ def rank_find_results(
         # 2. quality signal count
         qs_count = 0
         for cr in ev.get("criteria_results", []):
-            if cr.get("criterion_id") in quality_signal_ids and cr.get("status") == STATUS_SUPPORTED:
+            if (
+                cr.get("criterion_id") in quality_signal_ids
+                and cr.get("status") == STATUS_SUPPORTED
+                and bool(cr.get("evidence"))
+            ):
                 qs_count += 1
 
         # 3. doc score
@@ -564,7 +560,8 @@ def rank_find_results(
         d_score = 3 if d_val == DOC_CLEAR else (2 if d_val == DOC_PARTIAL else 1)
 
         # 4. stable id
-        sid = item.get("candidate", {}).get("skill_id", "")
+        cand = item.get("candidate") or {}
+        sid = cand.get("skill_id") or item.get("skill_id", "")
         return (-m_score, -qs_count, -d_score, sid)
 
     sorted_all = sorted(evaluated_items, key=sort_key)
