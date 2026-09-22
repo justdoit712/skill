@@ -1,0 +1,417 @@
+# src 分层重构实施方案
+
+状态：待实施。编制日期：2026-09-22。
+
+依据：[src 分层与轻量化评估](./src分层与轻量化评估.md)。实施基准为提交 `361cd08` 加实施开始时确认的工作区改动，不能只按提交版本回退或覆盖本地修改。
+
+本方案将代码评估转化为分批改动、接口约定、兼容要求和验收清单。当前仅生成方案，尚未执行重构。
+
+## 1. 目标和范围
+
+完成以下结果：
+
+1. 将 `src` 分成 `catalog`、`finder`、`infra`、`shared` 四个包，依赖方向明确。
+2. 拆解 `pipeline.py`、`local_run.py`、`skill_finder.py` 的多重职责；共享条目规则、网络访问和文件写入各有明确归属。
+3. 修复本轮评估发现的查找用量、评估次数、证据校验、结束状态、材料、候选安排和参数校验问题。
+4. 保留目录采集、定向查找、离线维护、现有命令和前端查看能力。
+5. 通过实际入口测试和轻量依赖检查约束后续增长，继续使用 Python、JSON 和原生前端。
+
+本次不引入数据库、后端服务、任务队列、依赖注入框架或通用运行器。不批量合入以前暂缓的工作流、页面状态或提取算法问题；共享材料与条目更新接口涉及的数据一致性要求，按本方案单独验证、单独提交修复。
+
+前端报告契约适配属于本次必做工作；将全部内联 JavaScript 拆成模块列为独立后续批次，不阻塞 `src` 重构验收。
+
+## 2. 当前基准与需要保留的行为
+
+### 2.1 工作区基准
+
+编制方案时发现以下已有改动：
+
+| 项目 | 当前值/状态 | 实施要求 |
+| --- | --- | --- |
+| 查询规划最大输出 | 4,000 Token | 保留，不恢复旧方案中的 1,200 |
+| 单技能评估最大输出 | 10,000 Token | 保留，不恢复旧方案中的 2,500 |
+| 连续失败停止阈值 | 20 次 | 提取为有名称的常量；不静默恢复为 3 |
+| 查找配置评估上限 | `config/find-skill.json` 中为 80 | 保留最新配置；代码兜底值与配置值分别说明 |
+| 查找配置最大总用量 | `config/find-skill.json` 中为 `"20 000 000"` | 继续解释为 20,000,000 |
+| 本地查找结果 | 存在 `public/data/find-report.json` | 实施测试使用临时目录，不覆盖真实结果 |
+| 评估文档 | 已生成但未提交 | 保留并作为方案依据 |
+
+实施开始重新记录 `git status`、源码差异和配置生效值。若发生后续修改，以最新明确需求和实际源码为准，再更新基准。该步骤是检查，不自动提交、清理或暂存用户文件。
+
+上轮评估时原有 235 项测试通过；这不是重构后的验收结果。实施前重新运行一次，记录新增基线失败，区分既有故障与本次回归。
+
+### 2.2 公开命令与数据
+
+必须保留：
+
+| 入口或文件 | 要求 |
+| --- | --- |
+| `python tools/run_local.py` | 保留本地推荐目标、Token 限额、池补充、重试参数 |
+| `--check` | 只预检，不联网、不调用模型、不写运行数据 |
+| `--sync-config`、`--enrich-catalog` | 无模型凭据也可离线执行 |
+| `python tools/find_skill.py [topic]` | 保留位置参数、配置 topic 和交互输入；具体需求跳过目录规则 |
+| `python -m src.pipeline` | 保留 `--phase reserve/evaluate/all`、`--dry-run`、`--json` 及现有路径、限额参数 |
+| `scripts/run-local.ps1`、`.run/*.run.xml` | 保留现有调用入口；同步检查工作目录和根路径 |
+| 目录、候选池、队列、账本 | 保留路径、技能 ID、评估 ID 和序列化格式；不因移动 Python 文件重建数据 |
+| 查找结果 | 保留独立运行目录、本地 JSON/Markdown 和前端查看能力 |
+
+Actions 的 `reserve → 提交推送 → evaluate` 顺序必须保留。`--phase all` 保持现有本地用途，不将其替换进两阶段工作流。`--dry-run` 可以执行既有发现/抓取步骤，但不能调用模型、写账本或正式产物；它与完全离线的 `--check` 语义不同。
+
+## 3. 目标目录与依赖规则
+
+```text
+tools/
+  run_local.py                 # argparse、命令分派、退出码
+  find_skill.py                # argparse、topic 输入、退出码
+src/
+  __init__.py
+  pipeline.py                 # 保留原模块命令的薄 CLI
+  shared/
+    __init__.py
+    models.py                 # Candidate、DocumentSnapshot
+    identity.py               # ID、URL 解析、去重、指纹
+    schema.py                 # 共用字段规范化
+    usage.py                  # 实际请求与用量统计
+    runtime.py                # 时钟、时区
+  infra/
+    __init__.py
+    http.py                   # 有界 HTTP 读取、原文读取契约
+    github.py                 # GitHub 认证、搜索、仓库文件树
+    llm.py                    # 模型传输、凭据、ModelCallResult
+    files.py                  # 原子文件读写和文件锁原语
+  catalog/
+    __init__.py
+    config.py                 # 配置加载、组合、预检
+    discovery.py              # 目录查询、种子来源、候选组合
+    evaluation.py             # 六项检查 Prompt、解析、评估 ID
+    prescreen.py              # PrescreenConfig、PrescreenResult、预筛
+    decide.py
+    overrides.py
+    snooze.py
+    enrich.py                 # 单条结构化提取
+    entry_state.py            # 统一条目更新
+    index.py                  # 目录/页面转换和统计
+    queue.py                  # Actions 队列与序列化
+    budget.py                 # 周配额、评估记录
+    pool.py                   # 本地候选池
+    report.py                 # 周报、本地采集报告
+    sync_reserve.py           # 准备、预留、dry-run
+    sync_evaluate.py          # 评估、合并、输出
+    local.py                  # 本地采集编排
+    maintenance.py            # 离线配置同步、离线增强
+  finder/
+    __init__.py
+    config.py                 # 查找参数与配置校验
+    search.py                 # 查询安排、候选轮转、材料收集
+    plan.py                   # 需求规划及解析
+    evaluation.py             # 技能评估、证据核验、排序
+    run.py                    # 查找编排、用量、统一收尾
+    report.py                 # 报告与页面投影
+```
+
+依赖约束：
+
+- CLI 调用业务包；业务代码不导入 CLI。
+- `catalog` 与 `finder` 互不导入，包括函数内部导入。
+- `infra` 仅依赖标准库、现有外部库和 `shared`；不加载业务配置或调用业务规则。
+- `shared` 不导入其他三个包，不读目录策略，不读模型凭据。
+- 包内编排可调用规则、配置、存储和报告；规则/转换函数不得反向调用编排。
+- `__init__.py` 保持简单；不用集中导出把整条流水线隐式导入。
+
+不为每个旧模块保留永久兼容壳。公开 CLI 保持；仓库内部导入、测试补丁及工作流中的 Python 片段一起迁移。确需过渡的重导出只在迁移批次期间存在，最后删除。
+
+## 4. 接口约定
+
+以下名称是实施目标，参数可按实际调用点小幅调整；职责和行为不能被调整掉。
+
+### 4.1 网络、GitHub 和模型
+
+| 接口 | 所在模块 | 约定 |
+| --- | --- | --- |
+| `fetch_text()` | `infra/http.py` | 保留超时、重试、字节上限、状态和截断信息 |
+| `fetch_skill_document()` | `infra/http.py` | 原文 URL、非空/非 HTML/完整读取、指纹；不做目录筛选 |
+| `search_repositories(query, ...)` | `infra/github.py` | 查询由调用者构造；不自动追加领域排除词 |
+| `list_skill_paths(owner, repo, ...)` | `infra/github.py` | 精确 basename、路径列表、完整性和错误分别返回 |
+| `call_model()`、`resolve_api_key()` | `infra/llm.py` | 迁移现有传输；不包含目录或查找 Prompt |
+| `UsageTotals` | `shared/usage.py` | 已知用量、未知用量、请求次数分别累计 |
+
+GitHub 统一实现现有有界重试并关闭响应；目录和查找只保留各自搜索策略。HTTP 与模型重试原因不同，不为了少几行代码强行合成一个通用重试装饰器。
+
+提取模型通信时保留既有调用参数及目录重试语义。查找在所有入口路径中复制模型配置并强制 `request.max_attempts=1`，包括测试/程序传入配置的路径，避免嵌套重试隐藏未知用量。不改写调用方原配置对象。
+
+目录读取上限与查找读取上限分别显式传入。查找维持主文件 64 KiB、单技能总材料 96 KiB、最多 2 个引用文件。恰好等于读取上限且已经 EOF 的文本应可用，只有实际超出上限才标记截断。
+
+### 4.2 材料快照
+
+`DocumentSnapshot` 最小字段：`path`、`text`、`fingerprint`、`fetched_at`、`source_url`、可空的 `resolved_ref`。
+
+- 每个引用文档独立保存这些字段；评估和证据校验使用同一批内存快照。
+- 路径按仓库路径规范化，保留大小写；相对引用不得逃出仓库或变成外部地址。
+- 只读取 Skill 明确引用的说明文件；读取失败也有记录。
+- 没有实际解析出固定提交时保留 HEAD 来源并标明检查时间，不能伪造固定版本。
+- 文本用于本次评估，报告只保留必要证据和来源元数据，不新增技能包镜像。
+- 两阶段目录任务恢复读取时必须核对预留指纹。发现变化不得沿用旧指纹保存新评估，应留待新版本重新排队/预留。
+
+### 4.3 目录条目更新
+
+`catalog/entry_state.py` 提供一个纯函数 `update_entry(previous, candidate, event, context)`。
+
+`event` 使用小型数据结构，区分 `fresh_evaluation`、`cached_evaluation`、`no_evaluation`、`fetch_failed`；包含预筛结果、可用评估、决策、上游状态和材料版本。避免用字典是否非空判断是否真的获得了评估。
+
+统一处理范围：
+
+- 内容版本、历史评估与待复核状态。
+- 新评估与旧格式缓存的字段继承。
+- 原有条目保留、首次发现时间、最近检查时间。
+- 人工干预字段的投影；可批量幂等应用，但规则只有一份。
+
+输入的人工配置已经在 `catalog/config.py` 中校验；函数不读账本、不读文件、不访问网络，也不决定预算与重试。
+
+迁移时建立以下状态矩阵：
+
+| 事件 | 必须成立的结果 |
+| --- | --- |
+| 同版本、没有有效新评估 | 保留原有效描述和依据；不能因 outcome 非空就清空 |
+| 同版本、新评估明确返回 `null` / `[]` | 接受新结果，不能复活旧增强字段 |
+| 旧格式缓存缺字段、版本相同 | 才允许兼容继承；保留“字段缺失”和“明确空值”的区别 |
+| 新版本尚未评估成功 | 保留最近有效评估快照并标识待复核 |
+| 同一变化版本连续失败 | 最近有效快照不被中间空记录覆盖 |
+| 当前版本成功得到新评估 | 按新评估和目录准入规则更新 |
+| 人工排除、收藏、冷冻 | 保留现有优先级和跳过调用行为；由既有规则函数处理 |
+
+本地与 Actions 针对同一规范化事件必须得到相同条目。不同调度方式产生不同事件是允许的，不能用 `mode="local"/"actions"` 在更新函数内复制两套规则。
+
+## 5. 定向查找行为修复
+
+本节对应评估报告第 3 节。先补真实入口回归，再修改行为；每项修复与纯文件搬迁分开提交。
+
+### F1. 请求记账与评估上限
+
+`finder/run.py` 区分：
+
+- `evaluation_attempts`：已开始的候选模型评估次数，包含请求失败和解析失败。
+- `evaluated_count`：成功解析并完成校验的候选数量。
+- `usage.requests`：模型请求次数，包含查询规划。
+
+顺序固定为：检查停止条件 → 记录即将发起的调用及候选名额 → 保存运行记录 → 调用模型 → 累计已知/未知用量 → 记录结果 → 保存 → 判断能否继续。
+
+规划占模型请求和 Token，不占候选评估名额。材料抓取失败不占模型评估名额。`limit` 只约束最终展示；不能触发提前停止搜索/评估。
+
+规划或评估用量未知、超时结果不明时停止后续模型请求。有效但缺 usage 的当前评估可以完成解析并保留，随后以 `usage_unknown` 收尾。已知用量的无效输出占用名额并计入连续失败；成功评估重置连续失败数。连续失败阈值保持当前 20，任何情况都不能越过 `max_evaluations`。
+
+进程在请求中被中断时，在运行记录中保留“已开始、结果未知”的调用；不能把它计为零用量。只要求恢复已保存的部分结果，不新增断点自动重试系统。
+
+总 Token 是按服务商返回值执行的停止阈值，最后一次请求可能超过阈值；不以字符数估算冒充真实用量。保留当前 4,000/10,000 输出上限，并记录本次生效值。
+
+### F2. 证据核验
+
+删除路径后缀匹配、引文首尾子串匹配、真实窗口被包含在较长伪造引文中的反向匹配。
+
+实施第一版使用：规范路径精确匹配 + 有效起止行 + 完整引文在该行范围内匹配。可以规范化换行与连续空白，不删除否定词、标点或其他正文。无效路径、行号、引文降为 `unknown`；本次不加入模糊自动定位算法。
+
+所有 required 项均有有效支持证据，才允许 `strong`。同时严格校验标准 ID、枚举和字段类型。每个标准最多 3 条证据，每条引文最多 1,200 字符、解释最多 800 字符；简介最多 1,200 字符、使用说明最多 1,600 字符、推荐理由最多 800 字符。超限输出作为结构错误记录，不截断引文后继续宣称核验通过。已有查询/标准数量以及依赖/限制数组上限继续保留。不能用 `str(object)` 将对象伪装成合法文本。
+
+证据存在和语义支持是两项检查：模型需要解释引用如何支持需求，程序只声称核验了来源与原文。用“泛泛提及 Prompt”“只列文章链接”等反例检查评估 Prompt 的预期行为，不宣称代码能保证所有语义判断正确。
+
+### F3. 单一结束路径
+
+所有返回路径经过 `finalize_run(state, reason)`：根据已完成评估排序，生成短名单/备选，更新状态与计数，再持久化。退出时不可绕过重新排名。
+
+新增查找报告 `schema_version`；保留已有 `shortlist`、`alternatives`、`evaluations`、`evaluated_count`、`parameters`、`usage` 字段，新增尝试数与失败记录。`evaluated_count` 继续代表成功结果数。
+
+| 场景 | status / stop_reason | 查找 CLI 退出码 |
+| --- | --- | ---: |
+| 在规定搜索范围内正常完成，足够或不足短名单 | `completed` / `target_reached`、`candidates_exhausted` 或 `completed` | 0 |
+| 尚有候选但达到次数或 Token 阈值 | `stopped` / `evaluation_limit` 或 `token_limit` | 2 |
+| 用量未知、连续失败达到阈值 | `stopped` / `usage_unknown` 或 `model_failures` | 2 |
+| 所有查询失败、全部仓库展开失败、全部材料读取失败、规划无效 | `error` / `search_failed`、`expansion_failed`、`material_failed` 或 `plan_failed` | 1 |
+| 用户中断 | `interrupted` / `interrupted` | 130 |
+| 配置或参数非法 | 启动错误，不调用模型、不创建运行产物 | 2 |
+
+部分查询/抓取失败在 `coverage_incomplete` 和逐项错误中说明，不把部分失败等同于“所有来源不可用”。所有候选均因材料读取错误无法评估时返回错误，而不是“没有匹配技能”。短名单数量不决定是否发生了基础设施错误。
+
+此表只调整定向查找的错误表达。目录 CLI 与本地采集 CLI 的既有退出码保持。
+
+### F4. 查询与候选安排
+
+1. 保留原需求；计划最多 8 个查询。缺少有效 required 标准时判定规划失败，不提升 quality_signal。
+2. 每个查询最多读取 20 个仓库结果。先执行有界查询集合，再跨查询轮转去重，最多展开 20 个仓库。
+3. 仓库树中仅接受 basename 恰为 `SKILL.md` 的文件；截断树单列覆盖不完整。
+4. 仓库内按需求查询词与路径的确定性匹配排序，相同条件按完整路径排序；有相关路径和通用路径时按“2 个相关、1 个通用”交替取出，某组耗尽后继续取另一组。没有命中时按稳定路径顺序安排。每仓库最多安排 10 个文件，避免通用路径全部排在总读取上限之外。
+5. 跨仓库轮转，最多读取 80 个主文件；读取顺序与跳过理由记入报告。实际模型评估继续受 F1 限制。
+
+路径排序只安排读取次序，不用路径推断质量或直接判定满足需求。所有目录排除词、分类、种子来源、人工排除和冷冻名单都不进入查找流程。
+
+### F5. 配置和参数
+
+配置优先级：显式 CLI/程序参数 > `find-skill.local.json` > `find-skill.json` > 代码默认值。topic 同样优先使用显式输入；只有配置也未提供且 stdin 为交互终端时才询问输入。
+
+模型配置保留当前 `model.local.json` 优先、缺失才用 example，以及环境变量凭据优先的语义。只检查本功能实际需要的字段，不加载目录配置。示例占位连接值不能作为就绪配置进入请求。
+
+数值兼容整数和现有空格、逗号、下划线分隔格式；拒绝布尔值、小数、负数、非法字符串。`20m` 明确报格式错误，本次不额外引入单位缩写。保留 `limit >= 1`、`max_evaluations >= limit`、`max_tokens >= 1000` 的约束。
+
+缺失可选配置可用默认值，存在但损坏或类型错误的文件必须报错。先得到一次校验后的有效参数，再建立运行目录。`--help` 不依赖模型配置有效性、网络或凭据。
+
+## 6. 报告、页面和写入策略
+
+### 6.1 文件职责
+
+`infra/files.py` 提供 `read_json()`、`write_json_atomic()`、`write_text_atomic()` 及必要文件锁；无效 JSON 的默认处理由调用者明确选择，不能全局吞错。
+
+临时文件与目标同目录、文件名唯一；失败清理本次临时文件，保留旧目标。原子替换只保证单文件完整，不声称多个 JSON/Markdown 构成事务。
+
+本地报告 JSON 是运行事实，Markdown 和页面报告由它投影。JSON 先写成功，再写派生产物。派生失败记录诊断，保留可重建的 JSON，不能声称全部产物成功。
+
+目录写入由编排/维护模块协调锁和保存；`catalog/index.py` 只负责转换。将常规采集、配置同步、离线增强涉及的本地目录写入统一到同一锁约定。可从 `maintenance.py` 暴露小型保存辅助供目录编排复用，不另造一套存储服务类。
+
+锁冲突和遗留锁明确报错，不自动删除未知进程留下的锁。该约定只覆盖同一文件系统上的写入，不代替远端工作流并发控制；后者按此前范围单独处理。
+
+### 6.2 前端查找结果
+
+保留 `public/data/find-report.json`，通过 `finder/report.py` 的白名单投影生成：需求、计划、状态、覆盖、用量、技能信息、证据、短名单和备选。排除本地绝对路径、模型凭据、连接配置、请求正文和堆栈。
+
+本地 JSON 继续逐步保存；公共页面快照在统一收尾时更新。正常完成即使没有匹配也更新为空结果，防止旧主题冒充新结果；错误/中断有有效结果时输出带明确状态的部分结果，没有有效结果时保留上次公共快照并在本次本地报告说明。
+
+公共快照使用短写锁和唯一临时文件；多任务按最后成功完成写入的顺序展示，每份包含 run_id、topic、updated_at。第一版不增加任务管理器或多报告选择界面。
+
+同步修改 `renderFindView()`：支持新状态、尝试/成功数量、覆盖不完整信息；能读取缺少 `schema_version` 和新字段的旧报告。所有用户/上游/模型文本进行 HTML/Markdown 转义，链接来自程序确认的来源。
+
+## 7. 文件迁移清单
+
+| 当前文件 | 目标及拆分 |
+| --- | --- |
+| `models.py` | Candidate → `shared/models.py`；PrescreenResult → `catalog/prescreen.py` |
+| `dedupe.py`、`schema_utils.py`、`usage.py` | → `shared/identity.py`、`shared/schema.py`、`shared/usage.py` |
+| `budget.py` | 周配额留 `catalog/budget.py`；时钟 → shared/runtime；文件工具 → infra/files |
+| `fetch.py` | → `infra/http.py`，扩展有界原文读取契约 |
+| `discover.py` | 网络 → infra/github；目录策略 → catalog/discovery；配置组合 → catalog/config |
+| `evaluate.py` | 传输、凭据、ModelCallResult → infra/llm；目录 Prompt/解析/ID → catalog/evaluation |
+| `prescreen.py`、`decide.py`、`overrides.py`、`snooze.py`、`pool.py` | → catalog 对应模块；调整文件/时钟依赖 |
+| `index.py` | 转换留 catalog/index；配置同步 → maintenance；写入协调 → maintenance/infra/files |
+| `enrich.py` | 单条提取留 catalog/enrich；文件级任务 → maintenance |
+| `report.py` | → catalog/report，并接收 local_run 的报告渲染 |
+| `pipeline.py` | 按下表拆分，原文件只留 CLI |
+| `local_run.py` | 编排 → catalog/local；CLI → tools/run_local；状态更新/报告/维护分别提取 |
+| `skill_finder.py` | → finder/config、search、run、report；CLI → tools/find_skill |
+| `find_evaluate.py` | 规划 → finder/plan；评估/证据/排名 → finder/evaluation |
+
+`pipeline.py` 的具体分拆：
+
+| 函数组 | 目标 |
+| --- | --- |
+| `load_all_config`、`precheck` | catalog/config |
+| 队列读写、排序、积压合并、已结清判断、候选序列化 | catalog/queue |
+| `previous_evaluation_snapshot`、`review_state`、`admission_decision` 及两套条目更新 | catalog/entry_state |
+| `prepare`、`phase_reserve`、`dry_run` | catalog/sync_reserve |
+| `phase_evaluate` | catalog/sync_evaluate，拆开单项处理和最终合并 |
+| `main` | src/pipeline，转交上述模块 |
+
+`local._collect()` 分成池准备、单候选处理、应用处理结果和最终报告四个步骤。移除依赖大量外层状态的 `save()` / `publish()` 闭包；保留一个清晰的主循环。禁止将原函数整体搬入一个新类后视为完成。
+
+## 8. 分批实施与验收门槛
+
+### P0. 建立可比较的基线
+
+动作：记录工作区差异；运行现有测试；保存临时测试用的目录、队列、账本和查找报告样例；列出所有 CLI、脚本、工作流、IDE 调用点。
+
+交付：测试基线与当前行为样例。上轮本地探针仅用于定位案例，将必要数据自包含地放入仓库测试，测试不得依赖某台机器的审查目录。
+
+### P1. 修复定向查找边界
+
+动作：在现有模块中落实 F1～F5 及统一收尾；新增 `test_skill_finder.py`、`test_find_evaluate.py`，补 `test_discover.py` 的精确文件名和树截断用例。先写能复现的失败用例，再修改对应生产函数。
+
+交付：各行为修复及回归测试。门槛：次数、未知用量、证据、失败/中断、材料和配置案例全部通过；最新输出长度与连续失败阈值未被回退。
+
+### P2. 提取共享数据和外部接口
+
+动作：迁移 shared/infra；合并两套 GitHub 仓库请求代码；调用方明确传查询、读取限制和重试配置；原子文件写入采用公共函数。
+
+交付：网络、模型和文件工具各有明确实现。门槛：infra/shared 不导入业务包；目录默认策略不进入 finder；目录现有用量/重试/ID 语义不因移动而改变。
+
+### P3. 拆分目录任务和统一条目更新
+
+动作：按迁移表分解 pipeline；建立 update_entry 及状态矩阵；将 local 的报告与条目更新移出闭包；把离线维护迁出 index/enrich；协调本地写入锁。
+
+交付：薄 pipeline CLI、两个同步阶段、本地编排与维护模块。门槛：本地不导入同步编排；相同事件的条目结果一致；旧数据能继续读取；离线命令无网络/模型调用。
+
+共享材料、条目更新所需的行为修正单独提交，不与几百行文件移动混在一个提交中。以测试证明事件矩阵，不能仅以“输出文件存在”判断通过。
+
+### P4. 迁移查找业务并接通报告投影
+
+动作：拆 finder 六个模块和 CLI；将 P1 已验证行为迁入新位置；落实本地快照/页面投影分离、原子写入与新状态展示。
+
+交付：独立 finder 包和兼容新旧报告的前端。门槛：无 catalog 导入；查找运行不读写目录数据/策略；任意结束路径保持已完成结果可见。
+
+### P5. 清理旧导入和整体回归
+
+动作：删除已迁移的旧模块和临时重导出；更新 tests、README、运行说明、工作流 Python 片段及 IDE 配置；添加 `test_architecture.py`、`test_cli.py`。
+
+特别更新 `.github/workflows/sync-skills.yml` 中 `from src.budget import week_id` 的模块路径；保留 `python -m src.pipeline`。不要因 CLI 壳存在而漏掉脚本内独立导入。
+
+交付：最终目录、文档与完整测试结果。门槛：第 9 节全部必需项通过，源代码未残留两套相同通信/条目规则；每个长函数剩余职责可说明。
+
+### P6. 可独立排期的前端模块拆分
+
+将内联脚本拆为 `catalog-state.js`、`catalog-view.js`、`find-view.js`、`app.js`；保留当前样式和功能，使用原生模块与 Node 内置测试。该批次不包含此前暂缓的页面业务修复，不引入构建链；不作为 P0～P5 完成条件。
+
+## 9. 测试矩阵与运行命令
+
+| 编号 | 用例 | 可核验结果 |
+| --- | --- | --- |
+| T01 | 规划缺 usage；评估超时；有效响应缺 usage | 后续模型调用数为 0；记录未知用量；保留已有结果 |
+| T02 | max_evaluations=2，先失败后成功 | 最多 2 次候选评估；规划单独计入请求与 Token |
+| T03 | 越界行、错误路径、真实句子拼接伪造句、缺 required 证据 | 不能进入 strong 短名单 |
+| T04 | 一条成功后中断；全部查询失败；正常无匹配 | 状态和退出码不同；中断短名单包含成功项 |
+| T05 | NOT_SKILL.md、HTML、空文本、超限、恰好等于上限 | 非 Skill/无效材料拒绝；完整边界文件可读 |
+| T06 | 多查询首个返回 20 个仓库；大合集包含相关与通用路径 | 查询和仓库轮转；路径排序有界；未读范围可见 |
+| T07 | 全是 quality_signal；损坏配置；非法值；topic 缺失 | 无隐式升级/回退；不调用模型；无效启动不写运行目录 |
+| T08 | 目录配置缺失、Prompt 被目录排除、仓库被黑名单/冷冻 | finder 正常评估；正式索引、池、账本和人工配置哈希不变 |
+| T09 | 第 4.3 节每种条目事件，分别走本地和 Actions | 统一生产函数被调用；字段和快照结果一致 |
+| T10 | reserve/evaluate 跨进程；旧队列/账本；恢复原文版本变化 | 预留顺序、ID、已有记录兼容；旧指纹不绑定新材料 |
+| T11 | JSON 成功、Markdown/页面写失败；并发公共快照写入 | 本地 JSON 可恢复；无半文件；失败可诊断 |
+| T12 | --help、--check、--sync-config、--enrich-catalog | help 无配置依赖；离线入口无网络/模型调用；路径与退出码正确 |
+| T13 | 新旧报告前端显示：正常、停止、部分结果、错误 | 主题、结果、用量与状态对应；文本被转义 |
+| T14 | 对所有 src Python 文件分析导入 | 禁止跨业务/反向依赖；兼容绝对、相对、函数内导入；无循环 |
+| T15 | 固定时间与假 API 的全流程样例 | 目录、队列、账本在约定修复之外保持格式与行为；结果可复现 |
+
+测试网络/模型可替换，业务规则必须执行生产函数。为 finder 显式提供少量可注入调用参数或 patch 实际使用位置；不要建立通用依赖容器。时间和随机 ID 在确定性测试中固定。
+
+核心新增测试文件建议：`test_skill_finder.py`、`test_find_evaluate.py`、`test_entry_state.py`、`test_files.py`、`test_architecture.py`、`test_cli.py`。延续现有测试的扁平结构，先不把测试目录也做一次大迁移。
+
+实施后执行：
+
+```powershell
+.\.venv\Scripts\python.exe -m unittest tests.test_skill_finder tests.test_find_evaluate tests.test_entry_state tests.test_files tests.test_architecture tests.test_cli
+.\.venv\Scripts\python.exe -m unittest discover -s tests -q
+.\.venv\Scripts\python.exe tools/run_local.py --help
+.\.venv\Scripts\python.exe tools/find_skill.py --help
+.\.venv\Scripts\python.exe -m src.pipeline --help
+git diff --check
+```
+
+目前新增测试尚不存在，上述命令是实施验收要求。本方案编制没有执行或宣称通过这些新增测试。
+
+另通过临时根目录验证离线维护和真实 CLI 参数分派；真实 GitHub/模型烟雾验收与自动回归分开，不作为纯分层是否正确的唯一证据。前端契约适配完成后，用项目现有 HTTP 预览执行 T13；P6 如果另行实施，再增加对应 JS 行为测试。
+
+## 10. 提交、回滚和最终完成标准
+
+每批提交先完成该批验证，再进入下一批；同一批移动源码时同步修改所有调用点，不能留下依赖旧路径才能运行的半成品。
+
+提交类型建议分别为：`fix(finder)`、`refactor(infra)`、`refactor(catalog)`、`refactor(finder)`、`test(architecture)`、`docs`。是否实际提交按实施任务授权执行，本方案不包含自动提交或发布动作。
+
+回滚按批次反向撤销源码提交，并先检查后续依赖。重构不自动回滚、清空真实运行报告、目录数据或用户配置；格式保持兼容以减少回退成本。已有数据若意外变化，先定位写入来源，不执行全仓库重置。
+
+最终完成检查：
+
+- [ ] 四个包边界成立，旧业务模块完成迁移，保留的薄入口有明确用途。
+- [ ] 三个大编排文件的配置、规则、报告和 I/O 已分离；不存在原大函数原样换文件/换类的情况。
+- [ ] 本地与 Actions 使用同一条目更新函数；GitHub 通信、模型传输和文件工具已归并。
+- [ ] F1～F5、材料快照和状态矩阵通过对应行为测试。
+- [ ] 用户指定方向始终跳过目录规则，且目录运行数据不受查找影响。
+- [ ] 当前输出 Token 上限、失败阈值、配置优先级和生效值得到保留或按本方案明确修正。
+- [ ] 公开命令、工作流导入、IDE 配置及新旧数据兼容验证完成。
+- [ ] 本地报告、Markdown、公共投影与前端展示保持一致，失败和中断结果可用。
+- [ ] 完整测试通过，架构检查通过，未增加运行依赖；例外与未覆盖范围写入实施结果。
+- [ ] 更新运行文档和模块职责说明，记录本次明确的行为变化；P6 未实施时单列，不冒充完成。
+
+不把总行数减少作为验收目标。编排函数超过约 150 行、普通模块超过约 400 行时进行职责检查；Prompt、数据表和内聚算法可说明例外。轻量化以规则修改点减少、依赖可理解、测试能验证实际行为为准。

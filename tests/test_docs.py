@@ -32,17 +32,25 @@ class DocLinkTest(unittest.TestCase):
                 if target.startswith(("http://", "https://", "mailto:", "#")):
                     continue
                 checked += 1
-                if not (base / target).exists():
+                clean_target = re.sub(r":\d+$", "", target.split("#")[0])
+                if not (base / clean_target).exists():
                     broken.append(f"{rel} -> {target}")
         self.assertGreater(checked, 0, "没有检查到任何本地链接")
         self.assertEqual(broken, [], "存在失效的本地链接：\n" + "\n".join(broken))
 
     def test_docs_dir_has_no_unexpected_files(self) -> None:
-        """docs/ 收敛为需求、清理清单与运行说明三份，避免过程性文档堆积。"""
+        """docs/ 收敛为需求、清理清单与运行说明等规范文档，避免过程性文档堆积。"""
         names = sorted(p.name for p in (ROOT / "docs").glob("*.md"))
         self.assertEqual(
             names,
-            ["Skills导航目录二开需求.md", "Skills导航目录清理清单.md", "定向查找Skill实施方案.md", "运行说明.md"],
+            [
+                "Skills导航目录二开需求.md",
+                "Skills导航目录清理清单.md",
+                "src分层与轻量化评估.md",
+                "src分层重构实施方案.md",
+                "定向查找Skill实施方案.md",
+                "运行说明.md",
+            ],
             "docs/ 的文件集合发生变化；若是刻意调整，请同步更新本断言",
         )
 
