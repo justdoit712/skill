@@ -1,0 +1,89 @@
+{
+  "description": "自包含的定向查找测试用例集，为 P1 证据核验与单技能评估测试提供夹具数据",
+  "samples": {
+    "valid_skill_path": "tests/fixtures/finder_samples/valid_skill.md",
+    "fabricated_quote_skill_path": "tests/fixtures/finder_samples/fabricated_quote_skill.md",
+    "html_error_page_path": "tests/fixtures/finder_samples/html_error_page.md",
+    "truncated_skill_path": "tests/fixtures/finder_samples/truncated_skill.md"
+  },
+  "verification_cases": [
+    {
+      "id": "exact_match_pass",
+      "desc": "准确路径、有效行号、完整引文精确匹配，核验通过",
+      "source_path": "skills/prompt-craftsman/SKILL.md",
+      "start_line": 3,
+      "end_line": 3,
+      "quote": "A specialized AI Agent skill for designing, testing, and optimizing production-grade system prompts and user prompts.",
+      "expected_ok": true
+    },
+    {
+      "id": "out_of_bounds_start_line",
+      "desc": "行号超出文件总行数，核验失败并报错",
+      "source_path": "skills/prompt-craftsman/SKILL.md",
+      "start_line": 999,
+      "end_line": 1005,
+      "quote": "A specialized AI Agent skill",
+      "expected_ok": false,
+      "expected_error_substr": "越界"
+    },
+    {
+      "id": "inverted_lines",
+      "desc": "起始行大于结束行，核验失败",
+      "source_path": "skills/prompt-craftsman/SKILL.md",
+      "start_line": 10,
+      "end_line": 5,
+      "quote": "A specialized AI Agent skill",
+      "expected_ok": false,
+      "expected_error_substr": "越界"
+    },
+    {
+      "id": "bool_line_trap",
+      "desc": "行号传入布尔值 True（防范 isinstance(True, int) == True 的陷阱），必须拒绝",
+      "source_path": "skills/prompt-craftsman/SKILL.md",
+      "start_line": true,
+      "end_line": 5,
+      "quote": "A specialized AI Agent skill",
+      "expected_ok": false,
+      "expected_error_substr": "非布尔整数"
+    },
+    {
+      "id": "nonexistent_file_path",
+      "desc": "引用的路径不在已读材料中，核验失败",
+      "source_path": "skills/nonexistent/SKILL.md",
+      "start_line": 1,
+      "end_line": 2,
+      "quote": "Some quote",
+      "expected_ok": false,
+      "expected_error_substr": "未在已读取材料中找到"
+    },
+    {
+      "id": "empty_quote",
+      "desc": "引文为空或纯空白，核验失败",
+      "source_path": "skills/prompt-craftsman/SKILL.md",
+      "start_line": 1,
+      "end_line": 1,
+      "quote": "   \n\t  ",
+      "expected_ok": false,
+      "expected_error_substr": "不能为空"
+    },
+    {
+      "id": "fabricated_spliced_quote",
+      "desc": "将真实文本与捏造保证拼接成更长引文，核验失败（杜绝模型幻觉）",
+      "source_path": "skills/prompt-helper/SKILL.md",
+      "start_line": 7,
+      "end_line": 7,
+      "quote": "All prompts are generated based on heuristic rules. Guarantees 100% test accuracy across all benchmarks.",
+      "expected_ok": false,
+      "expected_error_substr": "未找到完整匹配"
+    },
+    {
+      "id": "multiline_quote_normalized_whitespace",
+      "desc": "跨行引文，换行与连续空白被规范化后仍可匹配",
+      "source_path": "skills/prompt-craftsman/SKILL.md",
+      "start_line": 6,
+      "end_line": 7,
+      "quote": "This skill helps users create high-quality, structured prompts for LLM applications. It provides systematic prompt templates, role definitions, constraint frameworks, and evaluation rubrics.",
+      "expected_ok": true
+    }
+  ]
+}
