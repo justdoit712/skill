@@ -71,7 +71,7 @@ def timezone_utc():
 
 class LedgerTest(unittest.TestCase):
     def setUp(self) -> None:
-        self._tmp = tempfile.TemporaryDirectory()
+        self._tmp = tempfile.TemporaryDirectory(ignore_cleanup_errors=True)
         self.state = Path(self._tmp.name) / "state"
 
     def tearDown(self) -> None:

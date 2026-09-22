@@ -36,6 +36,24 @@ Token 上限在每次请求后检查，最后一次请求可能超出上限。
 `data/local/runs/<运行编号>/report.md` 展示用量与本次推荐链接。
 运行后执行 `scripts/preview.ps1` 可浏览分类目录。
 
+## 定向查找特定需求 Skill
+
+当需要针对特定任务（例如："生成高质量 Prompt"、"Postgres 性能优化"、"React Native 跨平台测试"）寻找最匹配且真实可用的 Skill 时，可以使用独立的定向查找工具 [find_skill.py](find_skill.py)：
+
+```powershell
+# 交互式输入需求
+.\.venv\Scripts\python.exe find_skill.py
+
+# 命令行直接指定需求与候选参数
+.\.venv\Scripts\python.exe find_skill.py "生成高质量 Prompt" --limit 5 --max-evaluations 20 --max-tokens 200000
+```
+
+### 特性与运行边界
+- **需求驱动与跨范围检索**：跳过主目录的分类排他限制（如 Prompt 工程在主目录不单独设类，但在定向查找中可自由搜索）。
+- **零目录副作用**：完全独立于主导航目录的 `data/catalog.json`、`data/queue.json` 和周额度账本，不会影响主站数据。
+- **客观证据核验**：LLM 对评判准则的声称（`supported`）必须附带代码文件行号与原文片段，经代码严格检验，杜绝幻觉。
+- **独立报告留存**：每次查找结果输出在 `data/local/find-skills/<时间戳-UUID>/`，包含可读 Markdown 短名单报告（`report.md`）与机器可读的评估数据（`report.json`）。
+
 ## 收录范围
 
 ### 主分类
@@ -133,4 +151,5 @@ GitHub 是托管平台，不是所有技能的发布方。官方、社区与聚�
 | --- | --- |
 | [二开需求](docs/Skills导航目录二开需求.md) | 本次重建的统一依据：定位、范围、规则、清理与验收 |
 | [运行说明](docs/运行说明.md) | 运行链路、周额度、配置与密钥、故障处理 |
+| [定向查找方案](docs/定向查找Skill实施方案.md) | 定向查找特定需求 Skill 的交互与自动化评估实施方案 |
 | [清理清单](docs/Skills导航目录清理清单.md) | 已删除内容、许可证记录与执行记录 |

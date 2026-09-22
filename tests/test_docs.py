@@ -42,7 +42,7 @@ class DocLinkTest(unittest.TestCase):
         names = sorted(p.name for p in (ROOT / "docs").glob("*.md"))
         self.assertEqual(
             names,
-            ["Skills导航目录二开需求.md", "Skills导航目录清理清单.md", "运行说明.md"],
+            ["Skills导航目录二开需求.md", "Skills导航目录清理清单.md", "定向查找Skill实施方案.md", "运行说明.md"],
             "docs/ 的文件集合发生变化；若是刻意调整，请同步更新本断言",
         )
 

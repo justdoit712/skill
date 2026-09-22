@@ -258,7 +258,25 @@ def _expand_candidates(
 
         if error:
             outcomes.append(SearchOutcome(query=probe, ok=False, reason_code=REASON_HTTP_ERROR, error=error))
-            out.append(candidate)
+            if error.startswith("TREE_TRUNCATED") and paths:
+                for path in paths:
+                    out.append(
+                        candidate_from_repo(
+                            candidate.owner,
+                            candidate.repo,
+                            path=path,
+                            url=f"https://github.com/{candidate.owner}/{candidate.repo}/blob/HEAD/{path}",
+                            repo_url=candidate.repo_url,
+                            name=_skill_name_from_path(path, candidate.name),
+                            description=candidate.description,
+                            source_id=candidate.source_ids[0] if candidate.source_ids else "",
+                            discovery_method=candidate.discovery_methods[0] if candidate.discovery_methods else "",
+                            search_term=candidate.search_terms[0] if candidate.search_terms else "",
+                            discovered_at=candidate.discovered_at or discovered_at,
+                        )
+                    )
+            else:
+                out.append(candidate)
             continue
 
         if not paths:
@@ -437,11 +455,14 @@ def expand_repo_skills(
         if not ok:
             return [], error
 
+        is_truncated = bool((tree or {}).get("truncated"))
         paths = [
             item.get("path", "")
             for item in (tree or {}).get("tree", [])
             if item.get("type") == "blob" and item.get("path", "").endswith(SKILL_FILENAME)
         ]
+        if is_truncated:
+            return sorted(paths), "TREE_TRUNCATED: GitHub API 返回的文件树已被截断，展开结果可能不完整"
         return sorted(paths), None
     finally:
         if owns:
