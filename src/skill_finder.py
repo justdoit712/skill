@@ -62,8 +62,8 @@ MAX_PRIMARY_FILE_BYTES = 65536
 MAX_TOTAL_MATERIAL_BYTES = 98304
 MAX_REFERENCED_FILES = 2
 
-PLAN_MAX_OUTPUT_TOKENS = 1200
-EVAL_MAX_OUTPUT_TOKENS = 2500
+PLAN_MAX_OUTPUT_TOKENS = 4000
+EVAL_MAX_OUTPUT_TOKENS = 10000
 
 STATUS_TARGET_REACHED = "target_reached"
 STATUS_COMPLETED = "completed"
@@ -494,7 +494,7 @@ def execute_find_skill(
             if usage.total_tokens >= final_max_tokens:
                 report["stop_reason"] = STATUS_TOKEN_LIMIT
                 break
-            if consecutive_failures >= 3:
+            if consecutive_failures >= 20:
                 report["stop_reason"] = STATUS_MODEL_FAILURES
                 break
 
