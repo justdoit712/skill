@@ -309,6 +309,21 @@ def fetch_candidate_materials(
 # --------------------------------------------------------------------------
 
 
+def _parse_int_val(val: Any, default: int) -> int:
+    """支持 int 以及带空格、下划线、千分位逗号的表示（如 '200 000'、'200_000'、'200,000'）。"""
+    if val is None:
+        return default
+    if isinstance(val, (int, float)):
+        return int(val)
+    if isinstance(val, str):
+        clean = val.replace(" ", "").replace("_", "").replace(",", "").strip()
+        try:
+            return int(clean)
+        except ValueError:
+            pass
+    return default
+
+
 def execute_find_skill(
     topic: str,
     *,
@@ -323,9 +338,9 @@ def execute_find_skill(
     """执行定向查找全流程并生成报告。"""
     root = Path(root_dir).resolve()
     run_cfg = load_finder_run_config(root / "config")
-    final_limit = limit if limit is not None else int(run_cfg.get("limit", DEFAULT_LIMIT))
-    final_max_evaluations = max_evaluations if max_evaluations is not None else int(run_cfg.get("max_evaluations", DEFAULT_MAX_EVALUATIONS))
-    final_max_tokens = max_tokens if max_tokens is not None else int(run_cfg.get("max_tokens", DEFAULT_MAX_TOKENS))
+    final_limit = limit if limit is not None else _parse_int_val(run_cfg.get("limit"), DEFAULT_LIMIT)
+    final_max_evaluations = max_evaluations if max_evaluations is not None else _parse_int_val(run_cfg.get("max_evaluations"), DEFAULT_MAX_EVALUATIONS)
+    final_max_tokens = max_tokens if max_tokens is not None else _parse_int_val(run_cfg.get("max_tokens"), DEFAULT_MAX_TOKENS)
 
     started_at = now_local()
     run_id = started_at.strftime("%Y%m%d-%H%M%S-") + uuid4().hex[:6]
@@ -664,15 +679,15 @@ def render_find_markdown_report(report: dict[str, Any]) -> str:
 def main(argv: list[str] | None = None, *, root: Path | None = None) -> int:
     root_path = Path(root or Path(__file__).resolve().parents[1]).resolve()
     run_cfg = load_finder_run_config(root_path / "config")
-    cfg_limit = run_cfg.get("limit", DEFAULT_LIMIT)
-    cfg_max_eval = run_cfg.get("max_evaluations", DEFAULT_MAX_EVALUATIONS)
-    cfg_max_tokens = run_cfg.get("max_tokens", DEFAULT_MAX_TOKENS)
+    cfg_limit = _parse_int_val(run_cfg.get("limit"), DEFAULT_LIMIT)
+    cfg_max_eval = _parse_int_val(run_cfg.get("max_evaluations"), DEFAULT_MAX_EVALUATIONS)
+    cfg_max_tokens = _parse_int_val(run_cfg.get("max_tokens"), DEFAULT_MAX_TOKENS)
 
     parser = argparse.ArgumentParser(description="定向查找特定需求的 AI Agent Skill 并生成短名单对比报告")
     parser.add_argument("topic", nargs="?", help="想要查找的技能需求（如：生成高质量 Prompt）")
-    parser.add_argument("--limit", type=int, default=None, help=f"优先查看的短名单数量（默认 {cfg_limit}，取自 config/find-skill.json）")
-    parser.add_argument("--max-evaluations", type=int, default=None, help=f"本次最多评估的技能数量（默认 {cfg_max_eval}，取自 config/find-skill.json）")
-    parser.add_argument("--max-tokens", type=int, default=None, help=f"本次模型调用的 Token 消耗停止阈值（默认 {cfg_max_tokens:,}，取自 config/find-skill.json）")
+    parser.add_argument("--limit", type=lambda v: _parse_int_val(v, DEFAULT_LIMIT), default=None, help=f"优先查看的短名单数量（默认 {cfg_limit}，取自 config/find-skill.json）")
+    parser.add_argument("--max-evaluations", type=lambda v: _parse_int_val(v, DEFAULT_MAX_EVALUATIONS), default=None, help=f"本次最多评估的技能数量（默认 {cfg_max_eval}，取自 config/find-skill.json）")
+    parser.add_argument("--max-tokens", type=lambda v: _parse_int_val(v, DEFAULT_MAX_TOKENS), default=None, help=f"本次模型调用的 Token 消耗停止阈值（默认 {cfg_max_tokens:,}，取自 config/find-skill.json）")
     args = parser.parse_args(argv)
 
     topic = args.topic or run_cfg.get("topic")
