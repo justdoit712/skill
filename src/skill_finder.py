@@ -682,15 +682,18 @@ def main(argv: list[str] | None = None, *, root: Path | None = None) -> int:
     cfg_limit = _parse_int_val(run_cfg.get("limit"), DEFAULT_LIMIT)
     cfg_max_eval = _parse_int_val(run_cfg.get("max_evaluations"), DEFAULT_MAX_EVALUATIONS)
     cfg_max_tokens = _parse_int_val(run_cfg.get("max_tokens"), DEFAULT_MAX_TOKENS)
+    cfg_topic = (run_cfg.get("topic") or "").strip()
+
+    topic_help = f"想要查找的技能需求（默认取自 config/find-skill.json: '{cfg_topic}'）" if cfg_topic else "想要查找的技能需求（如：生成高质量 Prompt）"
 
     parser = argparse.ArgumentParser(description="定向查找特定需求的 AI Agent Skill 并生成短名单对比报告")
-    parser.add_argument("topic", nargs="?", help="想要查找的技能需求（如：生成高质量 Prompt）")
+    parser.add_argument("topic", nargs="?", help=topic_help)
     parser.add_argument("--limit", type=lambda v: _parse_int_val(v, DEFAULT_LIMIT), default=None, help=f"优先查看的短名单数量（默认 {cfg_limit}，取自 config/find-skill.json）")
     parser.add_argument("--max-evaluations", type=lambda v: _parse_int_val(v, DEFAULT_MAX_EVALUATIONS), default=None, help=f"本次最多评估的技能数量（默认 {cfg_max_eval}，取自 config/find-skill.json）")
     parser.add_argument("--max-tokens", type=lambda v: _parse_int_val(v, DEFAULT_MAX_TOKENS), default=None, help=f"本次模型调用的 Token 消耗停止阈值（默认 {cfg_max_tokens:,}，取自 config/find-skill.json）")
     args = parser.parse_args(argv)
 
-    topic = args.topic or run_cfg.get("topic")
+    topic = (args.topic or cfg_topic).strip()
     if not topic:
         if sys.stdin.isatty():
             try:
@@ -700,7 +703,7 @@ def main(argv: list[str] | None = None, *, root: Path | None = None) -> int:
                 print("\n操作取消。")
                 return 1
         if not topic:
-            parser.error("必须提供需求 topic 参数（或在交互终端中输入）")
+            parser.error("必须提供需求 topic 参数（或在 config/find-skill.json 中配置 topic，或在交互终端中输入）")
 
     try:
         report = execute_find_skill(
