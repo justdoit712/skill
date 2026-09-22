@@ -744,7 +744,25 @@
     var shortlist = report.shortlist || [];
     var alternatives = report.alternatives || [];
     var tokens = (report.usage && report.usage.total_tokens) ? report.usage.total_tokens.toLocaleString() : "0";
-    var evCount = report.evaluated_count || (shortlist.length + alternatives.length);
+    var evCount = (report.evaluated_count !== undefined && report.evaluated_count !== null) ? report.evaluated_count : (shortlist.length + alternatives.length);
+    var attempts = (report.evaluation_attempts !== undefined && report.evaluation_attempts !== null) ? report.evaluation_attempts : evCount;
+    var stopReason = (report.stop_reason || report.status || "").toLowerCase();
+
+    // 状态提示条（支持 usage_unknown, token_limit, evaluation_limit, interrupted 等）
+    var bannerHtml = "";
+    if (stopReason === "usage_unknown") {
+      bannerHtml = '<div class="find-status-banner warning">⚠️ 模型调用缺失用量统计 (usage_unknown)，触发安全停机保护；已安全保存中断前的全部局部结果。</div>';
+    } else if (stopReason === "token_limit") {
+      bannerHtml = '<div class="find-status-banner warning">⚠️ 模型调用消耗已达到本次 Token 预算上限 (token_limit)，查找停止；已保存当前已完成结果。</div>';
+    } else if (stopReason === "evaluation_limit") {
+      bannerHtml = '<div class="find-status-banner info">ℹ️ 评估数量已达到本次设置上限 (evaluation_limit)，查找停止。</div>';
+    } else if (stopReason === "interrupted") {
+      bannerHtml = '<div class="find-status-banner warning">⏸️ 用户主动中断查找过程 (interrupted)；已安全保留中断前已评估的全部结果与 Token 用量。</div>';
+    } else if (stopReason === "model_failures") {
+      bannerHtml = '<div class="find-status-banner danger">⚠️ 连续模型调用异常次数超标 (model_failures)，触发熔断停机保护。</div>';
+    } else if (report.status === "error" || stopReason === "search_failed" || stopReason === "plan_failed") {
+      bannerHtml = '<div class="find-status-banner danger">❌ 查找过程中发生异常中止：' + escapeHtml(report.stop_reason || report.status) + '</div>';
+    }
 
     // 1. 概况卡片
     var overviewLi = document.createElement("li");
@@ -770,10 +788,11 @@
       '<div class="find-stats-row">' +
         '<span>🏆 优先推荐：<strong>' + shortlist.length + '</strong> 项</span>' +
         '<span>📋 相关备选：<strong>' + alternatives.length + '</strong> 项</span>' +
-        '<span>🔍 评估候选：<strong>' + evCount + '</strong> 个</span>' +
+        '<span>🔍 评估条目：<strong>' + evCount + '</strong>（尝试 <strong>' + attempts + '</strong> 次）</span>' +
         '<span>⚡ 消耗 Token：<strong>' + tokens + '</strong></span>' +
         '<span>🕒 时间：<strong>' + escapeHtml(updated) + '</strong></span>' +
       '</div>' +
+      bannerHtml +
       criteriaHtml;
     el.list.appendChild(overviewLi);
 
@@ -785,16 +804,19 @@
       el.list.appendChild(div1);
 
       shortlist.forEach(function (item) {
-        var cand = item.candidate || {};
-        var ev = item.evaluation || {};
+        var cand = item.candidate || item;
+        var ev = item.evaluation || item;
         var li = document.createElement("li");
         li.className = "card";
 
+        var matchLevel = ev.match || item.match_level || "strong";
+        var docLevel = ev.documentation || "clear";
         var bits = [
-          '<span class="tag tag-find-strong">强匹配</span>',
-          '<span class="tag tag-find-doc">' + (ev.documentation === "clear" ? "说明完整" : "说明部分") + '</span>'
+          '<span class="tag tag-find-strong">' + (matchLevel === "strong" ? "强匹配" : escapeHtml(matchLevel)) + '</span>',
+          '<span class="tag tag-find-doc">' + (docLevel === "clear" ? "说明完整" : "说明部分") + '</span>'
         ];
-        if (cand.author) bits.push('<span class="tag">' + escapeHtml(cand.author) + '</span>');
+        var authorName = cand.author || item.author;
+        if (authorName) bits.push('<span class="tag">' + escapeHtml(authorName) + '</span>');
 
         var evidenceHtml = "";
         var supportedResults = (ev.criteria_results || []).filter(function (cr) { return cr.status === "supported"; });
@@ -818,13 +840,16 @@
         var usageHtml = ev.usage_zh ? '<p class="detail"><strong>使用方式：</strong>' + escapeHtml(ev.usage_zh) + '</p>' : '';
         var depHtml = (ev.dependencies || []).length ? '<p class="detail"><strong>依赖：</strong>' + escapeHtml(ev.dependencies.join("、")) + '</p>' : '';
         var limHtml = (ev.limitations || []).length ? '<p class="detail" style="color:#b45309;"><strong>限制与注意：</strong>' + escapeHtml(ev.limitations.join("；")) + '</p>' : '';
+        var skillName = cand.name || cand.skill_id || item.name || item.skill_id || "未命名技能";
+        var skillUrl = cand.url || cand.repo_url || item.url || item.repo_url || "#";
+        var summaryText = ev.summary_zh || item.summary || "无简述";
 
         li.innerHTML =
           '<div class="card-head">' +
-            '<h3><a href="' + escapeHtml(cand.url || cand.repo_url) + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(cand.name || cand.skill_id) + '</a></h3>' +
+            '<h3><a href="' + escapeHtml(skillUrl) + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(skillName) + '</a></h3>' +
             '<div class="card-tags">' + bits.join("") + '</div>' +
           '</div>' +
-          '<p class="summary">' + escapeHtml(ev.summary_zh || "无简述") + '</p>' +
+          '<p class="summary">' + escapeHtml(summaryText) + '</p>' +
           whyHtml +
           evidenceHtml +
           usageHtml +
@@ -842,16 +867,17 @@
       el.list.appendChild(div2);
 
       alternatives.forEach(function (item) {
-        var cand = item.candidate || {};
-        var ev = item.evaluation || {};
+        var cand = item.candidate || item;
+        var ev = item.evaluation || item;
         var li = document.createElement("li");
         li.className = "card";
 
         var bits = [
           '<span class="tag tag-cand">相关备选</span>',
-          '<span class="tag">' + escapeHtml(ev.match || "partial") + '</span>'
+          '<span class="tag">' + escapeHtml(ev.match || item.match_level || "partial") + '</span>'
         ];
-        if (cand.author) bits.push('<span class="tag">' + escapeHtml(cand.author) + '</span>');
+        var authorName = cand.author || item.author;
+        if (authorName) bits.push('<span class="tag">' + escapeHtml(authorName) + '</span>');
 
         var gaps = [];
         (ev.criteria_results || []).forEach(function (cr) {
@@ -860,13 +886,16 @@
           }
         });
         var gapText = gaps.length ? "主要差距：准则 " + gaps.join("、") + " 未达到强匹配或缺乏确凿证据" : "说明质量或观察项有待完善";
+        var skillName = cand.name || cand.skill_id || item.name || item.skill_id || "未命名备选";
+        var skillUrl = cand.url || cand.repo_url || item.url || item.repo_url || "#";
+        var summaryText = ev.summary_zh || item.summary || "相关备选技能";
 
         li.innerHTML =
           '<div class="card-head">' +
-            '<h3><a href="' + escapeHtml(cand.url || cand.repo_url) + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(cand.name || cand.skill_id) + '</a></h3>' +
+            '<h3><a href="' + escapeHtml(skillUrl) + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(skillName) + '</a></h3>' +
             '<div class="card-tags">' + bits.join("") + '</div>' +
           '</div>' +
-          '<p class="summary">' + escapeHtml(ev.summary_zh || "相关备选技能") + '</p>' +
+          '<p class="summary">' + escapeHtml(summaryText) + '</p>' +
           '<div class="find-gap-text">⚠️ ' + escapeHtml(gapText) + '</div>';
         el.list.appendChild(li);
       });

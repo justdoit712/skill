@@ -14,17 +14,646 @@
         "cyclic": false
       },
       "src.budget": {
-        "lines": 300,
-        "sha256": "f5fca2ea84dd619f341a9ddcd6f48b4df681b29d75f1b3cbbc0ee6c78c3853db",
-        "imports": [],
-        "fan_out": 0,
-        "imported_by": [
-          "src.local_run",
-          "src.pipeline",
-          "src.pool",
-          "src.skill_finder"
+        "lines": 280,
+        "sha256": "4921e5cc75072c7a7b155172ee248044b62e2d9dcbdaa4cff6ffcc6abdd44708",
+        "imports": [
+          "src.infra.files",
+          "src.shared.runtime"
         ],
-        "transitive_imports": [],
+        "fan_out": 2,
+        "imported_by": [
+          "src.catalog.budget",
+          "src.catalog.queue",
+          "src.catalog.sync_evaluate",
+          "src.catalog.sync_reserve"
+        ],
+        "transitive_imports": [
+          "src.infra.files",
+          "src.shared.runtime"
+        ],
+        "cyclic": false
+      },
+      "src.catalog.__init__": {
+        "lines": 68,
+        "sha256": "2c6a5cd6bc9c9bb30d764010dc81942fd3861eca43e2b4bf361f6fc2faf383fb",
+        "imports": [
+          "src.catalog.entry_state",
+          "src.catalog.local",
+          "src.catalog.maintenance",
+          "src.catalog.store",
+          "src.catalog.sync_evaluate",
+          "src.catalog.sync_reserve"
+        ],
+        "fan_out": 6,
+        "imported_by": [],
+        "transitive_imports": [
+          "src.budget",
+          "src.catalog.budget",
+          "src.catalog.config",
+          "src.catalog.decide",
+          "src.catalog.dedupe",
+          "src.catalog.discovery",
+          "src.catalog.entry_state",
+          "src.catalog.evaluation",
+          "src.catalog.fetch",
+          "src.catalog.index",
+          "src.catalog.local",
+          "src.catalog.maintenance",
+          "src.catalog.overrides",
+          "src.catalog.pool",
+          "src.catalog.prescreen",
+          "src.catalog.queue",
+          "src.catalog.report",
+          "src.catalog.snooze",
+          "src.catalog.store",
+          "src.catalog.sync_evaluate",
+          "src.catalog.sync_reserve",
+          "src.catalog.usage",
+          "src.decide",
+          "src.dedupe",
+          "src.discover",
+          "src.enrich",
+          "src.evaluate",
+          "src.fetch",
+          "src.index",
+          "src.infra.files",
+          "src.infra.http",
+          "src.infra.llm",
+          "src.models",
+          "src.overrides",
+          "src.pool",
+          "src.prescreen",
+          "src.report",
+          "src.schema_utils",
+          "src.shared.identity",
+          "src.shared.models",
+          "src.shared.runtime",
+          "src.shared.schema",
+          "src.shared.usage",
+          "src.snooze",
+          "src.usage"
+        ],
+        "cyclic": false
+      },
+      "src.catalog.budget": {
+        "lines": 5,
+        "sha256": "b90659d56332630795cb9bb67b16a9aa3a94ab5d468d5fba0f66093a26e53e55",
+        "imports": [
+          "src.budget"
+        ],
+        "fan_out": 1,
+        "imported_by": [
+          "src.catalog.local"
+        ],
+        "transitive_imports": [
+          "src.budget",
+          "src.infra.files",
+          "src.shared.runtime"
+        ],
+        "cyclic": false
+      },
+      "src.catalog.config": {
+        "lines": 78,
+        "sha256": "61bfcaf8240a68609c38511f145246b241fa1888b8c9d3bc480ed434d382d052",
+        "imports": [
+          "src.infra.files",
+          "src.overrides",
+          "src.prescreen",
+          "src.snooze"
+        ],
+        "fan_out": 4,
+        "imported_by": [
+          "src.catalog.local",
+          "src.catalog.sync_evaluate",
+          "src.catalog.sync_reserve",
+          "src.pipeline"
+        ],
+        "transitive_imports": [
+          "src.dedupe",
+          "src.infra.files",
+          "src.models",
+          "src.overrides",
+          "src.prescreen",
+          "src.shared.identity",
+          "src.shared.models",
+          "src.snooze"
+        ],
+        "cyclic": false
+      },
+      "src.catalog.decide": {
+        "lines": 5,
+        "sha256": "ac8ab207dfc87e2713dbf3d891b070abfaca6e3a53432e5afe26ea93b92fd5d1",
+        "imports": [
+          "src.decide"
+        ],
+        "fan_out": 1,
+        "imported_by": [
+          "src.catalog.local"
+        ],
+        "transitive_imports": [
+          "src.decide"
+        ],
+        "cyclic": false
+      },
+      "src.catalog.dedupe": {
+        "lines": 5,
+        "sha256": "014108ea9be606e0ec853fddbab1aa38d133b1fd47eb809c55bb865067c7d713",
+        "imports": [
+          "src.dedupe"
+        ],
+        "fan_out": 1,
+        "imported_by": [
+          "src.catalog.local"
+        ],
+        "transitive_imports": [
+          "src.dedupe",
+          "src.models",
+          "src.shared.identity",
+          "src.shared.models"
+        ],
+        "cyclic": false
+      },
+      "src.catalog.discovery": {
+        "lines": 5,
+        "sha256": "81bb4d6d811549c3bb6b5b5605b5fde918e547f12b5107d776b0728fc62ec075",
+        "imports": [
+          "src.discover"
+        ],
+        "fan_out": 1,
+        "imported_by": [
+          "src.catalog.local"
+        ],
+        "transitive_imports": [
+          "src.dedupe",
+          "src.discover",
+          "src.fetch",
+          "src.infra.http",
+          "src.models",
+          "src.shared.identity",
+          "src.shared.models"
+        ],
+        "cyclic": false
+      },
+      "src.catalog.enrich": {
+        "lines": 5,
+        "sha256": "b79863bc27a4402792945784f1eb86867ec0a3f82e43b1d592dee880fb8512f5",
+        "imports": [
+          "src.enrich"
+        ],
+        "fan_out": 1,
+        "imported_by": [],
+        "transitive_imports": [
+          "src.decide",
+          "src.enrich",
+          "src.index",
+          "src.models",
+          "src.overrides",
+          "src.schema_utils",
+          "src.shared.models",
+          "src.shared.schema",
+          "src.snooze"
+        ],
+        "cyclic": false
+      },
+      "src.catalog.entry_state": {
+        "lines": 304,
+        "sha256": "5c1cb1463b0ea8cf5680856a30c27e84e800b96e7a9a907349782560ca108eb0",
+        "imports": [
+          "src.shared.models",
+          "src.shared.schema"
+        ],
+        "fan_out": 2,
+        "imported_by": [
+          "src.catalog.__init__",
+          "src.catalog.local",
+          "src.catalog.sync_evaluate",
+          "src.pipeline"
+        ],
+        "transitive_imports": [
+          "src.shared.models",
+          "src.shared.schema"
+        ],
+        "cyclic": false
+      },
+      "src.catalog.evaluation": {
+        "lines": 5,
+        "sha256": "3df392ea17b756fc29c68add929e2068779ba41357c69e438046219005fe8271",
+        "imports": [
+          "src.evaluate"
+        ],
+        "fan_out": 1,
+        "imported_by": [
+          "src.catalog.local"
+        ],
+        "transitive_imports": [
+          "src.decide",
+          "src.evaluate",
+          "src.fetch",
+          "src.infra.http",
+          "src.infra.llm",
+          "src.models",
+          "src.schema_utils",
+          "src.shared.models",
+          "src.shared.schema"
+        ],
+        "cyclic": false
+      },
+      "src.catalog.fetch": {
+        "lines": 5,
+        "sha256": "7ff80043e1fed424464f34a1a3f52dee470d8ed0990af3895b9d89ef39773820",
+        "imports": [
+          "src.fetch"
+        ],
+        "fan_out": 1,
+        "imported_by": [
+          "src.catalog.local"
+        ],
+        "transitive_imports": [
+          "src.fetch",
+          "src.infra.http"
+        ],
+        "cyclic": false
+      },
+      "src.catalog.index": {
+        "lines": 5,
+        "sha256": "d0c961e2fc7343603580bf8b2753a6d0f719c583593c1079cb4636abcc7882b0",
+        "imports": [
+          "src.index"
+        ],
+        "fan_out": 1,
+        "imported_by": [
+          "src.catalog.local",
+          "src.catalog.sync_evaluate"
+        ],
+        "transitive_imports": [
+          "src.decide",
+          "src.index",
+          "src.models",
+          "src.overrides",
+          "src.schema_utils",
+          "src.shared.models",
+          "src.shared.schema",
+          "src.snooze"
+        ],
+        "cyclic": false
+      },
+      "src.catalog.local": {
+        "lines": 824,
+        "sha256": "87f6d88cb5754332c351f8dc0acfc0310058be2cbd33eb9c90618c3e77aa9d11",
+        "imports": [
+          "src.catalog.budget",
+          "src.catalog.config",
+          "src.catalog.decide",
+          "src.catalog.dedupe",
+          "src.catalog.discovery",
+          "src.catalog.entry_state",
+          "src.catalog.evaluation",
+          "src.catalog.fetch",
+          "src.catalog.index",
+          "src.catalog.maintenance",
+          "src.catalog.overrides",
+          "src.catalog.pool",
+          "src.catalog.prescreen",
+          "src.catalog.report",
+          "src.catalog.snooze",
+          "src.catalog.usage",
+          "src.infra.files",
+          "src.shared.runtime"
+        ],
+        "fan_out": 18,
+        "imported_by": [
+          "src.catalog.__init__",
+          "src.local_run"
+        ],
+        "transitive_imports": [
+          "src.budget",
+          "src.catalog.budget",
+          "src.catalog.config",
+          "src.catalog.decide",
+          "src.catalog.dedupe",
+          "src.catalog.discovery",
+          "src.catalog.entry_state",
+          "src.catalog.evaluation",
+          "src.catalog.fetch",
+          "src.catalog.index",
+          "src.catalog.maintenance",
+          "src.catalog.overrides",
+          "src.catalog.pool",
+          "src.catalog.prescreen",
+          "src.catalog.report",
+          "src.catalog.snooze",
+          "src.catalog.usage",
+          "src.decide",
+          "src.dedupe",
+          "src.discover",
+          "src.enrich",
+          "src.evaluate",
+          "src.fetch",
+          "src.index",
+          "src.infra.files",
+          "src.infra.http",
+          "src.infra.llm",
+          "src.models",
+          "src.overrides",
+          "src.pool",
+          "src.prescreen",
+          "src.report",
+          "src.schema_utils",
+          "src.shared.identity",
+          "src.shared.models",
+          "src.shared.runtime",
+          "src.shared.schema",
+          "src.shared.usage",
+          "src.snooze",
+          "src.usage"
+        ],
+        "cyclic": false
+      },
+      "src.catalog.maintenance": {
+        "lines": 45,
+        "sha256": "7b4033900ab7281de99c13cd6197c322108f49becadd427da4d5f3fd77a68253",
+        "imports": [
+          "src.enrich",
+          "src.index"
+        ],
+        "fan_out": 2,
+        "imported_by": [
+          "src.catalog.__init__",
+          "src.catalog.local"
+        ],
+        "transitive_imports": [
+          "src.decide",
+          "src.enrich",
+          "src.index",
+          "src.models",
+          "src.overrides",
+          "src.schema_utils",
+          "src.shared.models",
+          "src.shared.schema",
+          "src.snooze"
+        ],
+        "cyclic": false
+      },
+      "src.catalog.overrides": {
+        "lines": 5,
+        "sha256": "3ed0723bc93cbcb787032088437b69f76a219b23f765c645acafe264cdb9615f",
+        "imports": [
+          "src.overrides"
+        ],
+        "fan_out": 1,
+        "imported_by": [
+          "src.catalog.local"
+        ],
+        "transitive_imports": [
+          "src.overrides"
+        ],
+        "cyclic": false
+      },
+      "src.catalog.pool": {
+        "lines": 5,
+        "sha256": "b57757ad41cf02f5157bf1b30df99d5eb658142d0334101f9894e8dcc14b66a1",
+        "imports": [
+          "src.pool"
+        ],
+        "fan_out": 1,
+        "imported_by": [
+          "src.catalog.local"
+        ],
+        "transitive_imports": [
+          "src.dedupe",
+          "src.infra.files",
+          "src.models",
+          "src.pool",
+          "src.shared.identity",
+          "src.shared.models",
+          "src.shared.runtime"
+        ],
+        "cyclic": false
+      },
+      "src.catalog.prescreen": {
+        "lines": 5,
+        "sha256": "528cf90738e38abba22af10f7e181141c8fa0be1d95c93899a921fe91901fddf",
+        "imports": [
+          "src.prescreen"
+        ],
+        "fan_out": 1,
+        "imported_by": [
+          "src.catalog.local"
+        ],
+        "transitive_imports": [
+          "src.dedupe",
+          "src.models",
+          "src.overrides",
+          "src.prescreen",
+          "src.shared.identity",
+          "src.shared.models"
+        ],
+        "cyclic": false
+      },
+      "src.catalog.queue": {
+        "lines": 228,
+        "sha256": "3ca63b647181ffd50ddd2449fe1861d051450e40869ad81594034d760613e256",
+        "imports": [
+          "src.budget",
+          "src.infra.files",
+          "src.models"
+        ],
+        "fan_out": 3,
+        "imported_by": [
+          "src.catalog.sync_evaluate",
+          "src.catalog.sync_reserve",
+          "src.pipeline"
+        ],
+        "transitive_imports": [
+          "src.budget",
+          "src.infra.files",
+          "src.models",
+          "src.shared.models",
+          "src.shared.runtime"
+        ],
+        "cyclic": false
+      },
+      "src.catalog.report": {
+        "lines": 30,
+        "sha256": "69c2dc67a982fa1385fd17190e747e5a44c29f11d9b8fd4d55568f4dc637a08b",
+        "imports": [
+          "src.report"
+        ],
+        "fan_out": 1,
+        "imported_by": [
+          "src.catalog.local"
+        ],
+        "transitive_imports": [
+          "src.decide",
+          "src.index",
+          "src.models",
+          "src.overrides",
+          "src.report",
+          "src.schema_utils",
+          "src.shared.models",
+          "src.shared.schema",
+          "src.snooze"
+        ],
+        "cyclic": false
+      },
+      "src.catalog.snooze": {
+        "lines": 5,
+        "sha256": "f81963938249fb17a8e50f7f138a793fe47526f444ec0c4eb754433c5629bc6c",
+        "imports": [
+          "src.snooze"
+        ],
+        "fan_out": 1,
+        "imported_by": [
+          "src.catalog.local"
+        ],
+        "transitive_imports": [
+          "src.overrides",
+          "src.snooze"
+        ],
+        "cyclic": false
+      },
+      "src.catalog.store": {
+        "lines": 146,
+        "sha256": "92fd2b98a0b68dfaecd3bf3ae74823e96a64e12421ccf6d8f40a1c7c5d2b506e",
+        "imports": [
+          "src.index",
+          "src.infra.files"
+        ],
+        "fan_out": 2,
+        "imported_by": [
+          "src.catalog.__init__"
+        ],
+        "transitive_imports": [
+          "src.decide",
+          "src.index",
+          "src.infra.files",
+          "src.models",
+          "src.overrides",
+          "src.schema_utils",
+          "src.shared.models",
+          "src.shared.schema",
+          "src.snooze"
+        ],
+        "cyclic": false
+      },
+      "src.catalog.sync_evaluate": {
+        "lines": 325,
+        "sha256": "fe2d5b7dee924b3d6e9399ad8b7c62051c3c7122402cd7559a457702b57e54bf",
+        "imports": [
+          "src.budget",
+          "src.catalog.config",
+          "src.catalog.entry_state",
+          "src.catalog.index",
+          "src.catalog.queue",
+          "src.catalog.sync_reserve",
+          "src.decide",
+          "src.evaluate",
+          "src.infra.files",
+          "src.infra.http",
+          "src.models",
+          "src.overrides",
+          "src.report",
+          "src.shared.identity",
+          "src.shared.runtime",
+          "src.snooze"
+        ],
+        "fan_out": 16,
+        "imported_by": [
+          "src.catalog.__init__",
+          "src.pipeline"
+        ],
+        "transitive_imports": [
+          "src.budget",
+          "src.catalog.config",
+          "src.catalog.entry_state",
+          "src.catalog.index",
+          "src.catalog.queue",
+          "src.catalog.sync_reserve",
+          "src.decide",
+          "src.dedupe",
+          "src.discover",
+          "src.evaluate",
+          "src.fetch",
+          "src.index",
+          "src.infra.files",
+          "src.infra.http",
+          "src.infra.llm",
+          "src.models",
+          "src.overrides",
+          "src.prescreen",
+          "src.report",
+          "src.schema_utils",
+          "src.shared.identity",
+          "src.shared.models",
+          "src.shared.runtime",
+          "src.shared.schema",
+          "src.snooze"
+        ],
+        "cyclic": false
+      },
+      "src.catalog.sync_reserve": {
+        "lines": 465,
+        "sha256": "8fba544505f16b31ed9815df2bf76e71e60f80de47547e2a67dd7e5e45597a5b",
+        "imports": [
+          "src.budget",
+          "src.catalog.config",
+          "src.catalog.queue",
+          "src.dedupe",
+          "src.discover",
+          "src.evaluate",
+          "src.infra.files",
+          "src.infra.http",
+          "src.models",
+          "src.overrides",
+          "src.prescreen",
+          "src.shared.identity",
+          "src.shared.runtime",
+          "src.snooze"
+        ],
+        "fan_out": 14,
+        "imported_by": [
+          "src.catalog.__init__",
+          "src.catalog.sync_evaluate",
+          "src.pipeline"
+        ],
+        "transitive_imports": [
+          "src.budget",
+          "src.catalog.config",
+          "src.catalog.queue",
+          "src.decide",
+          "src.dedupe",
+          "src.discover",
+          "src.evaluate",
+          "src.fetch",
+          "src.infra.files",
+          "src.infra.http",
+          "src.infra.llm",
+          "src.models",
+          "src.overrides",
+          "src.prescreen",
+          "src.schema_utils",
+          "src.shared.identity",
+          "src.shared.models",
+          "src.shared.runtime",
+          "src.shared.schema",
+          "src.snooze"
+        ],
+        "cyclic": false
+      },
+      "src.catalog.usage": {
+        "lines": 5,
+        "sha256": "f4f276839ed4744ad93546d07332b5c274cb1bac3412cca2e637175aa8ca826e",
+        "imports": [
+          "src.usage"
+        ],
+        "fan_out": 1,
+        "imported_by": [
+          "src.catalog.local"
+        ],
+        "transitive_imports": [
+          "src.shared.usage",
+          "src.usage"
+        ],
         "cyclic": false
       },
       "src.decide": {
@@ -33,37 +662,39 @@
         "imports": [],
         "fan_out": 0,
         "imported_by": [
+          "src.catalog.decide",
+          "src.catalog.sync_evaluate",
           "src.evaluate",
-          "src.index",
-          "src.local_run",
-          "src.pipeline"
+          "src.index"
         ],
         "transitive_imports": [],
         "cyclic": false
       },
       "src.dedupe": {
-        "lines": 148,
-        "sha256": "3ed3eb5769187d001c1375530ce75c905ea79a8bb632fde1c408ed704cce1a1c",
+        "lines": 97,
+        "sha256": "8d477d664924158616434648cc39b374439bb5e0b4d06422d7ae81dfeaf5191c",
         "imports": [
-          "src.models"
+          "src.models",
+          "src.shared.identity"
         ],
-        "fan_out": 1,
+        "fan_out": 2,
         "imported_by": [
+          "src.catalog.dedupe",
+          "src.catalog.sync_reserve",
           "src.discover",
-          "src.local_run",
-          "src.pipeline",
           "src.pool",
-          "src.prescreen",
-          "src.skill_finder"
+          "src.prescreen"
         ],
         "transitive_imports": [
-          "src.models"
+          "src.models",
+          "src.shared.identity",
+          "src.shared.models"
         ],
         "cyclic": false
       },
       "src.discover": {
         "lines": 504,
-        "sha256": "ba92e8ffa914d600772a623f611be0dbf1c94d153549e55e0262370d276b0c98",
+        "sha256": "d84cc036e1aee0dc3faf7226835cf9df748066021db2410a46f9524e4d31f0b0",
         "imports": [
           "src.dedupe",
           "src.fetch",
@@ -71,14 +702,16 @@
         ],
         "fan_out": 3,
         "imported_by": [
-          "src.local_run",
-          "src.pipeline",
-          "src.skill_finder"
+          "src.catalog.discovery",
+          "src.catalog.sync_reserve"
         ],
         "transitive_imports": [
           "src.dedupe",
           "src.fetch",
-          "src.models"
+          "src.infra.http",
+          "src.models",
+          "src.shared.identity",
+          "src.shared.models"
         ],
         "cyclic": false
       },
@@ -91,7 +724,8 @@
         ],
         "fan_out": 2,
         "imported_by": [
-          "src.local_run"
+          "src.catalog.enrich",
+          "src.catalog.maintenance"
         ],
         "transitive_imports": [
           "src.decide",
@@ -99,60 +733,265 @@
           "src.models",
           "src.overrides",
           "src.schema_utils",
+          "src.shared.models",
+          "src.shared.schema",
           "src.snooze"
         ],
         "cyclic": false
       },
       "src.evaluate": {
-        "lines": 435,
-        "sha256": "356c33a46472303407842a9f3a0f275c3c9a9ffe96c390c7b4f42f2420c866ce",
+        "lines": 264,
+        "sha256": "ec478c69cf061d585c28be6938a232ed35a5d7375e94ab54bb56bd5b42369d2b",
         "imports": [
           "src.decide",
           "src.fetch",
+          "src.infra.llm",
           "src.models",
           "src.schema_utils"
         ],
-        "fan_out": 4,
+        "fan_out": 5,
         "imported_by": [
-          "src.local_run",
-          "src.pipeline",
-          "src.skill_finder"
+          "src.catalog.evaluation",
+          "src.catalog.sync_evaluate",
+          "src.catalog.sync_reserve"
         ],
         "transitive_imports": [
           "src.decide",
           "src.fetch",
+          "src.infra.http",
+          "src.infra.llm",
           "src.models",
-          "src.schema_utils"
+          "src.schema_utils",
+          "src.shared.models",
+          "src.shared.schema"
         ],
         "cyclic": false
       },
       "src.fetch": {
-        "lines": 165,
-        "sha256": "fe8cae8db5257ac50ebce0e5d540bd13d44caf944cdc6d6543aa9a2faf866fd9",
+        "lines": 40,
+        "sha256": "74affc5c5c97c7a1220ef45a6ab96bbc7fcaf1b29169d64b19186287e8208fa0",
+        "imports": [
+          "src.infra.http"
+        ],
+        "fan_out": 1,
+        "imported_by": [
+          "src.catalog.fetch",
+          "src.discover",
+          "src.evaluate"
+        ],
+        "transitive_imports": [
+          "src.infra.http"
+        ],
+        "cyclic": false
+      },
+      "src.find_evaluate": {
+        "lines": 77,
+        "sha256": "56f734dfd423a77b813c45b470c3f00deb1d8084d6252c668f90c9231d58b50d",
+        "imports": [
+          "src.finder.evaluation",
+          "src.finder.evidence",
+          "src.finder.plan"
+        ],
+        "fan_out": 3,
+        "imported_by": [],
+        "transitive_imports": [
+          "src.finder.evaluation",
+          "src.finder.evidence",
+          "src.finder.plan",
+          "src.shared.materials",
+          "src.shared.schema"
+        ],
+        "cyclic": false
+      },
+      "src.finder.__init__": {
+        "lines": 160,
+        "sha256": "1a734cca631d0c78955d89b27064a2c683518f875d0a886c806c5bb222ec1879",
+        "imports": [
+          "src.finder.config",
+          "src.finder.evaluation",
+          "src.finder.evidence",
+          "src.finder.plan",
+          "src.finder.report",
+          "src.finder.run",
+          "src.finder.search"
+        ],
+        "fan_out": 7,
+        "imported_by": [],
+        "transitive_imports": [
+          "src.finder.config",
+          "src.finder.evaluation",
+          "src.finder.evidence",
+          "src.finder.plan",
+          "src.finder.report",
+          "src.finder.run",
+          "src.finder.search",
+          "src.infra.files",
+          "src.infra.github",
+          "src.infra.http",
+          "src.infra.llm",
+          "src.models",
+          "src.shared.identity",
+          "src.shared.materials",
+          "src.shared.models",
+          "src.shared.runtime",
+          "src.shared.schema",
+          "src.shared.usage"
+        ],
+        "cyclic": false
+      },
+      "src.finder.config": {
+        "lines": 138,
+        "sha256": "342f9f939b259d5a3bd63825c9ef0a4f0ab316fd4cdec94daf4fe41f0bff588a",
+        "imports": [
+          "src.infra.files"
+        ],
+        "fan_out": 1,
+        "imported_by": [
+          "src.finder.__init__",
+          "src.finder.run",
+          "src.skill_finder"
+        ],
+        "transitive_imports": [
+          "src.infra.files"
+        ],
+        "cyclic": false
+      },
+      "src.finder.evaluation": {
+        "lines": 418,
+        "sha256": "0785524d8c69e82ddfd3b61fca27688440f9f422542c0618022ff64460556da9",
+        "imports": [
+          "src.finder.evidence",
+          "src.finder.plan",
+          "src.shared.schema"
+        ],
+        "fan_out": 3,
+        "imported_by": [
+          "src.find_evaluate",
+          "src.finder.__init__",
+          "src.finder.run",
+          "src.skill_finder"
+        ],
+        "transitive_imports": [
+          "src.finder.evidence",
+          "src.finder.plan",
+          "src.shared.materials",
+          "src.shared.schema"
+        ],
+        "cyclic": false
+      },
+      "src.finder.evidence": {
+        "lines": 116,
+        "sha256": "cc4fc096aa6d78af86077c9d19aa702104247e537901b5393ba3bbe972e2900f",
+        "imports": [
+          "src.shared.materials"
+        ],
+        "fan_out": 1,
+        "imported_by": [
+          "src.find_evaluate",
+          "src.finder.__init__",
+          "src.finder.evaluation",
+          "src.skill_finder"
+        ],
+        "transitive_imports": [
+          "src.shared.materials"
+        ],
+        "cyclic": false
+      },
+      "src.finder.plan": {
+        "lines": 166,
+        "sha256": "a27c5f640457e0be01f06df65f69997b59355a768cfbf0a9b6918786580ada9d",
         "imports": [],
         "fan_out": 0,
         "imported_by": [
-          "src.discover",
-          "src.evaluate",
-          "src.local_run",
-          "src.pipeline",
+          "src.find_evaluate",
+          "src.finder.__init__",
+          "src.finder.evaluation",
+          "src.finder.run",
           "src.skill_finder"
         ],
         "transitive_imports": [],
         "cyclic": false
       },
-      "src.find_evaluate": {
-        "lines": 588,
-        "sha256": "f7a2e315b6ed6a9e29b2281e5fd68441d2e5de5c305ffde0f99f6e0474111796",
+      "src.finder.report": {
+        "lines": 308,
+        "sha256": "d8b8a50dd21e0ba73d52dfe4d1022155cf9a9b10730a2a03b252882784c358c9",
         "imports": [
-          "src.schema_utils"
+          "src.infra.files",
+          "src.shared.runtime"
         ],
-        "fan_out": 1,
+        "fan_out": 2,
         "imported_by": [
+          "src.finder.__init__",
+          "src.finder.run",
           "src.skill_finder"
         ],
         "transitive_imports": [
-          "src.schema_utils"
+          "src.infra.files",
+          "src.shared.runtime"
+        ],
+        "cyclic": false
+      },
+      "src.finder.run": {
+        "lines": 721,
+        "sha256": "840f4dc34ca1d8d3cc5eabfc23e1d77e400c231c13baad339b8e861f7c32869b",
+        "imports": [
+          "src.finder.config",
+          "src.finder.evaluation",
+          "src.finder.plan",
+          "src.finder.report",
+          "src.finder.search",
+          "src.infra.files",
+          "src.infra.llm",
+          "src.shared.runtime",
+          "src.shared.usage"
+        ],
+        "fan_out": 9,
+        "imported_by": [
+          "src.finder.__init__",
+          "src.skill_finder"
+        ],
+        "transitive_imports": [
+          "src.finder.config",
+          "src.finder.evaluation",
+          "src.finder.evidence",
+          "src.finder.plan",
+          "src.finder.report",
+          "src.finder.search",
+          "src.infra.files",
+          "src.infra.github",
+          "src.infra.http",
+          "src.infra.llm",
+          "src.models",
+          "src.shared.identity",
+          "src.shared.materials",
+          "src.shared.models",
+          "src.shared.runtime",
+          "src.shared.schema",
+          "src.shared.usage"
+        ],
+        "cyclic": false
+      },
+      "src.finder.search": {
+        "lines": 295,
+        "sha256": "a8c9fe8e67a98e446273c10f5bcd48e3cd6dd0fc8d728fcc82b6e28885622b5a",
+        "imports": [
+          "src.infra.github",
+          "src.infra.http",
+          "src.models",
+          "src.shared.identity"
+        ],
+        "fan_out": 4,
+        "imported_by": [
+          "src.finder.__init__",
+          "src.finder.run",
+          "src.skill_finder"
+        ],
+        "transitive_imports": [
+          "src.infra.github",
+          "src.infra.http",
+          "src.models",
+          "src.shared.identity",
+          "src.shared.models"
         ],
         "cyclic": false
       },
@@ -168,9 +1007,10 @@
         ],
         "fan_out": 5,
         "imported_by": [
+          "src.catalog.index",
+          "src.catalog.maintenance",
+          "src.catalog.store",
           "src.enrich",
-          "src.local_run",
-          "src.pipeline",
           "src.report"
         ],
         "transitive_imports": [
@@ -178,34 +1018,121 @@
           "src.models",
           "src.overrides",
           "src.schema_utils",
+          "src.shared.models",
+          "src.shared.schema",
           "src.snooze"
         ],
         "cyclic": false
       },
-      "src.local_run": {
-        "lines": 618,
-        "sha256": "4706ef3c6a3449c2330aa2caf29e726545ce1eb5bdb5cad6c3cc8deab982e13b",
+      "src.infra.__init__": {
+        "lines": 30,
+        "sha256": "9f5a732036e35c0d865c160e6762d43349d58d77082409772e0a3b9f7f9e1b7b",
         "imports": [
-          "src.budget",
-          "src.decide",
-          "src.dedupe",
-          "src.discover",
-          "src.enrich",
-          "src.evaluate",
-          "src.fetch",
-          "src.index",
-          "src.overrides",
-          "src.pipeline",
-          "src.pool",
-          "src.prescreen",
-          "src.report",
-          "src.snooze",
-          "src.usage"
+          "src.infra.files",
+          "src.infra.github",
+          "src.infra.http",
+          "src.infra.llm"
         ],
-        "fan_out": 15,
+        "fan_out": 4,
+        "imported_by": [],
+        "transitive_imports": [
+          "src.infra.files",
+          "src.infra.github",
+          "src.infra.http",
+          "src.infra.llm"
+        ],
+        "cyclic": false
+      },
+      "src.infra.files": {
+        "lines": 43,
+        "sha256": "06bbea067f191275274b9cba73f9b54a1c74c8ee558c0a0c5ed12f1383c70334",
+        "imports": [],
+        "fan_out": 0,
+        "imported_by": [
+          "src.budget",
+          "src.catalog.config",
+          "src.catalog.local",
+          "src.catalog.queue",
+          "src.catalog.store",
+          "src.catalog.sync_evaluate",
+          "src.catalog.sync_reserve",
+          "src.finder.config",
+          "src.finder.report",
+          "src.finder.run",
+          "src.infra.__init__",
+          "src.pool"
+        ],
+        "transitive_imports": [],
+        "cyclic": false
+      },
+      "src.infra.github": {
+        "lines": 177,
+        "sha256": "522f0886865ac62db772d3a66c3a55ee59f18e0e2cde9ff858ae02c827b968c6",
+        "imports": [],
+        "fan_out": 0,
+        "imported_by": [
+          "src.finder.search",
+          "src.infra.__init__"
+        ],
+        "transitive_imports": [],
+        "cyclic": false
+      },
+      "src.infra.http": {
+        "lines": 159,
+        "sha256": "cd77e2bceb3f02d44600b95ff33e7d4f7d9311ee4fd1fa66d7f6f327f2840e9c",
+        "imports": [],
+        "fan_out": 0,
+        "imported_by": [
+          "src.catalog.sync_evaluate",
+          "src.catalog.sync_reserve",
+          "src.fetch",
+          "src.finder.search",
+          "src.infra.__init__"
+        ],
+        "transitive_imports": [],
+        "cyclic": false
+      },
+      "src.infra.llm": {
+        "lines": 204,
+        "sha256": "baea7646c4a8ab3e220f3629950c270ca7b4a41de674db1ea06a25cbfd7b8bc2",
+        "imports": [],
+        "fan_out": 0,
+        "imported_by": [
+          "src.evaluate",
+          "src.finder.run",
+          "src.infra.__init__",
+          "src.skill_finder"
+        ],
+        "transitive_imports": [],
+        "cyclic": false
+      },
+      "src.local_run": {
+        "lines": 39,
+        "sha256": "bc7a886404727b7055223d6d54652663924101ce7d282a3f5443d22567aca120",
+        "imports": [
+          "src.catalog.local"
+        ],
+        "fan_out": 1,
         "imported_by": [],
         "transitive_imports": [
           "src.budget",
+          "src.catalog.budget",
+          "src.catalog.config",
+          "src.catalog.decide",
+          "src.catalog.dedupe",
+          "src.catalog.discovery",
+          "src.catalog.entry_state",
+          "src.catalog.evaluation",
+          "src.catalog.fetch",
+          "src.catalog.index",
+          "src.catalog.local",
+          "src.catalog.maintenance",
+          "src.catalog.overrides",
+          "src.catalog.pool",
+          "src.catalog.prescreen",
+          "src.catalog.report",
+          "src.catalog.snooze",
+          "src.catalog.usage",
           "src.decide",
           "src.dedupe",
           "src.discover",
@@ -213,34 +1140,47 @@
           "src.evaluate",
           "src.fetch",
           "src.index",
+          "src.infra.files",
+          "src.infra.http",
+          "src.infra.llm",
           "src.models",
           "src.overrides",
-          "src.pipeline",
           "src.pool",
           "src.prescreen",
           "src.report",
           "src.schema_utils",
+          "src.shared.identity",
+          "src.shared.models",
+          "src.shared.runtime",
+          "src.shared.schema",
+          "src.shared.usage",
           "src.snooze",
           "src.usage"
         ],
         "cyclic": false
       },
       "src.models": {
-        "lines": 55,
-        "sha256": "5173ce8efd1df6bc4db7a87161ee68d96bcda474558e5a584724c4c36bd68447",
-        "imports": [],
-        "fan_out": 0,
+        "lines": 48,
+        "sha256": "772419c30163ed9656f0c415149a0509faa66d6fa668421e77cb3361e945f613",
+        "imports": [
+          "src.shared.models"
+        ],
+        "fan_out": 1,
         "imported_by": [
+          "src.catalog.queue",
+          "src.catalog.sync_evaluate",
+          "src.catalog.sync_reserve",
           "src.dedupe",
           "src.discover",
           "src.evaluate",
+          "src.finder.search",
           "src.index",
-          "src.pipeline",
           "src.pool",
-          "src.prescreen",
-          "src.skill_finder"
+          "src.prescreen"
         ],
-        "transitive_imports": [],
+        "transitive_imports": [
+          "src.shared.models"
+        ],
         "cyclic": false
       },
       "src.overrides": {
@@ -249,9 +1189,11 @@
         "imports": [],
         "fan_out": 0,
         "imported_by": [
+          "src.catalog.config",
+          "src.catalog.overrides",
+          "src.catalog.sync_evaluate",
+          "src.catalog.sync_reserve",
           "src.index",
-          "src.local_run",
-          "src.pipeline",
           "src.prescreen",
           "src.snooze"
         ],
@@ -259,59 +1201,67 @@
         "cyclic": false
       },
       "src.pipeline": {
-        "lines": 1269,
-        "sha256": "6764653d979544b3c7d01e9d1efe3627a516bebb7248c7f986a1d2bf0b3a8216",
+        "lines": 153,
+        "sha256": "e4d71291b3e63502ff4e30a435ee0e0c7d6b1693a548d76417bc4714450be6ff",
         "imports": [
-          "src.budget",
-          "src.decide",
-          "src.dedupe",
-          "src.discover",
-          "src.evaluate",
-          "src.fetch",
-          "src.index",
-          "src.models",
-          "src.overrides",
-          "src.prescreen",
-          "src.report",
-          "src.snooze"
+          "src.catalog.config",
+          "src.catalog.entry_state",
+          "src.catalog.queue",
+          "src.catalog.sync_evaluate",
+          "src.catalog.sync_reserve"
         ],
-        "fan_out": 12,
-        "imported_by": [
-          "src.local_run"
-        ],
+        "fan_out": 5,
+        "imported_by": [],
         "transitive_imports": [
           "src.budget",
+          "src.catalog.config",
+          "src.catalog.entry_state",
+          "src.catalog.index",
+          "src.catalog.queue",
+          "src.catalog.sync_evaluate",
+          "src.catalog.sync_reserve",
           "src.decide",
           "src.dedupe",
           "src.discover",
           "src.evaluate",
           "src.fetch",
           "src.index",
+          "src.infra.files",
+          "src.infra.http",
+          "src.infra.llm",
           "src.models",
           "src.overrides",
           "src.prescreen",
           "src.report",
           "src.schema_utils",
+          "src.shared.identity",
+          "src.shared.models",
+          "src.shared.runtime",
+          "src.shared.schema",
           "src.snooze"
         ],
         "cyclic": false
       },
       "src.pool": {
         "lines": 283,
-        "sha256": "f8a81ae19fde3e45d134c214bbaa5c1b15b3c232c97d57a3d175bad1b5771774",
+        "sha256": "e768ca69778844464f96562d6ba617285f89dbbd0e204b1a6498a891e6b70074",
         "imports": [
-          "src.budget",
           "src.dedupe",
-          "src.models"
+          "src.infra.files",
+          "src.models",
+          "src.shared.runtime"
         ],
-        "fan_out": 3,
+        "fan_out": 4,
         "imported_by": [
-          "src.local_run"
+          "src.catalog.pool"
         ],
         "transitive_imports": [
-          "src.budget",
           "src.dedupe",
-          "src.models"
+          "src.infra.files",
+          "src.models",
+          "src.shared.identity",
+          "src.shared.models",
+          "src.shared.runtime"
         ],
         "cyclic": false
       },
@@ -325,13 +1275,16 @@
         ],
         "fan_out": 3,
         "imported_by": [
-          "src.local_run",
-          "src.pipeline"
+          "src.catalog.config",
+          "src.catalog.prescreen",
+          "src.catalog.sync_reserve"
         ],
         "transitive_imports": [
           "src.dedupe",
           "src.models",
-          "src.overrides"
+          "src.overrides",
+          "src.shared.identity",
+          "src.shared.models"
         ],
         "cyclic": false
       },
@@ -343,8 +1296,8 @@
         ],
         "fan_out": 1,
         "imported_by": [
-          "src.local_run",
-          "src.pipeline"
+          "src.catalog.report",
+          "src.catalog.sync_evaluate"
         ],
         "transitive_imports": [
           "src.decide",
@@ -352,50 +1305,176 @@
           "src.models",
           "src.overrides",
           "src.schema_utils",
+          "src.shared.models",
+          "src.shared.schema",
           "src.snooze"
         ],
         "cyclic": false
       },
       "src.schema_utils": {
-        "lines": 64,
-        "sha256": "7eb641c2f540b8eda8afe49f0d1730559277df12344c6a30718ff4ac3bf37467",
-        "imports": [],
-        "fan_out": 0,
+        "lines": 18,
+        "sha256": "968e0c52177f24863a37cb23d3d12750de7a97a0e69b7fe24d7c8087d096c7f5",
+        "imports": [
+          "src.shared.schema"
+        ],
+        "fan_out": 1,
         "imported_by": [
           "src.enrich",
           "src.evaluate",
-          "src.find_evaluate",
           "src.index"
+        ],
+        "transitive_imports": [
+          "src.shared.schema"
+        ],
+        "cyclic": false
+      },
+      "src.shared.__init__": {
+        "lines": 36,
+        "sha256": "fa80666ecfb426bc5b7a9063b0094c39e0e3d844de00ba7a030c54b9f2675e74",
+        "imports": [
+          "src.shared.identity",
+          "src.shared.materials",
+          "src.shared.models",
+          "src.shared.runtime",
+          "src.shared.schema",
+          "src.shared.usage"
+        ],
+        "fan_out": 6,
+        "imported_by": [],
+        "transitive_imports": [
+          "src.shared.identity",
+          "src.shared.materials",
+          "src.shared.models",
+          "src.shared.runtime",
+          "src.shared.schema",
+          "src.shared.usage"
+        ],
+        "cyclic": false
+      },
+      "src.shared.identity": {
+        "lines": 97,
+        "sha256": "df287171d505ae67e92970b26b064b01f54c46f243bcc29a4c9d338230164254",
+        "imports": [
+          "src.shared.models"
+        ],
+        "fan_out": 1,
+        "imported_by": [
+          "src.catalog.sync_evaluate",
+          "src.catalog.sync_reserve",
+          "src.dedupe",
+          "src.finder.search",
+          "src.shared.__init__"
+        ],
+        "transitive_imports": [
+          "src.shared.models"
+        ],
+        "cyclic": false
+      },
+      "src.shared.materials": {
+        "lines": 64,
+        "sha256": "9fb26314193cc20009782d63f58e807391fb5ed1bff6d06cd20285a7a91d706e",
+        "imports": [],
+        "fan_out": 0,
+        "imported_by": [
+          "src.finder.evidence",
+          "src.shared.__init__"
+        ],
+        "transitive_imports": [],
+        "cyclic": false
+      },
+      "src.shared.models": {
+        "lines": 24,
+        "sha256": "3c776c8e032e6e16f04e0cb7b2bf5cd28c7cc41e883401e45ea7bc962e23eaa2",
+        "imports": [],
+        "fan_out": 0,
+        "imported_by": [
+          "src.catalog.entry_state",
+          "src.models",
+          "src.shared.__init__",
+          "src.shared.identity"
+        ],
+        "transitive_imports": [],
+        "cyclic": false
+      },
+      "src.shared.runtime": {
+        "lines": 35,
+        "sha256": "01ed64e4008752a309c18beaeefb6cfc659398bcbf41a0a2c2b2f746d6408a86",
+        "imports": [],
+        "fan_out": 0,
+        "imported_by": [
+          "src.budget",
+          "src.catalog.local",
+          "src.catalog.sync_evaluate",
+          "src.catalog.sync_reserve",
+          "src.finder.report",
+          "src.finder.run",
+          "src.pool",
+          "src.shared.__init__"
+        ],
+        "transitive_imports": [],
+        "cyclic": false
+      },
+      "src.shared.schema": {
+        "lines": 62,
+        "sha256": "a67c20ff5ce54ce866791ed1e349592cb6a5ba48a2fcda05293ad7e16e213ad9",
+        "imports": [],
+        "fan_out": 0,
+        "imported_by": [
+          "src.catalog.entry_state",
+          "src.finder.evaluation",
+          "src.schema_utils",
+          "src.shared.__init__"
+        ],
+        "transitive_imports": [],
+        "cyclic": false
+      },
+      "src.shared.usage": {
+        "lines": 51,
+        "sha256": "32d8ab1de20bc57d0e066fabc1cedfa714b744803ee20d5ad1a262158e98bf35",
+        "imports": [],
+        "fan_out": 0,
+        "imported_by": [
+          "src.finder.run",
+          "src.shared.__init__",
+          "src.usage"
         ],
         "transitive_imports": [],
         "cyclic": false
       },
       "src.skill_finder": {
-        "lines": 728,
-        "sha256": "358b213d245170300ef6f90b19a73fee7fe11aedaa6f1ed3815392438d46ed92",
+        "lines": 183,
+        "sha256": "ea0fe3b18905d9b1e08a7901295bacaffb430eeff2e3bf443e2653498a1b4ab1",
         "imports": [
-          "src.budget",
-          "src.dedupe",
-          "src.discover",
-          "src.evaluate",
-          "src.fetch",
-          "src.find_evaluate",
-          "src.models",
-          "src.usage"
+          "src.finder.config",
+          "src.finder.evaluation",
+          "src.finder.evidence",
+          "src.finder.plan",
+          "src.finder.report",
+          "src.finder.run",
+          "src.finder.search",
+          "src.infra.llm"
         ],
         "fan_out": 8,
         "imported_by": [],
         "transitive_imports": [
-          "src.budget",
-          "src.decide",
-          "src.dedupe",
-          "src.discover",
-          "src.evaluate",
-          "src.fetch",
-          "src.find_evaluate",
+          "src.finder.config",
+          "src.finder.evaluation",
+          "src.finder.evidence",
+          "src.finder.plan",
+          "src.finder.report",
+          "src.finder.run",
+          "src.finder.search",
+          "src.infra.files",
+          "src.infra.github",
+          "src.infra.http",
+          "src.infra.llm",
           "src.models",
-          "src.schema_utils",
-          "src.usage"
+          "src.shared.identity",
+          "src.shared.materials",
+          "src.shared.models",
+          "src.shared.runtime",
+          "src.shared.schema",
+          "src.shared.usage"
         ],
         "cyclic": false
       },
@@ -407,9 +1486,11 @@
         ],
         "fan_out": 1,
         "imported_by": [
-          "src.index",
-          "src.local_run",
-          "src.pipeline"
+          "src.catalog.config",
+          "src.catalog.snooze",
+          "src.catalog.sync_evaluate",
+          "src.catalog.sync_reserve",
+          "src.index"
         ],
         "transitive_imports": [
           "src.overrides"
@@ -417,47 +1498,50 @@
         "cyclic": false
       },
       "src.usage": {
-        "lines": 42,
-        "sha256": "cbff64e3badeb4a0831f9fde0b12c4706f768e20c89b69d0913115b16f68dd95",
-        "imports": [],
-        "fan_out": 0,
-        "imported_by": [
-          "src.local_run",
-          "src.skill_finder"
+        "lines": 10,
+        "sha256": "5f178e4bc7a6809ee9cf8a5aff6cf903c05bd8b8b634cff3202889a34404bab6",
+        "imports": [
+          "src.shared.usage"
         ],
-        "transitive_imports": [],
+        "fan_out": 1,
+        "imported_by": [
+          "src.catalog.usage"
+        ],
+        "transitive_imports": [
+          "src.shared.usage"
+        ],
         "cyclic": false
       }
     },
-    "total_lines": 6865,
+    "total_lines": 9544,
     "largest_functions": [
       {
-        "module": "src.local_run",
-        "name": "_collect",
-        "line": 127,
-        "span": 397,
-        "decision_points": 79
-      },
-      {
-        "module": "src.pipeline",
-        "name": "phase_evaluate",
-        "line": 862,
-        "span": 293,
-        "decision_points": 48
-      },
-      {
-        "module": "src.skill_finder",
+        "module": "src.finder.run",
         "name": "execute_find_skill",
-        "line": 327,
-        "span": 262,
-        "decision_points": 30
+        "line": 163,
+        "span": 466,
+        "decision_points": 45
       },
       {
-        "module": "src.pipeline",
-        "name": "prepare",
-        "line": 251,
-        "span": 153,
-        "decision_points": 35
+        "module": "src.catalog.local",
+        "name": "_collect",
+        "line": 373,
+        "span": 338,
+        "decision_points": 72
+      },
+      {
+        "module": "src.catalog.sync_evaluate",
+        "name": "phase_evaluate",
+        "line": 58,
+        "span": 265,
+        "decision_points": 55
+      },
+      {
+        "module": "src.catalog.entry_state",
+        "name": "update_entry",
+        "line": 141,
+        "span": 146,
+        "decision_points": 56
       },
       {
         "module": "src.overrides",
@@ -467,18 +1551,18 @@
         "decision_points": 41
       },
       {
-        "module": "src.evaluate",
+        "module": "src.infra.llm",
         "name": "call_model",
-        "line": 190,
-        "span": 123,
+        "line": 76,
+        "span": 129,
         "decision_points": 18
       },
       {
-        "module": "src.pipeline",
-        "name": "_accumulate_plan",
-        "line": 436,
-        "span": 107,
-        "decision_points": 23
+        "module": "src.catalog.sync_reserve",
+        "name": "prepare",
+        "line": 175,
+        "span": 126,
+        "decision_points": 35
       },
       {
         "module": "src.snooze",
@@ -502,18 +1586,18 @@
         "decision_points": 22
       },
       {
-        "module": "src.pipeline",
-        "name": "phase_reserve",
-        "line": 651,
-        "span": 96,
-        "decision_points": 10
+        "module": "src.catalog.local",
+        "name": "main",
+        "line": 713,
+        "span": 99,
+        "decision_points": 17
       },
       {
-        "module": "src.local_run",
-        "name": "main",
-        "line": 526,
-        "span": 93,
-        "decision_points": 17
+        "module": "src.finder.evaluation",
+        "name": "build_evaluation_prompt",
+        "line": 60,
+        "span": 99,
+        "decision_points": 9
       }
     ],
     "test_methods_by_file": {
@@ -523,14 +1607,21 @@
       "test_dedupe.py": 18,
       "test_discover.py": 8,
       "test_docs.py": 2,
+      "test_entry_state.py": 6,
       "test_evaluate.py": 12,
+      "test_files.py": 5,
+      "test_find_evaluate.py": 7,
+      "test_finder_projection.py": 10,
       "test_local_run.py": 22,
+      "test_materials.py": 9,
       "test_overrides.py": 20,
       "test_pipeline.py": 35,
       "test_pool.py": 8,
       "test_prescreen.py": 12,
       "test_public.py": 11,
+      "test_skill_finder.py": 13,
       "test_snooze.py": 12,
+      "test_store.py": 4,
       "test_summary_structure.py": 12,
       "test_workflows.py": 18
     }
@@ -549,9 +1640,9 @@
       }
     },
     "A2_verifier_input_mutation": {
-      "input_changed": true,
-      "limitations_after_two_calls": 2,
-      "explanation_changed": true
+      "input_changed": false,
+      "limitations_after_two_calls": 0,
+      "explanation_changed": false
     },
     "A3_material_identity": {
       "both_reads_ok": true,
@@ -582,14 +1673,10 @@
       "page_generation": "old"
     },
     "A7_refetch_identity": {
-      "evaluated": 1,
-      "calls": [
-        {
-          "declared_fingerprint": "sha256:0950378887a46ab649dfa26064b5a466",
-          "actual_fingerprint": "sha256:603800f76e0abb1c0af5dd844a125bf6"
-        }
-      ],
-      "fingerprint_mismatch_reached_evaluator": true
+      "evaluated": 0,
+      "skipped": 1,
+      "calls": [],
+      "fingerprint_mismatch_prevented": true
     }
   }
 }
