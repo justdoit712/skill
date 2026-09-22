@@ -1,0 +1,595 @@
+{
+  "schema_version": 1,
+  "python": "3.13.14",
+  "inventory": {
+    "method": "Static imports including function-local imports; no dynamic import resolution. Decision points are a branch proxy, not McCabe complexity or coverage. Function span includes nested definitions.",
+    "modules": {
+      "src.__init__": {
+        "lines": 8,
+        "sha256": "092c26f6bdbd2e022f70d49bad6554f9958c1ca9287d0042dc6cbe815865b020",
+        "imports": [],
+        "fan_out": 0,
+        "imported_by": [],
+        "transitive_imports": [],
+        "cyclic": false
+      },
+      "src.budget": {
+        "lines": 300,
+        "sha256": "f5fca2ea84dd619f341a9ddcd6f48b4df681b29d75f1b3cbbc0ee6c78c3853db",
+        "imports": [],
+        "fan_out": 0,
+        "imported_by": [
+          "src.local_run",
+          "src.pipeline",
+          "src.pool",
+          "src.skill_finder"
+        ],
+        "transitive_imports": [],
+        "cyclic": false
+      },
+      "src.decide": {
+        "lines": 133,
+        "sha256": "81e427344535cf47ee77c8aadee1f8e524179c7e10f43d4f19acb8c4abdf68e6",
+        "imports": [],
+        "fan_out": 0,
+        "imported_by": [
+          "src.evaluate",
+          "src.index",
+          "src.local_run",
+          "src.pipeline"
+        ],
+        "transitive_imports": [],
+        "cyclic": false
+      },
+      "src.dedupe": {
+        "lines": 148,
+        "sha256": "3ed3eb5769187d001c1375530ce75c905ea79a8bb632fde1c408ed704cce1a1c",
+        "imports": [
+          "src.models"
+        ],
+        "fan_out": 1,
+        "imported_by": [
+          "src.discover",
+          "src.local_run",
+          "src.pipeline",
+          "src.pool",
+          "src.prescreen",
+          "src.skill_finder"
+        ],
+        "transitive_imports": [
+          "src.models"
+        ],
+        "cyclic": false
+      },
+      "src.discover": {
+        "lines": 504,
+        "sha256": "ba92e8ffa914d600772a623f611be0dbf1c94d153549e55e0262370d276b0c98",
+        "imports": [
+          "src.dedupe",
+          "src.fetch",
+          "src.models"
+        ],
+        "fan_out": 3,
+        "imported_by": [
+          "src.local_run",
+          "src.pipeline",
+          "src.skill_finder"
+        ],
+        "transitive_imports": [
+          "src.dedupe",
+          "src.fetch",
+          "src.models"
+        ],
+        "cyclic": false
+      },
+      "src.enrich": {
+        "lines": 246,
+        "sha256": "182c7d4891dfef9d3bba4eb21730fb1187521cf671f49971ddbc1d46ae5af955",
+        "imports": [
+          "src.index",
+          "src.schema_utils"
+        ],
+        "fan_out": 2,
+        "imported_by": [
+          "src.local_run"
+        ],
+        "transitive_imports": [
+          "src.decide",
+          "src.index",
+          "src.models",
+          "src.overrides",
+          "src.schema_utils",
+          "src.snooze"
+        ],
+        "cyclic": false
+      },
+      "src.evaluate": {
+        "lines": 435,
+        "sha256": "356c33a46472303407842a9f3a0f275c3c9a9ffe96c390c7b4f42f2420c866ce",
+        "imports": [
+          "src.decide",
+          "src.fetch",
+          "src.models",
+          "src.schema_utils"
+        ],
+        "fan_out": 4,
+        "imported_by": [
+          "src.local_run",
+          "src.pipeline",
+          "src.skill_finder"
+        ],
+        "transitive_imports": [
+          "src.decide",
+          "src.fetch",
+          "src.models",
+          "src.schema_utils"
+        ],
+        "cyclic": false
+      },
+      "src.fetch": {
+        "lines": 165,
+        "sha256": "fe8cae8db5257ac50ebce0e5d540bd13d44caf944cdc6d6543aa9a2faf866fd9",
+        "imports": [],
+        "fan_out": 0,
+        "imported_by": [
+          "src.discover",
+          "src.evaluate",
+          "src.local_run",
+          "src.pipeline",
+          "src.skill_finder"
+        ],
+        "transitive_imports": [],
+        "cyclic": false
+      },
+      "src.find_evaluate": {
+        "lines": 588,
+        "sha256": "f7a2e315b6ed6a9e29b2281e5fd68441d2e5de5c305ffde0f99f6e0474111796",
+        "imports": [
+          "src.schema_utils"
+        ],
+        "fan_out": 1,
+        "imported_by": [
+          "src.skill_finder"
+        ],
+        "transitive_imports": [
+          "src.schema_utils"
+        ],
+        "cyclic": false
+      },
+      "src.index": {
+        "lines": 411,
+        "sha256": "b51a8617c47403f77b5ebed50b24e86512a50160198c2b0ed29396b740829309",
+        "imports": [
+          "src.decide",
+          "src.models",
+          "src.overrides",
+          "src.schema_utils",
+          "src.snooze"
+        ],
+        "fan_out": 5,
+        "imported_by": [
+          "src.enrich",
+          "src.local_run",
+          "src.pipeline",
+          "src.report"
+        ],
+        "transitive_imports": [
+          "src.decide",
+          "src.models",
+          "src.overrides",
+          "src.schema_utils",
+          "src.snooze"
+        ],
+        "cyclic": false
+      },
+      "src.local_run": {
+        "lines": 618,
+        "sha256": "4706ef3c6a3449c2330aa2caf29e726545ce1eb5bdb5cad6c3cc8deab982e13b",
+        "imports": [
+          "src.budget",
+          "src.decide",
+          "src.dedupe",
+          "src.discover",
+          "src.enrich",
+          "src.evaluate",
+          "src.fetch",
+          "src.index",
+          "src.overrides",
+          "src.pipeline",
+          "src.pool",
+          "src.prescreen",
+          "src.report",
+          "src.snooze",
+          "src.usage"
+        ],
+        "fan_out": 15,
+        "imported_by": [],
+        "transitive_imports": [
+          "src.budget",
+          "src.decide",
+          "src.dedupe",
+          "src.discover",
+          "src.enrich",
+          "src.evaluate",
+          "src.fetch",
+          "src.index",
+          "src.models",
+          "src.overrides",
+          "src.pipeline",
+          "src.pool",
+          "src.prescreen",
+          "src.report",
+          "src.schema_utils",
+          "src.snooze",
+          "src.usage"
+        ],
+        "cyclic": false
+      },
+      "src.models": {
+        "lines": 55,
+        "sha256": "5173ce8efd1df6bc4db7a87161ee68d96bcda474558e5a584724c4c36bd68447",
+        "imports": [],
+        "fan_out": 0,
+        "imported_by": [
+          "src.dedupe",
+          "src.discover",
+          "src.evaluate",
+          "src.index",
+          "src.pipeline",
+          "src.pool",
+          "src.prescreen",
+          "src.skill_finder"
+        ],
+        "transitive_imports": [],
+        "cyclic": false
+      },
+      "src.overrides": {
+        "lines": 240,
+        "sha256": "e8f17a42caa40e0b5d0f59120bd97ebb7aad502ba543ba452d100d6fe13c8ba4",
+        "imports": [],
+        "fan_out": 0,
+        "imported_by": [
+          "src.index",
+          "src.local_run",
+          "src.pipeline",
+          "src.prescreen",
+          "src.snooze"
+        ],
+        "transitive_imports": [],
+        "cyclic": false
+      },
+      "src.pipeline": {
+        "lines": 1269,
+        "sha256": "6764653d979544b3c7d01e9d1efe3627a516bebb7248c7f986a1d2bf0b3a8216",
+        "imports": [
+          "src.budget",
+          "src.decide",
+          "src.dedupe",
+          "src.discover",
+          "src.evaluate",
+          "src.fetch",
+          "src.index",
+          "src.models",
+          "src.overrides",
+          "src.prescreen",
+          "src.report",
+          "src.snooze"
+        ],
+        "fan_out": 12,
+        "imported_by": [
+          "src.local_run"
+        ],
+        "transitive_imports": [
+          "src.budget",
+          "src.decide",
+          "src.dedupe",
+          "src.discover",
+          "src.evaluate",
+          "src.fetch",
+          "src.index",
+          "src.models",
+          "src.overrides",
+          "src.prescreen",
+          "src.report",
+          "src.schema_utils",
+          "src.snooze"
+        ],
+        "cyclic": false
+      },
+      "src.pool": {
+        "lines": 283,
+        "sha256": "f8a81ae19fde3e45d134c214bbaa5c1b15b3c232c97d57a3d175bad1b5771774",
+        "imports": [
+          "src.budget",
+          "src.dedupe",
+          "src.models"
+        ],
+        "fan_out": 3,
+        "imported_by": [
+          "src.local_run"
+        ],
+        "transitive_imports": [
+          "src.budget",
+          "src.dedupe",
+          "src.models"
+        ],
+        "cyclic": false
+      },
+      "src.prescreen": {
+        "lines": 229,
+        "sha256": "fa0ff2056559525e19051d49c760c60a419feab4e77c65f776e71a206405a8ef",
+        "imports": [
+          "src.dedupe",
+          "src.models",
+          "src.overrides"
+        ],
+        "fan_out": 3,
+        "imported_by": [
+          "src.local_run",
+          "src.pipeline"
+        ],
+        "transitive_imports": [
+          "src.dedupe",
+          "src.models",
+          "src.overrides"
+        ],
+        "cyclic": false
+      },
+      "src.report": {
+        "lines": 179,
+        "sha256": "6f3e972edd0626e542036b2b432b5baac74444bc9b9f8008bb7d6bc431d30a44",
+        "imports": [
+          "src.index"
+        ],
+        "fan_out": 1,
+        "imported_by": [
+          "src.local_run",
+          "src.pipeline"
+        ],
+        "transitive_imports": [
+          "src.decide",
+          "src.index",
+          "src.models",
+          "src.overrides",
+          "src.schema_utils",
+          "src.snooze"
+        ],
+        "cyclic": false
+      },
+      "src.schema_utils": {
+        "lines": 64,
+        "sha256": "7eb641c2f540b8eda8afe49f0d1730559277df12344c6a30718ff4ac3bf37467",
+        "imports": [],
+        "fan_out": 0,
+        "imported_by": [
+          "src.enrich",
+          "src.evaluate",
+          "src.find_evaluate",
+          "src.index"
+        ],
+        "transitive_imports": [],
+        "cyclic": false
+      },
+      "src.skill_finder": {
+        "lines": 728,
+        "sha256": "358b213d245170300ef6f90b19a73fee7fe11aedaa6f1ed3815392438d46ed92",
+        "imports": [
+          "src.budget",
+          "src.dedupe",
+          "src.discover",
+          "src.evaluate",
+          "src.fetch",
+          "src.find_evaluate",
+          "src.models",
+          "src.usage"
+        ],
+        "fan_out": 8,
+        "imported_by": [],
+        "transitive_imports": [
+          "src.budget",
+          "src.decide",
+          "src.dedupe",
+          "src.discover",
+          "src.evaluate",
+          "src.fetch",
+          "src.find_evaluate",
+          "src.models",
+          "src.schema_utils",
+          "src.usage"
+        ],
+        "cyclic": false
+      },
+      "src.snooze": {
+        "lines": 220,
+        "sha256": "ad98d6cd2ab3bbfbca6e54bf590434e4768cbdb8f9b4ddc48e0055dd6deb4443",
+        "imports": [
+          "src.overrides"
+        ],
+        "fan_out": 1,
+        "imported_by": [
+          "src.index",
+          "src.local_run",
+          "src.pipeline"
+        ],
+        "transitive_imports": [
+          "src.overrides"
+        ],
+        "cyclic": false
+      },
+      "src.usage": {
+        "lines": 42,
+        "sha256": "cbff64e3badeb4a0831f9fde0b12c4706f768e20c89b69d0913115b16f68dd95",
+        "imports": [],
+        "fan_out": 0,
+        "imported_by": [
+          "src.local_run",
+          "src.skill_finder"
+        ],
+        "transitive_imports": [],
+        "cyclic": false
+      }
+    },
+    "total_lines": 6865,
+    "largest_functions": [
+      {
+        "module": "src.local_run",
+        "name": "_collect",
+        "line": 127,
+        "span": 397,
+        "decision_points": 79
+      },
+      {
+        "module": "src.pipeline",
+        "name": "phase_evaluate",
+        "line": 862,
+        "span": 293,
+        "decision_points": 48
+      },
+      {
+        "module": "src.skill_finder",
+        "name": "execute_find_skill",
+        "line": 327,
+        "span": 262,
+        "decision_points": 30
+      },
+      {
+        "module": "src.pipeline",
+        "name": "prepare",
+        "line": 251,
+        "span": 153,
+        "decision_points": 35
+      },
+      {
+        "module": "src.overrides",
+        "name": "validate_overrides",
+        "line": 29,
+        "span": 132,
+        "decision_points": 41
+      },
+      {
+        "module": "src.evaluate",
+        "name": "call_model",
+        "line": 190,
+        "span": 123,
+        "decision_points": 18
+      },
+      {
+        "module": "src.pipeline",
+        "name": "_accumulate_plan",
+        "line": 436,
+        "span": 107,
+        "decision_points": 23
+      },
+      {
+        "module": "src.snooze",
+        "name": "validate_snooze",
+        "line": 65,
+        "span": 104,
+        "decision_points": 35
+      },
+      {
+        "module": "src.discover",
+        "name": "_expand_candidates",
+        "line": 207,
+        "span": 102,
+        "decision_points": 21
+      },
+      {
+        "module": "src.index",
+        "name": "build_entry",
+        "line": 69,
+        "span": 100,
+        "decision_points": 22
+      },
+      {
+        "module": "src.pipeline",
+        "name": "phase_reserve",
+        "line": 651,
+        "span": 96,
+        "decision_points": 10
+      },
+      {
+        "module": "src.local_run",
+        "name": "main",
+        "line": 526,
+        "span": 93,
+        "decision_points": 17
+      }
+    ],
+    "test_methods_by_file": {
+      "test_budget.py": 18,
+      "test_config.py": 13,
+      "test_decide.py": 14,
+      "test_dedupe.py": 18,
+      "test_discover.py": 8,
+      "test_docs.py": 2,
+      "test_evaluate.py": 12,
+      "test_local_run.py": 22,
+      "test_overrides.py": 20,
+      "test_pipeline.py": 35,
+      "test_pool.py": 8,
+      "test_prescreen.py": 12,
+      "test_public.py": 11,
+      "test_snooze.py": 12,
+      "test_summary_structure.py": 12,
+      "test_workflows.py": 18
+    }
+  },
+  "probes": {
+    "A1_zero_attempt_usage": {
+      "attempts_supplied": 0,
+      "observed": {
+        "prompt_tokens": 0,
+        "completion_tokens": 0,
+        "reasoning_tokens": 0,
+        "total_tokens": 0,
+        "requests": 1,
+        "unknown_usage_requests": 1,
+        "incomplete_breakdown_requests": 1
+      }
+    },
+    "A2_verifier_input_mutation": {
+      "input_changed": true,
+      "limitations_after_two_calls": 2,
+      "explanation_changed": true
+    },
+    "A3_material_identity": {
+      "both_reads_ok": true,
+      "reference_changed": true,
+      "candidate_fingerprint_unchanged": true,
+      "requested_urls": [
+        "https://raw.githubusercontent.com/example/repo/fixed-revision/skills/demo/SKILL.md",
+        "https://raw.githubusercontent.com/example/repo/HEAD/skills/demo/details.md",
+        "https://raw.githubusercontent.com/example/repo/fixed-revision/skills/demo/SKILL.md",
+        "https://raw.githubusercontent.com/example/repo/HEAD/skills/demo/details.md"
+      ]
+    },
+    "A4_evaluation_key": {
+      "changed_model_without_version_bump_same_id": true
+    },
+    "A5_load_has_writes": {
+      "before": [
+        "budget.json"
+      ],
+      "after": [
+        "history/budget-2026-W38.json"
+      ],
+      "expected_archive_week": "2026-W38"
+    },
+    "A6_projection_write_failure": {
+      "error": "injected page write failure",
+      "catalog_generation": "new",
+      "page_generation": "old"
+    },
+    "A7_refetch_identity": {
+      "evaluated": 1,
+      "calls": [
+        {
+          "declared_fingerprint": "sha256:0950378887a46ab649dfa26064b5a466",
+          "actual_fingerprint": "sha256:603800f76e0abb1c0af5dd844a125bf6"
+        }
+      ],
+      "fingerprint_mismatch_reached_evaluator": true
+    }
+  }
+}

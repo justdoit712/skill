@@ -1,6 +1,6 @@
 {
   "rules_version": "1.0.0",
-  "source": "docs/Skills导航目录二开需求.md §5.2",
+  "source": "docs/产品规范.md §5.2",
   "note": "固定的评估输出，用于测试决策逻辑，不调用模型。样本类别与 config/rules.json 的 validation_samples 一一对应。",
   "cases": [
     {

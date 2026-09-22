@@ -1,6 +1,6 @@
 """人工收藏区（overrides）配置加载、校验与标记注入。
 
-依据 docs/Skills导航目录二开需求.md §7.4 与 docs/运行说明.md §9。
+依据 docs/产品规范.md §7.4 与 docs/运行说明.md §9。
 """
 
 from __future__ import annotations

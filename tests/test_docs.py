@@ -39,16 +39,14 @@ class DocLinkTest(unittest.TestCase):
         self.assertEqual(broken, [], "存在失效的本地链接：\n" + "\n".join(broken))
 
     def test_docs_dir_has_no_unexpected_files(self) -> None:
-        """docs/ 收敛为需求、清理清单与运行说明等规范文档，避免过程性文档堆积。"""
+        """docs/ 根目录只保留需求、运行说明、架构评估与重构实施方案。"""
         names = sorted(p.name for p in (ROOT / "docs").glob("*.md"))
         self.assertEqual(
             names,
             [
-                "Skills导航目录二开需求.md",
-                "Skills导航目录清理清单.md",
                 "src分层与轻量化评估.md",
                 "src分层重构实施方案.md",
-                "定向查找Skill实施方案.md",
+                "产品规范.md",
                 "运行说明.md",
             ],
             "docs/ 的文件集合发生变化；若是刻意调整，请同步更新本断言",

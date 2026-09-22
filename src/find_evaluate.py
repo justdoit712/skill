@@ -444,7 +444,7 @@ def verify_and_adjust_evaluation(
 ) -> dict[str, Any]:
     """对单技能评估结果执行严格的客观证据核对与匹配度判定调整。
 
-    约束（§3.4）：
+    约束（产品规范 §12.3）：
     1. supported 必须有通过核验的真实证据。未通过证据核验的强制降为 unknown；
     2. 所有 required 准则必须全部通过且有有效证据，才允许判定为 strong；
     3. 只要有任何 required 准则为 unsupported 或降为 unknown，强制降为 partial（或 none）。
@@ -533,7 +533,7 @@ def rank_find_results(
 ) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
     """对已完成评估的条目进行优先级排序。
 
-    排序规则（§3.5）：
+    排序规则（产品规范 §12.3）：
     1. 需求匹配程度（strong > partial > none）；
     2. 有证据支持的质量观察项数量（降序）；
     3. 使用说明的清晰程度（clear > partial > insufficient）；

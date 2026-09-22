@@ -1,7 +1,7 @@
-"""public/ 页面约束：旧域名、旧推广内容与旧计数不得回归。
+"""public/ 页面约束：站点身份、内容范围与统计必须符合产品规范。
 
-这些断言对应 §8.2、§8.3、§8.6 与 §7.1：发布地址是用户仓库的 Pages 子路径，
-不引用上游域名，不含推广入口，也不保留与实际不同步的旧计数。
+这些断言对应产品规范 §8 与 §7.1：发布地址是项目的 Pages 子路径，
+不包含无关域名或推广入口，也不使用与实际不同步的固定计数。
 """
 
 from __future__ import annotations
@@ -19,7 +19,7 @@ PAGES = ["index.html", "styles.css", "robots.txt", "sitemap.xml"]
 
 
 class NoUpstreamTracesTest(unittest.TestCase):
-    """§7.1：不继续引用上游域名；§8.2/§8.3：清除推广入口。"""
+    """产品规范 §7.1 与 §8：站点身份和页面内容范围一致。"""
 
     FORBIDDEN = {
         "旧域名": "miyucaicai",
@@ -48,7 +48,7 @@ class NoUpstreamTracesTest(unittest.TestCase):
             self.assertNotIn(selector, css, f"styles.css 残留孤立样式 {selector}")
 
     def test_skills_page_is_merged_and_removed(self) -> None:
-        """§8.6：skills.html 合并到主导航后删除重复入口。"""
+        """产品规范 §8：使用主导航，不维护重复的技能列表入口。"""
         self.assertFalse((PUBLIC / "skills.html").exists(), "skills.html 应已合并删除")
 
 
@@ -70,7 +70,7 @@ class IndexPageTest(unittest.TestCase):
             self.assertIn(element_id, self.html)
 
     def test_no_custom_domain_cname(self) -> None:
-        """§7.1：不生成指向上游域名的 CNAME。"""
+        """产品规范 §7.1：当前没有自定义域名，不生成 CNAME。"""
         self.assertFalse((PUBLIC / "CNAME").exists())
 
     def test_relative_links_do_not_escape_public_dir(self) -> None:
