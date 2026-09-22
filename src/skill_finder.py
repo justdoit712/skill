@@ -112,6 +112,29 @@ def load_finder_model_config(config_dir: str | Path = "config") -> dict[str, Any
     return cfg_copy
 
 
+def load_finder_run_config(config_dir: str | Path = "config") -> dict[str, Any]:
+    """读取定向查找配置，优先合并 find-skill.json 与 find-skill.local.json。"""
+    base = Path(config_dir)
+    res: dict[str, Any] = {}
+    base_cfg = base / "find-skill.json"
+    local_cfg = base / "find-skill.local.json"
+    if base_cfg.exists():
+        try:
+            data = _read_json_file(base_cfg)
+            if isinstance(data, dict):
+                res.update(data)
+        except Exception:
+            pass
+    if local_cfg.exists():
+        try:
+            data = _read_json_file(local_cfg)
+            if isinstance(data, dict):
+                res.update(data)
+        except Exception:
+            pass
+    return res
+
+
 def search_github_repos_for_query(
     query: str,
     *,
@@ -289,9 +312,9 @@ def fetch_candidate_materials(
 def execute_find_skill(
     topic: str,
     *,
-    limit: int = DEFAULT_LIMIT,
-    max_evaluations: int = DEFAULT_MAX_EVALUATIONS,
-    max_tokens: int = DEFAULT_MAX_TOKENS,
+    limit: int | None = None,
+    max_evaluations: int | None = None,
+    max_tokens: int | None = None,
     root_dir: str | Path = ".",
     model_cfg: dict[str, Any] | None = None,
     log=print,
@@ -299,18 +322,23 @@ def execute_find_skill(
 ) -> dict[str, Any]:
     """执行定向查找全流程并生成报告。"""
     root = Path(root_dir).resolve()
+    run_cfg = load_finder_run_config(root / "config")
+    final_limit = limit if limit is not None else int(run_cfg.get("limit", DEFAULT_LIMIT))
+    final_max_evaluations = max_evaluations if max_evaluations is not None else int(run_cfg.get("max_evaluations", DEFAULT_MAX_EVALUATIONS))
+    final_max_tokens = max_tokens if max_tokens is not None else int(run_cfg.get("max_tokens", DEFAULT_MAX_TOKENS))
+
     started_at = now_local()
     run_id = started_at.strftime("%Y%m%d-%H%M%S-") + uuid4().hex[:6]
     run_dir = root / "data" / "local" / "find-skills" / run_id
     run_dir.mkdir(parents=True, exist_ok=True)
 
-    if limit < 1:
+    if final_limit < 1:
         raise ValueError("limit 必须是正整数")
-    if max_evaluations < 1:
+    if final_max_evaluations < 1:
         raise ValueError("max_evaluations 必须是正整数")
-    if max_tokens < 1000:
+    if final_max_tokens < 1000:
         raise ValueError("max_tokens 必须 >= 1000")
-    if limit > max_evaluations:
+    if final_limit > final_max_evaluations:
         raise ValueError("limit 不能大于 max_evaluations")
 
     cfg = model_cfg if model_cfg is not None else load_finder_model_config(root / "config")
@@ -325,9 +353,9 @@ def execute_find_skill(
         "topic": topic.strip(),
         "status": "running",
         "parameters": {
-            "limit": limit,
-            "max_evaluations": max_evaluations,
-            "max_tokens": max_tokens,
+            "limit": final_limit,
+            "max_evaluations": final_max_evaluations,
+            "max_tokens": final_max_tokens,
         },
         "model": cfg.get("model"),
         "plan": None,
@@ -437,10 +465,10 @@ def execute_find_skill(
         cfg_eval.setdefault("limits", {})["max_output_tokens"] = EVAL_MAX_OUTPUT_TOKENS
 
         for idx, cand in enumerate(scheduled_candidates, start=1):
-            if len(evaluated_items) >= max_evaluations:
+            if len(evaluated_items) >= final_max_evaluations:
                 report["stop_reason"] = STATUS_EVALUATION_LIMIT
                 break
-            if usage.total_tokens >= max_tokens:
+            if usage.total_tokens >= final_max_tokens:
                 report["stop_reason"] = STATUS_TOKEN_LIMIT
                 break
             if consecutive_failures >= 3:
@@ -493,7 +521,7 @@ def execute_find_skill(
                 report["evaluations"].append(item_record)
                 report["evaluated_count"] = len(evaluated_items)
                 log(
-                    f"完成评估 [{len(evaluated_items)}/{max_evaluations}]：{cand.name} "
+                    f"完成评估 [{len(evaluated_items)}/{final_max_evaluations}]：{cand.name} "
                     f"-> 匹配度: {verified_eval['match']} | 说明质量: {verified_eval['documentation']} "
                     f"（累计消耗: {usage.total_tokens:,} Token）"
                 )
@@ -504,14 +532,14 @@ def execute_find_skill(
             save_current_report()
 
         # 5. 排序与短名单归纳
-        shortlist, alternatives = rank_find_results(evaluated_items, plan, limit=limit)
+        shortlist, alternatives = rank_find_results(evaluated_items, plan, limit=final_limit)
         report["shortlist"] = shortlist
         report["alternatives"] = alternatives
         report["shortlist_count"] = len(shortlist)
         report["alternatives_count"] = len(alternatives)
 
         if not report["stop_reason"]:
-            if len(shortlist) >= limit:
+            if len(shortlist) >= final_limit:
                 report["stop_reason"] = STATUS_TARGET_REACHED
             else:
                 report["stop_reason"] = STATUS_COMPLETED
@@ -634,14 +662,20 @@ def render_find_markdown_report(report: dict[str, Any]) -> str:
 
 
 def main(argv: list[str] | None = None, *, root: Path | None = None) -> int:
+    root_path = Path(root or Path(__file__).resolve().parents[1]).resolve()
+    run_cfg = load_finder_run_config(root_path / "config")
+    cfg_limit = run_cfg.get("limit", DEFAULT_LIMIT)
+    cfg_max_eval = run_cfg.get("max_evaluations", DEFAULT_MAX_EVALUATIONS)
+    cfg_max_tokens = run_cfg.get("max_tokens", DEFAULT_MAX_TOKENS)
+
     parser = argparse.ArgumentParser(description="定向查找特定需求的 AI Agent Skill 并生成短名单对比报告")
     parser.add_argument("topic", nargs="?", help="想要查找的技能需求（如：生成高质量 Prompt）")
-    parser.add_argument("--limit", type=int, default=DEFAULT_LIMIT, help="优先查看的短名单数量（默认 5）")
-    parser.add_argument("--max-evaluations", type=int, default=DEFAULT_MAX_EVALUATIONS, help="本次最多评估的技能数量（默认 20）")
-    parser.add_argument("--max-tokens", type=int, default=DEFAULT_MAX_TOKENS, help="本次模型调用的 Token 消耗停止阈值（默认 200,000）")
+    parser.add_argument("--limit", type=int, default=None, help=f"优先查看的短名单数量（默认 {cfg_limit}，取自 config/find-skill.json）")
+    parser.add_argument("--max-evaluations", type=int, default=None, help=f"本次最多评估的技能数量（默认 {cfg_max_eval}，取自 config/find-skill.json）")
+    parser.add_argument("--max-tokens", type=int, default=None, help=f"本次模型调用的 Token 消耗停止阈值（默认 {cfg_max_tokens:,}，取自 config/find-skill.json）")
     args = parser.parse_args(argv)
 
-    topic = args.topic
+    topic = args.topic or run_cfg.get("topic")
     if not topic:
         if sys.stdin.isatty():
             try:
@@ -652,8 +686,6 @@ def main(argv: list[str] | None = None, *, root: Path | None = None) -> int:
                 return 1
         if not topic:
             parser.error("必须提供需求 topic 参数（或在交互终端中输入）")
-
-    root_path = Path(root or Path(__file__).resolve().parents[1]).resolve()
 
     try:
         report = execute_find_skill(
@@ -667,3 +699,4 @@ def main(argv: list[str] | None = None, *, root: Path | None = None) -> int:
     except Exception as exc:
         print(f"启动错误：{exc}", file=sys.stderr)
         return 1
+
