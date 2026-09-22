@@ -1,0 +1,561 @@
+{
+  "run_id": "20260922-200253-599cb7",
+  "started_at": "2026-09-22T20:02:53.245258+08:00",
+  "topic": "生成高质量 Prompt",
+  "status": "running",
+  "parameters": {
+    "limit": 5,
+    "max_evaluations": 80,
+    "max_tokens": 20000000
+  },
+  "model": "deepseek-flash",
+  "plan": {
+    "intent": "寻找能够根据用户需求生成高质量提示词（Prompt）的技能或工具。",
+    "queries": [
+      "生成高质量Prompt",
+      "高质量提示词生成",
+      "prompt generator high quality",
+      "AI prompt generation tool",
+      "提示词生成器",
+      "prompt engineering optimizer",
+      "自动生成优质提示词",
+      "LLM prompt creator"
+    ],
+    "criteria": [
+      {
+        "id": "generate_prompt",
+        "kind": "required",
+        "description": "明确支持根据用户需求生成提示词（Prompt）"
+      },
+      {
+        "id": "high_quality_output",
+        "kind": "quality_signal",
+        "description": "生成的提示词结构清晰、内容具体、可直接使用，体现高质量"
+      },
+      {
+        "id": "customizable_generation",
+        "kind": "quality_signal",
+        "description": "支持按领域、角色、任务类型或输出格式等条件定制生成提示词"
+      },
+      {
+        "id": "optimize_or_evaluate",
+        "kind": "quality_signal",
+        "description": "提供对已有提示词进行评估、优化或迭代改进的能力"
+      },
+      {
+        "id": "examples_or_explanation",
+        "kind": "quality_signal",
+        "description": "提供示例、模板或生成思路说明，便于理解与复用"
+      }
+    ]
+  },
+  "search": {
+    "queries_executed": [
+      {
+        "query": "生成高质量Prompt",
+        "ok": true,
+        "repos_returned": 6,
+        "error": null
+      },
+      {
+        "query": "高质量提示词生成",
+        "ok": true,
+        "repos_returned": 1,
+        "error": null
+      },
+      {
+        "query": "prompt generator high quality",
+        "ok": true,
+        "repos_returned": 20,
+        "error": null
+      }
+    ],
+    "repos_discovered": 27,
+    "candidates_found": 1726,
+    "expansions": [
+      {
+        "repo": "linyi-7/prompt_generating",
+        "ok": true,
+        "skills_found": 0,
+        "truncated": false,
+        "error": null
+      },
+      {
+        "repo": "xiemuhou/my-ai-skills",
+        "ok": true,
+        "skills_found": 12,
+        "truncated": false,
+        "error": null
+      },
+      {
+        "repo": "ai-fzx/fzx-image2-prompt",
+        "ok": true,
+        "skills_found": 1,
+        "truncated": false,
+        "error": null
+      },
+      {
+        "repo": "122267881/ai-universal-prompt-framework",
+        "ok": true,
+        "skills_found": 1,
+        "truncated": false,
+        "error": null
+      },
+      {
+        "repo": "edwardwason/data-prompt-coach",
+        "ok": true,
+        "skills_found": 1,
+        "truncated": false,
+        "error": null
+      },
+      {
+        "repo": "gsqtju-dot/prompt-skill-1",
+        "ok": true,
+        "skills_found": 0,
+        "truncated": false,
+        "error": null
+      },
+      {
+        "repo": "hhhh124hhhh/seedance-2-prompt",
+        "ok": true,
+        "skills_found": 1,
+        "truncated": false,
+        "error": null
+      },
+      {
+        "repo": "composiohq/awesome-claude-skills",
+        "ok": true,
+        "skills_found": 864,
+        "truncated": false,
+        "error": null
+      },
+      {
+        "repo": "alirezarezvani/claude-skills",
+        "ok": true,
+        "skills_found": 846,
+        "truncated": false,
+        "error": null
+      },
+      {
+        "repo": "travisvn/awesome-claude-skills",
+        "ok": true,
+        "skills_found": 0,
+        "truncated": false,
+        "error": null
+      },
+      {
+        "repo": "hkuds/cli-anything",
+        "ok": false,
+        "skills_found": 0,
+        "truncated": false,
+        "error": "HTTP 403"
+      },
+      {
+        "repo": "composio-community/awesome-codex-skills",
+        "ok": false,
+        "skills_found": 0,
+        "truncated": false,
+        "error": "HTTP 403"
+      },
+      {
+        "repo": "majidmanzarpour/threejs-game-skills",
+        "ok": false,
+        "skills_found": 0,
+        "truncated": false,
+        "error": "HTTP 403"
+      },
+      {
+        "repo": "youmind-openlab/nano-banana-pro-prompts-recommend-skill",
+        "ok": false,
+        "skills_found": 0,
+        "truncated": false,
+        "error": "HTTP 403"
+      },
+      {
+        "repo": "sickn33/agentic-awesome-skills",
+        "ok": false,
+        "skills_found": 0,
+        "truncated": false,
+        "error": "HTTP 403"
+      },
+      {
+        "repo": "prat011/awesome-llm-skills",
+        "ok": false,
+        "skills_found": 0,
+        "truncated": false,
+        "error": "HTTP 403"
+      },
+      {
+        "repo": "osidemedia/higgsfield-ai-prompt-skill",
+        "ok": false,
+        "skills_found": 0,
+        "truncated": false,
+        "error": "HTTP 403"
+      },
+      {
+        "repo": "yizhiyanhua-ai/fireworks-tech-graph",
+        "ok": false,
+        "skills_found": 0,
+        "truncated": false,
+        "error": "HTTP 403"
+      },
+      {
+        "repo": "bear2u/my-skills",
+        "ok": false,
+        "skills_found": 0,
+        "truncated": false,
+        "error": "HTTP 403"
+      },
+      {
+        "repo": "agibottech/genie_sim",
+        "ok": false,
+        "skills_found": 0,
+        "truncated": false,
+        "error": "HTTP 403"
+      }
+    ]
+  },
+  "evaluated_count": 3,
+  "shortlist_count": 0,
+  "alternatives_count": 0,
+  "stop_reason": null,
+  "shortlist": [],
+  "alternatives": [],
+  "evaluations": [
+    {
+      "candidate": {
+        "skill_id": "xiemuhou/my-ai-skills:article-to-markdown/SKILL.md",
+        "name": "article-to-markdown",
+        "repo_url": "https://github.com/xiemuhou/my-ai-skills",
+        "url": "https://github.com/xiemuhou/my-ai-skills/blob/HEAD/article-to-markdown/SKILL.md",
+        "author": "xiemuhou",
+        "path": "article-to-markdown/SKILL.md",
+        "content_fingerprint": "sha256:7cde058a359b1eb99a71c3c5c874f1ca"
+      },
+      "evaluation": {
+        "match": "none",
+        "summary_zh": "该技能名为 article-to-markdown，唯一能力是将网页文章抓取并保存为 Markdown 文件（提取标题、特色图片、添加 YAML Front Matter），全文未涉及任何提示词（Prompt）生成功能，与用户「生成高质量 Prompt」的需求完全不相关。",
+        "criteria_results": [
+          {
+            "criterion_id": "generate_prompt",
+            "status": "unsupported",
+            "explanation": "技能说明中的目标是「将网页文章保存为 Markdown 文件」，全部流程围绕网页抓取、内容清洗与文件写入展开，没有任何生成提示词的步骤、参数或输出。",
+            "evidence": []
+          },
+          {
+            "criterion_id": "high_quality_output",
+            "status": "unsupported",
+            "explanation": "该技能的产出是保真保存的 Markdown 文章文件（含 category/tag/status 的 Front Matter），并明确要求「不做 AI 摘要」「不添加任何 AI 生成的内容」，其输出与生成结构性提示词无关。",
+            "evidence": []
+          },
+          {
+            "criterion_id": "customizable_generation",
+            "status": "unsupported",
+            "explanation": "技能确实提供 --category、--tag、--status、--filename、--path、--featured-image 等参数，但这些参数定制的是文章保存归档方式，而非按领域、角色、任务类型或输出格式定制生成提示词。",
+            "evidence": []
+          },
+          {
+            "criterion_id": "optimize_or_evaluate",
+            "status": "unsupported",
+            "explanation": "说明中的「完整性自检」「重试提取」针对的是网页正文抓取是否遗漏（折叠块、懒加载、REST API 对比），并非对提示词进行评估、优化或迭代改进。",
+            "evidence": []
+          },
+          {
+            "criterion_id": "examples_or_explanation",
+            "status": "unsupported",
+            "explanation": "文档中确有调用示例（如 `保存文章 https://xxx.com/xxx --category 技术 --tag python,AI --filename my-note`）和输出样例，但均为文章转 Markdown 的示例，与提示词生成的模板或思路说明无关。",
+            "evidence": []
+          }
+        ],
+        "documentation": "clear",
+        "usage_zh": "触发方式：说「保存文章」「网页转markdown」「下载文章」或使用 `/article-to-markdown`，并提供目标 URL；可附带参数：--category <名称>、--tag <标签>、--status <状态>、--filename <名称>、--path <目录>、--featured-image <URL>。执行流程为：确认参数 → 用 WebFetch 抓取网页内容（WordPress 站点优先请求 /wp-json/wp/v2/posts/<id> 取 content.rendered）→ 内容清洗（删标题行、来源、更新时间、页脚推广，保留原图链接）→ 生成文件名 → 用 Write 写入带 YAML Front Matter 的 .md 文件，并输出保存结果。",
+        "dependencies": [
+          "WebFetch 工具（抓取网页内容与原始 HTML）",
+          "Write 工具（写入 Markdown 文件）",
+          "WordPress REST API /wp-json/wp/v2/posts/<id>（仅 WordPress 站点，可选）"
+        ],
+        "limitations": [
+          "功能定位为网页文章转 Markdown 存档，完全不涉及提示词（Prompt）生成、优化或评估",
+          "需要可公开访问的 URL，遇登录/认证页面会提示退出",
+          "目标文件已存在时会终止任务而非覆盖",
+          "明确禁止添加任何 AI 生成内容（不做摘要、不改写正文）"
+        ],
+        "why_consider": "该技能与「生成高质量 Prompt」的需求无任何交集，若目标是生成提示词则不必查看；仅当需要把网页文章保真保存为 Markdown 时才值得参考。"
+      }
+    },
+    {
+      "candidate": {
+        "skill_id": "ai-fzx/fzx-image2-prompt:SKILL.md",
+        "name": "fzx-image2-prompt",
+        "repo_url": "https://github.com/ai-fzx/fzx-Image2-Prompt",
+        "url": "https://github.com/ai-fzx/fzx-image2-prompt/blob/HEAD/SKILL.md",
+        "author": "ai-fzx",
+        "path": "SKILL.md",
+        "content_fingerprint": "sha256:dc402e7cc302b6e88b01f6874635fef5"
+      },
+      "evaluation": {
+        "match": "strong",
+        "summary_zh": "该技能是一份面向 GPT-Image-2 的图像 Prompt 工程指南，包含 6 大铁律、多类场景模板库、质量检查清单与正误示例，可据用户描述生成结构化图像提示词，并支持按场景/角色/格式定制与自查优化。其能力集中在图像提示词领域，未覆盖文本/代码等通用 Prompt 场景。",
+        "criteria_results": [
+          {
+            "criterion_id": "generate_prompt",
+            "status": "supported",
+            "explanation": "技能标题与 description 明确为生成 GPT-Image-2 的高质量图像提示词，并给出生成前必须向用户澄清的问题清单，属于按需求生成 Prompt 的执行引擎。",
+            "evidence": [
+              {
+                "source_path": "SKILL.md",
+                "start_line": 3,
+                "end_line": 3,
+                "quote": "description: Use when generating images with GPT-Image-2 or needing high-quality image prompts for any scene type."
+              },
+              {
+                "source_path": "SKILL.md",
+                "start_line": 8,
+                "end_line": 9,
+                "quote": "> 将散乱的示例转化为结构化的 Prompt 工程引擎。 > 不是案例集合，而是 AI 内化的执行引擎。"
+              },
+              {
+                "source_path": "SKILL.md",
+                "start_line": 646,
+                "end_line": 650,
+                "quote": "### 当场景包含人物+环境互动时，必须明确： 1. **人物位置问题** - \"人物是站着、坐着、蹲着、跪着？\" - \"人物站在什么上面？\"（草地/石板/木地板/船/岸边/水中浅处？）"
+              }
+            ]
+          },
+          {
+            "criterion_id": "high_quality_output",
+            "status": "supported",
+            "explanation": "提供明确的模板结构与可直接套用的高质量完整示例，输出分段清晰（场景→主体→姿势→风格→镜头→光线→约束）且包含可复制的英文提示词，体现结构化与可落地性。",
+            "evidence": [
+              {
+                "source_path": "SKILL.md",
+                "start_line": 115,
+                "end_line": 122,
+                "quote": "[人物基础描述：年龄/性别/外貌/服装] [姿势 + 位置：站在XX上，XX姿势] [动作 + 物体关系：伸手去XX，物体在XX位置，够得着] [环境：包含XX细节，注意不要有冲突元素] [镜头：焦距 + 角度] [光线：单一方向，物理一致] [氛围 + 质感约束] [物理合理性约束：排除不可能的场景]"
+              },
+              {
+                "source_path": "SKILL.md",
+                "start_line": 128,
+                "end_line": 134,
+                "quote": "A photorealistic photograph of an 18-year-old East Asian woman wearing a pale mint-green hanfu with delicate embroidery. She is kneeling on a moss-covered stone slab at the water's edge, her right hand extended forward, fingertips gently hovering just above a pink lotus bloom floating on the pond surface. Her body is angled toward the lotus, left hand resting on her knee for balance."
+              }
+            ]
+          },
+          {
+            "criterion_id": "customizable_generation",
+            "status": "supported",
+            "explanation": "按场景/模板类型给出选择表，模板中大量使用占位符（年龄、种族、服装、焦距、比例等），支持按领域、角色、任务类型和输出格式定制生成。",
+            "evidence": [
+              {
+                "source_path": "SKILL.md",
+                "start_line": 62,
+                "end_line": 70,
+                "quote": "| 场景 | 模板 | 盲评结论 | |------|------|---------| | App UI | E | ✅ 必须用 | | Logo/品牌 | G | ✅ 必须用 | | 编辑工作流 | J | ✅ 必须用 | | 电影质感 | C | ✅ 推荐 | | 写实摄影 | A | ⚠️ 简洁即可 | | Pixar 3D | D | ❌ **跳过模板** | | 概念插画 | K | ❌ **跳过模板** |"
+              },
+              {
+                "source_path": "SKILL.md",
+                "start_line": 159,
+                "end_line": 161,
+                "quote": "Photorealistic medium close-up portrait of a [AGE]-year-old [ETHNICITY] [GENDER] with [HAIR DESCRIPTION] and [DISTINCTIVE FEATURE]. Wearing [CLOTHING DESCRIPTION], seated in [LOCATION]."
+              }
+            ]
+          },
+          {
+            "criterion_id": "optimize_or_evaluate",
+            "status": "supported",
+            "explanation": "提供生成前的内部质量检查清单（可逐条核对/评估提示词）以及 6 大常见陷阱的纠正对照表，可用作对已有提示词的评估与改进依据。",
+            "evidence": [
+              {
+                "source_path": "SKILL.md",
+                "start_line": 623,
+                "end_line": 633,
+                "quote": "### 基础检查 - [ ] 主体在开头？ - [ ] 结构分段清晰？ - [ ] 文字用引号包裹？ - [ ] 镜头参数明确？ - [ ] 光线描述具体？ - [ ] 没有\"8K ultra detailed\"？ - [ ] 没有冲突风格？ - [ ] 约束用正面句式？ - [ ] 不是过度工程化？ - [ ] 品牌/创意类选择了正确模板层级？"
+              },
+              {
+                "source_path": "SKILL.md",
+                "start_line": 590,
+                "end_line": 595,
+                "quote": "| 1 | 塞进一个长句 | 分段：场景→主体→姿势→光线→约束 | | 2 | 冲突风格 | 只选一个主风格 | | 3 | 负面提示词 | 改用正面约束 | | 4 | 忽略镜头参数 | 明确指定，有物理效果 | | 5 | 文字不用引号 | `\"...\"` 包裹 | | 6 | **忽略物理真实性** | **必须检查人与环境的物理关系** |"
+              }
+            ]
+          },
+          {
+            "criterion_id": "examples_or_explanation",
+            "status": "supported",
+            "explanation": "文档含正误对比示例、完整可套用示例以及各场景模板，并在模板中给出生成思路说明（如 5 个必答问题、盲评选择建议）。",
+            "evidence": [
+              {
+                "source_path": "SKILL.md",
+                "start_line": 105,
+                "end_line": 111,
+                "quote": "**⚠️ 使用前必须回答这5个问题**： 1. **人物站在哪里？**（必须明确表面：草地/石板/木栈道/岸边/台阶/船） 2. **人物姿势是什么？**（站/坐/蹲/跪/弯腰/靠在某物上） 3. **人物与互动对象的实际距离和角度？**（够得着吗？角度合理吗？） 4. **手和身体朝向哪里？** 5. **光线从哪个方向来？**（光源方向必须唯一）"
+              },
+              {
+                "source_path": "SKILL.md",
+                "start_line": 151,
+                "end_line": 155,
+                "quote": "**❌ 错误示例（不要这样写）**： ``` A girl standing in water touching a lotus flower... → 人不会站在水下！ ```"
+              }
+            ]
+          }
+        ],
+        "documentation": "clear",
+        "usage_zh": "作为 AI 执行引擎使用：1) 先按「6 大铁律」确定主题前置、结构化分段、英文引号包裹文字、明确镜头参数、编辑时分离 Change/Preserve、验证物理真实性；2) 参照「场景模板速查」按需求选择模板（A 写实摄影、B 产品 Mockup、C 电影质感、D Pixar 3D、E App UI、F 信息图、G Logo 品牌、H 等轴微缩、I 创意概念、J 编辑工作流、K 概念插画），套用模板并用具体信息替换 [占位符]；3) 生成前完成「场景合理性强制检查清单」与「内部质量检查清单」核对；4) 用修改而非重生成时，采用 J 系列编辑句式（Change: ... / Preserve: ...）。",
+        "dependencies": [
+          "GPT-Image-2 图像生成模型（技能面向该模型的提示词生成）"
+        ],
+        "limitations": [
+          "仅面向图像生成提示词，不覆盖文本、代码、Agent 指令等通用 Prompt 生成场景",
+          "未提供可执行脚本/API 调用代码，依赖使用者自行将模板送入图像生成接口",
+          "文档未说明与具体图像接口（如 edit 端点）的集成调用细节",
+          "版本历史标注日期为 2026-05-12（未来时间），实际可用性未经材料验证"
+        ],
+        "why_consider": "材料给出 6 大铁律 + 11 类场景模板 + 正误示例 + 质量检查清单，可直接套用生成结构化、物理合理的高质量图像提示词，工程化程度较高。"
+      }
+    },
+    {
+      "candidate": {
+        "skill_id": "122267881/ai-universal-prompt-framework:SKILL.md",
+        "name": "ai-universal-prompt-framework",
+        "repo_url": "https://github.com/122267881/ai-universal-prompt-framework",
+        "url": "https://github.com/122267881/ai-universal-prompt-framework/blob/HEAD/SKILL.md",
+        "author": "122267881",
+        "path": "SKILL.md",
+        "content_fingerprint": "sha256:8890f4cb8b796d06e95fe00b9d9c4d6c"
+      },
+      "evaluation": {
+        "match": "strong",
+        "summary_zh": "该技能是一个“AI 通用提示词框架”，可将用户模糊想法转化为包含需求分析、专家角色、八段式超级 Prompt、输出格式、评价标准与优化建议的结构化执行系统（专业模式另含任务拆解与工作流）。其核心即为生成高质量、可直接复制的提示词，与用户需求高度一致。",
+        "criteria_results": [
+          {
+            "criterion_id": "generate_prompt",
+            "status": "supported",
+            "explanation": "SKILL.md 明确以“将模糊想法转化为完整专业的 AI 执行系统”为定位，并规定在步骤 5 中构建八段式超级 Prompt，直接满足根据用户需求生成提示词的要求。",
+            "evidence": [
+              {
+                "source_path": "SKILL.md",
+                "start_line": 10,
+                "end_line": 10,
+                "quote": "AI通用提示词框架（AI Universal Prompt Framework）将用户一个模糊的想法，转化为一套完整、专业的 AI 执行系统。"
+              },
+              {
+                "source_path": "SKILL.md",
+                "start_line": 34,
+                "end_line": 34,
+                "quote": "**超级 Prompt 构建 (Super Prompt):** Compose the eight sections (Role / Context / Goal / Task / Requirement / Constraint / Output / Evaluation) so that, concatenated, they form one coherent, ready-to-use prompt."
+              }
+            ]
+          },
+          {
+            "criterion_id": "high_quality_output",
+            "status": "supported",
+            "explanation": "材料给出了固定的八段式结构与可直接复制的完整 Prompt 代码块，并要求专业、具体、可执行、避免空话套话，体现高质量可用的输出。",
+            "evidence": [
+              {
+                "source_path": "SKILL.md",
+                "start_line": 47,
+                "end_line": 47,
+                "quote": "## Eight-Section Super Prompt (output verbatim as a copy-ready block)"
+              },
+              {
+                "source_path": "SKILL.md",
+                "start_line": 83,
+                "end_line": 83,
+                "quote": "5. **完整 Prompt（可直接复制）** — a single fenced code block containing the eight sections concatenated, so the user can copy it into any AI tool."
+              },
+              {
+                "source_path": "SKILL.md",
+                "start_line": 89,
+                "end_line": 89,
+                "quote": "Use Simplified Chinese throughout. Be professional, concrete, and executable; avoid empty jargon and filler."
+              }
+            ]
+          },
+          {
+            "criterion_id": "customizable_generation",
+            "status": "supported",
+            "explanation": "技能支持按任务大类/子类分类、按角色库定制专家人设、按任务类型设计输出格式，并区分普通模式与专业模式，具备多维度定制生成能力。",
+            "evidence": [
+              {
+                "source_path": "SKILL.md",
+                "start_line": 32,
+                "end_line": 32,
+                "quote": "**专家角色设计 (Expert Persona):** Invent the single most fitting, credible expert for this task—with a title and a 80–150 character persona (seniority, specialty, perspective). Draw from a role library (CEO 顾问 / CFO / 投资专家 / 产品经理 / 程序架构师 / 销售专家 / 品牌专家 / 律师 / 教练 / 增长专家 …) but adapt freely."
+              },
+              {
+                "source_path": "SKILL.md",
+                "start_line": 41,
+                "end_line": 45,
+                "quote": "- **商业类:** 商业计划、市场分析、融资方案、战略规划、销售方案、品牌策划 - **内容类:** 文案、视频脚本、PPT、公众号 / 小红书文章、口播稿 - **技术类:** 编程、产品设计、架构设计、技术选型 - **企业类:** 流程优化、SOP 设计、AI 改造方案、组织提效 - **学习类:** 教程、学习计划、知识总结、培训大纲"
+              }
+            ]
+          },
+          {
+            "criterion_id": "optimize_or_evaluate",
+            "status": "supported",
+            "explanation": "技能在流程第 7 步质量增强中提供评价标准与优化/迭代建议，输出格式中也包含“评价标准”和“优化与迭代建议”章节；不过其评估与优化主要面向生成结果，未明确针对“已有提示词”的独立评估流程。",
+            "evidence": [
+              {
+                "source_path": "SKILL.md",
+                "start_line": 36,
+                "end_line": 36,
+                "quote": "7. **质量增强 (Quality Enhancement):** Provide evaluation criteria (how to judge good results) and optimization / iteration suggestions."
+              },
+              {
+                "source_path": "SKILL.md",
+                "start_line": 85,
+                "end_line": 86,
+                "quote": "7. **评价标准** — bullet list. 8. **优化与迭代建议** — bullet list."
+              }
+            ]
+          },
+          {
+            "criterion_id": "examples_or_explanation",
+            "status": "supported",
+            "explanation": "材料提供了完整的八段式提示词模板，并指明可加载 references/example.md 获取完整示例（销售增长方案），便于理解与复用。",
+            "evidence": [
+              {
+                "source_path": "SKILL.md",
+                "start_line": 50,
+                "end_line": 51,
+                "quote": "# Role 角色 <扮演的专家身份与资历>"
+              },
+              {
+                "source_path": "SKILL.md",
+                "start_line": 93,
+                "end_line": 93,
+                "quote": "For a fully worked example (sales growth plan), load `references/example.md`."
+              }
+            ]
+          }
+        ],
+        "documentation": "clear",
+        "usage_zh": "触发短语包括“架构一下我的需求”“帮我写个高级 Prompt”“把想法变成 AI 执行方案”“我不会写 Prompt”“帮我把任务拆开”“给我设计一个专家角色”。默认使用普通模式；当用户提到专业模式/工作流/任务拆解/复杂项目时切换到专业模式。技能按顺序执行需求理解→任务分类→专家角色设计→（专业模式）任务拆解→八段式超级 Prompt 构建→输出格式设计→质量增强→（专业模式）工作流设计，最终以九节 Markdown 结构输出，其中第 5 节给出可直接复制的完整 Prompt 代码块。无需外部 API 或配置，AI 直接充当提示词架构师。",
+        "dependencies": [
+          "无外部 API、密钥或后端依赖",
+          "references/example.md（示例文件，材料正文中未包含其内容）"
+        ],
+        "limitations": [
+          "评估与优化能力面向生成的提示词/结果，未明确提供对“已有提示词”的独立评估或改写流程",
+          "材料中引用的 references/example.md 实际内容未提供，无法核验示例质量",
+          "能力依赖 AI 模型自身，未声明任何外部校验或工具链"
+        ],
+        "why_consider": "它能把一个模糊想法一键结构化为包含专家角色、八段式超级 Prompt 与可直接复制代码块的完整执行方案，并支持按任务类型定制与专业模式的工作流拆解。"
+      }
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 16747,
+    "completion_tokens": 11691,
+    "reasoning_tokens": 6594,
+    "total_tokens": 28438,
+    "requests": 4,
+    "unknown_usage_requests": 0,
+    "incomplete_breakdown_requests": 0
+  },
+  "report_paths": {
+    "json": "D:\\Code_Projects\\opensource\\skill\\data\\local\\find-skills\\20260922-200253-599cb7\\report.json",
+    "md": "D:\\Code_Projects\\opensource\\skill\\data\\local\\find-skills\\20260922-200253-599cb7\\report.md"
+  },
+  "updated_at": "2026-09-22T20:04:51.215550+08:00"
+}
