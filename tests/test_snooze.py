@@ -373,7 +373,7 @@ class SnoozeOfflineSyncConfigTest(unittest.TestCase):
     """测试 python tools/run_local.py --sync-config 离线同步功能。"""
 
     def test_sync_config_offline_execution(self):
-        with tempfile.TemporaryDirectory() as tmpdir:
+        with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as tmpdir:
             tmp = Path(tmpdir)
             catalog_file = tmp / "catalog.json"
             public_file = tmp / "public_catalog.json"

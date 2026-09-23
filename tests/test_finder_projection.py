@@ -44,7 +44,7 @@ class TestT08FinderCatalogDecoupling(unittest.TestCase):
     """T08: Finder 物理与运行时解耦测试。"""
 
     def setUp(self) -> None:
-        self.temp_dir = tempfile.TemporaryDirectory()
+        self.temp_dir = tempfile.TemporaryDirectory(ignore_cleanup_errors=True)
         self.root = Path(self.temp_dir.name)
 
         # 构造测试环境与目录文件
@@ -266,7 +266,7 @@ class TestT11_2PublicSnapshotUpdateConditions(unittest.TestCase):
     """T11-2: 公共快照 (find-report.json) 四态更新发布条件矩阵测试。"""
 
     def setUp(self) -> None:
-        self.temp_dir = tempfile.TemporaryDirectory()
+        self.temp_dir = tempfile.TemporaryDirectory(ignore_cleanup_errors=True)
         self.public_dir = Path(self.temp_dir.name) / "public" / "data"
         self.public_dir.mkdir(parents=True)
         self.snapshot_file = self.public_dir / "find-report.json"

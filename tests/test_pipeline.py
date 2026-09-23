@@ -736,7 +736,7 @@ class EntryAndReportTest(PipelineHarness):
             evaluation=passing_evaluation(), context=self.ctx,
         )
         catalog = build_catalog([entry], context=self.ctx)
-        with tempfile.TemporaryDirectory() as tmp:
+        with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as tmp:
             manifest = write_catalog(
                 catalog, data_path=Path(tmp) / "c.json", public_path=Path(tmp) / "p.json"
             )
@@ -779,7 +779,7 @@ class EntryAndReportTest(PipelineHarness):
             evaluation=passing_evaluation(), context=self.ctx,
         )
         report = build_report(build_catalog([entry], context=self.ctx))
-        with tempfile.TemporaryDirectory() as tmp:
+        with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as tmp:
             written = write_report(
                 report, json_path=Path(tmp) / "r.json", markdown_path=Path(tmp) / "r.md"
             )

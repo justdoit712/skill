@@ -31,7 +31,10 @@ class TestT01UsageUnknown(unittest.TestCase):
     """T01: 未知用量零容忍熔断测试。"""
 
     def setUp(self) -> None:
-        self.temp_dir = tempfile.TemporaryDirectory()
+        # ignore_cleanup_errors：Windows 上删除文件后目录项可能短暂处于"删除挂起"，
+        # 紧随其后的 rmdir 会报 WinError 145（目录不是空的）；该错误与断言无关，
+        # 不应让测试变红。同类写法见 test_budget/test_local_run/test_pipeline/test_store。
+        self.temp_dir = tempfile.TemporaryDirectory(ignore_cleanup_errors=True)
         self.root = Path(self.temp_dir.name)
         (self.root / "config").mkdir(parents=True)
         (self.root / "config" / "model.local.json").write_text(
@@ -100,7 +103,10 @@ class TestT02AccountingAndAttempts(unittest.TestCase):
     """T02: 名额记账与 evaluation_attempts 独立性测试。"""
 
     def setUp(self) -> None:
-        self.temp_dir = tempfile.TemporaryDirectory()
+        # ignore_cleanup_errors：Windows 上删除文件后目录项可能短暂处于"删除挂起"，
+        # 紧随其后的 rmdir 会报 WinError 145（目录不是空的）；该错误与断言无关，
+        # 不应让测试变红。同类写法见 test_budget/test_local_run/test_pipeline/test_store。
+        self.temp_dir = tempfile.TemporaryDirectory(ignore_cleanup_errors=True)
         self.root = Path(self.temp_dir.name)
         (self.root / "config").mkdir(parents=True)
         (self.root / "config" / "model.local.json").write_text(
@@ -172,7 +178,10 @@ class TestT04InterruptAndErrorPreservation(unittest.TestCase):
     """T04: 中断或异常时统一收尾、保留短名单且 rank_find_results 传入 plan。"""
 
     def setUp(self) -> None:
-        self.temp_dir = tempfile.TemporaryDirectory()
+        # ignore_cleanup_errors：Windows 上删除文件后目录项可能短暂处于"删除挂起"，
+        # 紧随其后的 rmdir 会报 WinError 145（目录不是空的）；该错误与断言无关，
+        # 不应让测试变红。同类写法见 test_budget/test_local_run/test_pipeline/test_store。
+        self.temp_dir = tempfile.TemporaryDirectory(ignore_cleanup_errors=True)
         self.root = Path(self.temp_dir.name)
         (self.root / "config").mkdir(parents=True)
         (self.root / "config" / "model.local.json").write_text(
@@ -326,7 +335,10 @@ class TestT07ConfigValidationAndExitCode(unittest.TestCase):
     """T07: 参数防御性校验与退出码测试。"""
 
     def setUp(self) -> None:
-        self.temp_dir = tempfile.TemporaryDirectory()
+        # ignore_cleanup_errors：Windows 上删除文件后目录项可能短暂处于"删除挂起"，
+        # 紧随其后的 rmdir 会报 WinError 145（目录不是空的）；该错误与断言无关，
+        # 不应让测试变红。同类写法见 test_budget/test_local_run/test_pipeline/test_store。
+        self.temp_dir = tempfile.TemporaryDirectory(ignore_cleanup_errors=True)
         self.root = Path(self.temp_dir.name)
         (self.root / "config").mkdir(parents=True)
         (self.root / "config" / "find-skill.json").write_text(json.dumps({}), encoding="utf-8")

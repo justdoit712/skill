@@ -12,7 +12,7 @@ from src.infra.files import read_json, write_json_atomic
 
 class TestFiles(unittest.TestCase):
     def setUp(self):
-        self.tmp_dir = tempfile.TemporaryDirectory()
+        self.tmp_dir = tempfile.TemporaryDirectory(ignore_cleanup_errors=True)
         self.root = Path(self.tmp_dir.name)
 
     def tearDown(self):
