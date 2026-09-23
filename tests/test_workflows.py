@@ -33,10 +33,17 @@ class SyncWorkflowTest(unittest.TestCase):
         cls.trig = triggers(cls.doc)
         cls.runs = step_runs(cls.doc, "sync")
 
-    def test_weekly_schedule_is_sunday_1000_beijing(self) -> None:
-        crons = [s["cron"] for s in self.trig["schedule"]]
-        self.assertEqual(crons, ["0 2 * * 0"], "定时必须是每周日 10:00 北京时间")
-        self.assertNotIn("0 2 * * *", crons, "不得保留旧的每日表达式")
+    def test_weekly_schedule_is_currently_disabled(self) -> None:
+        """2026-09-23 起定时触发停用：首次发布未完成，空跑只会消耗额度与 GitHub 配额。
+
+        恢复定时需同时改回本断言与 workflow 里的 schedule 块
+        （表达式保持周日 10:00 北京时间 = UTC 0 2 * * 0，且不得使用旧的每日表达式）。
+        """
+        self.assertNotIn("schedule", self.trig, "定时触发当前应为停用状态")
+        self.assertIn("workflow_dispatch", self.trig, "手动触发必须保留")
+        raw = (WORKFLOWS / "sync-skills.yml").read_text(encoding="utf-8")
+        self.assertIn("#   - cron: '0 2 * * 0'", raw, "应保留可一键恢复的定时表达式注释")
+        self.assertNotIn("0 2 * * *", raw, "不得保留旧的每日表达式")
 
     def test_manual_trigger_with_dry_run(self) -> None:
         dispatch = self.trig["workflow_dispatch"]
@@ -142,6 +149,33 @@ class DeployWorkflowTest(unittest.TestCase):
             any("sparse-checkout" in str(s) for s in self.doc["jobs"]["deploy"]["steps"]),
             "不得使用稀疏检出",
         )
+
+
+class PublishWorkflowTest(unittest.TestCase):
+    """人工发布入口：只发布已提交产物，不得引入第二个构建/部署实现。"""
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.doc = load("publish-pages.yml")
+        cls.trig = triggers(cls.doc)
+        cls.raw = (WORKFLOWS / "publish-pages.yml").read_text(encoding="utf-8")
+
+    def test_manual_only(self) -> None:
+        self.assertIn("workflow_dispatch", self.trig)
+        self.assertNotIn("schedule", self.trig, "发布入口不得有定时触发")
+        self.assertNotIn("push", self.trig, "发布入口不得监听 push，避免与顶层入口争夺部署")
+
+    def test_reuses_the_single_deploy_workflow(self) -> None:
+        deploy = self.doc["jobs"]["deploy"]
+        self.assertEqual(deploy["uses"], "./.github/workflows/deploy-pages.yml")
+        self.assertEqual(deploy["needs"], "stage")
+
+    def test_uploads_the_committed_artifact_without_rebuilding(self) -> None:
+        """发布不得运行采集/评估：一旦引入解释器或依赖安装，就会出现第二个产物来源。"""
+        self.assertIn("actions/upload-artifact", self.raw)
+        self.assertNotIn("pip install", self.raw, "发布入口不得安装依赖")
+        self.assertNotRegex(self.raw, r"run:\s*[^\n]*python", "发布入口不得运行采集/评估程序")
+        self.assertIn("public/data/catalog.json", self.raw, "应校验页面数据存在")
 
 
 class SyncConfigDeployWorkflowTest(unittest.TestCase):

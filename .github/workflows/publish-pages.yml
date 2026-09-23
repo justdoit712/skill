@@ -1,0 +1,51 @@
+name: Publish Pages (manual)
+
+# 只发布仓库里**已经提交**的 public/ 产物：不采集、不评估、不调用模型、不联网、不写数据。
+# 用途：把当前 data/catalog.json 与 public/data/*.json 对应的页面发布到 GitHub Pages。
+#
+# 与「单一部署入口」约束的关系（docs/运行说明.md §7）：
+#   本文件不是第二个部署实现，而是复用 deploy-pages.yml（workflow_call）的第二个**触发**入口。
+#   它不重新生成任何产物，因此不会出现"两个入口发布不同版本"的问题。
+#
+# 前置条件（属仓库设置，文件里改不了）：Settings → Pages → Source 必须是 "GitHub Actions"。
+# 若该设置不是 GitHub Actions，deploy job 会在 configure-pages 步骤失败并给出明确报错。
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages-publish
+  cancel-in-progress: false
+
+jobs:
+  stage:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出已提交的页面产物
+        uses: actions/checkout@v4
+
+      - name: 校验产物存在且非空
+        run: |
+          set -euo pipefail
+          for f in public/index.html public/styles.css public/js/app.js public/data/catalog.json; do
+            test -s "$f" || { echo "::error::$f 缺失或为空"; exit 1; }
+          done
+          echo "主索引条目数：$(grep -o '"skill_id"' public/data/catalog.json | wc -l)"
+
+      - name: 上传页面产物（供部署 job 使用同一产物）
+        uses: actions/upload-artifact@v4
+        with:
+          name: pages-public
+          path: public
+          retention-days: 1
+
+  deploy:
+    needs: stage
+    uses: ./.github/workflows/deploy-pages.yml
+    permissions:
+      contents: read
+      pages: write
+      id-token: write

@@ -9,11 +9,16 @@ name: Sync Skills
 # 也就不会出现"消耗了额度但账本没记上"的重复计费。
 #
 # 不靠机器人提交触发第二次 push：GITHUB_TOKEN 触发的 push 不会启动新 workflow。
-# 定时为每周日北京时间 10:00（UTC 0 2 * * 0）。手动与定时共享同一额度账本（§7.3）。
+# 手动与定时共享同一额度账本（§7.3）。
+#
+# 【定时触发当前停用】2026-09-23：首次发布尚未完成（线上实测 404），且 deploy job 的
+# 条件引用了不存在的 step id（审计报告 P0-3），跑通也不会发布，只会白耗额度与 GitHub 配额。
+# 因此暂时只保留手动触发；发布现有内容请用 publish-pages.yml（只上传已提交产物，不采集不评估）。
+# 恢复定时：取消下面 schedule 的注释，并同步更新 tests/test_workflows.py 的相应断言。
 
 on:
-  schedule:
-    - cron: '0 2 * * 0'
+  # schedule:
+  #   - cron: '0 2 * * 0'
   workflow_dispatch:
     inputs:
       dry_run:
