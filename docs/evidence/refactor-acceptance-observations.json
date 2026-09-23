@@ -1,0 +1,149 @@
+{
+  "baseline": "098d754da4ef7ff056291a9226f8e3aff6db73fe",
+  "observations": {
+    "success": {
+      "status": "completed",
+      "stop_reason": "target_reached",
+      "model_calls": 2,
+      "evaluated_count": 1,
+      "evaluation_attempts": 1,
+      "usage": {
+        "prompt_tokens": 20,
+        "completion_tokens": 20,
+        "reasoning_tokens": 0,
+        "total_tokens": 40,
+        "requests": 2,
+        "unknown_usage_requests": 0,
+        "incomplete_breakdown_requests": 0
+      },
+      "local_schema_present": false
+    },
+    "unknown_usage": {
+      "status": "stopped",
+      "stop_reason": "usage_unknown",
+      "model_calls": 2,
+      "evaluated_count": 0,
+      "evaluation_attempts": 1,
+      "usage": {
+        "prompt_tokens": 10,
+        "completion_tokens": 10,
+        "reasoning_tokens": 0,
+        "total_tokens": 20,
+        "requests": 2,
+        "unknown_usage_requests": 1,
+        "incomplete_breakdown_requests": 1
+      },
+      "local_schema_present": false
+    },
+    "interrupt": {
+      "status": "interrupted",
+      "stop_reason": "interrupted",
+      "model_calls": 2,
+      "evaluated_count": 0,
+      "evaluation_attempts": 1,
+      "usage": {
+        "prompt_tokens": 10,
+        "completion_tokens": 10,
+        "reasoning_tokens": 0,
+        "total_tokens": 20,
+        "requests": 1,
+        "unknown_usage_requests": 0,
+        "incomplete_breakdown_requests": 0
+      },
+      "local_schema_present": false
+    },
+    "material_failed": {
+      "status": "completed",
+      "stop_reason": "candidates_exhausted",
+      "model_calls": 1,
+      "evaluated_count": 0,
+      "evaluation_attempts": 0,
+      "usage": {
+        "prompt_tokens": 10,
+        "completion_tokens": 10,
+        "reasoning_tokens": 0,
+        "total_tokens": 20,
+        "requests": 1,
+        "unknown_usage_requests": 0,
+        "incomplete_breakdown_requests": 0
+      },
+      "local_schema_present": false
+    },
+    "expansion_failed": {
+      "status": "completed",
+      "stop_reason": "candidates_exhausted",
+      "model_calls": 1,
+      "evaluated_count": 0,
+      "evaluation_attempts": 0,
+      "usage": {
+        "prompt_tokens": 10,
+        "completion_tokens": 10,
+        "reasoning_tokens": 0,
+        "total_tokens": 20,
+        "requests": 1,
+        "unknown_usage_requests": 0,
+        "incomplete_breakdown_requests": 0
+      },
+      "local_schema_present": false
+    },
+    "boolean_line_through_parser": {
+      "parsed_line": 1,
+      "match": "strong"
+    },
+    "overlength_output": {
+      "accepted_summary_length": 1201
+    },
+    "decimal_parameter": 1,
+    "array": {},
+    "placeholder": {
+      "accepted_endpoint": "https://api.example.com/v1/chat/completions"
+    },
+    "broken_help": {
+      "help_exit": 2
+    },
+    "exact_read_limit": {
+      "truncated": true
+    },
+    "no_request_usage": {
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "reasoning_tokens": 0,
+      "total_tokens": 0,
+      "requests": 1,
+      "unknown_usage_requests": 1,
+      "incomplete_breakdown_requests": 1
+    },
+    "snapshot_evidence": {
+      "exception": "AttributeError",
+      "message": "'DocumentSnapshot' object has no attribute 'content'"
+    },
+    "public_error_path": "OSError: C:\\private\\report.json",
+    "static_named_call_sites": {
+      "recover_catalog_projections": [],
+      "mutate_catalog": [],
+      "MaterialBundle": [],
+      "validate_document": [],
+      "search_repositories": []
+    },
+    "functions_over_150_lines": [
+      {
+        "file": "src/catalog/local.py",
+        "name": "_collect",
+        "line": 373,
+        "span": 338
+      },
+      {
+        "file": "src/catalog/sync_evaluate.py",
+        "name": "phase_evaluate",
+        "line": 58,
+        "span": 265
+      },
+      {
+        "file": "src/finder/run.py",
+        "name": "execute_find_skill",
+        "line": 163,
+        "span": 466
+      }
+    ]
+  }
+}

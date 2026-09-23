@@ -1,0 +1,157 @@
+{
+  "success": {
+    "status": "completed",
+    "stop_reason": "target_reached",
+    "model_calls": 2,
+    "evaluated_count": 1,
+    "evaluation_attempts": 1,
+    "usage": {
+      "prompt_tokens": 20,
+      "completion_tokens": 20,
+      "reasoning_tokens": 0,
+      "total_tokens": 40,
+      "requests": 2,
+      "unknown_usage_requests": 0,
+      "incomplete_breakdown_requests": 0
+    },
+    "local_schema_present": true
+  },
+  "unknown_usage": {
+    "status": "stopped",
+    "stop_reason": "usage_unknown",
+    "model_calls": 2,
+    "evaluated_count": 1,
+    "evaluation_attempts": 1,
+    "usage": {
+      "prompt_tokens": 10,
+      "completion_tokens": 10,
+      "reasoning_tokens": 0,
+      "total_tokens": 20,
+      "requests": 2,
+      "unknown_usage_requests": 1,
+      "incomplete_breakdown_requests": 1
+    },
+    "local_schema_present": true
+  },
+  "interrupt": {
+    "status": "interrupted",
+    "stop_reason": "interrupted",
+    "model_calls": 2,
+    "evaluated_count": 0,
+    "evaluation_attempts": 1,
+    "usage": {
+      "prompt_tokens": 10,
+      "completion_tokens": 10,
+      "reasoning_tokens": 0,
+      "total_tokens": 20,
+      "requests": 2,
+      "unknown_usage_requests": 1,
+      "incomplete_breakdown_requests": 1
+    },
+    "local_schema_present": true
+  },
+  "material_failed": {
+    "status": "error",
+    "stop_reason": "material_failed",
+    "model_calls": 1,
+    "evaluated_count": 0,
+    "evaluation_attempts": 0,
+    "usage": {
+      "prompt_tokens": 10,
+      "completion_tokens": 10,
+      "reasoning_tokens": 0,
+      "total_tokens": 20,
+      "requests": 1,
+      "unknown_usage_requests": 0,
+      "incomplete_breakdown_requests": 0
+    },
+    "local_schema_present": true
+  },
+  "expansion_failed": {
+    "status": "error",
+    "stop_reason": "expansion_failed",
+    "model_calls": 1,
+    "evaluated_count": 0,
+    "evaluation_attempts": 0,
+    "usage": {
+      "prompt_tokens": 10,
+      "completion_tokens": 10,
+      "reasoning_tokens": 0,
+      "total_tokens": 20,
+      "requests": 1,
+      "unknown_usage_requests": 0,
+      "incomplete_breakdown_requests": 0
+    },
+    "local_schema_present": true
+  },
+  "boolean_line_through_parser": {
+    "exception": "ValueError",
+    "message": "证据行号必须为整数，不能为布尔值或小数"
+  },
+  "overlength_output": {
+    "exception": "ValueError",
+    "message": "summary_zh 必须为不超过 1200 字符的文本"
+  },
+  "decimal_parameter": {
+    "exception": "ValueError",
+    "message": "参数 类型不支持: float，必须为正整数或数字字符串"
+  },
+  "array": {
+    "exception": "ValueError",
+    "message": "find-skill.json 必须为 JSON 对象"
+  },
+  "placeholder": {
+    "exception": "ValueError",
+    "message": "示例模型连接不可用于请求，请配置真实 endpoint 和 model"
+  },
+  "broken_help": {
+    "help_exit": 0
+  },
+  "exact_read_limit": {
+    "truncated": false
+  },
+  "no_request_usage": {
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "reasoning_tokens": 0,
+    "total_tokens": 0,
+    "requests": 0,
+    "unknown_usage_requests": 0,
+    "incomplete_breakdown_requests": 0
+  },
+  "snapshot_evidence": [
+    true,
+    "核验通过"
+  ],
+  "public_error_path": "execution_error",
+  "static_named_call_sites": {
+    "mutate_catalog": [
+      "src/catalog/local.py:259"
+    ],
+    "recover_catalog_projections": [
+      "src/catalog/maintenance.py:94"
+    ],
+    "validate_document": [
+      "src/catalog/local.py:508",
+      "src/catalog/sync_evaluate.py:138",
+      "src/finder/search.py:258",
+      "src/finder/search.py:277"
+    ],
+    "search_repositories": [
+      "src/catalog/discovery.py:115",
+      "src/finder/search.py:50"
+    ],
+    "MaterialBundle": [
+      "src/finder/search.py:283",
+      "src/shared/materials.py:97"
+    ]
+  },
+  "functions_over_150_lines": [
+    {
+      "file": "src/catalog/entry_state.py",
+      "name": "update_entry",
+      "line": 143,
+      "span": 152
+    }
+  ]
+}
