@@ -1,0 +1,8 @@
+{
+  "name": "skill-index",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/frontend/catalog-state.test.mjs"
+  }
+}

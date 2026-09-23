@@ -55,7 +55,11 @@ class NoUpstreamTracesTest(unittest.TestCase):
 class IndexPageTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        cls.html = (PUBLIC / "index.html").read_text(encoding="utf-8")
+        raw_html = (PUBLIC / "index.html").read_text(encoding="utf-8")
+        js_files = sorted((PUBLIC / "js").glob("*.js"))
+        js_content = "\n".join(f.read_text(encoding="utf-8") for f in js_files)
+        cls.raw_html = raw_html
+        cls.html = raw_html + "\n" + js_content
 
     def test_canonical_points_at_user_pages_subpath(self) -> None:
         self.assertIn(f'<link rel="canonical" href="{SITE_ROOT}">', self.html)

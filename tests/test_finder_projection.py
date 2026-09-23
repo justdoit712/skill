@@ -365,7 +365,10 @@ class TestT13FrontendFindViewRendering(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls) -> None:
-        cls.html_content = (ROOT / "public" / "index.html").read_text(encoding="utf-8")
+        html = (ROOT / "public" / "index.html").read_text(encoding="utf-8")
+        js_files = sorted((ROOT / "public" / "js").glob("*.js"))
+        js_content = "\n".join(f.read_text(encoding="utf-8") for f in js_files)
+        cls.html_content = html + "\n" + js_content
         cls.css_content = (ROOT / "public" / "styles.css").read_text(encoding="utf-8")
 
     def test_frontend_handles_all_stop_states(self) -> None:
