@@ -12,8 +12,8 @@ from pathlib import Path
 from typing import Any
 
 from src.infra.files import read_json, write_json_atomic
-from src.models import Candidate, PrescreenResult
-from src.budget import BudgetLedger, STATUS_COMPLETED, STATUS_FAILED, STATUS_NEEDS_RECOVERY
+from .models import Candidate, PrescreenResult
+from .budget import BudgetLedger, STATUS_COMPLETED, STATUS_FAILED, STATUS_NEEDS_RECOVERY
 
 QUEUE_FILENAME = "queue.json"
 QUEUE_VERSION = "1.0.0"

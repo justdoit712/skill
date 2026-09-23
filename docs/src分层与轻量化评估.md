@@ -32,19 +32,19 @@
 
 ### 2.1 本地采集依赖另一个完整任务的编排模块
 
-[local_run.py:21](../src/local_run.py:21) 从 `pipeline.py` 导入 `load_all_config`、`precheck`、`admission_decision`、`review_state`。
+local_run.py:21 从 `pipeline.py` 导入 `load_all_config`、`precheck`、`admission_decision`、`review_state`。
 
 这些分别属于配置和条目更新规则。它们应由两种目录任务共同使用。现在修改配置或复核规则要进入 Actions 编排文件；把 `pipeline.py` 搬进一个新文件夹仍会留下这个问题。静态导入分析显示本地入口直接依赖 15 个内部模块，传递可达 17 个；问题不只是单文件长。
 
-同一条目的更新又分别出现在本地 `publish()` 和 Actions 的 `entry_for()`：前者位于 [local_run.py:198](../src/local_run.py:198)，后者位于 [pipeline.py:1015](../src/pipeline.py:1015)。新字段要同步维护两处分支。
+同一条目的更新又分别出现在本地 `publish()` 和 Actions 的 `entry_for()`：前者位于 local_run.py:198，后者位于 pipeline.py:1015。新字段要同步维护两处分支。
 
 建议抽出目录专用的纯函数 `update_entry()`，集中处理版本、评估结果、人工配置投影和待复核状态。调用者负责账本、循环、网络和写文件。旧行为中的争议与已知问题应分别写成回归用例后修正，避免搬迁时无说明地改变业务。
 
 ### 2.2 外部接口藏在目录模块中，新功能难以正确复用
 
-[evaluate.py:190](../src/evaluate.py:190) 的 `call_model()` 是通用模型传输，但同文件包含目录六项检查的 Prompt、分类解析和评估 ID。定向查找只需要传输，却必须导入整个目录评估模块。
+evaluate.py:190 的 `call_model()` 是通用模型传输，但同文件包含目录六项检查的 Prompt、分类解析和评估 ID。定向查找只需要传输，却必须导入整个目录评估模块。
 
-[discover.py:114](../src/discover.py:114) 同时包含 GitHub 搜索、认证、仓库树读取，以及目录搜索模板、种子来源和展开策略。新增 [skill_finder.py:138](../src/skill_finder.py:138) 又实现了一次 GitHub 仓库搜索：现有版本包含有界重试，新版本只有一次 `get()`，`sleep` 参数未用于重试。
+discover.py:114 同时包含 GitHub 搜索、认证、仓库树读取，以及目录搜索模板、种子来源和展开策略。新增 skill_finder.py:138 又实现了一次 GitHub 仓库搜索：现有版本包含有界重试，新版本只有一次 `get()`，`sleep` 参数未用于重试。
 
 应把 GitHub 认证、请求、结果解析、树完整性检查放入 `infra/github.py`；把目录查询与种子规则保留在 `catalog/discovery.py`，把需求查询和轮转策略保留在 `finder/search.py`。基础接口接受明确的查询字符串，不能默认附加目录排除词。
 
@@ -52,9 +52,9 @@
 
 ### 2.3 文件写入借用周预算模块，保存报告又承担页面输出
 
-[pool.py:21](../src/pool.py:21) 和 [skill_finder.py:26](../src/skill_finder.py:26) 导入 `budget._write_json_atomic`、`now_local`。候选池或查找报告的存储没有周配额含义，跨模块借用下划线函数也说明公共接口尚未放在合适的位置。
+pool.py:21 和 skill_finder.py:26 导入 `budget._write_json_atomic`、`now_local`。候选池或查找报告的存储没有周配额含义，跨模块借用下划线函数也说明公共接口尚未放在合适的位置。
 
-[skill_finder.py:394](../src/skill_finder.py:394) 的 `save_current_report()` 同时保存本地 JSON、Markdown 和 `public/data/find-report.json`。运行开始就会写入公共页面数据路径，页面写入异常则被吞掉。
+skill_finder.py:394 的 `save_current_report()` 同时保存本地 JSON、Markdown 和 `public/data/find-report.json`。运行开始就会写入公共页面数据路径，页面写入异常则被吞掉。
 
 前端展示查找结果可以保留，但应明确拆成“本地运行记录”和“页面投影”两步。页面投影只包含展示字段，不直接复制本地绝对路径等运行信息。由编排层选择何时更新，写入失败要有可见诊断。当前代码能证明会写本地 `public/`，不能据此声称已经自动发布到远端。
 
@@ -64,7 +64,7 @@
 
 配置加载分散于 `pipeline.load_all_config()`、`prescreen.load_config()`、`discover.load_searches()` 和定向查找的两个配置函数。`local_run.main()` 同时分派采集、离线配置同步与离线增强。
 
-[index.py:337](../src/index.py:337) 的 `sync_config_to_catalog()` 已经是一条完整维护任务；[enrich.py:191](../src/enrich.py:191) 的 `enrich_catalog()` 同样负责读、改、写索引。
+index.py:337 的 `sync_config_to_catalog()` 已经是一条完整维护任务；enrich.py:191 的 `enrich_catalog()` 同样负责读、改、写索引。
 
 建议把目录配置组合放到 `catalog/config.py`，两个维护流程放到 `catalog/maintenance.py`。`index.py` 保留条目、目录和页面数据转换；`enrich.py` 保留单条结构化提取。模型连接文件可共用读取能力，但目录配置和查找配置分别校验、分别组合。
 
@@ -74,7 +74,7 @@
 
 ### 3.1 P1：未知用量和请求超时后仍继续调用模型
 
-位置：[规划调用后的处理](../src/skill_finder.py:423)、[候选调用后的处理](../src/skill_finder.py:520)、[用量累计](../src/usage.py:20)。
+位置：规划调用后的处理、候选调用后的处理、用量累计。
 
 `UsageTotals` 正确记录 `unknown_usage_requests`，但查找编排只检查已知 `total_tokens`，没有根据未知用量停止。
 
@@ -84,7 +84,7 @@
 
 ### 3.2 P1：评估上限约束的是成功结果数量
 
-位置：[skill_finder.py:491](../src/skill_finder.py:491)。
+位置：skill_finder.py:491。
 
 上限使用 `len(evaluated_items)`，解析失败和请求失败不增加这个数量。复现将 `max_evaluations=2`，返回一次无效 JSON、两次有效结果，实际发起了 **3 次候选评估请求**，加上规划共 4 次模型调用。
 
@@ -92,7 +92,7 @@
 
 ### 3.3 P1：部分引文匹配仍可被标为有效证据
 
-位置：[find_evaluate.py:384](../src/find_evaluate.py:384)。
+位置：find_evaluate.py:384。
 
 当前允许路径后缀匹配、全文匹配，以及引文前 20 个或后 20 个字符匹配。校验通过后继续保留模型给出的原路径和行号。
 
@@ -102,7 +102,7 @@
 
 ### 3.4 P2：失败、中断和无匹配没有统一收尾
 
-位置：[无仓库分支](../src/skill_finder.py:458)、[正常排序](../src/skill_finder.py:555)、[中断处理](../src/skill_finder.py:576)。
+位置：无仓库分支、正常排序、中断处理。
 
 复现两种情况：
 
@@ -113,7 +113,7 @@
 
 ### 3.5 P2：材料入口尚未形成完整契约
 
-位置：[仓库文件名判断](../src/discover.py:459)、[原文抓取](../src/skill_finder.py:271)。
+位置：仓库文件名判断、原文抓取。
 
 复现：`NOT_SKILL.md` 被 `.endswith("SKILL.md")` 当作技能；HTTP 成功且内容为登录 HTML 的材料仍返回 `ok=True`。这只能证明材料会被接受进入后续流程，不能推断它一定被模型推荐。
 
@@ -121,7 +121,7 @@
 
 ### 3.6 P2：候选覆盖与需求标准会被隐式改变
 
-位置：[查询循环](../src/skill_finder.py:439)、[文件轮转](../src/skill_finder.py:231)、[规划解析](../src/find_evaluate.py:179)。
+位置：查询循环、文件轮转、规划解析。
 
 复现：规划有两个查询，第一个返回 20 个仓库后，第二个完全不执行。随后各仓库路径按字典顺序取前 10 个，未结合需求安排顺序，合集内名称靠后的相关技能容易失去读取机会。
 
@@ -131,7 +131,7 @@
 
 ### 3.7 P2：配置错误被静默降级为默认值
 
-位置：[配置读取](../src/skill_finder.py:79)、[数值解析](../src/skill_finder.py:312)、[CLI 参数](../src/skill_finder.py:701)。
+位置：配置读取、数值解析、CLI 参数。
 
 无效 JSON 被转为默认值，非法数值字符串也直接回退。复现 `20m` 和 `oops` 均得到 `200000`。当前实际配置为 `"20 000 000"`，可以解析成 20,000,000；原运行说明混淆了配置值与 200,000 的代码兜底值，已在本次文档整理中更正，源码参数校验仍待修复。
 
@@ -391,13 +391,13 @@ AST 测得 `src` 仍为 21 个文件、6,865 行。函数跨度包含嵌套定�
 
 | 编号 | 当前观察 | 对架构的要求 |
 | --- | --- | --- |
-| A1 | [UsageTotals.add](../src/usage.py:20) 收到 `ModelCallResult(attempts=0)` 仍累计 1 次请求、1 次未知用量 | 区分“未发出”“已开始但结果未知”“响应已收到”，不能从缺 usage 推断请求发生 |
-| A2 | [证据核验](../src/find_evaluate.py:440) 修改输入的 explanation 和 limitations；重复调用原输入追加两条限制 | 纯核验返回新对象；保留原模型输出与程序校验结果的区别 |
-| A3 | [材料读取](../src/skill_finder.py:271) 中只改变引用文档时 candidate 指纹不变；指定版本的主文件仍配上 HEAD 引用文档 | 建立材料集合身份，尽可能固定同一 revision；无法固定时标明一致性未知 |
-| A4 | [evaluation_id](../src/evaluate.py:425) 在修改 model 名称但不改 `model_config_version` 时不变 | 当前缓存依赖人工升版本；需要显式版本管理与审计摘要，不可误称自动识别配置变化 |
-| A5 | [BudgetLedger.load](../src/budget.py:106) 跨周时移动账本到 history | 名为 load 的操作实际改变磁盘；将读取与周切换命令分开，明确锁和异常责任 |
-| A6 | 对 [write_catalog](../src/index.py:315) 注入页面写失败，主索引已变为 new，页面仍是 old | 多文件不是事务；声明主记录、派生记录和重建步骤，不将单文件原子写包装成完整一致性 |
-| A7 | reserve 后移除临时材料，再抓到新文本，[phase_evaluate](../src/pipeline.py:964) 仍调用评估器并带旧指纹 | 在调用前校验材料与预留身份；这属于正确性修复，不能仅迁移文件 |
+| A1 | UsageTotals.add 收到 `ModelCallResult(attempts=0)` 仍累计 1 次请求、1 次未知用量 | 区分“未发出”“已开始但结果未知”“响应已收到”，不能从缺 usage 推断请求发生 |
+| A2 | 证据核验 修改输入的 explanation 和 limitations；重复调用原输入追加两条限制 | 纯核验返回新对象；保留原模型输出与程序校验结果的区别 |
+| A3 | 材料读取 中只改变引用文档时 candidate 指纹不变；指定版本的主文件仍配上 HEAD 引用文档 | 建立材料集合身份，尽可能固定同一 revision；无法固定时标明一致性未知 |
+| A4 | evaluation_id 在修改 model 名称但不改 `model_config_version` 时不变 | 当前缓存依赖人工升版本；需要显式版本管理与审计摘要，不可误称自动识别配置变化 |
+| A5 | BudgetLedger.load 跨周时移动账本到 history | 名为 load 的操作实际改变磁盘；将读取与周切换命令分开，明确锁和异常责任 |
+| A6 | 对 write_catalog 注入页面写失败，主索引已变为 new，页面仍是 old | 多文件不是事务；声明主记录、派生记录和重建步骤，不将单文件原子写包装成完整一致性 |
+| A7 | reserve 后移除临时材料，再抓到新文本，phase_evaluate 仍调用评估器并带旧指纹 | 在调用前校验材料与预留身份；这属于正确性修复，不能仅迁移文件 |
 
 A1 是直接边界输入探针，不证明当前每个入口都会在无请求时计费。A3 证明“存在混用版本的构造路径”，没有访问真实 GitHub 判断分支实际差异。A4 在现有“版本由配置维护者提升”的契约下属于失效风险，而非证明服务商已返回错误缓存。A6 注入的是第二个文件写入失败，没有做断电实验。A7 运行真实预留/评估编排、队列和账本，以替身截取评估器收到的材料，不调用真实模型。
 

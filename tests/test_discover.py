@@ -10,7 +10,7 @@ import json
 import unittest
 from pathlib import Path
 
-from src.discover import (
+from src.catalog.discovery import (
     _skill_name_from_path,
     build_queries,
     candidates_from_sources,

@@ -9,7 +9,7 @@ from unittest.mock import Mock
 
 import requests
 
-from src.evaluate import api_key_source, resolve_api_key
+from src.infra.llm import api_key_source, call_model, resolve_api_key
 
 ENV_NAME = "DSH_TEST_LLM_KEY"
 FAKE_ENV_KEY = "sk-env-0000000000000000000000000000"
@@ -63,8 +63,6 @@ class ApiKeyResolutionTest(unittest.TestCase):
 
     def test_missing_credentials_error_mentions_both_places(self) -> None:
         """报错要能告诉人往哪儿设，而不是只说"缺凭据"。"""
-        from src.evaluate import call_model
-
         result = call_model(self.cfg(), "system", "user")
         self.assertFalse(result.ok)
         self.assertIn(ENV_NAME, result.error)
@@ -89,28 +87,28 @@ class NoLeakInSourceTest(unittest.TestCase):
 
     def test_no_print_call_mentions_credentials(self) -> None:
         import ast
-        from src import evaluate
+        from src.infra import llm
+        from src.catalog import evaluation
 
-        tree = ast.parse(inspect.getsource(evaluate))
         offenders = []
-        for node in ast.walk(tree):
-            if not isinstance(node, ast.Call):
-                continue
-            func = node.func
-            is_print = (isinstance(func, ast.Name) and func.id == "print") or (
-                isinstance(func, ast.Attribute) and func.attr in {"print", "write", "debug", "info", "warning", "error"}
-            )
-            if not is_print:
-                continue
-            leaked = self._names_in(node) & self.CREDENTIAL_NAMES
-            if leaked:
-                offenders.append((getattr(node, "lineno", "?"), sorted(leaked)))
+        for mod in (llm, evaluation):
+            tree = ast.parse(inspect.getsource(mod))
+            for node in ast.walk(tree):
+                if not isinstance(node, ast.Call):
+                    continue
+                func = node.func
+                is_print = (isinstance(func, ast.Name) and func.id == "print") or (
+                    isinstance(func, ast.Attribute) and func.attr in {"print", "write", "debug", "info", "warning", "error"}
+                )
+                if not is_print:
+                    continue
+                leaked = self._names_in(node) & self.CREDENTIAL_NAMES
+                if leaked:
+                    offenders.append((getattr(node, "lineno", "?"), sorted(leaked)))
         self.assertEqual(offenders, [], f"疑似输出凭据的调用点：{offenders}")
 
     def test_error_and_notes_never_contain_the_key(self) -> None:
         os.environ.pop(ENV_NAME, None)
-        from src.evaluate import call_model
-
         cfg = {"auth": {"api_key_env": ENV_NAME}, "endpoint": "https://example.invalid", "model": "x"}
         result = call_model(cfg, "s", "u")
         blob = f"{result.error or ''}{result.notes}"
@@ -120,8 +118,6 @@ class NoLeakInSourceTest(unittest.TestCase):
 
 class ModelDiagnosticsTest(unittest.TestCase):
     def test_network_exception_keeps_type_for_safe_logging(self):
-        from src.evaluate import call_model
-
         session = Mock()
         session.post.side_effect = requests.exceptions.ReadTimeout("sensitive response detail")
         result = call_model({"model": "test", "endpoint": "https://example.invalid",
@@ -134,8 +130,6 @@ class ModelDiagnosticsTest(unittest.TestCase):
         self.assertEqual(session.post.call_count, 1)
 
     def test_http_error_keeps_status_without_exposing_response_body(self):
-        from src.evaluate import call_model
-
         response = Mock(status_code=429, text="sensitive response detail")
         session = Mock()
         session.post.return_value = response

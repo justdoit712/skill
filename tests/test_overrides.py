@@ -11,8 +11,8 @@ from pathlib import Path
 import tempfile
 import unittest
 
-from src.dedupe import candidate_from_repo, content_fingerprint
-from src.index import (
+from src.catalog.dedupe import candidate_from_repo, content_fingerprint
+from src.catalog.index import (
     CatalogContext,
     STATUS_CANDIDATE,
     STATUS_EXCLUDED,
@@ -23,8 +23,8 @@ from src.index import (
     build_page_data,
     write_catalog,
 )
-from src.models import Candidate, PrescreenResult
-from src.overrides import (
+from src.catalog.models import Candidate, PrescreenResult
+from src.catalog.overrides import (
     apply_manual_overrides,
     apply_manual_overrides_to_entry,
     get_manual_exclusions,
@@ -477,7 +477,7 @@ class ManualExclusionsTest(unittest.TestCase):
         self.assertIn("MANUAL_EXCLUDED", entry["reason_codes"])
 
     def test_prescreen_excludes_blacklisted_skill(self):
-        from src.prescreen import PrescreenConfig, prescreen
+        from src.catalog.prescreen import PrescreenConfig, prescreen
         cand = Candidate(
             skill_id="blocked/repo:SKILL.md",
             owner="blocked",

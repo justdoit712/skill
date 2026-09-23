@@ -11,18 +11,18 @@ from pathlib import Path
 import time
 from typing import Any
 
-from src.budget import BudgetLedger, QuotaExceeded
-from src.dedupe import dedupe
-from src.discover import discover
-from src.evaluate import evaluation_id
 from src.infra.files import read_json, write_json_atomic
 from src.infra.http import fetch_text
-from src.models import Candidate, PrescreenResult
-from src.overrides import get_manual_picks
-from src.prescreen import DECISION_QUEUED, prescreen
 from src.shared.identity import content_fingerprint
 from src.shared.runtime import now_local
-from src.snooze import get_active_snoozed
+from .budget import BudgetLedger, QuotaExceeded
+from .dedupe import dedupe
+from .discovery import discover
+from .evaluation import evaluation_id
+from .models import Candidate, PrescreenResult
+from .overrides import get_manual_picks
+from .prescreen import DECISION_QUEUED, prescreen
+from .snooze import get_active_snoozed
 
 from .config import load_all_config, precheck
 from .queue import (
@@ -411,8 +411,8 @@ def dry_run(
     sleep=time.sleep,
 ) -> dict:
     """只验证配置与计算计划：不调用模型、不写账本、不提交、不部署（§7.3）。"""
-    from src.budget import week_id
-    from src.evaluate import resolve_api_key
+    from .budget import week_id
+    from .evaluation import resolve_api_key
 
     cfg = load_all_config(config_dir)
     problems = precheck(cfg)

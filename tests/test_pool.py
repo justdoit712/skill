@@ -6,9 +6,9 @@ from pathlib import Path
 import tempfile
 import unittest
 
-from src.dedupe import candidate_from_repo
-from src.models import Candidate
-from src.pool import (
+from src.catalog.dedupe import candidate_from_repo
+from src.catalog.models import Candidate
+from src.catalog.pool import (
     STATUS_DONE,
     STATUS_EXCLUDED,
     STATUS_FETCH_FAILED,

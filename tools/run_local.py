@@ -7,7 +7,7 @@ ROOT = Path(__file__).resolve().parent.parent
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from src.local_run import main
+from src.catalog.local import main
 
 
 if __name__ == "__main__":

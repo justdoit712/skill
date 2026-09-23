@@ -12,7 +12,7 @@ import unittest
 from datetime import datetime, timedelta
 from pathlib import Path
 
-from src.budget import (
+from src.catalog.budget import (
     SHANGHAI_TZ,
     STATUS_COMPLETED,
     STATUS_FAILED,

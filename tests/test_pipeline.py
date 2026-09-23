@@ -19,12 +19,10 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from src.dedupe import candidate_from_repo, dedupe
-from src.fetch import FetchResult
-from src.index import CatalogContext, build_catalog, build_entry, write_catalog
-from src.pipeline import phase_evaluate, phase_reserve
-from src.prescreen import load_config, prescreen
-from src.report import (
+from src.catalog.dedupe import candidate_from_repo, dedupe
+from src.catalog.index import CatalogContext, build_catalog, build_entry, write_catalog
+from src.catalog.prescreen import load_config, prescreen
+from src.catalog.report import (
     COLLECTION_FAILED,
     CONTENT_CHANGED,
     NEW,
@@ -34,6 +32,8 @@ from src.report import (
     render_report_markdown,
     write_report,
 )
+from src.infra.http import FetchResult
+from src.pipeline import phase_evaluate, phase_reserve
 
 ROOT = Path(__file__).resolve().parents[1]
 RULES = json.loads((ROOT / "config" / "rules.json").read_text(encoding="utf-8"))

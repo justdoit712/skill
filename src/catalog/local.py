@@ -36,7 +36,8 @@ from .entry_state import (
     update_entry,
 )
 from .evaluation import RETRYABLE_STATUS, build_prompt, evaluate, evaluation_id, resolve_api_key
-from .fetch import fetch_text
+from src.infra.http import fetch_text
+from src.shared.usage import UsageTotals
 from .index import CatalogContext, build_catalog, build_entry, index_by_id, write_catalog
 from .overrides import apply_manual_overrides_to_entry, get_manual_exclusions, get_manual_picks
 from .snooze import apply_snooze_overrides, get_active_snoozed, load_snooze
@@ -56,7 +57,6 @@ from .pool import (
 )
 from .prescreen import prescreen
 from .report import build_report, write_report
-from .usage import UsageTotals
 
 
 STOP_LABELS = {

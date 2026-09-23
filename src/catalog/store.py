@@ -89,7 +89,7 @@ def mutate_catalog(
         write_json_atomic(catalog_file, updated_catalog)
 
         # 第二步写页面公开数据（使用 build_page_data 投影）
-        from src.index import build_page_data
+        from .index import build_page_data
         page_file = public_path / "data" / "catalog.json"
         write_json_atomic(page_file, build_page_data(updated_catalog))
 
@@ -116,7 +116,7 @@ def recover_catalog_projections(
         return False
 
     page_file = public_path / "data" / "catalog.json"
-    from src.index import build_page_data
+    from .index import build_page_data
     source_catalog = read_json(source_file)
     expected_page_data = build_page_data(source_catalog)
 

@@ -19,7 +19,7 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
-from src.evaluate import ModelCallResult
+from src.infra.llm import ModelCallResult
 from src.finder.report import (
     render_find_markdown_report,
     sanitize_report_for_public,
@@ -35,7 +35,7 @@ from src.finder.run import (
     STATUS_USAGE_UNKNOWN,
     execute_find_skill,
 )
-from src.models import Candidate
+from src.shared.models import Candidate
 
 ROOT = Path(__file__).resolve().parents[1]
 

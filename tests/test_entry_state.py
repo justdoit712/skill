@@ -25,8 +25,8 @@ from src.catalog.entry_state import (
     review_state,
     update_entry,
 )
-from src.index import CatalogContext
-from src.models import Candidate
+from src.catalog.index import CatalogContext
+from src.catalog.models import Candidate
 
 
 class EntryStateMachineTest(unittest.TestCase):

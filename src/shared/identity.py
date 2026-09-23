@@ -95,3 +95,43 @@ def dedupe_identities(identities: list[CandidateIdentity]) -> list[CandidateIden
             kept.discovered_at = item.discovered_at or kept.discovered_at
 
     return [merged[k] for k in order]
+
+
+def candidate_from_repo(
+    owner: str,
+    repo: str,
+    *,
+    path: str = "",
+    url: str = "",
+    repo_url: str = "",
+    name: str = "",
+    description: str = "",
+    source_id: str = "",
+    discovery_method: str = "",
+    search_term: str = "",
+    discovered_at: str = "",
+    content_fingerprint: str | None = None,
+) -> CandidateIdentity:
+    """由仓库信息构造中性候选身份，稳定 ID 与基本属性一并填好。"""
+    return CandidateIdentity(
+        skill_id=make_skill_id(owner, repo, path),
+        owner=owner.lower(),
+        repo=repo.lower(),
+        path=path.strip("/"),
+        url=url,
+        repo_url=repo_url or (f"https://github.com/{owner}/{repo}" if owner and repo else ""),
+        name=name or repo,
+        description=description,
+        discovered_at=discovered_at,
+        content_fingerprint=content_fingerprint,
+    )
+
+
+__all__ = [
+    "parse_github_url",
+    "make_skill_id",
+    "content_fingerprint",
+    "dedupe_identities",
+    "candidate_from_repo",
+]
+

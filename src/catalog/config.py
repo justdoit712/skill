@@ -10,9 +10,9 @@ import json
 from pathlib import Path
 
 from src.infra.files import read_json
-from src.overrides import get_manual_exclusions, get_manual_picks, load_overrides, validate_overrides
-from src.prescreen import load_config
-from src.snooze import load_snooze, validate_snooze
+from .overrides import get_manual_exclusions, get_manual_picks, load_overrides, validate_overrides
+from .prescreen import load_config
+from .snooze import load_snooze, validate_snooze
 
 
 def _load_json(path: Path) -> dict:

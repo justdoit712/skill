@@ -91,15 +91,16 @@ def inventory():
 
 
 def probes():
-    from src.budget import BudgetLedger, week_id
-    from src.dedupe import candidate_from_repo, content_fingerprint
-    from src.evaluate import ModelCallResult, evaluation_id
-    from src.fetch import FetchResult
-    from src.find_evaluate import verify_and_adjust_evaluation
-    from src.index import CatalogContext, build_catalog, write_catalog
-    import src.index as index_module
-    from src.skill_finder import fetch_candidate_materials
-    from src.usage import UsageTotals
+    from src.catalog.budget import BudgetLedger, week_id
+    from src.catalog.dedupe import candidate_from_repo, content_fingerprint
+    from src.catalog.evaluation import evaluation_id
+    from src.catalog.index import CatalogContext, build_catalog, write_catalog
+    import src.catalog.index as index_module
+    from src.finder.evaluation import verify_and_adjust_evaluation
+    from src.finder.search import fetch_candidate_materials
+    from src.infra.http import FetchResult
+    from src.infra.llm import ModelCallResult
+    from src.shared.usage import UsageTotals
 
     results = {}
     totals = UsageTotals()

@@ -17,8 +17,8 @@ import shutil
 import tempfile
 import unittest
 
-from src.dedupe import candidate_from_repo
-from src.index import (
+from src.catalog.dedupe import candidate_from_repo
+from src.catalog.index import (
     STATUS_CANDIDATE,
     STATUS_EXCLUDED,
     STATUS_PENDING,
@@ -29,8 +29,8 @@ from src.index import (
     sync_config_to_catalog,
     write_catalog,
 )
-from src.models import Candidate, PrescreenResult
-from src.snooze import (
+from src.catalog.models import Candidate, PrescreenResult
+from src.catalog.snooze import (
     DEFAULT_SNOOZE_DAYS,
     apply_snooze_overrides,
     compute_expires_at,
@@ -331,8 +331,8 @@ class SnoozeLocalPoolWatermarkTest(unittest.TestCase):
     """测试本地候选池 (pool.json) 水位计算与跳过逻辑。"""
 
     def test_actionable_watermark_excludes_snoozed(self):
-        from src.pool import CandidatePool, PoolItem, STATUS_PENDING, STATUS_DONE
-        from src.snooze import get_active_snoozed
+        from src.catalog.pool import CandidatePool, PoolItem, STATUS_PENDING, STATUS_DONE
+        from src.catalog.snooze import get_active_snoozed
 
         cand1 = candidate_from_repo("owner", "snoozed", path="SKILL.md", url="http://x")
         cand2 = candidate_from_repo("owner", "normal", path="SKILL.md", url="http://y")

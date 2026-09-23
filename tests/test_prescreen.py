@@ -5,8 +5,8 @@ from __future__ import annotations
 import unittest
 from pathlib import Path
 
-from src.dedupe import candidate_from_repo
-from src.prescreen import DECISION_EXCLUDED, DECISION_QUEUED, load_config, prescreen
+from src.catalog.dedupe import candidate_from_repo
+from src.catalog.prescreen import DECISION_EXCLUDED, DECISION_QUEUED, load_config, prescreen
 
 ROOT = Path(__file__).resolve().parents[1]
 

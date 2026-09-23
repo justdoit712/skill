@@ -81,7 +81,7 @@ jobs:
           if [ -n "${LIMIT_FETCHES}" ]; then args="$args --limit-fetches ${LIMIT_FETCHES}"; fi
           if [ -n "${EXPAND_LIMIT}" ]; then args="$args --expand-limit ${EXPAND_LIMIT}"; fi
           echo "args=$args" >> "$GITHUB_OUTPUT"
-          echo "week=$(python -c 'from src.budget import week_id; print(week_id())')" >> "$GITHUB_OUTPUT"
+          echo "week=$(python -c 'from src.shared.runtime import week_id; print(week_id())')" >> "$GITHUB_OUTPUT"
 
       - name: 干跑（不调用模型、不写账本）
         if: github.event.inputs.dry_run == 'true'

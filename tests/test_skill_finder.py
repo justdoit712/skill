@@ -8,11 +8,7 @@ import tempfile
 import unittest
 from unittest.mock import MagicMock, Mock, patch
 
-from src.dedupe import candidate_from_repo, content_fingerprint
-from src.evaluate import ModelCallResult
-from src.models import Candidate
-from src.pipeline import phase_evaluate
-from src.skill_finder import (
+from src.finder import (
     DEFAULT_LIMIT,
     STATUS_EVALUATION_LIMIT,
     STATUS_INTERRUPTED,
@@ -25,6 +21,10 @@ from src.skill_finder import (
     fetch_candidate_materials,
     main,
 )
+from src.infra.llm import ModelCallResult
+from src.pipeline import phase_evaluate
+from src.shared.identity import candidate_from_repo, content_fingerprint
+from src.shared.models import Candidate
 
 
 class TestT01UsageUnknown(unittest.TestCase):
@@ -42,7 +42,7 @@ class TestT01UsageUnknown(unittest.TestCase):
     def tearDown(self) -> None:
         self.temp_dir.cleanup()
 
-    @patch("src.skill_finder.call_model")
+    @patch("src.finder.run.call_model")
     def test_usage_unknown_in_planning_stops_immediately(self, mock_call) -> None:
         """规划阶段缺失 usage，立即熔断停机，后续不发生任何模型调用，状态为 usage_unknown。"""
         mock_call.return_value = ModelCallResult(
@@ -56,10 +56,10 @@ class TestT01UsageUnknown(unittest.TestCase):
         self.assertEqual(report["stop_reason"], STATUS_USAGE_UNKNOWN)
         self.assertEqual(mock_call.call_count, 1)
 
-    @patch("src.skill_finder.fetch_candidate_materials")
-    @patch("src.skill_finder.expand_and_collect_candidates")
-    @patch("src.skill_finder.search_github_repos_for_query")
-    @patch("src.skill_finder.call_model")
+    @patch("src.finder.run.fetch_candidate_materials")
+    @patch("src.finder.run.expand_and_collect_candidates")
+    @patch("src.finder.run.search_github_repos_for_query")
+    @patch("src.finder.run.call_model")
     def test_usage_unknown_in_candidate_evaluation_stops_immediately(
         self, mock_call, mock_search, mock_expand, mock_fetch
     ) -> None:
@@ -111,10 +111,10 @@ class TestT02AccountingAndAttempts(unittest.TestCase):
     def tearDown(self) -> None:
         self.temp_dir.cleanup()
 
-    @patch("src.skill_finder.fetch_candidate_materials")
-    @patch("src.skill_finder.expand_and_collect_candidates")
-    @patch("src.skill_finder.search_github_repos_for_query")
-    @patch("src.skill_finder.call_model")
+    @patch("src.finder.run.fetch_candidate_materials")
+    @patch("src.finder.run.expand_and_collect_candidates")
+    @patch("src.finder.run.search_github_repos_for_query")
+    @patch("src.finder.run.call_model")
     def test_failed_call_consumes_evaluation_attempt(
         self, mock_call, mock_search, mock_expand, mock_fetch
     ) -> None:
@@ -183,10 +183,10 @@ class TestT04InterruptAndErrorPreservation(unittest.TestCase):
     def tearDown(self) -> None:
         self.temp_dir.cleanup()
 
-    @patch("src.skill_finder.fetch_candidate_materials")
-    @patch("src.skill_finder.expand_and_collect_candidates")
-    @patch("src.skill_finder.search_github_repos_for_query")
-    @patch("src.skill_finder.call_model")
+    @patch("src.finder.run.fetch_candidate_materials")
+    @patch("src.finder.run.expand_and_collect_candidates")
+    @patch("src.finder.run.search_github_repos_for_query")
+    @patch("src.finder.run.call_model")
     def test_interrupt_preserves_shortlist_and_passes_plan(
         self, mock_call, mock_search, mock_expand, mock_fetch
     ) -> None:

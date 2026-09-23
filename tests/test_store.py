@@ -17,7 +17,7 @@ from src.catalog.store import (
     mutate_catalog,
     recover_catalog_projections,
 )
-from src.index import build_page_data
+from src.catalog.index import build_page_data
 from src.infra.files import read_json, write_json_atomic
 
 

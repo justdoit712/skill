@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import unittest
 
-from src.dedupe import (
+from src.catalog.dedupe import (
     candidate_from_repo,
     content_fingerprint,
     dedupe,

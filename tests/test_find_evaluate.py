@@ -7,7 +7,7 @@ import json
 from pathlib import Path
 import unittest
 
-from src.find_evaluate import (
+from src.finder import (
     DOC_CLEAR,
     DOC_INSUFFICIENT,
     DOC_PARTIAL,

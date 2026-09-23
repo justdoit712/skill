@@ -7,17 +7,17 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from src.enrich import (
+from src.catalog.enrich import (
     enrich_catalog,
     enrich_entry,
     extract_example_requests,
     extract_key_features,
     infer_skill_type,
 )
-from src.index import build_entry
-from src.models import Candidate
+from src.catalog.index import build_entry
+from src.catalog.models import Candidate
 from src.pipeline import previous_evaluation_snapshot, review_state
-from src.schema_utils import normalize_skill_type, normalize_string_list
+from src.shared.schema import normalize_skill_type, normalize_string_list
 
 
 class SchemaUtilsTest(unittest.TestCase):

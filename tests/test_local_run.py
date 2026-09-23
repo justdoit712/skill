@@ -7,12 +7,12 @@ import shutil
 import tempfile
 import unittest
 
-from src.dedupe import candidate_from_repo
-from src.evaluate import ModelCallResult
-from src.fetch import FetchResult
-from src.local_run import run_local
-from src.pipeline import load_all_config
-from src.usage import UsageTotals
+from src.catalog.config import load_all_config
+from src.catalog.dedupe import candidate_from_repo
+from src.catalog.local import run_local
+from src.infra.http import FetchResult
+from src.infra.llm import ModelCallResult
+from src.shared.usage import UsageTotals
 
 ROOT = Path(__file__).resolve().parents[1]
 FIXTURES = json.loads((ROOT / "tests/fixtures/evaluations.json").read_text(encoding="utf-8"))

@@ -23,8 +23,8 @@ from src.infra.github import (
     expand_repo_skills,
 )
 from src.infra.http import fetch_text
-from src.models import Candidate
 from src.shared.identity import content_fingerprint, make_skill_id
+from src.shared.models import Candidate
 
 MAX_REPOS_TO_EXPAND = 20
 MAX_SEARCH_REPOS_PER_QUERY = 20

@@ -9,7 +9,7 @@ import json
 import unittest
 from pathlib import Path
 
-from src.decide import (
+from src.catalog.decide import (
     DECISION_CANDIDATE,
     DECISION_EXCLUDED,
     DECISION_PROCESSING_FAILURE,

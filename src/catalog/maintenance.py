@@ -10,8 +10,8 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
-from src.index import sync_config_to_catalog
-from src.enrich import enrich_catalog
+from .index import sync_config_to_catalog
+from .enrich import enrich_catalog
 
 
 def sync_config_offline(
