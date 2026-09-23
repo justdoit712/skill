@@ -24,6 +24,27 @@ def load_searches(config_dir: str = "config") -> dict:
     return read_json(Path(config_dir) / "searches.json", default={})
 
 
+AUTOMATION_FILENAME = "automation.json"
+
+
+def load_automation(config_dir: str | Path = "config") -> dict:
+    """读取 config/automation.json（自动化开关，可选文件）。
+
+    语义（与 `.github/workflows/sync-skills.yml` 的 gate job 保持一致）：
+    - 缺失文件或缺失字段 → `scheduled_sync_enabled` 视为 **false**：无人值守的定时任务
+      不会因为文件丢失或改名而开始花钱。
+    - 文件存在但内容不是合法 JSON → 直接抛错，不静默降级。
+    - 字段存在但类型不是布尔 → 由 precheck 报错，避免 `"true"` 这类字符串被当成真值。
+    """
+    path = Path(config_dir) / AUTOMATION_FILENAME
+    if not path.exists():
+        return {"scheduled_sync_enabled": False, "missing": True}
+    payload = _load_json(path)
+    if not isinstance(payload, dict):
+        raise ValueError(f"{AUTOMATION_FILENAME} 顶层必须是 JSON 对象")
+    return payload
+
+
 def load_all_config(config_dir: str | Path = "config") -> dict:
     """加载目录流水线运行所需的全部配置字典。"""
     base = Path(config_dir)
@@ -43,6 +64,7 @@ def load_all_config(config_dir: str | Path = "config") -> dict:
         "model": model_cfg,
         "overrides": overrides_cfg,
         "snoozed": snooze_cfg,
+        "automation": load_automation(base),
         "source_types": {
             s["id"]: s.get("source_type") for s in sources_cfg.get("sources", [])
         },
@@ -68,11 +90,21 @@ def precheck(cfg: dict) -> list[str]:
         problems.extend(
             validate_snooze(cfg["snoozed"], active_pick_ids=active_picks, active_exclusion_ids=active_excl)
         )
+    automation = cfg.get("automation") or {}
+    if "scheduled_sync_enabled" in automation and not isinstance(
+        automation["scheduled_sync_enabled"], bool
+    ):
+        problems.append(
+            f"{AUTOMATION_FILENAME} 的 scheduled_sync_enabled 必须是 true 或 false"
+            f"（当前为 {type(automation['scheduled_sync_enabled']).__name__}）"
+        )
     return problems
 
 
 __all__ = [
+    "AUTOMATION_FILENAME",
     "load_all_config",
+    "load_automation",
     "precheck",
     "load_searches",
 ]

@@ -6,10 +6,13 @@
 from __future__ import annotations
 
 import json
+import tempfile
 import unittest
 from pathlib import Path
 
 import yaml
+
+from src.catalog.config import load_all_config, load_automation, precheck
 
 ROOT = Path(__file__).resolve().parents[1]
 CONFIG = ROOT / "config"
@@ -118,6 +121,37 @@ class ConfigIntegrityTest(unittest.TestCase):
     def test_example_config_keeps_api_key_empty(self) -> None:
         """model.example.json 会被提交，其 api_key 必须保持为空。"""
         self.assertIsNone(self.model["auth"].get("api_key"))
+
+
+class AutomationSwitchTest(unittest.TestCase):
+    """自动化开关：定时采集的开启/关闭由 config/automation.json 决定。"""
+
+    def test_shipped_file_declares_a_boolean(self) -> None:
+        data = load("automation.json")
+        self.assertIn("scheduled_sync_enabled", data, "必须显式声明开关")
+        self.assertIsInstance(data["scheduled_sync_enabled"], bool, "开关必须是 true 或 false")
+
+    def test_missing_file_is_treated_as_disabled(self) -> None:
+        """缺失按停用处理：无人值守的定时任务不会因为文件丢失而开始花钱。"""
+        with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as tmp:
+            self.assertIs(load_automation(tmp)["scheduled_sync_enabled"], False)
+
+    def test_non_boolean_value_is_reported_by_precheck(self) -> None:
+        """`"true"` 这类字符串不能被当成真值：gate 按 false 处理，precheck 必须报错。"""
+        cfg = load_all_config(CONFIG)
+        cfg["automation"] = {"scheduled_sync_enabled": "true"}
+        self.assertTrue(
+            any("scheduled_sync_enabled" in p for p in precheck(cfg)),
+            "字符串形式的开关必须被 precheck 拦下",
+        )
+        cfg["automation"] = {"scheduled_sync_enabled": True}
+        self.assertEqual(
+            [p for p in precheck(cfg) if "scheduled_sync_enabled" in p], [],
+            "合法布尔值不应产生问题",
+        )
+
+    def test_shipped_config_passes_precheck(self) -> None:
+        self.assertEqual(precheck(load_all_config(CONFIG)), [], "配置文件整体预检必须通过")
 
 
 if __name__ == "__main__":

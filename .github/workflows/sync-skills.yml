@@ -9,16 +9,17 @@ name: Sync Skills
 # 也就不会出现"消耗了额度但账本没记上"的重复计费。
 #
 # 不靠机器人提交触发第二次 push：GITHUB_TOKEN 触发的 push 不会启动新 workflow。
-# 手动与定时共享同一额度账本（§7.3）。
+# 定时为每周日北京时间 10:00（UTC 0 2 * * 0）。手动与定时共享同一额度账本（§7.3）。
 #
-# 【定时触发当前停用】2026-09-23：首次发布尚未完成（线上实测 404），且 deploy job 的
-# 条件引用了不存在的 step id（审计报告 P0-3），跑通也不会发布，只会白耗额度与 GitHub 配额。
-# 因此暂时只保留手动触发；发布现有内容请用 publish-pages.yml（只上传已提交产物，不采集不评估）。
-# 恢复定时：取消下面 schedule 的注释，并同步更新 tests/test_workflows.py 的相应断言。
+# 【开关在配置文件里】是否真正执行由 config/automation.json 的 scheduled_sync_enabled 决定
+# （true=执行，false=跳过）。on.schedule 属静态配置，文件无法在运行期注册或注销触发器，
+# 因此 schedule 始终保留在本文件，由 gate job 读配置后在运行期决定是否继续：
+#   false → 该次运行只做一次检出与判断（约 10 秒）即退出，不采集、不调用模型、不写账本、不部署。
+# 手动触发（Run workflow）不受该开关限制，始终执行。
 
 on:
-  # schedule:
-  #   - cron: '0 2 * * 0'
+  schedule:
+    - cron: '0 2 * * 0'
   workflow_dispatch:
     inputs:
       dry_run:
@@ -50,13 +51,64 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  gate:
+    # 读取 config/automation.json 的 scheduled_sync_enabled，决定本轮是否继续。
+    # 缺失文件或字段按 false 处理（无人值守的定时任务不会因为文件丢失而开始花钱）；
+    # 文件存在但内容损坏时直接报错，让失败可见，而不是静默停用。
+    runs-on: ubuntu-latest
+    outputs:
+      run_sync: ${{ steps.decide.outputs.run_sync }}
+      reason: ${{ steps.decide.outputs.reason }}
+    steps:
+      - name: 检出（只需读 config/automation.json）
+        uses: actions/checkout@v4
+
+      - name: 判定本轮是否执行
+        id: decide
+        run: |
+          set -euo pipefail
+          enabled=$(python3 - <<'PY'
+          import json
+          import pathlib
+          path = pathlib.Path("config/automation.json")
+          if not path.exists():
+              print("false")
+          else:
+              data = json.loads(path.read_text(encoding="utf-8"))
+              value = data.get("scheduled_sync_enabled") if isinstance(data, dict) else None
+              print("true" if value is True else "false")
+          PY
+          )
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "run_sync=true" >> "$GITHUB_OUTPUT"
+            echo "reason=手动触发，不受 automation.json 开关限制" >> "$GITHUB_OUTPUT"
+          elif [ "$enabled" = "true" ]; then
+            echo "run_sync=true" >> "$GITHUB_OUTPUT"
+            echo "reason=定时触发且 scheduled_sync_enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "run_sync=false" >> "$GITHUB_OUTPUT"
+            echo "reason=config/automation.json 的 scheduled_sync_enabled 非 true，本轮跳过（不采集、不调用模型、不写账本、不部署）" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: 记录判定结果
+        run: |
+          set -euo pipefail
+          echo "### 自动化开关判定" >> "$GITHUB_STEP_SUMMARY"
+          echo "- 触发方式：${{ github.event_name }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- 本轮执行：${{ steps.decide.outputs.run_sync }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- 原因：${{ steps.decide.outputs.reason }}" >> "$GITHUB_STEP_SUMMARY"
+
   sync:
+    needs: gate
+    if: needs.gate.outputs.run_sync == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: write
     outputs:
-      dry_run: ${{ steps.run.outputs.dry_run }}
-      week: ${{ steps.run.outputs.week }}
+      # 引用必须指向真实存在的 step id：reserve 步骤写 dry_run，args 步骤写 week。
+      # （历史上这里写成不存在的 steps.run，导致 deploy 条件恒假、定时跑通也不发布。）
+      dry_run: ${{ steps.reserve.outputs.dry_run }}
+      week: ${{ steps.args.outputs.week }}
     steps:
       - name: 检出（完整，含 config、data、public）
         uses: actions/checkout@v4
@@ -179,6 +231,8 @@ jobs:
 
   deploy:
     needs: sync
+    # sync 已被 gate 按 automation.json 放行或跳过；这里只再排除 dry_run。
+    # dry_run 时 reserve 步骤被跳过，其输出为空，条件自然为假，不会部署。
     if: needs.sync.outputs.dry_run == 'false'
     uses: ./.github/workflows/deploy-pages.yml
     permissions:

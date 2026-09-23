@@ -33,17 +33,41 @@ class SyncWorkflowTest(unittest.TestCase):
         cls.trig = triggers(cls.doc)
         cls.runs = step_runs(cls.doc, "sync")
 
-    def test_weekly_schedule_is_currently_disabled(self) -> None:
-        """2026-09-23 起定时触发停用：首次发布未完成，空跑只会消耗额度与 GitHub 配额。
+    def test_weekly_schedule_is_sunday_1000_beijing(self) -> None:
+        crons = [s["cron"] for s in self.trig["schedule"]]
+        self.assertEqual(crons, ["0 2 * * 0"], "定时必须是每周日 10:00 北京时间")
+        self.assertNotIn("0 2 * * *", crons, "不得保留旧的每日表达式")
 
-        恢复定时需同时改回本断言与 workflow 里的 schedule 块
-        （表达式保持周日 10:00 北京时间 = UTC 0 2 * * 0，且不得使用旧的每日表达式）。
+    def test_automation_switch_is_config_driven(self) -> None:
+        """定时是否执行由 config/automation.json 决定，而不是靠改本文件。
+
+        on.schedule 是静态配置，无法按文件注册/注销触发器；因此 schedule 常驻本文件，
+        由 gate job 读配置后在运行期决定继续或退出。手动触发不受开关限制。
         """
-        self.assertNotIn("schedule", self.trig, "定时触发当前应为停用状态")
-        self.assertIn("workflow_dispatch", self.trig, "手动触发必须保留")
-        raw = (WORKFLOWS / "sync-skills.yml").read_text(encoding="utf-8")
-        self.assertIn("#   - cron: '0 2 * * 0'", raw, "应保留可一键恢复的定时表达式注释")
-        self.assertNotIn("0 2 * * *", raw, "不得保留旧的每日表达式")
+        gate = self.doc["jobs"]["gate"]
+        runs = "\n".join(s.get("run", "") for s in gate["steps"] if isinstance(s, dict))
+        self.assertIn("automation.json", runs, "gate 必须读取 automation.json")
+        self.assertIn("scheduled_sync_enabled", runs, "gate 必须读取 scheduled_sync_enabled")
+        self.assertIn("run_sync", gate["outputs"])
+        self.assertEqual(self.doc["jobs"]["sync"]["needs"], "gate")
+        self.assertEqual(
+            self.doc["jobs"]["sync"]["if"], "needs.gate.outputs.run_sync == 'true'"
+        )
+        self.assertIn("workflow_dispatch", runs, "手动触发必须绕过开关")
+
+    def test_job_outputs_reference_existing_step_ids(self) -> None:
+        """回归守卫：job outputs 引用的 step id 必须真实存在。
+
+        历史上 outputs 写成 steps.run（实际 id 只有 args/reserve），输出恒为空串，
+        deploy 条件恒假，定时运行即使成功也永不发布。
+        """
+        for job_name, job in self.doc["jobs"].items():
+            ids = {s.get("id") for s in job.get("steps", []) if isinstance(s, dict)}
+            for key, value in (job.get("outputs") or {}).items():
+                for ref in re.findall(r"steps\.([A-Za-z0-9_-]+)\.outputs", str(value)):
+                    self.assertIn(
+                        ref, ids, f"{job_name}.outputs.{key} 引用了不存在的 step id: {ref}"
+                    )
 
     def test_manual_trigger_with_dry_run(self) -> None:
         dispatch = self.trig["workflow_dispatch"]
