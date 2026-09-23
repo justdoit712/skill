@@ -7,13 +7,8 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from src.catalog.enrich import (
-    enrich_catalog,
-    enrich_entry,
-    extract_example_requests,
-    extract_key_features,
-    infer_skill_type,
-)
+from src.catalog.enrich import enrich_entry, extract_example_requests, extract_key_features, infer_skill_type
+from src.catalog.maintenance import enrich_catalog
 from src.catalog.index import build_entry
 from src.catalog.models import Candidate
 from src.pipeline import previous_evaluation_snapshot, review_state
@@ -119,161 +114,16 @@ class GoldStandardFixturesTest(unittest.TestCase):
 
 
 class CacheInheritanceTest(unittest.TestCase):
-    def test_same_fingerprint_inherits_missing_structured_fields(self):
-        cand = Candidate(
-            skill_id="test/sample:SKILL.md",
-            owner="test",
-            repo="sample",
-            path="SKILL.md",
-            url="https://github.com/test/sample",
-            content_fingerprint="sha256:aaaa",
-        )
-        previous = {
-            "skill_id": "test/sample:SKILL.md",
-            "content_fingerprint": "sha256:aaaa",
-            "summary_zh": "既有中文简述",
-            "skill_type": "guideline",
-            "example_requests": ["“测试请求1”"],
-            "key_features": ["亮点A", "亮点B"],
-            "status": "recommended",
-            "main_category": {"id": "dev", "name": "编程开发"},
-            "tags": ["test"],
-            "last_checked": "2026-09-20",
-        }
+    def test_cached_explicit_empty_values_are_not_inherited(self):
+        from src.catalog.entry_state import EntryUpdateEvent, update_entry
+        candidate = Candidate(skill_id="test/sample:SKILL.md", owner="test", repo="sample", path="SKILL.md", content_fingerprint="sha256:v1")
+        previous = {"content_fingerprint": "sha256:v1", "skill_type": "tool", "example_requests": ["old"], "key_features": ["old"]}
+        event = EntryUpdateEvent(kind="cached_evaluation", evaluation={"skill_type": None, "example_requests": [], "key_features": []})
+        result = update_entry(previous, candidate, event)
+        self.assertIsNone(result["skill_type"])
+        self.assertEqual(result["example_requests"], [])
+        self.assertEqual(result["key_features"], [])
 
-        # 旧评估缓存缺少新字段
-        cached_evaluation_old = {
-            "summary_zh": "既有中文简述",
-            "tags": ["test"],
-        }
-
-        changed = False
-        evaluation_a = dict(cached_evaluation_old)
-        if (
-            previous
-            and not changed
-            and previous.get("content_fingerprint")
-            and cand.content_fingerprint
-            and previous["content_fingerprint"] == cand.content_fingerprint
-        ):
-            if "skill_type" not in evaluation_a or evaluation_a.get("skill_type") is None:
-                evaluation_a["skill_type"] = previous.get("skill_type")
-            if not evaluation_a.get("example_requests") and previous.get("example_requests"):
-                evaluation_a["example_requests"] = previous.get("example_requests")
-            if not evaluation_a.get("key_features") and previous.get("key_features"):
-                evaluation_a["key_features"] = previous.get("key_features")
-
-        entry_a = build_entry(cand, evaluation=evaluation_a)
-        self.assertEqual(entry_a["skill_type"], "guideline")
-        self.assertEqual(entry_a["example_requests"], ["“测试请求1”"])
-        self.assertEqual(entry_a["key_features"], ["亮点A", "亮点B"])
-
-    def test_content_changed_does_not_inherit_fields(self):
-        # 上游内容指纹改变（changed=True）
-        cand_changed = Candidate(
-            skill_id="test/sample:SKILL.md",
-            owner="test",
-            repo="sample",
-            path="SKILL.md",
-            url="https://github.com/test/sample",
-            content_fingerprint="sha256:bbbb",
-        )
-        previous = {
-            "skill_id": "test/sample:SKILL.md",
-            "content_fingerprint": "sha256:aaaa",
-            "summary_zh": "旧版本简述",
-            "skill_type": "guideline",
-            "example_requests": ["“旧版本请求”"],
-            "key_features": ["旧亮点"],
-            "status": "recommended",
-            "main_category": {"id": "dev", "name": "编程开发"},
-            "tags": ["test"],
-            "last_checked": "2026-09-20",
-        }
-        changed = True
-        state = review_state(previous, changed, None)
-        self.assertTrue(state["needs_review"])
-        self.assertIsNotNone(state["pending_review"])
-        self.assertEqual(state["pending_review"]["skill_type"], "guideline")
-        self.assertEqual(state["pending_review"]["example_requests"], ["“旧版本请求”"])
-
-        cached_evaluation_old = {"summary_zh": "旧版本简述"}
-        evaluation_b = dict(cached_evaluation_old)
-        if (
-            previous
-            and not changed
-            and previous.get("content_fingerprint")
-            and cand_changed.content_fingerprint
-            and previous["content_fingerprint"] == cand_changed.content_fingerprint
-        ):
-            evaluation_b["skill_type"] = previous.get("skill_type")
-
-        entry_b = build_entry(
-            cand_changed,
-            evaluation=evaluation_b,
-            needs_review=state["needs_review"],
-            pending_review=state["pending_review"],
-        )
-        # 新条目不应继承旧版本结构化字段
-        self.assertIsNone(entry_b["skill_type"])
-        self.assertEqual(entry_b["example_requests"], [])
-        self.assertEqual(entry_b["key_features"], [])
-        # 旧版本字段完整保留在 pending_review 快照中
-        self.assertEqual(entry_b["pending_review"]["skill_type"], "guideline")
-        self.assertEqual(entry_b["pending_review"]["example_requests"], ["“旧版本请求”"])
-
-    def test_content_changed_with_no_outcome_does_not_copy_old_fields(self):
-        # 关键用例：内容指纹改变，且本轮调用无 outcome（评估失败/跳过）
-        cand_changed = Candidate(
-            skill_id="test/sample:SKILL.md",
-            owner="test",
-            repo="sample",
-            path="SKILL.md",
-            url="https://github.com/test/sample",
-            content_fingerprint="sha256:cccc",
-        )
-        previous = {
-            "skill_id": "test/sample:SKILL.md",
-            "content_fingerprint": "sha256:aaaa",
-            "summary_zh": "旧版本简述",
-            "skill_type": "guideline",
-            "example_requests": ["“旧版本请求”"],
-            "key_features": ["旧亮点"],
-            "status": "recommended",
-            "main_category": {"id": "dev", "name": "编程开发"},
-            "tags": ["test"],
-            "last_checked": "2026-09-20",
-        }
-        changed = True
-        state = review_state(previous, changed, None)
-        entry = build_entry(
-            cand_changed,
-            evaluation=None,
-            needs_review=state["needs_review"],
-            pending_review=state["pending_review"],
-        )
-        outcome = None
-        # 模拟 local_run.py:213 的统一指纹判断逻辑
-        if (
-            previous
-            and not changed
-            and previous.get("content_fingerprint")
-            and cand_changed.content_fingerprint
-            and previous["content_fingerprint"] == cand_changed.content_fingerprint
-            and not outcome
-        ):
-            for key in ("summary_zh", "skill_type", "example_requests", "key_features"):
-                entry[key] = previous.get(key)
-
-        # 指纹改变且无 outcome 时，严禁复制旧字段进新条目
-        self.assertIsNone(entry["summary_zh"])
-        self.assertIsNone(entry["skill_type"])
-        self.assertEqual(entry["example_requests"], [])
-        self.assertEqual(entry["key_features"], [])
-        # 旧字段留在 pending_review 快照中
-        self.assertEqual(entry["pending_review"]["summary_zh"], "旧版本简述")
-        self.assertEqual(entry["pending_review"]["skill_type"], "guideline")
-        self.assertEqual(entry["pending_review"]["example_requests"], ["“旧版本请求”"])
 
 
 class EnrichmentSafetyAndIdempotencyTest(unittest.TestCase):

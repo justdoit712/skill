@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+from dataclasses import asdict
 from pathlib import Path
 import time
 from typing import Any
@@ -11,6 +12,8 @@ from src.infra.files import read_json, write_json_atomic
 from src.infra.http import fetch_text
 from src.shared.identity import content_fingerprint
 from src.shared.runtime import now_local
+from src.shared.materials import validate_document, primary_material_bundle
+from .store import catalog_task
 from .budget import BudgetLedger
 from .decide import decide
 from .evaluation import evaluate, evaluation_id
@@ -26,13 +29,8 @@ from .entry_state import (
     UPSTREAM_OK,
     update_entry,
 )
-from .index import (
-    CatalogContext,
-    build_catalog,
-    index_by_id,
-    merge_entries,
-    write_catalog,
-)
+from .index import CatalogContext, build_catalog, index_by_id, merge_entries
+from .store import write_catalog
 from .queue import (
     QUEUE_FILENAME,
     candidate_from_payload,
@@ -49,50 +47,17 @@ def _previous_entries(data_dir: Path) -> list[dict]:
     path = data_dir / "catalog.json"
     if not path.exists():
         return []
-    try:
-        return read_json(path, default={}).get("entries") or []
-    except (OSError, json.JSONDecodeError):
-        return []
+    catalog = read_json(path)
+    if not isinstance(catalog, dict) or not isinstance(catalog.get("entries"), list):
+        raise ValueError("主索引结构无效；停止评估以保留原文件")
+    return catalog["entries"]
 
 
-def phase_evaluate(
-    *,
-    config_dir: str | Path = "config",
-    data_dir: str | Path = "data",
-    public_dir: str | Path = "public",
-    state_dir: str | Path | None = None,
-    api_key: str | None = None,
-    sleep=time.sleep,
-    fetch_fn=fetch_text,
-    evaluate_fn=evaluate,
-) -> dict:
-    """评估已预留的条目，保留完整评估内容，合并既有索引并生成页面数据与周报。"""
-    started = now_local()
-    cfg = load_all_config(config_dir)
-    data_path, public_path = Path(data_dir), Path(public_dir)
-    state_path = Path(state_dir) if state_dir else data_path / "state"
-
-    problems = precheck(cfg)
-    if problems:
-        return {"ok": False, "stage": "precheck", "problems": problems}
-
-    queue = read_queue(state_path)
-    cap = int(cfg["rules"].get("weekly_quota") or DEFAULT_LIMIT_EVALUATIONS)
-    ledger = BudgetLedger.load(state_path, cap)
+def _evaluate_queue(queue, cfg, ledger, staged, started, token_cap,
+                    fetch_fn, evaluate_fn, api_key, sleep):
     reserved_ids = set(ledger.reserved)
-
-    token_cap = int((cfg["model"].get("limits") or {}).get("max_total_tokens_per_run") or 0)
     tokens_used = 0
-    token_stopped: list[str] = []
-
-    staged: dict[str, str] = {}
-    staged_path = state_path / TEXTS_DIRNAME / "staged.json"
-    if staged_path.exists():
-        try:
-            staged = read_json(staged_path, default={})
-        except (OSError, json.JSONDecodeError):
-            staged = {}
-
+    token_stopped = []
     results: dict[str, dict] = {}
     evaluated = 0
     skipped = 0
@@ -153,7 +118,7 @@ def phase_evaluate(
         text = staged.get(candidate.skill_id)
         if text is None:
             fetched = fetch_fn(candidate.url or candidate.repo_url, sleep=sleep)
-            if not fetched.ok or not fetched.text:
+            if not fetched.ok or not fetched.text or fetched.truncated:
                 ledger.fail(eid, fetched.reason_code or "NETWORK_ERROR", fetched.error or "抓取失败", started)
                 results[candidate.skill_id] = {"status": "failed", "note": "抓取失败"}
                 continue
@@ -170,6 +135,12 @@ def phase_evaluate(
                 item["content_changed"] = True
                 continue
 
+        valid, material_error = validate_document(candidate.path or "SKILL.md", text)
+        if not valid or content_fingerprint(text) != candidate.content_fingerprint:
+            results[candidate.skill_id] = {"status": "skipped", "note": material_error or "material_identity_changed"}
+            skipped += 1
+            continue
+        materials = primary_material_bundle(candidate, text, started.isoformat())
         ledger.begin_attempt(eid, started)
         outcome = evaluate_fn(
             candidate, text, model_cfg=cfg["model"], rules=cfg["rules"],
@@ -192,20 +163,23 @@ def phase_evaluate(
                 "reason_codes": decision["reason_codes"],
                 "main_category": evaluation.get("main_category"),
                 "evaluation": evaluation,
+                "materials": materials.manifest(),
+                "candidate": asdict(candidate),
+                "prescreen": item["prescreen"],
+                "evaluated_at": started.replace(microsecond=0).isoformat(),
             },
             started,
         )
         results[candidate.skill_id] = {"status": "completed", "decision": decision["decision"]}
         evaluated += 1
 
-    context = CatalogContext(
-        rules_version=cfg["rules"].get("rules_version"),
-        generated_at=started.replace(microsecond=0).isoformat(),
-        domain_names=cfg["prescreen"].domain_names,
-        source_types=cfg["source_types"],
-    )
+    return {"results": results, "evaluated": evaluated, "skipped": skipped, "settled_items": settled_items, "tokens_used": tokens_used, "token_stopped": token_stopped}
 
-    previous_entries = _previous_entries(data_path)
+
+def _build_evaluated_catalog(previous_entries, queue, cfg, ledger, context):
+    manual_picks_dict = get_manual_picks(cfg.get("overrides") or {})
+    manual_exclusions_dict = get_manual_exclusions(cfg.get("overrides") or {})
+    active_snoozed_set = set(get_active_snoozed(cfg.get("snoozed") or {}))
     previous_by_id = index_by_id(previous_entries)
 
     fresh_entries: list[dict] = []
@@ -237,6 +211,8 @@ def phase_evaluate(
             fetched_fingerprint=cand.content_fingerprint,
             rules_version=cfg["rules"].get("rules_version", "1.0.1"),
             model_config_version=cfg["model"].get("model_config_version", "1.0.0"),
+            evaluation_id=eid,
+            evaluated_at=outcome.get("evaluated_at"),
         )
         fresh_entries.append(update_entry(previous, cand, event, context))
 
@@ -267,6 +243,61 @@ def phase_evaluate(
         overrides=(cfg or {}).get("overrides"),
         snoozed=(cfg or {}).get("snoozed"),
     )
+    return catalog
+
+
+@catalog_task
+def phase_evaluate(
+    *,
+    config_dir: str | Path = "config",
+    data_dir: str | Path = "data",
+    public_dir: str | Path = "public",
+    state_dir: str | Path | None = None,
+    api_key: str | None = None,
+    sleep=time.sleep,
+    fetch_fn=fetch_text,
+    evaluate_fn=evaluate,
+) -> dict:
+    """评估已预留的条目，保留完整评估内容，合并既有索引并生成页面数据与周报。"""
+    started = now_local()
+    cfg = load_all_config(config_dir)
+    data_path, public_path = Path(data_dir), Path(public_dir)
+    state_path = Path(state_dir) if state_dir else data_path / "state"
+
+    problems = precheck(cfg)
+    if problems:
+        return {"ok": False, "stage": "precheck", "problems": problems}
+
+    previous_entries = _previous_entries(data_path)
+    queue = read_queue(state_path)
+    cap = int(cfg["rules"].get("weekly_quota") or DEFAULT_LIMIT_EVALUATIONS)
+    ledger = BudgetLedger.load(state_path, cap)
+    ledger.rollover()
+    token_cap = int((cfg["model"].get("limits") or {}).get("max_total_tokens_per_run") or 0)
+
+    staged: dict[str, str] = {}
+    staged_path = state_path / TEXTS_DIRNAME / "staged.json"
+    if staged_path.exists():
+        try:
+            staged = read_json(staged_path, default={})
+        except (OSError, json.JSONDecodeError):
+            staged = {}
+
+    batch = _evaluate_queue(queue, cfg, ledger, staged, started, token_cap,
+                            fetch_fn, evaluate_fn, api_key, sleep)
+    results, evaluated, skipped = batch["results"], batch["evaluated"], batch["skipped"]
+    settled_items = batch["settled_items"]
+    tokens_used, token_stopped = batch["tokens_used"], batch["token_stopped"]
+
+    context = CatalogContext(
+        rules_version=cfg["rules"].get("rules_version"),
+        generated_at=started.replace(microsecond=0).isoformat(),
+        domain_names=cfg["prescreen"].domain_names,
+        source_types=cfg["source_types"],
+    )
+
+    catalog = _build_evaluated_catalog(previous_entries, queue, cfg, ledger, context)
+    merged = catalog["entries"]
     manifest = write_catalog(
         catalog,
         data_path=data_path / "catalog.json",

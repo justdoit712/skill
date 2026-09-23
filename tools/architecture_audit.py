@@ -94,7 +94,8 @@ def probes():
     from src.catalog.budget import BudgetLedger, week_id
     from src.catalog.dedupe import candidate_from_repo, content_fingerprint
     from src.catalog.evaluation import evaluation_id
-    from src.catalog.index import CatalogContext, build_catalog, write_catalog
+    from src.catalog.index import CatalogContext, build_catalog
+    from src.catalog.store import write_catalog
     import src.catalog.index as index_module
     from src.finder.evaluation import verify_and_adjust_evaluation
     from src.finder.search import fetch_candidate_materials

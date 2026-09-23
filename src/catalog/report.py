@@ -6,6 +6,8 @@
 
 from __future__ import annotations
 
+from src.infra.files import write_json_atomic, write_text_atomic
+
 import json
 from pathlib import Path
 
@@ -168,12 +170,12 @@ def write_report(report: dict, *, json_path: str | Path, markdown_path: str | Pa
     """写出 JSON 报告，可选同时写出 Markdown 版本。"""
     json_file = Path(json_path)
     json_file.parent.mkdir(parents=True, exist_ok=True)
-    json_file.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
+    write_json_atomic(json_file, report)
 
     written = {"report_json": str(json_file)}
     if markdown_path is not None:
         md_file = Path(markdown_path)
         md_file.parent.mkdir(parents=True, exist_ok=True)
-        md_file.write_text(render_report_markdown(report), encoding="utf-8")
+        write_text_atomic(md_file, render_report_markdown(report))
         written["report_markdown"] = str(md_file)
     return written

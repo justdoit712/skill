@@ -48,6 +48,7 @@ class LocalRunTest(unittest.TestCase):
             if not path.name.endswith(".local.json"):
                 shutil.copyfile(path, self.root / "config" / path.name)
         self.cfg = load_all_config(self.root / "config")
+        self.cfg["model"].update(endpoint="https://fake.invalid/v1/chat/completions", model="test-model")
         self.cfg["model"]["auth"] = {"api_key": "test-secret-never-print", "api_key_env": "SKILL_TEST_UNUSED_KEY"}
         self.settings = {"target_recommended": 2, "max_total_tokens": 100000000,
                          "max_evaluations": None, "limit_queries": 0,
@@ -108,7 +109,7 @@ class LocalRunTest(unittest.TestCase):
     def test_missing_usage_stops_even_successful_response(self):
         def missing(*args, **kwargs):
             result = self.evaluate(*args, **kwargs)
-            result["call"] = ModelCallResult()
+            result["call"] = ModelCallResult(ok=True, attempts=1)
             return result
         report = self.collect(evaluate_fn=missing)
         self.assertEqual(report["stop_reason"], "usage_unknown")

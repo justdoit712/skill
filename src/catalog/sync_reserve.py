@@ -12,9 +12,10 @@ import time
 from typing import Any
 
 from src.infra.files import read_json, write_json_atomic
-from src.infra.http import fetch_text
+from src.infra.http import fetch_text, REASON_UPSTREAM_GONE
 from src.shared.identity import content_fingerprint
 from src.shared.runtime import now_local
+from .store import catalog_task
 from .budget import BudgetLedger, QuotaExceeded
 from .dedupe import dedupe
 from .discovery import discover
@@ -238,7 +239,7 @@ def prepare(
         text = fetched.text if (fetched.ok and fetched.text) else None
         note = {"ok": bool(text), "bytes": fetched.bytes_read, "reason_code": fetched.reason_code}
         if not fetched.ok:
-            note["upstream_gone"] = fetched.reason_code == UPSTREAM_GONE
+            note["upstream_gone"] = fetched.reason_code == REASON_UPSTREAM_GONE
         if text:
             fresh_fingerprint = content_fingerprint(text)
             baseline = item.get("baseline_fingerprint")
@@ -300,6 +301,7 @@ def prepare(
     }
 
 
+@catalog_task
 def phase_reserve(
     *,
     config_dir: str | Path = "config",
@@ -331,6 +333,7 @@ def phase_reserve(
     pending = _queue_pending(_read_queue(state_path) if (state_path / QUEUE_FILENAME).exists() else None)
     cap = int(cfg["rules"].get("weekly_quota") or DEFAULT_LIMIT_EVALUATIONS)
     ledger = BudgetLedger.load(state_path, cap)
+    ledger.rollover()
     ledger.mark_in_progress_as_needs_recovery(started)
 
     plan = prepare(

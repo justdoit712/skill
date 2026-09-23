@@ -18,17 +18,9 @@ import tempfile
 import unittest
 
 from src.catalog.dedupe import candidate_from_repo
-from src.catalog.index import (
-    STATUS_CANDIDATE,
-    STATUS_EXCLUDED,
-    STATUS_PENDING,
-    STATUS_RECOMMENDED,
-    build_catalog,
-    build_entry,
-    build_page_data,
-    sync_config_to_catalog,
-    write_catalog,
-)
+from src.catalog.index import STATUS_CANDIDATE, STATUS_EXCLUDED, STATUS_PENDING, STATUS_RECOMMENDED, build_catalog, build_entry, build_page_data
+from src.catalog.maintenance import sync_config_to_catalog
+from src.catalog.store import write_catalog
 from src.catalog.models import Candidate, PrescreenResult
 from src.catalog.snooze import (
     DEFAULT_SNOOZE_DAYS,

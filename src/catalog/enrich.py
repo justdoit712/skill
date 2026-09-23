@@ -16,7 +16,6 @@ import re
 from typing import Any
 
 from src.shared.schema import normalize_skill_type, normalize_string_list
-from .index import CatalogContext, build_catalog, write_catalog
 
 
 def extract_example_requests(summary_zh: str | None) -> list[str]:
@@ -188,62 +187,6 @@ def enrich_entry(entry: dict) -> dict:
     return res
 
 
-def enrich_catalog(root: Path | str) -> dict[str, Any]:
-    """对主索引文件执行离线结构化增强，并同步更新页面数据。
-
-    完全离线、幂等、不改变 summary_zh，安全可重复执行。
-    """
-    root_path = Path(root).resolve()
-    catalog_file = root_path / "data" / "catalog.json"
-    public_file = root_path / "public" / "data" / "catalog.json"
-
-    if not catalog_file.exists():
-        raise FileNotFoundError(f"未找到主索引文件：{catalog_file}")
-
-    catalog = json.loads(catalog_file.read_text(encoding="utf-8"))
-    raw_entries = catalog.get("entries", [])
-
-    enriched_entries: list[dict] = []
-    with_summary = 0
-    with_skill_type = 0
-    with_example_requests = 0
-    with_key_features = 0
-
-    for item in raw_entries:
-        enriched = enrich_entry(item)
-        enriched_entries.append(enriched)
-
-        if enriched.get("summary_zh"):
-            with_summary += 1
-        if enriched.get("skill_type"):
-            with_skill_type += 1
-        if enriched.get("example_requests"):
-            with_example_requests += 1
-        if enriched.get("key_features"):
-            with_key_features += 1
-
-    ctx = CatalogContext(
-        rules_version=catalog.get("rules_version"),
-        generated_at=catalog.get("generated_at"),
-    )
-    new_catalog = build_catalog(
-        enriched_entries,
-        context=ctx,
-        overrides=catalog.get("overrides"),
-        snoozed=catalog.get("snoozed"),
-    )
-
-    write_catalog(new_catalog, data_path=catalog_file, public_path=public_file)
-
-    return {
-        "total": len(enriched_entries),
-        "with_summary": with_summary,
-        "with_skill_type": with_skill_type,
-        "with_example_requests": with_example_requests,
-        "with_key_features": with_key_features,
-        "catalog_path": str(catalog_file),
-        "page_path": str(public_file),
-    }
 
 
 __all__ = [
@@ -251,5 +194,4 @@ __all__ = [
     "extract_key_features",
     "infer_skill_type",
     "enrich_entry",
-    "enrich_catalog",
 ]

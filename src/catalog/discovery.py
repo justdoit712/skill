@@ -111,78 +111,22 @@ def github_search(
     discovered_at: str | None = None,
 ) -> SearchOutcome:
     """执行一次 GitHub 仓库搜索，把结果转成候选。"""
-    owns_session = session is None
-    sess = session if session is not None else requests.Session()
-    sess.headers.setdefault("User-Agent", USER_AGENT)
-    sess.headers.setdefault("Accept", "application/vnd.github+json")
-    apply_github_auth(sess)
-
+    from src.infra.github import search_repositories
+    ok, items, total, error = search_repositories(query.q, session=session, per_page=per_page,
+        timeout=timeout, max_attempts=max_attempts, sleep=sleep)
+    outcome = SearchOutcome(query=query, ok=ok, total_count=total, error=error)
+    if not ok:
+        outcome.reason_code = REASON_UPSTREAM_GONE if error == "HTTP 404" else REASON_HTTP_ERROR if (error or "").startswith("HTTP") else REASON_NETWORK_ERROR
+        return outcome
     stamped = discovered_at or _utc_now()
-    outcome = SearchOutcome(query=query, ok=False)
-
-    try:
-        for attempt in range(1, max_attempts + 1):
-            try:
-                response = sess.get(
-                    GITHUB_SEARCH_ENDPOINT,
-                    params={"q": query.q, "per_page": per_page},
-                    timeout=timeout,
-                )
-            except requests.exceptions.RequestException as exc:
-                outcome.error = f"{type(exc).__name__}: {exc}"
-                if attempt < max_attempts:
-                    sleep(_backoff_seconds(attempt))
-                    continue
-                outcome.reason_code = REASON_NETWORK_ERROR
-                return outcome
-
-            try:
-                status = response.status_code
-                if status == 404:
-                    outcome.reason_code = REASON_UPSTREAM_GONE
-                    outcome.error = f"HTTP {status}"
-                    return outcome
-                if status >= 400:
-                    outcome.error = f"HTTP {status}"
-                    if status in RETRYABLE_STATUS and attempt < max_attempts:
-                        response.close()
-                        sleep(_backoff_seconds(attempt))
-                        continue
-                    outcome.reason_code = REASON_HTTP_ERROR
-                    return outcome
-
-                payload = response.json()
-            finally:
-                response.close()
-
-            items = payload.get("items") or []
-            outcome.total_count = int(payload.get("total_count") or 0)
-            for item in items:
-                owner = ((item.get("owner") or {}).get("login") or "").lower()
-                repo = (item.get("name") or "").lower()
-                if not owner or not repo:
-                    continue
-                outcome.candidates.append(
-                    candidate_from_repo(
-                        owner,
-                        repo,
-                        url=item.get("html_url") or "",
-                        repo_url=item.get("html_url") or "",
-                        name=item.get("name") or repo,
-                        description=item.get("description") or "",
-                        discovery_method="github_search",
-                        search_term=query.term,
-                        discovered_at=stamped,
-                    )
-                )
-            outcome.ok = True
-            return outcome
-    finally:
-        if owns_session:
-            sess.close()
-
-    outcome.reason_code = REASON_NETWORK_ERROR
-    outcome.error = "重试次数耗尽"
+    for item in items:
+        owner = ((item.get("owner") or {}).get("login") or "").lower()
+        repo = (item.get("name") or "").lower()
+        if owner and repo:
+            outcome.candidates.append(candidate_from_repo(owner, repo, url=item.get("html_url") or "",
+                repo_url=item.get("html_url") or "", name=item.get("name") or repo,
+                description=item.get("description") or "", discovery_method="github_search",
+                search_term=query.term, discovered_at=stamped))
     return outcome
 
 

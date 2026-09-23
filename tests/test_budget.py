@@ -197,6 +197,8 @@ class LedgerTest(unittest.TestCase):
 
         next_monday = monday + timedelta(days=7)
         rolled = BudgetLedger.load(self.state, CAP, moment=next_monday)
+        self.assertTrue(led.ledger_path.exists(), "load must not archive files")
+        rolled.rollover(next_monday)
         self.assertEqual(rolled.reserved_count, 0, "新周从空开始")
         self.assertEqual(rolled.remaining, CAP)
         self.assertEqual(rolled.rollover_from, week_id(monday))

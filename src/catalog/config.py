@@ -10,6 +10,7 @@ import json
 from pathlib import Path
 
 from src.infra.files import read_json
+from src.infra.llm import validate_model_config
 from .overrides import get_manual_exclusions, get_manual_picks, load_overrides, validate_overrides
 from .prescreen import load_config
 from .snooze import load_snooze, validate_snooze
@@ -80,8 +81,7 @@ def precheck(cfg: dict) -> list[str]:
         problems.append("rules.json 未定义检查项")
     if not cfg["searches"].get("per_domain"):
         problems.append("searches.json 未定义任何领域的查询词")
-    if not cfg["model"].get("endpoint") or not cfg["model"].get("model"):
-        problems.append("模型配置缺 endpoint 或 model")
+    problems.extend(validate_model_config(cfg["model"]))
     if "overrides" in cfg:
         problems.extend(validate_overrides(cfg["overrides"]))
     if "snoozed" in cfg:

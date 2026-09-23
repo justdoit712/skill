@@ -42,6 +42,8 @@ class EntryUpdateEvent:
     fetched_fingerprint: Optional[str] = None
     rules_version: str = "1.0.1"
     model_config_version: str = "1.0.0"
+    evaluation_id: str | None = None
+    evaluated_at: str | None = None
 
 
 def previous_evaluation_snapshot(previous: dict | None) -> dict | None:
@@ -64,7 +66,7 @@ def previous_evaluation_snapshot(previous: dict | None) -> dict | None:
         "main_category": category_id or None,
         "tags": list(previous.get("tags") or []),
         "limitations": previous.get("limitations"),
-        "evaluated_at": previous.get("last_checked"),
+        "evaluated_at": previous.get("evaluated_at", previous.get("last_checked")),
         "rules_version": previous.get("evaluation_rules_version"),
     }
 
@@ -182,11 +184,11 @@ def update_entry(
             and current_fp
             and previous["content_fingerprint"] == current_fp
         ):
-            if "skill_type" not in eval_dict or eval_dict.get("skill_type") is None:
+            if "skill_type" not in eval_dict:
                 eval_dict["skill_type"] = previous.get("skill_type")
-            if not eval_dict.get("example_requests") and previous.get("example_requests"):
+            if "example_requests" not in eval_dict:
                 eval_dict["example_requests"] = previous.get("example_requests")
-            if not eval_dict.get("key_features") and previous.get("key_features"):
+            if "key_features" not in eval_dict:
                 eval_dict["key_features"] = previous.get("key_features")
     else:
         # 没有新评估（no_evaluation / fetch_failed 等）：
@@ -283,6 +285,12 @@ def update_entry(
     elif event.rules_version and evaluation is not None:
         entry["evaluation_rules_version"] = event.rules_version
 
+    if evaluation is not None:
+        entry["last_evaluation_id"] = event.evaluation_id or previous.get("last_evaluation_id")
+        entry["evaluated_at"] = event.evaluated_at or (generated_at if event.kind == "fresh_evaluation" else previous.get("evaluated_at"))
+    else:
+        entry["last_evaluation_id"] = previous.get("last_evaluation_id")
+        entry["evaluated_at"] = previous.get("evaluated_at")
     return entry
 
 

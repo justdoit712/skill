@@ -20,7 +20,8 @@ import unittest
 from pathlib import Path
 
 from src.catalog.dedupe import candidate_from_repo, dedupe
-from src.catalog.index import CatalogContext, build_catalog, build_entry, write_catalog
+from src.catalog.index import CatalogContext, build_catalog, build_entry
+from src.catalog.store import write_catalog
 from src.catalog.prescreen import load_config, prescreen
 from src.catalog.report import (
     COLLECTION_FAILED,
@@ -148,6 +149,7 @@ class PipelineHarness(unittest.TestCase):
                 (cfg_dir / "model.example.json").read_text(encoding="utf-8"), encoding="utf-8"
             )
         model = json.loads(model_path.read_text(encoding="utf-8"))
+        model.update(endpoint="https://fake.invalid/v1/chat/completions", model="test-model")
         model.setdefault("limits", {}).update(limits_overrides)
         model_path.write_text(json.dumps(model, ensure_ascii=False, indent=2), encoding="utf-8")
         return cfg_dir

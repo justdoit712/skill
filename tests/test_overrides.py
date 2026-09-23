@@ -12,17 +12,8 @@ import tempfile
 import unittest
 
 from src.catalog.dedupe import candidate_from_repo, content_fingerprint
-from src.catalog.index import (
-    CatalogContext,
-    STATUS_CANDIDATE,
-    STATUS_EXCLUDED,
-    STATUS_PROCESSING_FAILURE,
-    STATUS_RECOMMENDED,
-    build_catalog,
-    build_entry,
-    build_page_data,
-    write_catalog,
-)
+from src.catalog.index import CatalogContext, STATUS_CANDIDATE, STATUS_EXCLUDED, STATUS_PROCESSING_FAILURE, STATUS_RECOMMENDED, build_catalog, build_entry, build_page_data
+from src.catalog.store import write_catalog
 from src.catalog.models import Candidate, PrescreenResult
 from src.catalog.overrides import (
     apply_manual_overrides,

@@ -100,18 +100,26 @@ class BudgetLedger:
             ledger.updated_at = str(payload.get("updated_at") or _iso(moment))
             return ledger
 
-        # 周切换：归档上一周账本，新周从空开始（§7.3 失败任务下周重新排队并占新周名额）
-        history = base / HISTORY_DIRNAME
-        history.mkdir(parents=True, exist_ok=True)
-        if stored_week:
-            archived = history / f"budget-{stored_week}.json"
-            if not archived.exists():
-                os.replace(ledger.ledger_path, archived)
-            else:
-                ledger.ledger_path.unlink()
         ledger.rollover_from = stored_week or None
         ledger.updated_at = _iso(moment)
         return ledger
+
+    def rollover(self, moment=None):
+        """Explicit mutation; production callers hold their catalog session."""
+        from src.infra.files import file_lock
+        with file_lock(self.state_dir / ".budget.lock"):
+            if self.ledger_path.exists():
+                payload = json.loads(self.ledger_path.read_text(encoding="utf-8"))
+                stored = payload.get("week")
+                if stored and stored != self.week:
+                    history = self.state_dir / HISTORY_DIRNAME
+                    history.mkdir(parents=True, exist_ok=True)
+                    archived = history / f"budget-{stored}.json"
+                    if not archived.exists():
+                        write_json_atomic(archived, payload)
+                    self.rollover_from = stored
+                    self.save(moment)
+        return self
 
     def save(self, moment: datetime | None = None) -> None:
         self.updated_at = _iso(moment)
@@ -140,7 +148,7 @@ class BudgetLedger:
             return None
         return json.loads(path.read_text(encoding="utf-8"))
 
-    def _save_record(self, evaluation_id: str, record: dict, moment: datetime | None = None) -> None:
+    def save_record(self, evaluation_id: str, record: dict, moment: datetime | None = None) -> None:
         record["evaluation_id"] = evaluation_id
         record["updated_at"] = _iso(moment)
         write_json_atomic(self.record_path(evaluation_id), record)
@@ -208,7 +216,7 @@ class BudgetLedger:
                 "outcome": existing.get("outcome"),
                 "error": None,
             }
-            self._save_record(evaluation_id, record, moment)
+            self.save_record(evaluation_id, record, moment)
             self.reserved.append(evaluation_id)
 
         self.save(moment)
@@ -237,7 +245,7 @@ class BudgetLedger:
         record["attempts"] = int(record.get("attempts") or 0) + 1
         record["status"] = STATUS_IN_PROGRESS
         record["week"] = record.get("week") or self.week
-        self._save_record(evaluation_id, record, moment)
+        self.save_record(evaluation_id, record, moment)
         return record["attempts"]
 
     def complete(self, evaluation_id: str, outcome: dict, moment: datetime | None = None) -> None:
@@ -245,21 +253,21 @@ class BudgetLedger:
         record["status"] = STATUS_COMPLETED
         record["outcome"] = outcome
         record["error"] = None
-        self._save_record(evaluation_id, record, moment)
+        self.save_record(evaluation_id, record, moment)
 
     def fail(self, evaluation_id: str, reason_code: str, error: str, moment: datetime | None = None) -> None:
         """标记失败。名额**不释放**——失败仍占本周额度。"""
         record = self.get(evaluation_id) or {}
         record["status"] = STATUS_FAILED
         record["error"] = {"reason_code": reason_code, "message": error}
-        self._save_record(evaluation_id, record, moment)
+        self.save_record(evaluation_id, record, moment)
 
     def mark_needs_recovery(self, evaluation_id: str, note: str, moment: datetime | None = None) -> None:
         """调用结果不明（如进程被杀在返回之前），不静默重跑。"""
         record = self.get(evaluation_id) or {}
         record["status"] = STATUS_NEEDS_RECOVERY
         record["error"] = {"reason_code": "UNKNOWN_OUTCOME", "message": note}
-        self._save_record(evaluation_id, record, moment)
+        self.save_record(evaluation_id, record, moment)
 
     def mark_in_progress_as_needs_recovery(self, moment: datetime | None = None) -> list[str]:
         """运行开始时调用：上次留下的 in_progress 说明进程在返回前中断。"""

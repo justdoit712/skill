@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import argparse
 from copy import deepcopy
+from dataclasses import dataclass, asdict
 import json
 import os
 from pathlib import Path
@@ -18,8 +19,10 @@ import time
 from typing import Any, Callable, Optional
 from uuid import uuid4
 
-from src.infra.files import write_json_atomic
+from src.infra.files import write_json_atomic, write_text_atomic
 from src.shared.runtime import now_local
+from src.shared.materials import validate_document, primary_material_bundle
+from .store import catalog_task
 from .budget import BudgetLedger, evaluation_filename
 from .config import load_all_config, precheck
 from .decide import decide
@@ -38,7 +41,8 @@ from .entry_state import (
 from .evaluation import RETRYABLE_STATUS, build_prompt, evaluate, evaluation_id, resolve_api_key
 from src.infra.http import fetch_text
 from src.shared.usage import UsageTotals
-from .index import CatalogContext, build_catalog, build_entry, index_by_id, write_catalog
+from .index import CatalogContext, build_catalog, build_entry, index_by_id
+from .store import mutate_catalog
 from .overrides import apply_manual_overrides_to_entry, get_manual_exclusions, get_manual_picks
 from .snooze import apply_snooze_overrides, get_active_snoozed, load_snooze
 from .pool import (
@@ -238,6 +242,8 @@ def apply_result(
         fetched_fingerprint=current_fp,
         rules_version=cfg["rules"]["rules_version"],
         model_config_version=cfg["model"].get("model_config_version", "1.0.0"),
+        evaluation_id=evaluation_id(candidate, cfg["model"], cfg["rules"]),
+        evaluated_at=outcome.get("evaluated_at"),
     )
     context.generated_at = now_local().isoformat()
     entry = update_entry(
@@ -250,11 +256,7 @@ def apply_result(
     apply_snooze_overrides([entry], active_snoozed)
     entries[candidate.skill_id] = entry
 
-    write_catalog(
-        build_catalog(list(entries.values()), context=context, overrides=cfg.get("overrides"), snoozed=cfg.get("snoozed")),
-        data_path=root / "data" / "catalog.json",
-        public_path=root / "public" / "data" / "catalog.json",
-    )
+    mutate_catalog(root, lambda current: build_catalog(list(entries.values()), context=context, overrides=cfg.get("overrides"), snoozed=cfg.get("snoozed")))
     return entry
 
 
@@ -322,7 +324,7 @@ def save_and_render(
         name = str(item["name"] or item["skill_id"]).replace("[", "（").replace("]", "）").replace("\n", " ")
         summary = str(item["summary_zh"] or "").replace("\n", " ")
         lines.append(f"- [{name}]({item['url']})：{summary}")
-    (run_dir / "report.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
+    write_text_atomic(run_dir / "report.md", "\n".join(lines) + "\n")
 
     if dirty and context is not None and baseline is not None:
         changes = build_report(
@@ -333,6 +335,7 @@ def save_and_render(
         write_report(changes, json_path=run_dir / "changes.json", markdown_path=run_dir / "changes.md")
 
 
+@catalog_task
 def run_local(
     root: Path,
     settings: dict,
@@ -370,349 +373,290 @@ def run_local(
         lock.unlink(missing_ok=True)
 
 
+@dataclass
+class LocalCollection:
+    """Facts and injected dependencies for one local collection; never shared globally."""
+    root: Any
+    local: Any
+    settings: Any
+    cfg: Any
+    discover_fn: Any
+    fetch_fn: Any
+    evaluate_fn: Any
+    log: Any
+    sleep: Any
+    run_id: Any
+    run_dir: Any
+    usage: Any
+    report: Any
+    ledger: Any
+    context: Any
+    entries: Any
+    old_recommended: Any
+    baseline: Any
+    active_snoozed: Any
+    manual_exclusions: Any
+    manual_picks: Any
+    pool_path: Any
+    pool: Any
+    dirty: Any
+    consecutive_failures: Any
+    active_eid: Any
+    active_call: Any
+    unknown_reserve: Any
+    max_attempts: Any
+    max_retries: Any
+    pending_items: Any
+
+    def save(self):
+        save_and_render(self.run_dir, self.local, self.report, self.pool, self.usage,
+            self.settings, self.entries, self.old_recommended, context=self.context,
+            baseline=self.baseline, dirty=self.dirty, run_id=self.run_id)
+
+    def publish(self, candidate, pres, outcome=None, upstream_status="ok"):
+        apply_result(candidate, pres, outcome, upstream_status=upstream_status,
+            entries=self.entries, context=self.context, manual_picks=self.manual_picks,
+            manual_exclusions=self.manual_exclusions, active_snoozed=self.active_snoozed,
+            root=self.root, cfg=self.cfg)
+        self.dirty = True
+
+def _evaluate_with_retries(state, candidate, text, eid, record):
+    result = None
+    for index in range(int(record.get('attempts') or 0), state.max_attempts):
+        if state.report['budget_tokens'] >= state.settings['max_total_tokens']:
+            state.report['stop_reason'] = 'token_limit'
+            break
+        if index:
+            delay = min(2 ** (index - 1), 8)
+            state.log(f'重连 {index}/{state.max_retries}：{candidate.name}，{delay} 秒后重试。')
+            state.sleep(delay)
+        attempt = state.ledger.begin_attempt(eid)
+        state.active_eid = eid
+        state.active_call = {'skill_id': candidate.skill_id, 'attempt': attempt, 'max_attempts': state.max_attempts, 'status': 'in_progress', 'usage': None}
+        state.report['calls'].append(state.active_call)
+        state.save()
+        result = state.evaluate_fn(candidate, text, model_cfg=state.cfg['model'], rules=state.cfg['rules'], taxonomy=state.cfg['taxonomy'], sleep=state.sleep)
+        call = result.get('call')
+        unknown_before = state.usage.unknown_usage_requests
+        state.active_call['usage'] = state.usage.add(call)
+        reserved_tokens = (state.usage.unknown_usage_requests - unknown_before) * state.unknown_reserve
+        state.report['unknown_usage_reserved_tokens'] += reserved_tokens
+        state.active_call['unknown_usage_reserved_tokens'] = reserved_tokens
+        state.active_call['diagnostics'] = {'error_type': getattr(call, 'error_type', None), 'http_status': getattr(call, 'http_status', None), 'latency_ms': getattr(call, 'latency_ms', None)}
+        state.active_call['status'] = 'completed' if result['ok'] else 'failed'
+        state.save()
+        if result['ok']:
+            break
+        code = result.get('reason_code') or 'MODEL_ERROR'
+        diagnostic = state.active_call['diagnostics']
+        details = [code]
+        if diagnostic['error_type']:
+            details.append(diagnostic['error_type'])
+        if diagnostic['http_status'] is not None:
+            details.append(f"HTTP {diagnostic['http_status']}")
+        if diagnostic['latency_ms'] is not None:
+            details.append(f"耗时 {diagnostic['latency_ms'] / 1000:.1f} 秒")
+        message = '；'.join(details)
+        state.ledger.fail(eid, code, message)
+        failure_record = state.ledger.get(eid)
+        failure_record['retryable'] = _retryable(result)
+        state.ledger.save_record(eid, failure_record)
+        state.active_eid = None
+        state.active_call['reason_code'] = code
+        state.report['failed_requests'] += 1
+        state.save()
+        state.log(f'请求失败：{candidate.name}；{message}。')
+        if not _retryable(result):
+            break
+    return result
+
+def process_candidate(state, item):
+    candidate = item.candidate
+    seq = item.seq
+    if candidate.skill_id in state.active_snoozed:
+        return True
+    if candidate.skill_id in state.manual_exclusions:
+        return True
+    if state.report['new_recommended'] >= state.settings['target_recommended']:
+        state.report['stop_reason'] = 'target_reached'
+        return False
+    if state.report['budget_tokens'] >= state.settings['max_total_tokens']:
+        state.report['stop_reason'] = 'token_limit'
+        return False
+    if state.settings.get('max_evaluations') and state.report['evaluations'] >= state.settings['max_evaluations']:
+        state.report['stop_reason'] = 'evaluation_limit'
+        return False
+    state.report['checked'] += 1
+    if candidate.path.split('/')[-1] != 'SKILL.md':
+        state.report['not_skill_files'] += 1
+        update_candidate_status(state.pool, seq, STATUS_NOT_SKILL)
+        save_pool(state.pool_path, state.pool)
+        return True
+    pres = prescreen(candidate, state.cfg['prescreen'], None)
+    if pres.excluded:
+        state.report['prescreen_excluded'] += 1
+        state.publish(candidate, pres)
+        update_candidate_status(state.pool, seq, POOL_STATUS_EXCLUDED)
+        save_pool(state.pool_path, state.pool)
+        state.save()
+        return True
+    state.log(f"检查 #{seq}（本轮进度 {state.report['checked']}/{len(state.pending_items)}，全池 {len(state.pool)}）：{candidate.skill_id}")
+    if '/blob/' not in candidate.url:
+        candidate.url = f'https://github.com/{candidate.owner}/{candidate.repo}/blob/HEAD/{candidate.path}'
+    url = candidate.url.replace('https://github.com/', 'https://raw.githubusercontent.com/', 1).replace('/blob/', '/', 1)
+    fetched = state.fetch_fn(url, sleep=state.sleep, max_bytes=int(state.cfg['model'].get('limits', {}).get('max_input_bytes') or 262144))
+    if not fetched.ok or not fetched.text or fetched.truncated or (not validate_document(candidate.path, fetched.text)[0]):
+        state.report['fetch_failed'] += 1
+        update_candidate_status(state.pool, seq, STATUS_FETCH_FAILED)
+        save_pool(state.pool_path, state.pool)
+        state.save()
+        return True
+    text = fetched.text
+    candidate.content_fingerprint = content_fingerprint(text)
+    pres = prescreen(candidate, state.cfg['prescreen'], text)
+    if pres.excluded:
+        state.report['prescreen_excluded'] += 1
+        state.publish(candidate, pres)
+        update_candidate_status(state.pool, seq, POOL_STATUS_EXCLUDED)
+        save_pool(state.pool_path, state.pool)
+        state.save()
+        return True
+    eid = evaluation_id(candidate, state.cfg['model'], state.cfg['rules'])
+    local_record = state.ledger.get(eid)
+    record = local_record or _read(state.root / 'data' / 'state' / 'evaluations' / evaluation_filename(eid), {})
+    if candidate.skill_id in state.manual_picks:
+        outcome = record.get('outcome') or ({'decision': (state.entries.get(candidate.skill_id) or {}).get('status')} if candidate.skill_id in state.entries else None)
+        state.publish(candidate, pres, outcome=outcome)
+        update_candidate_status(state.pool, seq, STATUS_DONE)
+        save_pool(state.pool_path, state.pool)
+        state.save()
+        return True
+    if record.get('status') == 'completed':
+        state.report['cached'] += 1
+        cached_outcome = dict(record['outcome']) if isinstance(record['outcome'], dict) else {}
+        cached_outcome['cached'] = True
+        state.publish(candidate, pres, cached_outcome)
+        update_candidate_status(state.pool, seq, STATUS_DONE)
+        save_pool(state.pool_path, state.pool)
+        state.save()
+        return True
+    resumable_failure = bool(local_record and record.get('status') == 'failed' and ((record.get('error') or {}).get('reason_code') == 'NETWORK_ERROR' or record.get('retryable')) and (int(record.get('attempts') or 0) < state.max_attempts))
+    if record.get('status') in ('failed', 'in_progress', 'needs_recovery') and (not resumable_failure):
+        state.report['blocked_records'] += 1
+        return True
+    state.ledger.reserve([{'evaluation_id': eid, 'skill_id': candidate.skill_id, 'content_fingerprint': candidate.content_fingerprint, 'rules_version': state.cfg['rules']['rules_version'], 'model_config_version': state.cfg['model'].get('model_config_version')}])
+    record = state.ledger.get(eid)
+    record['max_attempts'] = state.max_attempts
+    state.ledger.save_record(eid, record)
+    state.report['evaluations'] += 1
+    state.log(f"评估 #{state.report['evaluations']}：{candidate.name}（累计 {state.usage.total_tokens:,} Token）")
+    state.unknown_reserve = _unknown_usage_reserve(candidate, text, state.cfg)
+    result = None
+    result = _evaluate_with_retries(state, candidate, text, eid, record)
+    if result is None:
+        return False
+    if result['ok']:
+        evaluation = result['evaluation']
+        outcome = {**decide(evaluation, state.cfg['rules']), 'evaluation': evaluation, 'materials': primary_material_bundle(candidate, text, now_local().isoformat()).manifest(), 'main_category': evaluation.get('main_category'), 'usage': state.active_call['usage']}
+        outcome['candidate'] = asdict(candidate)
+        outcome['prescreen'] = asdict(pres)
+        outcome['evaluated_at'] = now_local().isoformat()
+        state.ledger.complete(eid, outcome)
+        state.active_eid = None
+        state.active_call['decision'] = outcome['decision']
+        state.publish(candidate, pres, outcome)
+        state.consecutive_failures = 0
+        update_candidate_status(state.pool, seq, STATUS_DONE)
+        save_pool(state.pool_path, state.pool)
+    else:
+        state.report['failed_evaluations'] += 1
+        state.consecutive_failures += 1
+        if _retryable(result) and state.max_retries:
+            state.report['stop_reason'] = state.report['stop_reason'] or 'retry_exhausted'
+    if state.active_call['usage']['total_tokens'] is None:
+        state.report['stop_reason'] = state.report['stop_reason'] or 'usage_unknown'
+    state.active_eid = state.active_call = None
+    state.save()
+    state.log(f"新增推荐 {state.report['new_recommended']}/{state.settings['target_recommended']}；输入 {state.usage.prompt_tokens:,}，输出 {state.usage.completion_tokens:,}，合计 {state.usage.total_tokens:,} Token。")
+    if state.report['stop_reason']:
+        return False
+    if state.consecutive_failures >= state.settings['max_consecutive_failures']:
+        state.report['stop_reason'] = 'model_failures'
+        return False
+    return True
+
 def _collect(root, local, settings, cfg, discover_fn, fetch_fn, evaluate_fn, log, sleep):
-    run_id = now_local().strftime("%Y%m%d-%H%M%S-") + uuid4().hex[:6]
-    run_dir = local / "runs" / run_id
+    run_id = now_local().strftime('%Y%m%d-%H%M%S-') + uuid4().hex[:6]
+    run_dir = local / 'runs' / run_id
     usage = UsageTotals()
-    max_retries = settings.get("max_retries", 5)
+    max_retries = settings.get('max_retries', 5)
     max_attempts = max_retries + 1
-    manual_picks = get_manual_picks(cfg.get("overrides") or {})
-    manual_exclusions = get_manual_exclusions(cfg.get("overrides") or {})
-    baseline = _read(root / "data" / "catalog.json", {"entries": []})
-    entries = index_by_id(baseline.get("entries") or [])
+    manual_picks = get_manual_picks(cfg.get('overrides') or {})
+    manual_exclusions = get_manual_exclusions(cfg.get('overrides') or {})
+    baseline = _read(root / 'data' / 'catalog.json', {'entries': []})
+    entries = index_by_id(baseline.get('entries') or [])
     for e in entries.values():
         apply_manual_overrides_to_entry(e, manual_picks, manual_exclusions)
-    old_recommended = {k for k, v in entries.items() if v.get("status") == STATUS_RECOMMENDED and not v.get("manual_pick")}
-    report = {
-        "run_id": run_id,
-        "started_at": now_local().isoformat(),
-        "status": "running",
-        "model": cfg["model"]["model"],
-        "settings": settings,
-        "discovered": 0,
-        "checked": 0,
-        "evaluations": 0,
-        "cached": 0,
-        "fetch_failed": 0,
-        "prescreen_excluded": 0,
-        "not_skill_files": 0,
-        "blocked_records": 0,
-        "failed_evaluations": 0,
-        "new_recommended": 0,
-        "failed_requests": 0,
-        "unknown_usage_reserved_tokens": 0,
-        "recommendations": [],
-        "calls": [],
-        "stop_reason": None,
-        "report_path": str(run_dir / "report.json"),
-    }
-    ledger = BudgetLedger.load(local / "state", cap=1, max_attempts=max_attempts)
+    old_recommended = {k for k, v in entries.items() if v.get('status') == STATUS_RECOMMENDED and (not v.get('manual_pick'))}
+    report = {'run_id': run_id, 'started_at': now_local().isoformat(), 'status': 'running', 'model': cfg['model']['model'], 'settings': settings, 'discovered': 0, 'checked': 0, 'evaluations': 0, 'cached': 0, 'fetch_failed': 0, 'prescreen_excluded': 0, 'not_skill_files': 0, 'blocked_records': 0, 'failed_evaluations': 0, 'new_recommended': 0, 'failed_requests': 0, 'unknown_usage_reserved_tokens': 0, 'recommendations': [], 'calls': [], 'stop_reason': None, 'report_path': str(run_dir / 'report.json')}
+    ledger = BudgetLedger.load(local / 'state', cap=1, max_attempts=max_attempts)
+    ledger.rollover()
     ledger.mark_in_progress_as_needs_recovery()
-    context = CatalogContext(
-        rules_version=cfg["rules"]["rules_version"],
-        domain_names=cfg["prescreen"].domain_names,
-        source_types=cfg["source_types"],
-    )
+    context = CatalogContext(rules_version=cfg['rules']['rules_version'], domain_names=cfg['prescreen'].domain_names, source_types=cfg['source_types'])
     dirty = False
-    active_snoozed = get_active_snoozed(cfg.get("snoozed") or {})
-    pool_path = local / "pool.json"
+    active_snoozed = get_active_snoozed(cfg.get('snoozed') or {})
+    pool_path = local / 'pool.json'
     pool = None
-
-    def save():
-        save_and_render(
-            run_dir,
-            local,
-            report,
-            pool,
-            usage,
-            settings,
-            entries,
-            old_recommended,
-            context=context,
-            baseline=baseline,
-            dirty=dirty,
-            run_id=run_id,
-        )
-
-    def publish(candidate, pres, outcome=None, upstream_status="ok"):
-        nonlocal dirty
-        apply_result(
-            candidate,
-            pres,
-            outcome,
-            upstream_status=upstream_status,
-            entries=entries,
-            context=context,
-            manual_picks=manual_picks,
-            manual_exclusions=manual_exclusions,
-            active_snoozed=active_snoozed,
-            root=root,
-            cfg=cfg,
-        )
-        dirty = True
-
     consecutive_failures = 0
     active_eid = None
     active_call = None
     unknown_reserve = 0
-
+    state = LocalCollection(root=root, local=local, settings=settings, cfg=cfg, discover_fn=discover_fn, fetch_fn=fetch_fn, evaluate_fn=evaluate_fn, log=log, sleep=sleep, run_id=run_id, run_dir=run_dir, usage=usage, report=report, ledger=ledger, context=context, entries=entries, old_recommended=old_recommended, baseline=baseline, active_snoozed=active_snoozed, manual_exclusions=manual_exclusions, manual_picks=manual_picks, pool_path=pool_path, pool=pool, dirty=dirty, consecutive_failures=consecutive_failures, active_eid=active_eid, active_call=active_call, unknown_reserve=unknown_reserve, max_attempts=max_attempts, max_retries=max_retries, pending_items=[])
     try:
-        save()
-        log(f"目标：新增 {settings['target_recommended']} 个推荐技能；上限 {settings['max_total_tokens']:,} Token。")
-        pool = prepare_pool(
-            root,
-            local,
-            cfg,
-            settings,
-            old_recommended,
-            discover_fn=discover_fn,
-            sleep=sleep,
-            log=log,
-            report=report,
-        )
-
-        report["discovered"] = len(pool)
-        ledger.cap = ledger.reserved_count + max(1, len(pool))
-        ledger.save()
-        save()
-        pending_items = get_pending_candidates(pool)
-        for item in pending_items:
-            candidate = item.candidate
-            seq = item.seq
-            if candidate.skill_id in active_snoozed:
-                continue
-            if candidate.skill_id in manual_exclusions:
-                continue
-            if report["new_recommended"] >= settings["target_recommended"]:
-                report["stop_reason"] = "target_reached"
+        state.save()
+        state.log(f"目标：新增 {state.settings['target_recommended']} 个推荐技能；上限 {state.settings['max_total_tokens']:,} Token。")
+        state.pool = prepare_pool(state.root, state.local, state.cfg, state.settings, state.old_recommended, discover_fn=state.discover_fn, sleep=state.sleep, log=state.log, report=state.report)
+        state.report['discovered'] = len(state.pool)
+        state.ledger.cap = state.ledger.reserved_count + max(1, len(state.pool))
+        state.ledger.save()
+        state.save()
+        state.pending_items = get_pending_candidates(state.pool)
+        for item in state.pending_items:
+            if not process_candidate(state, item):
                 break
-            if report["budget_tokens"] >= settings["max_total_tokens"]:
-                report["stop_reason"] = "token_limit"
-                break
-            if settings.get("max_evaluations") and report["evaluations"] >= settings["max_evaluations"]:
-                report["stop_reason"] = "evaluation_limit"
-                break
-            report["checked"] += 1
-            if not candidate.path.endswith("SKILL.md"):
-                report["not_skill_files"] += 1
-                update_candidate_status(pool, seq, STATUS_NOT_SKILL)
-                save_pool(pool_path, pool)
-                continue
-            pres = prescreen(candidate, cfg["prescreen"], None)
-            if pres.excluded:
-                report["prescreen_excluded"] += 1
-                publish(candidate, pres)
-                update_candidate_status(pool, seq, POOL_STATUS_EXCLUDED)
-                save_pool(pool_path, pool)
-                save()
-                continue
-            log(f"检查 #{seq}（本轮进度 {report['checked']}/{len(pending_items)}，全池 {len(pool)}）：{candidate.skill_id}")
-            if "/blob/" not in candidate.url:
-                candidate.url = f"https://github.com/{candidate.owner}/{candidate.repo}/blob/HEAD/{candidate.path}"
-            url = candidate.url.replace("https://github.com/", "https://raw.githubusercontent.com/", 1).replace("/blob/", "/", 1)
-            fetched = fetch_fn(
-                url,
-                sleep=sleep,
-                max_bytes=int(cfg["model"].get("limits", {}).get("max_input_bytes") or 262144),
-            )
-            if not fetched.ok or not fetched.text or fetched.truncated:
-                report["fetch_failed"] += 1
-                update_candidate_status(pool, seq, STATUS_FETCH_FAILED)
-                save_pool(pool_path, pool)
-                save()
-                continue
-            text = fetched.text
-            candidate.content_fingerprint = content_fingerprint(text)
-            pres = prescreen(candidate, cfg["prescreen"], text)
-            if pres.excluded:
-                report["prescreen_excluded"] += 1
-                publish(candidate, pres)
-                update_candidate_status(pool, seq, POOL_STATUS_EXCLUDED)
-                save_pool(pool_path, pool)
-                save()
-                continue
-            eid = evaluation_id(candidate, cfg["model"], cfg["rules"])
-            local_record = ledger.get(eid)
-            record = local_record or _read(root / "data" / "state" / "evaluations" / evaluation_filename(eid), {})
-            if candidate.skill_id in manual_picks:
-                outcome = record.get("outcome") or (
-                    {"decision": (entries.get(candidate.skill_id) or {}).get("status")}
-                    if candidate.skill_id in entries
-                    else None
-                )
-                publish(candidate, pres, outcome=outcome)
-                update_candidate_status(pool, seq, STATUS_DONE)
-                save_pool(pool_path, pool)
-                save()
-                continue
-            if record.get("status") == "completed":
-                report["cached"] += 1
-                cached_outcome = dict(record["outcome"]) if isinstance(record["outcome"], dict) else {}
-                cached_outcome["cached"] = True
-                publish(candidate, pres, cached_outcome)
-                update_candidate_status(pool, seq, STATUS_DONE)
-                save_pool(pool_path, pool)
-                save()
-                continue
-            resumable_failure = bool(
-                local_record
-                and record.get("status") == "failed"
-                and ((record.get("error") or {}).get("reason_code") == "NETWORK_ERROR" or record.get("retryable"))
-                and int(record.get("attempts") or 0) < max_attempts
-            )
-            if record.get("status") in ("failed", "in_progress", "needs_recovery") and not resumable_failure:
-                report["blocked_records"] += 1
-                continue
-            ledger.reserve([
-                {
-                    "evaluation_id": eid,
-                    "skill_id": candidate.skill_id,
-                    "content_fingerprint": candidate.content_fingerprint,
-                    "rules_version": cfg["rules"]["rules_version"],
-                    "model_config_version": cfg["model"].get("model_config_version"),
-                }
-            ])
-            record = ledger.get(eid)
-            record["max_attempts"] = max_attempts
-            ledger._save_record(eid, record)
-            report["evaluations"] += 1
-            log(f"评估 #{report['evaluations']}：{candidate.name}（累计 {usage.total_tokens:,} Token）")
-            unknown_reserve = _unknown_usage_reserve(candidate, text, cfg)
-            result = None
-            for index in range(int(record.get("attempts") or 0), max_attempts):
-                if report["budget_tokens"] >= settings["max_total_tokens"]:
-                    report["stop_reason"] = "token_limit"
-                    break
-                if index:
-                    delay = min(2 ** (index - 1), 8)
-                    log(f"重连 {index}/{max_retries}：{candidate.name}，{delay} 秒后重试。")
-                    sleep(delay)
-                attempt = ledger.begin_attempt(eid)
-                active_eid = eid
-                active_call = {
-                    "skill_id": candidate.skill_id,
-                    "attempt": attempt,
-                    "max_attempts": max_attempts,
-                    "status": "in_progress",
-                    "usage": None,
-                }
-                report["calls"].append(active_call)
-                save()
-                result = evaluate_fn(
-                    candidate,
-                    text,
-                    model_cfg=cfg["model"],
-                    rules=cfg["rules"],
-                    taxonomy=cfg["taxonomy"],
-                    sleep=sleep,
-                )
-                call = result.get("call")
-                unknown_before = usage.unknown_usage_requests
-                active_call["usage"] = usage.add(call)
-                reserved_tokens = (usage.unknown_usage_requests - unknown_before) * unknown_reserve
-                report["unknown_usage_reserved_tokens"] += reserved_tokens
-                active_call["unknown_usage_reserved_tokens"] = reserved_tokens
-                active_call["diagnostics"] = {
-                    "error_type": getattr(call, "error_type", None),
-                    "http_status": getattr(call, "http_status", None),
-                    "latency_ms": getattr(call, "latency_ms", None),
-                }
-                active_call["status"] = "completed" if result["ok"] else "failed"
-                save()
-                if result["ok"]:
-                    break
-                code = result.get("reason_code") or "MODEL_ERROR"
-                diagnostic = active_call["diagnostics"]
-                details = [code]
-                if diagnostic["error_type"]:
-                    details.append(diagnostic["error_type"])
-                if diagnostic["http_status"] is not None:
-                    details.append(f"HTTP {diagnostic['http_status']}")
-                if diagnostic["latency_ms"] is not None:
-                    details.append(f"耗时 {diagnostic['latency_ms'] / 1000:.1f} 秒")
-                message = "；".join(details)
-                ledger.fail(eid, code, message)
-                failure_record = ledger.get(eid)
-                failure_record["retryable"] = _retryable(result)
-                ledger._save_record(eid, failure_record)
-                active_eid = None
-                active_call["reason_code"] = code
-                report["failed_requests"] += 1
-                save()
-                log(f"请求失败：{candidate.name}；{message}。")
-                if not _retryable(result):
-                    break
-            if result is None:
-                break
-            if result["ok"]:
-                evaluation = result["evaluation"]
-                outcome = {
-                    **decide(evaluation, cfg["rules"]),
-                    "evaluation": evaluation,
-                    "main_category": evaluation.get("main_category"),
-                    "usage": active_call["usage"],
-                }
-                ledger.complete(eid, outcome)
-                active_eid = None
-                active_call["decision"] = outcome["decision"]
-                publish(candidate, pres, outcome)
-                consecutive_failures = 0
-                update_candidate_status(pool, seq, STATUS_DONE)
-                save_pool(pool_path, pool)
-            else:
-                report["failed_evaluations"] += 1
-                consecutive_failures += 1
-                if _retryable(result) and max_retries:
-                    report["stop_reason"] = report["stop_reason"] or "retry_exhausted"
-            if active_call["usage"]["total_tokens"] is None:
-                report["stop_reason"] = report["stop_reason"] or "usage_unknown"
-            active_eid = active_call = None
-            save()
-            log(
-                f"新增推荐 {report['new_recommended']}/{settings['target_recommended']}；"
-                f"输入 {usage.prompt_tokens:,}，输出 {usage.completion_tokens:,}，合计 {usage.total_tokens:,} Token。"
-            )
-            if report["stop_reason"]:
-                break
-            if consecutive_failures >= settings["max_consecutive_failures"]:
-                report["stop_reason"] = "model_failures"
-                break
-        if report["new_recommended"] >= settings["target_recommended"]:
-            report["stop_reason"] = report["stop_reason"] or "target_reached"
-        elif report["budget_tokens"] >= settings["max_total_tokens"]:
-            report["stop_reason"] = report["stop_reason"] or "token_limit"
-        elif settings.get("max_evaluations") and report["evaluations"] >= settings["max_evaluations"]:
-            report["stop_reason"] = report["stop_reason"] or "evaluation_limit"
-        report["stop_reason"] = report["stop_reason"] or "candidates_exhausted"
+        if state.report['new_recommended'] >= state.settings['target_recommended']:
+            state.report['stop_reason'] = state.report['stop_reason'] or 'target_reached'
+        elif state.report['budget_tokens'] >= state.settings['max_total_tokens']:
+            state.report['stop_reason'] = state.report['stop_reason'] or 'token_limit'
+        elif state.settings.get('max_evaluations') and state.report['evaluations'] >= state.settings['max_evaluations']:
+            state.report['stop_reason'] = state.report['stop_reason'] or 'evaluation_limit'
+        state.report['stop_reason'] = state.report['stop_reason'] or 'candidates_exhausted'
     except KeyboardInterrupt:
-        report["stop_reason"] = "interrupted"
+        state.report['stop_reason'] = 'interrupted'
     except Exception as exc:
-        report["stop_reason"] = "error"
-        report["error_type"] = type(exc).__name__
+        state.report['stop_reason'] = 'error'
+        state.report['error_type'] = type(exc).__name__
     finally:
-        if pool is not None:
-            save_pool(pool_path, pool)
-        if active_eid:
-            ledger.mark_needs_recovery(active_eid, "运行中断或异常，禁止自动重复付费请求")
-            if active_call["usage"] is None:
-                usage.add(None)
-                report["unknown_usage_reserved_tokens"] += unknown_reserve
-                active_call["status"] = "unknown"
-        report["status"] = "completed" if report["stop_reason"] == "target_reached" else "stopped"
-        save()
-        if dirty:
-            changes = build_report(
-                build_catalog(list(entries.values()), context=context),
-                previous_catalog=baseline,
-                run_meta={"usage": usage.snapshot(), "run_id": run_id},
-            )
-            write_report(changes, json_path=run_dir / "changes.json", markdown_path=run_dir / "changes.md")
-    return report
+        if state.pool is not None:
+            save_pool(state.pool_path, state.pool)
+        if state.active_eid:
+            state.ledger.mark_needs_recovery(state.active_eid, '运行中断或异常，禁止自动重复付费请求')
+            if state.active_call['usage'] is None:
+                state.usage.add(None)
+                state.report['unknown_usage_reserved_tokens'] += state.unknown_reserve
+                state.active_call['status'] = 'unknown'
+        state.report['status'] = 'completed' if state.report['stop_reason'] == 'target_reached' else 'stopped'
+        state.save()
+        if state.dirty:
+            changes = build_report(build_catalog(list(state.entries.values()), context=state.context), previous_catalog=state.baseline, run_meta={'usage': state.usage.snapshot(), 'run_id': state.run_id})
+            write_report(changes, json_path=state.run_dir / 'changes.json', markdown_path=state.run_dir / 'changes.md')
+    return state.report
 
 
 def main(argv=None, *, root: Path | None = None) -> int:
     root = Path(root or Path(__file__).resolve().parents[2]).resolve()
     parser = argparse.ArgumentParser(description="本地收集 50 个推荐 Skill，并显示 Token 消耗")
+    parser.add_argument("--recover-catalog", action="store_true", help="离线恢复已完成评估与页面，不调用模型")
     parser.add_argument("--check", action="store_true", help="仅本地预检：不联网、不调用模型、不写运行数据")
     parser.add_argument("--target", type=int, help="本次新增推荐目标")
     parser.add_argument("--max-tokens", type=int, help="输入加输出的本次 Token 上限")
@@ -726,6 +670,15 @@ def main(argv=None, *, root: Path | None = None) -> int:
     parser.add_argument("--pool-watermark", type=int, help="候选池待处理数量低于此水位线时自动增量补水，默认 20")
     args = parser.parse_args(argv)
     log = lambda message: print(message, flush=True)
+
+    if args.recover_catalog:
+        from .maintenance import recover_completed_results
+        try:
+            log(json.dumps(recover_completed_results(root), ensure_ascii=False))
+            return 0
+        except (OSError, ValueError, RuntimeError) as exc:
+            log(f"恢复失败：{exc}")
+            return 1
 
     if args.enrich_catalog:
         try:

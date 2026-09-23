@@ -256,8 +256,8 @@ class EntryStateMachineTest(unittest.TestCase):
         self.assertEqual(entry["pending_review"]["summary_zh"], "V1摘要")
         self.assertEqual(entry["pending_review"]["example_requests"], ["V1请求"])
 
-    def test_t10_local_and_pipeline_identical_entry_output(self):
-        """T10: 验证在 local 与 pipeline 两种调用场景下，输入相同事件与上下文，生成的条目结构完全相同。"""
+    def test_same_event_is_idempotent(self):
+        """重复应用同一事件不追加说明、不改变已有事实。真实入口比较见 test_refactor_acceptance。"""
         cand = Candidate(
             skill_id="acme/widget:skills/widget/SKILL.md",
             owner="acme",
@@ -281,7 +281,7 @@ class EntryStateMachineTest(unittest.TestCase):
             rules_version="1.0.1",
         )
         entry_from_pipeline_scenario = update_entry(None, cand, event, self.context)
-        entry_from_local_scenario = update_entry(None, cand, event, self.context)
+        entry_from_local_scenario = update_entry(entry_from_pipeline_scenario, cand, event, self.context)
 
         self.assertEqual(entry_from_pipeline_scenario, entry_from_local_scenario)
         # 确保所有必需字段键均存在

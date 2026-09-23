@@ -1,146 +1,88 @@
-"""目录读改写排他锁协调函数与恢复规则（落实 T19、T20）。
-
-遵循总方案“不另造存储服务类”原则，采用普通协调函数：
-1. 跨平台排他文件锁（data/.catalog.lock）保护读-改-写全过程
-2. 严格两步顺序持久化：先写真实数据 data/catalog.json，再写前端投影 public/data/catalog.json
-3. 发生异常或页面丢失时，通过 0-Token 恢复函数重新投影页面
-"""
-
-from __future__ import annotations
-
+"""Single-writer catalog sessions, atomic persistence and offline recovery."""
 from contextlib import contextmanager
-import os
+from contextvars import ContextVar
+from functools import wraps
+from inspect import signature
 from pathlib import Path
-import time
-from typing import Any, Callable, Generator
+import hashlib
+from src.infra.files import read_json, write_json_atomic, file_lock, LockConflict
 
-from src.infra.files import read_json, write_json_atomic
-
-
-class LockConflict(RuntimeError):
-    """目录排他锁冲突异常。"""
+_sessions = ContextVar("catalog_sessions", default=frozenset())
+catalog_lock = file_lock
 
 
 @contextmanager
-def catalog_lock(lock_path: Path | str, timeout: float = 0.0, retry_interval: float = 0.05) -> Generator[None, None, None]:
-    """获取目录排他锁的上下文管理器。
-
-    使用 os.O_CREAT | os.O_EXCL 保证多进程/多任务原子竞争：
-    - 若锁已被占用且在 timeout 时间内未释放，立即抛出 LockConflict 异常，绝不静默覆盖。
-    """
-    path = Path(lock_path)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    start = time.monotonic()
-    fd: int | None = None
-
-    while True:
-        try:
-            fd = os.open(str(path), os.O_CREAT | os.O_EXCL | os.O_RDWR)
-            break
-        except FileExistsError:
-            if time.monotonic() - start >= timeout:
-                raise LockConflict(f"无法获取目录锁 {path}：被其他进程占用")
-            time.sleep(retry_interval)
-
-    try:
+def catalog_session(data_dir, timeout=0):
+    path = Path(data_dir).resolve()
+    if path in _sessions.get():
         yield
-    finally:
-        if fd is not None:
-            try:
-                os.close(fd)
-            except OSError:
-                pass
+        return
+    with catalog_lock(path / ".catalog.lock", timeout=timeout):
+        token = _sessions.set(_sessions.get() | {path})
         try:
-            path.unlink(missing_ok=True)
-        except OSError:
-            pass
+            yield
+        finally:
+            _sessions.reset(token)
 
 
-def mutate_catalog(
-    root_dir: Path | str,
-    mutator_fn: Callable[[dict], dict],
-    *,
-    data_dir: Path | str | None = None,
-    public_dir: Path | str | None = None,
-    timeout: float = 0.0,
-) -> dict:
-    """读-改-写全过程排他锁协调函数（落实 T19 规范）。
-
-    1. 获取同根目录排他锁（data/.catalog.lock）
-    2. 读取最新 data/catalog.json
-    3. 执行纯内存修改回调 mutator_fn
-    4. 严格顺序持久化：
-       - 第 1 步：先写主索引 data/catalog.json
-       - 第 2 步：再写前端页面数据 public/data/catalog.json
-    5. 释放文件锁并返回更新后的目录字典
-    """
-    root = Path(root_dir)
-    data_path = Path(data_dir) if data_dir else root / "data"
-    public_path = Path(public_dir) if public_dir else root / "public"
-    lock_file = data_path / ".catalog.lock"
-
-    with catalog_lock(lock_file, timeout=timeout):
-        catalog_file = data_path / "catalog.json"
-        current_catalog = read_json(catalog_file, default={"entries": []})
-
-        updated_catalog = mutator_fn(current_catalog)
-
-        # 严格顺序持久化：第一步先写源数据
-        write_json_atomic(catalog_file, updated_catalog)
-
-        # 第二步写页面公开数据（使用 build_page_data 投影）
-        from .index import build_page_data
-        page_file = public_path / "data" / "catalog.json"
-        write_json_atomic(page_file, build_page_data(updated_catalog))
-
-        return updated_catalog
+def catalog_task(function):
+    """Hold one lock for the entire use case, including the initial read."""
+    spec = signature(function)
+    @wraps(function)
+    def guarded(*args, **kwargs):
+        values = spec.bind(*args, **kwargs)
+        values.apply_defaults()
+        args_map = values.arguments
+        catalog_path = args_map.get("catalog_path")
+        data = Path(catalog_path).parent if catalog_path else args_map.get("data_dir")
+        if data is None:
+            data = Path(args_map.get("root_dir", args_map.get("root", "."))) / "data"
+        with catalog_session(data):
+            return function(*args, **kwargs)
+    return guarded
 
 
-def recover_catalog_projections(
-    root_dir: Path | str,
-    *,
-    data_dir: Path | str | None = None,
-    public_dir: Path | str | None = None,
-) -> bool:
-    """部分写入失败时的 0-Token 恢复函数（落实 T20 规范）。
-
-    若主索引 data/catalog.json 完好，但 public/data/catalog.json 缺失或不一致，
-    直接读取主索引重新投影页面文件，绝不发起任何模型调用。
-    """
-    root = Path(root_dir)
-    data_path = Path(data_dir) if data_dir else root / "data"
-    public_path = Path(public_dir) if public_dir else root / "public"
-
-    source_file = data_path / "catalog.json"
-    if not source_file.exists():
-        return False
-
-    page_file = public_path / "data" / "catalog.json"
+def write_catalog(catalog, *, data_path, public_path):
     from .index import build_page_data
-    source_catalog = read_json(source_file)
-    expected_page_data = build_page_data(source_catalog)
+    data, public = Path(data_path), Path(public_path)
+    with catalog_session(data.parent):
+        page = build_page_data(catalog)
+        write_json_atomic(data, catalog)
+        # If this fails, the committed source remains sufficient to rebuild.
+        write_json_atomic(public, page)
+        return {"catalog_path": str(data), "page_path": str(public),
+                "catalog_digest": "sha256:" + hashlib.sha256(data.read_bytes()).hexdigest()[:32],
+                "page_digest": "sha256:" + hashlib.sha256(public.read_bytes()).hexdigest()[:32],
+                "counts": page["counts"], "generated_at": catalog.get("generated_at")}
 
-    needs_recovery = False
-    if not page_file.exists():
-        needs_recovery = True
-    else:
+
+def mutate_catalog(root_dir, mutator_fn, *, data_dir=None, public_dir=None, timeout=0):
+    root = Path(root_dir)
+    data = Path(data_dir) if data_dir else root / "data"
+    public = Path(public_dir) if public_dir else root / "public"
+    with catalog_session(data, timeout=timeout):
+        current = read_json(data / "catalog.json", default={"entries": []})
+        updated = mutator_fn(current)
+        write_catalog(updated, data_path=data / "catalog.json", public_path=public / "data" / "catalog.json")
+        return updated
+
+
+def recover_catalog_projections(root_dir, *, data_dir=None, public_dir=None):
+    from .index import build_page_data
+    root = Path(root_dir)
+    data = Path(data_dir) if data_dir else root / "data"
+    public = Path(public_dir) if public_dir else root / "public"
+    with catalog_session(data):
+        source = data / "catalog.json"
+        if not source.exists():
+            return False
+        expected = build_page_data(read_json(source))
+        target = public / "data" / "catalog.json"
         try:
-            current_page_data = read_json(page_file)
-            if current_page_data != expected_page_data:
-                needs_recovery = True
-        except Exception:
-            needs_recovery = True
-
-    if needs_recovery:
-        write_json_atomic(page_file, expected_page_data)
+            current = read_json(target)
+        except (OSError, ValueError):
+            current = None
+        if current == expected:
+            return False
+        write_json_atomic(target, expected)
         return True
-
-    return False
-
-
-__all__ = [
-    "LockConflict",
-    "catalog_lock",
-    "mutate_catalog",
-    "recover_catalog_projections",
-]
