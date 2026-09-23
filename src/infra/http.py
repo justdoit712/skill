@@ -66,7 +66,7 @@ def _read_capped(response: requests.Response, max_bytes: int) -> tuple[bytes, bo
         if not chunk:
             continue
         remaining = max_bytes - total
-        if len(chunk) >= remaining:
+        if len(chunk) > remaining:
             chunks.append(chunk[:remaining])
             total += remaining
             truncated = True

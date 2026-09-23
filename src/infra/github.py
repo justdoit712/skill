@@ -164,7 +164,12 @@ def search_repositories(
                         continue
                     return False, [], 0, f"HTTP {status}"
 
-                payload = response.json()
+                try:
+                    payload = response.json()
+                except (ValueError, TypeError):
+                    return False, [], 0, "INVALID_JSON"
+                if not isinstance(payload, dict) or not isinstance(payload.get("items", []), list):
+                    return False, [], 0, "INVALID_RESPONSE"
                 items = payload.get("items") or []
                 total = int(payload.get("total_count") or 0)
                 return True, items, total, None

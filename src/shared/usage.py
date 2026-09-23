@@ -30,7 +30,14 @@ class UsageTotals:
         if total is None and prompt is not None and completion is not None:
             total = prompt + completion
         reasoning = _number((usage.get("completion_tokens_details") or {}).get("reasoning_tokens"))
-        attempts = max(1, int(getattr(call, "attempts", 1) or 1))
+        attempts = max(0, int(getattr(call, "attempts", 1)))
+        # A received response proves a request happened even for legacy adapters
+        # which leave attempts at its default zero value.
+        if attempts == 0 and (getattr(call, "ok", False) or usage or getattr(call, "content", None)):
+            attempts = 1
+        if attempts == 0:
+            return {"prompt_tokens": None, "completion_tokens": None, "reasoning_tokens": None,
+                    "total_tokens": None, "attempts": 0}
         self.requests += attempts
         # 失败重试的响应可能没有 usage，不假装它们免费。
         self.unknown_usage_requests += attempts - 1 + int(total is None)
@@ -49,3 +56,9 @@ class UsageTotals:
 
     def snapshot(self) -> dict:
         return asdict(self)
+
+    def record_unknown_request(self) -> None:
+        """A transport was entered but never returned a result."""
+        self.requests += 1
+        self.unknown_usage_requests += 1
+        self.incomplete_breakdown_requests += 1

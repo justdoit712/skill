@@ -11,6 +11,21 @@ import time
 from dataclasses import dataclass, field
 
 import requests
+from urllib.parse import urlparse
+
+
+def validate_model_config(config: dict) -> list[str]:
+    if not isinstance(config, dict):
+        return ["模型配置必须为对象"]
+    endpoint, model = config.get("endpoint"), config.get("model")
+    if not isinstance(endpoint, str) or not isinstance(model, str) or not endpoint.strip() or not model.strip():
+        return ["模型配置缺 endpoint 或 model"]
+    host = (urlparse(endpoint).hostname or "").lower()
+    if any(host == suffix or host.endswith('.' + suffix) for suffix in ("example.com", "example.org", "example.net")) or model.startswith("example-"):
+        return ["示例模型连接不可用于请求，请配置真实 endpoint 和 model"]
+    if urlparse(endpoint).scheme not in ("http", "https") or not host:
+        return ["模型 endpoint 必须是有效的 HTTP(S) 地址"]
+    return []
 
 DEFAULT_TIMEOUT_SECONDS = 180.0
 DEFAULT_MAX_ATTEMPTS = 2
