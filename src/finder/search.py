@@ -25,6 +25,8 @@ from src.infra.github import (
 from src.infra.http import fetch_text
 from src.shared.identity import content_fingerprint, make_skill_id
 from src.shared.models import Candidate
+from src.shared.materials import DocumentSnapshot, MaterialBundle, validate_document
+from src.infra.github import search_repositories
 
 MAX_REPOS_TO_EXPAND = 20
 MAX_SEARCH_REPOS_PER_QUERY = 20
@@ -44,40 +46,18 @@ def search_github_repos_for_query(
     sleep=time.sleep,
 ) -> tuple[bool, list[dict[str, str]], str | None]:
     """执行单个关键词的 GitHub 仓库搜索（围绕查询词与 SKILL.md in:readme 检索）。"""
-    import requests
-
-    owns_session = session is None
-    sess = session if session is not None else requests.Session()
-    sess.headers.setdefault("User-Agent", USER_AGENT)
-    sess.headers.setdefault("Accept", "application/vnd.github+json")
-    apply_github_auth(sess)
-
     full_q = f'{query.strip()} "SKILL.md" in:readme'
-    repos: list[dict[str, str]] = []
-
-    try:
-        response = sess.get(
-            GITHUB_SEARCH_ENDPOINT,
-            params={"q": full_q, "per_page": per_page},
-            timeout=timeout,
-        )
-        if response.status_code >= 400:
-            return False, [], f"HTTP {response.status_code}"
-        payload = response.json()
-        items = payload.get("items") or []
-        for it in items:
-            owner = ((it.get("owner") or {}).get("login") or "").lower()
-            repo = (it.get("name") or "").lower()
-            html_url = it.get("html_url") or f"https://github.com/{owner}/{repo}"
-            desc = it.get("description") or ""
-            if owner and repo:
-                repos.append({"owner": owner, "repo": repo, "url": html_url, "description": desc})
-        return True, repos, None
-    except Exception as exc:
-        return False, [], f"{type(exc).__name__}: {exc}"
-    finally:
-        if owns_session:
-            sess.close()
+    ok, items, _, error = search_repositories(full_q, session=session, per_page=per_page,
+                                              timeout=timeout, sleep=sleep)
+    repos = []
+    for item in items:
+        owner = (item.get("owner") or {}).get("login", "").lower()
+        repo = item.get("name", "").lower()
+        if owner and repo:
+            repos.append({"owner": owner, "repo": repo,
+                          "url": item.get("html_url") or f"https://github.com/{owner}/{repo}",
+                          "description": item.get("description") or ""})
+    return ok, repos, error
 
 
 def _round_robin_merge_repos(
@@ -156,7 +136,7 @@ def expand_and_collect_candidates(
         truncated = bool(err and err.startswith("TREE_TRUNCATED"))
 
         # 精确 basename 为 SKILL.md（排除 NOT_SKILL.md、SKILL.md.bak 等）
-        valid_paths = [p for p in paths if p.split("/")[-1] == "SKILL.md"]
+        valid_paths = sorted(p for p in paths if p.split("/")[-1] == "SKILL.md")
 
         expansion_logs.append(
             {
@@ -184,6 +164,7 @@ def expand_and_collect_candidates(
         else:
             selected_paths = valid_paths[:MAX_FILES_PER_REPO]
 
+        expansion_logs[-1]["omitted_files"] = max(0, len(valid_paths) - len(selected_paths))
         for p in selected_paths:
             sid = make_skill_id(owner, repo, p)
             if sid not in seen_skills:
@@ -274,22 +255,29 @@ def fetch_candidate_materials(
         return False, {}, fetched.reason_code or "FETCH_FAILED"
 
     primary_text = fetched.text
-    if _is_html_content(primary_text):
-        return False, {}, "HTML_CONTENT_REJECTED"
-
+    valid, reason = validate_document(candidate.path, primary_text, MAX_PRIMARY_FILE_BYTES)
+    if not valid:
+        return False, {}, "HTML_CONTENT_REJECTED" if _is_html_content(primary_text) else reason
     candidate.content_fingerprint = content_fingerprint(primary_text)
-    materials: dict[str, str] = {candidate.path: primary_text}
+    ref = "HEAD"
+    if "/blob/" in candidate.url and candidate.url.endswith("/" + candidate.path):
+        ref = candidate.url.split("/blob/", 1)[1][:-len(candidate.path)-1]
+    resolved = ref if re.fullmatch(r"[0-9a-fA-F]{40}", ref) else None
+    stamp = datetime.now(timezone.utc).isoformat()
+    primary = DocumentSnapshot(candidate.path, primary_text, candidate.content_fingerprint, stamp, raw_url, resolved)
+    references, errors = [], {}
     total_bytes = len(primary_text.encode("utf-8"))
-
-    ref_paths = extract_referenced_md_paths(candidate.path, primary_text)
-    for ref_p in ref_paths:
-        remaining_budget = MAX_TOTAL_MATERIAL_BYTES - total_bytes
-        if remaining_budget <= 2048:
-            break
-        ref_raw_url = f"https://raw.githubusercontent.com/{candidate.owner}/{candidate.repo}/HEAD/{ref_p}"
-        ref_fetched = fn(ref_raw_url, max_bytes=remaining_budget, sleep=sleep)
-        if ref_fetched.ok and ref_fetched.text and not ref_fetched.truncated and not _is_html_content(ref_fetched.text):
-            materials[ref_p] = ref_fetched.text
-            total_bytes += len(ref_fetched.text.encode("utf-8"))
-
-    return True, materials, None
+    for ref_p in extract_referenced_md_paths(candidate.path, primary_text):
+        remaining = MAX_TOTAL_MATERIAL_BYTES - total_bytes
+        if remaining <= 0:
+            errors[ref_p] = "MATERIAL_LIMIT"
+            continue
+        url = f"https://raw.githubusercontent.com/{candidate.owner}/{candidate.repo}/{ref}/{ref_p}"
+        item = fn(url, max_bytes=remaining, sleep=sleep)
+        valid, reason = validate_document(ref_p, item.text or "", remaining)
+        if not item.ok or item.truncated or not valid:
+            errors[ref_p] = item.reason_code or reason or "FETCH_FAILED"
+            continue
+        references.append(DocumentSnapshot(ref_p, item.text, content_fingerprint(item.text), stamp, url, resolved))
+        total_bytes += len(item.text.encode("utf-8"))
+    return True, MaterialBundle(candidate.skill_id, primary, tuple(references), errors), None

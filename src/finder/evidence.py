@@ -33,7 +33,7 @@ def _extract_material_text(materials: dict[str, Any], path: str) -> str | None:
     if item is None:
         return None
     if isinstance(item, DocumentSnapshot):
-        return item.content
+        return item.text
     if isinstance(item, str):
         return item
     if hasattr(item, "content"):

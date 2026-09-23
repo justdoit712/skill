@@ -103,6 +103,8 @@ def build_evaluation_prompt(
             "   - 'partial'：满足部分核心能力，或属于相关的辅助/备选方案；",
             "   - 'none'：完全不相关，或仅标题沾边但无实际匹配能力。",
             "4. documentation 说明完整度：'clear'（用法、参数与示例清晰完整）、'partial'（有说明但较粗略）、'insufficient'（几乎无可用指引）。",
+            "仅提及能力、只列外部文章链接或否定该能力不构成支持；必须解释实际步骤如何满足用户需求。",
+            "每个标准最多 3 条证据；quote 最多 1200 字符、explanation 最多 800 字符；不得添加用户未要求的平台或模型限制。",
             "5. summary_zh 必须是客观事实陈述（一到两句话），严禁使用夸大用词。",
             "",
             "JSON 输出结构：",
@@ -158,92 +160,58 @@ def build_evaluation_prompt(
     return system, user
 
 
-def parse_skill_evaluation(content: str, plan_criteria: list[dict[str, Any]]) -> dict[str, Any]:
-    """解析单技能评估结果并进行基础强类型校验。"""
-    cleaned = _strip_fence(content)
-    try:
-        data = json.loads(cleaned)
-    except json.JSONDecodeError as exc:
-        raise ValueError(f"技能评估输出不是合法 JSON：{exc}") from exc
+def _text(value, field, limit):
+    if not isinstance(value, str) or len(value) > limit:
+        raise ValueError(f"{field} 必须为不超过 {limit} 字符的文本")
+    return _normalize_space(value)
 
+
+def parse_skill_evaluation(content: str, plan_criteria: list[dict[str, Any]]) -> dict[str, Any]:
+    """Validate the model response before any normalization can hide bad types."""
+    data = json.loads(_strip_fence(content))
     if not isinstance(data, dict):
         raise ValueError("技能评估顶层必须是 JSON 对象")
-
-    match_val = str(data.get("match") or "").strip().lower()
-    if match_val not in VALID_MATCH_VALUES:
-        match_val = MATCH_PARTIAL
-
-    doc_val = str(data.get("documentation") or "").strip().lower()
-    if doc_val not in VALID_DOC_VALUES:
-        doc_val = DOC_PARTIAL
-
-    summary_zh = _normalize_space(str(data.get("summary_zh") or ""))
-    usage_zh = _normalize_space(str(data.get("usage_zh") or ""))
-    why_consider = _normalize_space(str(data.get("why_consider") or ""))
-
-    dependencies = normalize_string_list(data.get("dependencies"), max_items=5, max_length=80)
-    limitations = normalize_string_list(data.get("limitations"), max_items=5, max_length=100)
-
-    # 规范化 criteria_results
-    raw_results = data.get("criteria_results")
-    results_by_id: dict[str, dict[str, Any]] = {}
-    if isinstance(raw_results, list):
-        for item in raw_results:
-            if isinstance(item, dict):
-                cid = str(item.get("criterion_id") or "").strip()
-                if cid:
-                    results_by_id[cid] = item
-
-    criteria_results: list[dict[str, Any]] = []
-    for c in plan_criteria:
-        cid = c["id"]
-        res = results_by_id.get(cid) or {}
-        st = str(res.get("status") or "").strip().lower()
-        if st not in VALID_STATUS_VALUES:
-            st = STATUS_UNKNOWN
-
-        expl = _normalize_space(str(res.get("explanation") or ""))
-        raw_ev = res.get("evidence")
-        clean_ev: list[dict[str, Any]] = []
-        if isinstance(raw_ev, list):
-            for ev in raw_ev:
-                if isinstance(ev, dict):
-                    spath = str(ev.get("source_path") or "").strip()
-                    try:
-                        sline = int(ev.get("start_line", 0))
-                        eline = int(ev.get("end_line", 0))
-                    except (ValueError, TypeError):
-                        sline, eline = 0, 0
-                    quote = _normalize_space(str(ev.get("quote") or ""))
-                    if spath and quote:
-                        clean_ev.append(
-                            {
-                                "source_path": spath,
-                                "start_line": sline,
-                                "end_line": eline,
-                                "quote": quote,
-                            }
-                        )
-
-        criteria_results.append(
-            {
-                "criterion_id": cid,
-                "status": st,
-                "explanation": expl,
-                "evidence": clean_ev,
-            }
-        )
-
-    return {
-        "match": match_val,
-        "summary_zh": summary_zh,
-        "criteria_results": criteria_results,
-        "documentation": doc_val,
-        "usage_zh": usage_zh,
-        "dependencies": dependencies,
-        "limitations": limitations,
-        "why_consider": why_consider,
-    }
+    if data.get("match") not in VALID_MATCH_VALUES or data.get("documentation") not in VALID_DOC_VALUES:
+        raise ValueError("无效的 match/documentation 枚举")
+    result = {"match": data["match"], "documentation": data["documentation"]}
+    for field, limit in (("summary_zh", 1200), ("usage_zh", 1600), ("why_consider", 800)):
+        result[field] = _text(data.get(field, ""), field, limit)
+    for field, limit in (("dependencies", 80), ("limitations", 100)):
+        values = data.get(field, [])
+        if not isinstance(values, list) or len(values) > 5:
+            raise ValueError(f"{field} 必须为最多 5 项的数组")
+        result[field] = [_text(v, field, limit) for v in values]
+    raw = data.get("criteria_results")
+    expected = {c["id"] for c in plan_criteria}
+    if not isinstance(raw, list) or len(raw) != len(expected):
+        raise ValueError("criteria_results 必须完整覆盖固定标准")
+    by_id = {}
+    for item in raw:
+        if not isinstance(item, dict):
+            raise ValueError("准则结果必须为对象")
+        cid = item.get("criterion_id")
+        if not isinstance(cid, str) or cid not in expected or cid in by_id:
+            raise ValueError("准则 ID 缺失、重复或不属于本次计划")
+        if item.get("status") not in VALID_STATUS_VALUES:
+            raise ValueError("无效的准则 status")
+        evidence = item.get("evidence", [])
+        if not isinstance(evidence, list) or len(evidence) > 3:
+            raise ValueError("每个准则最多 3 条证据")
+        clean = []
+        for ev in evidence:
+            if not isinstance(ev, dict):
+                raise ValueError("证据必须为对象")
+            start, end = ev.get("start_line"), ev.get("end_line")
+            if type(start) is not int or type(end) is not int:
+                raise ValueError("证据行号必须为整数，不能为布尔值或小数")
+            clean.append({"source_path": _text(ev.get("source_path"), "source_path", 4096),
+                          "start_line": start, "end_line": end,
+                          "quote": _text(ev.get("quote"), "quote", 1200)})
+        by_id[cid] = {"criterion_id": cid, "status": item["status"],
+                      "explanation": _text(item.get("explanation", ""), "explanation", 800),
+                      "evidence": clean}
+    result["criteria_results"] = [by_id[c["id"]] for c in plan_criteria]
+    return result
 
 
 def verify_and_adjust_evaluation(
@@ -296,7 +264,8 @@ def verify_and_adjust_evaluation(
     res["criteria_results"] = adjusted_results
 
     # 重新计算 match 资格
-    all_required_supported = True
+    present_ids = {cr["criterion_id"] for cr in adjusted_results}
+    all_required_supported = all(c["id"] in present_ids for c in plan_criteria if c.get("kind") == KIND_REQUIRED)
     any_required_unsupported = False
     supported_count = 0
 
@@ -319,7 +288,9 @@ def verify_and_adjust_evaluation(
         if not all_required_supported:
             res["match"] = MATCH_NONE if (any_required_unsupported or supported_count == 0) else MATCH_PARTIAL
             if res.get("limitations") is not None and isinstance(res["limitations"], list):
-                res["limitations"].append("部分必需能力在材料中缺少直接可核验的文字依据")
+                note = "部分必需能力在材料中缺少直接可核验的文字依据"
+                if note not in res["limitations"]:
+                    res["limitations"].append(note)
     elif original_match == MATCH_PARTIAL:
         if supported_count == 0:
             res["match"] = MATCH_NONE

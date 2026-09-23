@@ -19,15 +19,49 @@ from copy import deepcopy
 from pathlib import Path
 import re
 from typing import Any
+from urllib.parse import urlsplit, quote
 
-from src.infra.files import write_json_atomic
+from src.infra.files import write_json_atomic, write_text_atomic, file_lock, read_json
 from src.shared.runtime import now_local
 
 STATUS_SUPPORTED = "supported"
 
 
+PUBLIC_REASONS = {"completed", "target_reached", "candidates_exhausted", "token_limit", "evaluation_limit",
+                  "usage_unknown", "model_failures", "interrupted", "search_failed", "expansion_failed",
+                  "material_failed", "plan_failed", "execution_error", "artifact_failed"}
+
+
+def _escape_markdown(value):
+    if isinstance(value, str):
+        return re.sub(r"([\\`*_{}\[\]<>])", r"\\\1", value).replace("\r", " ").replace("\n", " ")
+    if isinstance(value, list):
+        return [_escape_markdown(v) for v in value]
+    if isinstance(value, dict):
+        return {k: _markdown_url(v) if k in {"url", "repo_url"} else _escape_markdown(v)
+                for k, v in value.items()}
+    return value
+
+
+def _markdown_url(value):
+    if not isinstance(value, str):
+        return "#"
+    try:
+        parsed = urlsplit(value)
+        if parsed.scheme not in {"http", "https"} or not parsed.hostname:
+            return "#"
+    except ValueError:
+        return "#"
+    return quote(value, safe=":/?=&%#@+;,_~.-")
+
+
+def _count(value):
+    return f"{value:,}" if type(value) is int and value >= 0 else "未知"
+
+
 def render_find_markdown_report(report: dict[str, Any]) -> str:
     """将查找结果格式化为高可读性的 Markdown 报告。"""
+    report = _escape_markdown(report)
     topic = report.get("topic", "")
     params = report.get("parameters", {})
     usage = report.get("usage") or {}
@@ -42,7 +76,7 @@ def render_find_markdown_report(report: dict[str, Any]) -> str:
         f"- **运行编号**：`{report.get('run_id')}`（{report.get('started_at', '')}）",
         f"- **运行状态**：{report.get('stop_reason') or report.get('status')}",
         f"- **检查范围**：检索查询 {len(search.get('queries_executed', []))} 条，发现仓库 {search.get('repos_discovered', 0)} 个，展开技能文件 {search.get('candidates_found', 0)} 个，实际评估 {report.get('evaluated_count', 0)} 个",
-        f"- **Token 用量**：输入 {usage.get('prompt_tokens', 0):,}，输出 {usage.get('completion_tokens', 0):,}，总计 {usage.get('total_tokens', 0):,} Token（本次停止阈值 {params.get('max_tokens', 0):,}）",
+        f"- **Token 用量**：输入 {_count(usage.get('prompt_tokens'))}，输出 {_count(usage.get('completion_tokens'))}，总计 {_count(usage.get('total_tokens'))} Token（本次停止阈值 {_count(params.get('max_tokens'))}）",
         "",
         "---",
         "",
@@ -202,7 +236,7 @@ def sanitize_report_for_public(report: dict[str, Any]) -> dict[str, Any]:
                     "query": str(qe.get("query") or ""),
                     "ok": bool(qe.get("ok")),
                     "repos_returned": int(qe.get("repos_returned") or 0),
-                    "error": str(qe.get("error")) if qe.get("error") else None,
+                    "error": "search_failed" if qe.get("error") else None,
                 }
             )
 
@@ -216,7 +250,9 @@ def sanitize_report_for_public(report: dict[str, Any]) -> dict[str, Any]:
         "updated_at": str(report.get("updated_at") or now_local().isoformat()),
         "topic": str(report.get("topic") or ""),
         "status": str(report.get("status") or ""),
-        "stop_reason": str(report.get("stop_reason") or ""),
+        "stop_reason": report.get("stop_reason") if report.get("stop_reason") in PUBLIC_REASONS else "execution_error" if report.get("stop_reason") else "",
+        "coverage_incomplete": bool(report.get("coverage_incomplete")),
+        "errors": [{"stage": e.get("stage"), "code": e.get("code")} for e in report.get("errors", [])],
         "parameters": {
             "limit": params.get("limit", 5),
             "max_evaluations": params.get("max_evaluations", 20),
@@ -232,16 +268,18 @@ def sanitize_report_for_public(report: dict[str, Any]) -> dict[str, Any]:
             "repos_discovered": int(search.get("repos_discovered") or 0),
             "candidates_found": int(search.get("candidates_found") or 0),
         },
-        "evaluation_attempts": int(report.get("evaluation_attempts") or 0),
-        "evaluated_count": int(report.get("evaluated_count") or 0),
+        "evaluation_attempts": report.get("evaluation_attempts"),
+        "evaluated_count": report.get("evaluated_count"),
         "shortlist_count": len(sanitized_shortlist),
         "alternatives_count": len(sanitized_alternatives),
         "shortlist": sanitized_shortlist,
         "alternatives": sanitized_alternatives,
         "usage": {
-            "prompt_tokens": int(usage.get("prompt_tokens") or 0),
-            "completion_tokens": int(usage.get("completion_tokens") or 0),
-            "total_tokens": int(usage.get("total_tokens") or 0),
+            "prompt_tokens": usage.get("prompt_tokens"),
+            "completion_tokens": usage.get("completion_tokens"),
+            "total_tokens": usage.get("total_tokens"),
+            "unknown_usage_requests": usage.get("unknown_usage_requests"),
+            "requests": usage.get("requests"),
         },
     }
 
@@ -284,8 +322,7 @@ def should_update_public_snapshot(report: dict[str, Any]) -> bool:
     ):
         return True
 
-    # 若未被上述分支覆盖但有实际成功评估，允许更新；否则默认保留旧快照
-    return has_any_items
+    return has_any_items and status == "error"
 
 
 def write_local_report(report: dict[str, Any], run_dir: Path) -> None:
@@ -293,7 +330,7 @@ def write_local_report(report: dict[str, Any], run_dir: Path) -> None:
     run_dir.mkdir(parents=True, exist_ok=True)
     write_json_atomic(run_dir / "report.json", report)
     md_text = render_find_markdown_report(report)
-    (run_dir / "report.md").write_text(md_text, encoding="utf-8")
+    write_text_atomic(run_dir / "report.md", md_text)
 
 
 def update_public_snapshot(report: dict[str, Any], public_data_dir: Path) -> bool:
@@ -304,5 +341,17 @@ def update_public_snapshot(report: dict[str, Any], public_data_dir: Path) -> boo
     public_data_dir.mkdir(parents=True, exist_ok=True)
     projection = sanitize_report_for_public(report)
     target_file = public_data_dir / "find-report.json"
-    write_json_atomic(target_file, projection)
+    with file_lock(public_data_dir / ".find-report.lock"):
+        write_json_atomic(target_file, projection)
     return True
+
+
+def rebuild_find_report(run_dir: Path, public_data_dir: Path | None = None) -> dict:
+    """Rebuild derived reports from saved facts; never calls a model."""
+    report = read_json(Path(run_dir) / "report.json")
+    if report.get("schema_version") not in (None, "1.0.0"):
+        raise ValueError("不支持的报告 schema_version")
+    write_local_report(report, Path(run_dir))
+    if public_data_dir is not None:
+        update_public_snapshot(report, public_data_dir)
+    return report

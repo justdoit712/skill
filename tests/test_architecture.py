@@ -12,6 +12,7 @@ from __future__ import annotations
 import ast
 from pathlib import Path
 import unittest
+from importlib.util import resolve_name
 
 ROOT = Path(__file__).resolve().parents[1]
 SRC_DIR = ROOT / "src"
@@ -96,9 +97,53 @@ class ArchitectureGuardTest(unittest.TestCase):
             imps = self._collect_imported_targets(p)
             for imp in imps:
                 self.assertFalse(
-                    "tools" in imp or "src.pipeline" in imp,
+                    imp == "tools" or imp.startswith("tools.") or imp == "src.pipeline" or imp.startswith("src.pipeline."),
                     f"架构违规：业务模块 {p.relative_to(ROOT)} 反向依赖了 CLI: {imp}",
                 )
+
+    def test_internal_import_graph_has_no_cycles(self):
+        paths = {".".join(p.relative_to(ROOT).with_suffix("").parts): p
+                 for p in SRC_DIR.rglob("*.py") if p.name != "__init__.py"}
+        graph = {name: set() for name in paths}
+        for name, path in paths.items():
+            for node in ast.walk(ast.parse(path.read_text(encoding="utf-8"))):
+                if isinstance(node, ast.Import):
+                    targets = [a.name for a in node.names]
+                elif isinstance(node, ast.ImportFrom):
+                    base = resolve_name("." * node.level + (node.module or ""), name.rsplit(".", 1)[0]) if node.level else node.module or ""
+                    targets = [base, *(base + "." + a.name for a in node.names)]
+                else:
+                    continue
+                graph[name].update(target for target in targets if target in paths)
+        visited = set()
+        def visit(name, stack):
+            self.assertNotIn(name, stack, "循环依赖：" + " -> ".join([*stack, name]))
+            if name in visited:
+                return
+            for target in graph[name]:
+                visit(target, [*stack, name])
+            visited.add(name)
+        for name in graph:
+            visit(name, [])
+
+    def test_pure_rules_do_not_call_io_or_import_runners(self):
+        modules = ["catalog/index.py", "catalog/entry_state.py", "catalog/decide.py",
+                   "catalog/enrich.py", "finder/evidence.py", "finder/plan.py", "finder/evaluation.py"]
+        forbidden_calls = {"open", "read_text", "read_bytes", "write_text", "write_bytes", "read_json", "write_json_atomic", "fetch_text", "call_model"}
+        forbidden_imports = {"requests", "src.infra", "local", "run", "sync_evaluate", "sync_reserve", "maintenance", "store"}
+        for module in modules:
+            tree = ast.parse((SRC_DIR / module).read_text(encoding="utf-8"))
+            for node in ast.walk(tree):
+                if isinstance(node, ast.Call):
+                    name = node.func.id if isinstance(node.func, ast.Name) else node.func.attr if isinstance(node.func, ast.Attribute) else ""
+                    self.assertNotIn(name, forbidden_calls, f"{module}:{node.lineno}")
+                if isinstance(node, ast.ImportFrom):
+                    target = node.module or ""
+                    self.assertFalse(any(target == name or target.startswith(name + ".") for name in forbidden_imports), f"{module}: {target}")
+
+    def test_store_does_not_depend_on_use_cases(self):
+        for target in self._collect_imported_targets(SRC_DIR / "catalog" / "store.py"):
+            self.assertFalse(any(target.endswith("." + name) for name in ("local", "maintenance", "sync_evaluate", "sync_reserve")), target)
 
 
 if __name__ == "__main__":

@@ -85,7 +85,9 @@ def parse_query_plan(content: str) -> dict[str, Any]:
     if not isinstance(data, dict):
         raise ValueError("查询规划顶层必须是 JSON 对象")
 
-    intent = str(data.get("intent") or "").strip()
+    if not isinstance(data.get("intent"), str):
+        raise ValueError("intent 必须为文本")
+    intent = data["intent"].strip()
     if not intent:
         raise ValueError("查询规划缺少意图归纳 (intent)")
 
@@ -94,6 +96,8 @@ def parse_query_plan(content: str) -> dict[str, Any]:
     if not isinstance(raw_queries, list) or not raw_queries:
         raise ValueError("查询规划缺少搜索短语 (queries 数组)")
 
+    if len(raw_queries) > MAX_PLAN_QUERIES or any(not isinstance(q, str) for q in raw_queries):
+        raise ValueError("queries 类型错误或超过查询上限")
     queries: list[str] = []
     for q in raw_queries:
         if isinstance(q, str):
@@ -112,21 +116,23 @@ def parse_query_plan(content: str) -> dict[str, Any]:
     if not isinstance(raw_criteria, list) or not raw_criteria:
         raise ValueError("查询规划缺少评估准则 (criteria 数组)")
 
+    if len(raw_criteria) > MAX_CRITERIA_COUNT:
+        raise ValueError("criteria 超过准则上限")
     criteria: list[dict[str, Any]] = []
     seen_ids: set[str] = set()
     has_required = False
 
     for c in raw_criteria:
-        if not isinstance(c, dict):
-            continue
+        if not isinstance(c, dict) or not isinstance(c.get("id"), str) or not isinstance(c.get("description"), str):
+            raise ValueError("准则必须包含文本 id/description")
         cid = re.sub(r"[^a-z0-9_]+", "_", str(c.get("id") or "").strip().lower()).strip("_")
         if not cid:
             continue
         if cid in seen_ids:
-            continue
+            raise ValueError("重复准则 ID")
         kind = str(c.get("kind") or "").strip().lower()
         if kind not in VALID_CRITERION_KINDS:
-            kind = KIND_QUALITY_SIGNAL
+            raise ValueError("无效的准则 kind")
 
         desc = _normalize_space(str(c.get("description") or ""))
         if not desc:

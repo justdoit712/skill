@@ -11,6 +11,7 @@ from pathlib import Path
 from typing import Any
 
 from src.infra.files import read_json
+from src.infra.llm import validate_model_config
 
 DEFAULT_LIMIT = 5
 DEFAULT_MAX_EVALUATIONS = 20
@@ -48,10 +49,9 @@ def load_finder_model_config(config_dir: str | Path = "config") -> dict[str, Any
     if not isinstance(cfg, dict):
         raise ValueError("模型配置文件必须是 JSON 对象")
 
-    endpoint = (cfg.get("endpoint") or "").strip()
-    model = (cfg.get("model") or "").strip()
-    if not endpoint or not model:
-        raise ValueError("模型配置缺少有效的 endpoint 或 model")
+    problems = validate_model_config(cfg)
+    if problems:
+        raise ValueError("；".join(problems))
 
     # 禁用底层库嵌套重试，准确统计单次调用
     cfg_copy = deepcopy(cfg)
@@ -67,12 +67,16 @@ def load_finder_run_config(config_dir: str | Path = "config") -> dict[str, Any]:
     shared_cfg = base / "find-skill.json"
     if shared_cfg.exists():
         shared = _read_json_file(shared_cfg, default={})
+        if not isinstance(shared, dict):
+            raise ValueError("find-skill.json 必须为 JSON 对象")
         if isinstance(shared, dict):
             res.update(shared)
 
     local_cfg = base / "find-skill.local.json"
     if local_cfg.exists():
         local_data = _read_json_file(local_cfg, default={})
+        if not isinstance(local_data, dict):
+            raise ValueError("find-skill.local.json 必须为 JSON 对象")
         if isinstance(local_data, dict):
             res.update(local_data)
 
@@ -86,7 +90,7 @@ def _parse_int_val(val: Any, default: int = 0, field_name: str = "参数") -> in
         return default
     if isinstance(val, bool):
         raise ValueError(f"{field_name} 不能是布尔值: {val}")
-    if isinstance(val, (int, float)):
+    if isinstance(val, int):
         int_val = int(val)
         if int_val < 0:
             raise ValueError(f"{field_name} 不能为负数: {val}")
