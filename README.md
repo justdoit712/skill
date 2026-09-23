@@ -5,14 +5,47 @@
 
 **不下载、不镜像、不安装、不启用、不执行任何技能包。**
 
-计划浏览地址：<https://justdoit712.github.io/skill/>
+线上地址：<https://justdoit712.github.io/skill/> —— **当前未发布**（2026-09-23 实测返回 404）。
+本仓库为私有，而 GitHub Pages 在 **Free 套餐下只支持公开仓库**；私有仓库需 Pro/Team（页面依然对全网公开），
+"仅成员可见"需 Enterprise Cloud。三种可行路径与具体步骤见 [部署与访问](#部署与访问)。
 
 ## 当前状态
 
 项目提供技能目录、独立定向查找和静态浏览页面，产品范围与业务规则见 [产品规范](docs/产品规范.md)。
 
-采集、评估、队列、待复核与发布链路已实现，仓库已包含目录条目、页面数据和定向查找入口。
-架构分层与部分边界修复待实施；线上部署与 Actions 实跑状态未在本次文档整理中核验。运行方式见 [运行说明](docs/运行说明.md)。
+采集、评估、队列、待复核链路已实现，仓库已包含目录条目、页面数据和定向查找入口；分层重构（P0–P6）已完成：
+`src/` 按 `catalog` / `finder` / `infra` / `shared` 分包，前端拆成原生 ES 模块，并有 AST 架构守卫。
+
+尚未完成的部分：
+
+- **线上从未发布**：目标地址实测 404，仓库中也没有任何一次成功的 Actions 产物（`data/state`、`data/reports` 均不存在）。
+- **定时采集默认关闭**：开关在 [config/automation.json](config/automation.json) 的 `scheduled_sync_enabled`（当前 `false`）；手动触发不受该开关限制。
+- **已知缺陷待修**：[全量审计报告](docs/audit/2026-09-23-全量审计报告.md) 记录 3 个 P0 与 11 个 P1，其中阶段一的抓取失败分支会抛 `NameError`，**修好之前不要开启定时采集**。
+
+## 部署与访问
+
+页面是纯静态产物（`public/` 下的 `index.html`、`styles.css`、`js/`、`data/`），本地预览：
+
+```powershell
+.\scripts\preview.ps1            # 自动选空闲端口并打开浏览器
+```
+
+发布到 GitHub Pages 有两个入口，**发布前需先把仓库设置里的 Pages Source 设为 `GitHub Actions`**：
+
+| 入口 | 触发方式 | 行为 |
+| --- | --- | --- |
+| [publish-pages.yml](.github/workflows/publish-pages.yml) | 手动（Run workflow） | 只上传已提交的 `public/` 产物：不采集、不评估、不调用模型、不联网、不写数据 |
+| [sync-skills.yml](.github/workflows/sync-skills.yml) | 定时（周日 10:00 北京时间）或手动 | 完整两阶段链路，成功后一并部署；定时是否执行由 [config/automation.json](config/automation.json) 决定 |
+
+**为什么不能用"分支部署"**：站点首页位于 `public/` 子目录，而 Pages 的分支部署只能指向仓库根或 `/docs`，
+因此必须走 Actions 入口，或者把 `public/` 的内容放到另一个仓库的根目录再发布。
+
+**仓库可见性对 Pages 的影响**（GitHub 官方规则）：
+
+| 仓库 | Free | Pro / Team | Enterprise Cloud |
+| --- | --- | --- | --- |
+| 公开 | 可用，页面公开 | 可用，页面公开 | 可用，可设为私有 |
+| 私有 | 不可用 | 可用，但页面仍是公开的 | 可用，可设为私有 |
 
 ## 在本地运行
 
@@ -120,7 +153,9 @@ Token 上限在每次请求后检查，最后一次请求可能超出上限。
 
 ## 运行方式
 
-计划每周通过 GitHub Actions 自动采集与评估，也支持手动触发。每周新增与重评合计
+每周通过 GitHub Actions 自动采集与评估，也支持手动触发；**定时是否执行由
+[config/automation.json](config/automation.json) 的 `scheduled_sync_enabled` 决定**（`true` 执行、
+`false` 跳过，关闭时该次运行只做判断即退出；手动触发不受该开关限制）。每周新增与重评合计
 **最多 50 个**，优先复核发生变化的已有推荐。
 
 Actions 定时与手动共享同一额度账本，手动触发不绕过上限。本地 `run_local.py` 按上述单次目标与预算运行，使用独立账本。网络失败时保留上次有效数据，
@@ -151,6 +186,7 @@ GitHub 是托管平台，不是所有技能的发布方。官方、社区与聚�
 | 文档 | 内容 |
 | --- | --- |
 | [产品规范](docs/产品规范.md) | 产品定位、收录范围、业务规则、运行模式与验收要求 |
-| [运行说明](docs/运行说明.md) | 运行链路、周额度、配置与密钥、故障处理 |
+| [运行说明](docs/运行说明.md) | 运行链路、周额度、配置与密钥、发布入口、故障处理 |
+| [全量审计报告](docs/audit/2026-09-23-全量审计报告.md) | 按入口的健康度、P0–P3 缺陷（含位置与复现）、覆盖率实测、文档漂移与修复顺序 |
 | [分层与轻量化评估](docs/src分层与轻量化评估.md) | 架构分析、离线证据、设计取舍与恢复边界 |
 | [分层重构实施方案](docs/src分层重构实施方案.md) | 待实施改动、兼容约定和验收清单 |
