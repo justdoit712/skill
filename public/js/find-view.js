@@ -9,6 +9,10 @@ import { escapeHtml } from "./utils.js";
  */
 export function renderFindView(container, report) {
   container.innerHTML = "";
+  if (report?.schema_version && report.schema_version !== "1.0.0") {
+    container.innerHTML = '<li class="find-overview-card"><h3>报告版本不兼容</h3><p>请升级页面后重新查看该报告。</p></li>';
+    return;
+  }
   if (!report || (!report.shortlist && !report.alternatives)) {
     container.innerHTML =
       '<li class="find-overview-card find-empty-box">' +
@@ -23,14 +27,16 @@ export function renderFindView(container, report) {
   const updated = report.updated_at ? report.updated_at.slice(0, 19).replace("T", " ") : "未知";
   const shortlist = report.shortlist || [];
   const alternatives = report.alternatives || [];
-  const tokens = (report.usage && report.usage.total_tokens) ? report.usage.total_tokens.toLocaleString() : "0";
-  const evCount = (report.evaluated_count !== undefined && report.evaluated_count !== null) ? report.evaluated_count : (shortlist.length + alternatives.length);
-  const attempts = (report.evaluation_attempts !== undefined && report.evaluation_attempts !== null) ? report.evaluation_attempts : evCount;
+  const tokens = Number.isFinite(report.usage?.total_tokens) ? report.usage.total_tokens.toLocaleString() : "未知";
+  const evCount = Number.isFinite(report.evaluated_count) ? report.evaluated_count : "未知";
+  const attempts = Number.isFinite(report.evaluation_attempts) ? report.evaluation_attempts : "未知";
   const stopReason = (report.stop_reason || report.status || "").toLowerCase();
 
   // 状态提示条（支持 usage_unknown, token_limit, evaluation_limit, interrupted 等）
   let bannerHtml = "";
-  if (stopReason === "usage_unknown") {
+  if (report.status === "running") {
+    bannerHtml = '<div class="find-status-banner info">查找尚未完成；此处显示上次保存的进度。</div>';
+  } else if (stopReason === "usage_unknown") {
     bannerHtml = '<div class="find-status-banner warning">⚠️ 模型调用缺失用量统计 (usage_unknown)，触发安全停机保护；已安全保存中断前的全部局部结果。</div>';
   } else if (stopReason === "token_limit") {
     bannerHtml = '<div class="find-status-banner warning">⚠️ 模型调用消耗已达到本次 Token 预算上限 (token_limit)，查找停止；已保存当前已完成结果。</div>';
@@ -42,6 +48,12 @@ export function renderFindView(container, report) {
     bannerHtml = '<div class="find-status-banner danger">⚠️ 连续模型调用异常次数超标 (model_failures)，触发熔断停机保护。</div>';
   } else if (report.status === "error" || stopReason === "search_failed" || stopReason === "plan_failed") {
     bannerHtml = '<div class="find-status-banner danger">❌ 查找过程中发生异常中止：' + escapeHtml(report.stop_reason || report.status) + '</div>';
+  }
+  if (report.coverage_incomplete) {
+    bannerHtml += '<div class="find-status-banner warning">本次检索覆盖不完整，部分来源读取失败或超出读取范围。</div>';
+  }
+  if (report.usage?.unknown_usage_requests > 0) {
+    bannerHtml += '<div class="find-status-banner warning">存在用量未知的请求，显示的 Token 仅为已知用量。</div>';
   }
 
   // 1. 概况卡片
@@ -121,7 +133,7 @@ export function renderFindView(container, report) {
       const depHtml = (ev.dependencies || []).length ? '<p class="detail"><strong>依赖：</strong>' + escapeHtml(ev.dependencies.join("、")) + '</p>' : '';
       const limHtml = (ev.limitations || []).length ? '<p class="detail" style="color:#b45309;"><strong>限制与注意：</strong>' + escapeHtml(ev.limitations.join("；")) + '</p>' : '';
       const skillName = cand.name || cand.skill_id || item.name || item.skill_id || "未命名技能";
-      const skillUrl = cand.url || cand.repo_url || item.url || item.repo_url || "#";
+      const skillUrl = safeLink(cand.url || cand.repo_url || item.url || item.repo_url);
       const summaryText = ev.summary_zh || item.summary || "无简述";
 
       li.innerHTML =
@@ -167,7 +179,7 @@ export function renderFindView(container, report) {
       });
       const gapText = gaps.length ? "主要差距：准则 " + gaps.join("、") + " 未达到强匹配或缺乏确凿证据" : "说明质量或观察项有待完善";
       const skillName = cand.name || cand.skill_id || item.name || item.skill_id || "未命名备选";
-      const skillUrl = cand.url || cand.repo_url || item.url || item.repo_url || "#";
+      const skillUrl = safeLink(cand.url || cand.repo_url || item.url || item.repo_url);
       const summaryText = ev.summary_zh || item.summary || "相关备选技能";
 
       li.innerHTML =
@@ -179,5 +191,14 @@ export function renderFindView(container, report) {
         '<div class="find-gap-text">⚠️ ' + escapeHtml(gapText) + '</div>';
       container.appendChild(li);
     });
+  }
+}
+
+function safeLink(value) {
+  try {
+    const url = new URL(value);
+    return ["https:", "http:"].includes(url.protocol) ? url.href : "#";
+  } catch {
+    return "#";
   }
 }
