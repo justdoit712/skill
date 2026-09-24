@@ -1,18 +1,18 @@
-"""多厂商模型与 API Key 本地热插拔切换工具。
+"""多厂商模型与 API Key 本地独立文件热插拔管理工具。
 
-功能：
-1. 维护 config/providers.local.json 中的多厂商模型与 Key 配置库；
-2. 一键热插拔切换当前项目生效的 config/model.local.json；
-3. 支持命令行直切与交互式编号菜单选择；
-4. 切换前自动校验配置格式，切换后原子写入，无损安全。
+设计原则（分离存储、独立自治）：
+1. 每个厂商拥有独立的私有配置文件：config/models/<厂商ID>.local.json（如 deepseek.local.json、qwen.local.json）；
+2. 相互独立、互不混合，各自存放端点、模型名与私有 API Key；
+3. 一键热插拔激活：选中后原子写入 config/models/model.local.json（当前项目生效模型）；
+4. 所有 *.local.json 均被 .gitignore 严格忽略，杜绝凭据泄漏风险。
 
 用法：
     python tools/switch_model.py                 # 交互式菜单选择切换
-    python tools/switch_model.py deepseek        # 直接切换到 deepseek
-    python tools/switch_model.py qwen            # 直接切换到通义千问
-    python tools/switch_model.py --list          # 列出所有可用厂商及状态
+    python tools/switch_model.py deepseek        # 直接切换到 deepseek.local.json
+    python tools/switch_model.py qwen            # 直接切换到 qwen.local.json
+    python tools/switch_model.py --list          # 列出所有可用厂商独立配置及状态
     python tools/switch_model.py --show          # 显示当前生效模型信息
-    python tools/switch_model.py --check         # 预检当前模型连接配置
+    python tools/switch_model.py --check         # 预检当前生效的模型连接配置
 """
 
 from __future__ import annotations
@@ -29,19 +29,18 @@ sys.path.insert(0, str(ROOT))
 from src.infra.files import read_json, write_json_atomic
 from src.infra.llm import validate_model_config
 
-def _res_model_file(fname: str) -> Path:
-    sub = ROOT / "config" / "models" / fname
+
+def _get_models_dir() -> Path:
+    sub = ROOT / "config" / "models"
     if sub.exists():
         return sub
-    flat = ROOT / "config" / fname
-    if flat.exists():
-        return flat
-    return sub
+    flat = ROOT / "config"
+    return flat
 
-PROVIDERS_LOCAL_PATH = _res_model_file("providers.local.json")
-PROVIDERS_EXAMPLE_PATH = _res_model_file("providers.example.json")
-MODEL_LOCAL_PATH = _res_model_file("model.local.json")
-MODEL_EXAMPLE_PATH = _res_model_file("model.example.json")
+
+MODELS_DIR = _get_models_dir()
+MODEL_LOCAL_PATH = MODELS_DIR / "model.local.json"
+PROVIDERS_LOCAL_PATH = MODELS_DIR / "providers.local.json"
 
 
 def mask_key(key: str | None) -> str:
@@ -54,36 +53,58 @@ def mask_key(key: str | None) -> str:
     return f"{s[:3]}***{s[-4:]}"
 
 
-def load_providers_catalog() -> dict:
-    """加载厂商配置库，若 local 不存在则尝试自动从 example 初始化。"""
-    if PROVIDERS_LOCAL_PATH.exists():
-        data = read_json(PROVIDERS_LOCAL_PATH, default={})
-        if isinstance(data, dict) and "providers" in data:
-            return data
+def load_providers_catalog(models_dir: Path | None = None) -> dict:
+    """加载所有独立厂商配置文件。
+    
+    自动扫描 models_dir 下的 *.local.json（排除当前生效的 model.local.json 与旧版 providers.local.json）。
+    """
+    directory = models_dir or MODELS_DIR
+    providers: dict[str, dict] = {}
 
-    if PROVIDERS_EXAMPLE_PATH.exists():
-        example_data = read_json(PROVIDERS_EXAMPLE_PATH, default={})
-        if isinstance(example_data, dict):
-            # 若 model.local.json 已经有 key，尝试回填到 example 中
-            if MODEL_LOCAL_PATH.exists():
-                cur = read_json(MODEL_LOCAL_PATH, default={})
-                cur_provider = cur.get("provider")
-                cur_key = (cur.get("auth") or {}).get("api_key")
-                if cur_provider and cur_key and cur_provider in example_data.get("providers", {}):
-                    example_data["providers"][cur_provider]["auth"]["api_key"] = cur_key
-            write_json_atomic(PROVIDERS_LOCAL_PATH, example_data)
-            return example_data
+    if directory.exists():
+        for p in sorted(directory.glob("*.local.json")):
+            if p.name in ("model.local.json", "providers.local.json"):
+                continue
+            # pid: deepseek.local.json -> deepseek
+            pid = p.name[:-11] if p.name.endswith(".local.json") else p.stem
+            try:
+                content = read_json(p, default={})
+                if isinstance(content, dict):
+                    content.setdefault("name", pid)
+                    content.setdefault("provider_id", pid)
+                    providers[pid] = content
+            except Exception:
+                continue
 
-    return {"active": None, "providers": {}}
+    # 兼容回退：若未扫描到独立文件但存在 providers.local.json
+    if not providers and PROVIDERS_LOCAL_PATH.exists():
+        legacy_data = read_json(PROVIDERS_LOCAL_PATH, default={})
+        if isinstance(legacy_data, dict) and "providers" in legacy_data:
+            providers = legacy_data["providers"]
+
+    # 检测当前激活厂商
+    active_id: str | None = None
+    if MODEL_LOCAL_PATH.exists():
+        cur = read_json(MODEL_LOCAL_PATH, default={})
+        active_id = cur.get("active_provider")
+        if not active_id:
+            cur_endpoint = cur.get("endpoint")
+            cur_model = cur.get("model")
+            for pid, pcfg in providers.items():
+                if pcfg.get("endpoint") == cur_endpoint and pcfg.get("model") == cur_model:
+                    active_id = pid
+                    break
+
+    return {"active": active_id, "providers": providers}
 
 
 def list_providers(catalog: dict) -> None:
-    """格式化打印厂商列表。"""
+    """格式化打印各独立厂商配置状态列表。"""
     providers = catalog.get("providers", {})
     active_id = catalog.get("active")
-    print("\n" + "=" * 65)
-    print(f"{'#':<4} {'厂商 ID':<14} {'模型名称':<22} {'状态 / Key':<18}")
-    print("-" * 65)
+    print("\n" + "=" * 68)
+    print(f"{'#':<4} {'厂商 ID':<14} {'模型名称':<24} {'状态 / Key':<18}")
+    print("-" * 68)
     for idx, (pid, pcfg) in enumerate(providers.items(), 1):
         name = pcfg.get("name", pid)
         model = pcfg.get("model", "unknown")
@@ -91,8 +112,8 @@ def list_providers(catalog: dict) -> None:
         is_active = (pid == active_id)
         active_mark = "[当前激活] " if is_active else "           "
         key_status = mask_key(key)
-        print(f"{idx:<4} {pid:<14} {model:<22} {active_mark}{key_status}")
-    print("=" * 65 + "\n")
+        print(f"{idx:<4} {pid:<14} {model:<24} {active_mark}{key_status}")
+    print("=" * 68 + "\n")
 
 
 def show_current() -> None:
@@ -107,7 +128,8 @@ def show_current() -> None:
     env_key = os.environ.get(env_name)
 
     print("\n" + "=" * 55)
-    print("【当前项目生效模型配置 (config/model.local.json)】")
+    print("【当前项目生效模型配置 (config/models/model.local.json)】")
+    print(f"  激活来源  : {cur.get('active_provider', 'custom')}")
     print(f"  服务标识  : {cur.get('provider')}")
     print(f"  模型名称  : {cur.get('model')}")
     print(f"  服务端点  : {cur.get('endpoint')}")
@@ -118,15 +140,28 @@ def show_current() -> None:
     print("=" * 55 + "\n")
 
 
-def switch_to_provider(provider_id: str, catalog: dict) -> bool:
-    """切换到指定厂商配置并更新 model.local.json。"""
+def switch_to_provider(provider_id: str, catalog: dict | None = None) -> bool:
+    """切换到指定独立厂商配置文件，并原子覆写到 model.local.json。"""
+    if catalog is None:
+        catalog = load_providers_catalog()
+
     providers = catalog.get("providers", {})
-    if provider_id not in providers:
+    target_cfg = None
+
+    # 1. 优先从已加载 catalog 中获取
+    if provider_id in providers:
+        target_cfg = dict(providers[provider_id])
+    else:
+        # 2. 尝试直接从独立文件读取
+        candidate_file = MODELS_DIR / f"{provider_id}.local.json"
+        if candidate_file.exists():
+            target_cfg = read_json(candidate_file, default={})
+
+    if not target_cfg:
         print(f"[错误] 未找到厂商 ID '{provider_id}'，可选厂商：{', '.join(providers.keys())}")
         return False
 
-    target_cfg = dict(providers[provider_id])
-    name = target_cfg.pop("name", provider_id)
+    name = target_cfg.get("name", provider_id)
 
     # 校验合法性
     problems = validate_model_config(target_cfg)
@@ -140,21 +175,27 @@ def switch_to_provider(provider_id: str, catalog: dict) -> bool:
 
     if not key and not has_env:
         print(f"[提示] 注意：厂商 '{provider_id}' 当前未设置 api_key，环境变量 '{env_var}' 亦为空。")
-        print(f"       切换后请在 config/providers.local.json 或 config/model.local.json 中填入 Key。")
+        print(f"       请在 config/models/{provider_id}.local.json 中填入私有 Key。")
 
-    # 写入 model.local.json
-    target_cfg["note"] = f"当前由 tools/switch_model.py 激活（厂商: {name}）。禁止提交、禁止写入日志。"
+    # 记录 active 标记并原子写入 model.local.json
+    target_cfg["active_provider"] = provider_id
+    target_cfg["note"] = f"当前由 tools/switch_model.py 从 {provider_id}.local.json 激活（厂商: {name}）。禁止提交、禁止写入日志。"
     write_json_atomic(MODEL_LOCAL_PATH, target_cfg)
 
-    # 更新 providers.local.json 中的 active 标记
+    # 若内存目录传入，同步更新 active 状态
     catalog["active"] = provider_id
-    write_json_atomic(PROVIDERS_LOCAL_PATH, catalog)
+    if PROVIDERS_LOCAL_PATH.exists():
+        legacy_data = read_json(PROVIDERS_LOCAL_PATH, default={})
+        if isinstance(legacy_data, dict):
+            legacy_data["active"] = provider_id
+            write_json_atomic(PROVIDERS_LOCAL_PATH, legacy_data)
 
     print(f"[成功] 已热插拔切换至模型：{name} ({provider_id})")
-    print(f"       生效文件: config/model.local.json")
-    print(f"       模型名称: {target_cfg.get('model')}")
-    print(f"       端点地址: {target_cfg.get('endpoint')}")
-    print(f"       当前密钥: {mask_key(key)}")
+    print(f"       独立源文件: config/models/{provider_id}.local.json")
+    print(f"       当前生效件: config/models/model.local.json")
+    print(f"       模型名称  : {target_cfg.get('model')}")
+    print(f"       端点地址  : {target_cfg.get('endpoint')}")
+    print(f"       当前密钥  : {mask_key(key)}")
     return True
 
 
@@ -162,7 +203,7 @@ def interactive_select(catalog: dict) -> None:
     """交互式终端选择菜单。"""
     providers = catalog.get("providers", {})
     if not providers:
-        print("[错误] 厂商配置库为空！")
+        print("[错误] 未扫描到任何独立模型配置文件 (config/models/*.local.json)！")
         return
 
     list_providers(catalog)
@@ -196,7 +237,7 @@ def interactive_select(catalog: dict) -> None:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="多厂商大模型与 Key 本地热插拔管理工具")
+    parser = argparse.ArgumentParser(description="多厂商大模型与 Key 本地独立文件热插拔管理工具")
     parser.add_argument("provider", nargs="?", help="要切换到的目标厂商 ID (如 deepseek, qwen, siliconflow, ollama)")
     parser.add_argument("-l", "--list", action="store_true", help="列出所有已配置的厂商及状态")
     parser.add_argument("-s", "--show", "--current", action="store_true", help="显示当前生效模型详情")
