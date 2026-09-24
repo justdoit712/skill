@@ -1,15 +1,17 @@
 """多厂商模型与 API Key 本地独立文件热插拔管理工具。
 
 设计原则（分离存储、独立自治）：
-1. 每个厂商拥有独立的私有配置文件：config/models/<厂商ID>.local.json（如 deepseek.local.json、qwen.local.json）；
+1. 每个厂商拥有独立的私有配置文件：config/models/<厂商ID>.local.json（如 deepseek.local.json、bailian.local.json）；
 2. 相互独立、互不混合，各自存放端点、模型名与私有 API Key；
 3. 一键热插拔激活：选中后原子写入 config/models/model.local.json（当前项目生效模型）；
-4. 所有 *.local.json 均被 .gitignore 严格忽略，杜绝凭据泄漏风险。
+4. 支持厂商别名快捷切换（如 qwen、aliyun 自动指向 bailian）；
+5. 所有 *.local.json 均被 .gitignore 严格忽略，杜绝凭据泄漏风险。
 
 用法：
     python tools/switch_model.py                 # 交互式菜单选择切换
     python tools/switch_model.py deepseek        # 直接切换到 deepseek.local.json
-    python tools/switch_model.py qwen            # 直接切换到 qwen.local.json
+    python tools/switch_model.py bailian         # 直接切换到 bailian.local.json (阿里云百炼平台)
+    python tools/switch_model.py qwen            # 别名切换：自动定位到 bailian.local.json
     python tools/switch_model.py --list          # 列出所有可用厂商独立配置及状态
     python tools/switch_model.py --show          # 显示当前生效模型信息
     python tools/switch_model.py --check         # 预检当前生效的模型连接配置
@@ -28,6 +30,13 @@ sys.path.insert(0, str(ROOT))
 
 from src.infra.files import read_json, write_json_atomic
 from src.infra.llm import validate_model_config
+
+# 厂商快捷别名映射
+ALIASES: dict[str, str] = {
+    "qwen": "bailian",
+    "aliyun": "bailian",
+    "dashscope": "bailian",
+}
 
 
 def _get_models_dir() -> Path:
@@ -146,22 +155,31 @@ def switch_to_provider(provider_id: str, catalog: dict | None = None) -> bool:
         catalog = load_providers_catalog()
 
     providers = catalog.get("providers", {})
+    resolved_id = ALIASES.get(provider_id.lower(), provider_id)
     target_cfg = None
 
     # 1. 优先从已加载 catalog 中获取
-    if provider_id in providers:
+    if resolved_id in providers:
+        target_cfg = dict(providers[resolved_id])
+    elif provider_id in providers:
         target_cfg = dict(providers[provider_id])
+        resolved_id = provider_id
     else:
         # 2. 尝试直接从独立文件读取
-        candidate_file = MODELS_DIR / f"{provider_id}.local.json"
+        candidate_file = MODELS_DIR / f"{resolved_id}.local.json"
         if candidate_file.exists():
             target_cfg = read_json(candidate_file, default={})
 
     if not target_cfg:
-        print(f"[错误] 未找到厂商 ID '{provider_id}'，可选厂商：{', '.join(providers.keys())}")
+        available = list(providers.keys())
+        alias_hints = [f"{k}->{v}" for k, v in ALIASES.items() if v in providers]
+        hint_str = f"可选厂商：{', '.join(available)}"
+        if alias_hints:
+            hint_str += f"（支持别名：{', '.join(alias_hints)}）"
+        print(f"[错误] 未找到厂商 ID '{provider_id}'，{hint_str}")
         return False
 
-    name = target_cfg.get("name", provider_id)
+    name = target_cfg.get("name", resolved_id)
 
     # 校验合法性
     problems = validate_model_config(target_cfg)
@@ -174,24 +192,24 @@ def switch_to_provider(provider_id: str, catalog: dict | None = None) -> bool:
     has_env = bool(os.environ.get(env_var))
 
     if not key and not has_env:
-        print(f"[提示] 注意：厂商 '{provider_id}' 当前未设置 api_key，环境变量 '{env_var}' 亦为空。")
-        print(f"       请在 config/models/{provider_id}.local.json 中填入私有 Key。")
+        print(f"[提示] 注意：厂商 '{resolved_id}' 当前未设置 api_key，环境变量 '{env_var}' 亦为空。")
+        print(f"       请在 config/models/{resolved_id}.local.json 中填入私有 Key。")
 
     # 记录 active 标记并原子写入 model.local.json
-    target_cfg["active_provider"] = provider_id
-    target_cfg["note"] = f"当前由 tools/switch_model.py 从 {provider_id}.local.json 激活（厂商: {name}）。禁止提交、禁止写入日志。"
+    target_cfg["active_provider"] = resolved_id
+    target_cfg["note"] = f"当前由 tools/switch_model.py 从 {resolved_id}.local.json 激活（厂商: {name}）。禁止提交、禁止写入日志。"
     write_json_atomic(MODEL_LOCAL_PATH, target_cfg)
 
     # 若内存目录传入，同步更新 active 状态
-    catalog["active"] = provider_id
+    catalog["active"] = resolved_id
     if PROVIDERS_LOCAL_PATH.exists():
         legacy_data = read_json(PROVIDERS_LOCAL_PATH, default={})
         if isinstance(legacy_data, dict):
-            legacy_data["active"] = provider_id
+            legacy_data["active"] = resolved_id
             write_json_atomic(PROVIDERS_LOCAL_PATH, legacy_data)
 
-    print(f"[成功] 已热插拔切换至模型：{name} ({provider_id})")
-    print(f"       独立源文件: config/models/{provider_id}.local.json")
+    print(f"[成功] 已热插拔切换至模型：{name} ({resolved_id})")
+    print(f"       独立源文件: config/models/{resolved_id}.local.json")
     print(f"       当前生效件: config/models/model.local.json")
     print(f"       模型名称  : {target_cfg.get('model')}")
     print(f"       端点地址  : {target_cfg.get('endpoint')}")
@@ -230,15 +248,16 @@ def interactive_select(catalog: dict) -> None:
             print("[错误] 输入编号超出范围。")
             return
 
-    if choice in providers:
-        switch_to_provider(choice, catalog)
+    target_id = ALIASES.get(choice.lower(), choice)
+    if target_id in providers or (MODELS_DIR / f"{target_id}.local.json").exists():
+        switch_to_provider(target_id, catalog)
     else:
         print(f"[错误] 无效的厂商 ID: '{choice}'")
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="多厂商大模型与 Key 本地独立文件热插拔管理工具")
-    parser.add_argument("provider", nargs="?", help="要切换到的目标厂商 ID (如 deepseek, qwen, siliconflow, ollama)")
+    parser.add_argument("provider", nargs="?", help="要切换到的目标厂商 ID (如 deepseek, bailian, siliconflow, ollama；支持别名 qwen, aliyun)")
     parser.add_argument("-l", "--list", action="store_true", help="列出所有已配置的厂商及状态")
     parser.add_argument("-s", "--show", "--current", action="store_true", help="显示当前生效模型详情")
     parser.add_argument("-c", "--check", action="store_true", help="预检当前生效的模型连接配置")
@@ -268,7 +287,8 @@ def main() -> None:
         return
 
     if args.provider:
-        ok = switch_to_provider(args.provider.strip(), catalog)
+        target_id = ALIASES.get(args.provider.strip().lower(), args.provider.strip())
+        ok = switch_to_provider(target_id, catalog)
         sys.exit(0 if ok else 1)
 
     # 无参数时进入交互选择
