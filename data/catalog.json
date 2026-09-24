@@ -5,8 +5,8 @@
   "counts": {
     "recommended": 18,
     "candidate": 8,
-    "manual": 32,
-    "excluded": 15
+    "manual": 24,
+    "excluded": 23
   },
   "entries": [
     {
@@ -1110,14 +1110,16 @@
         ],
         "terms": []
       },
-      "status": "recommended",
+      "status": "excluded",
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
       "flags": [
         "NO_DOMAIN_TERM_MATCH"
       ],
-      "reason_codes": [],
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "limitations": "不适合简单单文件 HTML/JSX artifacts；需要 Node 18+ 环境；构建流程依赖 bash 脚本和自动安装依赖。",
       "evaluation_rules_version": "1.0.1",
       "first_seen": "2026-09-20T16:59:36+00:00",
@@ -1127,13 +1129,8 @@
       "upstream_status": "ok",
       "license": null,
       "excluded": false,
-      "manual_pick": true,
-      "manual_note": {
-        "added_at": "2026-09-22",
-        "reason": "用户收藏",
-        "from": "recommended",
-        "auto_status": "recommended"
-      },
+      "manual_pick": false,
+      "manual_note": null,
       "skill_type": null,
       "example_requests": [],
       "key_features": [
@@ -1591,14 +1588,16 @@
         ],
         "terms": []
       },
-      "status": "recommended",
+      "status": "excluded",
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
       "flags": [
         "NO_DOMAIN_TERM_MATCH"
       ],
-      "reason_codes": [],
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "limitations": "仅提供规则索引和快速参考，详细规则文件需另行读取；缺少具体实现细节与代码示例。",
       "evaluation_rules_version": "1.0.1",
       "first_seen": "2026-09-20T16:59:36+00:00",
@@ -1608,13 +1607,8 @@
       "upstream_status": "ok",
       "license": null,
       "excluded": false,
-      "manual_pick": true,
-      "manual_note": {
-        "added_at": "2026-09-22",
-        "reason": "用户收藏",
-        "from": "recommended",
-        "auto_status": "recommended"
-      },
+      "manual_pick": false,
+      "manual_note": null,
       "skill_type": null,
       "example_requests": [
         "“构建 React Native 组件、优化性能、实现动画和配置原生模块”"
@@ -1659,14 +1653,16 @@
         ],
         "terms": []
       },
-      "status": "recommended",
+      "status": "excluded",
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
       "flags": [
         "NO_DOMAIN_TERM_MATCH"
       ],
-      "reason_codes": [],
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "limitations": "需要较新的浏览器支持（Chromium 125+、Firefox 144+、Safari 18.2+）；React 稳定版不支持 ViewTransition，需 canary 版本（Next.js 除外）；存在嵌套 VT 不触发内部 enter/exit、Next.js 中无 per-item staggered animations 等限制。",
       "evaluation_rules_version": "1.0.1",
       "first_seen": "2026-09-20T16:59:36+00:00",
@@ -1676,13 +1672,8 @@
       "upstream_status": "ok",
       "license": null,
       "excluded": false,
-      "manual_pick": true,
-      "manual_note": {
-        "added_at": "2026-09-22",
-        "reason": "用户收藏",
-        "from": "recommended",
-        "auto_status": "recommended"
-      },
+      "manual_pick": false,
+      "manual_note": null,
       "skill_type": null,
       "example_requests": [
         "“页面过渡、路由变化、共享元素动画、组件进出动画、列表重排”"
@@ -1850,14 +1841,16 @@
         ],
         "terms": []
       },
-      "status": "recommended",
+      "status": "excluded",
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
       "flags": [
         "NO_DOMAIN_TERM_MATCH"
       ],
-      "reason_codes": [],
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "limitations": "依赖远程指南源，需网络访问；具体规则和输出格式由远程内容定义。",
       "evaluation_rules_version": "1.0.1",
       "first_seen": "2026-09-20T16:59:36+00:00",
@@ -1867,13 +1860,8 @@
       "upstream_status": "ok",
       "license": null,
       "excluded": false,
-      "manual_pick": true,
-      "manual_note": {
-        "added_at": "2026-09-22",
-        "reason": "用户收藏",
-        "from": "recommended",
-        "auto_status": "recommended"
-      },
+      "manual_pick": false,
+      "manual_note": null,
       "skill_type": null,
       "example_requests": [
         "“用户要求检查界面、可访问性、设计审计”"
@@ -3330,14 +3318,16 @@
         ],
         "terms": []
       },
-      "status": "recommended",
+      "status": "excluded",
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
       "flags": [
         "NO_DOMAIN_TERM_MATCH"
       ],
-      "reason_codes": [],
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "limitations": "主要限制：SKILL.md 本身不包含详细评估标准、模板与示例报告，依赖 resources/ 下的文件；需要访问目标代码库和项目上下文；Slither 等工具为可选，无工具时部分架构图与升级检查可能受限。",
       "evaluation_rules_version": "1.0.1",
       "first_seen": "2026-09-20T16:59:36+00:00",
@@ -3347,13 +3337,8 @@
       "upstream_status": "ok",
       "license": null,
       "excluded": false,
-      "manual_pick": true,
-      "manual_note": {
-        "added_at": "2026-09-24",
-        "reason": "用户收藏",
-        "from": "recommended",
-        "auto_status": "recommended"
-      },
+      "manual_pick": false,
+      "manual_note": null,
       "skill_type": null,
       "example_requests": [],
       "key_features": [
@@ -3592,12 +3577,14 @@
         ],
         "terms": []
       },
-      "status": "recommended",
+      "status": "excluded",
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
       "flags": [],
-      "reason_codes": [],
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "limitations": "需要用户提供代码库或合约地址；链上分析需 RPC 端点；依赖 Slither 工具套件；分析范围基于 Trail of Bits 清单。",
       "evaluation_rules_version": "1.0.1",
       "first_seen": "2026-09-20T16:59:36+00:00",
@@ -3607,13 +3594,8 @@
       "upstream_status": "ok",
       "license": null,
       "excluded": false,
-      "manual_pick": true,
-      "manual_note": {
-        "added_at": "2026-09-24",
-        "reason": "用户收藏",
-        "from": "recommended",
-        "auto_status": "recommended"
-      },
+      "manual_pick": false,
+      "manual_note": null,
       "skill_type": null,
       "example_requests": [
         "“代币集成或审计”"
@@ -4528,14 +4510,16 @@
         ],
         "terms": []
       },
-      "status": "recommended",
+      "status": "excluded",
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
       "flags": [
         "NO_DOMAIN_TERM_MATCH"
       ],
-      "reason_codes": [],
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "limitations": "仅适用于包含数值算术或单位换算的代码库；主技能上下文不得自行执行仓库级量纲分析、传播或验证，必须依赖子代理；固定全自动模式。",
       "evaluation_rules_version": "1.0.1",
       "first_seen": "2026-09-20T16:59:36+00:00",
@@ -4545,13 +4529,8 @@
       "upstream_status": "ok",
       "license": null,
       "excluded": false,
-      "manual_pick": true,
-      "manual_note": {
-        "added_at": "2026-09-24",
-        "reason": "用户收藏",
-        "from": "recommended",
-        "auto_status": "recommended"
-      },
+      "manual_pick": false,
+      "manual_note": null,
       "skill_type": null,
       "example_requests": [
         "“DeFi、区块链及其他数值计算代码，用于发现单位不匹配和公式错误”"
@@ -4655,14 +4634,16 @@
         ],
         "terms": []
       },
-      "status": "recommended",
+      "status": "excluded",
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
       "flags": [
         "NO_DOMAIN_TERM_MATCH"
       ],
-      "reason_codes": [],
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "limitations": "仅识别状态变更入口点，不进行漏洞检测；不分析只读函数；Slither 可选，不可用时需手动分析；依赖各语言参考文件。",
       "evaluation_rules_version": "1.0.1",
       "first_seen": "2026-09-20T16:59:36+00:00",
@@ -4672,13 +4653,8 @@
       "upstream_status": "ok",
       "license": null,
       "excluded": false,
-      "manual_pick": true,
-      "manual_note": {
-        "added_at": "2026-09-24",
-        "reason": "用户收藏",
-        "from": "recommended",
-        "auto_status": "recommended"
-      },
+      "manual_pick": false,
+      "manual_note": null,
       "skill_type": null,
       "example_requests": [],
       "key_features": [
@@ -4805,6 +4781,12 @@
         "from": "recommended"
       },
       {
+        "skill_id": "anthropics/skills:skills/skill-creator/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-24",
+        "from": "candidate"
+      },
+      {
         "skill_id": "anthropics/skills:skills/slack-gif-creator/SKILL.md",
         "reason": "用户收藏",
         "added_at": "2026-09-22",
@@ -4817,37 +4799,19 @@
         "from": "recommended"
       },
       {
-        "skill_id": "anthropics/skills:skills/web-artifacts-builder/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-22",
-        "from": "recommended"
-      },
-      {
         "skill_id": "anthropics/skills:skills/xlsx/SKILL.md",
         "reason": "用户收藏",
         "added_at": "2026-09-22",
         "from": "recommended"
       },
       {
+        "skill_id": "vercel-labs/agent-skills:skills/composition-patterns/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-24",
+        "from": "candidate"
+      },
+      {
         "skill_id": "vercel-labs/agent-skills:skills/react-best-practices/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-22",
-        "from": "recommended"
-      },
-      {
-        "skill_id": "vercel-labs/agent-skills:skills/react-native-skills/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-22",
-        "from": "recommended"
-      },
-      {
-        "skill_id": "vercel-labs/agent-skills:skills/react-view-transitions/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-22",
-        "from": "recommended"
-      },
-      {
-        "skill_id": "vercel-labs/agent-skills:skills/web-design-guidelines/SKILL.md",
         "reason": "用户收藏",
         "added_at": "2026-09-22",
         "from": "recommended"
@@ -4877,18 +4841,6 @@
         "from": "recommended"
       },
       {
-        "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/guidelines-advisor/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-24",
-        "from": "recommended"
-      },
-      {
-        "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/token-integration-analyzer/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-24",
-        "from": "recommended"
-      },
-      {
         "skill_id": "trailofbits/skills:plugins/code-improver/skills/code-improver/SKILL.md",
         "reason": "用户收藏",
         "added_at": "2026-09-24",
@@ -4901,40 +4853,16 @@
         "from": "recommended"
       },
       {
+        "skill_id": "trailofbits/skills:plugins/code-improver/tests/fixtures/pr-review-toolkit/skills/review-pr/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-24",
+        "from": "candidate"
+      },
+      {
         "skill_id": "trailofbits/skills:plugins/code-improver/tests/fixtures/review-panel/skills/panel-review/SKILL.md",
         "reason": "用户收藏",
         "added_at": "2026-09-24",
         "from": "recommended"
-      },
-      {
-        "skill_id": "trailofbits/skills:plugins/dimensional-analysis/skills/dimensional-analysis/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-24",
-        "from": "recommended"
-      },
-      {
-        "skill_id": "trailofbits/skills:plugins/entry-point-analyzer/skills/entry-point-analyzer/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-24",
-        "from": "recommended"
-      },
-      {
-        "skill_id": "anthropics/skills:skills/pdf/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-24",
-        "from": "candidate"
-      },
-      {
-        "skill_id": "anthropics/skills:skills/skill-creator/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-24",
-        "from": "candidate"
-      },
-      {
-        "skill_id": "vercel-labs/agent-skills:skills/composition-patterns/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-24",
-        "from": "candidate"
       },
       {
         "skill_id": "trailofbits/skills:plugins/culture-index/skills/interpreting-culture-index/SKILL.md",
@@ -4943,7 +4871,7 @@
         "from": "candidate"
       },
       {
-        "skill_id": "trailofbits/skills:plugins/code-improver/tests/fixtures/pr-review-toolkit/skills/review-pr/SKILL.md",
+        "skill_id": "anthropics/skills:skills/pdf/SKILL.md",
         "reason": "用户收藏",
         "added_at": "2026-09-24",
         "from": "candidate"
@@ -5017,6 +4945,46 @@
       },
       {
         "skill_id": "trailofbits/skills:plugins/dwarf-expert/skills/dwarf-expert/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-24"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/guidelines-advisor/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-24"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/token-integration-analyzer/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-24"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/dimensional-analysis/skills/dimensional-analysis/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-24"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/entry-point-analyzer/skills/entry-point-analyzer/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-24"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/web-artifacts-builder/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-24"
+      },
+      {
+        "skill_id": "vercel-labs/agent-skills:skills/react-native-skills/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-24"
+      },
+      {
+        "skill_id": "vercel-labs/agent-skills:skills/react-view-transitions/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-24"
+      },
+      {
+        "skill_id": "vercel-labs/agent-skills:skills/web-design-guidelines/SKILL.md",
         "reason": "用户屏蔽/删除",
         "added_at": "2026-09-24"
       }
@@ -5192,6 +5160,18 @@
         "name": "pdf",
         "added_at": "2026-09-24",
         "source_url": "https://github.com/anthropics/skills/blob/HEAD/skills/pdf/SKILL.md"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/docx/SKILL.md",
+        "name": "docx",
+        "added_at": "2026-09-24",
+        "source_url": "https://github.com/anthropics/skills/blob/HEAD/skills/docx/SKILL.md"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/xlsx/SKILL.md",
+        "name": "xlsx",
+        "added_at": "2026-09-24",
+        "source_url": "https://github.com/anthropics/skills/blob/HEAD/skills/xlsx/SKILL.md"
       }
     ],
     "source": "docs/plans/2026-09-24-已收录管理实施方案.md",

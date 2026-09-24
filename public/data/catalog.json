@@ -4,12 +4,12 @@
   "counts": {
     "recommended": 18,
     "candidate": 8,
-    "manual": 31,
+    "manual": 21,
     "pending": 0,
     "processing_failure": 0,
-    "total_evaluated": 57,
-    "owned": 1,
-    "owned_in_catalog": 1
+    "total_evaluated": 47,
+    "owned": 3,
+    "owned_in_catalog": 3
   },
   "categories": [
     {
@@ -30,7 +30,7 @@
     },
     {
       "id": "docs",
-      "count": 9
+      "count": 7
     },
     {
       "id": "product",
@@ -178,58 +178,6 @@
       "limitations": "需要用户提供充分上下文；部分功能依赖可选的 Claude 集成（artifacts、子代理、连接器），在无这些环境时采用手动替代流程。",
       "first_seen": "2026-09-20T16:59:36+00:00",
       "last_checked": "2026-09-21T01:19:28.138168+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
-      "skill_id": "anthropics/skills:skills/docx/SKILL.md",
-      "name": "docx",
-      "url": "https://github.com/anthropics/skills/blob/HEAD/skills/docx/SKILL.md",
-      "author": "anthropics",
-      "summary_zh": "创建、编辑、读取和转换 Word 文档（.docx/.dotx），支持格式排版、批注、修订跟踪与内容提取，适用于生成报告、信函、备忘录等办公文档。",
-      "skill_type": null,
-      "example_requests": [
-        "“生成报告、信函、备忘录等办公文档”"
-      ],
-      "key_features": [
-        "支持格式排版、批注、修订跟踪与内容提取",
-        "创建、编辑、读取和转换 Word 文档"
-      ],
-      "main_category": {
-        "id": "docs",
-        "name": "文档办公"
-      },
-      "tags": [
-        "Word",
-        "docx",
-        "文档处理",
-        "办公自动化"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "docx (npm, preinstalled)",
-        "pandoc",
-        "LibreOffice (soffice)",
-        "pdftoppm (Poppler)"
-      ],
-      "source_type": "official",
-      "status": "recommended",
-      "manual_pick": true,
-      "manual_note": {
-        "added_at": "2026-09-22",
-        "reason": "用户收藏",
-        "from": "recommended",
-        "auto_status": "recommended"
-      },
-      "snooze": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [],
-      "limitations": "不支持 PDF、电子表格、Google Docs；旧版 .doc 需先转换为 .docx；docx-js 不能打开现有文件；部分场景下接受修订可能残留空段落（空项目符号）；依赖外部工具链。",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-21T01:20:40.017366+08:00",
       "content_changed_at": null,
       "upstream_status": "ok",
       "license": null
@@ -585,109 +533,6 @@
       "license": null
     },
     {
-      "skill_id": "anthropics/skills:skills/web-artifacts-builder/SKILL.md",
-      "name": "web-artifacts-builder",
-      "url": "https://github.com/anthropics/skills/blob/HEAD/skills/web-artifacts-builder/SKILL.md",
-      "author": "anthropics",
-      "summary_zh": "用于创建复杂的 claude.ai HTML artifacts 的前端工具套件，基于 React、Tailwind、shadcn/ui，适合需要状态管理、路由或 shadcn/ui 组件的复杂 artifact。",
-      "skill_type": null,
-      "example_requests": [],
-      "key_features": [
-        "用于创建复杂的 claude.ai HTML artifacts 的前端工具"
-      ],
-      "main_category": {
-        "id": "dev",
-        "name": "编程开发"
-      },
-      "tags": [
-        "frontend",
-        "html-artifacts",
-        "react",
-        "tailwind",
-        "shadcn-ui",
-        "claude-artifacts"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "React 18",
-        "TypeScript",
-        "Vite",
-        "Parcel",
-        "Tailwind CSS",
-        "shadcn/ui",
-        "Node 18+"
-      ],
-      "source_type": "official",
-      "status": "recommended",
-      "manual_pick": true,
-      "manual_note": {
-        "added_at": "2026-09-22",
-        "reason": "用户收藏",
-        "from": "recommended",
-        "auto_status": "recommended"
-      },
-      "snooze": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [],
-      "limitations": "不适合简单单文件 HTML/JSX artifacts；需要 Node 18+ 环境；构建流程依赖 bash 脚本和自动安装依赖。",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-21T01:26:22.732568+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
-      "skill_id": "anthropics/skills:skills/xlsx/SKILL.md",
-      "name": "xlsx",
-      "url": "https://github.com/anthropics/skills/blob/HEAD/skills/xlsx/SKILL.md",
-      "author": "anthropics",
-      "summary_zh": "该技能用于创建、编辑和分析电子表格文件（如 xlsx, csv），利用 openpyxl/pandas 等工具处理数据、公式、格式转换，典型场景包括数据清洗、报表生成和金融模型构建。",
-      "skill_type": null,
-      "example_requests": [],
-      "key_features": [
-        "用于创建、编辑和分析电子表格文件"
-      ],
-      "main_category": {
-        "id": "docs",
-        "name": "文档办公"
-      },
-      "tags": [
-        "spreadsheet",
-        "excel",
-        "data-processing",
-        "financial-modeling"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "openpyxl",
-        "pandas",
-        "markitdown",
-        "LibreOffice (soffice)"
-      ],
-      "source_type": "official",
-      "status": "recommended",
-      "manual_pick": true,
-      "manual_note": {
-        "added_at": "2026-09-22",
-        "reason": "用户收藏",
-        "from": "recommended",
-        "auto_status": "recommended"
-      },
-      "snooze": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [],
-      "limitations": "公式兼容性受 LibreOffice 限制（不支持 XLOOKUP、XMATCH、SORT、FILTER 等）；openpyxl 写入公式无缓存值需运行 recalc.py 重算；重新保存含外部链接的工作簿会丢失链接。",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-21T01:27:09.313514+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
       "skill_id": "vercel-labs/agent-skills:skills/composition-patterns/SKILL.md",
       "name": "composition-patterns",
       "url": "https://github.com/vercel-labs/agent-skills/blob/HEAD/skills/composition-patterns/SKILL.md",
@@ -774,155 +619,6 @@
       "limitations": "仅提供规则索引和简要说明，详细规则内容需查看 rules/ 目录或 AGENTS.md；未提供依赖与平台声明。",
       "first_seen": "2026-09-20T16:59:36+00:00",
       "last_checked": "2026-09-21T01:30:07.121744+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
-      "skill_id": "vercel-labs/agent-skills:skills/react-native-skills/SKILL.md",
-      "name": "react-native-skills",
-      "url": "https://github.com/vercel-labs/agent-skills/blob/HEAD/skills/react-native-skills/SKILL.md",
-      "author": "vercel-labs",
-      "summary_zh": "提供 React Native 与 Expo 移动应用开发的最佳实践，涵盖列表性能、动画、导航、UI 模式、状态管理等领域。适用于构建 React Native 组件、优化性能、实现动画和配置原生模块等场景。",
-      "skill_type": null,
-      "example_requests": [
-        "“构建 React Native 组件、优化性能、实现动画和配置原生模块”"
-      ],
-      "key_features": [
-        "涵盖列表性能、动画、导航、UI 模式、状态管理等领域",
-        "提供 React Native 与 Expo 移动应用"
-      ],
-      "main_category": {
-        "id": "dev",
-        "name": "编程开发"
-      },
-      "tags": [
-        "react-native",
-        "expo",
-        "mobile",
-        "best-practices",
-        "performance",
-        "animation",
-        "ui"
-      ],
-      "platform_declared": "React Native / Expo",
-      "dependencies_declared": [],
-      "source_type": "official",
-      "status": "recommended",
-      "manual_pick": true,
-      "manual_note": {
-        "added_at": "2026-09-22",
-        "reason": "用户收藏",
-        "from": "recommended",
-        "auto_status": "recommended"
-      },
-      "snooze": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [],
-      "limitations": "仅提供规则索引和快速参考，详细规则文件需另行读取；缺少具体实现细节与代码示例。",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-21T01:30:44.744031+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
-      "skill_id": "vercel-labs/agent-skills:skills/react-view-transitions/SKILL.md",
-      "name": "react-view-transitions",
-      "url": "https://github.com/vercel-labs/agent-skills/blob/HEAD/skills/react-view-transitions/SKILL.md",
-      "author": "vercel-labs",
-      "summary_zh": "提供使用 React View Transition API 实现原生级动画的指南，适用于页面过渡、路由变化、共享元素动画、组件进出动画、列表重排等场景。",
-      "skill_type": null,
-      "example_requests": [
-        "“页面过渡、路由变化、共享元素动画、组件进出动画、列表重排”"
-      ],
-      "key_features": [
-        "提供使用 React View Transition API 实现原生级动画的指南"
-      ],
-      "main_category": {
-        "id": "dev",
-        "name": "编程开发"
-      },
-      "tags": [
-        "react",
-        "view-transitions",
-        "animation",
-        "nextjs",
-        "ui"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "react@canary",
-        "react-dom@canary",
-        "next.js (optional)"
-      ],
-      "source_type": "official",
-      "status": "recommended",
-      "manual_pick": true,
-      "manual_note": {
-        "added_at": "2026-09-22",
-        "reason": "用户收藏",
-        "from": "recommended",
-        "auto_status": "recommended"
-      },
-      "snooze": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [],
-      "limitations": "需要较新的浏览器支持（Chromium 125+、Firefox 144+、Safari 18.2+）；React 稳定版不支持 ViewTransition，需 canary 版本（Next.js 除外）；存在嵌套 VT 不触发内部 enter/exit、Next.js 中无 per-item staggered animations 等限制。",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-21T01:31:27.046487+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
-      "skill_id": "vercel-labs/agent-skills:skills/web-design-guidelines/SKILL.md",
-      "name": "web-design-guidelines",
-      "url": "https://github.com/vercel-labs/agent-skills/blob/HEAD/skills/web-design-guidelines/SKILL.md",
-      "author": "vercel-labs",
-      "summary_zh": "审查 UI 代码是否符合 Web Interface Guidelines，适用于用户要求检查界面、可访问性、设计审计等场景。",
-      "skill_type": null,
-      "example_requests": [
-        "“用户要求检查界面、可访问性、设计审计”"
-      ],
-      "key_features": [
-        "审查 UI 代码"
-      ],
-      "main_category": {
-        "id": "product",
-        "name": "产品与设计"
-      },
-      "tags": [
-        "UI审查",
-        "可访问性",
-        "设计规范",
-        "Web界面"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "WebFetch"
-      ],
-      "source_type": "official",
-      "status": "recommended",
-      "manual_pick": true,
-      "manual_note": {
-        "added_at": "2026-09-22",
-        "reason": "用户收藏",
-        "from": "recommended",
-        "auto_status": "recommended"
-      },
-      "snooze": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [],
-      "limitations": "依赖远程指南源，需网络访问；具体规则和输出格式由远程内容定义。",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-21T01:32:28.242398+08:00",
       "content_changed_at": null,
       "upstream_status": "ok",
       "license": null
@@ -1127,104 +823,6 @@
       "limitations": "不能用于纯 Solidity/EVM 审计、CometBFT 共识引擎内部、非共识关键代码；依赖资源文件；仅覆盖 SDK v0.53.x 版本。",
       "first_seen": "2026-09-20T16:59:36+00:00",
       "last_checked": "2026-09-21T01:45:56.237900+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
-      "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/guidelines-advisor/SKILL.md",
-      "name": "guidelines-advisor",
-      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/building-secure-contracts/skills/guidelines-advisor/SKILL.md",
-      "author": "trailofbits",
-      "summary_zh": "这是一个基于 Trail of Bits 最佳实践的智能合约开发顾问技能，用于分析代码库并生成文档、架构与实现审查、依赖与测试评估及优先级建议。典型场景是审查 Solidity/Rust/Cairo 等智能合约项目的开发规范与安全性。",
-      "skill_type": null,
-      "example_requests": [],
-      "key_features": [
-        "这是一个基于 Trail of Bits 最佳实践的智能合约开发顾问技能"
-      ],
-      "main_category": {
-        "id": "security",
-        "name": "安全"
-      },
-      "tags": [
-        "智能合约",
-        "安全审计",
-        "开发指南",
-        "Solidity",
-        "代码审查"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "Slither（可选，用于 Solidity 架构图/升级检查）"
-      ],
-      "source_type": "official",
-      "status": "recommended",
-      "manual_pick": true,
-      "manual_note": {
-        "added_at": "2026-09-24",
-        "reason": "用户收藏",
-        "from": "recommended",
-        "auto_status": "recommended"
-      },
-      "snooze": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [],
-      "limitations": "主要限制：SKILL.md 本身不包含详细评估标准、模板与示例报告，依赖 resources/ 下的文件；需要访问目标代码库和项目上下文；Slither 等工具为可选，无工具时部分架构图与升级检查可能受限。",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-21T01:47:02.238292+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
-      "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/token-integration-analyzer/SKILL.md",
-      "name": "token-integration-analyzer",
-      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/building-secure-contracts/skills/token-integration-analyzer/SKILL.md",
-      "author": "trailofbits",
-      "summary_zh": "基于 Trail of Bits 代币集成清单的代币实现与集成安全分析，支持 ERC20/ERC721 标准符合性、20+ 异常代币模式、链上稀缺性分析，适用于代币集成或审计场景。",
-      "skill_type": null,
-      "example_requests": [
-        "“代币集成或审计”"
-      ],
-      "key_features": [
-        "支持 ERC20/ERC721 标准符合性、20+ 异常代币模式、链上稀缺性分析"
-      ],
-      "main_category": {
-        "id": "security",
-        "name": "安全"
-      },
-      "tags": [
-        "token security",
-        "ERC20",
-        "ERC721",
-        "smart contract audit",
-        "weird tokens"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "slither",
-        "slither-check-erc",
-        "slither-prop"
-      ],
-      "source_type": "official",
-      "status": "recommended",
-      "manual_pick": true,
-      "manual_note": {
-        "added_at": "2026-09-24",
-        "reason": "用户收藏",
-        "from": "recommended",
-        "auto_status": "recommended"
-      },
-      "snooze": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [],
-      "limitations": "需要用户提供代码库或合约地址；链上分析需 RPC 端点；依赖 Slither 工具套件；分析范围基于 Trail of Bits 清单。",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-21T01:50:01.937755+08:00",
       "content_changed_at": null,
       "upstream_status": "ok",
       "license": null
@@ -1473,111 +1071,6 @@
       "limitations": "不能用于临床心理评估或诊断，不能作为招聘/解雇的唯一依据，仅适用于 Culture Index 评估",
       "first_seen": "2026-09-20T16:59:36+00:00",
       "last_checked": "2026-09-21T01:57:04.711030+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
-      "skill_id": "trailofbits/skills:plugins/dimensional-analysis/skills/dimensional-analysis/SKILL.md",
-      "name": "dimensional-analysis",
-      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/dimensional-analysis/skills/dimensional-analysis/SKILL.md",
-      "author": "trailofbits",
-      "summary_zh": "对代码库执行量纲分析，添加单位、维度和小数缩放注释，适用于 DeFi、区块链及其他数值计算代码，用于发现单位不匹配和公式错误。",
-      "skill_type": null,
-      "example_requests": [
-        "“DeFi、区块链及其他数值计算代码，用于发现单位不匹配和公式错误”"
-      ],
-      "key_features": [],
-      "main_category": {
-        "id": "dev",
-        "name": "编程开发"
-      },
-      "tags": [
-        "代码分析",
-        "量纲分析",
-        "单位标注",
-        "DeFi",
-        "漏洞检测"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "Read",
-        "Write",
-        "Grep",
-        "List",
-        "Glob",
-        "Task",
-        "TodoRead",
-        "TodoWrite",
-        "arithmetic-scanner",
-        "dimension-discoverer",
-        "dimension-annotator",
-        "dimension-propagator",
-        "dimension-validator"
-      ],
-      "source_type": "official",
-      "status": "recommended",
-      "manual_pick": true,
-      "manual_note": {
-        "added_at": "2026-09-24",
-        "reason": "用户收藏",
-        "from": "recommended",
-        "auto_status": "recommended"
-      },
-      "snooze": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [],
-      "limitations": "仅适用于包含数值算术或单位换算的代码库；主技能上下文不得自行执行仓库级量纲分析、传播或验证，必须依赖子代理；固定全自动模式。",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-21T02:00:05.327488+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
-      "skill_id": "trailofbits/skills:plugins/entry-point-analyzer/skills/entry-point-analyzer/SKILL.md",
-      "name": "entry-point-analyzer",
-      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/entry-point-analyzer/skills/entry-point-analyzer/SKILL.md",
-      "author": "trailofbits",
-      "summary_zh": "智能合约安全审计辅助技能，识别并分类所有状态变更入口点（公共、角色受限、仅合约），生成结构化报告。典型使用场景为开始审计时映射攻击面。",
-      "skill_type": null,
-      "example_requests": [],
-      "key_features": [
-        "智能合约安全审计辅助技能"
-      ],
-      "main_category": {
-        "id": "security",
-        "name": "安全"
-      },
-      "tags": [
-        "安全审计",
-        "智能合约",
-        "入口点分析",
-        "状态变更"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "slither"
-      ],
-      "source_type": "official",
-      "status": "recommended",
-      "manual_pick": true,
-      "manual_note": {
-        "added_at": "2026-09-24",
-        "reason": "用户收藏",
-        "from": "recommended",
-        "auto_status": "recommended"
-      },
-      "snooze": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [],
-      "limitations": "仅识别状态变更入口点，不进行漏洞检测；不分析只读函数；Slither 可选，不可用时需手动分析；依赖各语言参考文件。",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-21T02:00:55.277440+08:00",
       "content_changed_at": null,
       "upstream_status": "ok",
       "license": null
@@ -2822,6 +2315,59 @@
   ],
   "owned_entries": [
     {
+      "skill_id": "anthropics/skills:skills/docx/SKILL.md",
+      "name": "docx",
+      "url": "https://github.com/anthropics/skills/blob/HEAD/skills/docx/SKILL.md",
+      "author": "anthropics",
+      "summary_zh": "创建、编辑、读取和转换 Word 文档（.docx/.dotx），支持格式排版、批注、修订跟踪与内容提取，适用于生成报告、信函、备忘录等办公文档。",
+      "skill_type": null,
+      "example_requests": [
+        "“生成报告、信函、备忘录等办公文档”"
+      ],
+      "key_features": [
+        "支持格式排版、批注、修订跟踪与内容提取",
+        "创建、编辑、读取和转换 Word 文档"
+      ],
+      "main_category": {
+        "id": "docs",
+        "name": "文档办公"
+      },
+      "tags": [
+        "Word",
+        "docx",
+        "文档处理",
+        "办公自动化"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "docx (npm, preinstalled)",
+        "pandoc",
+        "LibreOffice (soffice)",
+        "pdftoppm (Poppler)"
+      ],
+      "source_type": "official",
+      "status": "recommended",
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-22",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      },
+      "snooze": null,
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "reason_codes": [],
+      "limitations": "不支持 PDF、电子表格、Google Docs；旧版 .doc 需先转换为 .docx；docx-js 不能打开现有文件；部分场景下接受修订可能残留空段落（空项目符号）；依赖外部工具链。",
+      "first_seen": "2026-09-20T16:59:36+00:00",
+      "last_checked": "2026-09-21T01:20:40.017366+08:00",
+      "content_changed_at": null,
+      "upstream_status": "ok",
+      "license": null,
+      "original_partition": "manual"
+    },
+    {
       "skill_id": "anthropics/skills:skills/pdf/SKILL.md",
       "name": "pdf",
       "url": "https://github.com/anthropics/skills/blob/HEAD/skills/pdf/SKILL.md",
@@ -2883,6 +2429,56 @@
       "upstream_status": "ok",
       "license": null,
       "original_partition": "manual"
+    },
+    {
+      "skill_id": "anthropics/skills:skills/xlsx/SKILL.md",
+      "name": "xlsx",
+      "url": "https://github.com/anthropics/skills/blob/HEAD/skills/xlsx/SKILL.md",
+      "author": "anthropics",
+      "summary_zh": "该技能用于创建、编辑和分析电子表格文件（如 xlsx, csv），利用 openpyxl/pandas 等工具处理数据、公式、格式转换，典型场景包括数据清洗、报表生成和金融模型构建。",
+      "skill_type": null,
+      "example_requests": [],
+      "key_features": [
+        "用于创建、编辑和分析电子表格文件"
+      ],
+      "main_category": {
+        "id": "docs",
+        "name": "文档办公"
+      },
+      "tags": [
+        "spreadsheet",
+        "excel",
+        "data-processing",
+        "financial-modeling"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "openpyxl",
+        "pandas",
+        "markitdown",
+        "LibreOffice (soffice)"
+      ],
+      "source_type": "official",
+      "status": "recommended",
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-22",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      },
+      "snooze": null,
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "reason_codes": [],
+      "limitations": "公式兼容性受 LibreOffice 限制（不支持 XLOOKUP、XMATCH、SORT、FILTER 等）；openpyxl 写入公式无缓存值需运行 recalc.py 重算；重新保存含外部链接的工作簿会丢失链接。",
+      "first_seen": "2026-09-20T16:59:36+00:00",
+      "last_checked": "2026-09-21T01:27:09.313514+08:00",
+      "content_changed_at": null,
+      "upstream_status": "ok",
+      "license": null,
+      "original_partition": "manual"
     }
   ],
   "overrides": {
@@ -2939,6 +2535,12 @@
         "from": "recommended"
       },
       {
+        "skill_id": "anthropics/skills:skills/skill-creator/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-24",
+        "from": "candidate"
+      },
+      {
         "skill_id": "anthropics/skills:skills/slack-gif-creator/SKILL.md",
         "reason": "用户收藏",
         "added_at": "2026-09-22",
@@ -2951,37 +2553,19 @@
         "from": "recommended"
       },
       {
-        "skill_id": "anthropics/skills:skills/web-artifacts-builder/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-22",
-        "from": "recommended"
-      },
-      {
         "skill_id": "anthropics/skills:skills/xlsx/SKILL.md",
         "reason": "用户收藏",
         "added_at": "2026-09-22",
         "from": "recommended"
       },
       {
+        "skill_id": "vercel-labs/agent-skills:skills/composition-patterns/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-24",
+        "from": "candidate"
+      },
+      {
         "skill_id": "vercel-labs/agent-skills:skills/react-best-practices/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-22",
-        "from": "recommended"
-      },
-      {
-        "skill_id": "vercel-labs/agent-skills:skills/react-native-skills/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-22",
-        "from": "recommended"
-      },
-      {
-        "skill_id": "vercel-labs/agent-skills:skills/react-view-transitions/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-22",
-        "from": "recommended"
-      },
-      {
-        "skill_id": "vercel-labs/agent-skills:skills/web-design-guidelines/SKILL.md",
         "reason": "用户收藏",
         "added_at": "2026-09-22",
         "from": "recommended"
@@ -3011,18 +2595,6 @@
         "from": "recommended"
       },
       {
-        "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/guidelines-advisor/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-24",
-        "from": "recommended"
-      },
-      {
-        "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/token-integration-analyzer/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-24",
-        "from": "recommended"
-      },
-      {
         "skill_id": "trailofbits/skills:plugins/code-improver/skills/code-improver/SKILL.md",
         "reason": "用户收藏",
         "added_at": "2026-09-24",
@@ -3035,40 +2607,16 @@
         "from": "recommended"
       },
       {
+        "skill_id": "trailofbits/skills:plugins/code-improver/tests/fixtures/pr-review-toolkit/skills/review-pr/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-24",
+        "from": "candidate"
+      },
+      {
         "skill_id": "trailofbits/skills:plugins/code-improver/tests/fixtures/review-panel/skills/panel-review/SKILL.md",
         "reason": "用户收藏",
         "added_at": "2026-09-24",
         "from": "recommended"
-      },
-      {
-        "skill_id": "trailofbits/skills:plugins/dimensional-analysis/skills/dimensional-analysis/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-24",
-        "from": "recommended"
-      },
-      {
-        "skill_id": "trailofbits/skills:plugins/entry-point-analyzer/skills/entry-point-analyzer/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-24",
-        "from": "recommended"
-      },
-      {
-        "skill_id": "anthropics/skills:skills/pdf/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-24",
-        "from": "candidate"
-      },
-      {
-        "skill_id": "anthropics/skills:skills/skill-creator/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-24",
-        "from": "candidate"
-      },
-      {
-        "skill_id": "vercel-labs/agent-skills:skills/composition-patterns/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-24",
-        "from": "candidate"
       },
       {
         "skill_id": "trailofbits/skills:plugins/culture-index/skills/interpreting-culture-index/SKILL.md",
@@ -3077,7 +2625,7 @@
         "from": "candidate"
       },
       {
-        "skill_id": "trailofbits/skills:plugins/code-improver/tests/fixtures/pr-review-toolkit/skills/review-pr/SKILL.md",
+        "skill_id": "anthropics/skills:skills/pdf/SKILL.md",
         "reason": "用户收藏",
         "added_at": "2026-09-24",
         "from": "candidate"
@@ -3151,6 +2699,46 @@
       },
       {
         "skill_id": "trailofbits/skills:plugins/dwarf-expert/skills/dwarf-expert/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-24"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/guidelines-advisor/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-24"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/token-integration-analyzer/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-24"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/dimensional-analysis/skills/dimensional-analysis/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-24"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/entry-point-analyzer/skills/entry-point-analyzer/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-24"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/web-artifacts-builder/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-24"
+      },
+      {
+        "skill_id": "vercel-labs/agent-skills:skills/react-native-skills/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-24"
+      },
+      {
+        "skill_id": "vercel-labs/agent-skills:skills/react-view-transitions/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-24"
+      },
+      {
+        "skill_id": "vercel-labs/agent-skills:skills/web-design-guidelines/SKILL.md",
         "reason": "用户屏蔽/删除",
         "added_at": "2026-09-24"
       }
@@ -3326,6 +2914,18 @@
         "name": "pdf",
         "added_at": "2026-09-24",
         "source_url": "https://github.com/anthropics/skills/blob/HEAD/skills/pdf/SKILL.md"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/docx/SKILL.md",
+        "name": "docx",
+        "added_at": "2026-09-24",
+        "source_url": "https://github.com/anthropics/skills/blob/HEAD/skills/docx/SKILL.md"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/xlsx/SKILL.md",
+        "name": "xlsx",
+        "added_at": "2026-09-24",
+        "source_url": "https://github.com/anthropics/skills/blob/HEAD/skills/xlsx/SKILL.md"
       }
     ]
   }
