@@ -66,6 +66,76 @@
       "expires_at": "2027-02-21",
       "days": 150,
       "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "cloudflare/skills:skills/cloudflare-email-service/SKILL.md",
+      "snoozed_at": "2026-09-24",
+      "expires_at": "2027-02-21",
+      "days": 150,
+      "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "cloudflare/skills:skills/cloudflare-one-migrations/SKILL.md",
+      "snoozed_at": "2026-09-24",
+      "expires_at": "2027-02-21",
+      "days": 150,
+      "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "cloudflare/skills:skills/durable-objects/SKILL.md",
+      "snoozed_at": "2026-09-24",
+      "expires_at": "2027-02-21",
+      "days": 150,
+      "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "cloudflare/skills:skills/nextjs-on-cloudflare/SKILL.md",
+      "snoozed_at": "2026-09-24",
+      "expires_at": "2027-02-21",
+      "days": 150,
+      "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "cloudflare/skills:skills/sandbox-next/SKILL.md",
+      "snoozed_at": "2026-09-24",
+      "expires_at": "2027-02-21",
+      "days": 150,
+      "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "cloudflare/skills:skills/sandbox-stable/SKILL.md",
+      "snoozed_at": "2026-09-24",
+      "expires_at": "2027-02-21",
+      "days": 150,
+      "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "cloudflare/skills:skills/workers-best-practices/SKILL.md",
+      "snoozed_at": "2026-09-24",
+      "expires_at": "2027-02-21",
+      "days": 150,
+      "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "cloudflare/skills:skills/wrangler/SKILL.md",
+      "snoozed_at": "2026-09-24",
+      "expires_at": "2027-02-21",
+      "days": 150,
+      "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "cloudflare/skills:skills/agents-sdk/SKILL.md",
+      "snoozed_at": "2026-09-24",
+      "expires_at": "2027-02-21",
+      "days": 150,
+      "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "anthropics/skills:skills/brand-guidelines/SKILL.md",
+      "snoozed_at": "2026-09-24",
+      "expires_at": "2027-02-21",
+      "days": 150,
+      "reason": "用户暂不关注"
     }
   ]
 }

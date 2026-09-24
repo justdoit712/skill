@@ -4,9 +4,21 @@
   "note": "人工干预名单（overrides）：由用户手工维护。manual_picks 长期保留在收藏区；manual_exclusions 为人工排除黑名单，流水线扫描到直接跳过（0 模型调用）。",
   "manual_picks": [
     {
+      "skill_id": "anthropics/skills:skills/canvas-design/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-24",
+      "from": "candidate"
+    },
+    {
       "skill_id": "anthropics/skills:skills/docx/SKILL.md",
       "reason": "用户收藏",
       "added_at": "2026-09-22",
+      "from": "recommended"
+    },
+    {
+      "skill_id": "anthropics/skills:skills/frontend-design/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-24",
       "from": "recommended"
     },
     {
@@ -76,37 +88,7 @@
       "from": "recommended"
     },
     {
-      "skill_id": "anthropics/skills:skills/frontend-design/SKILL.md",
-      "reason": "用户收藏",
-      "added_at": "2026-09-24",
-      "from": "recommended"
-    },
-    {
-      "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/token-integration-analyzer/SKILL.md",
-      "reason": "用户收藏",
-      "added_at": "2026-09-24",
-      "from": "recommended"
-    },
-    {
-      "skill_id": "trailofbits/skills:plugins/entry-point-analyzer/skills/entry-point-analyzer/SKILL.md",
-      "reason": "用户收藏",
-      "added_at": "2026-09-24",
-      "from": "recommended"
-    },
-    {
-      "skill_id": "trailofbits/skills:plugins/dimensional-analysis/skills/dimensional-analysis/SKILL.md",
-      "reason": "用户收藏",
-      "added_at": "2026-09-24",
-      "from": "recommended"
-    },
-    {
-      "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/guidelines-advisor/SKILL.md",
-      "reason": "用户收藏",
-      "added_at": "2026-09-24",
-      "from": "recommended"
-    },
-    {
-      "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/cosmos-vulnerability-scanner/SKILL.md",
+      "skill_id": "cloudflare/skills:skills/turnstile-spin/SKILL.md",
       "reason": "用户收藏",
       "added_at": "2026-09-24",
       "from": "recommended"
@@ -118,13 +100,67 @@
       "from": "recommended"
     },
     {
-      "skill_id": "cloudflare/skills:skills/turnstile-spin/SKILL.md",
+      "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/cosmos-vulnerability-scanner/SKILL.md",
       "reason": "用户收藏",
       "added_at": "2026-09-24",
       "from": "recommended"
     },
     {
-      "skill_id": "anthropics/skills:skills/canvas-design/SKILL.md",
+      "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/guidelines-advisor/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-24",
+      "from": "recommended"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/token-integration-analyzer/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-24",
+      "from": "recommended"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/dimensional-analysis/skills/dimensional-analysis/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-24",
+      "from": "recommended"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/entry-point-analyzer/skills/entry-point-analyzer/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-24",
+      "from": "recommended"
+    },
+    {
+      "skill_id": "anthropics/skills:skills/doc-coauthoring/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-24",
+      "from": "recommended"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/code-improver/skills/code-improver/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-24",
+      "from": "recommended"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/code-improver/skills/pr-improver/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-24",
+      "from": "recommended"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/code-improver/tests/fixtures/review-panel/skills/panel-review/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-24",
+      "from": "recommended"
+    },
+    {
+      "skill_id": "anthropics/skills:skills/discernment-nudge/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-24",
+      "from": "candidate"
+    },
+    {
+      "skill_id": "anthropics/skills:skills/internal-comms/SKILL.md",
       "reason": "用户收藏",
       "added_at": "2026-09-24",
       "from": "candidate"
@@ -158,6 +194,26 @@
     },
     {
       "skill_id": "anthropics/skills:skills/academy-guide/SKILL.md",
+      "reason": "用户屏蔽/删除",
+      "added_at": "2026-09-24"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/algorand-vulnerability-scanner/SKILL.md",
+      "reason": "用户屏蔽/删除",
+      "added_at": "2026-09-24"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/cairo-vulnerability-scanner/SKILL.md",
+      "reason": "用户屏蔽/删除",
+      "added_at": "2026-09-24"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/substrate-vulnerability-scanner/SKILL.md",
+      "reason": "用户屏蔽/删除",
+      "added_at": "2026-09-24"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/burpsuite-project-parser/skills/burpsuite-project-parser/SKILL.md",
       "reason": "用户屏蔽/删除",
       "added_at": "2026-09-24"
     }
