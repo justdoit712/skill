@@ -71,10 +71,10 @@ export function initSyncModal(elements, overridesState, onClearSync, ownedState 
     } else {
       elements.modalTitle.textContent = "同步已收录变更包 (owned-patch.json)";
       elements.modalDesc.innerHTML =
-        "本站部署于 GitHub Pages 静态环境。请将以下生成的<strong>带前置条件的已收录变更包</strong>应用至仓库。点击下方按钮下载并在本地执行 <code>python tools/manage_owned.py --apply-patch owned-patch.json</code>，或提交到仓库由 Actions 自动合入！";
+        "本站部署于 GitHub Pages 静态环境。请下载下方生成的<strong>带前置条件的已收录变更包</strong>并在本地执行 <code>python tools/manage_owned.py --apply-changes owned-patch.json</code> 合并配置并刷新页面数据，随后提交并推送 <code>config/owned-skills.json</code>。Actions 不会自动合并裸变更包。";
       elements.jsonPreview.textContent = ownedState ? generateOwnedPatch(ownedState) : "{}";
       elements.btnDownloadJson.textContent = "💾 下载 owned-patch.json";
-      elements.btnGotoGithub.textContent = "📋 复制本地应用命令";
+      elements.btnGotoGithub.textContent = "📋 复制本地合并命令";
     }
     elements.copyStatus.textContent = "";
   }
@@ -163,7 +163,7 @@ export function initSyncModal(elements, overridesState, onClearSync, ownedState 
 
   elements.btnGotoGithub.addEventListener("click", () => {
     if (currentModalTab === "owned") {
-      const cmd = "python tools/manage_owned.py --apply-patch owned-patch.json";
+      const cmd = "python tools/manage_owned.py --apply-changes owned-patch.json";
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(cmd).catch(() => {});
       }

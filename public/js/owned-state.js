@@ -121,20 +121,54 @@ export function markOwned(ownedState, item, today = null) {
 /**
  * 取消已收录状态。
  * 取消后保留私人详情（方便误操作恢复）。
+ *
+ * 遵循《已收录功能代码复核与修复方案》O-01：
+ * 若条目同时存在于 stagedAdds 和 baseline，删除 stagedAdds 后必须继续记录 stagedDeletes，
+ * 保证基线条目被真正取消并生成有效的删除变更包。
  */
 export function unmarkOwned(ownedState, skillId) {
   if (!skillId) return;
 
-  // 若处于待新增暂存区：直接移除新增（抵消本次新增）
-  if (ownedState.stagedAdds[skillId]) {
+  const hadStagedAdd = Boolean(ownedState.stagedAdds[skillId]);
+  if (hadStagedAdd) {
     delete ownedState.stagedAdds[skillId];
-    return;
   }
 
-  // 若存在于已同步基线：记录待删除
+  // 若存在于已同步基线：必须记录待删除（即使刚才移除了本地旧暂存新增）
   if (ownedState.baseline[skillId]) {
     ownedState.stagedDeletes.add(skillId);
   }
+}
+
+/**
+ * 自动对账浏览器暂存状态与公共基线状态。
+ *
+ * 遵循《已收录功能代码复核与修复方案》O-01：
+ * 1. 若 stagedAdds[sid] 已存在于新基线 baseline[sid]，判为已成功同步至仓库，自动清除该暂存；
+ * 2. 若 stagedDeletes 包含 sid 且 baseline 中已经不含 sid，判为删除已同步，自动清除该删除标记；
+ * 3. 返回清除的数量 { reconciledAdds: number, reconciledDeletes: number }。
+ */
+export function reconcileOwnedStaged(ownedState) {
+  let reconciledAdds = 0;
+  let reconciledDeletes = 0;
+
+  // 1. 检查已成功合入基线的新增暂存
+  Object.keys(ownedState.stagedAdds).forEach(sid => {
+    if (ownedState.baseline[sid]) {
+      delete ownedState.stagedAdds[sid];
+      reconciledAdds += 1;
+    }
+  });
+
+  // 2. 检查已成功在基线中剔除的删除暂存
+  Array.from(ownedState.stagedDeletes).forEach(sid => {
+    if (!ownedState.baseline[sid]) {
+      ownedState.stagedDeletes.delete(sid);
+      reconciledDeletes += 1;
+    }
+  });
+
+  return { reconciledAdds, reconciledDeletes };
 }
 
 /**
@@ -324,14 +358,44 @@ export function importPrivateBackup(ownedState, backupData, options = {}) {
 
 /**
  * 持久化待同步变更至 LocalStorage。
+ * 遵循《已收录功能代码复核与修复方案》O-02：多标签页并发安全，写入前增量合并外部存储中的其他条目。
  */
 export function saveOwnedStagedStorage(ownedState, storageObj = null) {
   try {
     const storage = storageObj || (typeof localStorage !== "undefined" ? localStorage : null);
     if (!storage) return;
+
+    // 多标签页增量合并：读取外部存储可能包含的其他标签页新增/删除
+    const raw = storage.getItem(STORAGE_KEY_OWNED_STAGED);
+    let mergedAdds = Object.assign({}, ownedState.stagedAdds);
+    let mergedDeletes = new Set(ownedState.stagedDeletes);
+
+    if (raw) {
+      try {
+        const external = JSON.parse(raw);
+        if (external && external.stagedAdds && typeof external.stagedAdds === "object") {
+          Object.entries(external.stagedAdds).forEach(([sid, item]) => {
+            if (!mergedAdds[sid] && !mergedDeletes.has(sid)) {
+              mergedAdds[sid] = item;
+            }
+          });
+        }
+        if (external && Array.isArray(external.stagedDeletes)) {
+          external.stagedDeletes.forEach(sid => {
+            if (!mergedAdds[sid]) {
+              mergedDeletes.add(sid);
+            }
+          });
+        }
+      } catch (err) {}
+    }
+
+    ownedState.stagedAdds = mergedAdds;
+    ownedState.stagedDeletes = mergedDeletes;
+
     const data = {
-      stagedAdds: ownedState.stagedAdds,
-      stagedDeletes: Array.from(ownedState.stagedDeletes)
+      stagedAdds: mergedAdds,
+      stagedDeletes: Array.from(mergedDeletes)
     };
     storage.setItem(STORAGE_KEY_OWNED_STAGED, JSON.stringify(data));
   } catch (e) {}
@@ -372,12 +436,30 @@ export function clearOwnedStagedStorage(ownedState, storageObj = null) {
 
 /**
  * 持久化私人详情至 LocalStorage。
+ * 遵循《已收录功能代码复核与修复方案》O-02：多标签页并发安全，写入前增量合并外部存储中的其他条目。
  */
 export function saveOwnedPrivateStorage(ownedState, storageObj = null) {
   try {
     const storage = storageObj || (typeof localStorage !== "undefined" ? localStorage : null);
     if (!storage) return;
-    storage.setItem(STORAGE_KEY_OWNED_PRIVATE, JSON.stringify(ownedState.privateDetails));
+
+    const raw = storage.getItem(STORAGE_KEY_OWNED_PRIVATE);
+    let mergedPrivate = Object.assign({}, ownedState.privateDetails);
+    if (raw) {
+      try {
+        const external = JSON.parse(raw);
+        if (external && typeof external === "object") {
+          Object.entries(external).forEach(([sid, detail]) => {
+            if (!mergedPrivate[sid]) {
+              mergedPrivate[sid] = detail;
+            }
+          });
+        }
+      } catch (err) {}
+    }
+
+    ownedState.privateDetails = mergedPrivate;
+    storage.setItem(STORAGE_KEY_OWNED_PRIVATE, JSON.stringify(mergedPrivate));
   } catch (e) {}
 }
 

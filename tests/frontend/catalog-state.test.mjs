@@ -163,3 +163,38 @@ test("catalog-state: mock storage save, load, and clear", () => {
   assert.equal(store["test_storage"], undefined);
   assert.equal(isPicked(state2, "test/p"), false);
 });
+
+test("catalog-state: O-03 partitionEntries strictly excludes non-display statuses (excluded, pending, processing_failure)", () => {
+  const overrides = createOverridesState();
+  const allEntries = {
+    "rec/item": { skill_id: "rec/item", status: "recommended", _baselineTab: "recommended" },
+    "cand/item": { skill_id: "cand/item", status: "candidate", _baselineTab: "candidate" },
+    "excl/item": { skill_id: "excl/item", status: "excluded", _baselineTab: "excluded" },
+    "pending/item": { skill_id: "pending/item", status: "pending", _baselineTab: "pending" },
+    "failed/item": { skill_id: "failed/item", status: "processing_failure", _baselineTab: "processing_failure" },
+    "unknown/item": { skill_id: "unknown/item", status: "custom_status", _baselineTab: "unknown" }
+  };
+
+  const { activeRecommended, activeCandidates } = partitionEntries(
+    allEntries,
+    overrides,
+    "2026-09-24",
+    null
+  );
+
+  // 严格白名单验证：
+  // 1. recommended 仅包含 rec/item
+  assert.equal(activeRecommended.length, 1);
+  assert.equal(activeRecommended[0].skill_id, "rec/item");
+
+  // 2. candidate 仅包含 cand/item
+  assert.equal(activeCandidates.length, 1);
+  assert.equal(activeCandidates[0].skill_id, "cand/item");
+
+  // 3. excluded, pending, processing_failure, unknown 决不漏入候选区或推荐区
+  const allActiveIds = [...activeRecommended, ...activeCandidates].map(e => e.skill_id);
+  assert.ok(!allActiveIds.includes("excl/item"), "excluded 项决不展示在候选或推荐区");
+  assert.ok(!allActiveIds.includes("pending/item"), "pending 项决不展示在候选或推荐区");
+  assert.ok(!allActiveIds.includes("failed/item"), "processing_failure 项决不展示在候选或推荐区");
+  assert.ok(!allActiveIds.includes("unknown/item"), "未知状态项决不展示在候选或推荐区");
+});

@@ -296,6 +296,68 @@ class TestFinderOwnedIntegration(unittest.TestCase):
         self.assertTrue((run_dir / "report.md").exists())
         self.assertTrue((public_data / "find-report.json").exists())
 
+    @patch("src.finder.run.call_model")
+    def test_runtime_plan_parse_error_finalizes_run_and_preserves_tokens(self, mock_call) -> None:
+        """O-04 验收：规划请求返回无效 JSON 时，必须收尾生成终态报告并保留 Token 用量。"""
+        # 模型返回非 JSON 文本，但有真实 Token 消耗
+        mock_call.return_value = ModelCallResult(
+            ok=True,
+            content="这不是合法的 JSON 格式内容",
+            usage={"prompt_tokens": 100, "completion_tokens": 50, "total_tokens": 150},
+        )
+
+        report = execute_find_skill("测试规划解析异常", root_dir=self.root)
+
+        # 验证没有直接抛出 ValueError，而是收尾进入错误终态
+        self.assertEqual(report["status"], "error")
+        self.assertEqual(report["stop_reason"], "plan_failed")
+        self.assertEqual(report["usage"]["total_tokens"], 150)
+        self.assertEqual(report["usage"]["requests"], 1)
+
+        # 验证错误阶段记录
+        planning_errors = [e for e in report.get("errors", []) if e.get("stage") == "planning"]
+        self.assertTrue(len(planning_errors) >= 1)
+        self.assertEqual(planning_errors[0]["code"], "plan_failed")
+
+        # 验证本地事实 report.json 终态不再为 running，且 report.md 已成功生成
+        run_json = Path(report["report_paths"]["json"])
+        self.assertTrue(run_json.exists())
+        saved_data = json.loads(run_json.read_text(encoding="utf-8"))
+        self.assertEqual(saved_data["status"], "error")
+        self.assertEqual(saved_data["stop_reason"], "plan_failed")
+        self.assertTrue(Path(report["report_paths"]["md"]).exists())
+
+        # 验证 CLI main 返回 1（运行期错误，非参数错误 2）
+        code = main(["测试规划解析异常"], root=self.root)
+        self.assertEqual(code, 1)
+
+    @patch("src.finder.run.search_github_repos_for_query")
+    @patch("src.finder.run.call_model")
+    def test_runtime_adapter_error_finalizes_run_as_execution_error(self, mock_call, mock_search) -> None:
+        """O-04 验收：规划成功后搜索适配器抛出 ValueError，必须记录 execution 阶段收尾。"""
+        mock_call.return_value = ModelCallResult(
+            ok=True,
+            content=json.dumps({
+                "intent": "测试适配器异常",
+                "queries": ["query1"],
+                "criteria": [{"id": "c1", "kind": "required", "description": "测试条件"}],
+            }),
+            usage={"prompt_tokens": 80, "completion_tokens": 40, "total_tokens": 120},
+        )
+        mock_search.side_effect = ValueError("网络适配器运行时抛错")
+
+        report = execute_find_skill("测试适配器异常", root_dir=self.root)
+
+        self.assertEqual(report["status"], "error")
+        self.assertEqual(report["stop_reason"], "execution_error")
+        exec_errors = [e for e in report.get("errors", []) if e.get("stage") == "execution"]
+        self.assertTrue(len(exec_errors) >= 1)
+        self.assertEqual(exec_errors[0]["code"], "execution_error")
+        self.assertTrue(Path(report["report_paths"]["md"]).exists())
+
+        code = main(["测试适配器异常"], root=self.root)
+        self.assertEqual(code, 1)
+
 
 if __name__ == "__main__":
     unittest.main()

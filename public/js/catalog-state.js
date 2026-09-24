@@ -324,7 +324,7 @@ export function populateBaseline(overridesState, data, today = null) {
     allEntries[e.skill_id] = e;
   });
   (data.owned_entries || []).forEach(e => {
-    e._baselineTab = e.original_partition || "candidate";
+    e._baselineTab = e.original_partition || (e.status === "recommended" ? "recommended" : (e.status === "candidate" ? "candidate" : (e.status || "unknown")));
     allEntries[e.skill_id] = e;
   });
 
@@ -340,7 +340,8 @@ export function populateBaseline(overridesState, data, today = null) {
 }
 
 /**
- * 分区条目：已收录项排除，排除项跳过，收藏项进入 activeManual，冷冻项跳过，其余按基线划入 activeRecommended / activeCandidates。
+ * 分区条目：已收录项排除，排除项跳过，收藏项进入 activeManual，冷冻项跳过，其余按基线严格白名单划入 activeRecommended / activeCandidates。
+ * 遵循《已收录功能代码复核与修复方案》O-03：非展示状态（excluded, pending, processing_failure 等）决不误入候选区。
  */
 export function partitionEntries(allEntries, overridesState, today = null, ownedState = null) {
   const curToday = today || shanghaiTodayStr();
@@ -362,9 +363,18 @@ export function partitionEntries(allEntries, overridesState, today = null, owned
       if (isSnoozed(overridesState, sid, curToday)) {
         return;
       }
-      if (entry._baselineTab === "recommended") {
+
+      // 严格白名单过滤：排除项、待处理项、失败项不进入推荐或候选
+      const isAutoExcluded = entry.status === "excluded" || entry._baselineTab === "excluded";
+      const isPendingOrFailed = entry.status === "pending" || entry.status === "processing_failure" ||
+                                entry._baselineTab === "pending" || entry._baselineTab === "processing_failure";
+      if (isAutoExcluded || isPendingOrFailed) {
+        return;
+      }
+
+      if (entry._baselineTab === "recommended" || entry.status === "recommended") {
         activeRecommended.push(entry);
-      } else {
+      } else if (entry._baselineTab === "candidate" || entry.status === "candidate") {
         activeCandidates.push(entry);
       }
     }

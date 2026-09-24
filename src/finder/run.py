@@ -328,11 +328,11 @@ def execute_find_skill(topic, *, limit=None, max_evaluations=None, max_tokens=No
             state.report["errors"].append({"stage": "planning", "code": "plan_failed", "message": result.error})
     except KeyboardInterrupt:
         reason = STATUS_INTERRUPTED
-    except ValueError:
-        raise
     except Exception as exc:
-        state.report["errors"].append({"stage": "execution", "code": "execution_error", "message": str(exc)})
-        reason = "plan_failed" if state.report["plan"] is None else "execution_error"
+        stage = "planning" if state.report.get("plan") is None else "execution"
+        code = "plan_failed" if state.report.get("plan") is None else "execution_error"
+        state.report["errors"].append({"stage": stage, "code": code, "message": str(exc)})
+        reason = code
     return finalize_run(state.report, reason, limit=params["limit"], run_dir=directory,
                         root_dir=root, usage=state.usage, log=log)
 

@@ -23,6 +23,7 @@ import {
   saveOwnedStagedStorage,
   loadOwnedPrivateStorage,
   populateOwnedBaseline,
+  reconcileOwnedStaged,
   markOwned,
   unmarkOwned,
   getEffectiveOwnedList
@@ -197,6 +198,8 @@ export function boot(data) {
   loadStorage(overridesState);
   loadOwnedStagedStorage(ownedState);
   loadOwnedPrivateStorage(ownedState);
+  reconcileOwnedStaged(ownedState);
+  saveOwnedStagedStorage(ownedState);
 
   (data.categories || []).forEach(c => {
     const opt = document.createElement("option");
@@ -232,6 +235,19 @@ export function fail(reason) {
   el.empty.hidden = false;
   el.emptyReason.textContent = reason;
 }
+
+// 多标签页并发状态同步（遵循 O-02）
+window.addEventListener("storage", e => {
+  if (e.key === "skills_catalog_owned_staged_v1" || e.key === "skills_catalog_owned_private_v1") {
+    loadOwnedStagedStorage(ownedState);
+    loadOwnedPrivateStorage(ownedState);
+    reconcileOwnedStaged(ownedState);
+    apply();
+  } else if (e.key === "skills_catalog_overrides_v2" || e.key === "skill_overrides_v2") {
+    loadStorage(overridesState);
+    apply();
+  }
+});
 
 // 事件监听与委托
 el.q.addEventListener("input", e => {
