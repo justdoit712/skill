@@ -17,6 +17,22 @@ import {
 import { renderCatalogList } from "./catalog-view.js";
 import { renderFindView } from "./find-view.js";
 import { updateSyncBar, initSyncModal, initSnoozedModal } from "./modals.js";
+import {
+  createOwnedState,
+  loadOwnedStagedStorage,
+  saveOwnedStagedStorage,
+  loadOwnedPrivateStorage,
+  populateOwnedBaseline,
+  markOwned,
+  unmarkOwned,
+  getEffectiveOwnedList
+} from "./owned-state.js";
+import {
+  renderOwnedList,
+  showToast,
+  initPrivateDetailsModal,
+  initPrivateBackup
+} from "./owned-view.js";
 
 // 全局应用运行时状态
 const state = {
@@ -30,6 +46,7 @@ const state = {
 };
 
 const overridesState = createOverridesState();
+const ownedState = createOwnedState();
 
 // DOM 元素缓存
 const el = {
@@ -45,10 +62,12 @@ const el = {
   tabCand: document.getElementById("tab-candidate"),
   tabManual: document.getElementById("tab-manual"),
   tabFind: document.getElementById("tab-find"),
+  tabOwned: document.getElementById("tab-owned"),
   badgeRec: document.getElementById("count-recommended"),
   badgeCand: document.getElementById("count-candidate"),
   badgeManual: document.getElementById("count-manual"),
   badgeFind: document.getElementById("count-find"),
+  badgeOwned: document.getElementById("count-owned"),
   controls: document.querySelector(".controls"),
   syncBar: document.getElementById("sync-bar"),
   syncSummary: document.getElementById("sync-summary"),
@@ -60,6 +79,7 @@ const el = {
   modalDesc: document.getElementById("modal-desc"),
   tabModalOverrides: document.getElementById("tab-modal-overrides"),
   tabModalSnoozed: document.getElementById("tab-modal-snoozed"),
+  tabModalOwned: document.getElementById("tab-modal-owned"),
   jsonPreview: document.getElementById("json-preview"),
   copyStatus: document.getElementById("copy-status"),
   btnCopyJson: document.getElementById("btn-copy-json"),
@@ -70,7 +90,16 @@ const el = {
   btnCloseSnoozedBottom: document.getElementById("btn-close-snoozed-bottom"),
   btnOpenSnoozed: document.getElementById("btn-open-snoozed"),
   countSnoozedActive: document.getElementById("count-snoozed-active"),
-  snoozedList: document.getElementById("snoozed-list")
+  snoozedList: document.getElementById("snoozed-list"),
+  privateModal: document.getElementById("private-modal"),
+  btnClosePrivateModal: document.getElementById("btn-close-private-modal"),
+  btnCancelPrivate: document.getElementById("btn-cancel-private"),
+  btnSavePrivate: document.getElementById("btn-save-private"),
+  btnDeletePrivate: document.getElementById("btn-delete-private"),
+  privateSkillIdDisplay: document.getElementById("private-skill-id-display"),
+  privateManagedUrl: document.getElementById("private-managed-url"),
+  privateNote: document.getElementById("private-note"),
+  privateUrlError: document.getElementById("private-url-error")
 };
 
 /**
@@ -79,9 +108,12 @@ const el = {
 export function apply() {
   if (!state.data) return;
 
+  const effectiveOwned = getEffectiveOwnedList(ownedState, state.allEntries);
+  if (el.badgeOwned) el.badgeOwned.textContent = effectiveOwned.length;
+
   if (state.tab === "find") {
     if (el.controls) el.controls.style.display = "none";
-    renderFindView(el.list, state.findReport);
+    renderFindView(el.list, state.findReport, ownedState);
     el.meta.hidden = false;
     if (state.findReport && state.findReport.topic) {
       const slLen = (state.findReport.shortlist || []).length;
@@ -90,13 +122,22 @@ export function apply() {
     } else {
       el.meta.textContent = "定向查找：暂无查找报告。";
     }
-    updateSyncBar(el.syncBar, el.syncSummary, overridesState);
+    updateSyncBar(el.syncBar, el.syncSummary, overridesState, ownedState);
+    return;
+  }
+
+  if (state.tab === "owned") {
+    if (el.controls) el.controls.style.display = "";
+    const shown = renderOwnedList(el.list, effectiveOwned, { q: state.q });
+    el.meta.hidden = false;
+    el.meta.textContent = "已收录共 " + effectiveOwned.length + " 条，当前显示 " + shown + " 条。";
+    updateSyncBar(el.syncBar, el.syncSummary, overridesState, ownedState);
     return;
   }
 
   if (el.controls) el.controls.style.display = "";
 
-  const { activeRecommended, activeCandidates, activeManual } = partitionEntries(state.allEntries, overridesState);
+  const { activeRecommended, activeCandidates, activeManual } = partitionEntries(state.allEntries, overridesState, null, ownedState);
 
   if (el.badgeRec) el.badgeRec.textContent = activeRecommended.length;
   if (el.badgeCand) el.badgeCand.textContent = activeCandidates.length;
@@ -123,7 +164,7 @@ export function apply() {
     el.countSnoozedActive.textContent = effectiveSnoozed.length;
   }
 
-  updateSyncBar(el.syncBar, el.syncSummary, overridesState);
+  updateSyncBar(el.syncBar, el.syncSummary, overridesState, ownedState);
 }
 
 /**
@@ -135,10 +176,12 @@ export function setTab(tab) {
   el.tabCand.classList.toggle("is-active", tab === "candidate");
   el.tabManual.classList.toggle("is-active", tab === "manual");
   if (el.tabFind) el.tabFind.classList.toggle("is-active", tab === "find");
+  if (el.tabOwned) el.tabOwned.classList.toggle("is-active", tab === "owned");
   el.tabRec.setAttribute("aria-selected", tab === "recommended" ? "true" : "false");
   el.tabCand.setAttribute("aria-selected", tab === "candidate" ? "true" : "false");
   el.tabManual.setAttribute("aria-selected", tab === "manual" ? "true" : "false");
   if (el.tabFind) el.tabFind.setAttribute("aria-selected", tab === "find" ? "true" : "false");
+  if (el.tabOwned) el.tabOwned.setAttribute("aria-selected", tab === "owned" ? "true" : "false");
   apply();
 }
 
@@ -150,7 +193,10 @@ export function boot(data) {
   el.status.hidden = true;
 
   state.allEntries = populateBaseline(overridesState, data);
+  populateOwnedBaseline(ownedState, data.owned, data.owned_entries);
   loadStorage(overridesState);
+  loadOwnedStagedStorage(ownedState);
+  loadOwnedPrivateStorage(ownedState);
 
   (data.categories || []).forEach(c => {
     const opt = document.createElement("option");
@@ -207,6 +253,11 @@ el.tabRec.addEventListener("click", () => setTab("recommended"));
 el.tabCand.addEventListener("click", () => setTab("candidate"));
 el.tabManual.addEventListener("click", () => setTab("manual"));
 if (el.tabFind) el.tabFind.addEventListener("click", () => setTab("find"));
+if (el.tabOwned) el.tabOwned.addEventListener("click", () => setTab("owned"));
+
+// 初始化私人详情与备份控制器
+const privateModalController = initPrivateDetailsModal(el, ownedState, () => apply());
+initPrivateBackup(el, ownedState, () => apply());
 
 // 列表卡片按钮委托
 el.list.addEventListener("click", e => {
@@ -240,11 +291,55 @@ el.list.addEventListener("click", e => {
     } else {
       apply();
     }
+  } else if (action === "owned") {
+    const entry = state.allEntries[sid];
+    const skillName = btn.getAttribute("data-name") || (entry && entry.name) || sid;
+    const sourceUrl = btn.getAttribute("data-url") || (entry && (entry.url || entry.repo_url)) || null;
+    const fromWhere = btn.getAttribute("data-from") || (entry && entry._baselineTab) || (state.tab === "find" ? "find" : (state.tab || "candidate"));
+
+    markOwned(ownedState, {
+      skill_id: sid,
+      name: skillName,
+      source_url: sourceUrl,
+      original_partition: fromWhere
+    });
+    saveOwnedStagedStorage(ownedState);
+
+    const card = btn.closest(".card");
+    if (card) {
+      card.classList.add("is-dismissing");
+      setTimeout(() => apply(), 250);
+    } else {
+      apply();
+    }
+
+    showToast("已将「" + skillName + "」标记为已收录", {
+      onUndo: () => {
+        unmarkOwned(ownedState, sid);
+        saveOwnedStagedStorage(ownedState);
+        apply();
+      }
+    });
+  } else if (action === "unmark-owned") {
+    unmarkOwned(ownedState, sid);
+    saveOwnedStagedStorage(ownedState);
+    const card = btn.closest(".card");
+    if (card) {
+      card.classList.add("is-dismissing");
+      setTimeout(() => apply(), 250);
+    } else {
+      apply();
+    }
+    showToast("已取消已收录并按原分区规则恢复");
+  } else if (action === "edit-private") {
+    if (privateModalController) {
+      privateModalController.open(sid);
+    }
   }
 });
 
 // 初始化弹窗
-initSyncModal(el, overridesState, () => apply());
+initSyncModal(el, overridesState, () => apply(), ownedState);
 initSnoozedModal(el, overridesState, () => state.allEntries, () => apply());
 
 // 引导启动：读取目录数据

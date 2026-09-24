@@ -34,6 +34,10 @@
         <span>收藏区</span>
         <span id="count-manual" class="tab-badge">0</span>
       </button>
+      <button id="tab-owned" class="tab" role="tab" aria-selected="false">
+        <span>✓ 已收录</span>
+        <span id="count-owned" class="tab-badge">0</span>
+      </button>
       <button id="tab-find" class="tab" role="tab" aria-selected="false">
         <span>🔍 定向查找</span>
         <span id="count-find" class="tab-badge">0</span>
@@ -44,7 +48,7 @@
   <section class="controls" aria-label="筛选">
     <div class="control control-search">
       <label for="q">关键词</label>
-      <input id="q" type="search" placeholder="搜索名称、简述或作者…" autocomplete="off">
+      <input id="q" type="search" placeholder="搜索名称、简述、作者或私人备注…" autocomplete="off">
     </div>
     <div class="control control-cat">
       <label for="category">主分类</label>
@@ -82,6 +86,8 @@
       <dd>属于收录范围但存在 <code>unknown</code>、说明不完整或尚需核验，均注明原因。</dd>
       <dt>收藏区</dt>
       <dd>由用户手工指定并长期保留的条目。三区互斥，上游变化不自动重评或降级，程序不自动移出。</dd>
+      <dt>已收录区</dt>
+      <dd>用户已收录在自己仓库或本地环境的条目。在推荐、候选及定向查找中自动隐藏，流水线扫描零 Token 消耗跳过。提供私人管理链接与备注管理。</dd>
       <dt>内容已变化，待复核</dt>
       <dd>已推荐技能的上游内容发生变化。保留推荐状态并醒目标记，同时展示原评估对应的版本；复核不通过则降级。</dd>
     </dl>
@@ -113,6 +119,7 @@
       <div class="modal-tab-bar" role="tablist">
         <button id="tab-modal-overrides" class="modal-tab-btn is-active" type="button">overrides.json (收藏/屏蔽)</button>
         <button id="tab-modal-snoozed" class="modal-tab-btn" type="button">snoozed.json (暂不看 150天)</button>
+        <button id="tab-modal-owned" class="modal-tab-btn" type="button">owned-skills.json (已收录变更包)</button>
       </div>
       <p id="modal-desc">本站部署于 GitHub Pages 静态环境。请将以下生成的配置同步保存至仓库中。点击下方绿色按钮将<strong>自动复制配置到剪贴板并直达 GitHub 网页在线编辑页</strong>，粘贴后提交即可生效！</p>
       <pre><code id="json-preview" class="json-preview"></code></pre>
@@ -143,6 +150,44 @@
   </div>
 </div>
 
+<!-- 私人详情管理弹窗 -->
+<div id="private-modal" class="modal-overlay" hidden>
+  <div class="modal-content" role="dialog" aria-labelledby="private-modal-title" aria-modal="true">
+    <div class="modal-head">
+      <h3 id="private-modal-title">编辑私人详情</h3>
+      <button id="btn-close-private-modal" class="modal-close" aria-label="关闭">&times;</button>
+    </div>
+    <div class="modal-body">
+      <p class="private-modal-hint" style="font-size: 13px; color: #64748b; background: #f8fafc; padding: 8px 12px; border-radius: 6px; border: 1px solid #e2e8f0; margin-bottom: 14px;">
+        ℹ️ <strong>隐私说明：</strong>管理链接与备注<strong>仅保存于当前浏览器</strong>，不会随名单配置同步到 GitHub，也不会进入公开部署产物。清除浏览器数据会丢失未备份的私人详情。
+      </p>
+      <div class="form-group" style="margin-bottom: 12px;">
+        <label for="private-skill-id-display" style="display:block; font-size:12px; color:#64748b; font-weight:600; margin-bottom:4px;">技能 ID</label>
+        <input id="private-skill-id-display" type="text" readonly disabled style="width:100%; padding:8px 10px; font-size:13px; background:#f1f5f9; border:1px solid #cbd5e1; border-radius:6px; color:#475569;">
+      </div>
+      <div class="form-group" style="margin-bottom: 12px;">
+        <label for="private-managed-url" style="display:block; font-size:12px; color:#64748b; font-weight:600; margin-bottom:4px;">我的管理链接（可选，仅支持 http/https，如个人 fork 或微调工作流）：</label>
+        <input id="private-managed-url" type="url" placeholder="https://github.com/my-account/my-customized-skill" style="width:100%; padding:8px 10px; font-size:13px; border:1px solid #cbd5e1; border-radius:6px;">
+        <div id="private-url-error" style="color:#dc2626; font-size:12px; margin-top:4px;"></div>
+      </div>
+      <div class="form-group" style="margin-bottom: 14px;">
+        <label for="private-note" style="display:block; font-size:12px; color:#64748b; font-weight:600; margin-bottom:4px;">私人备注（可选，例如定制说明、适用场景或私有配置）：</label>
+        <textarea id="private-note" rows="3" placeholder="例如：已在内网工作流中引入，调整了提示词模板与环境依赖。" style="width:100%; padding:8px 10px; font-size:13px; border:1px solid #cbd5e1; border-radius:6px; resize:vertical; font-family:inherit;"></textarea>
+      </div>
+    </div>
+    <div class="modal-actions" style="display:flex; justify-content:space-between;">
+      <button id="btn-delete-private" class="btn-action btn-block" style="color:#dc2626;">删除私人详情</button>
+      <div style="display:flex; gap:8px;">
+        <button id="btn-cancel-private" class="btn-secondary">取消</button>
+        <button id="btn-save-private" class="btn-primary" style="background:#16a34a; border-color:#16a34a; color:#fff;">保存到本浏览器</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<input type="file" id="private-backup-file-input" accept=".json,application/json" style="display:none;">
+<div id="toast-container" class="toast-container" aria-live="polite"></div>
+
 <footer class="site-footer">
   <div class="wrap">
     <p id="snoozed-footer-wrap" class="snoozed-footer">当前有 <strong id="count-snoozed-active">0</strong> 个条目处于 150 天冷冻期。<a id="btn-open-snoozed" href="javascript:void(0)">查看冷冻名单与恢复</a></p>
@@ -152,7 +197,6 @@
 </footer>
 
 <script type="module" src="js/app.js"></script>
-
 
 </body>
 </html>

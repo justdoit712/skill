@@ -1,13 +1,16 @@
 /**
  * 定向技能查找报告（find-report）视图渲染组件。
+ * 遵循《已收录 Skill 管理：详细实施方案》§6.3。
  */
 
 import { escapeHtml } from "./utils.js";
+import { isOwned } from "./owned-state.js";
 
 /**
  * 渲染定向查找报告。
+ * 纯投影：不修改原 report 对象。已收录条目自动隐藏并显示统计。
  */
-export function renderFindView(container, report) {
+export function renderFindView(container, report, ownedState = null) {
   container.innerHTML = "";
   if (report?.schema_version && report.schema_version !== "1.0.0") {
     container.innerHTML = '<li class="find-overview-card"><h3>报告版本不兼容</h3><p>请升级页面后重新查看该报告。</p></li>';
@@ -25,17 +28,24 @@ export function renderFindView(container, report) {
 
   const topic = report.topic || "未命名需求";
   const updated = report.updated_at ? report.updated_at.slice(0, 19).replace("T", " ") : "未知";
-  const shortlist = report.shortlist || [];
-  const alternatives = report.alternatives || [];
+
+  const rawShortlist = report.shortlist || [];
+  const rawAlternatives = report.alternatives || [];
+  const shortlist = rawShortlist.filter(item => !ownedState || !isOwned(ownedState, (item.candidate || item).skill_id));
+  const alternatives = rawAlternatives.filter(item => !ownedState || !isOwned(ownedState, (item.candidate || item).skill_id));
+  const hiddenOwnedCount = (rawShortlist.length + rawAlternatives.length) - (shortlist.length + alternatives.length);
+
   const tokens = Number.isFinite(report.usage?.total_tokens) ? report.usage.total_tokens.toLocaleString() : "未知";
   const evCount = Number.isFinite(report.evaluated_count) ? report.evaluated_count : "未知";
   const attempts = Number.isFinite(report.evaluation_attempts) ? report.evaluation_attempts : "未知";
   const stopReason = (report.stop_reason || report.status || "").toLowerCase();
 
-  // 状态提示条（支持 usage_unknown, token_limit, evaluation_limit, interrupted 等）
+  // 状态提示条（支持 usage_unknown, token_limit, evaluation_limit, all_candidates_owned, interrupted 等）
   let bannerHtml = "";
   if (report.status === "running") {
     bannerHtml = '<div class="find-status-banner info">查找尚未完成；此处显示上次保存的进度。</div>';
+  } else if (stopReason === "all_candidates_owned") {
+    bannerHtml = '<div class="find-status-banner info">ℹ️ 本次发现的候选已全部收录。</div>';
   } else if (stopReason === "usage_unknown") {
     bannerHtml = '<div class="find-status-banner warning">⚠️ 模型调用缺失用量统计 (usage_unknown)，触发安全停机保护；已安全保存中断前的全部局部结果。</div>';
   } else if (stopReason === "token_limit") {
@@ -54,6 +64,15 @@ export function renderFindView(container, report) {
   }
   if (report.usage?.unknown_usage_requests > 0) {
     bannerHtml += '<div class="find-status-banner warning">存在用量未知的请求，显示的 Token 仅为已知用量。</div>';
+  }
+
+  // 已收录隐藏提示
+  if (hiddenOwnedCount > 0) {
+    if (rawShortlist.length + rawAlternatives.length > 0 && shortlist.length + alternatives.length === 0) {
+      bannerHtml += '<div class="find-status-banner info">ℹ️ 本报告中的条目已全部收录，可在“已收录”中管理。</div>';
+    } else {
+      bannerHtml += '<div class="find-status-banner info">ℹ️ 原报告推荐 ' + rawShortlist.length + ' 项、备选 ' + rawAlternatives.length + ' 项；当前已收录隐藏 ' + hiddenOwnedCount + ' 项。</div>';
+    }
   }
 
   // 1. 概况卡片
@@ -135,12 +154,15 @@ export function renderFindView(container, report) {
       const skillName = cand.name || cand.skill_id || item.name || item.skill_id || "未命名技能";
       const skillUrl = safeLink(cand.url || cand.repo_url || item.url || item.repo_url);
       const summaryText = ev.summary_zh || item.summary || "无简述";
+      const candId = cand.skill_id || item.skill_id;
+      const ownedBtn = '<button type="button" class="btn-action btn-owned" data-action="owned" data-id="' + escapeHtml(candId) + '" data-name="' + escapeHtml(skillName) + '" data-url="' + escapeHtml(skillUrl) + '" data-from="find" title="标记为已收录（从目录与查找中隐藏，0 Token 跳过）">✓ 已收录</button>';
 
       li.innerHTML =
         '<div class="card-head">' +
           '<h3><a href="' + escapeHtml(skillUrl) + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(skillName) + '</a></h3>' +
-          '<div class="card-tags">' + bits.join("") + '</div>' +
+          '<div class="card-actions">' + ownedBtn + '</div>' +
         '</div>' +
+        '<div class="card-tags" style="margin: 0 0 8px;">' + bits.join("") + '</div>' +
         '<p class="summary">' + escapeHtml(summaryText) + '</p>' +
         whyHtml +
         evidenceHtml +
@@ -181,12 +203,15 @@ export function renderFindView(container, report) {
       const skillName = cand.name || cand.skill_id || item.name || item.skill_id || "未命名备选";
       const skillUrl = safeLink(cand.url || cand.repo_url || item.url || item.repo_url);
       const summaryText = ev.summary_zh || item.summary || "相关备选技能";
+      const candId = cand.skill_id || item.skill_id;
+      const ownedBtn = '<button type="button" class="btn-action btn-owned" data-action="owned" data-id="' + escapeHtml(candId) + '" data-name="' + escapeHtml(skillName) + '" data-url="' + escapeHtml(skillUrl) + '" data-from="find" title="标记为已收录（从目录与查找中隐藏，0 Token 跳过）">✓ 已收录</button>';
 
       li.innerHTML =
         '<div class="card-head">' +
           '<h3><a href="' + escapeHtml(skillUrl) + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(skillName) + '</a></h3>' +
-          '<div class="card-tags">' + bits.join("") + '</div>' +
+          '<div class="card-actions">' + ownedBtn + '</div>' +
         '</div>' +
+        '<div class="card-tags" style="margin: 0 0 8px;">' + bits.join("") + '</div>' +
         '<p class="summary">' + escapeHtml(summaryText) + '</p>' +
         '<div class="find-gap-text">⚠️ ' + escapeHtml(gapText) + '</div>';
       container.appendChild(li);

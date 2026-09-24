@@ -4,6 +4,7 @@
  */
 
 import { shanghaiTodayStr, computeExpiresAt, isSnoozeActive } from "./utils.js";
+import { isOwned } from "./owned-state.js";
 
 export const STORAGE_KEY = "skill_overrides_v2";
 export const LEGACY_STORAGE_KEY = "skill_overrides_v1";
@@ -322,6 +323,10 @@ export function populateBaseline(overridesState, data, today = null) {
     e._baselineTab = "manual";
     allEntries[e.skill_id] = e;
   });
+  (data.owned_entries || []).forEach(e => {
+    e._baselineTab = e.original_partition || "candidate";
+    allEntries[e.skill_id] = e;
+  });
 
   Object.values(allEntries).forEach(e => {
     if (e.snooze && e.snooze.expires_at) {
@@ -335,9 +340,9 @@ export function populateBaseline(overridesState, data, today = null) {
 }
 
 /**
- * 分区条目：排除项跳过，收藏项进入 activeManual，冷冻项跳过，其余按基线划入 activeRecommended / activeCandidates。
+ * 分区条目：已收录项排除，排除项跳过，收藏项进入 activeManual，冷冻项跳过，其余按基线划入 activeRecommended / activeCandidates。
  */
-export function partitionEntries(allEntries, overridesState, today = null) {
+export function partitionEntries(allEntries, overridesState, today = null, ownedState = null) {
   const curToday = today || shanghaiTodayStr();
   const activeManual = [];
   const activeRecommended = [];
@@ -345,6 +350,9 @@ export function partitionEntries(allEntries, overridesState, today = null) {
 
   Object.keys(allEntries).forEach(sid => {
     const entry = allEntries[sid];
+    if (ownedState && isOwned(ownedState, sid)) {
+      return;
+    }
     if (isExcluded(overridesState, sid)) {
       return;
     }
