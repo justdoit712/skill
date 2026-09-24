@@ -3,10 +3,10 @@
   "rules_version": "1.0.1",
   "generated_at": "2026-09-21T02:01:22.196060+08:00",
   "counts": {
-    "recommended": 26,
-    "candidate": 19,
-    "manual": 21,
-    "excluded": 7
+    "recommended": 18,
+    "candidate": 17,
+    "manual": 27,
+    "excluded": 11
   },
   "entries": [
     {
@@ -186,7 +186,12 @@
       "example_requests": [],
       "key_features": [
         "提供 Anthropic 官方品牌颜色与字体指南"
-      ]
+      ],
+      "snooze": {
+        "snoozed_at": "2026-09-24",
+        "expires_at": "2027-02-21",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "anthropics/skills:skills/canvas-design/SKILL.md",
@@ -381,8 +386,13 @@
       "upstream_status": "ok",
       "license": null,
       "excluded": false,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-24",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "skill_type": null,
       "example_requests": [
         "“决策、建议、估算”"
@@ -437,8 +447,13 @@
       "upstream_status": "ok",
       "license": null,
       "excluded": false,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-24",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      },
       "skill_type": null,
       "example_requests": [
         "“撰写文档、提案、技术规格、决策文档”"
@@ -627,8 +642,13 @@
       "upstream_status": "ok",
       "license": null,
       "excluded": false,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-24",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "skill_type": null,
       "example_requests": [],
       "key_features": [
@@ -1970,7 +1990,12 @@
       "key_features": [
         "提供持久状态、RPC、调度、工作流、MCP 集成等 API 参考和示例",
         "用于构建、调试和审查 Cloudflare Agents SDK 应用"
-      ]
+      ],
+      "snooze": {
+        "snoozed_at": "2026-09-24",
+        "expires_at": "2027-02-21",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "cloudflare/skills:skills/cloudflare-email-service/SKILL.md",
@@ -2031,7 +2056,12 @@
       "key_features": [
         "覆盖从 Workers、外部应用、AI Agent 发送及收件处理等典型场景",
         "提供 Cloudflare Email Sending 与 Email Routing 的集成、设置、故障排查指南"
-      ]
+      ],
+      "snooze": {
+        "snoozed_at": "2026-09-24",
+        "expires_at": "2027-02-21",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "cloudflare/skills:skills/cloudflare-one-migrations/SKILL.md",
@@ -2089,7 +2119,12 @@
       "example_requests": [
         "“网络与安全团队梳理迁移方案”"
       ],
-      "key_features": []
+      "key_features": [],
+      "snooze": {
+        "snoozed_at": "2026-09-24",
+        "expires_at": "2027-02-21",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "cloudflare/skills:skills/cloudflare-one/SKILL.md",
@@ -2274,7 +2309,12 @@
       "example_requests": [],
       "key_features": [
         "用于构建、调试和审查 Cloudflare Durable Objects 代码"
-      ]
+      ],
+      "snooze": {
+        "snoozed_at": "2026-09-24",
+        "expires_at": "2027-02-21",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "cloudflare/skills:skills/nextjs-on-cloudflare/SKILL.md",
@@ -2334,7 +2374,12 @@
       "example_requests": [],
       "key_features": [
         "用于在 Cloudflare Workers 上构建、迁移和部署 Next.js 应用"
-      ]
+      ],
+      "snooze": {
+        "snoozed_at": "2026-09-24",
+        "expires_at": "2027-02-21",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "cloudflare/skills:skills/sandbox-migrate-to-next/SKILL.md",
@@ -2459,7 +2504,12 @@
       ],
       "key_features": [
         "指导在 Cloudflare Workers 上使用 @cloudflare/sandbox@next SDK 构建或维"
-      ]
+      ],
+      "snooze": {
+        "snoozed_at": "2026-09-24",
+        "expires_at": "2027-02-21",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "cloudflare/skills:skills/sandbox-stable/SKILL.md",
@@ -2518,7 +2568,12 @@
       "example_requests": [],
       "key_features": [
         "用于在 Cloudflare Sandbox stable @cloudflare/sandbox 包上构建或维护应用"
-      ]
+      ],
+      "snooze": {
+        "snoozed_at": "2026-09-24",
+        "expires_at": "2027-02-21",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "cloudflare/skills:skills/turnstile-spin/SKILL.md",
@@ -2705,7 +2760,12 @@
       "example_requests": [],
       "key_features": [
         "涵盖配置、可观测性、反模式和验证"
-      ]
+      ],
+      "snooze": {
+        "snoozed_at": "2026-09-24",
+        "expires_at": "2027-02-21",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "cloudflare/skills:skills/wrangler/SKILL.md",
@@ -2766,7 +2826,12 @@
       "example_requests": [
         "“Cloudflare Workers 部署、配置修改和故障排查”"
       ],
-      "key_features": []
+      "key_features": [],
+      "snooze": {
+        "snoozed_at": "2026-09-24",
+        "expires_at": "2027-02-21",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "trailofbits/skills:plugins/agentic-actions-auditor/skills/agentic-actions-auditor/SKILL.md",
@@ -2923,12 +2988,14 @@
         ],
         "terms": []
       },
-      "status": "recommended",
+      "status": "excluded",
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
       "flags": [],
-      "reason_codes": [],
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "limitations": "需要用户提供 Algorand 合约代码；Tealer 为可选依赖，未安装时静态分析受限；仅覆盖 11 种漏洞模式；报告结果需人工复核。",
       "evaluation_rules_version": "1.0.1",
       "first_seen": "2026-09-20T16:59:36+00:00",
@@ -3055,12 +3122,14 @@
         ],
         "terms": []
       },
-      "status": "recommended",
+      "status": "excluded",
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
       "flags": [],
-      "reason_codes": [],
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "limitations": "Caracal 仅覆盖部分漏洞模式，需结合人工审查；未提及其他平台兼容性。",
       "evaluation_rules_version": "1.0.1",
       "first_seen": "2026-09-20T16:59:36+00:00",
@@ -3427,12 +3496,14 @@
         ],
         "terms": []
       },
-      "status": "recommended",
+      "status": "excluded",
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
       "flags": [],
-      "reason_codes": [],
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "limitations": "仅针对Substrate/FRAME框架，未声明其他区块链平台支持。",
       "evaluation_rules_version": "1.0.1",
       "first_seen": "2026-09-20T16:59:36+00:00",
@@ -3613,14 +3684,16 @@
         ],
         "terms": []
       },
-      "status": "recommended",
+      "status": "excluded",
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
       "flags": [
         "NO_DOMAIN_TERM_MATCH"
       ],
-      "reason_codes": [],
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "limitations": "需要 Burp Suite Professional 和第三方扩展；响应体可能非常大，必须严格截断输出；搜索结果可能因扩展未加载而出现假阴性。",
       "evaluation_rules_version": "1.0.1",
       "first_seen": "2026-09-20T16:59:36+00:00",
@@ -3828,8 +3901,13 @@
       "upstream_status": "ok",
       "license": null,
       "excluded": false,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-24",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      },
       "skill_type": null,
       "example_requests": [
         "“按指定审查者迭代修复代码、技能或模块”"
@@ -3894,8 +3972,13 @@
       "upstream_status": "ok",
       "license": null,
       "excluded": false,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-24",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      },
       "skill_type": null,
       "example_requests": [
         "“在创建或更新 PR 前清理分支”"
@@ -4073,8 +4156,13 @@
       "upstream_status": "ok",
       "license": null,
       "excluded": false,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-24",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      },
       "skill_type": null,
       "example_requests": [
         "“请求运行 panel review 的代码审查”"
@@ -4622,9 +4710,21 @@
     "note": "人工干预名单（overrides）：由用户手工维护。manual_picks 长期保留在收藏区；manual_exclusions 为人工排除黑名单，流水线扫描到直接跳过（0 模型调用）。",
     "manual_picks": [
       {
+        "skill_id": "anthropics/skills:skills/canvas-design/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-24",
+        "from": "candidate"
+      },
+      {
         "skill_id": "anthropics/skills:skills/docx/SKILL.md",
         "reason": "用户收藏",
         "added_at": "2026-09-22",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/frontend-design/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-24",
         "from": "recommended"
       },
       {
@@ -4694,37 +4794,7 @@
         "from": "recommended"
       },
       {
-        "skill_id": "anthropics/skills:skills/frontend-design/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-24",
-        "from": "recommended"
-      },
-      {
-        "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/token-integration-analyzer/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-24",
-        "from": "recommended"
-      },
-      {
-        "skill_id": "trailofbits/skills:plugins/entry-point-analyzer/skills/entry-point-analyzer/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-24",
-        "from": "recommended"
-      },
-      {
-        "skill_id": "trailofbits/skills:plugins/dimensional-analysis/skills/dimensional-analysis/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-24",
-        "from": "recommended"
-      },
-      {
-        "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/guidelines-advisor/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-24",
-        "from": "recommended"
-      },
-      {
-        "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/cosmos-vulnerability-scanner/SKILL.md",
+        "skill_id": "cloudflare/skills:skills/turnstile-spin/SKILL.md",
         "reason": "用户收藏",
         "added_at": "2026-09-24",
         "from": "recommended"
@@ -4736,13 +4806,67 @@
         "from": "recommended"
       },
       {
-        "skill_id": "cloudflare/skills:skills/turnstile-spin/SKILL.md",
+        "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/cosmos-vulnerability-scanner/SKILL.md",
         "reason": "用户收藏",
         "added_at": "2026-09-24",
         "from": "recommended"
       },
       {
-        "skill_id": "anthropics/skills:skills/canvas-design/SKILL.md",
+        "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/guidelines-advisor/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-24",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/token-integration-analyzer/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-24",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/dimensional-analysis/skills/dimensional-analysis/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-24",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/entry-point-analyzer/skills/entry-point-analyzer/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-24",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/doc-coauthoring/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-24",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/code-improver/skills/code-improver/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-24",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/code-improver/skills/pr-improver/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-24",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/code-improver/tests/fixtures/review-panel/skills/panel-review/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-24",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/discernment-nudge/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-24",
+        "from": "candidate"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/internal-comms/SKILL.md",
         "reason": "用户收藏",
         "added_at": "2026-09-24",
         "from": "candidate"
@@ -4776,6 +4900,26 @@
       },
       {
         "skill_id": "anthropics/skills:skills/academy-guide/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-24"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/algorand-vulnerability-scanner/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-24"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/cairo-vulnerability-scanner/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-24"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/substrate-vulnerability-scanner/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-24"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/burpsuite-project-parser/skills/burpsuite-project-parser/SKILL.md",
         "reason": "用户屏蔽/删除",
         "added_at": "2026-09-24"
       }
@@ -4845,6 +4989,76 @@
       },
       {
         "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/secure-workflow-guide/SKILL.md",
+        "snoozed_at": "2026-09-24",
+        "expires_at": "2027-02-21",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "cloudflare/skills:skills/cloudflare-email-service/SKILL.md",
+        "snoozed_at": "2026-09-24",
+        "expires_at": "2027-02-21",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "cloudflare/skills:skills/cloudflare-one-migrations/SKILL.md",
+        "snoozed_at": "2026-09-24",
+        "expires_at": "2027-02-21",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "cloudflare/skills:skills/durable-objects/SKILL.md",
+        "snoozed_at": "2026-09-24",
+        "expires_at": "2027-02-21",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "cloudflare/skills:skills/nextjs-on-cloudflare/SKILL.md",
+        "snoozed_at": "2026-09-24",
+        "expires_at": "2027-02-21",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "cloudflare/skills:skills/sandbox-next/SKILL.md",
+        "snoozed_at": "2026-09-24",
+        "expires_at": "2027-02-21",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "cloudflare/skills:skills/sandbox-stable/SKILL.md",
+        "snoozed_at": "2026-09-24",
+        "expires_at": "2027-02-21",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "cloudflare/skills:skills/workers-best-practices/SKILL.md",
+        "snoozed_at": "2026-09-24",
+        "expires_at": "2027-02-21",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "cloudflare/skills:skills/wrangler/SKILL.md",
+        "snoozed_at": "2026-09-24",
+        "expires_at": "2027-02-21",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "cloudflare/skills:skills/agents-sdk/SKILL.md",
+        "snoozed_at": "2026-09-24",
+        "expires_at": "2027-02-21",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/brand-guidelines/SKILL.md",
         "snoozed_at": "2026-09-24",
         "expires_at": "2027-02-21",
         "days": 150,
