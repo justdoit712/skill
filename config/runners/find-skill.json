@@ -3,7 +3,6 @@
   "limit": 5,
   "max_evaluations": 80,
   "max_tokens": "20 000 000",
-  "interactive": true,
   "max_clarification_turns": 3,
-  "note": "定向查找 Skill 配置：topic 为需求目标文字；limit 为推荐展示数；max_evaluations 为最多评估候选数；max_tokens 为用量停止熔断阈值；interactive 为是否开启阶段一人机澄清轮询；max_clarification_turns 为最大澄清轮数（默认3轮）。可在命令行临时覆盖。"
+  "note": "定向查找 Skill 配置：topic 为需求目标文字；limit 为推荐展示数；max_evaluations 为最多评估候选数；max_tokens 为用量停止熔断阈值；max_clarification_turns 为阶段一人机澄清轮数（默认3轮）。可在命令行临时覆盖。"
 }

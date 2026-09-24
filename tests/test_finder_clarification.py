@@ -160,7 +160,6 @@ class TestInteractivePlanningExecution(unittest.TestCase):
             api_key="fake-key",
             transport=mock_call,
             sleep=lambda s: None,
-            interactive=True,
             max_turns=3,
             input_fn=mock_input,
             log=lambda *a, **k: None,
@@ -211,7 +210,6 @@ class TestInteractivePlanningExecution(unittest.TestCase):
             api_key="fake-key",
             transport=mock_call,
             sleep=lambda s: None,
-            interactive=True,
             max_turns=3,
             input_fn=mock_input,
             log=lambda *a, **k: None,
@@ -223,8 +221,8 @@ class TestInteractivePlanningExecution(unittest.TestCase):
         self.assertEqual(plan.get("clarification_turns", 0), 0)
         self.assertEqual(mock_call.call_count, 2)  # 1 次提问 + 1 次最终规划
 
-    def test_non_interactive_backward_compatibility(self) -> None:
-        """测试 interactive=False 时的向后兼容性：仅发生 1 次单轮规划调用，无澄清问答。"""
+    def test_zero_turns_direct_planning(self) -> None:
+        """测试 max_turns=0 时的直接规划：仅发生 1 次规划调用，无澄清问答。"""
         final_plan_json = json.dumps({
             "intent": "快速规划测试",
             "queries": ["prompt generator"],
@@ -245,8 +243,7 @@ class TestInteractivePlanningExecution(unittest.TestCase):
             api_key="fake-key",
             transport=mock_call,
             sleep=lambda s: None,
-            interactive=False,
-            max_turns=3,
+            max_turns=0,
             log=lambda *a, **k: None,
         )
 
@@ -262,7 +259,7 @@ class TestInteractivePlanningExecution(unittest.TestCase):
     def test_execute_find_skill_with_interactive_flag(
         self, mock_call, mock_search, mock_expand, mock_fetch
     ) -> None:
-        """集成测试：execute_find_skill 支持 interactive 与 max_clarification_turns 参数。"""
+        """集成测试：execute_find_skill 支持 max_clarification_turns 与 input_fn 参数。"""
         q1_json = json.dumps({
             "focus": "场景",
             "question": "应用场景？",
@@ -287,7 +284,6 @@ class TestInteractivePlanningExecution(unittest.TestCase):
         report = execute_find_skill(
             "测试需求",
             root_dir=self.root,
-            interactive=True,
             max_clarification_turns=2,
             input_fn=mock_input,
             log=lambda *a, **k: None,

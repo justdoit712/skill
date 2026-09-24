@@ -287,19 +287,17 @@ def _run_planning_phase(
     transport: Any,
     sleep: Any,
     *,
-    interactive: bool = False,
     max_turns: int = DEFAULT_MAX_CLARIFICATION_TURNS,
     input_fn: Any = input,
     log: Any = print,
 ) -> tuple[dict[str, Any] | None, str | None]:
     """执行阶段一需求理解与规划：
-    若开启 interactive 且 max_turns > 0，执行最多 max_turns 轮人机交互澄清轮询；
-    用户可随时回车（空输入）提前结束沟通进入搜索；
-    若未开启交互或环境不支持，单轮直接规划。
+    执行最多 max_turns 轮人机交互澄清轮询；
+    用户可随时回车（空输入）提前结束沟通进入搜索。
     """
     history: list[dict[str, str]] = []
 
-    if interactive and max_turns > 0:
+    if max_turns > 0:
         log("\n" + "=" * 60)
         log("【阶段一：需求理解与意图澄清轮询】")
         log(f"用户初始需求：{topic}")
@@ -410,7 +408,7 @@ def execute_find_skill(topic, *, limit=None, max_evaluations=None, max_tokens=No
                        root_dir=".", model_cfg=None, log=print, sleep=time.sleep,
                        call_model_fn=None, fetch_candidate_materials_fn=None,
                        expand_and_collect_candidates_fn=None, search_github_repos_fn=None,
-                       owned_ids=None, interactive=None, max_clarification_turns=None,
+                       owned_ids=None, max_clarification_turns=None,
                        input_fn=input):
     from src.infra.llm import validate_model_config
     from src.infra.owned import load_owned_ids
@@ -425,19 +423,16 @@ def execute_find_skill(topic, *, limit=None, max_evaluations=None, max_tokens=No
     if params["limit"] < 1 or params["max_evaluations"] < params["limit"] or params["max_tokens"] < 1000:
         raise ValueError("要求 limit >= 1、max_evaluations >= limit、max_tokens >= 1000")
 
-    if interactive is None:
-        cfg_interactive = run_cfg.get("interactive")
-        if isinstance(cfg_interactive, bool):
-            interactive = cfg_interactive and sys.stdin.isatty()
-        else:
-            interactive = sys.stdin.isatty()
-
     if max_clarification_turns is None:
+        raw_turns = run_cfg.get("max_clarification_turns")
         max_clarification_turns = _parse_int_val(
-            run_cfg.get("max_clarification_turns"),
+            raw_turns,
             DEFAULT_MAX_CLARIFICATION_TURNS,
             "max_clarification_turns",
         )
+        # 若未mock输入且不在交互终端，安全不阻塞
+        if input_fn is input and not sys.stdin.isatty():
+            max_clarification_turns = 0
 
     cfg = deepcopy(model_cfg if model_cfg is not None else load_finder_model_config(root / "config"))
     problems = validate_model_config(cfg)
@@ -465,7 +460,6 @@ def execute_find_skill(topic, *, limit=None, max_evaluations=None, max_tokens=No
             api_key,
             transport,
             sleep,
-            interactive=bool(interactive),
             max_turns=max_clarification_turns,
             input_fn=input_fn,
             log=log,
@@ -549,24 +543,10 @@ def main(argv: list[str] | None = None, *, root: Path | None = None) -> int:
         help=f"本次模型调用的 Token 消耗停止阈值（默认 {cfg_max_tokens:,}）",
     )
     parser.add_argument(
-        "--interactive",
-        action="store_true",
-        default=None,
-        dest="interactive",
-        help="强制启用阶段一人机澄清轮询（默认在交互终端自动启用）",
-    )
-    parser.add_argument(
-        "--no-interactive",
-        "--quick",
-        action="store_false",
-        dest="interactive",
-        help="禁用阶段一人机澄清轮询，直接单轮快速规划",
-    )
-    parser.add_argument(
         "--turns",
         type=int,
         default=None,
-        help="指定阶段一最大澄清轮数（默认取配置或 3）",
+        help="阶段一人机澄清轮数（默认 3 轮）",
     )
 
     try:
@@ -597,7 +577,6 @@ def main(argv: list[str] | None = None, *, root: Path | None = None) -> int:
             max_evaluations=args.max_evaluations,
             max_tokens=args.max_tokens,
             root_dir=root_path,
-            interactive=args.interactive,
             max_clarification_turns=args.turns,
         )
     except KeyboardInterrupt:
