@@ -76,13 +76,25 @@ class PrescreenConfig:
 def load_config(config_dir: str | Path = "config") -> PrescreenConfig:
     """加载并交叉引用四个配置文件及人工覆盖。"""
     base = Path(config_dir)
-    taxonomy = json.loads((base / "taxonomy.json").read_text(encoding="utf-8"))
-    rules = json.loads((base / "rules.json").read_text(encoding="utf-8"))
-    searches = json.loads((base / "searches.json").read_text(encoding="utf-8"))
-    sources = json.loads((base / "sources.json").read_text(encoding="utf-8"))
+    def _res(fname: str, sub: str) -> Path:
+        sub_p = base / sub / fname
+        flat_p = base / fname
+        if flat_p.exists() and sub_p.exists():
+            try:
+                return flat_p if flat_p.stat().st_mtime >= sub_p.stat().st_mtime else sub_p
+            except OSError:
+                return flat_p
+        if flat_p.exists():
+            return flat_p
+        return sub_p
+
+    taxonomy = json.loads(_res("taxonomy.json", "standards").read_text(encoding="utf-8"))
+    rules = json.loads(_res("rules.json", "standards").read_text(encoding="utf-8"))
+    searches = json.loads(_res("searches.json", "discovery").read_text(encoding="utf-8"))
+    sources = json.loads(_res("sources.json", "discovery").read_text(encoding="utf-8"))
 
     manual_exclusions: set[str] = set()
-    overrides_file = base / "overrides.json"
+    overrides_file = _res("overrides.json", "governance")
     if overrides_file.exists():
         try:
             from .overrides import load_overrides, get_manual_exclusions

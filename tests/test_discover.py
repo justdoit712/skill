@@ -17,8 +17,15 @@ from src.catalog.discovery import (
 )
 
 ROOT = Path(__file__).resolve().parents[1]
-SOURCES = json.loads((ROOT / "config" / "sources.json").read_text(encoding="utf-8"))
-SEARCHES = json.loads((ROOT / "config" / "searches.json").read_text(encoding="utf-8"))
+def _load_disc(name: str):
+    p = ROOT / "config" / "discovery" / name
+    if p.is_file():
+        return json.loads(p.read_text(encoding="utf-8"))
+    return json.loads((ROOT / "config" / name).read_text(encoding="utf-8"))
+
+
+SOURCES = _load_disc("sources.json")
+SEARCHES = _load_disc("searches.json")
 
 
 class SkillNameTest(unittest.TestCase):

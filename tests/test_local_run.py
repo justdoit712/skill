@@ -44,9 +44,12 @@ class LocalRunTest(unittest.TestCase):
         self.addCleanup(self.tmp.cleanup)
         self.root = Path(self.tmp.name)
         (self.root / "config").mkdir()
-        for path in (ROOT / "config").glob("*.json"):
+        for path in (ROOT / "config").rglob("*.json"):
             if not path.name.endswith(".local.json"):
-                shutil.copyfile(path, self.root / "config" / path.name)
+                rel = path.relative_to(ROOT / "config")
+                dest = self.root / "config" / rel
+                dest.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copyfile(path, dest)
         self.cfg = load_all_config(self.root / "config")
         self.cfg["model"].update(endpoint="https://fake.invalid/v1/chat/completions", model="test-model")
         self.cfg["model"]["auth"] = {"api_key": "test-secret-never-print", "api_key_env": "SKILL_TEST_UNUSED_KEY"}

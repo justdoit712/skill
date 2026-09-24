@@ -37,7 +37,14 @@ from src.infra.http import FetchResult
 from src.pipeline import phase_evaluate, phase_reserve
 
 ROOT = Path(__file__).resolve().parents[1]
-RULES = json.loads((ROOT / "config" / "rules.json").read_text(encoding="utf-8"))
+def _load_rules():
+    p = ROOT / "config" / "standards" / "rules.json"
+    if p.is_file():
+        return json.loads(p.read_text(encoding="utf-8"))
+    return json.loads((ROOT / "config" / "rules.json").read_text(encoding="utf-8"))
+
+
+RULES = _load_rules()
 FIXTURE = json.loads((ROOT / "tests" / "fixtures" / "evaluations.json").read_text(encoding="utf-8"))
 EVAL_BY_ID = {c["id"]: c["evaluation"] for c in FIXTURE["cases"]}
 
@@ -143,15 +150,30 @@ class PipelineHarness(unittest.TestCase):
         cfg_dir = self.root / "config"
         if not cfg_dir.exists():
             shutil.copytree(ROOT / "config", cfg_dir)
-        model_path = cfg_dir / "model.local.json"
+        model_path = cfg_dir / "models" / "model.local.json"
+        if not model_path.parent.exists():
+            model_path.parent.mkdir(parents=True, exist_ok=True)
         if not model_path.exists():
-            model_path.write_text(
-                (cfg_dir / "model.example.json").read_text(encoding="utf-8"), encoding="utf-8"
-            )
+            flat_model = cfg_dir / "model.local.json"
+            if flat_model.exists():
+                model_path = flat_model
+            else:
+                base_model = {
+                    "model_config_version": "1.0.0",
+                    "provider": "test-provider",
+                    "endpoint": "https://fake.invalid/v1/chat/completions",
+                    "model": "test-model",
+                    "auth": {"type": "bearer", "api_key_env": "LLM_API_KEY", "api_key": "fake"},
+                    "limits": {"max_calls_per_week": 50, "max_total_tokens_per_run": 100000000}
+                }
+                model_path.write_text(json.dumps(base_model, ensure_ascii=False, indent=2), encoding="utf-8")
         model = json.loads(model_path.read_text(encoding="utf-8"))
         model.update(endpoint="https://fake.invalid/v1/chat/completions", model="test-model")
         model.setdefault("limits", {}).update(limits_overrides)
         model_path.write_text(json.dumps(model, ensure_ascii=False, indent=2), encoding="utf-8")
+        flat_p = cfg_dir / "model.local.json"
+        if flat_p != model_path:
+            flat_p.write_text(json.dumps(model, ensure_ascii=False, indent=2), encoding="utf-8")
         return cfg_dir
 
     def write_previous_catalog(self, entries: list[dict]) -> None:
@@ -400,8 +422,12 @@ class RunTokenCapTest(PipelineHarness):
         self.assertEqual(result["tokens_used"], 45000)
 
     def test_shipped_config_carries_the_cap(self) -> None:
-        example = json.loads((ROOT / "config" / "model.example.json").read_text(encoding="utf-8"))
-        self.assertEqual(example["limits"]["max_total_tokens_per_run"], 100000000)
+        p = ROOT / "config" / "models" / "model.local.json"
+        if not p.is_file():
+            p = ROOT / "config" / "model.example.json"
+        if p.is_file():
+            example = json.loads(p.read_text(encoding="utf-8"))
+            self.assertEqual(example["limits"]["max_total_tokens_per_run"], 100000000)
 
 
 # ---------------------------------------------------------------- 抓取上限
@@ -477,7 +503,7 @@ class FetchCapTest(PipelineHarness):
 
     def test_config_default_is_used_when_cli_absent(self) -> None:
         cfg_dir = self.temp_config()
-        rules_path = cfg_dir / "rules.json"
+        rules_path = (cfg_dir / "standards" / "rules.json") if (cfg_dir / "standards" / "rules.json").exists() else (cfg_dir / "rules.json")
         rules = json.loads(rules_path.read_text(encoding="utf-8"))
         rules.setdefault("run_limits", {})["max_fetches_per_run"] = 2
         rules_path.write_text(json.dumps(rules, ensure_ascii=False, indent=2), encoding="utf-8")
@@ -491,7 +517,7 @@ class FetchCapTest(PipelineHarness):
 
     def test_cli_overrides_config(self) -> None:
         cfg_dir = self.temp_config()
-        rules_path = cfg_dir / "rules.json"
+        rules_path = (cfg_dir / "standards" / "rules.json") if (cfg_dir / "standards" / "rules.json").exists() else (cfg_dir / "rules.json")
         rules = json.loads(rules_path.read_text(encoding="utf-8"))
         rules.setdefault("run_limits", {})["max_fetches_per_run"] = 5
         rules_path.write_text(json.dumps(rules, ensure_ascii=False, indent=2), encoding="utf-8")

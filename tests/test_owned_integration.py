@@ -65,12 +65,14 @@ class OwnedCatalogPipelineIntegrationTest(PipelineHarness):
     """测试主目录流水线与已收录（Owned）名单集成的端到端行为。"""
 
     def _write_owned_config(self, cfg_dir: Path, items: list[dict]) -> None:
-        path = cfg_dir / "owned-skills.json"
         data = {
             "schema_version": "1.0.0",
             "items": items,
         }
-        path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+        content = json.dumps(data, ensure_ascii=False, indent=2)
+        for p in (cfg_dir / "governance" / "owned-skills.json", cfg_dir / "owned-skills.json"):
+            if p.parent.exists():
+                p.write_text(content, encoding="utf-8")
 
     def test_local_pool_watermark_and_skip_owned(self):
         """本地采集：水位线计算排除已收录项，已收录项 0 抓取 0 评估且保留 PENDING 状态。"""
@@ -280,17 +282,17 @@ class OwnedCatalogPipelineIntegrationTest(PipelineHarness):
     def test_offline_sync_and_public_projections(self):
         """离线配置同步与公共投影：已收录从浏览数组排除、counts 正确、owned_entries 携带原分区。"""
         cfg_dir = self.temp_config()
-        (cfg_dir / "overrides.json").write_text(
-            json.dumps({
-                "manual_picks": [{"skill_id": "acme/manual:SKILL.md", "reason": "测试收藏", "added_at": "2026-09-24"}],
-                "manual_exclusions": [],
-            }, ensure_ascii=False),
-            encoding="utf-8",
-        )
-        (cfg_dir / "snoozed.json").write_text(
-            json.dumps({"snooze_version": "1.0.0", "snoozed": []}, ensure_ascii=False),
-            encoding="utf-8",
-        )
+        overrides_content = json.dumps({
+            "manual_picks": [{"skill_id": "acme/manual:SKILL.md", "reason": "测试收藏", "added_at": "2026-09-24"}],
+            "manual_exclusions": [],
+        }, ensure_ascii=False)
+        for p in (cfg_dir / "governance" / "overrides.json", cfg_dir / "overrides.json"):
+            if p.parent.exists():
+                p.write_text(overrides_content, encoding="utf-8")
+        snooze_content = json.dumps({"snooze_version": "1.0.0", "snoozed": []}, ensure_ascii=False)
+        for p in (cfg_dir / "governance" / "snoozed.json", cfg_dir / "snoozed.json"):
+            if p.parent.exists():
+                p.write_text(snooze_content, encoding="utf-8")
         self._write_owned_config(
             cfg_dir,
             [

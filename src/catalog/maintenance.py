@@ -37,7 +37,10 @@ def recover_completed_results(root_dir: str | Path = ".") -> dict:
     catalog = read_json(data / "catalog.json", default={"entries": []})
     entries = index_by_id(catalog.get("entries", []))
     rules = load_config(root / "config")
-    sources = read_json(root / "config" / "sources.json", default={})
+    sources_file = root / "config" / "discovery" / "sources.json"
+    if not sources_file.exists():
+        sources_file = root / "config" / "sources.json"
+    sources = read_json(sources_file, default={})
     context = CatalogContext(rules_version=rules.rules["rules_version"],
                              domain_names=rules.domain_names,
                              source_types={s["id"]: s.get("source_type") for s in sources.get("sources", [])})
@@ -152,9 +155,21 @@ def sync_config_to_catalog(
     root = Path(root_dir)
     data_file = Path(catalog_path) if catalog_path else root / "data" / "catalog.json"
     public_file = Path(public_catalog_path) if public_catalog_path else root / "public" / "data" / "catalog.json"
-    overrides_file = Path(overrides_path) if overrides_path else root / "config" / "overrides.json"
-    snooze_file = Path(snoozed_path) if snoozed_path else root / "config" / "snoozed.json"
-    owned_file = Path(owned_path) if owned_path else root / "config" / "owned-skills.json"
+    def _res(fname: str, sub: str) -> Path:
+        sub_p = root / "config" / sub / fname
+        flat_p = root / "config" / fname
+        if flat_p.exists() and sub_p.exists():
+            try:
+                return flat_p if flat_p.stat().st_mtime >= sub_p.stat().st_mtime else sub_p
+            except OSError:
+                return flat_p
+        if flat_p.exists():
+            return flat_p
+        return sub_p
+
+    overrides_file = Path(overrides_path) if overrides_path else _res("overrides.json", "governance")
+    snooze_file = Path(snoozed_path) if snoozed_path else _res("snoozed.json", "governance")
+    owned_file = Path(owned_path) if owned_path else _res("owned-skills.json", "governance")
 
     if not data_file.exists():
         raise FileNotFoundError(f"主索引文件不存在：{data_file}")

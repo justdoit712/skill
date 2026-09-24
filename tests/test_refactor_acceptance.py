@@ -199,7 +199,9 @@ class CatalogAcceptanceTest(PipelineHarness):
         with patch("src.catalog.store.write_json_atomic", side_effect=fault), self.assertRaises(OSError):
             phase_evaluate(config_dir=config, data_dir=self.data, public_dir=self.public, evaluate_fn=evaluator)
         self.assertEqual(len(evaluator.calls), 1)
-        (config / "model.local.json").unlink()
+        for p in (config / "model.local.json", config / "models" / "model.local.json"):
+            if p.exists():
+                p.unlink()
         with patch("requests.sessions.Session.request", side_effect=AssertionError("offline recovery")):
             result = recover_completed_results(self.root)
             self.assertEqual(result["restored"], 1)

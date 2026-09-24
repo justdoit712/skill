@@ -19,7 +19,14 @@ from src.catalog.decide import (
 
 ROOT = Path(__file__).resolve().parents[1]
 FIXTURE = json.loads((ROOT / "tests" / "fixtures" / "evaluations.json").read_text(encoding="utf-8"))
-RULES = json.loads((ROOT / "config" / "rules.json").read_text(encoding="utf-8"))
+def _load_rules():
+    p = ROOT / "config" / "standards" / "rules.json"
+    if p.is_file():
+        return json.loads(p.read_text(encoding="utf-8"))
+    return json.loads((ROOT / "config" / "rules.json").read_text(encoding="utf-8"))
+
+
+RULES = _load_rules()
 
 
 class ValidationSampleTest(unittest.TestCase):

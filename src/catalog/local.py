@@ -731,7 +731,10 @@ def main(argv=None, *, root: Path | None = None) -> int:
             return 1
 
     try:
-        settings = _read(root / "config" / "local-run.json")
+        run_file = root / "config" / "runners" / "local-run.json"
+        if not run_file.exists():
+            run_file = root / "config" / "local-run.json"
+        settings = _read(run_file)
         for argument, key in (
             ("target", "target_recommended"),
             ("max_tokens", "max_total_tokens"),

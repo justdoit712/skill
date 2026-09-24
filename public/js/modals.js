@@ -177,7 +177,7 @@ export function initSyncModal(elements, overridesState, onClearSync, ownedState 
       navigator.clipboard.writeText(jsonStr).catch(() => {});
     }
     elements.copyStatus.textContent = "🚀 已复制最新配置！正在打开 GitHub 在线编辑页…";
-    window.open("https://github.com/justdoit712/skill/edit/main/config/" + fileName, "_blank");
+    window.open("https://github.com/justdoit712/skill/edit/main/config/governance/" + fileName, "_blank");
   });
 
   return { openSyncModal, closeSyncModal, updateModalContent };

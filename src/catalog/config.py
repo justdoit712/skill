@@ -18,20 +18,37 @@ from .prescreen import load_config
 from .snooze import load_snooze, validate_snooze
 
 
+def _resolve_config_file(base: Path, filename: str, subfolder: str | None = None) -> Path:
+    flat = base / filename
+    sub = (base / subfolder / filename) if subfolder else flat
+    if flat.exists() and sub.exists():
+        try:
+            return flat if flat.stat().st_mtime >= sub.stat().st_mtime else sub
+        except OSError:
+            return flat
+    if flat.exists():
+        return flat
+    if sub.exists():
+        return sub
+    return sub
+
+
 def _load_json(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-def load_searches(config_dir: str = "config") -> dict:
-    """读取 config/searches.json。"""
-    return read_json(Path(config_dir) / "searches.json", default={})
+def load_searches(config_dir: str | Path = "config") -> dict:
+    """读取 searches.json。"""
+    base = Path(config_dir)
+    target = _resolve_config_file(base, "searches.json", "discovery")
+    return read_json(target, default={})
 
 
 AUTOMATION_FILENAME = "automation.json"
 
 
 def load_automation(config_dir: str | Path = "config") -> dict:
-    """读取 config/automation.json（自动化开关，可选文件）。
+    """读取 automation.json（自动化开关，可选文件）。
 
     语义（与 `.github/workflows/sync-skills.yml` 的 gate job 保持一致）：
     - 缺失文件或缺失字段 → `scheduled_sync_enabled` 视为 **false**：无人值守的定时任务
@@ -39,7 +56,8 @@ def load_automation(config_dir: str | Path = "config") -> dict:
     - 文件存在但内容不是合法 JSON → 直接抛错，不静默降级。
     - 字段存在但类型不是布尔 → 由 precheck 报错，避免 `"true"` 这类字符串被当成真值。
     """
-    path = Path(config_dir) / AUTOMATION_FILENAME
+    base = Path(config_dir)
+    path = _resolve_config_file(base, AUTOMATION_FILENAME, "runners")
     if not path.exists():
         return {"scheduled_sync_enabled": False, "missing": True}
     payload = _load_json(path)
@@ -52,11 +70,17 @@ def load_all_config(config_dir: str | Path = "config") -> dict:
     """加载目录流水线运行所需的全部配置字典。"""
     base = Path(config_dir)
     prescreen_cfg = load_config(base)
-    model_path = base / "model.local.json"
-    model_cfg = _load_json(model_path) if model_path.exists() else _load_json(base / "model.example.json")
-    overrides_cfg = load_overrides(base / "overrides.json")
-    snooze_cfg = load_snooze(base / "snoozed.json")
-    sources_cfg = _load_json(base / "sources.json")
+    model_path = _resolve_config_file(base, "model.local.json", "models")
+    if model_path.exists():
+        model_cfg = _load_json(model_path)
+    else:
+        ex_path = _resolve_config_file(base, "model.example.json", "models")
+        model_cfg = _load_json(ex_path) if ex_path.exists() else {}
+
+    overrides_cfg = load_overrides(_resolve_config_file(base, "overrides.json", "governance"))
+    snooze_cfg = load_snooze(_resolve_config_file(base, "snoozed.json", "governance"))
+    sources_file = _resolve_config_file(base, "sources.json", "discovery")
+    sources_cfg = _load_json(sources_file) if sources_file.exists() else {}
     owned_cfg = load_owned_config(base)
 
     return {

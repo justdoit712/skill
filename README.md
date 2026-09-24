@@ -20,7 +20,7 @@
 尚未完成的部分：
 
 - **线上从未发布**：目标地址实测 404，仓库中也没有任何一次成功的 Actions 产物（`data/state`、`data/reports` 均不存在）。
-- **定时采集默认关闭**：开关在 [config/automation.json](config/automation.json) 的 `scheduled_sync_enabled`（当前 `false`）；手动触发不受该开关限制。
+- **定时采集默认关闭**：开关在 [config/automation.json](config/runners/automation.json) 的 `scheduled_sync_enabled`（当前 `false`）；手动触发不受该开关限制。
 - **历史审计须按范围复核**：[全量审计报告](docs/audit/2026-09-23-全量审计报告.md) 是修复前记录；其中阶段一抓取失败的 `NameError` 已修复并回归。本轮仅关闭分层验收列出的缺口，不代表该历史报告全部问题或线上运行均已验收。
 
 ## 部署与访问
@@ -36,7 +36,7 @@
 | 入口 | 触发方式 | 行为 |
 | --- | --- | --- |
 | [publish-pages.yml](.github/workflows/publish-pages.yml) | 手动（Run workflow） | 只上传已提交的 `public/` 产物：不采集、不评估、不调用模型、不联网、不写数据 |
-| [sync-skills.yml](.github/workflows/sync-skills.yml) | 定时（周日 10:00 北京时间）或手动 | 完整两阶段链路，成功后一并部署；定时是否执行由 [config/automation.json](config/automation.json) 决定 |
+| [sync-skills.yml](.github/workflows/sync-skills.yml) | 定时（周日 10:00 北京时间）或手动 | 完整两阶段链路，成功后一并部署；定时是否执行由 [config/automation.json](config/runners/automation.json) 决定 |
 
 **为什么不能用"分支部署"**：站点首页位于 `public/` 子目录，而 Pages 的分支部署只能指向仓库根或 `/docs`，
 因此必须走 Actions 入口，或者把 `public/` 的内容放到另一个仓库的根目录再发布。
@@ -58,13 +58,13 @@
 ```
 
 默认目标是**本次新增 50 个推荐技能**，允许评估超过 50 个候选；本次输入＋输出合计上限
-**100M（100,000,000）Token**。参数在 [config/local-run.json](config/local-run.json) 修改。
+**100M（100,000,000）Token**。参数在 [config/local-run.json](config/runners/local-run.json) 修改。
 网络错误及临时 HTTP 错误最多重连 **5 次**（首次加重试共 6 次），重连成功后继续。
 达到目标、预算用尽、候选用完、重连用尽或最终响应用量缺失时停止；预算不保证能找到 50 个合格结果。
 重试中用量未知的请求按输入字节数＋最大输出＋消息余量预留估算预算，与实际返回的 Token 分开显示。
 Token 上限在每次请求后检查，最后一次请求可能超出上限。
 
-模型凭据使用 `config/model.local.json` 或环境变量；GitHub 搜索可设置 `GITHUB_TOKEN`。
+模型凭据使用 `config/models/model.local.json` 或环境变量；GitHub 搜索可设置 `GITHUB_TOKEN`。
 控制台显示输入、输出和总 Token，`data/local/latest-run.json` 保存最新用量，
 `data/local/runs/<运行编号>/report.md` 展示用量与本次推荐链接。
 运行后执行 `scripts/preview.ps1` 可浏览分类目录。
@@ -138,7 +138,7 @@ Token 上限在每次请求后检查，最后一次请求可能超出上限。
 | 风险复核 | 是否有可疑行为或与收录范围冲突的功能 |
 
 六项全部通过进入**推荐区**；存在 `unknown` 或说明不完整的留在**候选区**并注明原因。
-用户可通过 `config/overrides.json` 将特定技能收入**收藏区**，通过 `config/snoozed.json` 设置 150 天冷冻（暂不关注），或通过 `config/owned-skills.json` 标记为**已收录**（从目录与定向查找中隐藏，流水线 0 Token 跳过）。页面默认展示推荐区，各分区严格互斥。
+用户可通过 `config/governance/overrides.json` 将特定技能收入**收藏区**，通过 `config/governance/snoozed.json` 设置 150 天冷冻（暂不关注），或通过 `config/governance/owned-skills.json` 标记为**已收录**（从目录与定向查找中隐藏，流水线 0 Token 跳过）。页面默认展示推荐区，各分区严格互斥。
 
 已推荐技能的内容发生变化后，会**保留推荐状态并醒目标记"内容已变化，待复核"**，
 同时展示原评估对应的版本；复核不通过则降级至候选区。人工收藏条目的内容变化只做中性提示，不自动重评、不自动降级。
@@ -155,7 +155,7 @@ Token 上限在每次请求后检查，最后一次请求可能超出上限。
 ## 运行方式
 
 每周通过 GitHub Actions 自动采集与评估，也支持手动触发；**定时是否执行由
-[config/automation.json](config/automation.json) 的 `scheduled_sync_enabled` 决定**（`true` 执行、
+[config/automation.json](config/runners/automation.json) 的 `scheduled_sync_enabled` 决定**（`true` 执行、
 `false` 跳过，关闭时该次运行只做判断即退出；手动触发不受该开关限制）。每周新增与重评合计
 **最多 50 个**，优先复核发生变化的已有推荐。
 

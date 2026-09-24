@@ -36,8 +36,20 @@ def _read_json_file(path: Path, default=None) -> Any:
 def load_finder_model_config(config_dir: str | Path = "config") -> dict[str, Any]:
     """读取模型配置，仅加载 model.local.json 或 model.example.json。"""
     base = Path(config_dir)
-    local_cfg = base / "model.local.json"
-    example_cfg = base / "model.example.json"
+    def _res(fname: str, sub: str) -> Path:
+        sub_p = base / sub / fname
+        flat_p = base / fname
+        if flat_p.exists() and sub_p.exists():
+            try:
+                return flat_p if flat_p.stat().st_mtime >= sub_p.stat().st_mtime else sub_p
+            except OSError:
+                return flat_p
+        if flat_p.exists():
+            return flat_p
+        return sub_p
+
+    local_cfg = _res("model.local.json", "models")
+    example_cfg = _res("model.example.json", "models")
 
     if local_cfg.exists():
         cfg = _read_json_file(local_cfg)
@@ -64,7 +76,11 @@ def load_finder_run_config(config_dir: str | Path = "config") -> dict[str, Any]:
     base = Path(config_dir)
     res: dict[str, Any] = {}
 
-    shared_cfg = base / "find-skill.json"
+    def _res(fname: str, sub: str) -> Path:
+        p = base / sub / fname
+        return p if p.exists() else base / fname
+
+    shared_cfg = _res("find-skill.json", "runners")
     if shared_cfg.exists():
         shared = _read_json_file(shared_cfg, default={})
         if not isinstance(shared, dict):
@@ -72,7 +88,7 @@ def load_finder_run_config(config_dir: str | Path = "config") -> dict[str, Any]:
         if isinstance(shared, dict):
             res.update(shared)
 
-    local_cfg = base / "find-skill.local.json"
+    local_cfg = _res("find-skill.local.json", "runners")
     if local_cfg.exists():
         local_data = _read_json_file(local_cfg, default={})
         if not isinstance(local_data, dict):

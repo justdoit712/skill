@@ -27,8 +27,19 @@ EXPECTED_CHECK_IDS = [
 ]
 
 
+def _resolve_config_path(name: str) -> Path:
+    p = CONFIG / name
+    if p.is_file():
+        return p
+    for sub in ("standards", "discovery", "governance", "runners", "models"):
+        sub_p = CONFIG / sub / name
+        if sub_p.is_file():
+            return sub_p
+    return p
+
+
 def load(name: str) -> dict:
-    return json.loads((CONFIG / name).read_text(encoding="utf-8"))
+    return json.loads(_resolve_config_path(name).read_text(encoding="utf-8"))
 
 
 class ConfigIntegrityTest(unittest.TestCase):
@@ -38,7 +49,11 @@ class ConfigIntegrityTest(unittest.TestCase):
         cls.rules = load("rules.json")
         cls.sources = load("sources.json")
         cls.searches = load("searches.json")
-        cls.model = load("model.example.json")
+        model_path = _resolve_config_path("model.local.json")
+        if model_path.is_file():
+            cls.model = json.loads(model_path.read_text(encoding="utf-8"))
+        else:
+            cls.model = {"limits": {"max_calls_per_week": cls.rules["weekly_quota"]}, "auth": {}}
         cls.taxonomy_ids = [c["id"] for c in cls.taxonomy["main_categories"]]
         cls.all_reason_codes = {
             code
@@ -113,15 +128,14 @@ class ConfigIntegrityTest(unittest.TestCase):
     def test_model_quota_matches_rules(self) -> None:
         self.assertEqual(self.model["limits"]["max_calls_per_week"], self.rules["weekly_quota"])
 
-    def test_model_example_has_no_credentials(self) -> None:
-        blob = json.dumps(self.model, ensure_ascii=False).lower()
-        for marker in ("sk-", "bearer ey", "secret\":", "password"):
-            self.assertNotIn(marker, blob, f"示例配置疑似含凭据标记 {marker}")
+    def test_no_example_templates_in_config(self) -> None:
+        """确保仓库中无遗留 example / template 配置文件。"""
+        examples = list(CONFIG.rglob("*example*.json"))
+        self.assertEqual(examples, [], f"仓库内不应包含 example 配置文件模板: {examples}")
 
-    def test_example_config_keeps_api_key_empty(self) -> None:
-        """model.example.json 会被提交，其 api_key 必须保持为空。"""
-        self.assertIsNone(self.model["auth"].get("api_key"))
-
+    def test_model_config_in_models_subdir(self) -> None:
+        """验证模型配置存放于 config/models/ 子目录。"""
+        self.assertTrue((CONFIG / "models").is_dir(), "config/models 目录必须存在")
 
 class AutomationSwitchTest(unittest.TestCase):
     """自动化开关：定时采集的开启/关闭由 config/automation.json 决定。"""

@@ -11,7 +11,7 @@ name: Sync Skills
 # 不靠机器人提交触发第二次 push：GITHUB_TOKEN 触发的 push 不会启动新 workflow。
 # 定时为每周日北京时间 10:00（UTC 0 2 * * 0）。手动与定时共享同一额度账本（§7.3）。
 #
-# 【开关在配置文件里】是否真正执行由 config/automation.json 的 scheduled_sync_enabled 决定
+# 【开关在配置文件里】是否真正执行由 config/runners/automation.json 的 scheduled_sync_enabled 决定
 # （true=执行，false=跳过）。on.schedule 属静态配置，文件无法在运行期注册或注销触发器，
 # 因此 schedule 始终保留在本文件，由 gate job 读配置后在运行期决定是否继续：
 #   false → 该次运行只做一次检出与判断（约 10 秒）即退出，不采集、不调用模型、不写账本、不部署。
@@ -52,7 +52,7 @@ concurrency:
 
 jobs:
   gate:
-    # 读取 config/automation.json 的 scheduled_sync_enabled，决定本轮是否继续。
+    # 读取 config/runners/automation.json 的 scheduled_sync_enabled，决定本轮是否继续。
     # 缺失文件或字段按 false 处理（无人值守的定时任务不会因为文件丢失而开始花钱）；
     # 文件存在但内容损坏时直接报错，让失败可见，而不是静默停用。
     runs-on: ubuntu-latest
@@ -70,7 +70,9 @@ jobs:
           enabled=$(python3 - <<'PY'
           import json
           import pathlib
-          path = pathlib.Path("config/automation.json")
+          path = pathlib.Path("config/runners/automation.json")
+          if not path.exists():
+              path = pathlib.Path("config/automation.json")
           if not path.exists():
               print("false")
           else:
@@ -87,7 +89,7 @@ jobs:
             echo "reason=定时触发且 scheduled_sync_enabled=true" >> "$GITHUB_OUTPUT"
           else
             echo "run_sync=false" >> "$GITHUB_OUTPUT"
-            echo "reason=config/automation.json 的 scheduled_sync_enabled 非 true，本轮跳过（不采集、不调用模型、不写账本、不部署）" >> "$GITHUB_OUTPUT"
+            echo "reason=automation.json 的 scheduled_sync_enabled 非 true，本轮跳过（不采集、不调用模型、不写账本、不部署）" >> "$GITHUB_OUTPUT"
           fi
 
       - name: 记录判定结果

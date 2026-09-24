@@ -259,22 +259,21 @@ class SnoozePipelineIntegrationTest(PipelineHarness):
         # 配置 snoozed.json 冷冻 acme/snoozed
         today = now_shanghai_date()
         exp = compute_expires_at(today, 150)
-        snooze_file = cfg_dir / "snoozed.json"
-        snooze_file.write_text(
-            json.dumps({
-                "snooze_version": "1.0.0",
-                "snoozed": [
-                    {
-                        "skill_id": "acme/snoozed",
-                        "snoozed_at": today,
-                        "expires_at": exp,
-                        "days": 150,
-                        "reason": "测试冷冻",
-                    }
-                ],
-            }, ensure_ascii=False),
-            encoding="utf-8",
-        )
+        snooze_content = json.dumps({
+            "snooze_version": "1.0.0",
+            "snoozed": [
+                {
+                    "skill_id": "acme/snoozed",
+                    "snoozed_at": today,
+                    "expires_at": exp,
+                    "days": 150,
+                    "reason": "测试冷冻",
+                }
+            ],
+        }, ensure_ascii=False)
+        for p in (cfg_dir / "governance" / "snoozed.json", cfg_dir / "snoozed.json"):
+            if p.parent.exists():
+                p.write_text(snooze_content, encoding="utf-8")
 
         cand_snoozed = candidate_from_repo("acme", "snoozed", url="https://github.com/acme/snoozed")
         cand_normal = candidate_from_repo("acme", "normal", url="https://github.com/acme/normal")

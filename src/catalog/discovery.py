@@ -313,8 +313,10 @@ def discover(
 
 
 def load_searches(config_dir: str = "config") -> dict:
-    """读取 config/searches.json。"""
-    return json.loads((Path(config_dir) / "searches.json").read_text(encoding="utf-8"))
+    """读取 searches.json。"""
+    p = Path(config_dir)
+    target = p / "discovery" / "searches.json" if (p / "discovery" / "searches.json").exists() else p / "searches.json"
+    return json.loads(target.read_text(encoding="utf-8"))
 
 
 def candidates_from_sources(sources_cfg: dict, *, discovered_at: str | None = None) -> list[Candidate]:

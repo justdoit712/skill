@@ -29,7 +29,18 @@ def get_owned_config_path(config_dir: str | Path = "config") -> Path:
     p = Path(config_dir)
     if p.name.endswith(".json"):
         return p
-    return p / OWNED_CONFIG_FILENAME
+    sub = p / "governance" / OWNED_CONFIG_FILENAME
+    flat = p / OWNED_CONFIG_FILENAME
+    if flat.exists() and sub.exists():
+        try:
+            return flat if flat.stat().st_mtime >= sub.stat().st_mtime else sub
+        except OSError:
+            return flat
+    if flat.exists():
+        return flat
+    if sub.exists():
+        return sub
+    return sub
 
 
 def load_owned_config(
