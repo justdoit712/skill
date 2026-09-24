@@ -87,11 +87,12 @@ def build_queries(searches: dict) -> list[Query]:
 
     queries: list[Query] = []
     for domain_id, spec in (searches.get("per_domain") or {}).items():
+        domain_exclusions = exclude_terms + tuple(spec.get("exclude_terms", []))
         for term in list(spec.get("zh", [])) + list(spec.get("en", [])):
             if not term:
                 continue
             queries.append(
-                Query(domain_id=domain_id, term=term, q=build_query_string(term, template, exclude_terms))
+                Query(domain_id=domain_id, term=term, q=build_query_string(term, template, domain_exclusions))
             )
     return queries
 

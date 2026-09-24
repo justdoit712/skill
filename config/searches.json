@@ -63,8 +63,9 @@
       "en": ["vulnerability", "code security", "audit", "static analysis"]
     },
     "finance": {
-      "zh": ["宏观", "地缘", "大宗商品", "期货", "黄金", "白银", "股票", "财报", "汇率", "利率", "回测", "能源"],
-      "en": ["macro", "geopolitical", "commodities", "futures", "gold", "silver", "stock", "earnings", "forex", "interest rate", "backtest", "energy"],
+      "zh": ["宏观", "地缘", "大宗商品", "期货", "黄金", "白银", "股票", "财报", "汇率", "利率", "回测", "能源", "加密货币行情", "资金费率"],
+      "en": ["macro", "geopolitical", "commodities", "futures", "gold", "silver", "stock", "earnings", "forex", "interest rate", "backtest", "energy", "crypto market data", "crypto backtesting", "technical indicators", "funding rate", "TA-Lib", "pandas-ta", "backtrader", "freqtrade", "CCXT"],
+      "exclude_terms": ["-solidity", "-teal", "-\"smart contract\"", "-\"smart contracts\"", "-\"contract audit\"", "-\"contract vulnerability\"", "-\"web3 development\"", "-\"web3 infrastructure\""],
       "spec_provided": ["宏观", "地缘", "大宗商品", "期货", "黄金", "白银"]
     },
     "mental_health": {

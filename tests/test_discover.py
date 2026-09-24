@@ -62,6 +62,17 @@ class SourcesSeedTest(unittest.TestCase):
 
 
 class QueryTest(unittest.TestCase):
+    def test_finance_exclusions_do_not_leak_to_other_domains(self) -> None:
+        queries = build_queries(SEARCHES)
+        finance = [q for q in queries if q.domain_id == "finance"]
+        self.assertTrue({"CCXT", "TA-Lib", "pandas-ta", "backtrader", "freqtrade", "funding rate"}.issubset({q.term for q in finance}))
+        for query in queries:
+            for excluded in SEARCHES["per_domain"]["finance"]["exclude_terms"]:
+                if query.domain_id == "finance":
+                    self.assertIn(excluded, query.q)
+                else:
+                    self.assertNotIn(excluded, query.q)
+
     def test_queries_constrain_to_skill_md(self) -> None:
         queries = build_queries(SEARCHES)
         self.assertTrue(queries)
