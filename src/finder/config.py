@@ -27,6 +27,8 @@ MAX_REFERENCED_FILES = 2
 
 PLAN_MAX_OUTPUT_TOKENS = 4000
 EVAL_MAX_OUTPUT_TOKENS = 10000
+DEFAULT_MAX_CLARIFICATION_TURNS = 3
+CLARIFICATION_MAX_OUTPUT_TOKENS = 1500
 
 
 def _read_json_file(path: Path, default=None) -> Any:
@@ -151,6 +153,8 @@ __all__ = [
     "MAX_REFERENCED_FILES",
     "PLAN_MAX_OUTPUT_TOKENS",
     "EVAL_MAX_OUTPUT_TOKENS",
+    "DEFAULT_MAX_CLARIFICATION_TURNS",
+    "CLARIFICATION_MAX_OUTPUT_TOKENS",
     "load_finder_model_config",
     "load_finder_run_config",
     "_parse_int_val",

@@ -44,8 +44,13 @@ from .evaluation import (
     verify_and_adjust_evaluation,
 )
 from .plan import (
+    CLARIFICATION_MAX_OUTPUT_TOKENS,
+    DEFAULT_MAX_CLARIFICATION_TURNS,
     PLAN_MAX_OUTPUT_TOKENS,
+    build_clarification_question_prompt,
+    build_interactive_plan_prompt,
     build_plan_prompt,
+    parse_clarification_question,
     parse_query_plan,
 )
 from .report import (
@@ -274,11 +279,139 @@ def _evaluate_candidates(state, candidates, cfg, api_key, transport, fetch, slee
     return STATUS_TARGET_REACHED if len(rank_find_results(report["evaluations"], report["plan"], report["parameters"]["limit"])[0]) >= report["parameters"]["limit"] else STATUS_CANDIDATES_EXHAUSTED
 
 
+def _run_planning_phase(
+    state: FinderRunState,
+    topic: str,
+    cfg: dict,
+    api_key: str,
+    transport: Any,
+    sleep: Any,
+    *,
+    interactive: bool = False,
+    max_turns: int = DEFAULT_MAX_CLARIFICATION_TURNS,
+    input_fn: Any = input,
+    log: Any = print,
+) -> tuple[dict[str, Any] | None, str | None]:
+    """执行阶段一需求理解与规划：
+    若开启 interactive 且 max_turns > 0，执行最多 max_turns 轮人机交互澄清轮询；
+    用户可随时回车（空输入）提前结束沟通进入搜索；
+    若未开启交互或环境不支持，单轮直接规划。
+    """
+    history: list[dict[str, str]] = []
+
+    if interactive and max_turns > 0:
+        log("\n" + "=" * 60)
+        log("【阶段一：需求理解与意图澄清轮询】")
+        log(f"用户初始需求：{topic}")
+        log(f"将进行最多 {max_turns} 轮关键意图澄清（直接回车跳过，按当前理解开始搜索）。")
+        log("=" * 60)
+
+        clarify_cfg = deepcopy(cfg)
+        clarify_cfg.setdefault("limits", {})["max_output_tokens"] = CLARIFICATION_MAX_OUTPUT_TOKENS
+
+        for turn_idx in range(1, max_turns + 1):
+            if state.usage.total_tokens >= state.report["parameters"]["max_tokens"]:
+                return None, STATUS_TOKEN_LIMIT
+
+            system, user = build_clarification_question_prompt(
+                topic, history, turn=turn_idx, max_turns=max_turns
+            )
+            result, unknown = state.call(transport, clarify_cfg, system, user, api_key=api_key, sleep=sleep)
+            if unknown:
+                return None, STATUS_USAGE_UNKNOWN
+            if not result.ok or not result.content:
+                log(f"[提示] 第 {turn_idx} 轮澄清生成未果，直接收敛为最终规划。")
+                break
+
+            try:
+                clarification = parse_clarification_question(result.content)
+            except Exception:
+                log(f"[提示] 第 {turn_idx} 轮澄清格式解析异常，直接收敛为最终规划。")
+                break
+
+            focus = clarification.get("focus", "需求澄清")
+            question = clarification.get("question", "")
+            options = clarification.get("options", [])
+
+            log(f"\n[轮询澄清 {turn_idx}/{max_turns}] 聚焦：{focus}")
+            log(f"提问：{question}")
+            if options:
+                log("建议选项：")
+                for o_idx, opt in enumerate(options, 1):
+                    log(f"  {o_idx}) {opt}")
+            log("（直接回车跳过后续沟通，按当前理解直接开始搜索）")
+
+            try:
+                user_reply = input_fn("您的答复 / 补充 > ").strip()
+            except (KeyboardInterrupt, EOFError):
+                log("\n用户结束沟通，基于已收集信息生成规划。")
+                break
+
+            if not user_reply or user_reply.lower() in ("skip", "q", "exit", "直接搜索", "开始搜索"):
+                log("[提示] 用户确认直接进入搜索阶段。")
+                break
+
+            if user_reply.isdigit() and options:
+                choice_idx = int(user_reply) - 1
+                if 0 <= choice_idx < len(options):
+                    user_reply = options[choice_idx]
+                    log(f"已选择：{user_reply}")
+
+            history.append({
+                "turn": str(turn_idx),
+                "focus": focus,
+                "question": question,
+                "answer": user_reply,
+            })
+
+    # 最终收敛为 QueryPlan
+    if state.usage.total_tokens >= state.report["parameters"]["max_tokens"]:
+        return None, STATUS_TOKEN_LIMIT
+
+    plan_cfg = deepcopy(cfg)
+    plan_cfg.setdefault("limits", {})["max_output_tokens"] = PLAN_MAX_OUTPUT_TOKENS
+
+    if history:
+        system, user = build_interactive_plan_prompt(topic, history)
+    else:
+        system, user = build_plan_prompt(topic)
+
+    result, unknown = state.call(transport, plan_cfg, system, user, api_key=api_key, sleep=sleep)
+    if unknown:
+        return None, STATUS_USAGE_UNKNOWN
+    if not result.ok or not result.content:
+        state.report["errors"].append({"stage": "planning", "code": "plan_failed", "message": result.error})
+        return None, "plan_failed"
+
+    try:
+        plan = parse_query_plan(result.content)
+        if history:
+            plan["clarification_history"] = history
+            plan["clarification_turns"] = len(history)
+
+            log("\n" + "=" * 60)
+            log("【已精准收敛的搜索规划】")
+            log(f"核心意图: {plan.get('intent')}")
+            log(f"搜索短语: {', '.join(plan.get('queries', []))}")
+            reqs = [c['description'] for c in plan.get('criteria', []) if c.get('kind') == 'required']
+            sigs = [c['description'] for c in plan.get('criteria', []) if c.get('kind') == 'quality_signal']
+            if reqs:
+                log(f"必须满足 (required): {'; '.join(reqs)}")
+            if sigs:
+                log(f"加分特征 (quality_signal): {'; '.join(sigs)}")
+            log("=" * 60 + "\n")
+        return plan, None
+    except Exception as exc:
+        state.report["errors"].append({"stage": "planning", "code": "plan_failed", "message": str(exc)})
+        return None, "plan_failed"
+
+
 def execute_find_skill(topic, *, limit=None, max_evaluations=None, max_tokens=None,
                        root_dir=".", model_cfg=None, log=print, sleep=time.sleep,
                        call_model_fn=None, fetch_candidate_materials_fn=None,
                        expand_and_collect_candidates_fn=None, search_github_repos_fn=None,
-                       owned_ids=None):
+                       owned_ids=None, interactive=None, max_clarification_turns=None,
+                       input_fn=input):
     from src.infra.llm import validate_model_config
     from src.infra.owned import load_owned_ids
     root = Path(root_dir).resolve()
@@ -291,6 +424,21 @@ def execute_find_skill(topic, *, limit=None, max_evaluations=None, max_tokens=No
               for k, explicit, default in (("limit", limit, DEFAULT_LIMIT), ("max_evaluations", max_evaluations, DEFAULT_MAX_EVALUATIONS), ("max_tokens", max_tokens, DEFAULT_MAX_TOKENS))}
     if params["limit"] < 1 or params["max_evaluations"] < params["limit"] or params["max_tokens"] < 1000:
         raise ValueError("要求 limit >= 1、max_evaluations >= limit、max_tokens >= 1000")
+
+    if interactive is None:
+        cfg_interactive = run_cfg.get("interactive")
+        if isinstance(cfg_interactive, bool):
+            interactive = cfg_interactive and sys.stdin.isatty()
+        else:
+            interactive = sys.stdin.isatty()
+
+    if max_clarification_turns is None:
+        max_clarification_turns = _parse_int_val(
+            run_cfg.get("max_clarification_turns"),
+            DEFAULT_MAX_CLARIFICATION_TURNS,
+            "max_clarification_turns",
+        )
+
     cfg = deepcopy(model_cfg if model_cfg is not None else load_finder_model_config(root / "config"))
     problems = validate_model_config(cfg)
     if problems:
@@ -310,22 +458,28 @@ def execute_find_skill(topic, *, limit=None, max_evaluations=None, max_tokens=No
     transport = call_model_fn or call_model
     reason = "plan_failed"
     try:
-        plan_cfg = deepcopy(cfg)
-        plan_cfg.setdefault("limits", {})["max_output_tokens"] = PLAN_MAX_OUTPUT_TOKENS
-        system, user = build_plan_prompt(topic.strip())
-        result, unknown = state.call(transport, plan_cfg, system, user, api_key=api_key, sleep=sleep)
-        if unknown:
-            reason = STATUS_USAGE_UNKNOWN
-        elif result.ok and result.content:
-            state.report["plan"] = parse_query_plan(result.content)
+        plan, plan_error = _run_planning_phase(
+            state,
+            topic.strip(),
+            cfg,
+            api_key,
+            transport,
+            sleep,
+            interactive=bool(interactive),
+            max_turns=max_clarification_turns,
+            input_fn=input_fn,
+            log=log,
+        )
+        if plan_error:
+            reason = plan_error
+        elif plan:
+            state.report["plan"] = plan
             candidates, reason = _find_candidates(state, search_github_repos_fn or search_github_repos_for_query,
                 expand_and_collect_candidates_fn or expand_and_collect_candidates, sleep, log, owned_ids=owned_ids)
             if reason is None:
                 cfg.setdefault("limits", {})["max_output_tokens"] = EVAL_MAX_OUTPUT_TOKENS
                 reason = _evaluate_candidates(state, candidates, cfg, api_key, transport,
                     fetch_candidate_materials_fn or fetch_candidate_materials, sleep)
-        else:
-            state.report["errors"].append({"stage": "planning", "code": "plan_failed", "message": result.error})
     except KeyboardInterrupt:
         reason = STATUS_INTERRUPTED
     except Exception as exc:
@@ -394,6 +548,26 @@ def main(argv: list[str] | None = None, *, root: Path | None = None) -> int:
         default=None,
         help=f"本次模型调用的 Token 消耗停止阈值（默认 {cfg_max_tokens:,}）",
     )
+    parser.add_argument(
+        "--interactive",
+        action="store_true",
+        default=None,
+        dest="interactive",
+        help="强制启用阶段一人机澄清轮询（默认在交互终端自动启用）",
+    )
+    parser.add_argument(
+        "--no-interactive",
+        "--quick",
+        action="store_false",
+        dest="interactive",
+        help="禁用阶段一人机澄清轮询，直接单轮快速规划",
+    )
+    parser.add_argument(
+        "--turns",
+        type=int,
+        default=None,
+        help="指定阶段一最大澄清轮数（默认取配置或 3）",
+    )
 
     try:
         args = parser.parse_args(argv)
@@ -423,6 +597,8 @@ def main(argv: list[str] | None = None, *, root: Path | None = None) -> int:
             max_evaluations=args.max_evaluations,
             max_tokens=args.max_tokens,
             root_dir=root_path,
+            interactive=args.interactive,
+            max_clarification_turns=args.turns,
         )
     except KeyboardInterrupt:
         return 130

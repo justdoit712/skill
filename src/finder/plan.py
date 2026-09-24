@@ -29,6 +29,10 @@ def _strip_fence(text: str) -> str:
     return stripped.strip()
 
 
+DEFAULT_MAX_CLARIFICATION_TURNS = 3
+CLARIFICATION_MAX_OUTPUT_TOKENS = 1500
+
+
 def _normalize_space(s: str) -> str:
     return re.sub(r"\s+", " ", s.strip())
 
@@ -159,14 +163,171 @@ def parse_query_plan(content: str) -> dict[str, Any]:
     }
 
 
+def build_clarification_question_prompt(
+    topic: str,
+    history: list[dict[str, str]],
+    turn: int,
+    max_turns: int = DEFAULT_MAX_CLARIFICATION_TURNS,
+) -> tuple[str, str]:
+    """构造第 turn 轮交互澄清问题的提示词。"""
+    system = "\n".join(
+        [
+            "你是资深的 AI 技能检索与需求分析专家。",
+            f"用户希望在 GitHub 上查找与其需求最匹配的 AI Agent Skill。当前正在进行需求意图澄清对话（第 {turn}/{max_turns} 轮）。",
+            "你的任务是针对当前需求中尚不清晰的维度，生成 1 个最关键的定向提问，并给出 2~4 个具体的选项建议，帮助用户快速明确范围。",
+            "",
+            "提问侧重指导：",
+            "- 第 1 轮侧重：核心应用场景、目标任务类型、主要解决的具体痛点或语言栈；",
+            "- 第 2 轮侧重：技术约束（如依赖平台 Claude/Cursor/OpenHands/CLI）、特定功能偏好、是否需要评测/测试工具等；",
+            "- 第 3 轮侧重：最终关键偏好或输出格式确认；",
+            "",
+            "输出要求：",
+            "1. 只输出合法 JSON 对象，严禁包含任何 Markdown 标记或前后解释文字；",
+            "2. 结构包含：",
+            "   - focus: 字符串，本次提问聚焦的维度（如 '应用场景细化'）；",
+            "   - question: 字符串，面向用户的精炼提问；",
+            "   - options: 字符串数组（2~4 项），建议的典型回答或预设选项；",
+            "   - summary: 字符串，对目前已明确信息的简要一句话概括。",
+            "",
+            "示例输出格式：",
+            json.dumps(
+                {
+                    "focus": "应用场景细化",
+                    "question": "请问您期望该技能主要应用于什么场景？是否有特定的编程语言或框架要求？",
+                    "options": [
+                        "用于 Python / TypeScript 代码生成与单元测试重构",
+                        "用于日常技术文档与中英文文章润色写作",
+                        "通用的 LLM 提示词模板设计与效果评估",
+                    ],
+                    "summary": "初步需求为提示词生成与优化",
+                },
+                ensure_ascii=False,
+                indent=2,
+            ),
+        ]
+    )
+
+    history_lines = []
+    for h in history:
+        t = h.get("turn", "")
+        q = h.get("question", "")
+        a = h.get("answer", "")
+        history_lines.append(f"第 {t} 轮提问：{q}\n用户回答：{a}")
+
+    history_str = ("\n\n已有的沟通记录：\n" + "\n\n".join(history_lines)) if history_lines else "（这是首轮澄清沟通）"
+
+    user = f"用户原始需求：{topic.strip()}\n\n{history_str}\n\n请直接输出第 {turn} 轮的提问 JSON："
+    return system, user
+
+
+def parse_clarification_question(content: str) -> dict[str, Any]:
+    """解析大模型生成的澄清提问 JSON。"""
+    cleaned = _strip_fence(content)
+    try:
+        data = json.loads(cleaned)
+    except json.JSONDecodeError as exc:
+        cleaned_text = cleaned.strip()
+        if cleaned_text:
+            return {
+                "focus": "需求澄清",
+                "question": cleaned_text,
+                "options": [],
+                "summary": "",
+            }
+        raise ValueError(f"澄清提问输出不是合法 JSON：{exc}") from exc
+
+    if not isinstance(data, dict):
+        raise ValueError("澄清提问顶层必须是 JSON 对象")
+
+    question = str(data.get("question") or "").strip()
+    if not question:
+        raise ValueError("澄清提问缺少 question 字段")
+
+    raw_options = data.get("options")
+    options = []
+    if isinstance(raw_options, list):
+        for opt in raw_options:
+            if isinstance(opt, str) and opt.strip():
+                options.append(opt.strip())
+
+    return {
+        "focus": str(data.get("focus") or "需求澄清").strip(),
+        "question": question,
+        "options": options[:5],
+        "summary": str(data.get("summary") or "").strip(),
+    }
+
+
+def build_interactive_plan_prompt(topic: str, history: list[dict[str, str]]) -> tuple[str, str]:
+    """结合多轮澄清沟通历史，构造最终结构化规划的提示词。"""
+    if not history:
+        return build_plan_prompt(topic)
+
+    system = "\n".join(
+        [
+            "你是技能检索与需求分析专家。你的任务是将用户的具体需求以及多轮交互澄清记录，分解为最精准的 GitHub 技能搜索计划与评估维度。",
+            "",
+            "输出要求：",
+            "1. 只输出一个合法的 JSON 对象，严禁包含任何 Markdown 代码块标记（如 ```json）或前后解释文字。",
+            "2. queries 数组：生成 3 到 8 条自然语言搜索短语（包含精准中英文关键词、同义表述与结合澄清细节的直接需求短语）。模型只输出短语本身，不要添加 GitHub 搜索操作符（如 in:readme 或 site:github.com）。",
+            "3. criteria 数组：生成 2 到 5 条评估准则。每条包含 id（小写下划线标识符）、kind（只能是 'required' 或 'quality_signal'）、description（明确的能力或质量描述）。",
+            "4. 硬性规则：结合用户在原始需求和沟通中所确认的核心能力设为 'required'（至少设 1 条）；其它期望的质量特征（如提供示例、参数优化、特定环境辅助等）必须设为 'quality_signal'，绝不能擅自升级为硬门槛！",
+            "5. 不默认绑定未在沟通中提及的特定私有平台或接口，保持通用适配。",
+            "",
+            "JSON 输出结构：",
+            json.dumps(
+                {
+                    "intent": "结合多轮澄清后对用户核心意图的一句话精准归纳",
+                    "queries": ["code prompt generator", "prompt optimizer", "代码提示词优化"],
+                    "criteria": [
+                        {
+                            "id": "generate_prompt",
+                            "kind": "required",
+                            "description": "明确支持根据具体代码需求生成高质量提示词",
+                        },
+                        {
+                            "id": "optimize_prompt",
+                            "kind": "quality_signal",
+                            "description": "说明如何检查、评估或优化已有提示词并给出改进示例",
+                        },
+                    ],
+                },
+                ensure_ascii=False,
+                indent=2,
+            ),
+        ]
+    )
+
+    history_lines = []
+    for h in history:
+        t = h.get("turn", "")
+        q = h.get("question", "")
+        a = h.get("answer", "")
+        history_lines.append(f"- 第 {t} 轮提问：{q}\n  用户确认：{a}")
+
+    history_str = "\n".join(history_lines)
+
+    user = (
+        f"用户原始需求：{topic.strip()}\n\n"
+        f"多轮交互澄清确认记录：\n{history_str}\n\n"
+        f"请基于上述全部背景与细化约束，直接输出最精准的最终规划 JSON："
+    )
+    return system, user
+
+
 __all__ = [
     "MAX_PLAN_QUERIES",
     "MAX_CRITERIA_COUNT",
     "KIND_REQUIRED",
     "KIND_QUALITY_SIGNAL",
     "VALID_CRITERION_KINDS",
+    "DEFAULT_MAX_CLARIFICATION_TURNS",
+    "CLARIFICATION_MAX_OUTPUT_TOKENS",
     "_strip_fence",
     "_normalize_space",
     "build_plan_prompt",
     "parse_query_plan",
+    "build_clarification_question_prompt",
+    "parse_clarification_question",
+    "build_interactive_plan_prompt",
 ]
