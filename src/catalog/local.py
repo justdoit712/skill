@@ -22,6 +22,7 @@ from uuid import uuid4
 from src.infra.files import write_json_atomic, write_text_atomic
 from src.shared.runtime import now_local
 from src.shared.materials import validate_document, primary_material_bundle
+from src.shared.owned import is_skill_owned
 from .store import catalog_task
 from .budget import BudgetLedger, evaluation_filename
 from .config import load_all_config, precheck
@@ -137,6 +138,8 @@ def prepare_pool(
     """管道步骤 1：候选池准备，检查水位线并按需增量搜索补水。"""
     active_snoozed = get_active_snoozed(cfg.get("snoozed") or {})
     manual_exclusions = get_manual_exclusions(cfg.get("overrides") or {})
+    owned_cfg = cfg.get("owned") or {}
+    owned_ids = {it["skill_id"] for it in owned_cfg.get("items", [])}
     pool_path = local / "pool.json"
     force_refresh = settings.get("refresh_pool", False)
     watermark = settings.get("pool_watermark", 20)
@@ -150,6 +153,7 @@ def prepare_pool(
             if it.status == POOL_STATUS_PENDING
             and it.candidate.skill_id not in active_snoozed
             and it.candidate.skill_id not in manual_exclusions
+            and not is_skill_owned(it.candidate.skill_id, owned_ids)
         )
 
     if not force_refresh:
@@ -256,7 +260,7 @@ def apply_result(
     apply_snooze_overrides([entry], active_snoozed)
     entries[candidate.skill_id] = entry
 
-    mutate_catalog(root, lambda current: build_catalog(list(entries.values()), context=context, overrides=cfg.get("overrides"), snoozed=cfg.get("snoozed")))
+    mutate_catalog(root, lambda current: build_catalog(list(entries.values()), context=context, overrides=cfg.get("overrides"), snoozed=cfg.get("snoozed"), owned=cfg.get("owned")))
     return entry
 
 
@@ -274,15 +278,18 @@ def save_and_render(
     baseline: dict | None = None,
     dirty: bool = False,
     run_id: str = "",
+    cfg: dict | None = None,
+    owned_ids: set[str] | None = None,
 ) -> None:
     """管道步骤 4：落盘运行报告、可读 Markdown 以及目录差异报告。"""
     report["usage"] = usage.snapshot()
     report["budget_tokens"] = usage.total_tokens + report.get("unknown_usage_reserved_tokens", 0)
     report["updated_at"] = now_local().isoformat()
+    owned_set = owned_ids or set()
     report["recommendations"] = [
         {key: e.get(key) for key in ("skill_id", "name", "url", "summary_zh", "main_category")}
         for sid, e in entries.items()
-        if sid not in old_recommended and e.get("status") == STATUS_RECOMMENDED and not e.get("needs_review") and not e.get("manual_pick")
+        if sid not in old_recommended and e.get("status") == STATUS_RECOMMENDED and not e.get("needs_review") and not e.get("manual_pick") and not is_skill_owned(sid, owned_set)
     ]
     report["new_recommended"] = len(report["recommendations"])
     if pool is not None:
@@ -302,6 +309,8 @@ def save_and_render(
             f"- 候选池：共 {pst['total']} 条，待处理 {pst['pending']} 条"
             f"（已完成 {pst['done']}，排除 {pst['excluded']}，抓取失败 {pst['fetch_failed']}，非技能 {pst['not_skill']}）"
         )
+    if report.get("skipped_owned"):
+        lines.append(f"- 已收录跳过：{report['skipped_owned']}")
     lines.extend([
         f"- 本次新增推荐：{report['new_recommended']} / {settings['target_recommended']}",
         f"- 评估次数：{report['evaluations']}；复用已有评估：{report['cached']}",
@@ -328,7 +337,7 @@ def save_and_render(
 
     if dirty and context is not None and baseline is not None:
         changes = build_report(
-            build_catalog(list(entries.values()), context=context),
+            build_catalog(list(entries.values()), context=context, overrides=(cfg or {}).get("overrides"), snoozed=(cfg or {}).get("snoozed"), owned=(cfg or {}).get("owned")),
             previous_catalog=baseline,
             run_meta={"usage": usage.snapshot(), "run_id": run_id},
         )
@@ -407,11 +416,14 @@ class LocalCollection:
     max_attempts: Any
     max_retries: Any
     pending_items: Any
+    owned_ids: Any
+    skipped_owned_ids: Any
 
     def save(self):
         save_and_render(self.run_dir, self.local, self.report, self.pool, self.usage,
             self.settings, self.entries, self.old_recommended, context=self.context,
-            baseline=self.baseline, dirty=self.dirty, run_id=self.run_id)
+            baseline=self.baseline, dirty=self.dirty, run_id=self.run_id,
+            cfg=self.cfg, owned_ids=self.owned_ids)
 
     def publish(self, candidate, pres, outcome=None, upstream_status="ok"):
         apply_result(candidate, pres, outcome, upstream_status=upstream_status,
@@ -473,6 +485,10 @@ def _evaluate_with_retries(state, candidate, text, eid, record):
 def process_candidate(state, item):
     candidate = item.candidate
     seq = item.seq
+    if is_skill_owned(candidate.skill_id, state.owned_ids):
+        state.skipped_owned_ids.add(candidate.skill_id)
+        state.report["skipped_owned"] = len(state.skipped_owned_ids)
+        return True
     if candidate.skill_id in state.active_snoozed:
         return True
     if candidate.skill_id in state.manual_exclusions:
@@ -598,7 +614,10 @@ def _collect(root, local, settings, cfg, discover_fn, fetch_fn, evaluate_fn, log
     for e in entries.values():
         apply_manual_overrides_to_entry(e, manual_picks, manual_exclusions)
     old_recommended = {k for k, v in entries.items() if v.get('status') == STATUS_RECOMMENDED and (not v.get('manual_pick'))}
-    report = {'run_id': run_id, 'started_at': now_local().isoformat(), 'status': 'running', 'model': cfg['model']['model'], 'settings': settings, 'discovered': 0, 'checked': 0, 'evaluations': 0, 'cached': 0, 'fetch_failed': 0, 'prescreen_excluded': 0, 'not_skill_files': 0, 'blocked_records': 0, 'failed_evaluations': 0, 'new_recommended': 0, 'failed_requests': 0, 'unknown_usage_reserved_tokens': 0, 'recommendations': [], 'calls': [], 'stop_reason': None, 'report_path': str(run_dir / 'report.json')}
+    owned_cfg = cfg.get('owned') or {}
+    owned_ids = {it['skill_id'] for it in owned_cfg.get('items', [])}
+    skipped_owned_ids = set()
+    report = {'run_id': run_id, 'started_at': now_local().isoformat(), 'status': 'running', 'model': cfg['model']['model'], 'settings': settings, 'discovered': 0, 'checked': 0, 'evaluations': 0, 'cached': 0, 'fetch_failed': 0, 'prescreen_excluded': 0, 'not_skill_files': 0, 'blocked_records': 0, 'failed_evaluations': 0, 'new_recommended': 0, 'failed_requests': 0, 'unknown_usage_reserved_tokens': 0, 'skipped_owned': 0, 'recommendations': [], 'calls': [], 'stop_reason': None, 'report_path': str(run_dir / 'report.json')}
     ledger = BudgetLedger.load(local / 'state', cap=1, max_attempts=max_attempts)
     ledger.rollover()
     ledger.mark_in_progress_as_needs_recovery()
@@ -611,7 +630,7 @@ def _collect(root, local, settings, cfg, discover_fn, fetch_fn, evaluate_fn, log
     active_eid = None
     active_call = None
     unknown_reserve = 0
-    state = LocalCollection(root=root, local=local, settings=settings, cfg=cfg, discover_fn=discover_fn, fetch_fn=fetch_fn, evaluate_fn=evaluate_fn, log=log, sleep=sleep, run_id=run_id, run_dir=run_dir, usage=usage, report=report, ledger=ledger, context=context, entries=entries, old_recommended=old_recommended, baseline=baseline, active_snoozed=active_snoozed, manual_exclusions=manual_exclusions, manual_picks=manual_picks, pool_path=pool_path, pool=pool, dirty=dirty, consecutive_failures=consecutive_failures, active_eid=active_eid, active_call=active_call, unknown_reserve=unknown_reserve, max_attempts=max_attempts, max_retries=max_retries, pending_items=[])
+    state = LocalCollection(root=root, local=local, settings=settings, cfg=cfg, discover_fn=discover_fn, fetch_fn=fetch_fn, evaluate_fn=evaluate_fn, log=log, sleep=sleep, run_id=run_id, run_dir=run_dir, usage=usage, report=report, ledger=ledger, context=context, entries=entries, old_recommended=old_recommended, baseline=baseline, active_snoozed=active_snoozed, manual_exclusions=manual_exclusions, manual_picks=manual_picks, pool_path=pool_path, pool=pool, dirty=dirty, consecutive_failures=consecutive_failures, active_eid=active_eid, active_call=active_call, unknown_reserve=unknown_reserve, max_attempts=max_attempts, max_retries=max_retries, pending_items=[], owned_ids=owned_ids, skipped_owned_ids=skipped_owned_ids)
     try:
         state.save()
         state.log(f"目标：新增 {state.settings['target_recommended']} 个推荐技能；上限 {state.settings['max_total_tokens']:,} Token。")
@@ -648,7 +667,7 @@ def _collect(root, local, settings, cfg, discover_fn, fetch_fn, evaluate_fn, log
         state.report['status'] = 'completed' if state.report['stop_reason'] == 'target_reached' else 'stopped'
         state.save()
         if state.dirty:
-            changes = build_report(build_catalog(list(state.entries.values()), context=state.context), previous_catalog=state.baseline, run_meta={'usage': state.usage.snapshot(), 'run_id': state.run_id})
+            changes = build_report(build_catalog(list(state.entries.values()), context=state.context, overrides=state.cfg.get('overrides'), snoozed=state.cfg.get('snoozed'), owned=state.cfg.get('owned')), previous_catalog=state.baseline, run_meta={'usage': state.usage.snapshot(), 'run_id': state.run_id})
             write_report(changes, json_path=state.run_dir / 'changes.json', markdown_path=state.run_dir / 'changes.md')
     return state.report
 

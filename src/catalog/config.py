@@ -11,6 +11,8 @@ from pathlib import Path
 
 from src.infra.files import read_json
 from src.infra.llm import validate_model_config
+from src.infra.owned import load_owned_config
+from src.shared.owned import validate_owned_config
 from .overrides import get_manual_exclusions, get_manual_picks, load_overrides, validate_overrides
 from .prescreen import load_config
 from .snooze import load_snooze, validate_snooze
@@ -55,6 +57,7 @@ def load_all_config(config_dir: str | Path = "config") -> dict:
     overrides_cfg = load_overrides(base / "overrides.json")
     snooze_cfg = load_snooze(base / "snoozed.json")
     sources_cfg = _load_json(base / "sources.json")
+    owned_cfg = load_owned_config(base)
 
     return {
         "prescreen": prescreen_cfg,
@@ -65,6 +68,7 @@ def load_all_config(config_dir: str | Path = "config") -> dict:
         "model": model_cfg,
         "overrides": overrides_cfg,
         "snoozed": snooze_cfg,
+        "owned": owned_cfg,
         "automation": load_automation(base),
         "source_types": {
             s["id"]: s.get("source_type") for s in sources_cfg.get("sources", [])
@@ -91,6 +95,11 @@ def precheck(cfg: dict) -> list[str]:
             validate_snooze(cfg["snoozed"], active_pick_ids=active_picks, active_exclusion_ids=active_excl)
         )
     automation = cfg.get("automation") or {}
+    if "owned" in cfg:
+        try:
+            validate_owned_config(cfg["owned"])
+        except ValueError as exc:
+            problems.append(f"owned-skills.json 校验失败：{exc}")
     if "scheduled_sync_enabled" in automation and not isinstance(
         automation["scheduled_sync_enabled"], bool
     ):

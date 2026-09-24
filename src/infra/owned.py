@@ -26,7 +26,10 @@ OWNED_CONFIG_FILENAME = "owned-skills.json"
 
 def get_owned_config_path(config_dir: str | Path = "config") -> Path:
     """获取已收录配置文件路径。"""
-    return Path(config_dir) / OWNED_CONFIG_FILENAME
+    p = Path(config_dir)
+    if p.name.endswith(".json"):
+        return p
+    return p / OWNED_CONFIG_FILENAME
 
 
 def load_owned_config(

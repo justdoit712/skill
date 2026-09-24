@@ -7,7 +7,9 @@
     "manual": 21,
     "pending": 0,
     "processing_failure": 0,
-    "total_evaluated": 66
+    "total_evaluated": 66,
+    "owned": 0,
+    "owned_in_catalog": 0
   },
   "categories": [
     {
@@ -3127,6 +3129,7 @@
       "license": null
     }
   ],
+  "owned_entries": [],
   "overrides": {
     "overrides_version": "1.0.0",
     "source": "docs/运行说明.md §9",
@@ -3362,5 +3365,9 @@
         "reason": "用户暂不关注"
       }
     ]
+  },
+  "owned": {
+    "schema_version": "1.0.0",
+    "items": []
   }
 }

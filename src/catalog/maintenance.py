@@ -88,7 +88,7 @@ def recover_completed_results(root_dir: str | Path = ".") -> dict:
     apply_manual_overrides(values, catalog.get("overrides") or {})
     apply_snooze_overrides(values, catalog.get("snoozed"))
     if restored:
-        updated = build_catalog(values, context=context, overrides=catalog.get("overrides"), snoozed=catalog.get("snoozed"))
+        updated = build_catalog(values, context=context, overrides=catalog.get("overrides"), snoozed=catalog.get("snoozed"), owned=catalog.get("owned"))
         write_catalog(updated, data_path=data / "catalog.json", public_path=root / "public" / "data" / "catalog.json")
     else:
         recover_catalog_projections(root)
@@ -102,6 +102,7 @@ def sync_config_offline(
     public_catalog_path: str | Path | None = None,
     overrides_path: str | Path | None = None,
     snoozed_path: str | Path | None = None,
+    owned_path: str | Path | None = None,
 ) -> dict[str, Any]:
     """纯离线同步配置规则到目录与页面公开数据（0-Token、无模型依赖）。"""
     return sync_config_to_catalog(
@@ -110,6 +111,7 @@ def sync_config_offline(
         public_catalog_path=public_catalog_path,
         overrides_path=overrides_path,
         snoozed_path=snoozed_path,
+        owned_path=owned_path,
     )
 
 
@@ -133,6 +135,7 @@ def sync_config_to_catalog(
     public_catalog_path: str | Path | None = None,
     overrides_path: str | Path | None = None,
     snoozed_path: str | Path | None = None,
+    owned_path: str | Path | None = None,
 ) -> dict:
     """仅同步 overrides.json 和 snoozed.json 到已有的 catalog.json。
 
@@ -144,12 +147,14 @@ def sync_config_to_catalog(
     """
     from .overrides import apply_manual_overrides, get_manual_exclusions, get_manual_picks, load_overrides, validate_overrides
     from .snooze import apply_snooze_overrides, get_active_snoozed, load_snooze, validate_snooze
+    from src.infra.owned import load_owned_config
 
     root = Path(root_dir)
     data_file = Path(catalog_path) if catalog_path else root / "data" / "catalog.json"
     public_file = Path(public_catalog_path) if public_catalog_path else root / "public" / "data" / "catalog.json"
     overrides_file = Path(overrides_path) if overrides_path else root / "config" / "overrides.json"
     snooze_file = Path(snoozed_path) if snoozed_path else root / "config" / "snoozed.json"
+    owned_file = Path(owned_path) if owned_path else root / "config" / "owned-skills.json"
 
     if not data_file.exists():
         raise FileNotFoundError(f"主索引文件不存在：{data_file}")
@@ -183,6 +188,8 @@ def sync_config_to_catalog(
 
     catalog["overrides"] = overrides
     catalog["snoozed"] = snooze_cfg
+    owned_cfg = load_owned_config(owned_file)
+    catalog["owned"] = owned_cfg
 
     # 重新计算各分类统计
     rec = sum(1 for e in entries if e.get("status") == "recommended" and not e.get("manual_pick"))
@@ -200,6 +207,7 @@ def sync_config_to_catalog(
     manifest["counts"]["excluded"] = excl
     active_snoozed_count = len(get_active_snoozed(snooze_cfg))
     manifest["active_snoozed"] = active_snoozed_count
+    manifest["owned_count"] = len(owned_cfg.get("items", []))
     return manifest
 
 
@@ -247,6 +255,7 @@ def enrich_catalog(root: Path | str) -> dict[str, Any]:
         context=ctx,
         overrides=catalog.get("overrides"),
         snoozed=catalog.get("snoozed"),
+        owned=catalog.get("owned"),
     )
 
     write_catalog(new_catalog, data_path=catalog_file, public_path=public_file)

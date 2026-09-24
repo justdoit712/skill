@@ -24,6 +24,7 @@ from .models import Candidate, PrescreenResult
 from .overrides import get_manual_picks
 from .prescreen import DECISION_QUEUED, prescreen
 from .snooze import get_active_snoozed
+from src.shared.owned import is_skill_owned
 
 from .config import load_all_config, precheck
 from .queue import (
@@ -212,16 +213,59 @@ def prepare(
         if skill and item.get("content_fingerprint"):
             catalogued.setdefault(skill, item["content_fingerprint"])
 
-    cap_estimate = min(limit_evaluations, len(first_pass) + len(pending or []))
+    owned_cfg = (cfg or {}).get("owned") or {}
+    owned_items = owned_cfg.get("items", [])
+    owned_ids = {it["skill_id"] for it in owned_items}
+
+    schedulable_first_pass = [(c, p) for c, p in first_pass if not is_skill_owned(c.skill_id, owned_ids)]
+    owned_first_pass = [(c, p) for c, p in first_pass if is_skill_owned(c.skill_id, owned_ids)]
+
+    all_pending = list(pending or [])
+    schedulable_pending = [item for item in all_pending if not is_skill_owned(_skill_of(item), owned_ids)]
+    owned_pending = [item for item in all_pending if is_skill_owned(_skill_of(item), owned_ids)]
+
+    skipped_owned_ids = {c.skill_id for c, _ in owned_first_pass} | {_skill_of(item) for item in owned_pending}
+    skipped_owned = len(skipped_owned_ids)
+
+    cap_estimate = min(limit_evaluations, len(schedulable_first_pass) + len(schedulable_pending))
     cap = cap_estimate if limit_fetches is None else max(0, limit_fetches)
 
     plan = _accumulate_plan(
-        first_pass, list(pending or []), catalogued=catalogued,
+        schedulable_first_pass, schedulable_pending, catalogued=catalogued,
         catalogued_review=catalogued_review,
         source_types=source_types,
         cfg=cfg, ledger=ledger, cap=cap,
     )
-    slots = min(limit_evaluations, len(plan["queue"]))
+    schedulable_queue = plan["queue"]
+    slots = min(limit_evaluations, len(schedulable_queue))
+
+    dormant_owned_items: list[dict] = []
+    seen_dormant_ids: set[str] = set()
+
+    for item in owned_pending:
+        sid = _skill_of(item)
+        item["pending"] = True
+        item.setdefault("first_queued_at", _stamp())
+        item["fetch"] = {
+            "ok": False, "bytes": 0, "reason_code": None,
+            "skipped": "已收录，暂不调度",
+        }
+        dormant_owned_items.append(item)
+        if sid:
+            seen_dormant_ids.add(sid)
+
+    for candidate, prescreen_result in owned_first_pass:
+        if prescreen_result.decision == DECISION_QUEUED and candidate.skill_id not in seen_dormant_ids:
+            dormant_item = candidate_payload(
+                candidate, prescreen_result,
+                {"ok": False, "bytes": 0, "reason_code": None, "skipped": "已收录，暂不调度"},
+            )
+            dormant_item["pending"] = True
+            dormant_item["first_queued_at"] = _stamp()
+            dormant_owned_items.append(dormant_item)
+            seen_dormant_ids.add(candidate.skill_id)
+
+    full_queue = schedulable_queue + dormant_owned_items
 
     staged: dict[str, str] = {}
     texts_dir = (state_dir / TEXTS_DIRNAME) if state_dir else None
@@ -230,7 +274,7 @@ def prepare(
 
     enriched: list[tuple[Candidate, PrescreenResult, dict]] = []
     fetched_count = 0
-    for item in plan["queue"]:
+    for item in schedulable_queue:
         if fetched_count >= cap:
             break
         candidate = candidate_from_payload(item["candidate"])
@@ -257,7 +301,7 @@ def prepare(
         item["prescreen"] = asdict(prescreen(candidate, cfg["prescreen"], text))
         enriched.append((candidate, prescreen_from_payload(item["prescreen"]), note))
 
-    for item in plan["queue"][cap:]:
+    for item in schedulable_queue[cap:]:
         candidate = candidate_from_payload(item["candidate"])
         item["fetch"] = {
             "ok": False, "bytes": 0, "reason_code": None,
@@ -281,7 +325,7 @@ def prepare(
     batch = [
         (c, p, f)
         for c, p, f in queued
-        if c.content_fingerprint and c.skill_id not in active_snoozed_set
+        if c.content_fingerprint and c.skill_id not in active_snoozed_set and not is_skill_owned(c.skill_id, owned_ids)
     ]
 
     return {
@@ -289,8 +333,10 @@ def prepare(
         "queued": queued,
         "batch": batch,
         "excluded": excluded,
-        "queue": plan["queue"],
-        "queue_pending": plan["queue_pending"],
+        "queue": full_queue,
+        "queue_pending": len(full_queue),
+        "schedulable_count": len(schedulable_queue),
+        "skipped_owned": skipped_owned,
         "carried_over": plan["carried_over"],
         "needs_review": plan["needs_review"],
         "discovery_total": len(candidates),
@@ -395,6 +441,8 @@ def phase_reserve(
         "evaluation_slots": plan["evaluation_slots"],
         "reserved": len(reserved),
         "queue_pending": plan["queue_pending"],
+        "schedulable_count": plan["schedulable_count"],
+        "skipped_owned": plan["skipped_owned"],
         "carried_over": plan["carried_over"],
         "needs_review_backlog": plan["needs_review"],
         "quota": ledger.snapshot(),
@@ -447,6 +495,9 @@ def dry_run(
         "fetched": plan["fetched"],
         "fetch_cap": plan["fetch_cap"],
         "evaluation_slots": plan["evaluation_slots"],
+        "queue_pending": plan["queue_pending"],
+        "schedulable_count": plan["schedulable_count"],
+        "skipped_owned": plan["skipped_owned"],
         "model": cfg["model"].get("model"),
         "credentials_present": bool(resolve_api_key(cfg["model"])),
         "discovery_failed": plan["discovery_failed"],

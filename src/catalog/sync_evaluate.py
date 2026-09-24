@@ -21,6 +21,7 @@ from .models import Candidate, PrescreenResult
 from .overrides import apply_manual_overrides, get_manual_exclusions, get_manual_picks
 from .report import build_report, write_report
 from .snooze import apply_snooze_overrides, get_active_snoozed
+from src.shared.owned import is_skill_owned
 
 from .config import load_all_config, precheck
 from .entry_state import (
@@ -69,10 +70,16 @@ def _evaluate_queue(queue, cfg, ledger, staged, started, token_cap,
     manual_exclusions_set = set(manual_exclusions_dict.keys())
     active_snoozed_dict = get_active_snoozed((cfg or {}).get("snoozed") or {})
     active_snoozed_set = set(active_snoozed_dict.keys())
+    owned_cfg = (cfg or {}).get("owned") or {}
+    owned_ids = {it["skill_id"] for it in owned_cfg.get("items", [])}
 
     for item in queue.get("pending", []):
         candidate = candidate_from_payload(item["candidate"])
         eid = evaluation_id(candidate, cfg["model"], cfg["rules"])
+        if is_skill_owned(candidate.skill_id, owned_ids):
+            results[candidate.skill_id] = {"status": "skipped", "note": "已收录条目直接跳过"}
+            skipped += 1
+            continue
 
         if candidate.skill_id in manual_exclusions_set:
             results[candidate.skill_id] = {"status": "skipped", "note": "人工排除黑名单条目直接跳过"}
@@ -180,12 +187,14 @@ def _build_evaluated_catalog(previous_entries, queue, cfg, ledger, context):
     manual_picks_dict = get_manual_picks(cfg.get("overrides") or {})
     manual_exclusions_dict = get_manual_exclusions(cfg.get("overrides") or {})
     active_snoozed_set = set(get_active_snoozed(cfg.get("snoozed") or {}))
+    owned_cfg = (cfg or {}).get("owned") or {}
+    owned_ids = {it["skill_id"] for it in owned_cfg.get("items", [])}
     previous_by_id = index_by_id(previous_entries)
 
     fresh_entries: list[dict] = []
     for item in queue.get("pending", []):
         cand = candidate_from_payload(item["candidate"])
-        if cand.skill_id in active_snoozed_set:
+        if cand.skill_id in active_snoozed_set or is_skill_owned(cand.skill_id, owned_ids):
             continue
         pres = prescreen_from_payload(item["prescreen"])
         fetch_note = item.get("fetch") or {}
@@ -218,7 +227,7 @@ def _build_evaluated_catalog(previous_entries, queue, cfg, ledger, context):
 
     for item in queue.get("excluded", []):
         cand = candidate_from_payload(item["candidate"])
-        if cand.skill_id in active_snoozed_set:
+        if cand.skill_id in active_snoozed_set or is_skill_owned(cand.skill_id, owned_ids):
             continue
         pres = prescreen_from_payload(item["prescreen"])
         previous = previous_by_id.get(cand.skill_id)
@@ -242,6 +251,7 @@ def _build_evaluated_catalog(previous_entries, queue, cfg, ledger, context):
         context=context,
         overrides=(cfg or {}).get("overrides"),
         snoozed=(cfg or {}).get("snoozed"),
+        owned=(cfg or {}).get("owned"),
     )
     return catalog
 

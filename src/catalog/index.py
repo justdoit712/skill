@@ -13,6 +13,7 @@ import hashlib
 import json
 from pathlib import Path
 
+from src.shared.owned import build_public_owned_projection, is_skill_owned, normalize_owned_id
 from src.shared.schema import normalize_skill_type, normalize_string_list
 from .decide import (
     DECISION_CANDIDATE,
@@ -199,6 +200,7 @@ def build_catalog(
     context: CatalogContext,
     overrides: dict | None = None,
     snoozed: dict | None = None,
+    owned: dict | None = None,
 ) -> dict:
     """汇总为唯一索引。"""
     counts: dict[str, int] = {}
@@ -216,6 +218,8 @@ def build_catalog(
         res["overrides"] = overrides
     if snoozed:
         res["snoozed"] = snoozed
+    if owned:
+        res["owned"] = owned
     return res
 
 
@@ -224,11 +228,35 @@ def build_page_data(catalog: dict) -> dict:
     manual: list[dict] = []
     recommended: list[dict] = []
     candidates: list[dict] = []
+    owned_entries: list[dict] = []
     pending = 0
     failed = 0
     category_counts: dict[str, int] = {}
 
+    owned_cfg = catalog.get("owned") or {}
+    owned_items = owned_cfg.get("items") or []
+    owned_ids: set[str] = set()
+    for item in owned_items:
+        sid = item.get("skill_id")
+        if sid:
+            try:
+                owned_ids.add(normalize_owned_id(sid))
+            except ValueError:
+                owned_ids.add(sid)
+
     for entry in catalog.get("entries", []):
+        entry_id = entry.get("skill_id") or ""
+        if is_skill_owned(entry_id, owned_ids):
+            orig_partition = "manual" if entry.get("manual_pick") else (
+                "recommended" if entry.get("status") == STATUS_RECOMMENDED else (
+                    "candidate" if entry.get("status") == STATUS_CANDIDATE else entry.get("status")
+                )
+            )
+            disp = _display(entry)
+            disp["original_partition"] = orig_partition
+            owned_entries.append(disp)
+            continue
+
         category = entry.get("main_category") or {}
         if category.get("id"):
             category_counts[category["id"]] = category_counts.get(category["id"], 0) + 1
@@ -256,6 +284,8 @@ def build_page_data(catalog: dict) -> dict:
             "pending": pending,
             "processing_failure": failed,
             "total_evaluated": len(recommended) + len(candidates) + len(manual),
+            "owned": len(owned_items),
+            "owned_in_catalog": len(owned_entries),
         },
         "categories": [
             {"id": key, "count": value} for key, value in sorted(category_counts.items())
@@ -263,11 +293,14 @@ def build_page_data(catalog: dict) -> dict:
         "manual": manual,
         "recommended": recommended,
         "candidates": candidates,
+        "owned_entries": owned_entries,
     }
     if catalog.get("overrides"):
         res["overrides"] = catalog["overrides"]
     if catalog.get("snoozed"):
         res["snoozed"] = catalog["snoozed"]
+    if catalog.get("owned"):
+        res["owned"] = build_public_owned_projection(catalog["owned"])
     return res
 
 
