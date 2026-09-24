@@ -3,13 +3,13 @@
   "rules_version": "1.0.1",
   "counts": {
     "recommended": 18,
-    "candidate": 17,
-    "manual": 27,
+    "candidate": 8,
+    "manual": 31,
     "pending": 0,
     "processing_failure": 0,
-    "total_evaluated": 62,
-    "owned": 0,
-    "owned_in_catalog": 0
+    "total_evaluated": 57,
+    "owned": 1,
+    "owned_in_catalog": 1
   },
   "categories": [
     {
@@ -30,7 +30,7 @@
     },
     {
       "id": "docs",
-      "count": 10
+      "count": 9
     },
     {
       "id": "product",
@@ -432,6 +432,59 @@
       "license": null
     },
     {
+      "skill_id": "anthropics/skills:skills/skill-creator/SKILL.md",
+      "name": "skill-creator",
+      "url": "https://github.com/anthropics/skills/blob/HEAD/skills/skill-creator/SKILL.md",
+      "author": "anthropics",
+      "summary_zh": "用于创建、修改和评估 Claude 技能，包括起草 SKILL.md、运行测试、基准比较和优化描述触发准确性，适用于需要构建或迭代技能的用户。",
+      "skill_type": null,
+      "example_requests": [
+        "“需要构建或迭代技能的用户”"
+      ],
+      "key_features": [
+        "用于创建、修改和评估 Claude 技能"
+      ],
+      "main_category": {
+        "id": "dev",
+        "name": "编程开发"
+      },
+      "tags": [
+        "技能开发",
+        "Claude",
+        "测试评估",
+        "提示词优化"
+      ],
+      "platform_declared": [
+        "Claude.ai",
+        "Cowork",
+        "Claude Code"
+      ],
+      "dependencies_declared": [
+        "python",
+        "claude CLI"
+      ],
+      "source_type": "official",
+      "status": "candidate",
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-24",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
+      "snooze": null,
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "reason_codes": [],
+      "limitations": "Claude.ai 环境无子代理，无法并行基准测试；描述优化需要 claude CLI；Cowork 环境无浏览器需使用静态查看器。",
+      "first_seen": "2026-09-20T16:59:36+00:00",
+      "last_checked": "2026-09-21T01:24:36.215057+08:00",
+      "content_changed_at": null,
+      "upstream_status": "ok",
+      "license": null
+    },
+    {
       "skill_id": "anthropics/skills:skills/slack-gif-creator/SKILL.md",
       "name": "slack-gif-creator",
       "url": "https://github.com/anthropics/skills/blob/HEAD/skills/slack-gif-creator/SKILL.md",
@@ -630,6 +683,54 @@
       "limitations": "公式兼容性受 LibreOffice 限制（不支持 XLOOKUP、XMATCH、SORT、FILTER 等）；openpyxl 写入公式无缓存值需运行 recalc.py 重算；重新保存含外部链接的工作簿会丢失链接。",
       "first_seen": "2026-09-20T16:59:36+00:00",
       "last_checked": "2026-09-21T01:27:09.313514+08:00",
+      "content_changed_at": null,
+      "upstream_status": "ok",
+      "license": null
+    },
+    {
+      "skill_id": "vercel-labs/agent-skills:skills/composition-patterns/SKILL.md",
+      "name": "composition-patterns",
+      "url": "https://github.com/vercel-labs/agent-skills/blob/HEAD/skills/composition-patterns/SKILL.md",
+      "author": "vercel-labs",
+      "summary_zh": "提供 React 组件组合模式指南，用于重构布尔属性过多的组件、构建灵活组件库和设计可复用 API，典型使用场景包括组件架构设计、状态管理与 React 19 迁移。",
+      "skill_type": null,
+      "example_requests": [],
+      "key_features": [
+        "提供 React 组件组合模式指南"
+      ],
+      "main_category": {
+        "id": "dev",
+        "name": "编程开发"
+      },
+      "tags": [
+        "react",
+        "composition-patterns",
+        "component-architecture",
+        "frontend"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "React 19+ (仅适用于 react19 规则)"
+      ],
+      "source_type": "official",
+      "status": "candidate",
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-24",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
+      "snooze": null,
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "reason_codes": [
+        "INCOMPLETE_INSTRUCTIONS"
+      ],
+      "limitations": "仅提供规则索引，具体规则和代码示例需查阅配套规则文件；React 19 部分仅适用于 React 19+。",
+      "first_seen": "2026-09-20T16:59:36+00:00",
+      "last_checked": "2026-09-21T01:28:34.579960+08:00",
       "content_changed_at": null,
       "upstream_status": "ok",
       "license": null
@@ -1235,6 +1336,52 @@
       "license": null
     },
     {
+      "skill_id": "trailofbits/skills:plugins/code-improver/tests/fixtures/pr-review-toolkit/skills/review-pr/SKILL.md",
+      "name": "review-pr",
+      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/code-improver/tests/fixtures/pr-review-toolkit/skills/review-pr/SKILL.md",
+      "author": "trailofbits",
+      "summary_zh": "该技能用于审查当前分支相对基础分支的代码变更，检查正确性、测试覆盖和文档准确性，典型场景是响应分支、diff 或 PR 审查请求。",
+      "skill_type": null,
+      "example_requests": [],
+      "key_features": [
+        "覆盖和文档准确性",
+        "用于审查当前分支相对基础分支的代码"
+      ],
+      "main_category": {
+        "id": "dev",
+        "name": "编程开发"
+      },
+      "tags": [
+        "代码审查",
+        "PR审查",
+        "diff审查"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "source_type": "official",
+      "status": "candidate",
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-24",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
+      "snooze": null,
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "reason_codes": [
+        "MISSING_DEPENDENCY"
+      ],
+      "limitations": "未声明 git 依赖及运行环境要求；需要调用者提供 base 分支名称。",
+      "first_seen": "2026-09-20T16:59:36+00:00",
+      "last_checked": "2026-09-21T01:54:26.648746+08:00",
+      "content_changed_at": null,
+      "upstream_status": "ok",
+      "license": null
+    },
+    {
       "skill_id": "trailofbits/skills:plugins/code-improver/tests/fixtures/review-panel/skills/panel-review/SKILL.md",
       "name": "panel-review",
       "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/code-improver/tests/fixtures/review-panel/skills/panel-review/SKILL.md",
@@ -1278,6 +1425,54 @@
       "limitations": "依赖预定义的审查子代理和 Task 调度工具；不执行具体审计规则，仅合并结果；未声明平台兼容性。",
       "first_seen": "2026-09-20T16:59:36+00:00",
       "last_checked": "2026-09-21T01:55:01.665990+08:00",
+      "content_changed_at": null,
+      "upstream_status": "ok",
+      "license": null
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/culture-index/skills/interpreting-culture-index/SKILL.md",
+      "name": "interpreting-culture-index",
+      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/culture-index/skills/interpreting-culture-index/SKILL.md",
+      "author": "trailofbits",
+      "summary_zh": "解读 Culture Index 调查和行为画像数据，支持个人分析、团队构成、倦怠检测、招聘和冲突调解等场景。",
+      "skill_type": null,
+      "example_requests": [],
+      "key_features": [
+        "支持个人分析、团队构成、倦怠检测、招聘和冲突调解等场景"
+      ],
+      "main_category": {
+        "id": "docs",
+        "name": "文档办公"
+      },
+      "tags": [
+        "culture-index",
+        "behavioral-profile",
+        "team-analysis",
+        "hiring",
+        "burnout-detection"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "uv",
+        "extract_pdf.py"
+      ],
+      "source_type": "official",
+      "status": "candidate",
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-24",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
+      "snooze": null,
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "reason_codes": [],
+      "limitations": "不能用于临床心理评估或诊断，不能作为招聘/解雇的唯一依据，仅适用于 Culture Index 评估",
+      "first_seen": "2026-09-20T16:59:36+00:00",
+      "last_checked": "2026-09-21T01:57:04.711030+08:00",
       "content_changed_at": null,
       "upstream_status": "ok",
       "license": null
@@ -2303,111 +2498,6 @@
       "license": null
     },
     {
-      "skill_id": "anthropics/skills:skills/pdf/SKILL.md",
-      "name": "pdf",
-      "url": "https://github.com/anthropics/skills/blob/HEAD/skills/pdf/SKILL.md",
-      "author": "anthropics",
-      "summary_zh": "提供 PDF 文件的读取、提取、合并、拆分、旋转、水印、创建、表单填写、加密解密和 OCR 等操作指南与代码示例。",
-      "skill_type": null,
-      "example_requests": [],
-      "key_features": [
-        "提供 PDF 文件的读取、提取、合并、拆分、旋转、水印、创建、表单填写、加密解密和 OCR 等操作指南与代码示例",
-        "提供 PDF 文件的读取、提取、合并、拆分、旋转、水印、创建、表单填写、加密解密和 OCR 等操作指南与代码"
-      ],
-      "main_category": {
-        "id": "docs",
-        "name": "文档办公"
-      },
-      "tags": [
-        "pdf",
-        "document-processing",
-        "text-extraction",
-        "merge-pdf",
-        "split-pdf",
-        "ocr",
-        "watermark",
-        "encryption"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "pypdf",
-        "pdfplumber",
-        "reportlab",
-        "pytesseract",
-        "pdf2image",
-        "poppler-utils (pdftotext, pdfimages)",
-        "qpdf",
-        "pdftk",
-        "pdf-lib (mentioned)"
-      ],
-      "source_type": "official",
-      "status": "candidate",
-      "manual_pick": false,
-      "manual_note": null,
-      "snooze": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [
-        "INCOMPLETE_INSTRUCTIONS",
-        "MISSING_DEPENDENCY"
-      ],
-      "limitations": "表单填写和高级功能依赖未提供的 FORMS.md 和 REFERENCE.md；未提供完整的依赖安装说明；未声明支持的平台和 Python 版本。",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-21T01:23:40.719525+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
-      "skill_id": "anthropics/skills:skills/skill-creator/SKILL.md",
-      "name": "skill-creator",
-      "url": "https://github.com/anthropics/skills/blob/HEAD/skills/skill-creator/SKILL.md",
-      "author": "anthropics",
-      "summary_zh": "用于创建、修改和评估 Claude 技能，包括起草 SKILL.md、运行测试、基准比较和优化描述触发准确性，适用于需要构建或迭代技能的用户。",
-      "skill_type": null,
-      "example_requests": [
-        "“需要构建或迭代技能的用户”"
-      ],
-      "key_features": [
-        "用于创建、修改和评估 Claude 技能"
-      ],
-      "main_category": {
-        "id": "dev",
-        "name": "编程开发"
-      },
-      "tags": [
-        "技能开发",
-        "Claude",
-        "测试评估",
-        "提示词优化"
-      ],
-      "platform_declared": [
-        "Claude.ai",
-        "Cowork",
-        "Claude Code"
-      ],
-      "dependencies_declared": [
-        "python",
-        "claude CLI"
-      ],
-      "source_type": "official",
-      "status": "candidate",
-      "manual_pick": false,
-      "manual_note": null,
-      "snooze": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [],
-      "limitations": "Claude.ai 环境无子代理，无法并行基准测试；描述优化需要 claude CLI；Cowork 环境无浏览器需使用静态查看器。",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-21T01:24:36.215057+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
       "skill_id": "anthropics/skills:skills/webapp-testing/SKILL.md",
       "name": "webapp-testing",
       "url": "https://github.com/anthropics/skills/blob/HEAD/skills/webapp-testing/SKILL.md",
@@ -2491,49 +2581,6 @@
       "license": null
     },
     {
-      "skill_id": "vercel-labs/agent-skills:skills/composition-patterns/SKILL.md",
-      "name": "composition-patterns",
-      "url": "https://github.com/vercel-labs/agent-skills/blob/HEAD/skills/composition-patterns/SKILL.md",
-      "author": "vercel-labs",
-      "summary_zh": "提供 React 组件组合模式指南，用于重构布尔属性过多的组件、构建灵活组件库和设计可复用 API，典型使用场景包括组件架构设计、状态管理与 React 19 迁移。",
-      "skill_type": null,
-      "example_requests": [],
-      "key_features": [
-        "提供 React 组件组合模式指南"
-      ],
-      "main_category": {
-        "id": "dev",
-        "name": "编程开发"
-      },
-      "tags": [
-        "react",
-        "composition-patterns",
-        "component-architecture",
-        "frontend"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "React 19+ (仅适用于 react19 规则)"
-      ],
-      "source_type": "official",
-      "status": "candidate",
-      "manual_pick": false,
-      "manual_note": null,
-      "snooze": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [
-        "INCOMPLETE_INSTRUCTIONS"
-      ],
-      "limitations": "仅提供规则索引，具体规则和代码示例需查阅配套规则文件；React 19 部分仅适用于 React 19+。",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-21T01:28:34.579960+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
       "skill_id": "cloudflare/skills:skills/sandbox-migrate-to-next/SKILL.md",
       "name": "sandbox-migrate-to-next",
       "url": "https://github.com/cloudflare/skills/blob/HEAD/skills/sandbox-migrate-to-next/SKILL.md",
@@ -2567,7 +2614,11 @@
       "status": "candidate",
       "manual_pick": false,
       "manual_note": null,
-      "snooze": null,
+      "snooze": {
+        "snoozed_at": "2026-09-24",
+        "expires_at": "2027-02-21",
+        "reason": "用户暂不关注"
+      },
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -2610,7 +2661,11 @@
       "status": "candidate",
       "manual_pick": false,
       "manual_note": null,
-      "snooze": null,
+      "snooze": {
+        "snoozed_at": "2026-09-24",
+        "expires_at": "2027-02-21",
+        "reason": "用户暂不关注"
+      },
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -2652,7 +2707,11 @@
       "status": "candidate",
       "manual_pick": false,
       "manual_note": null,
-      "snooze": null,
+      "snooze": {
+        "snoozed_at": "2026-09-24",
+        "expires_at": "2027-02-21",
+        "reason": "用户暂不关注"
+      },
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -2712,135 +2771,6 @@
       "license": null
     },
     {
-      "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/code-maturity-assessor/SKILL.md",
-      "name": "code-maturity-assessor",
-      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/building-secure-contracts/skills/code-maturity-assessor/SKILL.md",
-      "author": "trailofbits",
-      "summary_zh": "评估智能合约或区块链代码库的成熟度，基于Trail of Bits的9类别框架输出评分卡和改进路线图，适用于安全审计和项目评估。",
-      "skill_type": null,
-      "example_requests": [
-        "“安全审计和项目评估”"
-      ],
-      "key_features": [
-        "评估智能合约或区块链代码"
-      ],
-      "main_category": {
-        "id": "security",
-        "name": "安全"
-      },
-      "tags": [
-        "代码审计",
-        "智能合约",
-        "安全评估",
-        "成熟度模型"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [],
-      "source_type": "official",
-      "status": "candidate",
-      "manual_pick": false,
-      "manual_note": null,
-      "snooze": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [],
-      "limitations": "评估依赖于完整代码库访问权限和用户提供的流程信息；框架版本为v0.1.0",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-21T01:45:09.260506+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
-      "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/solana-vulnerability-scanner/SKILL.md",
-      "name": "solana-vulnerability-scanner",
-      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/building-secure-contracts/skills/solana-vulnerability-scanner/SKILL.md",
-      "author": "trailofbits",
-      "summary_zh": "该技能用于系统扫描 Solana 程序（含 Anchor）的 6 类关键安全漏洞，包括任意 CPI、PDA 验证缺失等，适用于审计、预上线安全评估等场景。",
-      "skill_type": null,
-      "example_requests": [
-        "“审计、预上线安全评估”"
-      ],
-      "key_features": [],
-      "main_category": {
-        "id": "security",
-        "name": "安全"
-      },
-      "tags": [
-        "security-audit",
-        "solana",
-        "vulnerability-scanner",
-        "smart-contract"
-      ],
-      "platform_declared": "Solana",
-      "dependencies_declared": [
-        "Trail of Bits Solana Lints",
-        "anchor",
-        "solana-test-validator",
-        "solana-program"
-      ],
-      "source_type": "official",
-      "status": "candidate",
-      "manual_pick": false,
-      "manual_note": null,
-      "snooze": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [],
-      "limitations": "扫描依赖人工执行或外部工具；详细漏洞模式依赖 resources/VULNERABILITY_PATTERNS.md 文件；未提供自动化集成。",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-21T01:48:20.729863+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
-      "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/ton-vulnerability-scanner/SKILL.md",
-      "name": "ton-vulnerability-scanner",
-      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/building-secure-contracts/skills/ton-vulnerability-scanner/SKILL.md",
-      "author": "trailofbits",
-      "summary_zh": "审计 TON 区块链 FunC 智能合约的安全技能，扫描整数作布尔、伪造 Jetton 合约和无 Gas 检查转发 TON 三种漏洞，适用于 TON dApp 上线前安全审计。",
-      "skill_type": null,
-      "example_requests": [
-        "“TON dApp 上线前安全审计”"
-      ],
-      "key_features": [
-        "审计 TON 区块链 FunC 智能合约的安全技能"
-      ],
-      "main_category": {
-        "id": "security",
-        "name": "安全"
-      },
-      "tags": [
-        "安全审计",
-        "智能合约",
-        "TON",
-        "FunC",
-        "漏洞扫描"
-      ],
-      "platform_declared": "TON (FunC)",
-      "dependencies_declared": [],
-      "source_type": "official",
-      "status": "candidate",
-      "manual_pick": false,
-      "manual_note": null,
-      "snooze": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [
-        "MISSING_DEPENDENCY"
-      ],
-      "limitations": "主要依赖人工审查，FunC 自动化工具有限；完整漏洞模式详情需额外查看 resources/VULNERABILITY_PATTERNS.md。",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-21T01:50:35.028891+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
       "skill_id": "trailofbits/skills:plugins/code-improver/skills/skill-improver/SKILL.md",
       "name": "skill-improver",
       "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/code-improver/skills/skill-improver/SKILL.md",
@@ -2888,140 +2818,73 @@
       "content_changed_at": null,
       "upstream_status": "ok",
       "license": null
-    },
+    }
+  ],
+  "owned_entries": [
     {
-      "skill_id": "trailofbits/skills:plugins/code-improver/tests/fixtures/pr-review-toolkit/skills/review-pr/SKILL.md",
-      "name": "review-pr",
-      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/code-improver/tests/fixtures/pr-review-toolkit/skills/review-pr/SKILL.md",
-      "author": "trailofbits",
-      "summary_zh": "该技能用于审查当前分支相对基础分支的代码变更，检查正确性、测试覆盖和文档准确性，典型场景是响应分支、diff 或 PR 审查请求。",
+      "skill_id": "anthropics/skills:skills/pdf/SKILL.md",
+      "name": "pdf",
+      "url": "https://github.com/anthropics/skills/blob/HEAD/skills/pdf/SKILL.md",
+      "author": "anthropics",
+      "summary_zh": "提供 PDF 文件的读取、提取、合并、拆分、旋转、水印、创建、表单填写、加密解密和 OCR 等操作指南与代码示例。",
       "skill_type": null,
       "example_requests": [],
       "key_features": [
-        "覆盖和文档准确性",
-        "用于审查当前分支相对基础分支的代码"
-      ],
-      "main_category": {
-        "id": "dev",
-        "name": "编程开发"
-      },
-      "tags": [
-        "代码审查",
-        "PR审查",
-        "diff审查"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [],
-      "source_type": "official",
-      "status": "candidate",
-      "manual_pick": false,
-      "manual_note": null,
-      "snooze": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [
-        "MISSING_DEPENDENCY"
-      ],
-      "limitations": "未声明 git 依赖及运行环境要求；需要调用者提供 base 分支名称。",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-21T01:54:26.648746+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
-      "skill_id": "trailofbits/skills:plugins/culture-index/skills/interpreting-culture-index/SKILL.md",
-      "name": "interpreting-culture-index",
-      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/culture-index/skills/interpreting-culture-index/SKILL.md",
-      "author": "trailofbits",
-      "summary_zh": "解读 Culture Index 调查和行为画像数据，支持个人分析、团队构成、倦怠检测、招聘和冲突调解等场景。",
-      "skill_type": null,
-      "example_requests": [],
-      "key_features": [
-        "支持个人分析、团队构成、倦怠检测、招聘和冲突调解等场景"
+        "提供 PDF 文件的读取、提取、合并、拆分、旋转、水印、创建、表单填写、加密解密和 OCR 等操作指南与代码示例",
+        "提供 PDF 文件的读取、提取、合并、拆分、旋转、水印、创建、表单填写、加密解密和 OCR 等操作指南与代码"
       ],
       "main_category": {
         "id": "docs",
         "name": "文档办公"
       },
       "tags": [
-        "culture-index",
-        "behavioral-profile",
-        "team-analysis",
-        "hiring",
-        "burnout-detection"
+        "pdf",
+        "document-processing",
+        "text-extraction",
+        "merge-pdf",
+        "split-pdf",
+        "ocr",
+        "watermark",
+        "encryption"
       ],
       "platform_declared": null,
       "dependencies_declared": [
-        "uv",
-        "extract_pdf.py"
+        "pypdf",
+        "pdfplumber",
+        "reportlab",
+        "pytesseract",
+        "pdf2image",
+        "poppler-utils (pdftotext, pdfimages)",
+        "qpdf",
+        "pdftk",
+        "pdf-lib (mentioned)"
       ],
       "source_type": "official",
       "status": "candidate",
-      "manual_pick": false,
-      "manual_note": null,
-      "snooze": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [],
-      "limitations": "不能用于临床心理评估或诊断，不能作为招聘/解雇的唯一依据，仅适用于 Culture Index 评估",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-21T01:57:04.711030+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
-      "skill_id": "trailofbits/skills:plugins/dwarf-expert/skills/dwarf-expert/SKILL.md",
-      "name": "dwarf-expert",
-      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/dwarf-expert/skills/dwarf-expert/SKILL.md",
-      "author": "trailofbits",
-      "summary_zh": "分析编译后二进制中的 DWARF 调试信息，用于检查 .debug_* 节、DIE 树或 DW_TAG_/DW_AT_ 条目，常见于调试信息验证、DWARF 标准查询或编写解析 DWARF 的代码。",
-      "skill_type": null,
-      "example_requests": [],
-      "key_features": [],
-      "main_category": {
-        "id": "dev",
-        "name": "编程开发"
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-24",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
       },
-      "tags": [
-        "DWARF",
-        "调试信息",
-        "二进制分析",
-        "llvm-dwarfdump",
-        "pyelftools"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "dwarfdump",
-        "llvm-dwarfdump",
-        "readelf",
-        "pyelftools",
-        "libdwarf",
-        "gimli",
-        "debug/dwarf",
-        "LibObjectFile"
-      ],
-      "source_type": "official",
-      "status": "candidate",
-      "manual_pick": false,
-      "manual_note": null,
       "snooze": null,
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "reason_codes": [],
-      "limitations": "不涉及运行时调试（gdb/lldb）和超出 DWARF 的逆向（Ghidra/IDA）；未提及 Windows PDB 等非 DWARF 调试信息",
+      "reason_codes": [
+        "INCOMPLETE_INSTRUCTIONS",
+        "MISSING_DEPENDENCY"
+      ],
+      "limitations": "表单填写和高级功能依赖未提供的 FORMS.md 和 REFERENCE.md；未提供完整的依赖安装说明；未声明支持的平台和 Python 版本。",
       "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-21T02:00:27.313337+08:00",
+      "last_checked": "2026-09-21T01:23:40.719525+08:00",
       "content_changed_at": null,
       "upstream_status": "ok",
-      "license": null
+      "license": null,
+      "original_partition": "manual"
     }
   ],
-  "owned_entries": [],
   "overrides": {
     "overrides_version": "1.0.0",
     "source": "docs/运行说明.md §9",
@@ -3034,6 +2897,18 @@
         "from": "candidate"
       },
       {
+        "skill_id": "anthropics/skills:skills/discernment-nudge/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-24",
+        "from": "candidate"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/doc-coauthoring/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-24",
+        "from": "recommended"
+      },
+      {
         "skill_id": "anthropics/skills:skills/docx/SKILL.md",
         "reason": "用户收藏",
         "added_at": "2026-09-22",
@@ -3044,6 +2919,12 @@
         "reason": "用户收藏",
         "added_at": "2026-09-24",
         "from": "recommended"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/internal-comms/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-24",
+        "from": "candidate"
       },
       {
         "skill_id": "anthropics/skills:skills/mcp-builder/SKILL.md",
@@ -3142,24 +3023,6 @@
         "from": "recommended"
       },
       {
-        "skill_id": "trailofbits/skills:plugins/dimensional-analysis/skills/dimensional-analysis/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-24",
-        "from": "recommended"
-      },
-      {
-        "skill_id": "trailofbits/skills:plugins/entry-point-analyzer/skills/entry-point-analyzer/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-24",
-        "from": "recommended"
-      },
-      {
-        "skill_id": "anthropics/skills:skills/doc-coauthoring/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-24",
-        "from": "recommended"
-      },
-      {
         "skill_id": "trailofbits/skills:plugins/code-improver/skills/code-improver/SKILL.md",
         "reason": "用户收藏",
         "added_at": "2026-09-24",
@@ -3178,13 +3041,43 @@
         "from": "recommended"
       },
       {
-        "skill_id": "anthropics/skills:skills/discernment-nudge/SKILL.md",
+        "skill_id": "trailofbits/skills:plugins/dimensional-analysis/skills/dimensional-analysis/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-24",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/entry-point-analyzer/skills/entry-point-analyzer/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-24",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/pdf/SKILL.md",
         "reason": "用户收藏",
         "added_at": "2026-09-24",
         "from": "candidate"
       },
       {
-        "skill_id": "anthropics/skills:skills/internal-comms/SKILL.md",
+        "skill_id": "anthropics/skills:skills/skill-creator/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-24",
+        "from": "candidate"
+      },
+      {
+        "skill_id": "vercel-labs/agent-skills:skills/composition-patterns/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-24",
+        "from": "candidate"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/culture-index/skills/interpreting-culture-index/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-24",
+        "from": "candidate"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/code-improver/tests/fixtures/pr-review-toolkit/skills/review-pr/SKILL.md",
         "reason": "用户收藏",
         "added_at": "2026-09-24",
         "from": "candidate"
@@ -3238,6 +3131,26 @@
       },
       {
         "skill_id": "trailofbits/skills:plugins/burpsuite-project-parser/skills/burpsuite-project-parser/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-24"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/code-maturity-assessor/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-24"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/solana-vulnerability-scanner/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-24"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/ton-vulnerability-scanner/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-24"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/dwarf-expert/skills/dwarf-expert/SKILL.md",
         "reason": "用户屏蔽/删除",
         "added_at": "2026-09-24"
       }
@@ -3381,11 +3294,39 @@
         "expires_at": "2027-02-21",
         "days": 150,
         "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "cloudflare/skills:skills/sandbox-migrate-to-next/SKILL.md",
+        "snoozed_at": "2026-09-24",
+        "expires_at": "2027-02-21",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "cloudflare/skills:skills/web-perf/SKILL.md",
+        "snoozed_at": "2026-09-24",
+        "expires_at": "2027-02-21",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/agentic-actions-auditor/skills/agentic-actions-auditor/SKILL.md",
+        "snoozed_at": "2026-09-24",
+        "expires_at": "2027-02-21",
+        "days": 150,
+        "reason": "用户暂不关注"
       }
     ]
   },
   "owned": {
     "schema_version": "1.0.0",
-    "items": []
+    "items": [
+      {
+        "skill_id": "anthropics/skills:skills/pdf/SKILL.md",
+        "name": "pdf",
+        "added_at": "2026-09-24",
+        "source_url": "https://github.com/anthropics/skills/blob/HEAD/skills/pdf/SKILL.md"
+      }
+    ]
   }
 }

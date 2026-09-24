@@ -4,9 +4,9 @@
   "generated_at": "2026-09-21T02:01:22.196060+08:00",
   "counts": {
     "recommended": 18,
-    "candidate": 17,
-    "manual": 27,
-    "excluded": 11
+    "candidate": 8,
+    "manual": 32,
+    "excluded": 15
   },
   "entries": [
     {
@@ -785,8 +785,13 @@
       "upstream_status": "ok",
       "license": null,
       "excluded": false,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-24",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "skill_type": null,
       "example_requests": [],
       "key_features": [
@@ -918,8 +923,13 @@
       "upstream_status": "ok",
       "license": null,
       "excluded": false,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-24",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "skill_type": null,
       "example_requests": [
         "“需要构建或迭代技能的用户”"
@@ -1406,8 +1416,13 @@
       "upstream_status": "ok",
       "license": null,
       "excluded": false,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-24",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "skill_type": null,
       "example_requests": [],
       "key_features": [
@@ -2443,7 +2458,12 @@
       ],
       "key_features": [
         "指导将 Cloudflare Sandbox 应用"
-      ]
+      ],
+      "snooze": {
+        "snoozed_at": "2026-09-24",
+        "expires_at": "2027-02-21",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "cloudflare/skills:skills/sandbox-next/SKILL.md",
@@ -2703,7 +2723,12 @@
       "manual_note": null,
       "skill_type": null,
       "example_requests": [],
-      "key_features": []
+      "key_features": [],
+      "snooze": {
+        "snoozed_at": "2026-09-24",
+        "expires_at": "2027-02-21",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "cloudflare/skills:skills/workers-best-practices/SKILL.md",
@@ -2889,7 +2914,12 @@
       "example_requests": [
         "“CI/CD 安全审查”"
       ],
-      "key_features": []
+      "key_features": [],
+      "snooze": {
+        "snoozed_at": "2026-09-24",
+        "expires_at": "2027-02-21",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "trailofbits/skills:plugins/audit-context-building/skills/audit-context-building/SKILL.md",
@@ -3177,14 +3207,16 @@
         ],
         "terms": []
       },
-      "status": "candidate",
+      "status": "excluded",
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
       "flags": [
         "NO_DOMAIN_TERM_MATCH"
       ],
-      "reason_codes": [],
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "limitations": "评估依赖于完整代码库访问权限和用户提供的流程信息；框架版本为v0.1.0",
       "evaluation_rules_version": "1.0.1",
       "first_seen": "2026-09-20T16:59:36+00:00",
@@ -3435,12 +3467,14 @@
         ],
         "terms": []
       },
-      "status": "candidate",
+      "status": "excluded",
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
       "flags": [],
-      "reason_codes": [],
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "limitations": "扫描依赖人工执行或外部工具；详细漏洞模式依赖 resources/VULNERABILITY_PATTERNS.md 文件；未提供自动化集成。",
       "evaluation_rules_version": "1.0.1",
       "first_seen": "2026-09-20T16:59:36+00:00",
@@ -3621,13 +3655,14 @@
         ],
         "terms": []
       },
-      "status": "candidate",
+      "status": "excluded",
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
       "flags": [],
       "reason_codes": [
-        "MISSING_DEPENDENCY"
+        "MISSING_DEPENDENCY",
+        "MANUAL_EXCLUDED"
       ],
       "limitations": "主要依赖人工审查，FunC 自动化工具有限；完整漏洞模式详情需额外查看 resources/VULNERABILITY_PATTERNS.md。",
       "evaluation_rules_version": "1.0.1",
@@ -4098,8 +4133,13 @@
       "upstream_status": "ok",
       "license": null,
       "excluded": false,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-24",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "skill_type": null,
       "example_requests": [],
       "key_features": [
@@ -4295,8 +4335,13 @@
       "upstream_status": "ok",
       "license": null,
       "excluded": false,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-24",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "skill_type": null,
       "example_requests": [],
       "key_features": [
@@ -4553,14 +4598,16 @@
         ],
         "terms": []
       },
-      "status": "candidate",
+      "status": "excluded",
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
       "flags": [
         "NO_DOMAIN_TERM_MATCH"
       ],
-      "reason_codes": [],
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "limitations": "不涉及运行时调试（gdb/lldb）和超出 DWARF 的逆向（Ghidra/IDA）；未提及 Windows PDB 等非 DWARF 调试信息",
       "evaluation_rules_version": "1.0.1",
       "first_seen": "2026-09-20T16:59:36+00:00",
@@ -4716,6 +4763,18 @@
         "from": "candidate"
       },
       {
+        "skill_id": "anthropics/skills:skills/discernment-nudge/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-24",
+        "from": "candidate"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/doc-coauthoring/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-24",
+        "from": "recommended"
+      },
+      {
         "skill_id": "anthropics/skills:skills/docx/SKILL.md",
         "reason": "用户收藏",
         "added_at": "2026-09-22",
@@ -4726,6 +4785,12 @@
         "reason": "用户收藏",
         "added_at": "2026-09-24",
         "from": "recommended"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/internal-comms/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-24",
+        "from": "candidate"
       },
       {
         "skill_id": "anthropics/skills:skills/mcp-builder/SKILL.md",
@@ -4824,24 +4889,6 @@
         "from": "recommended"
       },
       {
-        "skill_id": "trailofbits/skills:plugins/dimensional-analysis/skills/dimensional-analysis/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-24",
-        "from": "recommended"
-      },
-      {
-        "skill_id": "trailofbits/skills:plugins/entry-point-analyzer/skills/entry-point-analyzer/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-24",
-        "from": "recommended"
-      },
-      {
-        "skill_id": "anthropics/skills:skills/doc-coauthoring/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-24",
-        "from": "recommended"
-      },
-      {
         "skill_id": "trailofbits/skills:plugins/code-improver/skills/code-improver/SKILL.md",
         "reason": "用户收藏",
         "added_at": "2026-09-24",
@@ -4860,13 +4907,43 @@
         "from": "recommended"
       },
       {
-        "skill_id": "anthropics/skills:skills/discernment-nudge/SKILL.md",
+        "skill_id": "trailofbits/skills:plugins/dimensional-analysis/skills/dimensional-analysis/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-24",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/entry-point-analyzer/skills/entry-point-analyzer/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-24",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/pdf/SKILL.md",
         "reason": "用户收藏",
         "added_at": "2026-09-24",
         "from": "candidate"
       },
       {
-        "skill_id": "anthropics/skills:skills/internal-comms/SKILL.md",
+        "skill_id": "anthropics/skills:skills/skill-creator/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-24",
+        "from": "candidate"
+      },
+      {
+        "skill_id": "vercel-labs/agent-skills:skills/composition-patterns/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-24",
+        "from": "candidate"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/culture-index/skills/interpreting-culture-index/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-24",
+        "from": "candidate"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/code-improver/tests/fixtures/pr-review-toolkit/skills/review-pr/SKILL.md",
         "reason": "用户收藏",
         "added_at": "2026-09-24",
         "from": "candidate"
@@ -4920,6 +4997,26 @@
       },
       {
         "skill_id": "trailofbits/skills:plugins/burpsuite-project-parser/skills/burpsuite-project-parser/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-24"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/code-maturity-assessor/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-24"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/solana-vulnerability-scanner/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-24"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/ton-vulnerability-scanner/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-24"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/dwarf-expert/skills/dwarf-expert/SKILL.md",
         "reason": "用户屏蔽/删除",
         "added_at": "2026-09-24"
       }
@@ -5063,12 +5160,40 @@
         "expires_at": "2027-02-21",
         "days": 150,
         "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "cloudflare/skills:skills/sandbox-migrate-to-next/SKILL.md",
+        "snoozed_at": "2026-09-24",
+        "expires_at": "2027-02-21",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "cloudflare/skills:skills/web-perf/SKILL.md",
+        "snoozed_at": "2026-09-24",
+        "expires_at": "2027-02-21",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/agentic-actions-auditor/skills/agentic-actions-auditor/SKILL.md",
+        "snoozed_at": "2026-09-24",
+        "expires_at": "2027-02-21",
+        "days": 150,
+        "reason": "用户暂不关注"
       }
     ]
   },
   "owned": {
     "schema_version": "1.0.0",
-    "items": [],
+    "items": [
+      {
+        "skill_id": "anthropics/skills:skills/pdf/SKILL.md",
+        "name": "pdf",
+        "added_at": "2026-09-24",
+        "source_url": "https://github.com/anthropics/skills/blob/HEAD/skills/pdf/SKILL.md"
+      }
+    ],
     "source": "docs/plans/2026-09-24-已收录管理实施方案.md",
     "note": "已收录 Skill 项目级名单：标记为已收录的 Skill 不再出现在推荐、候选、收藏及定向查找结果中，也不再进行自动评估（0 Token 消耗）。"
   }
