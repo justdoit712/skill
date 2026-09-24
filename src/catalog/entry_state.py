@@ -16,6 +16,7 @@ from typing import Any, Optional
 
 from src.shared.models import CandidateIdentity
 from src.shared.schema import normalize_skill_type, normalize_string_list
+from .quality import quality_summary
 
 STATUS_RECOMMENDED = "recommended"
 STATUS_CANDIDATE = "candidate"
@@ -286,9 +287,11 @@ def update_entry(
         entry["evaluation_rules_version"] = event.rules_version
 
     if evaluation is not None:
+        entry["quality_summary"] = quality_summary(evaluation)
         entry["last_evaluation_id"] = event.evaluation_id or previous.get("last_evaluation_id")
         entry["evaluated_at"] = event.evaluated_at or (generated_at if event.kind == "fresh_evaluation" else previous.get("evaluated_at"))
     else:
+        entry["quality_summary"] = previous.get("quality_summary")
         entry["last_evaluation_id"] = previous.get("last_evaluation_id")
         entry["evaluated_at"] = previous.get("evaluated_at")
     return entry

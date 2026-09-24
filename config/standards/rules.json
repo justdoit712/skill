@@ -1,5 +1,9 @@
 {
-  "rules_version": "1.0.1",
+  "rules_version": "1.1.0",
+  "quality_review": {
+    "enabled": true,
+    "note": "普通查找：六项基础检查加实际价值、可执行性、结果验证三项质量检查。通过项须有逐行核验的原文引用；拟推荐项须再经一次独立评估，两轮分歧保留候选。每次请求分别计费并检查预算，不执行上游技能。"
+  },
   "source": "docs/Skills导航目录二开需求.md §5.2",
   "note": "评估规则与阈值的唯一来源。规则变更后须把受影响条目加入同一复核队列，并计入每周额度（§10.1）。AI 辅助评估不等于功能测试或安全审计。",
   "weekly_quota": 50,
@@ -115,6 +119,7 @@
       "SELF_REPO": "指向本导航目录自身仓库，不作为条目收录"
     },
     "candidate": {
+      "QUALITY_BELOW_BAR": "实际价值、可执行性或结果验证未达到推荐门槛",
       "INCOMPLETE_INSTRUCTIONS": "说明不完整",
       "INSUFFICIENT_EVIDENCE": "证据不足或无法定位",
       "UNRESOLVED_UNKNOWN": "存在无法判定的检查项",

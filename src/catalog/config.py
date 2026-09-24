@@ -107,6 +107,9 @@ def precheck(cfg: dict) -> list[str]:
         problems.append("taxonomy.json 未加载到任何主分类")
     if not cfg["rules"].get("checks"):
         problems.append("rules.json 未定义检查项")
+    quality = cfg["rules"].get("quality_review", {})
+    if not isinstance(quality, dict) or type(quality.get("enabled", False)) is not bool:
+        problems.append("rules.json quality_review.enabled 必须是布尔值")
     if not cfg["searches"].get("per_domain"):
         problems.append("searches.json 未定义任何领域的查询词")
     problems.extend(validate_model_config(cfg["model"]))

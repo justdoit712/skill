@@ -8,6 +8,8 @@
 
 from __future__ import annotations
 
+from .quality import quality_summary
+
 from dataclasses import dataclass, field
 import hashlib
 import json
@@ -127,6 +129,7 @@ def build_entry(
         "author": candidate.owner,
         # §6：中文简述来自评估；未评估时留空并明示状态，不编造
         "summary_zh": evaluation.get("summary_zh"),
+        "quality_summary": quality_summary(evaluation),
         "skill_type": normalize_skill_type(evaluation.get("skill_type")),
         "example_requests": normalize_string_list(
             evaluation.get("example_requests"), max_items=2, max_length=100
@@ -312,6 +315,7 @@ def _display(entry: dict) -> dict:
         "url": entry["url"],
         "author": entry["author"],
         "summary_zh": entry["summary_zh"],
+        "quality_summary": entry.get("quality_summary"),
         "skill_type": entry.get("skill_type"),
         "example_requests": entry.get("example_requests") or [],
         "key_features": entry.get("key_features") or [],

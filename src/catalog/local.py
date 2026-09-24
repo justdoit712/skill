@@ -434,29 +434,75 @@ class LocalCollection:
 
 def _evaluate_with_retries(state, candidate, text, eid, record):
     result = None
-    for index in range(int(record.get('attempts') or 0), state.max_attempts):
+    attempt_limit = int(record.get('max_attempts') or state.max_attempts)
+    initial_attempts = int(record.get('attempts') or 0)
+    for index in range(initial_attempts, attempt_limit):
         if state.report['budget_tokens'] >= state.settings['max_total_tokens']:
             state.report['stop_reason'] = 'token_limit'
             break
-        if index:
+        if index and (not record.get('pending_evaluation') or index > initial_attempts):
             delay = min(2 ** (index - 1), 8)
             state.log(f'重连 {index}/{state.max_retries}：{candidate.name}，{delay} 秒后重试。')
             state.sleep(delay)
         attempt = state.ledger.begin_attempt(eid)
         state.active_eid = eid
-        state.active_call = {'skill_id': candidate.skill_id, 'attempt': attempt, 'max_attempts': state.max_attempts, 'status': 'in_progress', 'usage': None}
+        state.active_call = {'skill_id': candidate.skill_id, 'attempt': attempt, 'max_attempts': attempt_limit, 'status': 'in_progress', 'usage': None}
         state.report['calls'].append(state.active_call)
         state.save()
-        result = state.evaluate_fn(candidate, text, model_cfg=state.cfg['model'], rules=state.cfg['rules'], taxonomy=state.cfg['taxonomy'], sleep=state.sleep)
+        observed = []
+
+        def on_request(event, stage, request_call):
+            if event == 'before':
+                if stage == 'review':
+                    if state.report['budget_tokens'] >= state.settings['max_total_tokens']:
+                        state.report['stop_reason'] = 'token_limit'
+                        return False
+                    if observed:
+                        state.active_call = {'skill_id': candidate.skill_id, 'attempt': attempt,
+                            'max_attempts': attempt_limit, 'status': 'in_progress', 'usage': None}
+                        state.report['calls'].append(state.active_call)
+                state.active_call['stage'] = stage
+                checkpoint = state.ledger.get(eid)
+                checkpoint.setdefault('requests', []).append(dict(state.active_call))
+                state.ledger.save_record(eid, checkpoint)
+                state.save()
+                return True
+            unknown_before = state.usage.unknown_usage_requests
+            state.active_call['usage'] = state.usage.add(request_call)
+            reserved = (state.usage.unknown_usage_requests - unknown_before) * state.unknown_reserve
+            state.report['unknown_usage_reserved_tokens'] += reserved
+            state.active_call['unknown_usage_reserved_tokens'] = reserved
+            state.active_call['diagnostics'] = {'error_type': getattr(request_call, 'error_type', None),
+                'http_status': getattr(request_call, 'http_status', None), 'latency_ms': getattr(request_call, 'latency_ms', None)}
+            state.active_call['status'] = 'completed' if request_call.ok else 'failed'
+            checkpoint = state.ledger.get(eid)
+            checkpoint['requests'][-1] = dict(state.active_call)
+            state.ledger.save_record(eid, checkpoint)
+            observed.append(request_call)
+            if state.active_call['usage']['total_tokens'] is None:
+                state.report['stop_reason'] = 'usage_unknown'
+            state.save()
+
+        result = state.evaluate_fn(candidate, text, model_cfg=state.cfg['model'], rules=state.cfg['rules'], taxonomy=state.cfg['taxonomy'], sleep=state.sleep, on_request=on_request, pending_evaluation=record.get('pending_evaluation'))
         call = result.get('call')
-        unknown_before = state.usage.unknown_usage_requests
-        state.active_call['usage'] = state.usage.add(call)
-        reserved_tokens = (state.usage.unknown_usage_requests - unknown_before) * state.unknown_reserve
-        state.report['unknown_usage_reserved_tokens'] += reserved_tokens
-        state.active_call['unknown_usage_reserved_tokens'] = reserved_tokens
-        state.active_call['diagnostics'] = {'error_type': getattr(call, 'error_type', None), 'http_status': getattr(call, 'http_status', None), 'latency_ms': getattr(call, 'latency_ms', None)}
+        if not observed:
+            # 兼容单次评估适配器；生产评估逐请求即时落账。
+            unknown_before = state.usage.unknown_usage_requests
+            state.active_call['usage'] = state.usage.add(call)
+            reserved_tokens = (state.usage.unknown_usage_requests - unknown_before) * state.unknown_reserve
+            state.report['unknown_usage_reserved_tokens'] += reserved_tokens
+            state.active_call['unknown_usage_reserved_tokens'] = reserved_tokens
+            state.active_call['diagnostics'] = {'error_type': getattr(call, 'error_type', None), 'http_status': getattr(call, 'http_status', None), 'latency_ms': getattr(call, 'latency_ms', None)}
         state.active_call['status'] = 'completed' if result['ok'] else 'failed'
         state.save()
+        if result.get('pending_evaluation'):
+            checkpoint = state.ledger.get(eid)
+            checkpoint.update(status='reserved', pending_evaluation=result['pending_evaluation'],
+                              max_attempts=state.max_attempts + 1)
+            state.ledger.save_record(eid, checkpoint)
+            state.active_call['status'] = 'completed'
+            state.active_eid = None
+            break
         if result['ok']:
             break
         code = result.get('reason_code') or 'MODEL_ERROR'
@@ -478,7 +524,7 @@ def _evaluate_with_retries(state, candidate, text, eid, record):
         state.report['failed_requests'] += 1
         state.save()
         state.log(f'请求失败：{candidate.name}；{message}。')
-        if not _retryable(result):
+        if not _retryable(result) or state.report['stop_reason']:
             break
     return result
 
@@ -562,7 +608,7 @@ def process_candidate(state, item):
         return True
     state.ledger.reserve([{'evaluation_id': eid, 'skill_id': candidate.skill_id, 'content_fingerprint': candidate.content_fingerprint, 'rules_version': state.cfg['rules']['rules_version'], 'model_config_version': state.cfg['model'].get('model_config_version')}])
     record = state.ledger.get(eid)
-    record['max_attempts'] = state.max_attempts
+    record['max_attempts'] = state.max_attempts + int(bool(record.get('pending_evaluation')))
     state.ledger.save_record(eid, record)
     state.report['evaluations'] += 1
     state.log(f"评估 #{state.report['evaluations']}：{candidate.name}（累计 {state.usage.total_tokens:,} Token）")
@@ -575,6 +621,7 @@ def process_candidate(state, item):
         evaluation = result['evaluation']
         outcome = {**decide(evaluation, state.cfg['rules']), 'evaluation': evaluation, 'materials': primary_material_bundle(candidate, text, now_local().isoformat()).manifest(), 'main_category': evaluation.get('main_category'), 'usage': state.active_call['usage']}
         outcome['candidate'] = asdict(candidate)
+        outcome['request_usage'] = (state.ledger.get(eid) or {}).get('requests', [])
         outcome['prescreen'] = asdict(pres)
         outcome['evaluated_at'] = now_local().isoformat()
         state.ledger.complete(eid, outcome)
@@ -584,7 +631,7 @@ def process_candidate(state, item):
         state.consecutive_failures = 0
         update_candidate_status(state.pool, seq, STATUS_DONE)
         save_pool(state.pool_path, state.pool)
-    else:
+    elif not result.get('pending_evaluation'):
         state.report['failed_evaluations'] += 1
         state.consecutive_failures += 1
         if _retryable(result) and state.max_retries:

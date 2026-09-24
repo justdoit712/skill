@@ -13,6 +13,7 @@ from src.infra.http import fetch_text
 from src.shared.identity import content_fingerprint
 from src.shared.runtime import now_local
 from src.shared.materials import validate_document, primary_material_bundle
+from src.shared.usage import UsageTotals
 from .store import catalog_task
 from .budget import BudgetLedger
 from .decide import decide
@@ -63,6 +64,7 @@ def _evaluate_queue(queue, cfg, ledger, staged, started, token_cap,
     evaluated = 0
     skipped = 0
     settled_items: list[str] = []
+    usage_unknown = False
 
     manual_picks_dict = get_manual_picks((cfg or {}).get("overrides") or {})
     manual_picks_set = set(manual_picks_dict.keys())
@@ -114,11 +116,11 @@ def _evaluate_queue(queue, cfg, ledger, staged, started, token_cap,
             skipped += 1
             continue
 
-        if token_cap and tokens_used >= token_cap:
+        if usage_unknown or (token_cap and tokens_used >= token_cap):
             token_stopped.append(candidate.skill_id)
             results[candidate.skill_id] = {
                 "status": "stopped",
-                "note": f"已达单次运行 token 上限 {token_cap}，本轮不再调用模型",
+                "note": "请求用量未知，本轮停止调用模型" if usage_unknown else f"已达单次运行 token 上限 {token_cap}，本轮不再调用模型",
             }
             continue
 
@@ -149,14 +151,43 @@ def _evaluate_queue(queue, cfg, ledger, staged, started, token_cap,
             continue
         materials = primary_material_bundle(candidate, text, started.isoformat())
         ledger.begin_attempt(eid, started)
+        request_records = list(existing.get("requests") or [])
+        observed_requests = 0
+
+        def on_request(event, stage, request_call):
+            nonlocal tokens_used, usage_unknown, observed_requests
+            if event == "before":
+                if stage == "review" and (usage_unknown or (token_cap and tokens_used >= token_cap)):
+                    return False
+                request_records.append({"stage": stage, "status": "in_progress", "usage": None})
+            else:
+                usage = UsageTotals()
+                observed_requests += 1
+                summary = usage.add(request_call)
+                tokens_used += usage.total_tokens
+                usage_unknown = usage_unknown or usage.unknown_usage_requests > 0
+                request_records[-1].update(status="completed" if request_call.ok else "failed", usage=summary)
+            record = ledger.get(eid)
+            record["requests"] = request_records
+            ledger.save_record(eid, record, started)
+            return True
+
         outcome = evaluate_fn(
             candidate, text, model_cfg=cfg["model"], rules=cfg["rules"],
-            taxonomy=cfg["taxonomy"], api_key=api_key, sleep=sleep,
+            taxonomy=cfg["taxonomy"], api_key=api_key, sleep=sleep, on_request=on_request,
+            pending_evaluation=existing.get("pending_evaluation"),
         )
         call = outcome.get("call")
-        if call is not None:
+        if call is not None and not observed_requests:
             tokens_used += int(getattr(call, "total_tokens", 0) or 0)
         if not outcome["ok"]:
+            if outcome.get("pending_evaluation"):
+                checkpoint = ledger.get(eid)
+                checkpoint.update(status="reserved", pending_evaluation=outcome["pending_evaluation"],
+                                  max_attempts=int(checkpoint.get("max_attempts") or 1) + 1)
+                ledger.save_record(eid, checkpoint, started)
+                results[candidate.skill_id] = {"status": "review_pending", "note": outcome["error"]}
+                continue
             ledger.fail(eid, outcome["reason_code"], outcome["error"] or "", started)
             results[candidate.skill_id] = {"status": "failed", "note": outcome["error"]}
             continue
@@ -171,6 +202,7 @@ def _evaluate_queue(queue, cfg, ledger, staged, started, token_cap,
                 "main_category": evaluation.get("main_category"),
                 "evaluation": evaluation,
                 "materials": materials.manifest(),
+                "request_usage": request_records,
                 "candidate": asdict(candidate),
                 "prescreen": item["prescreen"],
                 "evaluated_at": started.replace(microsecond=0).isoformat(),
@@ -180,7 +212,7 @@ def _evaluate_queue(queue, cfg, ledger, staged, started, token_cap,
         results[candidate.skill_id] = {"status": "completed", "decision": decision["decision"]}
         evaluated += 1
 
-    return {"results": results, "evaluated": evaluated, "skipped": skipped, "settled_items": settled_items, "tokens_used": tokens_used, "token_stopped": token_stopped}
+    return {"results": results, "evaluated": evaluated, "skipped": skipped, "settled_items": settled_items, "tokens_used": tokens_used, "token_stopped": token_stopped, "usage_unknown": usage_unknown}
 
 
 def _build_evaluated_catalog(previous_entries, queue, cfg, ledger, context):
@@ -352,6 +384,7 @@ def phase_evaluate(
         "tokens_used": tokens_used,
         "token_cap": token_cap or None,
         "token_stopped": token_stopped,
+        "usage_unknown": batch["usage_unknown"],
         "results": results,
         "entries_before": len(previous_entries),
         "entries_after": len(merged),

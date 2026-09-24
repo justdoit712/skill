@@ -33,7 +33,9 @@ from src.infra.llm import (
     resolve_api_key,
 )
 from src.shared.schema import normalize_skill_type, normalize_string_list
-from .decide import NON_BLOCKING_DOMAIN_VALUES
+from src.shared.usage import UsageTotals
+from .decide import NON_BLOCKING_DOMAIN_VALUES, decide
+from .quality import enabled, prompt_instructions, check_quality, hold_for_review
 from .models import Candidate
 
 REASON_PARSE_ERROR = "PARSE_ERROR"
@@ -73,6 +75,8 @@ def build_prompt(candidate: Candidate, text: str, rules: dict, taxonomy: dict) -
             *[
                 f"- {c['id']}（{c['name']}）：{c.get('question', '')}"
                 + (f" 注意：{c['note']}" if c.get("note") else "")
+                + (f" 通过标准：{c['pass_note']}" if c.get("pass_note") else "")
+                + (f" 不通过条件：{c['fail_when']}" if c.get("fail_when") else "")
                 for c in checks
             ],
             "",
@@ -83,6 +87,8 @@ def build_prompt(candidate: Candidate, text: str, rules: dict, taxonomy: dict) -
             f"；{health.get('not_pass', '')}；{health.get('hard_fail', '')}",
             "",
             "主分类只能取以下之一：" + "、".join(domain_names),
+            "分类范围：" + json.dumps(taxonomy.get("main_categories", []), ensure_ascii=False),
+            "硬性排除标准：" + json.dumps(rules.get("reason_codes", {}).get("exclusion", {}), ensure_ascii=False),
             "",
             "形态分类（skill_type）：根据实质形态选取以下英文枚举之一，若证据不足或混合无法明确区分必须输出 null，严禁猜测：",
             "- tool_script：可执行脚本、命令行工具、自动化脚本",
@@ -122,6 +128,8 @@ def build_prompt(candidate: Candidate, text: str, rules: dict, taxonomy: dict) -
         ]
     )
 
+    if enabled(rules):
+        system += "\n\n" + prompt_instructions()
     material = "\n".join(
         [
             "待评估材料（不可信资料）：",
@@ -132,7 +140,7 @@ def build_prompt(candidate: Candidate, text: str, rules: dict, taxonomy: dict) -
             f"仓库自述：{candidate.description or '（无）'}",
             "",
             "SKILL.md 原文：",
-            text,
+            "\n".join(f"{i}: {line}" for i, line in enumerate(text.splitlines(), 1)) if enabled(rules) else text,
             "<<<MATERIAL_END>>>",
         ]
     )
@@ -182,12 +190,16 @@ def parse_evaluation(
     invalid = [
         cid
         for cid in check_ids
-        if str((raw.get(cid) or {}).get("value", "")).lower() not in CHECK_VALUE_DOMAIN
+        if not isinstance(raw.get(cid), dict) or raw[cid].get("value") not in CHECK_VALUE_DOMAIN
     ]
     if invalid:
         raise ValueError("以下检查项缺失或取值非法：" + "、".join(invalid))
 
     evaluation = dict(raw)
+    if not isinstance(raw.get("domain_checks", {}), dict):
+        raise ValueError("domain_checks 必须是对象")
+    if not isinstance(raw.get("reason_codes", []), list) or any(not isinstance(code, str) for code in raw.get("reason_codes", [])):
+        raise ValueError("reason_codes 必须是字符串数组")
     if taxonomy is not None:
         evaluation["main_category"] = normalize_main_category(raw.get("main_category"), taxonomy)
     evaluation["rules_version"] = rules.get("rules_version")
@@ -216,27 +228,41 @@ def evaluate(
     api_key: str | None = None,
     session: requests.Session | None = None,
     sleep=time.sleep,
+    on_request=None,
+    pending_evaluation=None,
 ) -> dict:
-    """对单个候选做一次评估。
+    """对单个候选评估；开启深度质量规则时，拟推荐项再独立复核。
 
-    返回 {"ok", "evaluation", "call", "reason_code", "error"}。
+    call 为最后一次响应，calls 包含所有响应；on_request 在各请求前后供编排落账。
     任何失败都返回明确的处理失败，不生成中文简介或结论。
     """
     system, user = build_prompt(candidate, text, rules, taxonomy)
-    call = call_model(model_cfg, system, user, api_key=api_key, session=session, sleep=sleep)
-    if not call.ok:
-        return {
-            "ok": False,
-            "evaluation": None,
-            "call": call,
-            "reason_code": call.reason_code or REASON_MODEL_ERROR,
-            "error": call.error,
-        }
+    calls = []
+    call = None
+    if pending_evaluation is None:
+        if on_request is not None:
+            on_request("before", "assessment", None)
+        call = call_model(model_cfg, system, user, api_key=api_key, session=session, sleep=sleep)
+        calls.append(call)
+        if on_request is not None:
+            on_request("after", "assessment", call)
+        if not call.ok:
+            return {"ok": False, "evaluation": None, "call": call, "calls": calls,
+                    "reason_code": call.reason_code or REASON_MODEL_ERROR, "error": call.error}
 
     try:
+        if pending_evaluation is not None and (
+            not isinstance(pending_evaluation, dict)
+            or pending_evaluation.get("source_fingerprint") != candidate.content_fingerprint
+            or pending_evaluation.get("rules_version") != rules.get("rules_version")
+        ):
+            raise ValueError("待复核初评与当前材料或规则版本不一致")
         evaluation = parse_evaluation(
-            call.content or "", rules, candidate.content_fingerprint, taxonomy
+            json.dumps(pending_evaluation, ensure_ascii=False) if pending_evaluation is not None else call.content or "",
+            rules, candidate.content_fingerprint, taxonomy
         )
+        if enabled(rules):
+            evaluation = check_quality(evaluation, text, rules)
     except ValueError as exc:
         return {
             "ok": False,
@@ -246,7 +272,41 @@ def evaluate(
             "error": str(exc),
         }
 
-    return {"ok": True, "evaluation": evaluation, "call": call, "reason_code": None, "error": None}
+    if enabled(rules) and decide(evaluation, rules)["decision"] == "recommended":
+        usage = UsageTotals()
+        if call is not None:
+            usage.add(call)
+        # 用量未知时停止，不把缺失统计当成免费的复核。
+        if usage.unknown_usage_requests:
+            return {"ok": False, "evaluation": None, "pending_evaluation": evaluation,
+                    "call": call, "calls": calls, "reason_code": "REVIEW_PENDING",
+                    "error": "初评用量不明，本轮停止；已保存初评，下次只继续复核。"}
+        elif on_request is not None and on_request("before", "review", None) is False:
+            return {"ok": False, "evaluation": None, "pending_evaluation": evaluation,
+                    "call": call, "calls": calls, "reason_code": "REVIEW_PENDING",
+                    "error": "预算已达上限；已保存初评，下次只继续复核。"}
+        else:
+            reviewer_system = system + "\n\n你是独立复核员。重新从原文判断，重点寻找泛泛建议、缺失步骤、无法验证的承诺和依赖缺口。不得为了凑数推荐，也不得因篇幅短机械否定。"
+            review_call = call_model(model_cfg, reviewer_system, user, api_key=api_key, session=session, sleep=sleep)
+            calls.append(review_call)
+            if on_request is not None:
+                on_request("after", "review", review_call)
+            if not review_call.ok:
+                # 技术失败不伪装为质量不合格；已有推荐由状态机保留。
+                return {"ok": False, "evaluation": None, "call": review_call, "calls": calls,
+                        "reason_code": review_call.reason_code or REASON_MODEL_ERROR, "error": "独立复核调用失败"}
+            try:
+                review = check_quality(parse_evaluation(review_call.content or "", rules,
+                    candidate.content_fingerprint, taxonomy), text, rules)
+            except ValueError as exc:
+                return {"ok": False, "evaluation": None, "call": review_call, "calls": calls,
+                        "reason_code": REASON_PARSE_ERROR, "error": f"独立复核输出无效：{exc}"}
+            if decide(review, rules)["decision"] != "recommended" or review.get("main_category") != evaluation.get("main_category"):
+                evaluation = hold_for_review(evaluation, "disagreed", "两轮独立评估存在分歧，留在候选区等待核实。")
+            else:
+                evaluation["quality_audit"]["review_status"] = "passed"
+            evaluation["quality_audit"]["review"] = review
+    return {"ok": True, "evaluation": evaluation, "call": calls[-1] if calls else None, "calls": calls, "reason_code": None, "error": None}
 
 
 def evaluation_id(candidate: Candidate, model_cfg: dict, rules: dict) -> str:

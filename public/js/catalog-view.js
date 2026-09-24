@@ -54,6 +54,24 @@ export function reviewBlock(entry) {
     "</summary>" + (body.join("") || "<p>原评估未保留可展示的简述。</p>") + "</details>";
 }
 
+export function qualityBlock(entry) {
+  const quality = entry.quality_summary;
+  if (!quality) return "";
+  const names = { practical_value: "实际价值", actionability: "可执行性", verification: "结果验证" };
+  const values = { pass: "通过", fail: "未通过", unknown: "待核实" };
+  const states = { passed: "两轮评估通过", disagreed: "两轮评估有分歧", not_required: "初评未达到推荐门槛", budget_stopped: "待完成复核", usage_unknown: "待完成复核" };
+  const rows = [];
+  for (const [key, label] of Object.entries(names)) {
+    const check = (quality.checks || {})[key];
+    if (check) rows.push("<p>" + label + "：" + escapeHtml(values[check.value] || "待核实") + " — " + escapeHtml(check.evidence || "") + "</p>");
+    const review = (quality.review_checks || {})[key];
+    if (review && review.value !== "pass") rows.push("<p>复核意见（" + label + "）：" + escapeHtml(review.evidence || "") + "</p>");
+  }
+  if (quality.review_note) rows.push("<p>" + escapeHtml(quality.review_note) + "</p>");
+  for (const reason of quality.blocking_reasons || []) rows.push("<p>" + escapeHtml(reason) + "</p>");
+  return '<details class="review-box"><summary>筛选依据 · ' + escapeHtml(states[quality.review_status] || "待核实") + '</summary>' + rows.join("") + '<p>基于所提供材料评估，未经功能实测。</p></details>';
+}
+
 /**
  * 渲染技能目录列表。
  */
@@ -182,6 +200,7 @@ export function renderCatalogList(container, entries, overridesState, currentTab
       (entry.needs_review ? '<p class="detail review">待复核：' +
         escapeHtml(entry.review_note || "上游内容已变化，等待复核。") + "</p>" : "") +
       reviewBlock(entry) +
+      qualityBlock(entry) +
       (dates.length ? '<p class="dates">' + dates.join(" · ") + "</p>" : "");
     container.appendChild(li);
   });
