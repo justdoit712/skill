@@ -1,12 +1,11 @@
 {
   "catalog_version": "1.0.0",
   "rules_version": "1.0.1",
-  "generated_at": "2026-09-21T02:01:22.196060+08:00",
+  "generated_at": "2026-09-24T17:47:54.881484+08:00",
   "counts": {
-    "recommended": 18,
-    "candidate": 8,
-    "manual": 24,
-    "excluded": 23
+    "excluded": 23,
+    "candidate": 16,
+    "recommended": 84
   },
   "entries": [
     {
@@ -1369,6 +1368,11 @@
       "repo_url": "https://github.com/vercel-labs/agent-skills",
       "author": "vercel-labs",
       "summary_zh": "提供 React 组件组合模式指南，用于重构布尔属性过多的组件、构建灵活组件库和设计可复用 API，典型使用场景包括组件架构设计、状态管理与 React 19 迁移。",
+      "skill_type": null,
+      "example_requests": [],
+      "key_features": [
+        "提供 React 组件组合模式指南"
+      ],
       "main_category": {
         "id": "dev",
         "name": "编程开发"
@@ -1384,35 +1388,19 @@
       "dependencies_declared": [
         "React 19+ (仅适用于 react19 规则)"
       ],
-      "source_type": "official",
-      "discovery": {
-        "source_ids": [
-          "vercel_labs_agent_skills"
-        ],
-        "methods": [
-          "github_search"
-        ],
-        "terms": []
-      },
+      "limitations": "仅提供规则索引，具体规则和代码示例需查阅配套规则文件；React 19 部分仅适用于 React 19+。",
+      "license": null,
       "status": "candidate",
+      "reason_codes": [],
+      "first_seen": "2026-09-20T16:59:36+00:00",
+      "last_checked": "2026-09-24T17:17:43.316611+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:e38e0eaa609316b10423a9a138ed95e3",
+      "source_type": "official",
+      "upstream_status": "ok",
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "flags": [
-        "NO_DOMAIN_TERM_MATCH"
-      ],
-      "reason_codes": [
-        "INCOMPLETE_INSTRUCTIONS"
-      ],
-      "limitations": "仅提供规则索引，具体规则和代码示例需查阅配套规则文件；React 19 部分仅适用于 React 19+。",
-      "evaluation_rules_version": "1.0.1",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-21T01:28:34.579960+08:00",
-      "content_changed_at": null,
-      "content_fingerprint": "sha256:e38e0eaa609316b10423a9a138ed95e3",
-      "upstream_status": "ok",
-      "license": null,
-      "excluded": false,
       "manual_pick": true,
       "manual_note": {
         "added_at": "2026-09-24",
@@ -1420,11 +1408,9 @@
         "from": "candidate",
         "auto_status": "candidate"
       },
-      "skill_type": null,
-      "example_requests": [],
-      "key_features": [
-        "提供 React 组件组合模式指南"
-      ]
+      "evaluation_rules_version": "1.0.1",
+      "last_evaluation_id": null,
+      "evaluated_at": null
     },
     {
       "skill_id": "vercel-labs/agent-skills:skills/deploy-to-vercel/SKILL.md",
@@ -1503,6 +1489,9 @@
       "repo_url": "https://github.com/vercel-labs/agent-skills",
       "author": "vercel-labs",
       "summary_zh": "提供 React 与 Next.js 性能优化最佳实践规则，用于编写、审查或重构前端代码时提升性能。",
+      "skill_type": null,
+      "example_requests": [],
+      "key_features": [],
       "main_category": {
         "id": "dev",
         "name": "编程开发"
@@ -1517,33 +1506,19 @@
       ],
       "platform_declared": null,
       "dependencies_declared": [],
-      "source_type": "official",
-      "discovery": {
-        "source_ids": [
-          "vercel_labs_agent_skills"
-        ],
-        "methods": [
-          "github_search"
-        ],
-        "terms": []
-      },
+      "limitations": "仅提供规则索引和简要说明，详细规则内容需查看 rules/ 目录或 AGENTS.md；未提供依赖与平台声明。",
+      "license": null,
       "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-20T16:59:36+00:00",
+      "last_checked": "2026-09-24T17:17:44.155275+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:71ed7794962fa6e803ee83030517b5b9",
+      "source_type": "official",
+      "upstream_status": "ok",
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "flags": [
-        "NO_DOMAIN_TERM_MATCH"
-      ],
-      "reason_codes": [],
-      "limitations": "仅提供规则索引和简要说明，详细规则内容需查看 rules/ 目录或 AGENTS.md；未提供依赖与平台声明。",
-      "evaluation_rules_version": "1.0.1",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-21T01:30:07.121744+08:00",
-      "content_changed_at": null,
-      "content_fingerprint": "sha256:71ed7794962fa6e803ee83030517b5b9",
-      "upstream_status": "ok",
-      "license": null,
-      "excluded": false,
       "manual_pick": true,
       "manual_note": {
         "added_at": "2026-09-22",
@@ -1551,9 +1526,9 @@
         "from": "recommended",
         "auto_status": "recommended"
       },
-      "skill_type": null,
-      "example_requests": [],
-      "key_features": []
+      "evaluation_rules_version": "1.0.1",
+      "last_evaluation_id": null,
+      "evaluated_at": null
     },
     {
       "skill_id": "vercel-labs/agent-skills:skills/react-native-skills/SKILL.md",
@@ -1877,6 +1852,13 @@
       "repo_url": "https://github.com/vercel-labs/agent-skills",
       "author": "vercel-labs",
       "summary_zh": "该技能依据外部写作指南审查文档/散文的规范符合性，适用于要求检查写作风格或进行文档审查的场景。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "“检查写作风格或进行文档审查”"
+      ],
+      "key_features": [
+        "依据外部写作指南审查文档/散文的规范"
+      ],
       "main_category": {
         "id": "docs",
         "name": "文档办公"
@@ -1893,31 +1875,19 @@
       "dependencies_declared": [
         "WebFetch"
       ],
-      "source_type": "official",
-      "discovery": {
-        "source_ids": [
-          "vercel_labs_agent_skills"
-        ],
-        "methods": [
-          "github_search"
-        ],
-        "terms": []
-      },
+      "limitations": "依赖外部指南URL的可用性与内容；需要网络获取WebFetch能力；指南内容可能变化。",
+      "license": null,
       "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-20T16:59:36+00:00",
+      "last_checked": "2026-09-24T17:17:45.308699+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:89a5f581193289b80af58b980090aeed",
+      "source_type": "official",
+      "upstream_status": "ok",
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "flags": [],
-      "reason_codes": [],
-      "limitations": "依赖外部指南URL的可用性与内容；需要网络获取WebFetch能力；指南内容可能变化。",
-      "evaluation_rules_version": "1.0.1",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-21T01:33:43.300806+08:00",
-      "content_changed_at": null,
-      "content_fingerprint": "sha256:89a5f581193289b80af58b980090aeed",
-      "upstream_status": "ok",
-      "license": null,
-      "excluded": false,
       "manual_pick": true,
       "manual_note": {
         "added_at": "2026-09-22",
@@ -1925,13 +1895,9 @@
         "from": "recommended",
         "auto_status": "recommended"
       },
-      "skill_type": "guideline",
-      "example_requests": [
-        "“检查写作风格或进行文档审查”"
-      ],
-      "key_features": [
-        "依据外部写作指南审查文档/散文的规范"
-      ]
+      "evaluation_rules_version": "1.0.1",
+      "last_evaluation_id": null,
+      "evaluated_at": null
     },
     {
       "skill_id": "cloudflare/skills:skills/agents-sdk/SKILL.md",
@@ -2590,6 +2556,11 @@
       "repo_url": "https://github.com/cloudflare/skills",
       "author": "cloudflare",
       "summary_zh": "为现有前端与后端设置、修复或迁移 Cloudflare Turnstile 机器人验证，包含前端挂件嵌入和服务器端 Siteverify 校验，典型用于保护表单、登录、注册等用户触发请求。",
+      "skill_type": null,
+      "example_requests": [
+        "“保护表单、登录、注册等用户触发请求”"
+      ],
+      "key_features": [],
       "main_category": {
         "id": "dev",
         "name": "编程开发"
@@ -2614,33 +2585,19 @@
         "Cloudflare API token",
         "scripts: auth-probe.sh, widget-create.sh, validate.sh, persist-skill.sh"
       ],
-      "source_type": "official",
-      "discovery": {
-        "source_ids": [
-          "cloudflare_skills"
-        ],
-        "methods": [
-          "spec_initial_candidate"
-        ],
-        "terms": []
-      },
+      "limitations": "要求已有可放置 siteverify 的后端；不部署额外基础设施；不实现邮件/短信通知等超出范围的功能；对既有 widget 需要 Wrangler 4.109+ 且不支持自动安装；不能无后端纯静态站点使用。",
+      "license": null,
       "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-20T16:59:36+00:00",
+      "last_checked": "2026-09-24T17:17:46.202856+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:7d48437fa6bf484ece9aa2bf675e6a4b",
+      "source_type": "official",
+      "upstream_status": "ok",
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "flags": [
-        "NO_DOMAIN_TERM_MATCH"
-      ],
-      "reason_codes": [],
-      "limitations": "要求已有可放置 siteverify 的后端；不部署额外基础设施；不实现邮件/短信通知等超出范围的功能；对既有 widget 需要 Wrangler 4.109+ 且不支持自动安装；不能无后端纯静态站点使用。",
-      "evaluation_rules_version": "1.0.1",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-21T01:39:56.423329+08:00",
-      "content_changed_at": null,
-      "content_fingerprint": "sha256:7d48437fa6bf484ece9aa2bf675e6a4b",
-      "upstream_status": "ok",
-      "license": null,
-      "excluded": false,
       "manual_pick": true,
       "manual_note": {
         "added_at": "2026-09-24",
@@ -2648,11 +2605,9 @@
         "from": "recommended",
         "auto_status": "recommended"
       },
-      "skill_type": null,
-      "example_requests": [
-        "“保护表单、登录、注册等用户触发请求”"
-      ],
-      "key_features": []
+      "evaluation_rules_version": "1.0.1",
+      "last_evaluation_id": null,
+      "evaluated_at": null
     },
     {
       "skill_id": "cloudflare/skills:skills/web-perf/SKILL.md",
@@ -2915,7 +2870,17 @@
       "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/audit-context-building/skills/audit-context-building/SKILL.md",
       "repo_url": "https://github.com/trailofbits/skills",
       "author": "trailofbits",
-      "summary_zh": "在代码审计或威胁建模前构建代码库理解，记录函数假设、保证与依赖，供后续漏洞挖掘阶段使用。",
+      "summary_zh": "一款审计前置技能：在漏洞挖掘或威胁建模之前，通过子代理逐函数分析代码的假设、保证与依赖，并输出 DOSSIER.md 和每函数记录文件。适用于面对陌生代码库、或已有结论无法判断时先建立整体理解。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "开始审计前，帮我梳理这个陌生代码库各函数的假设与依赖",
+        "分析这个函数的调用链，看哪些假设其实没人保证"
+      ],
+      "key_features": [
+        "审计前逐函数梳理假设、保证与依赖，产出 dossier 与函数记录",
+        "分析交由子代理执行，仅返回紧凑记录以保留上下文",
+        "标记 \"nothing found\" 的未强制假设并保留未决问题"
+      ],
       "main_category": {
         "id": "security",
         "name": "安全"
@@ -2925,50 +2890,34 @@
       ],
       "tags": [
         "代码审计",
-        "上下文构建",
         "威胁建模",
-        "架构审查"
+        "代码理解",
+        "子代理工作流"
       ],
       "platform_declared": null,
       "dependencies_declared": [
-        "Workflow",
-        "Task",
-        "Read",
-        "Grep",
-        "Glob"
+        "allowed-tools: Workflow, Task, Read, Grep, Glob",
+        "插件命令 /audit-context-building:audit-context 与子代理 audit-context-building:function-analyzer",
+        "resources/ANALYSIS_FORMAT.md、FUNCTION_MICRO_ANALYSIS_EXAMPLE.md、DOMAIN_NOTES.md"
       ],
+      "limitations": "仅做上下文理解，不命名漏洞、不提修复、不写 PoC、不评严重性；依赖插件子代理与工作流工具，材料中未给出所引用 resources 文件内容，也未声明运行平台。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-20T16:59:36+00:00",
+      "last_checked": "2026-09-24T17:18:15.466053+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:33fa693dc6e166cfa4919e4373cb6578",
       "source_type": "official",
-      "discovery": {
-        "source_ids": [
-          "trailofbits_skills"
-        ],
-        "methods": [
-          "spec_initial_candidate"
-        ],
-        "terms": []
-      },
-      "status": "candidate",
+      "upstream_status": "ok",
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "flags": [],
-      "reason_codes": [],
-      "limitations": "不进行漏洞识别、修复、PoC 编写或严重性评级；仅生成理解性上下文，需后续阶段使用。",
-      "evaluation_rules_version": "1.0.1",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-21T01:42:39.810491+08:00",
-      "content_changed_at": null,
-      "content_fingerprint": "sha256:33fa693dc6e166cfa4919e4373cb6578",
-      "upstream_status": "ok",
-      "license": null,
-      "excluded": false,
       "manual_pick": false,
       "manual_note": null,
-      "skill_type": null,
-      "example_requests": [],
-      "key_features": [
-        "在代码审计或威胁建模前构建代码"
-      ]
+      "evaluation_rules_version": "1.0.1",
+      "last_evaluation_id": "trailofbits/skills:plugins/audit-context-building/skills/audit-context-building/SKILL.md|sha256:33fa693dc6e166cfa4919e4373cb6578|1.0.1|1.0.0",
+      "evaluated_at": "2026-09-24T17:18:15.465054+08:00"
     },
     {
       "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/algorand-vulnerability-scanner/SKILL.md",
@@ -3038,6 +2987,13 @@
       "repo_url": "https://github.com/trailofbits/skills",
       "author": "trailofbits",
       "summary_zh": "该技能帮助开发者在安全审计前按 Trail of Bits 清单准备代码库，包括设定审查目标、运行静态分析、提升测试覆盖率、清理死代码、完善文档等，适用于即将接受外部安全审计的项目。",
+      "skill_type": null,
+      "example_requests": [
+        "“即将接受外部安全审计的项目”"
+      ],
+      "key_features": [
+        "覆盖率、清理死代码、完善文档等"
+      ],
       "main_category": {
         "id": "security",
         "name": "安全"
@@ -3064,31 +3020,19 @@
         "Node.js",
         "Git"
       ],
-      "source_type": "official",
-      "discovery": {
-        "source_ids": [
-          "trailofbits_skills"
-        ],
-        "methods": [
-          "spec_initial_candidate"
-        ],
-        "terms": []
-      },
+      "limitations": "不替代专业安全审计，不执行审计；结果依赖用户运行工具与提供的信息；需要用户具备对应生态工具链。",
+      "license": null,
       "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-20T16:59:36+00:00",
+      "last_checked": "2026-09-24T17:18:16.403183+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:d639b411a315ea9420e40afabe75bbf4",
+      "source_type": "official",
+      "upstream_status": "ok",
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "flags": [],
-      "reason_codes": [],
-      "limitations": "不替代专业安全审计，不执行审计；结果依赖用户运行工具与提供的信息；需要用户具备对应生态工具链。",
-      "evaluation_rules_version": "1.0.1",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-21T01:44:08.627750+08:00",
-      "content_changed_at": null,
-      "content_fingerprint": "sha256:d639b411a315ea9420e40afabe75bbf4",
-      "upstream_status": "ok",
-      "license": null,
-      "excluded": false,
       "manual_pick": true,
       "manual_note": {
         "added_at": "2026-09-24",
@@ -3096,13 +3040,9 @@
         "from": "recommended",
         "auto_status": "recommended"
       },
-      "skill_type": null,
-      "example_requests": [
-        "“即将接受外部安全审计的项目”"
-      ],
-      "key_features": [
-        "覆盖率、清理死代码、完善文档等"
-      ]
+      "evaluation_rules_version": "1.0.1",
+      "last_evaluation_id": null,
+      "evaluated_at": null
     },
     {
       "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/cairo-vulnerability-scanner/SKILL.md",
@@ -3231,6 +3171,11 @@
       "repo_url": "https://github.com/trailofbits/skills",
       "author": "trailofbits",
       "summary_zh": "用于扫描 Cosmos SDK 模块和 CosmWasm 合约中的共识关键漏洞（链停止、资金损失、状态分歧），适用于审计自定义模块、审查 IBC 集成或链上线前安全评估。",
+      "skill_type": null,
+      "example_requests": [
+        "“审计自定义模块、审查 IBC 集成或链上线前安全评估”"
+      ],
+      "key_features": [],
       "main_category": {
         "id": "security",
         "name": "安全"
@@ -3247,31 +3192,19 @@
       ],
       "platform_declared": null,
       "dependencies_declared": [],
-      "source_type": "official",
-      "discovery": {
-        "source_ids": [
-          "trailofbits_skills"
-        ],
-        "methods": [
-          "spec_initial_candidate"
-        ],
-        "terms": []
-      },
+      "limitations": "不能用于纯 Solidity/EVM 审计、CometBFT 共识引擎内部、非共识关键代码；依赖资源文件；仅覆盖 SDK v0.53.x 版本。",
+      "license": null,
       "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-20T16:59:36+00:00",
+      "last_checked": "2026-09-24T17:18:17.429230+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:5f12f1ecdcf220726d32b391e5e64680",
+      "source_type": "official",
+      "upstream_status": "ok",
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "flags": [],
-      "reason_codes": [],
-      "limitations": "不能用于纯 Solidity/EVM 审计、CometBFT 共识引擎内部、非共识关键代码；依赖资源文件；仅覆盖 SDK v0.53.x 版本。",
-      "evaluation_rules_version": "1.0.1",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-21T01:45:56.237900+08:00",
-      "content_changed_at": null,
-      "content_fingerprint": "sha256:5f12f1ecdcf220726d32b391e5e64680",
-      "upstream_status": "ok",
-      "license": null,
-      "excluded": false,
       "manual_pick": true,
       "manual_note": {
         "added_at": "2026-09-24",
@@ -3279,11 +3212,9 @@
         "from": "recommended",
         "auto_status": "recommended"
       },
-      "skill_type": null,
-      "example_requests": [
-        "“审计自定义模块、审查 IBC 集成或链上线前安全评估”"
-      ],
-      "key_features": []
+      "evaluation_rules_version": "1.0.1",
+      "last_evaluation_id": null,
+      "evaluated_at": null
     },
     {
       "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/guidelines-advisor/SKILL.md",
@@ -3871,6 +3802,13 @@
       "repo_url": "https://github.com/trailofbits/skills",
       "author": "trailofbits",
       "summary_zh": "code-improver 通过用户指定的审查者与修复子代理循环改进代码目标，直至审查无关键/主要问题，适用于按指定审查者迭代修复代码、技能或模块的场景。",
+      "skill_type": null,
+      "example_requests": [
+        "“按指定审查者迭代修复代码、技能或模块”"
+      ],
+      "key_features": [
+        "code-improver 通过用户指定的审查者与修复子代理循环改进代码"
+      ],
       "main_category": {
         "id": "dev",
         "name": "编程开发"
@@ -3891,33 +3829,19 @@
         "TaskOutput",
         "TaskStop"
       ],
-      "source_type": "official",
-      "discovery": {
-        "source_ids": [
-          "trailofbits_skills"
-        ],
-        "methods": [
-          "spec_initial_candidate"
-        ],
-        "terms": []
-      },
+      "limitations": "仅在工作树内修改，不提交；审查者必须由用户指定且已安装；依赖工作流脚本和 Workflow 工具；不适用于一次性审查、快速修复、Claude Code skill 或分支拉取请求。",
+      "license": null,
       "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-20T16:59:36+00:00",
+      "last_checked": "2026-09-24T17:18:18.306117+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:a4e33a24c853da3df13262da9bce1fd8",
+      "source_type": "official",
+      "upstream_status": "ok",
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "flags": [
-        "NO_DOMAIN_TERM_MATCH"
-      ],
-      "reason_codes": [],
-      "limitations": "仅在工作树内修改，不提交；审查者必须由用户指定且已安装；依赖工作流脚本和 Workflow 工具；不适用于一次性审查、快速修复、Claude Code skill 或分支拉取请求。",
-      "evaluation_rules_version": "1.0.1",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-21T01:52:17.716862+08:00",
-      "content_changed_at": null,
-      "content_fingerprint": "sha256:a4e33a24c853da3df13262da9bce1fd8",
-      "upstream_status": "ok",
-      "license": null,
-      "excluded": false,
       "manual_pick": true,
       "manual_note": {
         "added_at": "2026-09-24",
@@ -3925,13 +3849,9 @@
         "from": "recommended",
         "auto_status": "recommended"
       },
-      "skill_type": null,
-      "example_requests": [
-        "“按指定审查者迭代修复代码、技能或模块”"
-      ],
-      "key_features": [
-        "code-improver 通过用户指定的审查者与修复子代理循环改进代码"
-      ]
+      "evaluation_rules_version": "1.0.1",
+      "last_evaluation_id": null,
+      "evaluated_at": null
     },
     {
       "skill_id": "trailofbits/skills:plugins/code-improver/skills/pr-improver/SKILL.md",
@@ -3940,6 +3860,11 @@
       "repo_url": "https://github.com/trailofbits/skills",
       "author": "trailofbits",
       "summary_zh": "PR Improver 自动对当前分支变更运行审查-修复循环，直到 PR 审查无严重/主要问题，适用于在创建或更新 PR 前清理分支。",
+      "skill_type": null,
+      "example_requests": [
+        "“在创建或更新 PR 前清理分支”"
+      ],
+      "key_features": [],
       "main_category": {
         "id": "dev",
         "name": "编程开发"
@@ -3962,33 +3887,19 @@
         "pr-review-toolkit",
         "code-improver workflow improve.js"
       ],
-      "source_type": "official",
-      "discovery": {
-        "source_ids": [
-          "trailofbits_skills"
-        ],
-        "methods": [
-          "spec_initial_candidate"
-        ],
-        "terms": []
-      },
+      "limitations": "不提交代码；要求 Git 仓库且当前分支不是 base；依赖 Workflow 工具与动态 workflow 文件；默认 reviewer 需要 pr-review-toolkit 插件；不适用于一次性审查或未推送的探索性改动。",
+      "license": null,
       "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-20T16:59:36+00:00",
+      "last_checked": "2026-09-24T17:18:20.188820+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:8bb6055905f95d4e0bbd6dbbab2be930",
+      "source_type": "official",
+      "upstream_status": "ok",
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "flags": [
-        "NO_DOMAIN_TERM_MATCH"
-      ],
-      "reason_codes": [],
-      "limitations": "不提交代码；要求 Git 仓库且当前分支不是 base；依赖 Workflow 工具与动态 workflow 文件；默认 reviewer 需要 pr-review-toolkit 插件；不适用于一次性审查或未推送的探索性改动。",
-      "evaluation_rules_version": "1.0.1",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-21T01:52:44.000306+08:00",
-      "content_changed_at": null,
-      "content_fingerprint": "sha256:8bb6055905f95d4e0bbd6dbbab2be930",
-      "upstream_status": "ok",
-      "license": null,
-      "excluded": false,
       "manual_pick": true,
       "manual_note": {
         "added_at": "2026-09-24",
@@ -3996,11 +3907,9 @@
         "from": "recommended",
         "auto_status": "recommended"
       },
-      "skill_type": null,
-      "example_requests": [
-        "“在创建或更新 PR 前清理分支”"
-      ],
-      "key_features": []
+      "evaluation_rules_version": "1.0.1",
+      "last_evaluation_id": null,
+      "evaluated_at": null
     },
     {
       "skill_id": "trailofbits/skills:plugins/code-improver/skills/skill-improver/SKILL.md",
@@ -4008,64 +3917,53 @@
       "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/code-improver/skills/skill-improver/SKILL.md",
       "repo_url": "https://github.com/trailofbits/skills",
       "author": "trailofbits",
-      "summary_zh": "skill-improver 通过调用 code-improver:improve 工作流，对 Claude Code 技能进行自动化审查-修复循环，直到审查无 critical/major 问题，并带有跨轮次发现台账、升级机制与范围守护。典型用于修复技能质量问题、迭代精炼技能或升级后恢复循环。",
+      "summary_zh": "面向 Claude Code 技能的自动审查-修复循环入口：解析目标技能路径并调用 code-improver 的 improve 工作流，由 plugin-dev skill-reviewer 反复审查修复直至无关键/重大问题。适用于迭代改进技能质量或在升级中断后继续循环。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "fix my skill",
+        "improve this skill until it passes review"
+      ],
+      "key_features": [
+        "自主审查-修复循环，直至审查零关键/重大问题",
+        "跨轮次发现台账，升级后可携台账续跑",
+        "每轮修复后机械式 git-diff 范围守卫"
+      ],
       "main_category": {
-        "id": "automation",
-        "name": "自动化"
+        "id": "dev",
+        "name": "编程开发"
       },
       "candidate_domains": [],
       "tags": [
-        "skill-improvement",
-        "code-review",
-        "automation",
-        "claude-code-skill",
-        "workflow"
+        "技能改进",
+        "代码审查",
+        "自动化循环",
+        "Claude Code 插件"
       ],
-      "platform_declared": null,
+      "platform_declared": "Claude Code 插件环境（marketplace: claude-plugins-official）；脚本路径回退查找同时涉及 ~/.claude 与 ~/.codex",
       "dependencies_declared": [
-        "plugin-dev plugin (marketplace claude-plugins-official)",
-        "Workflow tool",
-        "Bash",
-        "Glob",
-        "Read",
-        "TaskOutput",
-        "TaskStop",
-        "CLAUDE_PLUGIN_ROOT or CODEX_PLUGIN_ROOT environment variable"
+        "plugin-dev 插件（plugin-dev:skill-reviewer agent，来自 claude-plugins-official 市场）",
+        "工作流脚本 workflows/improve.js",
+        "Workflow 工具（另使用 TaskOutput/TaskStop 轮询与停止任务）",
+        "allowed-tools: Bash Glob Read TaskOutput TaskStop Workflow"
       ],
+      "limitations": "循环、台账与守卫的实现位于未随材料提供的 workflows/improve.js，其具体行为无法从本材料核实；需要预先安装 plugin-dev 插件且 Workflow 工具可用，否则中止；未声明操作系统兼容性。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-20T16:59:36+00:00",
+      "last_checked": "2026-09-24T17:18:59.177378+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:5764d6f51c5cd2e9dccb650b2a8f0428",
       "source_type": "official",
-      "discovery": {
-        "source_ids": [
-          "trailofbits_skills"
-        ],
-        "methods": [
-          "spec_initial_candidate"
-        ],
-        "terms": []
-      },
-      "status": "candidate",
+      "upstream_status": "ok",
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "flags": [
-        "NO_DOMAIN_TERM_MATCH"
-      ],
-      "reason_codes": [],
-      "limitations": "仅针对 Claude Code skill；需要 plugin-dev 插件与 Workflow 工具；循环运行于后台，非交互环境需轮询；不会自动提交更改。",
-      "evaluation_rules_version": "1.0.1",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-21T01:53:57.355615+08:00",
-      "content_changed_at": null,
-      "content_fingerprint": "sha256:5764d6f51c5cd2e9dccb650b2a8f0428",
-      "upstream_status": "ok",
-      "license": null,
-      "excluded": false,
       "manual_pick": false,
       "manual_note": null,
-      "skill_type": null,
-      "example_requests": [
-        "“修复技能质量问题、迭代精炼技能或升级后恢复循环”"
-      ],
-      "key_features": []
+      "evaluation_rules_version": "1.0.1",
+      "last_evaluation_id": "trailofbits/skills:plugins/code-improver/skills/skill-improver/SKILL.md|sha256:5764d6f51c5cd2e9dccb650b2a8f0428|1.0.1|1.0.0",
+      "evaluated_at": "2026-09-24T17:18:59.176377+08:00"
     },
     {
       "skill_id": "trailofbits/skills:plugins/code-improver/tests/fixtures/pr-review-toolkit/skills/review-pr/SKILL.md",
@@ -4074,6 +3972,12 @@
       "repo_url": "https://github.com/trailofbits/skills",
       "author": "trailofbits",
       "summary_zh": "该技能用于审查当前分支相对基础分支的代码变更，检查正确性、测试覆盖和文档准确性，典型场景是响应分支、diff 或 PR 审查请求。",
+      "skill_type": null,
+      "example_requests": [],
+      "key_features": [
+        "覆盖和文档准确性",
+        "用于审查当前分支相对基础分支的代码"
+      ],
       "main_category": {
         "id": "dev",
         "name": "编程开发"
@@ -4086,35 +3990,19 @@
       ],
       "platform_declared": null,
       "dependencies_declared": [],
-      "source_type": "official",
-      "discovery": {
-        "source_ids": [
-          "trailofbits_skills"
-        ],
-        "methods": [
-          "spec_initial_candidate"
-        ],
-        "terms": []
-      },
+      "limitations": "未声明 git 依赖及运行环境要求；需要调用者提供 base 分支名称。",
+      "license": null,
       "status": "candidate",
+      "reason_codes": [],
+      "first_seen": "2026-09-20T16:59:36+00:00",
+      "last_checked": "2026-09-24T17:19:00.206288+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:133b4e5a107b41260d4f7e4b91311a37",
+      "source_type": "official",
+      "upstream_status": "ok",
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "flags": [
-        "NO_DOMAIN_TERM_MATCH"
-      ],
-      "reason_codes": [
-        "MISSING_DEPENDENCY"
-      ],
-      "limitations": "未声明 git 依赖及运行环境要求；需要调用者提供 base 分支名称。",
-      "evaluation_rules_version": "1.0.1",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-21T01:54:26.648746+08:00",
-      "content_changed_at": null,
-      "content_fingerprint": "sha256:133b4e5a107b41260d4f7e4b91311a37",
-      "upstream_status": "ok",
-      "license": null,
-      "excluded": false,
       "manual_pick": true,
       "manual_note": {
         "added_at": "2026-09-24",
@@ -4122,12 +4010,9 @@
         "from": "candidate",
         "auto_status": "candidate"
       },
-      "skill_type": null,
-      "example_requests": [],
-      "key_features": [
-        "覆盖和文档准确性",
-        "用于审查当前分支相对基础分支的代码"
-      ]
+      "evaluation_rules_version": "1.0.1",
+      "last_evaluation_id": null,
+      "evaluated_at": null
     },
     {
       "skill_id": "trailofbits/skills:plugins/code-improver/tests/fixtures/review-panel/skills/panel-review/SKILL.md",
@@ -4136,6 +4021,13 @@
       "repo_url": "https://github.com/trailofbits/skills",
       "author": "trailofbits",
       "summary_zh": "启动一组专家审计子代理对代码目标进行审查并合并报告，适用于请求运行 panel review 的代码审查场景。",
+      "skill_type": null,
+      "example_requests": [
+        "“请求运行 panel review 的代码审查”"
+      ],
+      "key_features": [
+        "启动一组专家审计子代理对代码"
+      ],
       "main_category": {
         "id": "dev",
         "name": "编程开发"
@@ -4151,33 +4043,19 @@
         "review-panel:naming-auditor",
         "review-panel:todo-auditor"
       ],
-      "source_type": "official",
-      "discovery": {
-        "source_ids": [
-          "trailofbits_skills"
-        ],
-        "methods": [
-          "spec_initial_candidate"
-        ],
-        "terms": []
-      },
+      "limitations": "依赖预定义的审查子代理和 Task 调度工具；不执行具体审计规则，仅合并结果；未声明平台兼容性。",
+      "license": null,
       "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-20T16:59:36+00:00",
+      "last_checked": "2026-09-24T17:19:01.083951+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:3c16ddddc03bf29bc254b9ca1de1e6f1",
+      "source_type": "official",
+      "upstream_status": "ok",
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "flags": [
-        "NO_DOMAIN_TERM_MATCH"
-      ],
-      "reason_codes": [],
-      "limitations": "依赖预定义的审查子代理和 Task 调度工具；不执行具体审计规则，仅合并结果；未声明平台兼容性。",
-      "evaluation_rules_version": "1.0.1",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-21T01:55:01.665990+08:00",
-      "content_changed_at": null,
-      "content_fingerprint": "sha256:3c16ddddc03bf29bc254b9ca1de1e6f1",
-      "upstream_status": "ok",
-      "license": null,
-      "excluded": false,
       "manual_pick": true,
       "manual_note": {
         "added_at": "2026-09-24",
@@ -4185,13 +4063,9 @@
         "from": "recommended",
         "auto_status": "recommended"
       },
-      "skill_type": null,
-      "example_requests": [
-        "“请求运行 panel review 的代码审查”"
-      ],
-      "key_features": [
-        "启动一组专家审计子代理对代码"
-      ]
+      "evaluation_rules_version": "1.0.1",
+      "last_evaluation_id": null,
+      "evaluated_at": null
     },
     {
       "skill_id": "trailofbits/skills:plugins/constant-time-analysis/skills/constant-time-analysis/SKILL.md",
@@ -4273,6 +4147,11 @@
       "repo_url": "https://github.com/trailofbits/skills",
       "author": "trailofbits",
       "summary_zh": "解读 Culture Index 调查和行为画像数据，支持个人分析、团队构成、倦怠检测、招聘和冲突调解等场景。",
+      "skill_type": null,
+      "example_requests": [],
+      "key_features": [
+        "支持个人分析、团队构成、倦怠检测、招聘和冲突调解等场景"
+      ],
       "main_category": {
         "id": "docs",
         "name": "文档办公"
@@ -4290,33 +4169,19 @@
         "uv",
         "extract_pdf.py"
       ],
-      "source_type": "official",
-      "discovery": {
-        "source_ids": [
-          "trailofbits_skills"
-        ],
-        "methods": [
-          "spec_initial_candidate"
-        ],
-        "terms": []
-      },
+      "limitations": "不能用于临床心理评估或诊断，不能作为招聘/解雇的唯一依据，仅适用于 Culture Index 评估",
+      "license": null,
       "status": "candidate",
+      "reason_codes": [],
+      "first_seen": "2026-09-20T16:59:36+00:00",
+      "last_checked": "2026-09-24T17:19:01.942279+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:4ebafac15db6bdbeb5bc5ebd8d2bc2dc",
+      "source_type": "official",
+      "upstream_status": "ok",
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "flags": [
-        "NO_DOMAIN_TERM_MATCH"
-      ],
-      "reason_codes": [],
-      "limitations": "不能用于临床心理评估或诊断，不能作为招聘/解雇的唯一依据，仅适用于 Culture Index 评估",
-      "evaluation_rules_version": "1.0.1",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-21T01:57:04.711030+08:00",
-      "content_changed_at": null,
-      "content_fingerprint": "sha256:4ebafac15db6bdbeb5bc5ebd8d2bc2dc",
-      "upstream_status": "ok",
-      "license": null,
-      "excluded": false,
       "manual_pick": true,
       "manual_note": {
         "added_at": "2026-09-24",
@@ -4324,11 +4189,9 @@
         "from": "candidate",
         "auto_status": "candidate"
       },
-      "skill_type": null,
-      "example_requests": [],
-      "key_features": [
-        "支持个人分析、团队构成、倦怠检测、招聘和冲突调解等场景"
-      ]
+      "evaluation_rules_version": "1.0.1",
+      "last_evaluation_id": null,
+      "evaluated_at": null
     },
     {
       "skill_id": "trailofbits/skills:plugins/devcontainer-setup/skills/devcontainer-setup/SKILL.md",
@@ -4725,6 +4588,2823 @@
         "expires_at": "2027-02-21",
         "reason": "用户暂不关注"
       }
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/fp-check/skills/fp-check/SKILL.md",
+      "name": "fp-check",
+      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/fp-check/skills/fp-check/SKILL.md",
+      "repo_url": "https://github.com/trailofbits/skills",
+      "author": "trailofbits",
+      "summary_zh": "用于系统化验证已发现的疑似安全漏洞，逐条给出 TRUE POSITIVE 或 FALSE POSITIVE 结论并附证据，支持多漏洞批量分诊与利用链检查。适用于核实某个漏洞报告是否真实、是否可利用或为误报。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "帮我验证这个漏洞报告是真阳性还是误报",
+        "检查这个漏洞是否真的可以被利用"
+      ],
+      "key_features": [
+        "区分标准验证与深度验证两条路由",
+        "六道强制门禁评审与统一结论格式",
+        "批量分诊并检查漏洞利用链组合"
+      ],
+      "main_category": {
+        "id": "security",
+        "name": "安全"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "漏洞验证",
+        "误报排查",
+        "安全审计",
+        "代码审计"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "allowed-tools：Read、Grep、Glob、LSP、Bash、Task、Write、Edit、AskUserQuestion、TaskCreate、TaskUpdate、TaskList、TaskGet",
+        "references/ 下的 6 个参考文件（standard-verification.md、deep-verification.md、gate-reviews.md、bug-class-verification.md、false-positive-patterns.md、evidence-templates.md）",
+        "插件内置的分析代理（analysis agents，见 deep-verification.md 描述）"
+      ],
+      "limitations": "仅用于验证已提出的具体疑似漏洞，明确不用于漏洞发现或一般代码审查；具体验证清单与门禁细节依赖 SKILL.md 中引用的 references 文件，本次材料仅提供 SKILL.md 正文，未包含这些参考文件内容。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-24T17:19:37.757971+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:129223b79b8cb1e7c289c90cbe4ba288",
+      "source_type": "official",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.0.1",
+      "last_evaluation_id": "trailofbits/skills:plugins/fp-check/skills/fp-check/SKILL.md|sha256:129223b79b8cb1e7c289c90cbe4ba288|1.0.1|1.0.0",
+      "evaluated_at": "2026-09-24T17:19:37.756930+08:00"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/gh-cli/skills/gh-cli/SKILL.md",
+      "name": "gh-cli",
+      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/gh-cli/skills/gh-cli/SKILL.md",
+      "repo_url": "https://github.com/trailofbits/skills",
+      "author": "trailofbits",
+      "summary_zh": "该技能规范在访问 GitHub 仓库、PR、issue、release 及原始文件时优先使用已认证的 gh CLI，避免未认证的 curl/wget/WebFetch/MCP fetch 并建议克隆后本地读取。适用于需要认证访问私有仓库或更高 API 限额的 GitHub 操作场景。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "用 gh 查看 owner/repo 仓库的基本信息",
+        "查看 owner/repo 中 123 号 PR 或 issue 的内容"
+      ],
+      "key_features": [
+        "优先用已认证 gh CLI 取代未认证 curl/wget/WebFetch",
+        "覆盖仓库、PR、issue、release 与 raw 文件 URL 场景",
+        "明确 when to use / when NOT to use 边界"
+      ],
+      "main_category": {
+        "id": "dev",
+        "name": "编程开发"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "GitHub",
+        "CLI",
+        "认证访问",
+        "工作流规范"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "gh CLI（需已认证）"
+      ],
+      "limitations": "未提供 hook 实现与 README 内容，无法核实其具体拦截逻辑；未说明 gh CLI 安装与认证（gh auth login）步骤。",
+      "license": null,
+      "status": "candidate",
+      "reason_codes": [
+        "NEEDS_VERIFICATION"
+      ],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-24T17:20:14.656526+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:3810c9ff56ae9a26f4c6c1e0d058a946",
+      "source_type": "official",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.0.1",
+      "last_evaluation_id": "trailofbits/skills:plugins/gh-cli/skills/gh-cli/SKILL.md|sha256:3810c9ff56ae9a26f4c6c1e0d058a946|1.0.1|1.0.0",
+      "evaluated_at": "2026-09-24T17:20:14.655527+08:00"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/github-triage/skills/github-triage/SKILL.md",
+      "name": "github-triage",
+      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/github-triage/skills/github-triage/SKILL.md",
+      "repo_url": "https://github.com/trailofbits/skills",
+      "author": "trailofbits",
+      "summary_zh": "通过 gh CLI 梳理仓库中开放的 GitHub issue 与 PR：可选先增量合并就绪的机器人/维护者已批准 PR、对未评审 PR 派生评审子代理，再关闭已被已合并 PR 或提交解决的 issue、补齐 issue 与修复 PR 的双向引用，并对未解决项仅本地给出优先级与改动规模估计。适用于仓库 issue/PR backlog 整理与评审。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "帮我梳理一下这个仓库开放的 issue 和 PR",
+        "清理已解决但还没关闭的 issue，并补上修复 PR 的引用"
+      ],
+      "key_features": [
+        "所有写操作先汇总展示并经用户批准后才执行",
+        "优先级与改动规模仅本地展示，绝不写入 GitHub",
+        "对 issue/PR 文本按数据处理，抵御提示注入与 shell 注入"
+      ],
+      "main_category": {
+        "id": "dev",
+        "name": "编程开发"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "GitHub",
+        "issue 梳理",
+        "PR 合并",
+        "仓库维护"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "gh CLI（需已认证，GitHub Enterprise 需手动配置 GH_HOST）",
+        "git",
+        "allowed-tools: Bash Read Grep Agent AskUserQuestion Write",
+        "外部参考文件 references/reviewing-prs.md"
+      ],
+      "limitations": "仅面向可通过 gh CLI 访问的 GitHub 仓库，GHE 主机无法自动识别；不包含可独立运行的代码，实际动作依赖真实仓库状态与用户逐步批准；子代理评审规则细节位于未随材料给出的 references/reviewing-prs.md。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-24T17:20:42.470817+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:b3289e800b7b5dc9c37c9de2768ca052",
+      "source_type": "official",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.0.1",
+      "last_evaluation_id": "trailofbits/skills:plugins/github-triage/skills/github-triage/SKILL.md|sha256:b3289e800b7b5dc9c37c9de2768ca052|1.0.1|1.0.0",
+      "evaluated_at": "2026-09-24T17:20:42.469570+08:00"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/goal-prompt/skills/goal-prompt/SKILL.md",
+      "name": "goal-prompt",
+      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/goal-prompt/skills/goal-prompt/SKILL.md",
+      "repo_url": "https://github.com/trailofbits/skills",
+      "author": "trailofbits",
+      "summary_zh": "为 Claude Code 与 Codex 的 /goal 目标模式起草、改写并格式化可直接粘贴的单行目标条件，适用于跨多轮且存在可验证完成标准的编码或安全审计任务。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "把一个认证模块迁移任务改写成带检查命令的 /goal 命令",
+        "帮我压缩清理现有的 goal prompt，并补上停止条件"
+      ],
+      "key_features": [
+        "输出单行、不超过 4000 字符的 /goal 命令",
+        "以可验证结束状态和可观察检查条件收束任务",
+        "识别并封堵删代码、跳过测试等廉价完成路径"
+      ],
+      "main_category": {
+        "id": "dev",
+        "name": "编程开发"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "AI编程助手",
+        "目标提示词",
+        "Claude Code",
+        "Codex",
+        "工作流指南"
+      ],
+      "platform_declared": "Claude Code, Codex",
+      "dependencies_declared": [
+        "Bash、Read、Write 工具权限",
+        "uv 运行环境",
+        "scripts/format_goal_prompt.py 脚本"
+      ],
+      "limitations": "仅生成目标条件，不执行目标任务；格式化依赖材料未附带的 scripts/format_goal_prompt.py 与 uv；无法从上下文补全缺失元素时只输出 Missing 列表，不代替用户补齐信息。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-24T17:22:13.686753+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:684bd98d836f88e7b7ec552cc329e4e4",
+      "source_type": "official",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.0.1",
+      "last_evaluation_id": "trailofbits/skills:plugins/goal-prompt/skills/goal-prompt/SKILL.md|sha256:684bd98d836f88e7b7ec552cc329e4e4|1.0.1|1.0.0",
+      "evaluated_at": "2026-09-24T17:22:13.686753+08:00"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/let-fate-decide/skills/let-fate-decide/SKILL.md",
+      "name": "let-fate-decide",
+      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/let-fate-decide/skills/let-fate-decide/SKILL.md",
+      "repo_url": "https://github.com/trailofbits/skills",
+      "author": "trailofbits",
+      "summary_zh": "一个通过运行脚本抽取「12 宫黄道塔罗牌阵」（36 张牌）为模糊、随意委派的提示注入随机熵并给出解释方向的技能，主要用于在多个合理方案间平局时破局，或在安全/审计工作中作为发现视角。",
+      "skill_type": "tool_script",
+      "example_requests": [
+        "I dunno, just make it work somehow",
+        "let fate decide / whatever, you pick"
+      ],
+      "key_features": [
+        "抽取 12 宫黄道牌阵，每宫 1 张大阿卡纳 + 2 张小阿卡纳，共 36 张",
+        "脚本用 secrets.randbelow 做 Fisher-Yates 洗牌并输出 entropy_bits",
+        "安全/审计场景仅作发现视角，须以工程证据验证"
+      ],
+      "main_category": {
+        "id": "automation",
+        "name": "自动化"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "决策辅助",
+        "随机抽取",
+        "塔罗牌阵",
+        "提示词工作流"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "uv（用于 `uv run --no-config` 执行脚本）",
+        "Python 脚本 scripts/draw_cards.py",
+        "allowed-tools: Bash Read Grep Glob"
+      ],
+      "limitations": "必须能运行 uv/Python 脚本，脚本失败时按规则跳过占卜且不得伪造随机；引用文件（scripts/、references/、houses/、cards/）本体未在材料中提供，无法核验其存在与内容；上游未声明平台兼容性；不得用于安全关键决策的最终裁定。",
+      "license": null,
+      "status": "candidate",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-24T17:22:55.863763+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:ef51258f594553a28c44cf0e6feef89d",
+      "source_type": "official",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.0.1",
+      "last_evaluation_id": "trailofbits/skills:plugins/let-fate-decide/skills/let-fate-decide/SKILL.md|sha256:ef51258f594553a28c44cf0e6feef89d|1.0.1|1.0.0",
+      "evaluated_at": "2026-09-24T17:22:55.862468+08:00"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/modern-cpp/skills/modern-cpp/SKILL.md",
+      "name": "modern-cpp",
+      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/modern-cpp/skills/modern-cpp/SKILL.md",
+      "repo_url": "https://github.com/trailofbits/skills",
+      "author": "trailofbits",
+      "summary_zh": "提供现代 C++（C++20/23/26）编码指南，以反模式迁移表、特性分级和编译器加固清单引导写出更安全的现代 C++ 代码。适用于编写新 C++ 代码、现代化旧代码以及安全关键场景下的代码审查。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "帮我把这段用裸指针和 printf 的 C++ 代码改成现代写法",
+        "审查我的 C++ 代码是否采用了 C++20/23 的现代惯用法"
+      ],
+      "key_features": [
+        "30+ 条旧写法到现代惯用法的反模式迁移对照表",
+        "按 C++20/23/26 实用性分级的特性清单（Tier 1-4）",
+        "编译器加固标志、硬化 libc++ 与 sanitizer 实践清单"
+      ],
+      "main_category": {
+        "id": "dev",
+        "name": "编程开发"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "C++",
+        "现代C++",
+        "代码现代化",
+        "安全编程"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "支持 C++20/23/26 的编译器（反射需 GCC 16+）",
+        "Clang/libc++（硬化模式 _LIBCPP_HARDENING_MODE）",
+        "ASan、UBSan、TSan 等 sanitizer"
+      ],
+      "limitations": "仅为指导性文档，不含可执行脚本或工具实现；构建系统（CMake/Meson/Bazel）配置明确不在范围内；contracts 与 std::execution 等 C++26 特性仍标注需谨慎或等待生态成熟。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-24T17:23:25.895746+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:a3a886fc425c591202b18165aa587111",
+      "source_type": "official",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.0.1",
+      "last_evaluation_id": "trailofbits/skills:plugins/modern-cpp/skills/modern-cpp/SKILL.md|sha256:a3a886fc425c591202b18165aa587111|1.0.1|1.0.0",
+      "evaluated_at": "2026-09-24T17:23:25.894460+08:00"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/modern-python/skills/modern-python/SKILL.md",
+      "name": "modern-python",
+      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/modern-python/skills/modern-python/SKILL.md",
+      "repo_url": "https://github.com/trailofbits/skills",
+      "author": "trailofbits",
+      "summary_zh": "指导使用 uv、ruff、ty 等现代工具配置 Python 项目，涵盖新建项目、独立脚本与从 pip/Poetry/mypy/black 迁移。适用于需现代化 Python 工具链的开发者。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "用 uv 帮我建一个新的 Python 项目并配置 ruff 和 ty",
+        "把我的 pip/requirements.txt 项目迁移到 uv"
+      ],
+      "key_features": [
+        "以 uv/ruff/ty 为核心的现代 Python 工具链配置指南",
+        "提供从 requirements.txt、setup.py、flake8/black、mypy 的迁移步骤",
+        "含 pyproject.toml、依赖组与 80% 覆盖率等最佳实践清单"
+      ],
+      "main_category": {
+        "id": "dev",
+        "name": "编程开发"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "Python",
+        "uv",
+        "ruff",
+        "ty",
+        "项目配置",
+        "依赖管理",
+        "工具迁移"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "uv",
+        "ruff",
+        "ty",
+        "pytest",
+        "prek",
+        "Python >= 3.11"
+      ],
+      "limitations": "面向 Python >= 3.11 的现代工具链，不适用于非 Python 为主的项目，也不适用于用户明确要求保留旧工具链（pip/Poetry/mypy/black）的场景。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-24T17:23:44.747399+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:ef774b925eb1d1fc12e4f5ddc3f5ad92",
+      "source_type": "official",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.0.1",
+      "last_evaluation_id": "trailofbits/skills:plugins/modern-python/skills/modern-python/SKILL.md|sha256:ef774b925eb1d1fc12e4f5ddc3f5ad92|1.0.1|1.0.0",
+      "evaluated_at": "2026-09-24T17:23:44.745456+08:00"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/mutation-testing/skills/mutation-testing/SKILL.md",
+      "name": "mutation-testing",
+      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/mutation-testing/skills/mutation-testing/SKILL.md",
+      "repo_url": "https://github.com/trailofbits/skills",
+      "author": "trailofbits",
+      "summary_zh": "面向变异测试工具 mewt/muton 的使用指南，指导配置与加速变异测试活动、分析存活/未捕获变异体、并借测试缺口定位源码缺陷。适用于需要提升测试有效性或在未覆盖代码中找 bug 的开发场景。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "帮我配置一个 mewt 变异测试活动并让它跑得更快",
+        "分析存活变异体，找出未被测试覆盖的代码里的 bug"
+      ],
+      "key_features": [
+        "按配置/bug 猎取/结果分析三类工作流分流",
+        "给出 mewt/muton 常用命令与过滤器示例",
+        "按严重度解释未捕获变异体含义与排查方向"
+      ],
+      "main_category": {
+        "id": "dev",
+        "name": "编程开发"
+      },
+      "candidate_domains": [
+        "dev"
+      ],
+      "tags": [
+        "变异测试",
+        "测试覆盖率",
+        "代码质量",
+        "缺陷发现"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "mewt 4.x",
+        "muton",
+        "allowed-tools: Read Write Bash Grep"
+      ],
+      "limitations": "本次材料仅含 SKILL.md 概览，其引用的 workflows/ 与 references/ 文件未提供；命令细节以 mewt --help 为准，示例对应 mewt 4.x 且可能随版本变化；未说明工具的安装方式与运行环境要求。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-24T17:24:12.430717+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:20e6ee2b6cec91bad7572dea966b5fce",
+      "source_type": "official",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.0.1",
+      "last_evaluation_id": "trailofbits/skills:plugins/mutation-testing/skills/mutation-testing/SKILL.md|sha256:20e6ee2b6cec91bad7572dea966b5fce|1.0.1|1.0.0",
+      "evaluated_at": "2026-09-24T17:24:12.429718+08:00"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/open-sourcing/skills/open-sourcing/SKILL.md",
+      "name": "open-sourcing",
+      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/open-sourcing/skills/open-sourcing/SKILL.md",
+      "repo_url": "https://github.com/trailofbits/skills",
+      "author": "trailofbits",
+      "summary_zh": "一份开源发布就绪工作流指南：按序完成组织结构探测、历史密钥审计、readiness 检查、文档与许可证补齐、测试与 CI 加固、仓库设置与自动化发布，并按语言给出打包与发布参考。适用于把私有仓库转为公开或对既有公开仓库做发布质量复核。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "帮我把这个项目开源，先检查发布就绪情况",
+        "这个仓库准备公开，帮我选个许可证并配置发布自动化"
+      ],
+      "key_features": [
+        "顺序化九步发布就绪工作流，密钥审计优先",
+        "含组织探测与 readiness 检查脚本、多语言打包参考",
+        "强调历史含密钥应新建仓库而非改写历史"
+      ],
+      "main_category": {
+        "id": "dev",
+        "name": "编程开发"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "开源发布",
+        "仓库准备",
+        "许可证",
+        "密钥审计",
+        "CI/CD"
+      ],
+      "platform_declared": "GitHub",
+      "dependencies_declared": [
+        "bash（运行 {baseDir}/scripts/*.sh）",
+        "gitleaks 或 trufflehog（历史密钥扫描，标注为 if available）",
+        "zizmor、actionlint（CI 工作流审计与检查）",
+        "GitHub Actions、Dependabot 或 Renovate"
+      ],
+      "limitations": "材料仅展示 SKILL.md 正文，随附 scripts/detect_org.sh、scripts/check_readiness.sh 及各 references/*.md 的实际内容未给出，无法核验其行为；流程围绕 GitHub 仓库与 GitHub 托管服务展开，未声明其他平台或运行环境；外部安全工具未给出安装与版本要求。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-24T17:24:48.107225+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:da8d876edfc13f234cb88a2531da86a5",
+      "source_type": "official",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.0.1",
+      "last_evaluation_id": "trailofbits/skills:plugins/open-sourcing/skills/open-sourcing/SKILL.md|sha256:da8d876edfc13f234cb88a2531da86a5|1.0.1|1.0.0",
+      "evaluated_at": "2026-09-24T17:24:48.105219+08:00"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/post-patch-validation/skills/post-patch-validation/SKILL.md",
+      "name": "post-patch-validation",
+      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/post-patch-validation/skills/post-patch-validation/SKILL.md",
+      "repo_url": "https://github.com/trailofbits/skills",
+      "author": "trailofbits",
+      "summary_zh": "对已存在的安全补丁做基线对补丁的对抗性验证，用可复现证据检查原始利用、同根因变体、行为保持、回归与新引入的安全问题。适用于合入/接受补丁或报告为已修复前的本地验证场景，需用户授权执行仓库代码。",
+      "skill_type": "tool_script",
+      "example_requests": [
+        "验证这个修复提交是否真的堵住了漏洞，并给出可复现的反例",
+        "对一个 AI 生成的补丁做补丁后对抗性验证，检查变体与回归"
+      ],
+      "key_features": [
+        "基线对补丁的可复现证据，强制 control/exploit/variant/behavior/regression/s",
+        "exploit 与 variant 检查必须打印 PPV_REACHED 且盲侧运行，防止伪造复现",
+        "固定最小环境、argv 数组执行、结果与日志落盘可追溯，且不改动原始 worktree"
+      ],
+      "main_category": {
+        "id": "security",
+        "name": "安全"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "安全补丁验证",
+        "漏洞复现",
+        "代码审查",
+        "命令行工具"
+      ],
+      "platform_declared": "Claude Code（/post-patch-validation:validate-patch 工作流与 Workflow 工具）；未声明操作系统限定",
+      "dependencies_declared": [
+        "uv（uv run 执行 Python 脚本）",
+        "Python（scripts/post_patch_validation.py 运行器）",
+        "Git（commit pin、worktree、submodule 处理）",
+        "Claude Code Workflow 工具（可选，validate-patch 工作流）"
+      ],
+      "limitations": "仅执行本地代码与测试，不适用于远程或生产目标，且需用户授权执行仓库代码；其隔离不是主机沙箱，不可信检查代码需另用 OS/容器沙箱；超时、缺少 PPV_REACHED 标记或控制组失败会留下 validation gap；source/build 级证据不能证明运行时行为。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-24T17:25:28.894338+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:33b604f4d7d62eab393d710edb98b185",
+      "source_type": "official",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.0.1",
+      "last_evaluation_id": "trailofbits/skills:plugins/post-patch-validation/skills/post-patch-validation/SKILL.md|sha256:33b604f4d7d62eab393d710edb98b185|1.0.1|1.0.0",
+      "evaluated_at": "2026-09-24T17:25:28.893270+08:00"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/property-based-testing/skills/property-based-testing/SKILL.md",
+      "name": "property-based-testing",
+      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/property-based-testing/skills/property-based-testing/SKILL.md",
+      "repo_url": "https://github.com/trailofbits/skills",
+      "author": "trailofbits",
+      "summary_zh": "一份属性测试（property-based testing）实践指南：给出属性目录、强弱排序与常见假测试陷阱，并引导写新测试、重构、审查与失败排查。适用于序列化/解析器/校验器/排序及 Solidity 合约不变量等需要覆盖整个输入域的场景。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "为我的序列化/反序列化函数写 property-based 测试",
+        "审查现有 Hypothesis 测试是否真的断言了有效属性"
+      ],
+      "key_features": [
+        "提供 roundtrip、inverse、oracle 等 9 类属性目录",
+        "按强弱排序属性并建议断言最强属性",
+        "指出同义反复与空洞断言两种假测试模式"
+      ],
+      "main_category": {
+        "id": "dev",
+        "name": "编程开发"
+      },
+      "candidate_domains": [
+        "dev"
+      ],
+      "tags": [
+        "测试",
+        "属性测试",
+        "代码质量",
+        "Solidity 不变量"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "Hypothesis",
+        "fast-check",
+        "proptest",
+        "jqwik",
+        "rapid",
+        "Echidna",
+        "Medusa"
+      ],
+      "limitations": "SKILL.md 正文未给出完整代码示例，多数细节依赖未包含在本材料中的 references/*.md；明确不适用于覆盖引导二进制 fuzzing、变异测试、静态分析、基准测试与端到端 UI 测试；未声明运行环境与平台兼容性。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-24T17:26:01.481178+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:9448cacb65c6237a7c22dc5960266717",
+      "source_type": "official",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.0.1",
+      "last_evaluation_id": "trailofbits/skills:plugins/property-based-testing/skills/property-based-testing/SKILL.md|sha256:9448cacb65c6237a7c22dc5960266717|1.0.1|1.0.0",
+      "evaluated_at": "2026-09-24T17:26:01.480178+08:00"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/review-walkthrough/skills/review-walkthrough/SKILL.md",
+      "name": "review-walkthrough",
+      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/review-walkthrough/skills/review-walkthrough/SKILL.md",
+      "repo_url": "https://github.com/trailofbits/skills",
+      "author": "trailofbits",
+      "summary_zh": "对当前分支的代码改动生成自包含的交互式 HTML 评审走查页面，把 diff 拆成逻辑步骤并附解释与分级评审发现，适用于代码评审与 PR 评论准备场景。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "为当前分支的改动生成 HTML 代码评审走查",
+        "按指定 base 对 PR 改动生成评审走查页面"
+      ],
+      "key_features": [
+        "把分支 diff 按概念分组为逻辑步骤，不按提交顺序",
+        "解释与评审发现分级，并支持按文件/行锚定",
+        "渲染器校验 diff 完整性与锚点后安全嵌入模板"
+      ],
+      "main_category": {
+        "id": "dev",
+        "name": "编程开发"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "代码评审",
+        "Git diff",
+        "HTML 走查",
+        "PR 评论"
+      ],
+      "platform_declared": "Claude Code 与 Codex（浏览器打开：macOS 用 open，Linux 用 xdg-open）",
+      "dependencies_declared": [
+        "git（rev-parse / merge-base / diff）",
+        "uv（uv run --no-project）",
+        "随附渲染脚本 {baseDir}/scripts/render_walkthrough.py",
+        "GitHub PR 元数据（可选）",
+        "open / xdg-open（可选）"
+      ],
+      "limitations": "仅在显式调用时使用（disable-model-invocation: true）；只读评审，不运行测试或安装依赖；范围为已提交至 HEAD 的改动，未提交改动不在内；PR 评论仅生成可复制的 gh api 命令，不自动发布；无仓库自述可对照。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-24T17:26:36.646532+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:af098bc743979e8130ac5e98db908aec",
+      "source_type": "official",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.0.1",
+      "last_evaluation_id": "trailofbits/skills:plugins/review-walkthrough/skills/review-walkthrough/SKILL.md|sha256:af098bc743979e8130ac5e98db908aec|1.0.1|1.0.0",
+      "evaluated_at": "2026-09-24T17:26:36.645454+08:00"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/rust-review/skills/rust-review/SKILL.md",
+      "name": "rust-review",
+      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/rust-review/skills/rust-review/SKILL.md",
+      "repo_url": "https://github.com/trailofbits/skills",
+      "author": "trailofbits",
+      "summary_zh": "对 Rust crate、服务或库执行安全审查，重点检查 safe/unsafe 边界、unsafe 块内存安全、并发风险、panic DoS、FFI 与 async 运行时错误，并生成审计报告。适用于含 unsafe、FFI 或并发代码的 Rust 项目安全审计。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "帮我审计这个 Rust crate 的 unsafe 边界安全问题",
+        "只审查 high severity 的 Rust 并发与 FFI 安全问题"
+      ],
+      "key_features": [
+        "多阶段编排：worker 并行审查、去重裁判、误报与严重度裁判",
+        "覆盖 unsafe/内存安全/并发/panic DoS/FFI/async 等 bug 类",
+        "输出 REPORT.md 与 REPORT.sarif 审计报告"
+      ],
+      "main_category": {
+        "id": "security",
+        "name": "安全"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "Rust",
+        "安全审计",
+        "unsafe",
+        "FFI",
+        "并发",
+        "代码审查"
+      ],
+      "platform_declared": [
+        "Claude Code",
+        "Codex"
+      ],
+      "dependencies_declared": [
+        "uv（Python 脚本运行器，缺失需安装）",
+        "rg / grep / find（通过 Bash 使用；rg 缺失可回退 grep -E）",
+        "插件根目录环境变量：CLAUDE_PLUGIN_ROOT / CODEX_PLUGIN_ROOT / RUST_REVIEW_PLUGIN_ROOT",
+        "Python 脚本：build_run_plan.py、validate_artifacts.py、generate_sarif.py",
+        "插件子代理：rust-review:rust-review-worker、rust-review:rust-review-dedup-judge、rust-review:rust-review-fp-judge",
+        "工具允许列表：Agent、AskUserQuestion、SendMessage、TaskCreate、TaskUpdate、TaskList、Read、Write、Bash"
+      ],
+      "limitations": "需要 Claude Code 或 Codex 插件环境并安装 uv；依赖插件根目录下的脚本与子代理；不覆盖纯 C/C++、智能合约、内核 Rust 驱动以及密钥内存零化审计；运行可能因子代理失败、工具调用截断或缺失脚本产生部分结果。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-24T17:27:23.803105+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:52ee8b08876b0ad90ecdf4a58de8d41f",
+      "source_type": "official",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.0.1",
+      "last_evaluation_id": "trailofbits/skills:plugins/rust-review/skills/rust-review/SKILL.md|sha256:52ee8b08876b0ad90ecdf4a58de8d41f|1.0.1|1.0.0",
+      "evaluated_at": "2026-09-24T17:27:23.803105+08:00"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/second-opinion/skills/second-opinion/SKILL.md",
+      "name": "second-opinion",
+      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/second-opinion/skills/second-opinion/SKILL.md",
+      "repo_url": "https://github.com/trailofbits/skills",
+      "author": "trailofbits",
+      "summary_zh": "该技能调用外部 CLI（Codex 或 Antigravity，另保留 Gemini CLI 路径）对用户的未提交更改、分支 diff 或指定提交做独立代码评审并对比结果，仅输出评审发现，不应用修复。适用于需要外部第二意见的代码审查场景。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "use Codex to review my uncommitted changes for bugs",
+        "compare Codex and Antigravity on this branch against origin/main"
+      ],
+      "key_features": [
+        "通过 Codex 或 Antigravity CLI 获取独立代码评审",
+        "支持未提交更改、分支 diff 与指定提交三种范围",
+        "双提供方结果对比，保留低严重度问题"
+      ],
+      "main_category": {
+        "id": "dev",
+        "name": "编程开发"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "代码评审",
+        "外部评审",
+        "CLI",
+        "代码质量"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "Codex CLI（codex exec）",
+        "Antigravity CLI（agy）",
+        "Gemini CLI（headless gemini）",
+        "allowed-tools: Bash, Read, Glob, Grep, AskUserQuestion"
+      ],
+      "limitations": "仅生成评审发现，不应用修复、不提交到远端服务；依赖外部 CLI 与账号配置，缺少可执行文件或账号时视为评审失败；需读取各提供方引用文件与 review-input.md 方可执行。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-24T17:27:50.191550+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:e274353992ba838ff006322565479dc1",
+      "source_type": "official",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.0.1",
+      "last_evaluation_id": "trailofbits/skills:plugins/second-opinion/skills/second-opinion/SKILL.md|sha256:e274353992ba838ff006322565479dc1|1.0.1|1.0.0",
+      "evaluated_at": "2026-09-24T17:27:50.189687+08:00"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/semgrep-rule-creator/skills/semgrep-rule-creator/SKILL.md",
+      "name": "semgrep-rule-creator",
+      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/semgrep-rule-creator/skills/semgrep-rule-creator/SKILL.md",
+      "repo_url": "https://github.com/trailofbits/skills",
+      "author": "trailofbits",
+      "summary_zh": "指导编写并测试自定义 Semgrep 规则的技能：先写测试、分析 AST、编写规则并迭代到测试全部通过，用于检测代码中的安全漏洞、缺陷模式与编码规范违规。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "写一条检测 Python 中用户输入进入 eval() 的 Semgrep taint 规则",
+        "为 os.system 命令注入编写 Semgrep 规则并配套测试文件"
+      ],
+      "key_features": [
+        "test-first 强制流程，测试未 100% 通过不得优化规则",
+        "数据流漏洞优先使用 taint 模式以降低误报",
+        "每个 YAML 只含一条规则，输出规则文件加测试文件"
+      ],
+      "main_category": {
+        "id": "security",
+        "name": "安全"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "Semgrep",
+        "静态分析",
+        "安全规则",
+        "代码审计"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "Bash",
+        "Read",
+        "Write",
+        "Edit",
+        "Glob",
+        "Grep",
+        "WebFetch"
+      ],
+      "limitations": "需本地具备并会调用 semgrep CLI（材料未给出安装或环境声明）；运行前需联网 WebFetch 读取 7 个 Semgrep/ToB 文档链接；引用的 references/quick-reference.md 与 references/workflow.md 内容未包含在材料中。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-24T17:28:18.486705+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:6ca2e3b8520ed20af1b0879b7cab3188",
+      "source_type": "official",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.0.1",
+      "last_evaluation_id": "trailofbits/skills:plugins/semgrep-rule-creator/skills/semgrep-rule-creator/SKILL.md|sha256:6ca2e3b8520ed20af1b0879b7cab3188|1.0.1|1.0.0",
+      "evaluated_at": "2026-09-24T17:28:18.486705+08:00"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/semgrep-rule-variant-creator/skills/semgrep-rule-variant-creator/SKILL.md",
+      "name": "semgrep-rule-variant-creator",
+      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/semgrep-rule-variant-creator/skills/semgrep-rule-variant-creator/SKILL.md",
+      "repo_url": "https://github.com/trailofbits/skills",
+      "author": "trailofbits",
+      "summary_zh": "把已有的 Semgrep 规则移植到指定目标语言，按语言独立执行适用性分析、测试创建、规则翻译与 semgrep --test 校验四个阶段，为每种适用语言产出规则与测试文件目录。适用于将现成 Semgrep 检测规则迁移到其他语言的安全规则维护场景。",
+      "skill_type": "tool_script",
+      "example_requests": [
+        "把这条 Semgrep 规则移植到 Go 和 Java",
+        "把现有规则按四阶段手工移植到单一语言"
+      ],
+      "key_features": [
+        "每种语言独立跑四阶段：适用性分析→测试→翻译→校验",
+        "以 semgrep --test 全绿为验收，失败最多重试三次",
+        "NOT_APPLICABLE 判定须经独立 refuter 复核"
+      ],
+      "main_category": {
+        "id": "security",
+        "name": "安全"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "静态分析",
+        "Semgrep",
+        "规则移植",
+        "安全检测规则"
+      ],
+      "platform_declared": "Claude Code（${CLAUDE_PLUGIN_ROOT}）与 Codex（${CODEX_PLUGIN_ROOT}）插件环境",
+      "dependencies_declared": [
+        "Semgrep CLI（--test/--validate/--dump-ast/--dataflow-traces）",
+        "Workflow 工具与脚本 workflows/port-rule-to-languages.js",
+        "CLAUDE_PLUGIN_ROOT 或 CODEX_PLUGIN_ROOT 环境变量",
+        "references 目录下的 applicability-analysis.md、language-syntax-guide.md、workflow.md"
+      ],
+      "limitations": "仅用于移植已有规则，不创建新规则（新规则指向 semgrep-rule-creator）；材料只含 SKILL.md，工作流脚本与三份 references 文件的具体内容未提供，无法核验其内部实现；Semgrep 无法分析的语言（如 Perl、Elixir 的解析为 Pro 专有）不能产出可校验变体。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-24T17:29:10.878100+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:a456a7897a8042b1e2be81e10a7ac78f",
+      "source_type": "official",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.0.1",
+      "last_evaluation_id": "trailofbits/skills:plugins/semgrep-rule-variant-creator/skills/semgrep-rule-variant-creator/SKILL.md|sha256:a456a7897a8042b1e2be81e10a7ac78f|1.0.1|1.0.0",
+      "evaluated_at": "2026-09-24T17:29:10.878100+08:00"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/sharp-edges/skills/sharp-edges/SKILL.md",
+      "name": "sharp-edges",
+      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/sharp-edges/skills/sharp-edges/SKILL.md",
+      "repo_url": "https://github.com/trailofbits/skills",
+      "author": "trailofbits",
+      "summary_zh": "一套用于评估 API、配置与接口是否抗开发者误用的安全分析指南，识别易错 API、危险默认值与 footgun 设计。适用于审查 API/库设计、配置模式与加密接口的安全性。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "审查这个加密库的 API 设计是否存在误用风险",
+        "审计配置模式中可能导致安全失效的危险选项"
+      ],
+      "key_features": [
+        "四阶段分析工作流：表面识别、边界探测、威胁建模、验证发现",
+        "六类 Sharp Edge 模式：算法选择、危险默认值、字符串化安全等",
+        "支持多语言 footgun 参考（C/C++、Go、Rust、Python、PHP 等）"
+      ],
+      "main_category": {
+        "id": "security",
+        "name": "安全"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "API安全设计",
+        "配置审查",
+        "误用抗性",
+        "安全默认值",
+        "代码审计"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "allowed-tools: Read Grep Glob",
+        "references/ 目录下的分类与语言参考文件（crypto-apis.md、config-patterns.md、lang-*.md 等）"
+      ],
+      "limitations": "仅面向 API/配置/接口设计层面的误用抗性分析，明确不覆盖实现漏洞、业务逻辑缺陷与性能优化；部分细节依赖 references 目录文件，而该目录内容未在材料中提供。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-24T17:29:41.865471+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:3b69a709c2f8f0cfcf57d40a3186e166",
+      "source_type": "official",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.0.1",
+      "last_evaluation_id": "trailofbits/skills:plugins/sharp-edges/skills/sharp-edges/SKILL.md|sha256:3b69a709c2f8f0cfcf57d40a3186e166|1.0.1|1.0.0",
+      "evaluated_at": "2026-09-24T17:29:41.863312+08:00"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/spec-to-code-compliance/skills/spec-to-code-compliance/SKILL.md",
+      "name": "spec-to-code-compliance",
+      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/spec-to-code-compliance/skills/spec-to-code-compliance/SKILL.md",
+      "repo_url": "https://github.com/trailofbits/skills",
+      "author": "trailofbits",
+      "summary_zh": "用于将代码实现与规格文档（白皮书、协议规范、设计文档、README 承诺）逐条比对，找出实现、部分实现、冲突、超规格、缺失与不可判定六类分歧，并生成 REPORT.md 与逐需求记录。典型场景是按权威规范审计合约、C/C++、服务或反编译固件代码。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "对 ./contracts 按 SPEC.md 做合规检查",
+        "把白皮书和协议实现逐条比对找分歧"
+      ],
+      "key_features": [
+        "每条需求独立 agent 核查，六种 verdict 分类",
+        "由未产出该结论的独立代理尝试反驳分歧",
+        "输出 REPORT.md 与逐需求记录，含检索证据"
+      ],
+      "main_category": {
+        "id": "security",
+        "name": "安全"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "代码审计",
+        "合规检查",
+        "规范对照"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "Workflow",
+        "Task",
+        "Read",
+        "Grep",
+        "Glob",
+        "slash command /spec-to-code-compliance:spec-compliance",
+        "resources/DIVERGENCE_RUBRIC.md",
+        "resources/DOMAIN_NOTES.md",
+        "resources/ANALYSIS_FORMAT.md",
+        "resources/WORKED_EXAMPLE.md"
+      ],
+      "limitations": "不适用于没有任何意图行为文档的代码；不用于通用缺陷发现，也不用于撰写或改进文档；依赖插件 slash command 与 workflow 脚本，材料未提供脚本与 resources 文件内容，无法验证具体实现。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-24T17:30:09.098119+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:eb0d91b50a9c06f50baf8763d1e23566",
+      "source_type": "official",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.0.1",
+      "last_evaluation_id": "trailofbits/skills:plugins/spec-to-code-compliance/skills/spec-to-code-compliance/SKILL.md|sha256:eb0d91b50a9c06f50baf8763d1e23566|1.0.1|1.0.0",
+      "evaluated_at": "2026-09-24T17:30:09.097112+08:00"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/static-analysis/skills/codeql/SKILL.md",
+      "name": "codeql",
+      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/static-analysis/skills/codeql/SKILL.md",
+      "repo_url": "https://github.com/trailofbits/skills",
+      "author": "trailofbits",
+      "summary_zh": "一个基于 CodeQL 的安全静态分析技能，用于扫描代码库中的数据流与污点传播以发现安全漏洞，覆盖多种语言并支持 run-all 与 important-only 两种扫描模式。典型场景是构建 CodeQL 数据库、生成项目专属数据扩展并对结果进行筛选分析。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "用 CodeQL 扫描这个仓库的安全漏洞",
+        "为这个 C++ 项目构建 CodeQL 数据库"
+      ],
+      "key_features": [
+        "覆盖 Python/JS/TS/Go/Java/C/C++/C#/Ruby/Swift 多语言",
+        "支持 run-all 与 important-only 两种扫描模式",
+        "可为项目专有 source/sink 生成数据扩展模型"
+      ],
+      "main_category": {
+        "id": "security",
+        "name": "安全"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "安全扫描",
+        "静态分析",
+        "SAST",
+        "污点分析",
+        "CodeQL"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "codeql",
+        "jq",
+        "uv",
+        "Bash"
+      ],
+      "limitations": "依赖已安装的 CodeQL、jq、uv 及可构建的目标代码库；编译型语言在 macOS Apple Silicon 上需额外 workaround；正文引用的 workflows/ 与 references/ 文件未包含在本材料中，具体步骤需查阅上游仓库。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-24T17:30:47.275928+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:1a6d919ff80f83b262daf650552af6eb",
+      "source_type": "official",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.0.1",
+      "last_evaluation_id": "trailofbits/skills:plugins/static-analysis/skills/codeql/SKILL.md|sha256:1a6d919ff80f83b262daf650552af6eb|1.0.1|1.0.0",
+      "evaluated_at": "2026-09-24T17:30:47.274875+08:00"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/static-analysis/skills/sarif-parsing/SKILL.md",
+      "name": "sarif-parsing",
+      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/static-analysis/skills/sarif-parsing/SKILL.md",
+      "repo_url": "https://github.com/trailofbits/skills",
+      "author": "trailofbits",
+      "summary_zh": "提供解析与处理静态分析工具（CodeQL、Semgrep 等）SARIF 输出的最佳实践，涵盖 jq/Python 查询、严重度解析、去重、聚合与 CI/CD 集成。适用于读取扫描结果、合并多工具告警或为 CI 设置严重度门禁的场景。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "解析 CodeQL 生成的 SARIF 并统计高危问题",
+        "合并多个扫描器的 SARIF 结果并去重"
+      ],
+      "key_features": [
+        "给出严重度解析顺序，处理 CodeQL 结果缺少 level 的情况",
+        "提供 40+ jq 查询模板与 Python 辅助函数",
+        "覆盖多文件聚合、指纹去重与 CI/CD 门禁模式"
+      ],
+      "main_category": {
+        "id": "security",
+        "name": "安全"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "SARIF",
+        "静态分析",
+        "结果聚合",
+        "去重",
+        "CI/CD"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "Bash / Read / Glob / Grep 工具",
+        "jq",
+        "pysarif",
+        "sarif-tools",
+        "ijson",
+        "jsonschema",
+        "ajv-cli",
+        "SARIF SDK (.NET)",
+        "sarif-js (npm)",
+        "garif (Go)"
+      ],
+      "limitations": "仅处理已有的 SARIF 结果文件，不运行扫描也不编写 CodeQL/Semgrep 规则；实际使用依赖 jq、pysarif、sarif-tools 等外部工具与库，且引用的 resources 与 fixtures 文件未在本材料中展示。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-24T17:31:16.385920+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:cc5f008f40ffb8a1ae03ebd32d7234de",
+      "source_type": "official",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.0.1",
+      "last_evaluation_id": "trailofbits/skills:plugins/static-analysis/skills/sarif-parsing/SKILL.md|sha256:cc5f008f40ffb8a1ae03ebd32d7234de|1.0.1|1.0.0",
+      "evaluated_at": "2026-09-24T17:31:16.384921+08:00"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/static-analysis/skills/semgrep/SKILL.md",
+      "name": "semgrep",
+      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/static-analysis/skills/semgrep/SKILL.md",
+      "repo_url": "https://github.com/trailofbits/skills",
+      "author": "trailofbits",
+      "summary_zh": "对代码库执行 Semgrep 安全静态扫描的流程型技能：自动检测语言、选择并展示规则集计划、经用户显式批准后分批运行扫描并将结果合并为 SARIF，同时报告失败与跳过的扫描。适用于代码安全审计、代码审查前的漏洞查找与首轮静态分析。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "扫描这个代码库的安全漏洞",
+        "用 Semgrep 对这个仓库做一次安全审计"
+      ],
+      "key_features": [
+        "自动检测语言并选择规则集，扫描计划须用户显式批准",
+        "所有 semgrep 命令强制 --metrics=off，防止审计期遥测外泄",
+        "批量并行运行规则集并合并为 SARIF，明确报告 failed/skipped"
+      ],
+      "main_category": {
+        "id": "security",
+        "name": "安全"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "静态分析",
+        "安全扫描",
+        "Semgrep",
+        "SARIF",
+        "漏洞检测"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "Semgrep CLI（必需，semgrep --version）",
+        "Semgrep Pro（可选，跨文件污点分析）",
+        "uv（uv run --no-project 运行 merge_sarif.py）",
+        "Bash 工具（执行 scripts/run-scans.sh）"
+      ],
+      "limitations": "OSS 模式无法跨文件跟踪数据流；完整执行依赖材料中未给出的 scripts/run-scans.sh、merge_sarif.py 及 references/rulesets.md、scan-workflow.md；需克隆第三方规则集仓库并依赖网络与 Git；未声明操作系统等平台兼容性。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-24T17:31:56.523778+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:04df36a7685632ee39271aa432a4d32e",
+      "source_type": "official",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.0.1",
+      "last_evaluation_id": "trailofbits/skills:plugins/static-analysis/skills/semgrep/SKILL.md|sha256:04df36a7685632ee39271aa432a4d32e|1.0.1|1.0.0",
+      "evaluated_at": "2026-09-24T17:31:56.522631+08:00"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/supply-chain-risk-auditor/skills/supply-chain-risk-auditor/SKILL.md",
+      "name": "supply-chain-risk-auditor",
+      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/supply-chain-risk-auditor/skills/supply-chain-risk-auditor/SKILL.md",
+      "repo_url": "https://github.com/trailofbits/skills",
+      "author": "trailofbits",
+      "summary_zh": "对项目依赖（npm、PyPI、Go）做供应链风险审计，输出依赖版本匹配的安全公告、上游弃用/归档、npm 发布者集中度与安装脚本执行等风险的报告。适用于审计依赖、评估第三方包风险或在合作前审查依赖树。",
+      "skill_type": "tool_script",
+      "example_requests": [
+        "审计这个项目的依赖供应链风险",
+        "在合作前审查我的依赖树"
+      ],
+      "key_features": [
+        "由两个确定性脚本 collect.py/render.py 完成度量",
+        "不可评估不等于风险，缺失度量不作干净结论",
+        "报告含覆盖表，界定所有结论的范围"
+      ],
+      "main_category": {
+        "id": "security",
+        "name": "安全"
+      },
+      "candidate_domains": [
+        "security"
+      ],
+      "tags": [
+        "供应链安全",
+        "依赖审计",
+        "npm",
+        "PyPI",
+        "Go",
+        "开源风险"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "uv（uv run 执行脚本）",
+        "gh CLI 且需认证（gh auth status）",
+        "目标项目的 manifest 与锁文件（package.json/pyproject.toml/requirements*.txt/go.mod 等）",
+        "allowed-tools: Read Write Bash Glob Grep"
+      ],
+      "limitations": "仅支持 npm、PyPI、Go 生态；不读 yarn.lock/pnpm-lock.yaml/poetry.lock；不做许可证合规审计、不扫描目标自身源码的漏洞或密钥、不判断项目能否安装或构建；PyPI 与 Go 的多数准则结构性无法评估。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-24T17:32:19.423489+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:a1254b7f8d3a1731a9a7e1f9cd6c67b5",
+      "source_type": "official",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.0.1",
+      "last_evaluation_id": "trailofbits/skills:plugins/supply-chain-risk-auditor/skills/supply-chain-risk-auditor/SKILL.md|sha256:a1254b7f8d3a1731a9a7e1f9cd6c67b5|1.0.1|1.0.0",
+      "evaluated_at": "2026-09-24T17:32:19.423489+08:00"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/testing-handbook-skills/skills/address-sanitizer/SKILL.md",
+      "name": "address-sanitizer",
+      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/testing-handbook-skills/skills/address-sanitizer/SKILL.md",
+      "repo_url": "https://github.com/trailofbits/skills",
+      "author": "trailofbits",
+      "summary_zh": "介绍 AddressSanitizer（ASan）内存错误检测技术的使用：以 -fsanitize=address 编译、通过 ASAN_OPTIONS 配置、运行程序并解读崩溃报告，并给出 libFuzzer、AFL++、cargo-fuzz、honggfuzz 的集成方式。适用于对 C/C++ 或含 unsafe 块的 Rust 进行模糊测试、调试内存破坏问题及阅读 ASan 堆栈报告。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "用 ASan 编译我的 C 程序并运行单元测试",
+        "帮我读懂 ASan 的 heap-buffer-overflow 崩溃报告"
+      ],
+      "key_features": [
+        "覆盖 -fsanitize=address 编译、ASAN_OPTIONS 配置与崩溃报告解读",
+        "提供 libFuzzer、AFL++、cargo-fuzz、honggfuzz 的 ASan 集成指引",
+        "给出性能开销（约 2-4x）与平台支持差异说明"
+      ],
+      "main_category": {
+        "id": "dev",
+        "name": "编程开发"
+      },
+      "candidate_domains": [
+        "dev"
+      ],
+      "tags": [
+        "内存错误检测",
+        "AddressSanitizer",
+        "模糊测试",
+        "C/C++调试",
+        "单元测试"
+      ],
+      "platform_declared": [
+        "Linux（完整支持，性能最佳）",
+        "macOS（有限支持，部分功能可能不可用）",
+        "Windows（实验性支持，不推荐用于生产模糊测试）"
+      ],
+      "dependencies_declared": [
+        "Clang/GCC 编译器（-fsanitize=address）",
+        "ASAN_OPTIONS 环境变量",
+        "libFuzzer",
+        "AFL++",
+        "cargo-fuzz（Rust）",
+        "honggfuzz"
+      ],
+      "limitations": "ASan 需约 20TB 虚拟内存（须对 fuzzer 取消内存限制，如 -rss_limit_mb=0 或 -m none），带来约 2-4x 性能开销，不适合生产代码；macOS 支持有限、Windows 为实验性；纯安全语言（如纯 Go、纯 Java）无 FFI 时收益不大。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-24T17:32:51.200605+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:eb9ea8210fa55d50477fbe52993a704e",
+      "source_type": "official",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.0.1",
+      "last_evaluation_id": "trailofbits/skills:plugins/testing-handbook-skills/skills/address-sanitizer/SKILL.md|sha256:eb9ea8210fa55d50477fbe52993a704e|1.0.1|1.0.0",
+      "evaluated_at": "2026-09-24T17:32:51.199605+08:00"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/testing-handbook-skills/skills/aflpp/SKILL.md",
+      "name": "aflpp",
+      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/testing-handbook-skills/skills/aflpp/SKILL.md",
+      "repo_url": "https://github.com/trailofbits/skills",
+      "author": "trailofbits",
+      "summary_zh": "提供 AFL++ 模糊测试的完整操作指南，涵盖安装、插桩编译、harness 编写、语料管理、多核主从并行 fuzzing、CMPLOG、Sanitizer 集成与崩溃分析，适用于对成熟 C/C++ 项目做多核模糊测试。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "帮我对一个 C/C++ 项目搭建 AFL++ 多核模糊测试",
+        "怎么解读 afl-fuzz 的状态输出和稳定性指标"
+      ],
+      "key_features": [
+        "支持多核主/从实例（-M/-S）并行模糊测试",
+        "覆盖 LTO、LLVM、GCC 插件多种插桩编译模式",
+        "提供 Docker wrapper 脚本与环境变量性能调优建议"
+      ],
+      "main_category": {
+        "id": "security",
+        "name": "安全"
+      },
+      "candidate_domains": [
+        "dev"
+      ],
+      "tags": [
+        "模糊测试",
+        "AFL++",
+        "C/C++",
+        "漏洞挖掘",
+        "Sanitizer"
+      ],
+      "platform_declared": "推荐 Debian/Ubuntu；提供 Docker Hub 镜像（4.35c 起支持 Apple Silicon）；源码构建可配置 LLVM_CONFIG",
+      "dependencies_declared": [
+        "LLVM/Clang",
+        "GCC 及匹配的 plugin-dev",
+        "Python",
+        "Rust",
+        "lld（需与 clang 版本匹配）",
+        "Docker",
+        "gnuplot（afl-plot，host 模式需自行安装）"
+      ],
+      "limitations": "主要面向 Linux（推荐 Debian/Ubuntu）；afl-system-config/afl-persistent-config 需 root 并禁用内核安全缓解措施，会牺牲系统安全性；Docker 模式存在虚拟化性能损耗且 wrapper 不保留参数引号（含空格参数会被拆分）；ASan 下不支持 -m 内存限制。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-24T17:33:30.318346+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:0a31023527808e68a53b81b89c7a6c10",
+      "source_type": "official",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.0.1",
+      "last_evaluation_id": "trailofbits/skills:plugins/testing-handbook-skills/skills/aflpp/SKILL.md|sha256:0a31023527808e68a53b81b89c7a6c10|1.0.1|1.0.0",
+      "evaluated_at": "2026-09-24T17:33:30.316345+08:00"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/testing-handbook-skills/skills/atheris/SKILL.md",
+      "name": "atheris",
+      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/testing-handbook-skills/skills/atheris/SKILL.md",
+      "repo_url": "https://github.com/trailofbits/skills",
+      "author": "trailofbits",
+      "summary_zh": "介绍 Atheris（基于 libFuzzer 的覆盖引导 Python 模糊测试器）的安装、harness 编写与运行方法，覆盖纯 Python 代码与 Python C 扩展，并含 AddressSanitizer 配置与语料库管理。适用于对 Python 包进行模糊测试或排查 C 扩展内存损坏。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "帮我为 Python 包写一个 Atheris 模糊测试 harness",
+        "如何用 Atheris 对 Python C 扩展做内存损坏模糊测试"
+      ],
+      "key_features": [
+        "覆盖引导的 Python 模糊测试，支持纯 Python 与 C 扩展",
+        "集成 AddressSanitizer 检测内存损坏",
+        "提供 Docker 环境、语料库管理与并行运行说明"
+      ],
+      "main_category": {
+        "id": "security",
+        "name": "安全"
+      },
+      "candidate_domains": [
+        "dev"
+      ],
+      "tags": [
+        "模糊测试",
+        "Python",
+        "安全测试",
+        "libFuzzer",
+        "AddressSanitizer"
+      ],
+      "platform_declared": "32/64 位 Linux 与 macOS（推荐在 Linux 上运行）",
+      "dependencies_declared": [
+        "Python 3.7+",
+        "clang（推荐最新版）",
+        "uv",
+        "Docker（可选，推荐）",
+        "libFuzzer",
+        "AddressSanitizer / UBSan"
+      ],
+      "limitations": "仅面向 Python 目标；本地对 C 扩展进行模糊测试需手动设置 clang 编译标志与 LD_PRELOAD；正文引用的 structured-input.md、examples.md 等配套文件未在本材料中给出。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-24T17:34:03.842992+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:133306875d88bb063636a9165c56141a",
+      "source_type": "official",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.0.1",
+      "last_evaluation_id": "trailofbits/skills:plugins/testing-handbook-skills/skills/atheris/SKILL.md|sha256:133306875d88bb063636a9165c56141a|1.0.1|1.0.0",
+      "evaluated_at": "2026-09-24T17:34:03.842061+08:00"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/testing-handbook-skills/skills/cargo-fuzz/SKILL.md",
+      "name": "cargo-fuzz",
+      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/testing-handbook-skills/skills/cargo-fuzz/SKILL.md",
+      "repo_url": "https://github.com/trailofbits/skills",
+      "author": "trailofbits",
+      "summary_zh": "介绍并指导使用 cargo-fuzz 对 Cargo 管理的 Rust 项目进行模糊测试，涵盖初始化、编写 fuzz_target! 测试桩、sanitizer 选型、覆盖率分析与崩溃复现。适用于 Rust crate 的模糊测试，以及含 unsafe 代码或 FFI 的用例验证。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "为我的 Rust crate 初始化 cargo-fuzz 并编写 fuzz_target 测试桩",
+        "复现并分析 cargo fuzz 产生的 crash 文件"
+      ],
+      "key_features": [
+        "提供 cargo fuzz init/run 的完整命令示例",
+        "集成 ASan 与 --sanitizer none 性能选项",
+        "支持 arbitrary 结构化输入和覆盖率分析"
+      ],
+      "main_category": {
+        "id": "security",
+        "name": "安全"
+      },
+      "candidate_domains": [
+        "dev"
+      ],
+      "tags": [
+        "模糊测试",
+        "Rust",
+        "安全测试",
+        "覆盖率分析"
+      ],
+      "platform_declared": [
+        "Linux",
+        "macOS"
+      ],
+      "dependencies_declared": [
+        "Rust 与 Cargo（通过 rustup）",
+        "nightly Rust 工具链",
+        "cargo-fuzz",
+        "libFuzzer（后端）",
+        "arbitrary（可选结构化输入）",
+        "cargo-geiger（检查 unsafe）",
+        "cargo-binutils、rustfilt、llvm-tools-preview（覆盖率分析）"
+      ],
+      "limitations": "需要 Cargo 项目和 nightly Rust 工具链；安装说明仅覆盖 Linux/macOS；多核模糊测试为实验性且不推荐；覆盖率分析需额外安装 cargo-binutils、rustfilt、llvm-tools-preview。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-24T17:35:19.699609+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:8e8f882604f68c682afde3562ba1bd38",
+      "source_type": "official",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.0.1",
+      "last_evaluation_id": "trailofbits/skills:plugins/testing-handbook-skills/skills/cargo-fuzz/SKILL.md|sha256:8e8f882604f68c682afde3562ba1bd38|1.0.1|1.0.0",
+      "evaluated_at": "2026-09-24T17:35:19.696610+08:00"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/testing-handbook-skills/skills/constant-time-testing/SKILL.md",
+      "name": "constant-time-testing",
+      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/testing-handbook-skills/skills/constant-time-testing/SKILL.md",
+      "repo_url": "https://github.com/trailofbits/skills",
+      "author": "trailofbits",
+      "summary_zh": "一套针对密码实现时序侧信道的测试指南，介绍形式化、符号化、动态与统计四类工具，并给出 dudect 统计检测与 Timecop（Valgrind）动态追踪的用法。适用于审计密码代码、测试编译后二进制是否为常数时间，或排查疑似时序攻击。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "测试我的 RSA 模幂实现是否为常数时间",
+        "用 dudect 测量编译后二进制的时序差异"
+      ],
+      "key_features": [
+        "覆盖形式化、符号化、动态、统计四类常数时间分析工具",
+        "提供 dudect 统计测试与 Timecop 动态追踪的快速上手",
+        "给出四阶段测试工作流与常见违规模式清单"
+      ],
+      "main_category": {
+        "id": "security",
+        "name": "安全"
+      },
+      "candidate_domains": [
+        "dev"
+      ],
+      "tags": [
+        "密码学",
+        "时序侧信道",
+        "常数时间",
+        "安全测试"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "dudect",
+        "Timecop",
+        "Valgrind",
+        "dudect 子技能",
+        "timecop 子技能"
+      ],
+      "limitations": "具体安装与用法委托给 dudect、timecop 子技能；统计方法只给统计置信度、无法保证无泄漏且对噪声敏感；动态追踪覆盖仅限已执行路径，无法检测微架构时序差异。未声明平台兼容性。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-24T17:35:43.616630+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:d294126ee90dbb949261145fbf1fb05d",
+      "source_type": "official",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.0.1",
+      "last_evaluation_id": "trailofbits/skills:plugins/testing-handbook-skills/skills/constant-time-testing/SKILL.md|sha256:d294126ee90dbb949261145fbf1fb05d|1.0.1|1.0.0",
+      "evaluated_at": "2026-09-24T17:35:43.614628+08:00"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/testing-handbook-skills/skills/coverage-analysis/SKILL.md",
+      "name": "coverage-analysis",
+      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/testing-handbook-skills/skills/coverage-analysis/SKILL.md",
+      "repo_url": "https://github.com/trailofbits/skills",
+      "author": "trailofbits",
+      "summary_zh": "介绍如何用 llvm-cov、gcovr、cargo-fuzz 等工具测量并解读模糊测试实际覆盖的代码，把未覆盖区域转化为 harness、种子或字典改进。适用于新建 fuzzing campaign 基线、harness 改动后评估，以及 fuzzer 陷入平台期时的排查。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "帮我给新的 fuzzing campaign 建立覆盖率基线",
+        "分析覆盖率报告，找出一直没被覆盖的代码路径"
+      ],
+      "key_features": [
+        "覆盖 LLVM/GCC/cargo-fuzz 的覆盖率插桩与报告生成命令",
+        "把未覆盖区域定位为 harness、种子或字典改进工作",
+        "提供差分覆盖率比较与 CI 集成建议"
+      ],
+      "main_category": {
+        "id": "dev",
+        "name": "编程开发"
+      },
+      "candidate_domains": [
+        "dev"
+      ],
+      "tags": [
+        "模糊测试",
+        "覆盖率分析",
+        "软件测试",
+        "llvm-cov",
+        "gcovr"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "clang/LLVM（llvm-cov、llvm-profdata）",
+        "GCC/gcov 与 gcovr",
+        "uv（用于安装 gcovr）",
+        "cargo-fuzz + nightly 工具链（llvm-tools-preview）",
+        "cargo-binutils、rustfilt",
+        "lcov/genhtml（用于导出 lcov 格式报告）"
+      ],
+      "limitations": "未声明支持的操作系统与平台；依赖具体编译器插桩工具链（LLVM/GCC 不能混用）；上游明确建议在覆盖率基础设施未搭建或代码库过大时跳过该方法。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-24T17:36:12.501584+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:9f71cfaffec44f159aa333924a25cdbe",
+      "source_type": "official",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.0.1",
+      "last_evaluation_id": "trailofbits/skills:plugins/testing-handbook-skills/skills/coverage-analysis/SKILL.md|sha256:9f71cfaffec44f159aa333924a25cdbe|1.0.1|1.0.0",
+      "evaluated_at": "2026-09-24T17:36:12.501063+08:00"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/testing-handbook-skills/skills/fuzzing-dictionary/SKILL.md",
+      "name": "fuzzing-dictionary",
+      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/testing-handbook-skills/skills/fuzzing-dictionary/SKILL.md",
+      "repo_url": "https://github.com/trailofbits/skills",
+      "author": "trailofbits",
+      "summary_zh": "介绍如何为模糊测试器构建并接入 fuzzing 词典，提供关键词、magic bytes 与令牌以突破早期校验。适用于解析器、协议实现与文件格式处理器的模糊测试场景。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "为 PNG 解析器生成一个 fuzzing 词典",
+        "把词典接入 libFuzzer 或 AFL++ 进行模糊测试"
+      ],
+      "key_features": [
+        "支持从源码、头文件、二进制与 man page 提取令牌",
+        "覆盖词典语法、生成方法、反模式与故障排查",
+        "给出 libFuzzer、AFL++、cargo-fuzz、go-fuzz 接入方式"
+      ],
+      "main_category": {
+        "id": "security",
+        "name": "安全"
+      },
+      "candidate_domains": [
+        "dev"
+      ],
+      "tags": [
+        "模糊测试",
+        "安全测试",
+        "词典生成",
+        "libFuzzer",
+        "AFL++"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "libFuzzer",
+        "AFL++（含 afl-clang-lto / AFL_LLVM_DICT2FILE）",
+        "cargo-fuzz",
+        "go-fuzz"
+      ],
+      "limitations": "主要面向已具备模糊测试工具链的目标；go-fuzz 无内置词典支持，只能转为语料种子；未声明工具版本与具体运行环境要求。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-24T17:36:50.089860+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:b71fa7cab36ca466647123efa07c665c",
+      "source_type": "official",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.0.1",
+      "last_evaluation_id": "trailofbits/skills:plugins/testing-handbook-skills/skills/fuzzing-dictionary/SKILL.md|sha256:b71fa7cab36ca466647123efa07c665c|1.0.1|1.0.0",
+      "evaluated_at": "2026-09-24T17:36:50.088461+08:00"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/testing-handbook-skills/skills/fuzzing-obstacles/SKILL.md",
+      "name": "fuzzing-obstacles",
+      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/testing-handbook-skills/skills/fuzzing-obstacles/SKILL.md",
+      "repo_url": "https://github.com/trailofbits/skills",
+      "author": "trailofbits",
+      "summary_zh": "介绍在模糊测试中绕过阻断覆盖率的障碍（校验和/哈希验证、magic value 校验、时间种子等非确定性全局状态）的技术：定位阻塞检查、以 fuzzing 构建标志条件性绕过，并评估由此产生的误报。适用于 fuzzer 卡在验证、覆盖显示大块代码不可达或难以生成合法输入的 C/C++ 与 Rust 项目。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "模糊测试卡在 checksum 校验上，怎么绕过这个检查？",
+        "覆盖率显示校验和后面有大片代码无法到达，如何打补丁并评估误报？"
+      ],
+      "key_features": [
+        "以编译期宏在模糊构建中条件性跳过校验和与哈希验证",
+        "提供 C/C++ 与 Rust cfg 条件编译的对照示例",
+        "含 libFuzzer/AFL++/honggfuzz/cargo-fuzz 集成与误报评估指引"
+      ],
+      "main_category": {
+        "id": "security",
+        "name": "安全"
+      },
+      "candidate_domains": [
+        "dev"
+      ],
+      "tags": [
+        "模糊测试",
+        "安全测试",
+        "条件编译",
+        "覆盖率",
+        "SUT 打补丁"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "libFuzzer",
+        "AFL++",
+        "honggfuzz",
+        "cargo-fuzz",
+        "LibAFL",
+        "clang/LLVM sanitizers",
+        "Rust cfg!(fuzzing)"
+      ],
+      "limitations": "示例与指引仅覆盖 C/C++ 与 Rust；绕过校验会引入误报风险，需逐项评估下游假设并测量覆盖变化；未给出非 C/C++/Rust 环境的适配说明。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-24T17:37:26.347204+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:7d77500c3e0a2db1ce5fd5dbb0559b80",
+      "source_type": "official",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.0.1",
+      "last_evaluation_id": "trailofbits/skills:plugins/testing-handbook-skills/skills/fuzzing-obstacles/SKILL.md|sha256:7d77500c3e0a2db1ce5fd5dbb0559b80|1.0.1|1.0.0",
+      "evaluated_at": "2026-09-24T17:37:26.346596+08:00"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/testing-handbook-skills/skills/harness-writing/SKILL.md",
+      "name": "harness-writing",
+      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/testing-handbook-skills/skills/harness-writing/SKILL.md",
+      "repo_url": "https://github.com/trailofbits/skills",
+      "author": "trailofbits",
+      "summary_zh": "一份面向 C/C++ 与 Rust 的 fuzzing harness 编写技术指南，讲解如何将原始字节映射到目标 API、构造结构化输入、避免非确定性与假崩溃，并覆盖 libFuzzer、AFL++、cargo-fuzz、go-fuzz 等工具的用法。适用于首次编写 LLVMFuzzerTestOneInput/fuzz_target! harness，或 fuzz 活动覆盖率低、崩溃不可复现时改进 harness。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "帮我为这个 C++ 解析函数写一个 libFuzzer harness",
+        "我的 fuzz 活动找不到崩溃，怎么改进 harness"
+      ],
+      "key_features": [
+        "覆盖 C/C++ 与 Rust 的 harness 编写步骤与代码模式",
+        "含输入校验、FuzzedDataProvider、交错模糊等常见模式",
+        "提供 libFuzzer/AFL++/cargo-fuzz/go-fuzz 工具专用指导与排错表"
+      ],
+      "main_category": {
+        "id": "security",
+        "name": "安全"
+      },
+      "candidate_domains": [
+        "dev",
+        "content"
+      ],
+      "tags": [
+        "模糊测试",
+        "fuzzing harness",
+        "C/C++",
+        "Rust",
+        "软件安全测试"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "clang++ / -fsanitize=fuzzer",
+        "FuzzedDataProvider.h",
+        "libFuzzer",
+        "AFL++（afl-clang-fast++、__AFL_LOOP、AFL_USE_ASAN）",
+        "cargo-fuzz（需 nightly）",
+        "arbitrary crate",
+        "go-fuzz"
+      ],
+      "limitations": "仅针对 C/C++ 与 Rust（另提及 Go/Python 工具的 harness 形态）的模糊测试 harness 编写；示例中的 target_function、divide、concat 等为示意符号，需使用者替换为自身代码；未声明操作系统、编译器版本等运行平台要求，也未给出完整可运行工程。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-24T17:37:58.401313+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:8efda12f4ab61a7eef4daae88affc764",
+      "source_type": "official",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.0.1",
+      "last_evaluation_id": "trailofbits/skills:plugins/testing-handbook-skills/skills/harness-writing/SKILL.md|sha256:8efda12f4ab61a7eef4daae88affc764|1.0.1|1.0.0",
+      "evaluated_at": "2026-09-24T17:37:58.400361+08:00"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/testing-handbook-skills/skills/libafl/SKILL.md",
+      "name": "libafl",
+      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/testing-handbook-skills/skills/libafl/SKILL.md",
+      "repo_url": "https://github.com/trailofbits/skills",
+      "author": "trailofbits",
+      "summary_zh": "介绍如何使用 Rust 模块化模糊测试库 LibAFL 构建自定义 fuzzer，涵盖作为 libFuzzer 替代的快速上手、自定义组件编写、编译、多核运行与调试等。适用于需要高级控制或针对非标准目标的模糊测试与安全研究场景。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "用 LibAFL 构建一个自定义 mutator 的 fuzzer",
+        "把 LibAFL 作为 libFuzzer 替代为我现有的 harness 做模糊测试"
+      ],
+      "key_features": [
+        "模块化 Rust 模糊测试库，可自定义 observers、feedback、mutators、scheduler、ex",
+        "可作为 libFuzzer 的 drop-in replacement 使用现有 harness",
+        "支持多核并行 fuzzing、TUI 统计与 libFuzzer 兼容层编译"
+      ],
+      "main_category": {
+        "id": "security",
+        "name": "安全"
+      },
+      "candidate_domains": [
+        "dev"
+      ],
+      "tags": [
+        "模糊测试",
+        "安全测试",
+        "Rust"
+      ],
+      "platform_declared": "Linux/macOS",
+      "dependencies_declared": [
+        "Clang/LLVM 15-18",
+        "Rust (via rustup)",
+        "nightly Rust (llvm-tools)",
+        "libssl-dev",
+        "pkg-config"
+      ],
+      "limitations": "需要 Clang/LLVM 与 Rust 工具链，libFuzzer 兼容模式需 nightly Rust；面向自定义/研究用途，复杂度较高，需自行编写 harness 与配置编译包装器。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-24T17:38:24.779351+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:2f7f261439c2d87a15ddbb8a04a387fb",
+      "source_type": "official",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.0.1",
+      "last_evaluation_id": "trailofbits/skills:plugins/testing-handbook-skills/skills/libafl/SKILL.md|sha256:2f7f261439c2d87a15ddbb8a04a387fb|1.0.1|1.0.0",
+      "evaluated_at": "2026-09-24T17:38:24.778031+08:00"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/testing-handbook-skills/skills/libfuzzer/SKILL.md",
+      "name": "libfuzzer",
+      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/testing-handbook-skills/skills/libfuzzer/SKILL.md",
+      "repo_url": "https://github.com/trailofbits/skills",
+      "author": "trailofbits",
+      "summary_zh": "介绍如何在可用 Clang 编译的 C/C++ 项目中搭建并运行 LLVM 内置的覆盖率引导模糊测试器 libFuzzer，涵盖 harness 编写、-fsanitize=fuzzer 构建、语料与字典管理、sanitizer 集成与崩溃排查。适用于为 C/C++ 库编写或调试 LLVMFuzzerTestOneInput、启动模糊测试、与 AFL++ 选型比较等场景。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "帮我为这个 C 库写一个 libFuzzer harness",
+        "我的 libFuzzer 跑了几小时没发现崩溃，怎么排查"
+      ],
+      "key_features": [
+        "覆盖 harness 编写、-fsanitize=fuzzer 编译与 sanitizer 集成",
+        "语料库、字典管理与覆盖率分析工作流",
+        "-jobs/-workers 多核与 -fork/-ignore_crashes 崩溃后继续"
+      ],
+      "main_category": {
+        "id": "security",
+        "name": "安全"
+      },
+      "candidate_domains": [
+        "dev"
+      ],
+      "tags": [
+        "模糊测试",
+        "C/C++",
+        "LLVM",
+        "安全测试"
+      ],
+      "platform_declared": "Linux（推荐）、macOS、Windows",
+      "dependencies_declared": [
+        "LLVM/Clang 编译器（内含 libFuzzer 运行时）",
+        "LLVM 工具 llvm-profdata、llvm-cov（覆盖率分析，可选）",
+        "AddressSanitizer / UndefinedBehaviorSanitizer / MemorySanitizer（编译选项）"
+      ],
+      "limitations": "libFuzzer 自 2022 年底起处于仅维护模式；多核支持有限，材料建议重负载多核场景改用 AFL++/Honggfuzz/LibAFL；启用 ASan 有 2-4x 性能损失并需约 20TB 虚拟内存；-seed 复现仅限单核。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-24T17:38:54.821429+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:56b2c68b193f7fed4ae00ade6c639519",
+      "source_type": "official",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.0.1",
+      "last_evaluation_id": "trailofbits/skills:plugins/testing-handbook-skills/skills/libfuzzer/SKILL.md|sha256:56b2c68b193f7fed4ae00ade6c639519|1.0.1|1.0.0",
+      "evaluated_at": "2026-09-24T17:38:54.818903+08:00"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/testing-handbook-skills/skills/ossfuzz/SKILL.md",
+      "name": "ossfuzz",
+      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/testing-handbook-skills/skills/ossfuzz/SKILL.md",
+      "repo_url": "https://github.com/trailofbits/skills",
+      "author": "trailofbits",
+      "summary_zh": "介绍如何将开源项目接入 Google OSS-Fuzz 持续模糊测试服务，并在本地用 helper.py 构建镜像、编译并运行 harness、生成覆盖率报告及复现崩溃报告。适用于开源项目的持续模糊测试搭建与 OSS-Fuzz 提交前验证。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "帮我把这个开源 C++ 项目接入 OSS-Fuzz",
+        "如何在本地复现一个 OSS-Fuzz 崩溃报告"
+      ],
+      "key_features": [
+        "覆盖 project.yaml、Dockerfile、build.sh 的接入配置示例",
+        "helper.py 本地构建、运行 harness 与覆盖率的命令速查",
+        "含 libFuzzer、AFL++、Atheris、Rust 引擎集成指引"
+      ],
+      "main_category": {
+        "id": "security",
+        "name": "安全"
+      },
+      "candidate_domains": [
+        "dev"
+      ],
+      "tags": [
+        "模糊测试",
+        "OSS-Fuzz",
+        "漏洞发现",
+        "持续集成"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "uv",
+        "Docker",
+        "git",
+        "gsutil（覆盖率分析可选）",
+        "google/oss-fuzz 仓库"
+      ],
+      "limitations": "依赖 Docker 与 uv 运行环境；公共 OSS-Fuzz 对项目设有 criticality score 门槛，低分项目需自建实例；覆盖率分析需额外安装 gsutil。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-24T17:39:27.222205+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:aeb1abbcac5ae5e4a73be4bb923fc9cc",
+      "source_type": "official",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.0.1",
+      "last_evaluation_id": "trailofbits/skills:plugins/testing-handbook-skills/skills/ossfuzz/SKILL.md|sha256:aeb1abbcac5ae5e4a73be4bb923fc9cc|1.0.1|1.0.0",
+      "evaluated_at": "2026-09-24T17:39:27.219911+08:00"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/testing-handbook-skills/skills/ruzzy/SKILL.md",
+      "name": "ruzzy",
+      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/testing-handbook-skills/skills/ruzzy/SKILL.md",
+      "repo_url": "https://github.com/trailofbits/skills",
+      "author": "trailofbits",
+      "summary_zh": "Ruzzy 是 Trail of Bits 的 Ruby 覆盖引导模糊测试器，基于 libFuzzer，支持对纯 Ruby 代码和 Ruby C 扩展进行模糊测试，并可配合 ASan/UBSan 检测内存安全问题。适用于对 Ruby 库/gem 或原生扩展做安全测试的场景。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "帮我用 Ruzzy 对一个 Ruby gem 的 C 扩展做内存安全模糊测试",
+        "如何为纯 Ruby 的解析器编写 Ruzzy harness 并跑起来"
+      ],
+      "key_features": [
+        "基于 libFuzzer 的 Ruby 覆盖引导模糊测试器",
+        "同时支持纯 Ruby 代码与 Ruby C 扩展（需 tracer 脚本）",
+        "内置 AddressSanitizer 与 UndefinedBehaviorSanitizer 支持"
+      ],
+      "main_category": {
+        "id": "security",
+        "name": "安全"
+      },
+      "candidate_domains": [
+        "dev"
+      ],
+      "tags": [
+        "模糊测试",
+        "安全测试",
+        "Ruby",
+        "内存安全",
+        "libFuzzer"
+      ],
+      "platform_declared": "Linux x86-64 与 AArch64/ARM64（macOS/Windows 需使用 Dockerfile 或开发环境）",
+      "dependencies_declared": [
+        "Linux x86-64 或 AArch64/ARM64",
+        "clang（测试至 14.0.0，建议最新版）",
+        "Ruby with gem",
+        "libFuzzer（Ruzzy 构建于其上）",
+        "ASan/UBSan 预编译库（Ruzzy::ASAN_PATH / Ruzzy::UBSAN_PATH）"
+      ],
+      "limitations": "原生平台支持仅限 Linux x86-64 与 AArch64/ARM64，macOS/Windows 需借助 Dockerfile 或开发环境；需 clang 编译且纯 Ruby 模糊测试需额外的 tracer 脚本；ASan 默认禁用内存泄漏检测。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-24T17:39:49.781541+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:46374463b7ff99b028692ed8d30f1c9f",
+      "source_type": "official",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.0.1",
+      "last_evaluation_id": "trailofbits/skills:plugins/testing-handbook-skills/skills/ruzzy/SKILL.md|sha256:46374463b7ff99b028692ed8d30f1c9f|1.0.1|1.0.0",
+      "evaluated_at": "2026-09-24T17:39:49.780538+08:00"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/testing-handbook-skills/skills/testing-handbook-generator/SKILL.md",
+      "name": "testing-handbook-generator",
+      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/testing-handbook-skills/skills/testing-handbook-generator/SKILL.md",
+      "repo_url": "https://github.com/trailofbits/skills",
+      "author": "trailofbits",
+      "summary_zh": "从 Trail of Bits Testing Handbook（appsec.guide）分析页面并生成、维护 Claude Code 技能 SKILL.md 的元技能，按工具/模糊测试/技术/领域四类模板组织生成流程。适用于依据该手册新建或刷新安全测试技能的场景，不用于回答安全测试问题本身。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "从 testing handbook 生成技能",
+        "为 libFuzzer 章节创建一个技能"
+      ],
+      "key_features": [
+        "从 Testing Handbook 批量生成或刷新 Claude Code 技能",
+        "两阶段生成：先写内容，再统一填充 Related Skills 交叉引用",
+        "按工具/模糊测试/技术/领域四类模板生成并含校验步骤"
+      ],
+      "main_category": {
+        "id": "security",
+        "name": "安全"
+      },
+      "candidate_domains": [
+        "dev"
+      ],
+      "tags": [
+        "安全测试",
+        "技能生成",
+        "Testing Handbook"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "Trail of Bits Testing Handbook 仓库（github.com/trailofbits/testing-handbook）",
+        "uv 运行环境（uv run scripts/validate-skills.py）",
+        "WebFetch（获取非视频外部资源）"
+      ],
+      "limitations": "依赖 Testing Handbook 仓库可获取（需查找或克隆）；仅允许改动本插件目录与仓库根 README.md；不回答安全测试问题；生成物受 500 行上限约束；不抓取视频 URL、不直接包含 handbook 图片；discovery.md、agent-prompt.md、templates/、testing.md、scripts/validate-skills.py 未随材料提供，无法核验其内容。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-24T17:40:46.653107+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:84d2022bff1675f77f71a219aa3999b0",
+      "source_type": "official",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.0.1",
+      "last_evaluation_id": "trailofbits/skills:plugins/testing-handbook-skills/skills/testing-handbook-generator/SKILL.md|sha256:84d2022bff1675f77f71a219aa3999b0|1.0.1|1.0.0",
+      "evaluated_at": "2026-09-24T17:40:46.651277+08:00"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/testing-handbook-skills/skills/wycheproof/SKILL.md",
+      "name": "wycheproof",
+      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/testing-handbook-skills/skills/wycheproof/SKILL.md",
+      "repo_url": "https://github.com/trailofbits/skills",
+      "author": "trailofbits",
+      "summary_zh": "介绍如何使用 Project Wycheproof 的密码学测试向量（AES、RSA、ECDSA、ECDH、EdDSA 等）验证实现正确性与已知攻击边界，覆盖向量加载、结果标志映射、测试 harness 编写与 CI 集成。适用于测试或审计第三方密码库、排查同一输入下不同实现结果不一致的问题。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "用 Wycheproof 测试向量验证我的 AES-GCM 实现是否正确",
+        "排查 ECDSA 实现为何在非法 DER 编码签名上校验通过"
+      ],
+      "key_features": [
+        "覆盖 AES-GCM、RSA、ECDSA、ECDH、EdDSA 等算法的测试向量使用指南",
+        "给出加载、解析、编写 harness、CI 集成四阶段完整流程与代码示例",
+        "含 elliptic 包三个 CVE 的定位与修复案例分析"
+      ],
+      "main_category": {
+        "id": "security",
+        "name": "安全"
+      },
+      "candidate_domains": [
+        "dev"
+      ],
+      "tags": [
+        "密码学测试",
+        "测试向量",
+        "安全审计",
+        "CI集成"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "git（子模块引入）",
+        "curl（下载测试向量）",
+        "Python（cryptography、pytest）",
+        "Node.js（Mocha、eddsa）"
+      ],
+      "limitations": "仅覆盖已确立的标准密码算法，不适用于自定义/实验性算法；不用于时序侧信道测试或发现未知新漏洞（需配合 constant-time 测试与 fuzzing）；材料未声明具体平台兼容性。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-24T17:41:17.617728+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:d092dc70fbd0f86d1f755857bf57172a",
+      "source_type": "official",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.0.1",
+      "last_evaluation_id": "trailofbits/skills:plugins/testing-handbook-skills/skills/wycheproof/SKILL.md|sha256:d092dc70fbd0f86d1f755857bf57172a|1.0.1|1.0.0",
+      "evaluated_at": "2026-09-24T17:41:17.617215+08:00"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/trailmark/skills/audit-augmentation/SKILL.md",
+      "name": "audit-augmentation",
+      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/trailmark/skills/audit-augmentation/SKILL.md",
+      "repo_url": "https://github.com/trailofbits/skills",
+      "author": "trailofbits",
+      "summary_zh": "该技能说明如何用 Trailmark 将外部审计发现（SARIF 静态分析结果、weAudit 标注、0.4+ 二进制图导出）按文件与行重叠映射到代码图节点，生成按严重级别划分的子图并与 blast radius、污点等预分析数据交叉引用。适用于把 Semgrep/CodeQL 等结果叠加到代码结构上做审计排查与可视化。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "把 Semgrep 的 SARIF 结果导入代码图并和污点数据交叉引用",
+        "导入 weAudit 标注，按严重级别查看审计发现子图"
+      ],
+      "key_features": [
+        "按文件路径与行区间重叠把发现映射到代码图节点",
+        "按严重级别与工具生成 sarif:/weaudit: 子图",
+        "支持 Trailmark 0.4+ 外部二进制图 JSON 导入（带版本门控）"
+      ],
+      "main_category": {
+        "id": "security",
+        "name": "安全"
+      },
+      "candidate_domains": [
+        "security"
+      ],
+      "tags": [
+        "静态分析",
+        "代码审计",
+        "SARIF",
+        "weAudit",
+        "代码图"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "trailmark（uv tool install trailmark）",
+        "Python（uv run --with trailmark python -）",
+        "Trailmark >= 0.4.0（二进制图增强）",
+        "Trailmark 0.5.0+（.trailmark/links.toml 声明链接）"
+      ],
+      "limitations": "二进制图仅导入外部 JSON（Trailmark 本身不做反汇编）；二进制增强需 0.4.0+；引用的 references/formats.md 未包含在本材料中；未声明平台兼容性。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-24T17:41:49.382275+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:164ab881bfc63e77c782cfc6b67b2bb6",
+      "source_type": "official",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.0.1",
+      "last_evaluation_id": "trailofbits/skills:plugins/trailmark/skills/audit-augmentation/SKILL.md|sha256:164ab881bfc63e77c782cfc6b67b2bb6|1.0.1|1.0.0",
+      "evaluated_at": "2026-09-24T17:41:49.381260+08:00"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/trailmark/skills/crypto-protocol-diagram/SKILL.md",
+      "name": "crypto-protocol-diagram",
+      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/trailmark/skills/crypto-protocol-diagram/SKILL.md",
+      "repo_url": "https://github.com/trailofbits/skills",
+      "author": "trailofbits",
+      "summary_zh": "该技能从源码、RFC、论文、伪代码或 ProVerif/Tamarin 形式化模型中提取密码协议消息流，生成带加密操作注解的 Mermaid 时序图并提供内联 ASCII 图。适用于绘制 TLS、Noise、Signal、X3DH、FROST 等握手/密钥交换流程并用于安全审查。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "给这段 X25519 握手代码画 Mermaid 时序图",
+        "从这份 ProVerif 模型提取消息流并生成时序图"
+      ],
+      "key_features": [
+        "支持源码与规范（RFC/论文/伪代码/ProVerif/Tamarin）双路径提取",
+        "输出 Mermaid sequenceDiagram 文件并内联打印 ASCII 时序图",
+        "逐步注解密钥生成、DH、签名等加密操作并标注规范偏差"
+      ],
+      "main_category": {
+        "id": "security",
+        "name": "安全"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "密码协议",
+        "时序图",
+        "Mermaid",
+        "协议分析",
+        "形式化模型"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "Read",
+        "Write",
+        "Grep",
+        "Glob",
+        "Bash",
+        "WebFetch",
+        "references/spec-parsing-patterns.md",
+        "references/mermaid-sequence-syntax.md",
+        "references/protocol-patterns.md",
+        "references/ascii-sequence-diagram.md",
+        "examples/simple-handshake/",
+        "examples/simple-proverif/"
+      ],
+      "limitations": "仅依据材料生成时序图，不做协议形式化验证（需转用 mermaid-to-proverif）；依赖 references 与 examples 目录内容；未声明运行平台与外部工具版本，Bash/WebFetch 的可用性取决于运行环境。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-24T17:42:15.502640+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:11e665a8180bfc5dcac16cb4baa01100",
+      "source_type": "official",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.0.1",
+      "last_evaluation_id": "trailofbits/skills:plugins/trailmark/skills/crypto-protocol-diagram/SKILL.md|sha256:11e665a8180bfc5dcac16cb4baa01100|1.0.1|1.0.0",
+      "evaluated_at": "2026-09-24T17:42:15.500645+08:00"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/trailmark/skills/diagramming-code/SKILL.md",
+      "name": "diagramming-code",
+      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/trailmark/skills/diagramming-code/SKILL.md",
+      "repo_url": "https://github.com/trailofbits/skills",
+      "author": "trailofbits",
+      "summary_zh": "该技能基于 Trailmark 解析出的代码图生成 Mermaid 图，输出调用图、类继承图、模块依赖图、类结构图、复杂度热力图和数据流/攻击面图，用于代码架构的可视化与理解。",
+      "skill_type": "tool_script",
+      "example_requests": [
+        "画出 main 函数的调用图，深度 2",
+        "为 Rust 项目生成类继承图"
+      ],
+      "key_features": [
+        "基于 Trailmark 解析图生成 Mermaid，明确禁止手写图",
+        "支持调用图、类继承、模块依赖、包含、复杂度、数据流六类图",
+        "含版本门控以兼容 Trailmark 0.4.0 原生 diagram 命令"
+      ],
+      "main_category": {
+        "id": "dev",
+        "name": "编程开发"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "代码可视化",
+        "Mermaid",
+        "调用图",
+        "依赖分析"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "trailmark",
+        "uv (Python 运行环境)"
+      ],
+      "limitations": "必须安装 trailmark，否则脚本不可用；原生 trailmark diagram 仅在 0.4.0+ 存在，需先做版本检查；图节点超过 100 时脚本会警告；不适用于非代码来源的架构图。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-24T17:42:37.771739+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:1d2397bd08607b686122078afe8d2742",
+      "source_type": "official",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.0.1",
+      "last_evaluation_id": "trailofbits/skills:plugins/trailmark/skills/diagramming-code/SKILL.md|sha256:1d2397bd08607b686122078afe8d2742|1.0.1|1.0.0",
+      "evaluated_at": "2026-09-24T17:42:37.769833+08:00"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/trailmark/skills/genotoxic/SKILL.md",
+      "name": "genotoxic",
+      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/trailmark/skills/genotoxic/SKILL.md",
+      "repo_url": "https://github.com/trailofbits/skills",
+      "author": "trailofbits",
+      "summary_zh": "Genotoxic 将变异测试与 necessist（测试语句删除）结合代码图分析，把存活变异体与无用测试语句分诊为误报、缺失单元测试与模糊测试目标，并输出 GENOTOXIC_REPORT.md。适用于已有可通过测试套件、需要按数据流上下文排定测试改进优先级的代码库。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "帮我分诊变异测试中存活的变异体",
+        "根据测试缺口找出需要模糊测试的函数"
+      ],
+      "key_features": [
+        "结合变异测试与 necessist 结果交叉验证，标记 corroborated 高置信发现",
+        "用 trailmark 调用图数据（可达性、爆炸半径、权限边界）分类分诊",
+        "输出分类报告 GENOTOXIC_REPORT.md，含误报、缺失测试与模糊测试目标"
+      ],
+      "main_category": {
+        "id": "dev",
+        "name": "编程开发"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "变异测试",
+        "测试覆盖率",
+        "模糊测试",
+        "代码图分析",
+        "测试分诊"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "trailmark（uv tool install trailmark）",
+        "目标语言的变异测试框架（如 Python 的 mutmut）",
+        "necessist（可选，cargo install necessist）",
+        "uv",
+        "cargo",
+        "macOS 下运行 mull-runner 前需执行 ulimit -n 1024"
+      ],
+      "limitations": "要求代码库已有可通过的测试套件，且不适用于纯文档/配置改动或逻辑极简单的单文件脚本；核心分诊算法（batch_triage、test-to-production 映射）位于未随材料提供的 references/graph-analysis.md、triage-methodology.md 与 mutation-frameworks.md 中。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [
+        "NEEDS_VERIFICATION"
+      ],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-24T17:43:07.243342+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:cfbb30f69e91f2b04a14f426ef444216",
+      "source_type": "official",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.0.1",
+      "last_evaluation_id": "trailofbits/skills:plugins/trailmark/skills/genotoxic/SKILL.md|sha256:cfbb30f69e91f2b04a14f426ef444216|1.0.1|1.0.0",
+      "evaluated_at": "2026-09-24T17:43:07.241292+08:00"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/trailmark/skills/graph-evolution/SKILL.md",
+      "name": "graph-evolution",
+      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/trailmark/skills/graph-evolution/SKILL.md",
+      "repo_url": "https://github.com/trailofbits/skills",
+      "author": "trailofbits",
+      "summary_zh": "该技能在两个源码快照（git ref 或目录）上分别构建 Trailmark 代码图并运行 preanalysis，再通过 trailmark 原生 diff 与 graph_diff.py 计算结构化差异，输出面向安全的结构变化报告。适用于比较 commit/tag、审计快照间演进、检测新增攻击路径与权限边界变化。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "比较两个 tag 之间的代码图结构变化",
+        "找出本次改动引入的新攻击路径和污点传播变化"
+      ],
+      "key_features": [
+        "对两个快照分别构建 Trailmark 图并运行 preanalysis",
+        "检测新增攻击路径、污点传播与权限边界变化",
+        "用 graph_diff.py 分析 tainted、high_blast_radius 等子图成员变化"
+      ],
+      "main_category": {
+        "id": "security",
+        "name": "安全"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "安全分析",
+        "代码图",
+        "结构差异",
+        "攻击面"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "trailmark（uv tool install trailmark）",
+        "uv / Python 运行环境",
+        "git worktree",
+        "插件自带 scripts/graph_diff.py"
+      ],
+      "limitations": "必须先安装 trailmark 且不得以人工比对替代；diff 的 --language 默认 python，其他语言需显式指定，否则会得到空结果；仅覆盖 trailmark 支持的语言；依赖 git ref 或目录形式的两个快照。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-24T17:43:39.803608+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:009055f8ad529fd9fa3bfe58c510fae7",
+      "source_type": "official",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.0.1",
+      "last_evaluation_id": "trailofbits/skills:plugins/trailmark/skills/graph-evolution/SKILL.md|sha256:009055f8ad529fd9fa3bfe58c510fae7|1.0.1|1.0.0",
+      "evaluated_at": "2026-09-24T17:43:39.802784+08:00"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/trailmark/skills/mermaid-to-proverif/SKILL.md",
+      "name": "mermaid-to-proverif",
+      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/trailmark/skills/mermaid-to-proverif/SKILL.md",
+      "repo_url": "https://github.com/trailofbits/skills",
+      "author": "trailofbits",
+      "summary_zh": "把描述密码协议的 Mermaid sequenceDiagram 转换为 ProVerif 形式化验证模型（.pv 文件），用于验证保密性、认证性、前向保密等安全性质。适用于已有协议时序图、需要生成或校验 ProVerif 模型的场景。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "把这份 Mermaid 时序图转换成 ProVerif 模型",
+        "帮我验证这个协议的保密性和认证性质"
+      ],
+      "key_features": [
+        "Mermaid 时序图到 ProVerif .pv 模型的转换",
+        "8 步建模工作流 + 场景决策树",
+        "附 crypto-to-proverif 映射、ProVerif 语法与安全性质参考文档及示例"
+      ],
+      "main_category": {
+        "id": "security",
+        "name": "安全"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "形式化验证",
+        "密码协议",
+        "ProVerif",
+        "Mermaid",
+        "安全性质验证"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "Read",
+        "Write",
+        "Grep",
+        "Glob"
+      ],
+      "limitations": "必须先有 Mermaid sequenceDiagram 输入（通常来自 crypto-protocol-diagram 技能）；仅生成 .pv 模型文件，不包含运行 ProVerif 验证；不适用于非密码学系统（状态机、访问控制）。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-24T17:44:07.350113+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:2f096151ad7fb5de2d74556bfa853225",
+      "source_type": "official",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.0.1",
+      "last_evaluation_id": "trailofbits/skills:plugins/trailmark/skills/mermaid-to-proverif/SKILL.md|sha256:2f096151ad7fb5de2d74556bfa853225|1.0.1|1.0.0",
+      "evaluated_at": "2026-09-24T17:44:07.349109+08:00"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/trailmark/skills/slicing-code-context/SKILL.md",
+      "name": "slicing-code-context",
+      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/trailmark/skills/slicing-code-context/SKILL.md",
+      "repo_url": "https://github.com/trailofbits/skills",
+      "author": "trailofbits",
+      "summary_zh": "一款代码上下文切片与委派工作流：用 Trailmark 生成有界、图相关的源码切片包，把函数/类/调用路径/入口点等聚焦分析或补丁建议交给受限或本地小模型，再由协调者校验结果。适用于在不暴露完整仓库的前提下把代码评审、解释与机械改提案下沉到小模型。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "让小模型解释 Auth.verify 并列出其假设",
+        "只给 worker 进入 execute_query 的入口点路径并分类校验缺口"
+      ],
+      "key_features": [
+        "Trailmark 生成有界、图相关的确定性代码切片包",
+        "只把任务与切片包交给受限/本地小模型，不暴露全仓库",
+        "worker 只读仅提议修改，引用与修改由协调者逐条复核"
+      ],
+      "main_category": {
+        "id": "dev",
+        "name": "编程开发"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "代码切片",
+        "子代理委托",
+        "静态分析",
+        "代码评审"
+      ],
+      "platform_declared": "Claude Code（插件代理 trailmark:code-slice-worker）",
+      "dependencies_declared": [
+        "Python 3.12+",
+        "uv",
+        "Trailmark 0.5.x",
+        "Claude Code 插件代理 trailmark:code-slice-worker",
+        "scripts/build_slice_packet.py"
+      ],
+      "limitations": "依赖 Trailmark 静态分析可见性，运行期行为、生成代码、宏与动态分派场景不适用；worker 只能提议修改，最终判断与落盘由协调者完成；仅允许一次聚焦扩展，第二次仍缺上下文即停止委托；8K token 预算只约束估算的渲染包体，不等于满足模型完整上下文窗口。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-24T17:44:34.242213+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:72ea4b2adc22f0c9d64b1f7846517fb2",
+      "source_type": "official",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.0.1",
+      "last_evaluation_id": "trailofbits/skills:plugins/trailmark/skills/slicing-code-context/SKILL.md|sha256:72ea4b2adc22f0c9d64b1f7846517fb2|1.0.1|1.0.0",
+      "evaluated_at": "2026-09-24T17:44:34.240241+08:00"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/trailmark/skills/trailmark-finding-triage/SKILL.md",
+      "name": "trailmark-finding-triage",
+      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/trailmark/skills/trailmark-finding-triage/SKILL.md",
+      "repo_url": "https://github.com/trailofbits/skills",
+      "author": "trailofbits",
+      "summary_zh": "对单一安全发现（SARIF 结果、weAudit 标注、可疑函数或报告片段）做基于 Trailmark 图的证据分诊，判断是否可达并给出促进、待人工复核、降级或受阻的结论。适用于静态分析结果排期、PoC 前优先级判断与利用验证证据准备。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "对 src/Vault.sol:148 用 Trailmark 分诊，怀疑 withdraw 可绕过余额更新。",
+        "投入 PoC 前分诊这条 SARIF：contracts/Bridge.sol 第 91 行的 unchecked-transfer。"
+      ],
+      "key_features": [
+        "基于可达性、污点、权限边界与爆炸半径的图证据分诊",
+        "将 SARIF/weAudit/手工发现绑定到最窄图节点",
+        "输出 Promote/Needs manual review/Deprioritize/Blocked 单一结论"
+      ],
+      "main_category": {
+        "id": "security",
+        "name": "安全"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "安全审计",
+        "静态分析",
+        "漏洞分诊",
+        "可达性分析"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "trailmark skill（Trailmark 图与 preanalysis）",
+        "Bash/Read/Grep/Glob/Write 工具权限"
+      ],
+      "limitations": "引用文件 references/input-normalization.md、query-recipes.md、output-format.md 未随材料提供；依赖 trailmark 环境与 Trailmark 版本特性探测；文中明确图可达性不等于可利用性，需另行人工复核。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-24T17:45:01.305683+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:9f76e25b1ef98076e462dcac78afb488",
+      "source_type": "official",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.0.1",
+      "last_evaluation_id": "trailofbits/skills:plugins/trailmark/skills/trailmark-finding-triage/SKILL.md|sha256:9f76e25b1ef98076e462dcac78afb488|1.0.1|1.0.0",
+      "evaluated_at": "2026-09-24T17:45:01.303796+08:00"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/trailmark/skills/trailmark-review-gate/SKILL.md",
+      "name": "trailmark-review-gate",
+      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/trailmark/skills/trailmark-review-gate/SKILL.md",
+      "repo_url": "https://github.com/trailofbits/skills",
+      "author": "trailofbits",
+      "summary_zh": "对分支、PR、修复提交或发布 diff 运行 Trailmark 结构审查门禁，检测新增入口点、新增污点路径、被移除的校验/授权调用、权限边界漂移、爆炸半径与复杂度增长等图级安全回归，并输出可供评审引用的紧凑结构证据包。适用于合并前的差异化安全审查。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "审查这个 PR 分支，检查是否新增了入口点或扩大了攻击面",
+        "对比修复提交前后的污点路径与权限边界变化并给出门禁结论"
+      ],
+      "key_features": [
+        "将确定性安全门规则应用于 Trailmark 结构 diff 证据",
+        "检测新增入口点、新增污点路径与被移除的校验/授权调用",
+        "图证据与人工安全判断分离，不替代逐行审查"
+      ],
+      "main_category": {
+        "id": "security",
+        "name": "安全"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "安全审查",
+        "代码审查",
+        "结构分析",
+        "PR 门禁"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "Trailmark",
+        "graph-evolution"
+      ],
+      "limitations": "材料仅含 SKILL.md，所引用的 references/gate-rules.md、references/output-format.md、references/review-integration.md 未提供；功能依赖 Trailmark 与 graph-evolution 工具；作者自述本技能不替代逐行代码审查，仅产出结构证据。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-24T17:45:28.250040+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:fad45861eca1e8fe7c44d20a178816e5",
+      "source_type": "official",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.0.1",
+      "last_evaluation_id": "trailofbits/skills:plugins/trailmark/skills/trailmark-review-gate/SKILL.md|sha256:fad45861eca1e8fe7c44d20a178816e5|1.0.1|1.0.0",
+      "evaluated_at": "2026-09-24T17:45:28.249038+08:00"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/trailmark/skills/trailmark-structural/SKILL.md",
+      "name": "trailmark-structural",
+      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/trailmark/skills/trailmark-structural/SKILL.md",
+      "repo_url": "https://github.com/trailofbits/skills",
+      "author": "trailofbits",
+      "summary_zh": "调用 Trailmark 的 QueryEngine 对指定目标目录构建代码图并运行 preanalysis()，输出热点、污点、爆炸半径、攻击面、代理节点及子图等结构化 JSON。适用于 Vivisect Phase 1 的结构性分析与审计优先级排序。",
+      "skill_type": "tool_script",
+      "example_requests": [
+        "对目标项目跑一次完整的 Trailmark 结构性分析",
+        "输出该目标的复杂度热点、污点和攻击面数据"
+      ],
+      "key_features": [
+        "通过 QueryEngine 构图并运行四项 preanalysis 分析",
+        "输出污点、爆炸半径、攻击面、代理节点等结构化 JSON",
+        "兼容 Trailmark 0.2.x–0.5.0+，按版本探测特性"
+      ],
+      "main_category": {
+        "id": "security",
+        "name": "安全"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "安全分析",
+        "静态分析",
+        "污点分析",
+        "代码审计",
+        "Vivisect"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "trailmark（Python 包/CLI，区分 0.2.x、0.3.x、0.4.0+、0.5.0+）",
+        "python3",
+        "uv（可选回退：uv run --with trailmark）"
+      ],
+      "limitations": "依赖用户自行安装的 Trailmark；未安装时直接返回不进行分析；能力受 Trailmark 支持语言限制；部分 pass 或子图可能输出为空；v0.4+/0.5+ 字段需运行时探测，未声明支持平台。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-24T17:46:01.938898+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:7716c9069a3f216f26c69d2324953824",
+      "source_type": "official",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.0.1",
+      "last_evaluation_id": "trailofbits/skills:plugins/trailmark/skills/trailmark-structural/SKILL.md|sha256:7716c9069a3f216f26c69d2324953824|1.0.1|1.0.0",
+      "evaluated_at": "2026-09-24T17:46:01.936897+08:00"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/trailmark/skills/trailmark-summary/SKILL.md",
+      "name": "trailmark-summary",
+      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/trailmark/skills/trailmark-summary/SKILL.md",
+      "repo_url": "https://github.com/trailofbits/skills",
+      "author": "trailofbits",
+      "summary_zh": "在目标代码库上运行 Trailmark 的结构概览分析，返回自动识别的语言、入口点数量与依赖列表，用于在深入分析前快速了解陌生代码库。适用于 Vivisect Phase 0、Galvanize Phase 1 等需要快速结构定位的场景。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "对这个代码库跑一下 trailmark summary，看看有哪些语言和入口点",
+        "先给我一份这个项目的结构概览，包含识别到的语言和依赖列表"
+      ],
+      "key_features": [
+        "返回自动识别语言、入口点数量与依赖列表三项输出",
+        "兼容 v0.2.x 的 summary 工作流，不强制 0.4.0",
+        "显式禁止自动安装，缺依赖时报告而非跳过或伪造输出"
+      ],
+      "main_category": {
+        "id": "dev",
+        "name": "编程开发"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "代码分析",
+        "代码库概览",
+        "结构分析",
+        "Trailmark"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "trailmark CLI（需用户自行安装，未声明版本下限）",
+        "uv（可选，用于 uv run 回退）",
+        "python3（用于调用 detect_languages）"
+      ],
+      "limitations": "依赖外部 trailmark CLI 及 python3/uv 环境，且不自动安装；仅提供结构概览，不包含热点分数、污点数据或详细代码图查询，这些需改用 trailmark-structural 或主 trailmark 技能。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-24T17:46:25.662300+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:c6a6b5feb7bc3eda3b45140be8aa01f5",
+      "source_type": "official",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.0.1",
+      "last_evaluation_id": "trailofbits/skills:plugins/trailmark/skills/trailmark-summary/SKILL.md|sha256:c6a6b5feb7bc3eda3b45140be8aa01f5|1.0.1|1.0.0",
+      "evaluated_at": "2026-09-24T17:46:25.660685+08:00"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/trailmark/skills/trailmark-variant-neighborhood/SKILL.md",
+      "name": "trailmark-variant-neighborhood",
+      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/trailmark/skills/trailmark-variant-neighborhood/SKILL.md",
+      "repo_url": "https://github.com/trailofbits/skills",
+      "author": "trailofbits",
+      "summary_zh": "将单个已确认或疑似漏洞扩展为 Trailmark 图邻域中的变体候选（共享调用者/被调用者、敏感汇点、接口与覆写兄弟节点等），排序后输出供 variant-analysis、Semgrep 规则编写或人工复查使用的候选清单。适用于发现一个问题后寻找同源变体位置的安全审计场景。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "我确认了一个漏洞，帮我找出同源的变体候选位置",
+        "根据这个发现种子，生成可供 variant-analysis 复查的候选清单"
+      ],
+      "key_features": [
+        "基于 Trailmark 图扩展共享调用者、被调用者与敏感汇点",
+        "对候选排序，并降权测试、生成、第三方与不可达代码",
+        "只输出复查目标候选，不直接下漏洞结论"
+      ],
+      "main_category": {
+        "id": "security",
+        "name": "安全"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "安全审计",
+        "变体分析",
+        "静态分析",
+        "漏洞挖掘"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "Bash",
+        "Read",
+        "Grep",
+        "Glob",
+        "Write",
+        "Trailmark 图（正文引用）"
+      ],
+      "limitations": "必须先将种子绑定到 Trailmark 图节点，否则中止；依赖 Trailmark 对目标语言的支持；无明确示例；引用的 references/neighborhood-patterns.md、ranking.md、output-format.md 未包含在材料中，无法核对细则；仅产出候选而非确认漏洞。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [
+        "NEEDS_VERIFICATION"
+      ],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-24T17:47:11.829526+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:e49b232b46dce59ea2fd68a1c1dda25d",
+      "source_type": "official",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.0.1",
+      "last_evaluation_id": "trailofbits/skills:plugins/trailmark/skills/trailmark-variant-neighborhood/SKILL.md|sha256:e49b232b46dce59ea2fd68a1c1dda25d|1.0.1|1.0.0",
+      "evaluated_at": "2026-09-24T17:47:11.828527+08:00"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/trailmark/skills/trailmark/SKILL.md",
+      "name": "trailmark",
+      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/trailmark/skills/trailmark/SKILL.md",
+      "repo_url": "https://github.com/trailofbits/skills",
+      "author": "trailofbits",
+      "summary_zh": "Trailmark 是一个安全分析技能，将多语言源码（含 SQL、Solidity 等）解析为函数/类/调用关系的有向代码图，并提供调用路径、复杂度热点、入口点、攻击面、污点传播与爆炸半径等查询。适用于对陌生或混合语言代码库做安全审计、攻击面梳理与图证据生成。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "用 trailmark 分析这个仓库，找出从用户输入到敏感函数的调用路径",
+        "枚举这个项目的入口点并列出复杂度热点函数"
+      ],
+      "key_features": [
+        "多语言源码/二进制代码图构建与查询，支持 30+ 语言解析器",
+        "预分析四遍：爆炸半径、入口点枚举、权限边界、污点传播",
+        "以 .trailmark/links.toml 声明跨语言/FFI/RPC 链接边"
+      ],
+      "main_category": {
+        "id": "security",
+        "name": "安全"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "代码图",
+        "安全审计",
+        "调用路径分析",
+        "攻击面梳理",
+        "污点传播",
+        "静态分析"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "trailmark CLI（uv tool install trailmark）",
+        "Python 运行环境（uv run --with trailmark python -）",
+        "Trailmark 版本要求：0.2.x 基线，v0.4+/v0.5+ 特性需版本门控"
+      ],
+      "limitations": "静态分析工具，不做过程间污点分析，reachability 不等于 taint；不自行反汇编二进制，二进制图需外部 JSON 导入；部分能力（diagram、subgraph_edges、SQL 解析、links.toml 等）依赖 v0.4+/v0.5+ 版本；详细文档位于材料未包含的 references/ 文件；需先安装外部 trailmark CLI。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-24T17:47:54.881484+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:113af24db2830394ca7a42078a3172d3",
+      "source_type": "official",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.0.1",
+      "last_evaluation_id": "trailofbits/skills:plugins/trailmark/skills/trailmark/SKILL.md|sha256:113af24db2830394ca7a42078a3172d3|1.0.1|1.0.0",
+      "evaluated_at": "2026-09-24T17:47:54.879381+08:00"
     }
   ],
   "overrides": {
