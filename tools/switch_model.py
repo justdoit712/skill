@@ -1,18 +1,19 @@
 """多厂商模型与 API Key 本地独立文件热插拔管理工具。
 
 设计原则（分离存储、独立自治）：
-1. 每个厂商拥有独立的私有配置文件：config/models/<厂商ID>.local.json（如 deepseek.local.json、bailian.local.json）；
+1. 每个厂商/模型拥有独立的私有配置文件：config/models/<标识>.local.json；
 2. 相互独立、互不混合，各自存放端点、模型名与私有 API Key；
 3. 一键热插拔激活：选中后原子写入 config/models/model.local.json（当前项目生效模型）；
-4. 支持厂商别名快捷切换（如 qwen、aliyun 自动指向 bailian）；
+4. 支持智能模糊匹配与别名（如 kimi-k3 自动定位到 bailian-kimi-k3，qwen 指向百炼）；
 5. 所有 *.local.json 均被 .gitignore 严格忽略，杜绝凭据泄漏风险。
 
 用法：
     python tools/switch_model.py                 # 交互式菜单选择切换
-    python tools/switch_model.py deepseek        # 直接切换到 deepseek.local.json
-    python tools/switch_model.py bailian         # 直接切换到 bailian.local.json (阿里云百炼平台)
-    python tools/switch_model.py qwen            # 别名切换：自动定位到 bailian.local.json
-    python tools/switch_model.py --list          # 列出所有可用厂商独立配置及状态
+    python tools/switch_model.py deepseek        # 切换到 DeepSeek 官方 API
+    python tools/switch_model.py qwen3.8-flash   # 切换到阿里云百炼 qwen3.8-flash
+    python tools/switch_model.py kimi-k3         # 切换到阿里云百炼 kimi-k3
+    python tools/switch_model.py glm-5.3         # 切换到阿里云百炼 glm-5.3
+    python tools/switch_model.py --list          # 列出所有已配置的模型及状态
     python tools/switch_model.py --show          # 显示当前生效模型信息
     python tools/switch_model.py --check         # 预检当前生效的模型连接配置
 """
@@ -63,7 +64,7 @@ def mask_key(key: str | None) -> str:
 
 
 def load_providers_catalog(models_dir: Path | None = None) -> dict:
-    """加载所有独立厂商配置文件。
+    """加载所有独立厂商/模型配置文件。
     
     自动扫描 models_dir 下的 *.local.json（排除当前生效的 model.local.json 与旧版 providers.local.json）。
     """
@@ -96,7 +97,7 @@ def load_providers_catalog(models_dir: Path | None = None) -> dict:
     if MODEL_LOCAL_PATH.exists():
         cur = read_json(MODEL_LOCAL_PATH, default={})
         active_id = cur.get("active_provider")
-        if not active_id:
+        if not active_id or active_id not in providers:
             cur_endpoint = cur.get("endpoint")
             cur_model = cur.get("model")
             for pid, pcfg in providers.items():
@@ -108,21 +109,20 @@ def load_providers_catalog(models_dir: Path | None = None) -> dict:
 
 
 def list_providers(catalog: dict) -> None:
-    """格式化打印各独立厂商配置状态列表。"""
+    """格式化打印各独立厂商/模型配置状态列表。"""
     providers = catalog.get("providers", {})
     active_id = catalog.get("active")
-    print("\n" + "=" * 68)
-    print(f"{'#':<4} {'厂商 ID':<14} {'模型名称':<24} {'状态 / Key':<18}")
-    print("-" * 68)
+    print("\n" + "=" * 82)
+    print(f"{'#':<4} {'配置标识 ID':<36} {'模型 Code':<28} {'状态 / Key':<14}")
+    print("-" * 82)
     for idx, (pid, pcfg) in enumerate(providers.items(), 1):
-        name = pcfg.get("name", pid)
         model = pcfg.get("model", "unknown")
         key = (pcfg.get("auth") or {}).get("api_key")
         is_active = (pid == active_id)
         active_mark = "[当前激活] " if is_active else "           "
         key_status = mask_key(key)
-        print(f"{idx:<4} {pid:<14} {model:<24} {active_mark}{key_status}")
-    print("=" * 68 + "\n")
+        print(f"{idx:<4} {pid:<36} {model:<28} {active_mark}{key_status}")
+    print("=" * 82 + "\n")
 
 
 def show_current() -> None:
@@ -136,9 +136,10 @@ def show_current() -> None:
     env_name = auth.get("api_key_env", "LLM_API_KEY")
     env_key = os.environ.get(env_name)
 
-    print("\n" + "=" * 55)
+    print("\n" + "=" * 58)
     print("【当前项目生效模型配置 (config/models/model.local.json)】")
     print(f"  激活来源  : {cur.get('active_provider', 'custom')}")
+    print(f"  展示名称  : {cur.get('name')}")
     print(f"  服务标识  : {cur.get('provider')}")
     print(f"  模型名称  : {cur.get('model')}")
     print(f"  服务端点  : {cur.get('endpoint')}")
@@ -146,37 +147,60 @@ def show_current() -> None:
     print(f"  环境密钥  : {mask_key(env_key)} (变量: {env_name})")
     print(f"  超时时间  : {cur.get('request', {}).get('timeout_seconds')} 秒")
     print(f"  响应格式  : {cur.get('request', {}).get('response_format', 'default')}")
-    print("=" * 55 + "\n")
+    print("=" * 58 + "\n")
+
+
+def resolve_target_provider_id(query: str, providers: dict) -> str | None:
+    """智能解析用户输入的厂商或模型 ID。"""
+    raw = query.strip()
+    low = raw.lower()
+
+    # 1. 别名表直接映射
+    if low in ALIASES and ALIASES[low] in providers:
+        return ALIASES[low]
+
+    # 2. 精确匹配配置标识 (如 bailian-kimi-k3 或 deepseek)
+    if raw in providers:
+        return raw
+    if low in providers:
+        return low
+
+    # 3. 自动补全 bailian- 前缀 (如 kimi-k3 -> bailian-kimi-k3)
+    if f"bailian-{raw}" in providers:
+        return f"bailian-{raw}"
+    if f"bailian-{low}" in providers:
+        return f"bailian-{low}"
+
+    # 4. 按 model 字段反向搜索
+    for pid, pcfg in providers.items():
+        m = (pcfg.get("model") or "").strip()
+        if m.lower() == low or m == raw:
+            return pid
+
+    return None
 
 
 def switch_to_provider(provider_id: str, catalog: dict | None = None) -> bool:
-    """切换到指定独立厂商配置文件，并原子覆写到 model.local.json。"""
+    """切换到指定独立模型配置文件，并原子覆写到 model.local.json。"""
     if catalog is None:
         catalog = load_providers_catalog()
 
     providers = catalog.get("providers", {})
-    resolved_id = ALIASES.get(provider_id.lower(), provider_id)
+    resolved_id = resolve_target_provider_id(provider_id, providers)
     target_cfg = None
 
-    # 1. 优先从已加载 catalog 中获取
-    if resolved_id in providers:
+    if resolved_id and resolved_id in providers:
         target_cfg = dict(providers[resolved_id])
-    elif provider_id in providers:
-        target_cfg = dict(providers[provider_id])
-        resolved_id = provider_id
     else:
-        # 2. 尝试直接从独立文件读取
-        candidate_file = MODELS_DIR / f"{resolved_id}.local.json"
+        # 尝试直接从本地文件读取
+        candidate_file = MODELS_DIR / f"{provider_id}.local.json"
         if candidate_file.exists():
             target_cfg = read_json(candidate_file, default={})
+            resolved_id = provider_id
 
-    if not target_cfg:
-        available = list(providers.keys())
-        alias_hints = [f"{k}->{v}" for k, v in ALIASES.items() if v in providers]
-        hint_str = f"可选厂商：{', '.join(available)}"
-        if alias_hints:
-            hint_str += f"（支持别名：{', '.join(alias_hints)}）"
-        print(f"[错误] 未找到厂商 ID '{provider_id}'，{hint_str}")
+    if not target_cfg or not resolved_id:
+        print(f"[错误] 未找到模型配置 '{provider_id}'！")
+        print(f"       请运行 'python tools/switch_model.py --list' 查看所有可选模型。")
         return False
 
     name = target_cfg.get("name", resolved_id)
@@ -192,15 +216,15 @@ def switch_to_provider(provider_id: str, catalog: dict | None = None) -> bool:
     has_env = bool(os.environ.get(env_var))
 
     if not key and not has_env:
-        print(f"[提示] 注意：厂商 '{resolved_id}' 当前未设置 api_key，环境变量 '{env_var}' 亦为空。")
+        print(f"[提示] 注意：模型 '{resolved_id}' 当前未设置 api_key，环境变量 '{env_var}' 亦为空。")
         print(f"       请在 config/models/{resolved_id}.local.json 中填入私有 Key。")
 
     # 记录 active 标记并原子写入 model.local.json
     target_cfg["active_provider"] = resolved_id
-    target_cfg["note"] = f"当前由 tools/switch_model.py 从 {resolved_id}.local.json 激活（厂商: {name}）。禁止提交、禁止写入日志。"
+    target_cfg["note"] = f"当前由 tools/switch_model.py 从 {resolved_id}.local.json 激活（{name}）。禁止提交、禁止写入日志。"
     write_json_atomic(MODEL_LOCAL_PATH, target_cfg)
 
-    # 若内存目录传入，同步更新 active 状态
+    # 同步更新 active 状态
     catalog["active"] = resolved_id
     if PROVIDERS_LOCAL_PATH.exists():
         legacy_data = read_json(PROVIDERS_LOCAL_PATH, default={})
@@ -229,7 +253,7 @@ def interactive_select(catalog: dict) -> None:
     active_id = catalog.get("active")
 
     try:
-        choice = input(f"请输入要激活的厂商编号 [1-{len(keys)}] 或 厂商ID (直接回车保持当前): ").strip()
+        choice = input(f"请输入要激活的编号 [1-{len(keys)}] 或 模型ID (直接回车保持当前): ").strip()
     except (KeyboardInterrupt, EOFError):
         print("\n已取消操作。")
         return
@@ -248,17 +272,17 @@ def interactive_select(catalog: dict) -> None:
             print("[错误] 输入编号超出范围。")
             return
 
-    target_id = ALIASES.get(choice.lower(), choice)
-    if target_id in providers or (MODELS_DIR / f"{target_id}.local.json").exists():
-        switch_to_provider(target_id, catalog)
+    resolved = resolve_target_provider_id(choice, providers)
+    if resolved:
+        switch_to_provider(resolved, catalog)
     else:
-        print(f"[错误] 无效的厂商 ID: '{choice}'")
+        print(f"[错误] 未找到模型: '{choice}'")
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="多厂商大模型与 Key 本地独立文件热插拔管理工具")
-    parser.add_argument("provider", nargs="?", help="要切换到的目标厂商 ID (如 deepseek, bailian, siliconflow, ollama；支持别名 qwen, aliyun)")
-    parser.add_argument("-l", "--list", action="store_true", help="列出所有已配置的厂商及状态")
+    parser.add_argument("provider", nargs="?", help="要切换到的目标模型 ID (如 deepseek, qwen3.8-flash, kimi-k3, glm-5.3 等)")
+    parser.add_argument("-l", "--list", action="store_true", help="列出所有已配置的模型及状态")
     parser.add_argument("-s", "--show", "--current", action="store_true", help="显示当前生效模型详情")
     parser.add_argument("-c", "--check", action="store_true", help="预检当前生效的模型连接配置")
     args = parser.parse_args()
@@ -287,8 +311,7 @@ def main() -> None:
         return
 
     if args.provider:
-        target_id = ALIASES.get(args.provider.strip().lower(), args.provider.strip())
-        ok = switch_to_provider(target_id, catalog)
+        ok = switch_to_provider(args.provider.strip(), catalog)
         sys.exit(0 if ok else 1)
 
     # 无参数时进入交互选择
