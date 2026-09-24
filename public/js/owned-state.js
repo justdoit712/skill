@@ -39,9 +39,11 @@ export function validateManagedUrl(rawUrl) {
 export function createOwnedState() {
   return {
     baseline: {},       // skill_id -> { skill_id, name, source_url, added_at, original_partition }
-    stagedAdds: {},     // skill_id -> { skill_id, name, source_url, added_at, original_partition }
+    stagedAdds: {},     // skill_id -> { skill_id, name, source_url, added_at, original_partition, updated_at }
     stagedDeletes: new Set(), // skill_id
-    privateDetails: {}  // skill_id -> { managed_url, note }
+    privateDetails: {}, // skill_id -> { managed_url, note, updated_at }
+    _stagedChanges: {}, // skill_id -> { action: "mark"|"unmark"|"reconcile", item?, updated_at: number }
+    _privateChanges: {} // skill_id -> { action: "set"|"delete", detail?, updated_at: number }
   };
 }
 
@@ -93,28 +95,36 @@ export function isOwned(ownedState, skillId) {
  * 标记为已收录。
  * 新增后立即取消应抵消该次新增，而不是产生一条虚假删除。
  */
-export function markOwned(ownedState, item, today = null) {
+export function markOwned(ownedState, item, today = null, timestamp = null) {
   if (!item || !item.skill_id) return;
   const sid = item.skill_id;
+  const now = timestamp || Date.now();
 
   // 如果此前被标记了删除：取消删除标记
   if (ownedState.stagedDeletes.has(sid)) {
     ownedState.stagedDeletes.delete(sid);
-    return;
-  }
-
-  // 如果已存在于基线，无需 stagedAdd
-  if (ownedState.baseline[sid]) {
-    return;
   }
 
   const curToday = today || shanghaiTodayStr();
-  ownedState.stagedAdds[sid] = {
+  const stagedItem = {
     skill_id: sid,
     name: item.name || sid,
     source_url: item.source_url || item.url || item.repo_url || null,
-    added_at: curToday,
-    original_partition: item.original_partition || item._baselineTab || "candidate"
+    added_at: item.added_at || curToday,
+    original_partition: item.original_partition || item._baselineTab || "candidate",
+    updated_at: now
+  };
+
+  // 如果已存在于基线，无需加入 stagedAdds，但若撤销过删除，也需记录变动
+  if (!ownedState.baseline[sid]) {
+    ownedState.stagedAdds[sid] = stagedItem;
+  }
+
+  if (!ownedState._stagedChanges) ownedState._stagedChanges = {};
+  ownedState._stagedChanges[sid] = {
+    action: "mark",
+    item: stagedItem,
+    updated_at: now
   };
 }
 
@@ -126,8 +136,9 @@ export function markOwned(ownedState, item, today = null) {
  * 若条目同时存在于 stagedAdds 和 baseline，删除 stagedAdds 后必须继续记录 stagedDeletes，
  * 保证基线条目被真正取消并生成有效的删除变更包。
  */
-export function unmarkOwned(ownedState, skillId) {
+export function unmarkOwned(ownedState, skillId, timestamp = null) {
   if (!skillId) return;
+  const now = timestamp || Date.now();
 
   const hadStagedAdd = Boolean(ownedState.stagedAdds[skillId]);
   if (hadStagedAdd) {
@@ -138,6 +149,12 @@ export function unmarkOwned(ownedState, skillId) {
   if (ownedState.baseline[skillId]) {
     ownedState.stagedDeletes.add(skillId);
   }
+
+  if (!ownedState._stagedChanges) ownedState._stagedChanges = {};
+  ownedState._stagedChanges[skillId] = {
+    action: "unmark",
+    updated_at: now
+  };
 }
 
 /**
@@ -148,14 +165,17 @@ export function unmarkOwned(ownedState, skillId) {
  * 2. 若 stagedDeletes 包含 sid 且 baseline 中已经不含 sid，判为删除已同步，自动清除该删除标记；
  * 3. 返回清除的数量 { reconciledAdds: number, reconciledDeletes: number }。
  */
-export function reconcileOwnedStaged(ownedState) {
+export function reconcileOwnedStaged(ownedState, timestamp = null) {
   let reconciledAdds = 0;
   let reconciledDeletes = 0;
+  const now = timestamp || Date.now();
+  if (!ownedState._stagedChanges) ownedState._stagedChanges = {};
 
   // 1. 检查已成功合入基线的新增暂存
   Object.keys(ownedState.stagedAdds).forEach(sid => {
     if (ownedState.baseline[sid]) {
       delete ownedState.stagedAdds[sid];
+      ownedState._stagedChanges[sid] = { action: "reconcile", updated_at: now };
       reconciledAdds += 1;
     }
   });
@@ -164,6 +184,7 @@ export function reconcileOwnedStaged(ownedState) {
   Array.from(ownedState.stagedDeletes).forEach(sid => {
     if (!ownedState.baseline[sid]) {
       ownedState.stagedDeletes.delete(sid);
+      ownedState._stagedChanges[sid] = { action: "reconcile", updated_at: now };
       reconciledDeletes += 1;
     }
   });
@@ -259,27 +280,44 @@ export function getEffectiveOwnedList(ownedState, ownedEntriesMap = {}) {
 /**
  * 设置条目的私人详情（仅保存在当前浏览器，不参与变更包同步）。
  */
-export function setPrivateDetails(ownedState, skillId, { managed_url = "", note = "" }) {
+export function setPrivateDetails(ownedState, skillId, { managed_url = "", note = "" }, timestamp = null) {
   if (!skillId) return;
   const cleanUrl = validateManagedUrl(managed_url);
   const cleanNote = typeof note === "string" ? note.trim() : "";
+  const now = timestamp || Date.now();
 
+  // 若链接与备注均为空，等同于用户删除该条目的私人详情
   if (!cleanUrl && !cleanNote) {
-    delete ownedState.privateDetails[skillId];
-  } else {
-    ownedState.privateDetails[skillId] = {
-      managed_url: cleanUrl,
-      note: cleanNote
-    };
+    removePrivateDetails(ownedState, skillId, now);
+    return;
   }
+
+  const detail = {
+    managed_url: cleanUrl,
+    note: cleanNote,
+    updated_at: now
+  };
+  ownedState.privateDetails[skillId] = detail;
+  if (!ownedState._privateChanges) ownedState._privateChanges = {};
+  ownedState._privateChanges[skillId] = {
+    action: "set",
+    detail,
+    updated_at: now
+  };
 }
 
 /**
  * 删除条目的私人详情。
  */
-export function removePrivateDetails(ownedState, skillId) {
+export function removePrivateDetails(ownedState, skillId, timestamp = null) {
   if (!skillId) return;
+  const now = timestamp || Date.now();
   delete ownedState.privateDetails[skillId];
+  if (!ownedState._privateChanges) ownedState._privateChanges = {};
+  ownedState._privateChanges[skillId] = {
+    action: "delete",
+    updated_at: now
+  };
 }
 
 /**
@@ -333,6 +371,7 @@ export function importPrivateBackup(ownedState, backupData, options = {}) {
 
   let importedCount = 0;
   let conflictCount = 0;
+  const now = Date.now();
 
   Object.entries(parsed.items).forEach(([sid, detail]) => {
     if (!sid || typeof detail !== "object") return;
@@ -341,14 +380,19 @@ export function importPrivateBackup(ownedState, backupData, options = {}) {
     if (!cleanUrl && !cleanNote) return;
 
     const current = ownedState.privateDetails[sid];
+    const item = { managed_url: cleanUrl, note: cleanNote, updated_at: now };
     if (current && (current.managed_url !== cleanUrl || current.note !== cleanNote)) {
       conflictCount += 1;
       if (strategy === "use_imported") {
-        ownedState.privateDetails[sid] = { managed_url: cleanUrl, note: cleanNote };
+        ownedState.privateDetails[sid] = item;
+        if (!ownedState._privateChanges) ownedState._privateChanges = {};
+        ownedState._privateChanges[sid] = { action: "set", detail: item, updated_at: now };
         importedCount += 1;
       }
     } else {
-      ownedState.privateDetails[sid] = { managed_url: cleanUrl, note: cleanNote };
+      ownedState.privateDetails[sid] = item;
+      if (!ownedState._privateChanges) ownedState._privateChanges = {};
+      ownedState._privateChanges[sid] = { action: "set", detail: item, updated_at: now };
       importedCount += 1;
     }
   });
@@ -358,44 +402,68 @@ export function importPrivateBackup(ownedState, backupData, options = {}) {
 
 /**
  * 持久化待同步变更至 LocalStorage。
- * 遵循《已收录功能代码复核与修复方案》O-02：多标签页并发安全，写入前增量合并外部存储中的其他条目。
+ * 定向增量同步：保存时仅处理本次新增、取消与对账的具体记录，绝不盲目从缓存中复活已删除条目。
  */
 export function saveOwnedStagedStorage(ownedState, storageObj = null) {
   try {
     const storage = storageObj || (typeof localStorage !== "undefined" ? localStorage : null);
     if (!storage) return;
 
-    // 多标签页增量合并：读取外部存储可能包含的其他标签页新增/删除
     const raw = storage.getItem(STORAGE_KEY_OWNED_STAGED);
-    let mergedAdds = Object.assign({}, ownedState.stagedAdds);
-    let mergedDeletes = new Set(ownedState.stagedDeletes);
+    let externalAdds = {};
+    let externalDeletes = new Set();
 
     if (raw) {
       try {
         const external = JSON.parse(raw);
         if (external && external.stagedAdds && typeof external.stagedAdds === "object") {
-          Object.entries(external.stagedAdds).forEach(([sid, item]) => {
-            if (!mergedAdds[sid] && !mergedDeletes.has(sid)) {
-              mergedAdds[sid] = item;
-            }
-          });
+          externalAdds = Object.assign({}, external.stagedAdds);
         }
         if (external && Array.isArray(external.stagedDeletes)) {
-          external.stagedDeletes.forEach(sid => {
-            if (!mergedAdds[sid]) {
-              mergedDeletes.add(sid);
-            }
-          });
+          externalDeletes = new Set(external.stagedDeletes);
         }
       } catch (err) {}
     }
 
-    ownedState.stagedAdds = mergedAdds;
-    ownedState.stagedDeletes = mergedDeletes;
+    const changes = ownedState._stagedChanges || {};
+    const changeKeys = Object.keys(changes);
+
+    if (changeKeys.length > 0) {
+      // 仅根据本次具体变更记录进行修改
+      changeKeys.forEach(sid => {
+        const c = changes[sid];
+        if (c.action === "mark") {
+          if (!ownedState.baseline[sid]) {
+            externalAdds[sid] = c.item || ownedState.stagedAdds[sid];
+          } else {
+            delete externalAdds[sid];
+          }
+          externalDeletes.delete(sid);
+        } else if (c.action === "unmark") {
+          delete externalAdds[sid];
+          if (ownedState.baseline[sid]) {
+            externalDeletes.add(sid);
+          } else {
+            externalDeletes.delete(sid);
+          }
+        } else if (c.action === "reconcile") {
+          delete externalAdds[sid];
+          externalDeletes.delete(sid);
+        }
+      });
+    } else {
+      // 若无局部变更追踪，以当前内存状态同步
+      externalAdds = Object.assign({}, ownedState.stagedAdds);
+      externalDeletes = new Set(ownedState.stagedDeletes);
+    }
+
+    ownedState.stagedAdds = externalAdds;
+    ownedState.stagedDeletes = externalDeletes;
+    ownedState._stagedChanges = {};
 
     const data = {
-      stagedAdds: mergedAdds,
-      stagedDeletes: Array.from(mergedDeletes)
+      stagedAdds: externalAdds,
+      stagedDeletes: Array.from(externalDeletes)
     };
     storage.setItem(STORAGE_KEY_OWNED_STAGED, JSON.stringify(data));
   } catch (e) {}
@@ -413,10 +481,15 @@ export function loadOwnedStagedStorage(ownedState, storageObj = null) {
     const saved = JSON.parse(raw);
     if (saved.stagedAdds && typeof saved.stagedAdds === "object") {
       ownedState.stagedAdds = saved.stagedAdds;
+    } else {
+      ownedState.stagedAdds = {};
     }
     if (Array.isArray(saved.stagedDeletes)) {
       ownedState.stagedDeletes = new Set(saved.stagedDeletes);
+    } else {
+      ownedState.stagedDeletes = new Set();
     }
+    ownedState._stagedChanges = {};
   } catch (e) {}
 }
 
@@ -432,11 +505,14 @@ export function clearOwnedStagedStorage(ownedState, storageObj = null) {
   } catch (e) {}
   ownedState.stagedAdds = {};
   ownedState.stagedDeletes.clear();
+  ownedState._stagedChanges = {};
 }
 
 /**
  * 持久化私人详情至 LocalStorage。
- * 遵循《已收录功能代码复核与修复方案》O-02：多标签页并发安全，写入前增量合并外部存储中的其他条目。
+ * 遵循版本检查与删除定向记录：
+ * 1. 本次删除必须物理移除，绝不从外部缓存盲目复活；
+ * 2. 多页面并发修改时依据 updated_at 版本检查，防止未更新页面的旧快照覆盖新页面的更新。
  */
 export function saveOwnedPrivateStorage(ownedState, storageObj = null) {
   try {
@@ -444,22 +520,47 @@ export function saveOwnedPrivateStorage(ownedState, storageObj = null) {
     if (!storage) return;
 
     const raw = storage.getItem(STORAGE_KEY_OWNED_PRIVATE);
-    let mergedPrivate = Object.assign({}, ownedState.privateDetails);
+    let external = {};
     if (raw) {
       try {
-        const external = JSON.parse(raw);
-        if (external && typeof external === "object") {
-          Object.entries(external).forEach(([sid, detail]) => {
-            if (!mergedPrivate[sid]) {
-              mergedPrivate[sid] = detail;
-            }
-          });
+        const parsed = JSON.parse(raw);
+        if (parsed && typeof parsed === "object") {
+          external = parsed;
         }
       } catch (err) {}
     }
 
-    ownedState.privateDetails = mergedPrivate;
-    storage.setItem(STORAGE_KEY_OWNED_PRIVATE, JSON.stringify(mergedPrivate));
+    const changes = ownedState._privateChanges || {};
+    const changeKeys = Object.keys(changes);
+
+    if (changeKeys.length > 0) {
+      changeKeys.forEach(sid => {
+        const c = changes[sid];
+        const existing = external[sid];
+        const existingTs = (existing && typeof existing.updated_at === "number") ? existing.updated_at : 0;
+
+        if (c.action === "delete") {
+          // 用户明确删除：只要外部缓存不是在删除之后产生的更新，就坚决删除
+          if (c.updated_at >= existingTs) {
+            delete external[sid];
+          }
+        } else if (c.action === "set") {
+          // 版本检查：仅当外部无此项或本次修改版本更新时写入
+          if (!existing || c.updated_at >= existingTs) {
+            external[sid] = c.detail;
+          }
+        }
+      });
+    } else {
+      // 若无局部变更追踪，以当前内存状态覆盖/补充
+      Object.entries(ownedState.privateDetails).forEach(([sid, detail]) => {
+        external[sid] = detail;
+      });
+    }
+
+    ownedState.privateDetails = external;
+    ownedState._privateChanges = {};
+    storage.setItem(STORAGE_KEY_OWNED_PRIVATE, JSON.stringify(external));
   } catch (e) {}
 }
 
@@ -475,6 +576,9 @@ export function loadOwnedPrivateStorage(ownedState, storageObj = null) {
     const saved = JSON.parse(raw);
     if (saved && typeof saved === "object") {
       ownedState.privateDetails = saved;
+    } else {
+      ownedState.privateDetails = {};
     }
+    ownedState._privateChanges = {};
   } catch (e) {}
 }

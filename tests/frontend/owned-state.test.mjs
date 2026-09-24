@@ -26,7 +26,9 @@ import {
   clearOwnedStagedStorage,
   saveOwnedPrivateStorage,
   loadOwnedPrivateStorage,
-  reconcileOwnedStaged
+  reconcileOwnedStaged,
+  STORAGE_KEY_OWNED_STAGED,
+  STORAGE_KEY_OWNED_PRIVATE
 } from "../../public/js/owned-state.js";
 
 test("owned-state: baseline population and isOwned query", () => {
@@ -286,4 +288,182 @@ test("owned-state: O-02 multi-tab incremental merge prevents state loss in stage
   const privateData = JSON.parse(storage["skills_catalog_owned_private_v1"]);
   assert.equal(privateData["owner/tabA:SKILL.md"].note, "Tab A note");
   assert.equal(privateData["owner/tabB:SKILL.md"].note, "Tab B note");
+});
+
+test("owned-state: 操作 → 保存 → 刷新全过程：取消已收录不被缓存复活，待同步数量清零", () => {
+  const storage = {};
+  const mockStorage = {
+    getItem: key => storage[key] || null,
+    setItem: (key, val) => { storage[key] = String(val); },
+    removeItem: key => { delete storage[key]; }
+  };
+
+  const sid = "owner/skill-a:SKILL.md";
+
+  // 1. 操作：标记 Skill A 为已收录
+  const state1 = createOwnedState();
+  markOwned(state1, { skill_id: sid, name: "Skill A" });
+  assert.equal(isOwned(state1, sid), true);
+  assert.equal(calculateOwnedChangesCount(state1), 1);
+
+  // 2. 保存至本地缓存
+  saveOwnedStagedStorage(state1, mockStorage);
+  assert.ok(storage[STORAGE_KEY_OWNED_STAGED]);
+
+  // 3. 操作：点击撤销 / 取消已收录
+  unmarkOwned(state1, sid);
+  assert.equal(isOwned(state1, sid), false);
+  assert.equal(calculateOwnedChangesCount(state1), 0);
+
+  // 4. 保存至本地缓存
+  saveOwnedStagedStorage(state1, mockStorage);
+
+  // 5. 模拟刷新浏览器：全新状态机从缓存载入
+  const state2 = createOwnedState();
+  loadOwnedStagedStorage(state2, mockStorage);
+
+  // 验收：绝不从缓存复活，Skill 不再处于已收录状态，待同步数量为 0
+  assert.equal(isOwned(state2, sid), false, "刷新后条目不应被缓存复活");
+  assert.equal(state2.stagedAdds[sid], undefined, "暂存新增中不应残留该条目");
+  assert.equal(state2.stagedDeletes.has(sid), false, "暂存删除中不应产生虚假删除");
+  assert.equal(calculateOwnedChangesCount(state2), 0, "待同步数量必须清零");
+});
+
+test("owned-state: 操作 → 保存 → 刷新全过程：同步合入基线后对账与保存，待同步数量清零且刷新不再反复出现", () => {
+  const storage = {};
+  const mockStorage = {
+    getItem: key => storage[key] || null,
+    setItem: (key, val) => { storage[key] = String(val); },
+    removeItem: key => { delete storage[key]; }
+  };
+
+  const sid = "owner/synced-skill:SKILL.md";
+
+  // 1. 此前页面标记并保存了暂存
+  const state1 = createOwnedState();
+  markOwned(state1, { skill_id: sid, name: "Synced Skill" });
+  saveOwnedStagedStorage(state1, mockStorage);
+
+  // 2. 仓库同步完成，重新打开/刷新页面：基线中已包含该 Skill
+  const bootState = createOwnedState();
+  populateOwnedBaseline(bootState, {
+    items: [{ skill_id: sid, name: "Synced Skill" }]
+  });
+  loadOwnedStagedStorage(bootState, mockStorage);
+  assert.equal(calculateOwnedChangesCount(bootState), 1, "对账前处于暂存状态");
+
+  // 3. 执行对账与保存
+  const reconcileRes = reconcileOwnedStaged(bootState);
+  assert.equal(reconcileRes.reconciledAdds, 1);
+  saveOwnedStagedStorage(bootState, mockStorage);
+
+  // 4. 再次刷新页面验证
+  const refreshedState = createOwnedState();
+  populateOwnedBaseline(refreshedState, {
+    items: [{ skill_id: sid, name: "Synced Skill" }]
+  });
+  loadOwnedStagedStorage(refreshedState, mockStorage);
+
+  // 验收：待同步数量彻底清零，暂存区不再残留已同步记录
+  assert.equal(isOwned(refreshedState, sid), true, "基线存在，状态仍为已收录");
+  assert.equal(refreshedState.stagedAdds[sid], undefined, "暂存区不再有该条目");
+  assert.equal(calculateOwnedChangesCount(refreshedState), 0, "待同步数量清零");
+});
+
+test("owned-state: 操作 → 保存 → 刷新全过程：私人备注删除或清空后绝不从缓存复活", () => {
+  const storage = {};
+  const mockStorage = {
+    getItem: key => storage[key] || null,
+    setItem: (key, val) => { storage[key] = String(val); },
+    removeItem: key => { delete storage[key]; }
+  };
+
+  const sid = "owner/private-item:SKILL.md";
+
+  // 1. 设置私人详情并保存
+  const state1 = createOwnedState();
+  setPrivateDetails(state1, sid, { managed_url: "https://my-fork.internal", note: "我的重要备注" });
+  saveOwnedPrivateStorage(state1, mockStorage);
+
+  assert.equal(getPrivateDetails(state1, sid).note, "我的重要备注");
+
+  // 2. 用户点击“删除私人详情”
+  removePrivateDetails(state1, sid);
+  assert.equal(getPrivateDetails(state1, sid).note, "");
+
+  // 3. 保存
+  saveOwnedPrivateStorage(state1, mockStorage);
+
+  // 4. 模拟刷新
+  const state2 = createOwnedState();
+  loadOwnedPrivateStorage(state2, mockStorage);
+
+  // 验收：刷新后私人详情彻底删除，不从缓存复活
+  assert.equal(getPrivateDetails(state2, sid).note, "");
+  assert.equal(getPrivateDetails(state2, sid).managed_url, "");
+  assert.equal(state2.privateDetails[sid], undefined);
+
+  // 5. 同样验证清空字段后保存的删除效果
+  setPrivateDetails(state2, sid, { managed_url: "https://test.org", note: "临时备注" });
+  saveOwnedPrivateStorage(state2, mockStorage);
+  assert.equal(getPrivateDetails(state2, sid).note, "临时备注");
+
+  setPrivateDetails(state2, sid, { managed_url: "", note: "" }); // 清空保存
+  saveOwnedPrivateStorage(state2, mockStorage);
+
+  const state3 = createOwnedState();
+  loadOwnedPrivateStorage(state3, mockStorage);
+  assert.equal(getPrivateDetails(state3, sid).note, "");
+  assert.equal(state3.privateDetails[sid], undefined);
+});
+
+test("owned-state: 多标签页并发修改备注：版本检查确保新备注不被旧页面快照覆盖", () => {
+  const storage = {};
+  const mockStorage = {
+    getItem: key => storage[key] || null,
+    setItem: (key, val) => { storage[key] = String(val); },
+    removeItem: key => { delete storage[key]; }
+  };
+
+  const sidA = "owner/skill-a:SKILL.md";
+  const sidB = "owner/skill-b:SKILL.md";
+
+  // 初始状态 (t=1000)：两个 Skill 均有初始备注
+  const initTab = createOwnedState();
+  setPrivateDetails(initTab, sidA, { note: "Note A v1" }, 1000);
+  setPrivateDetails(initTab, sidB, { note: "Note B v1" }, 1000);
+  saveOwnedPrivateStorage(initTab, mockStorage);
+
+  // 标签页甲与乙均在 t=1000 打开并载入快照
+  const tab1 = createOwnedState();
+  loadOwnedPrivateStorage(tab1, mockStorage);
+
+  const tab2 = createOwnedState();
+  loadOwnedPrivateStorage(tab2, mockStorage);
+
+  // 标签页甲在 t=1010 修改 Skill A 为新备注并保存
+  setPrivateDetails(tab1, sidA, { note: "Note A v2 (new by Tab 1)" }, 1010);
+  saveOwnedPrivateStorage(tab1, mockStorage);
+
+  // 标签页乙尚未收到更新（本地内存仍是 Note A v1），在 t=1020 修改 Skill B 并保存
+  setPrivateDetails(tab2, sidB, { note: "Note B v2 (new by Tab 2)" }, 1020);
+  saveOwnedPrivateStorage(tab2, mockStorage);
+
+  // 模拟任一标签页刷新
+  const refreshed = createOwnedState();
+  loadOwnedPrivateStorage(refreshed, mockStorage);
+
+  // 验收：
+  // 1. Skill A 的新备注没有被标签页乙的旧快照覆盖！
+  assert.equal(getPrivateDetails(refreshed, sidA).note, "Note A v2 (new by Tab 1)");
+  // 2. Skill B 的新备注正常保存！
+  assert.equal(getPrivateDetails(refreshed, sidB).note, "Note B v2 (new by Tab 2)");
+
+  // 3. 版本检查：若标签页甲试图以陈旧时间戳 (t=1005 < 1020) 保存 Skill B，将被判定为旧快照而拒绝覆盖
+  setPrivateDetails(tab1, sidB, { note: "Stale B note" }, 1005);
+  saveOwnedPrivateStorage(tab1, mockStorage);
+
+  const finalCheck = createOwnedState();
+  loadOwnedPrivateStorage(finalCheck, mockStorage);
+  assert.equal(getPrivateDetails(finalCheck, sidB).note, "Note B v2 (new by Tab 2)", "旧版本的覆盖应被版本检查拦截");
 });
