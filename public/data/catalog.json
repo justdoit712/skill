@@ -2,12 +2,12 @@
   "generated_at": "2026-09-21T02:01:22.196060+08:00",
   "rules_version": "1.0.1",
   "counts": {
-    "recommended": 36,
-    "candidate": 21,
-    "manual": 12,
+    "recommended": 26,
+    "candidate": 19,
+    "manual": 21,
     "pending": 0,
     "processing_failure": 0,
-    "total_evaluated": 69
+    "total_evaluated": 66
   },
   "categories": [
     {
@@ -40,6 +40,55 @@
     }
   ],
   "manual": [
+    {
+      "skill_id": "anthropics/skills:skills/canvas-design/SKILL.md",
+      "name": "canvas-design",
+      "url": "https://github.com/anthropics/skills/blob/HEAD/skills/canvas-design/SKILL.md",
+      "author": "anthropics",
+      "summary_zh": "该技能通过创建设计哲学并表达为PDF/PNG视觉艺术作品，适用于制作海报、艺术设计等静态视觉内容。",
+      "skill_type": null,
+      "example_requests": [
+        "“制作海报、艺术设计等静态视觉内容”"
+      ],
+      "key_features": [
+        "通过创建设计哲学并表达为PDF/PNG视觉艺术"
+      ],
+      "main_category": {
+        "id": "content",
+        "name": "内容创作"
+      },
+      "tags": [
+        "视觉设计",
+        "艺术生成",
+        "海报设计",
+        "PDF/PNG生成",
+        "设计哲学"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "source_type": "official",
+      "status": "candidate",
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-24",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
+      "snooze": null,
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "reason_codes": [
+        "MISSING_DEPENDENCY"
+      ],
+      "limitations": "仅输出.md、.pdf和.png文件；需要额外工具生成视觉内容；可能需下载字体；未声明具体运行环境。",
+      "first_seen": "2026-09-20T16:59:36+00:00",
+      "last_checked": "2026-09-21T01:17:31.343047+08:00",
+      "content_changed_at": null,
+      "upstream_status": "ok",
+      "license": null
+    },
     {
       "skill_id": "anthropics/skills:skills/docx/SKILL.md",
       "name": "docx",
@@ -88,6 +137,54 @@
       "limitations": "不支持 PDF、电子表格、Google Docs；旧版 .doc 需先转换为 .docx；docx-js 不能打开现有文件；部分场景下接受修订可能残留空段落（空项目符号）；依赖外部工具链。",
       "first_seen": "2026-09-20T16:59:36+00:00",
       "last_checked": "2026-09-21T01:20:40.017366+08:00",
+      "content_changed_at": null,
+      "upstream_status": "ok",
+      "license": null
+    },
+    {
+      "skill_id": "anthropics/skills:skills/frontend-design/SKILL.md",
+      "name": "frontend-design",
+      "url": "https://github.com/anthropics/skills/blob/HEAD/skills/frontend-design/SKILL.md",
+      "author": "anthropics",
+      "summary_zh": "为构建或改版前端 UI 提供有辨识度的视觉设计指导，涵盖配色、字体、布局、动效与文案；适用于需要避免模板化外观的界面设计场景。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "“需要避免模板化外观的界面设计”"
+      ],
+      "key_features": [
+        "涵盖配色、字体、布局、动效与文案"
+      ],
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "tags": [
+        "前端设计",
+        "UI设计",
+        "视觉设计",
+        "CSS",
+        "排版",
+        "配色"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "source_type": "official",
+      "status": "recommended",
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-24",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      },
+      "snooze": null,
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "reason_codes": [],
+      "limitations": "仅提供设计原则与流程指导，未声明平台/框架兼容性与具体依赖；实际实现需自行适配。",
+      "first_seen": "2026-09-20T16:59:36+00:00",
+      "last_checked": "2026-09-21T01:21:36.753630+08:00",
       "content_changed_at": null,
       "upstream_status": "ok",
       "license": null
@@ -637,72 +734,369 @@
       "content_changed_at": null,
       "upstream_status": "ok",
       "license": null
-    }
-  ],
-  "recommended": [
+    },
     {
-      "skill_id": "anthropics/skills:skills/claude-api/SKILL.md",
-      "name": "claude-api",
-      "url": "https://github.com/anthropics/skills/blob/HEAD/skills/claude-api/SKILL.md",
-      "author": "anthropics",
-      "summary_zh": "提供 Claude API / Anthropic SDK 的参考指南，覆盖模型选择、定价、参数、流式、工具调用、MCP、托管代理、缓存、token 计数和模型迁移等，典型用于构建和调试 Claude LLM 应用。",
-      "skill_type": "reference",
+      "skill_id": "cloudflare/skills:skills/turnstile-spin/SKILL.md",
+      "name": "turnstile-spin",
+      "url": "https://github.com/cloudflare/skills/blob/HEAD/skills/turnstile-spin/SKILL.md",
+      "author": "cloudflare",
+      "summary_zh": "为现有前端与后端设置、修复或迁移 Cloudflare Turnstile 机器人验证，包含前端挂件嵌入和服务器端 Siteverify 校验，典型用于保护表单、登录、注册等用户触发请求。",
+      "skill_type": null,
       "example_requests": [
-        "“构建和调试 Claude LLM 应用”"
+        "“保护表单、登录、注册等用户触发请求”"
       ],
-      "key_features": [
-        "覆盖模型选择、定价、参数、流式、工具调用、MCP、托管代理、缓存、token 计数和模型迁移等",
-        "提供 Claude API / Anthropic SDK 的参考指南"
-      ],
+      "key_features": [],
       "main_category": {
         "id": "dev",
         "name": "编程开发"
       },
       "tags": [
-        "claude-api",
-        "anthropic-sdk",
-        "llm",
-        "api-reference",
-        "model-migration"
+        "Cloudflare Turnstile",
+        "bot verification",
+        "CAPTCHA",
+        "siteverify",
+        "frontend integration",
+        "backend integration",
+        "security"
       ],
-      "platform_declared": [
-        "Python",
-        "TypeScript",
-        "Java",
-        "Go",
-        "Ruby",
-        "C#",
-        "PHP",
-        "cURL",
-        "Amazon Bedrock",
-        "Google Vertex AI",
-        "Microsoft Foundry",
-        "Claude Platform on AWS"
-      ],
+      "platform_declared": null,
       "dependencies_declared": [
-        "anthropic",
-        "@anthropic-ai/sdk",
-        "@anthropic-ai/bedrock-sdk",
-        "@anthropic-ai/vertex-sdk",
-        "@anthropic-ai/foundry-sdk",
-        "ant CLI"
+        "curl",
+        "jq",
+        "python3",
+        "Bash",
+        "Wrangler 4.109+ (existing-widget flow)",
+        "Cloudflare API token",
+        "scripts: auth-probe.sh, widget-create.sh, validate.sh, persist-skill.sh"
       ],
       "source_type": "official",
       "status": "recommended",
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-24",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      },
       "snooze": null,
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
       "reason_codes": [],
-      "limitations": "正文引用的 shared/ 与 {lang}/ 文件未包含在材料中，需按需读取；模型与价格信息为缓存（2026-06-24），可能过时；仅适用于 Claude/Anthropic，不生成 OpenAI 等其他提供商代码。",
+      "limitations": "要求已有可放置 siteverify 的后端；不部署额外基础设施；不实现邮件/短信通知等超出范围的功能；对既有 widget 需要 Wrangler 4.109+ 且不支持自动安装；不能无后端纯静态站点使用。",
       "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-21T01:18:15.892833+08:00",
+      "last_checked": "2026-09-21T01:39:56.423329+08:00",
       "content_changed_at": null,
       "upstream_status": "ok",
       "license": null
     },
+    {
+      "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/audit-prep-assistant/SKILL.md",
+      "name": "audit-prep-assistant",
+      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/building-secure-contracts/skills/audit-prep-assistant/SKILL.md",
+      "author": "trailofbits",
+      "summary_zh": "该技能帮助开发者在安全审计前按 Trail of Bits 清单准备代码库，包括设定审查目标、运行静态分析、提升测试覆盖率、清理死代码、完善文档等，适用于即将接受外部安全审计的项目。",
+      "skill_type": null,
+      "example_requests": [
+        "“即将接受外部安全审计的项目”"
+      ],
+      "key_features": [
+        "覆盖率、清理死代码、完善文档等"
+      ],
+      "main_category": {
+        "id": "security",
+        "name": "安全"
+      },
+      "tags": [
+        "security audit",
+        "code review preparation",
+        "static analysis",
+        "test coverage",
+        "documentation",
+        "smart contract security"
+      ],
+      "platform_declared": "Solidity, Rust, Go, C++",
+      "dependencies_declared": [
+        "slither",
+        "dylint",
+        "golangci-lint",
+        "CodeQL",
+        "Semgrep",
+        "Foundry",
+        "Node.js",
+        "Git"
+      ],
+      "source_type": "official",
+      "status": "recommended",
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-24",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      },
+      "snooze": null,
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "reason_codes": [],
+      "limitations": "不替代专业安全审计，不执行审计；结果依赖用户运行工具与提供的信息；需要用户具备对应生态工具链。",
+      "first_seen": "2026-09-20T16:59:36+00:00",
+      "last_checked": "2026-09-21T01:44:08.627750+08:00",
+      "content_changed_at": null,
+      "upstream_status": "ok",
+      "license": null
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/cosmos-vulnerability-scanner/SKILL.md",
+      "name": "cosmos-vulnerability-scanner",
+      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/building-secure-contracts/skills/cosmos-vulnerability-scanner/SKILL.md",
+      "author": "trailofbits",
+      "summary_zh": "用于扫描 Cosmos SDK 模块和 CosmWasm 合约中的共识关键漏洞（链停止、资金损失、状态分歧），适用于审计自定义模块、审查 IBC 集成或链上线前安全评估。",
+      "skill_type": null,
+      "example_requests": [
+        "“审计自定义模块、审查 IBC 集成或链上线前安全评估”"
+      ],
+      "key_features": [],
+      "main_category": {
+        "id": "security",
+        "name": "安全"
+      },
+      "tags": [
+        "安全审计",
+        "区块链",
+        "Cosmos SDK",
+        "CosmWasm",
+        "漏洞扫描"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "source_type": "official",
+      "status": "recommended",
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-24",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      },
+      "snooze": null,
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "reason_codes": [],
+      "limitations": "不能用于纯 Solidity/EVM 审计、CometBFT 共识引擎内部、非共识关键代码；依赖资源文件；仅覆盖 SDK v0.53.x 版本。",
+      "first_seen": "2026-09-20T16:59:36+00:00",
+      "last_checked": "2026-09-21T01:45:56.237900+08:00",
+      "content_changed_at": null,
+      "upstream_status": "ok",
+      "license": null
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/guidelines-advisor/SKILL.md",
+      "name": "guidelines-advisor",
+      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/building-secure-contracts/skills/guidelines-advisor/SKILL.md",
+      "author": "trailofbits",
+      "summary_zh": "这是一个基于 Trail of Bits 最佳实践的智能合约开发顾问技能，用于分析代码库并生成文档、架构与实现审查、依赖与测试评估及优先级建议。典型场景是审查 Solidity/Rust/Cairo 等智能合约项目的开发规范与安全性。",
+      "skill_type": null,
+      "example_requests": [],
+      "key_features": [
+        "这是一个基于 Trail of Bits 最佳实践的智能合约开发顾问技能"
+      ],
+      "main_category": {
+        "id": "security",
+        "name": "安全"
+      },
+      "tags": [
+        "智能合约",
+        "安全审计",
+        "开发指南",
+        "Solidity",
+        "代码审查"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "Slither（可选，用于 Solidity 架构图/升级检查）"
+      ],
+      "source_type": "official",
+      "status": "recommended",
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-24",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      },
+      "snooze": null,
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "reason_codes": [],
+      "limitations": "主要限制：SKILL.md 本身不包含详细评估标准、模板与示例报告，依赖 resources/ 下的文件；需要访问目标代码库和项目上下文；Slither 等工具为可选，无工具时部分架构图与升级检查可能受限。",
+      "first_seen": "2026-09-20T16:59:36+00:00",
+      "last_checked": "2026-09-21T01:47:02.238292+08:00",
+      "content_changed_at": null,
+      "upstream_status": "ok",
+      "license": null
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/token-integration-analyzer/SKILL.md",
+      "name": "token-integration-analyzer",
+      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/building-secure-contracts/skills/token-integration-analyzer/SKILL.md",
+      "author": "trailofbits",
+      "summary_zh": "基于 Trail of Bits 代币集成清单的代币实现与集成安全分析，支持 ERC20/ERC721 标准符合性、20+ 异常代币模式、链上稀缺性分析，适用于代币集成或审计场景。",
+      "skill_type": null,
+      "example_requests": [
+        "“代币集成或审计”"
+      ],
+      "key_features": [
+        "支持 ERC20/ERC721 标准符合性、20+ 异常代币模式、链上稀缺性分析"
+      ],
+      "main_category": {
+        "id": "security",
+        "name": "安全"
+      },
+      "tags": [
+        "token security",
+        "ERC20",
+        "ERC721",
+        "smart contract audit",
+        "weird tokens"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "slither",
+        "slither-check-erc",
+        "slither-prop"
+      ],
+      "source_type": "official",
+      "status": "recommended",
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-24",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      },
+      "snooze": null,
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "reason_codes": [],
+      "limitations": "需要用户提供代码库或合约地址；链上分析需 RPC 端点；依赖 Slither 工具套件；分析范围基于 Trail of Bits 清单。",
+      "first_seen": "2026-09-20T16:59:36+00:00",
+      "last_checked": "2026-09-21T01:50:01.937755+08:00",
+      "content_changed_at": null,
+      "upstream_status": "ok",
+      "license": null
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/dimensional-analysis/skills/dimensional-analysis/SKILL.md",
+      "name": "dimensional-analysis",
+      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/dimensional-analysis/skills/dimensional-analysis/SKILL.md",
+      "author": "trailofbits",
+      "summary_zh": "对代码库执行量纲分析，添加单位、维度和小数缩放注释，适用于 DeFi、区块链及其他数值计算代码，用于发现单位不匹配和公式错误。",
+      "skill_type": null,
+      "example_requests": [
+        "“DeFi、区块链及其他数值计算代码，用于发现单位不匹配和公式错误”"
+      ],
+      "key_features": [],
+      "main_category": {
+        "id": "dev",
+        "name": "编程开发"
+      },
+      "tags": [
+        "代码分析",
+        "量纲分析",
+        "单位标注",
+        "DeFi",
+        "漏洞检测"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "Read",
+        "Write",
+        "Grep",
+        "List",
+        "Glob",
+        "Task",
+        "TodoRead",
+        "TodoWrite",
+        "arithmetic-scanner",
+        "dimension-discoverer",
+        "dimension-annotator",
+        "dimension-propagator",
+        "dimension-validator"
+      ],
+      "source_type": "official",
+      "status": "recommended",
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-24",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      },
+      "snooze": null,
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "reason_codes": [],
+      "limitations": "仅适用于包含数值算术或单位换算的代码库；主技能上下文不得自行执行仓库级量纲分析、传播或验证，必须依赖子代理；固定全自动模式。",
+      "first_seen": "2026-09-20T16:59:36+00:00",
+      "last_checked": "2026-09-21T02:00:05.327488+08:00",
+      "content_changed_at": null,
+      "upstream_status": "ok",
+      "license": null
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/entry-point-analyzer/skills/entry-point-analyzer/SKILL.md",
+      "name": "entry-point-analyzer",
+      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/entry-point-analyzer/skills/entry-point-analyzer/SKILL.md",
+      "author": "trailofbits",
+      "summary_zh": "智能合约安全审计辅助技能，识别并分类所有状态变更入口点（公共、角色受限、仅合约），生成结构化报告。典型使用场景为开始审计时映射攻击面。",
+      "skill_type": null,
+      "example_requests": [],
+      "key_features": [
+        "智能合约安全审计辅助技能"
+      ],
+      "main_category": {
+        "id": "security",
+        "name": "安全"
+      },
+      "tags": [
+        "安全审计",
+        "智能合约",
+        "入口点分析",
+        "状态变更"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "slither"
+      ],
+      "source_type": "official",
+      "status": "recommended",
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-24",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      },
+      "snooze": null,
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "reason_codes": [],
+      "limitations": "仅识别状态变更入口点，不进行漏洞检测；不分析只读函数；Slither 可选，不可用时需手动分析；依赖各语言参考文件。",
+      "first_seen": "2026-09-20T16:59:36+00:00",
+      "last_checked": "2026-09-21T02:00:55.277440+08:00",
+      "content_changed_at": null,
+      "upstream_status": "ok",
+      "license": null
+    }
+  ],
+  "recommended": [
     {
       "skill_id": "anthropics/skills:skills/doc-coauthoring/SKILL.md",
       "name": "doc-coauthoring",
@@ -746,49 +1140,6 @@
       "license": null
     },
     {
-      "skill_id": "anthropics/skills:skills/frontend-design/SKILL.md",
-      "name": "frontend-design",
-      "url": "https://github.com/anthropics/skills/blob/HEAD/skills/frontend-design/SKILL.md",
-      "author": "anthropics",
-      "summary_zh": "为构建或改版前端 UI 提供有辨识度的视觉设计指导，涵盖配色、字体、布局、动效与文案；适用于需要避免模板化外观的界面设计场景。",
-      "skill_type": "guideline",
-      "example_requests": [
-        "“需要避免模板化外观的界面设计”"
-      ],
-      "key_features": [
-        "涵盖配色、字体、布局、动效与文案"
-      ],
-      "main_category": {
-        "id": "product",
-        "name": "产品与设计"
-      },
-      "tags": [
-        "前端设计",
-        "UI设计",
-        "视觉设计",
-        "CSS",
-        "排版",
-        "配色"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [],
-      "source_type": "official",
-      "status": "recommended",
-      "manual_pick": false,
-      "manual_note": null,
-      "snooze": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [],
-      "limitations": "仅提供设计原则与流程指导，未声明平台/框架兼容性与具体依赖；实际实现需自行适配。",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-21T01:21:36.753630+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
       "skill_id": "vercel-labs/agent-skills:skills/deploy-to-vercel/SKILL.md",
       "name": "deploy-to-vercel",
       "url": "https://github.com/vercel-labs/agent-skills/blob/HEAD/skills/deploy-to-vercel/SKILL.md",
@@ -825,7 +1176,11 @@
       "status": "recommended",
       "manual_pick": false,
       "manual_note": null,
-      "snooze": null,
+      "snooze": {
+        "snoozed_at": "2026-09-24",
+        "expires_at": "2027-02-21",
+        "reason": "用户暂不关注"
+      },
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -866,7 +1221,11 @@
       "status": "recommended",
       "manual_pick": false,
       "manual_note": null,
-      "snooze": null,
+      "snooze": {
+        "snoozed_at": "2026-09-24",
+        "expires_at": "2027-02-21",
+        "reason": "用户暂不关注"
+      },
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -910,7 +1269,11 @@
       "status": "recommended",
       "manual_pick": false,
       "manual_note": null,
-      "snooze": null,
+      "snooze": {
+        "snoozed_at": "2026-09-24",
+        "expires_at": "2027-02-21",
+        "reason": "用户暂不关注"
+      },
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -1087,7 +1450,11 @@
       "status": "recommended",
       "manual_pick": false,
       "manual_note": null,
-      "snooze": null,
+      "snooze": {
+        "snoozed_at": "2026-09-24",
+        "expires_at": "2027-02-21",
+        "reason": "用户暂不关注"
+      },
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -1126,7 +1493,11 @@
       "status": "recommended",
       "manual_pick": false,
       "manual_note": null,
-      "snooze": null,
+      "snooze": {
+        "snoozed_at": "2026-09-24",
+        "expires_at": "2027-02-21",
+        "reason": "用户暂不关注"
+      },
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -1315,56 +1686,6 @@
       "license": null
     },
     {
-      "skill_id": "cloudflare/skills:skills/turnstile-spin/SKILL.md",
-      "name": "turnstile-spin",
-      "url": "https://github.com/cloudflare/skills/blob/HEAD/skills/turnstile-spin/SKILL.md",
-      "author": "cloudflare",
-      "summary_zh": "为现有前端与后端设置、修复或迁移 Cloudflare Turnstile 机器人验证，包含前端挂件嵌入和服务器端 Siteverify 校验，典型用于保护表单、登录、注册等用户触发请求。",
-      "skill_type": null,
-      "example_requests": [
-        "“保护表单、登录、注册等用户触发请求”"
-      ],
-      "key_features": [],
-      "main_category": {
-        "id": "dev",
-        "name": "编程开发"
-      },
-      "tags": [
-        "Cloudflare Turnstile",
-        "bot verification",
-        "CAPTCHA",
-        "siteverify",
-        "frontend integration",
-        "backend integration",
-        "security"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "curl",
-        "jq",
-        "python3",
-        "Bash",
-        "Wrangler 4.109+ (existing-widget flow)",
-        "Cloudflare API token",
-        "scripts: auth-probe.sh, widget-create.sh, validate.sh, persist-skill.sh"
-      ],
-      "source_type": "official",
-      "status": "recommended",
-      "manual_pick": false,
-      "manual_note": null,
-      "snooze": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [],
-      "limitations": "要求已有可放置 siteverify 的后端；不部署额外基础设施；不实现邮件/短信通知等超出范围的功能；对既有 widget 需要 Wrangler 4.109+ 且不支持自动安装；不能无后端纯静态站点使用。",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-21T01:39:56.423329+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
       "skill_id": "cloudflare/skills:skills/workers-best-practices/SKILL.md",
       "name": "workers-best-practices",
       "url": "https://github.com/cloudflare/skills/blob/HEAD/skills/workers-best-practices/SKILL.md",
@@ -1494,58 +1815,6 @@
       "license": null
     },
     {
-      "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/audit-prep-assistant/SKILL.md",
-      "name": "audit-prep-assistant",
-      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/building-secure-contracts/skills/audit-prep-assistant/SKILL.md",
-      "author": "trailofbits",
-      "summary_zh": "该技能帮助开发者在安全审计前按 Trail of Bits 清单准备代码库，包括设定审查目标、运行静态分析、提升测试覆盖率、清理死代码、完善文档等，适用于即将接受外部安全审计的项目。",
-      "skill_type": null,
-      "example_requests": [
-        "“即将接受外部安全审计的项目”"
-      ],
-      "key_features": [
-        "覆盖率、清理死代码、完善文档等"
-      ],
-      "main_category": {
-        "id": "security",
-        "name": "安全"
-      },
-      "tags": [
-        "security audit",
-        "code review preparation",
-        "static analysis",
-        "test coverage",
-        "documentation",
-        "smart contract security"
-      ],
-      "platform_declared": "Solidity, Rust, Go, C++",
-      "dependencies_declared": [
-        "slither",
-        "dylint",
-        "golangci-lint",
-        "CodeQL",
-        "Semgrep",
-        "Foundry",
-        "Node.js",
-        "Git"
-      ],
-      "source_type": "official",
-      "status": "recommended",
-      "manual_pick": false,
-      "manual_note": null,
-      "snooze": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [],
-      "limitations": "不替代专业安全审计，不执行审计；结果依赖用户运行工具与提供的信息；需要用户具备对应生态工具链。",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-21T01:44:08.627750+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
       "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/cairo-vulnerability-scanner/SKILL.md",
       "name": "cairo-vulnerability-scanner",
       "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/building-secure-contracts/skills/cairo-vulnerability-scanner/SKILL.md",
@@ -1589,88 +1858,6 @@
       "license": null
     },
     {
-      "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/cosmos-vulnerability-scanner/SKILL.md",
-      "name": "cosmos-vulnerability-scanner",
-      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/building-secure-contracts/skills/cosmos-vulnerability-scanner/SKILL.md",
-      "author": "trailofbits",
-      "summary_zh": "用于扫描 Cosmos SDK 模块和 CosmWasm 合约中的共识关键漏洞（链停止、资金损失、状态分歧），适用于审计自定义模块、审查 IBC 集成或链上线前安全评估。",
-      "skill_type": null,
-      "example_requests": [
-        "“审计自定义模块、审查 IBC 集成或链上线前安全评估”"
-      ],
-      "key_features": [],
-      "main_category": {
-        "id": "security",
-        "name": "安全"
-      },
-      "tags": [
-        "安全审计",
-        "区块链",
-        "Cosmos SDK",
-        "CosmWasm",
-        "漏洞扫描"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [],
-      "source_type": "official",
-      "status": "recommended",
-      "manual_pick": false,
-      "manual_note": null,
-      "snooze": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [],
-      "limitations": "不能用于纯 Solidity/EVM 审计、CometBFT 共识引擎内部、非共识关键代码；依赖资源文件；仅覆盖 SDK v0.53.x 版本。",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-21T01:45:56.237900+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
-      "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/guidelines-advisor/SKILL.md",
-      "name": "guidelines-advisor",
-      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/building-secure-contracts/skills/guidelines-advisor/SKILL.md",
-      "author": "trailofbits",
-      "summary_zh": "这是一个基于 Trail of Bits 最佳实践的智能合约开发顾问技能，用于分析代码库并生成文档、架构与实现审查、依赖与测试评估及优先级建议。典型场景是审查 Solidity/Rust/Cairo 等智能合约项目的开发规范与安全性。",
-      "skill_type": null,
-      "example_requests": [],
-      "key_features": [
-        "这是一个基于 Trail of Bits 最佳实践的智能合约开发顾问技能"
-      ],
-      "main_category": {
-        "id": "security",
-        "name": "安全"
-      },
-      "tags": [
-        "智能合约",
-        "安全审计",
-        "开发指南",
-        "Solidity",
-        "代码审查"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "Slither（可选，用于 Solidity 架构图/升级检查）"
-      ],
-      "source_type": "official",
-      "status": "recommended",
-      "manual_pick": false,
-      "manual_note": null,
-      "snooze": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [],
-      "limitations": "主要限制：SKILL.md 本身不包含详细评估标准、模板与示例报告，依赖 resources/ 下的文件；需要访问目标代码库和项目上下文；Slither 等工具为可选，无工具时部分架构图与升级检查可能受限。",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-21T01:47:02.238292+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
       "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/secure-workflow-guide/SKILL.md",
       "name": "secure-workflow-guide",
       "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/building-secure-contracts/skills/secure-workflow-guide/SKILL.md",
@@ -1707,7 +1894,11 @@
       "status": "recommended",
       "manual_pick": false,
       "manual_note": null,
-      "snooze": null,
+      "snooze": {
+        "snoozed_at": "2026-09-24",
+        "expires_at": "2027-02-21",
+        "reason": "用户暂不关注"
+      },
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -1760,52 +1951,6 @@
       "limitations": "仅针对Substrate/FRAME框架，未声明其他区块链平台支持。",
       "first_seen": "2026-09-20T16:59:36+00:00",
       "last_checked": "2026-09-21T01:49:27.303630+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
-      "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/token-integration-analyzer/SKILL.md",
-      "name": "token-integration-analyzer",
-      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/building-secure-contracts/skills/token-integration-analyzer/SKILL.md",
-      "author": "trailofbits",
-      "summary_zh": "基于 Trail of Bits 代币集成清单的代币实现与集成安全分析，支持 ERC20/ERC721 标准符合性、20+ 异常代币模式、链上稀缺性分析，适用于代币集成或审计场景。",
-      "skill_type": null,
-      "example_requests": [
-        "“代币集成或审计”"
-      ],
-      "key_features": [
-        "支持 ERC20/ERC721 标准符合性、20+ 异常代币模式、链上稀缺性分析"
-      ],
-      "main_category": {
-        "id": "security",
-        "name": "安全"
-      },
-      "tags": [
-        "token security",
-        "ERC20",
-        "ERC721",
-        "smart contract audit",
-        "weird tokens"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "slither",
-        "slither-check-erc",
-        "slither-prop"
-      ],
-      "source_type": "official",
-      "status": "recommended",
-      "manual_pick": false,
-      "manual_note": null,
-      "snooze": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [],
-      "limitations": "需要用户提供代码库或合约地址；链上分析需 RPC 端点；依赖 Slither 工具套件；分析范围基于 Trail of Bits 清单。",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-21T01:50:01.937755+08:00",
       "content_changed_at": null,
       "upstream_status": "ok",
       "license": null
@@ -1889,7 +2034,11 @@
       "status": "recommended",
       "manual_pick": false,
       "manual_note": null,
-      "snooze": null,
+      "snooze": {
+        "snoozed_at": "2026-09-24",
+        "expires_at": "2027-02-21",
+        "reason": "用户暂不关注"
+      },
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -2041,60 +2190,6 @@
       "license": null
     },
     {
-      "skill_id": "trailofbits/skills:plugins/devcontainer-setup/skills/devcontainer-setup/SKILL.md",
-      "name": "devcontainer-setup",
-      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/devcontainer-setup/skills/devcontainer-setup/SKILL.md",
-      "author": "trailofbits",
-      "summary_zh": "为项目生成带 Claude Code 和 Python/Node/Rust/Go 工具链的 devcontainer 配置，适用于搭建隔离开发环境或沙箱化 Claude Code 工作区。",
-      "skill_type": null,
-      "example_requests": [
-        "“搭建隔离开发环境或沙箱化 Claude Code 工作区”"
-      ],
-      "key_features": [
-        "为项目生成带 Claude Code 和 Python/Node/Rust/Go 工具"
-      ],
-      "main_category": {
-        "id": "dev",
-        "name": "编程开发"
-      },
-      "tags": [
-        "devcontainer",
-        "开发环境",
-        "Claude Code",
-        "自动化",
-        "容器"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "Claude Code",
-        "bubblewrap",
-        "socat",
-        "uv",
-        "fnm",
-        "ast-grep",
-        "iptables",
-        "ipset",
-        "NET_ADMIN capability",
-        "devcontainer CLI",
-        "VS Code"
-      ],
-      "source_type": "official",
-      "status": "recommended",
-      "manual_pick": false,
-      "manual_note": null,
-      "snooze": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [],
-      "limitations": "仅用于开发环境，不适用于生产容器；需要用户具备 Dev Container 使用基础；上游未提供 resources/ 和 references/ 目录内容，无法验证模板文件完整性。",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-21T01:57:49.644357+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
       "skill_id": "trailofbits/skills:plugins/differential-review/skills/differential-review/SKILL.md",
       "name": "differential-review",
       "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/differential-review/skills/differential-review/SKILL.md",
@@ -2124,7 +2219,11 @@
       "status": "recommended",
       "manual_pick": false,
       "manual_note": null,
-      "snooze": null,
+      "snooze": {
+        "snoozed_at": "2026-09-24",
+        "expires_at": "2027-02-21",
+        "reason": "用户暂不关注"
+      },
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -2132,101 +2231,6 @@
       "limitations": "不适用于全新代码（无基线对比）、仅文档改动、格式化/lint 或用户仅需快速摘要的场景；分析深度受代码库规模和所选策略限制。",
       "first_seen": "2026-09-20T16:59:36+00:00",
       "last_checked": "2026-09-21T01:58:26.908918+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
-      "skill_id": "trailofbits/skills:plugins/dimensional-analysis/skills/dimensional-analysis/SKILL.md",
-      "name": "dimensional-analysis",
-      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/dimensional-analysis/skills/dimensional-analysis/SKILL.md",
-      "author": "trailofbits",
-      "summary_zh": "对代码库执行量纲分析，添加单位、维度和小数缩放注释，适用于 DeFi、区块链及其他数值计算代码，用于发现单位不匹配和公式错误。",
-      "skill_type": null,
-      "example_requests": [
-        "“DeFi、区块链及其他数值计算代码，用于发现单位不匹配和公式错误”"
-      ],
-      "key_features": [],
-      "main_category": {
-        "id": "dev",
-        "name": "编程开发"
-      },
-      "tags": [
-        "代码分析",
-        "量纲分析",
-        "单位标注",
-        "DeFi",
-        "漏洞检测"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "Read",
-        "Write",
-        "Grep",
-        "List",
-        "Glob",
-        "Task",
-        "TodoRead",
-        "TodoWrite",
-        "arithmetic-scanner",
-        "dimension-discoverer",
-        "dimension-annotator",
-        "dimension-propagator",
-        "dimension-validator"
-      ],
-      "source_type": "official",
-      "status": "recommended",
-      "manual_pick": false,
-      "manual_note": null,
-      "snooze": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [],
-      "limitations": "仅适用于包含数值算术或单位换算的代码库；主技能上下文不得自行执行仓库级量纲分析、传播或验证，必须依赖子代理；固定全自动模式。",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-21T02:00:05.327488+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
-      "skill_id": "trailofbits/skills:plugins/entry-point-analyzer/skills/entry-point-analyzer/SKILL.md",
-      "name": "entry-point-analyzer",
-      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/entry-point-analyzer/skills/entry-point-analyzer/SKILL.md",
-      "author": "trailofbits",
-      "summary_zh": "智能合约安全审计辅助技能，识别并分类所有状态变更入口点（公共、角色受限、仅合约），生成结构化报告。典型使用场景为开始审计时映射攻击面。",
-      "skill_type": null,
-      "example_requests": [],
-      "key_features": [
-        "智能合约安全审计辅助技能"
-      ],
-      "main_category": {
-        "id": "security",
-        "name": "安全"
-      },
-      "tags": [
-        "安全审计",
-        "智能合约",
-        "入口点分析",
-        "状态变更"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "slither"
-      ],
-      "source_type": "official",
-      "status": "recommended",
-      "manual_pick": false,
-      "manual_note": null,
-      "snooze": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [],
-      "limitations": "仅识别状态变更入口点，不进行漏洞检测；不分析只读函数；Slither 可选，不可用时需手动分析；依赖各语言参考文件。",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-21T02:00:55.277440+08:00",
       "content_changed_at": null,
       "upstream_status": "ok",
       "license": null
@@ -2263,7 +2267,11 @@
       "status": "recommended",
       "manual_pick": false,
       "manual_note": null,
-      "snooze": null,
+      "snooze": {
+        "snoozed_at": "2026-09-24",
+        "expires_at": "2027-02-21",
+        "reason": "用户暂不关注"
+      },
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -2277,47 +2285,6 @@
     }
   ],
   "candidates": [
-    {
-      "skill_id": "anthropics/skills:skills/academy-guide/SKILL.md",
-      "name": "academy-guide",
-      "url": "https://github.com/anthropics/skills/blob/HEAD/skills/academy-guide/SKILL.md",
-      "author": "anthropics",
-      "summary_zh": "该技能用于在回答有关 Claude 产品使用问题时，从 Claude Academy 目录中推荐匹配的课程、教程或用例，作为正常答案的补充。典型场景是用户询问如何使用 Claude、Claude Code 等产品功能或寻求学习资源时。",
-      "skill_type": null,
-      "example_requests": [
-        "“询问如何使用 Claude、Claude Code 等产品功能或寻求学习资源”"
-      ],
-      "key_features": [],
-      "main_category": {
-        "id": "docs",
-        "name": "文档办公"
-      },
-      "tags": [
-        "学习资源",
-        "Claude Academy",
-        "课程推荐",
-        "教程"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [],
-      "source_type": "official",
-      "status": "candidate",
-      "manual_pick": false,
-      "manual_note": null,
-      "snooze": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [
-        "UNRESOLVED_UNKNOWN"
-      ],
-      "limitations": "仅推荐 Claude Academy 内容，需要可联网获取目录；目录可能过时且不可自行编造条目。",
-      "first_seen": "2026-09-20T16:26:13+00:00",
-      "last_checked": "2026-09-21T01:16:15.702375+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
     {
       "skill_id": "anthropics/skills:skills/brand-guidelines/SKILL.md",
       "name": "brand-guidelines",
@@ -2358,50 +2325,6 @@
       "limitations": "未提供实际应用代码或调用方式；字体需系统预装，否则回退；仅提供品牌规范，无法自动执行。",
       "first_seen": "2026-09-20T16:59:36+00:00",
       "last_checked": "2026-09-21T01:16:57.110160+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
-      "skill_id": "anthropics/skills:skills/canvas-design/SKILL.md",
-      "name": "canvas-design",
-      "url": "https://github.com/anthropics/skills/blob/HEAD/skills/canvas-design/SKILL.md",
-      "author": "anthropics",
-      "summary_zh": "该技能通过创建设计哲学并表达为PDF/PNG视觉艺术作品，适用于制作海报、艺术设计等静态视觉内容。",
-      "skill_type": null,
-      "example_requests": [
-        "“制作海报、艺术设计等静态视觉内容”"
-      ],
-      "key_features": [
-        "通过创建设计哲学并表达为PDF/PNG视觉艺术"
-      ],
-      "main_category": {
-        "id": "content",
-        "name": "内容创作"
-      },
-      "tags": [
-        "视觉设计",
-        "艺术生成",
-        "海报设计",
-        "PDF/PNG生成",
-        "设计哲学"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [],
-      "source_type": "official",
-      "status": "candidate",
-      "manual_pick": false,
-      "manual_note": null,
-      "snooze": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [
-        "MISSING_DEPENDENCY"
-      ],
-      "limitations": "仅输出.md、.pdf和.png文件；需要额外工具生成视觉内容；可能需下载字体；未声明具体运行环境。",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-21T01:17:31.343047+08:00",
       "content_changed_at": null,
       "upstream_status": "ok",
       "license": null
@@ -3280,6 +3203,60 @@
         "reason": "用户收藏",
         "added_at": "2026-09-22",
         "from": "recommended"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/frontend-design/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-24",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/token-integration-analyzer/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-24",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/entry-point-analyzer/skills/entry-point-analyzer/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-24",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/dimensional-analysis/skills/dimensional-analysis/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-24",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/guidelines-advisor/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-24",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/cosmos-vulnerability-scanner/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-24",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/audit-prep-assistant/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-24",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "cloudflare/skills:skills/turnstile-spin/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-24",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/canvas-design/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-24",
+        "from": "candidate"
       }
     ],
     "manual_exclusions": [
@@ -3297,14 +3274,93 @@
         "skill_id": "trailofbits/skills:plugins/constant-time-analysis/skills/constant-time-analysis/SKILL.md",
         "reason": "用户屏蔽/删除",
         "added_at": "2026-09-22"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/devcontainer-setup/skills/devcontainer-setup/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-24"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/claude-api/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-24"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/academy-guide/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-24"
       }
     ]
   },
   "snoozed": {
     "snooze_version": "1.0.0",
-    "source": "docs/运行说明.md §10",
-    "note": "临时冷冻/暂不关注名单：条目冷冻期默认为 150 天（snoozed_at <= today < expires_at）。冷冻期内前端隐藏且流水线跳过（0 Token 消耗）；到期当天自动解冻恢复展示。",
     "default_snooze_days": 150,
-    "snoozed": []
+    "source": "docs/运行说明.md §9.2",
+    "note": "临时不关注名单（snoozed）：由用户在网页端维护。在 snoozed_at <= today < expires_at 期间冷冻（默认150天），到期当天自动恢复显示与候选处理。流水线扫描时跳过模型调用，0 额外模型 token 消耗。",
+    "snoozed": [
+      {
+        "skill_id": "vercel-labs/agent-skills:skills/vercel-cli-with-tokens/SKILL.md",
+        "snoozed_at": "2026-09-24",
+        "expires_at": "2027-02-21",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "vercel-labs/agent-skills:skills/deploy-to-vercel/SKILL.md",
+        "snoozed_at": "2026-09-24",
+        "expires_at": "2027-02-21",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "vercel-labs/agent-skills:skills/vercel-optimize/SKILL.md",
+        "snoozed_at": "2026-09-24",
+        "expires_at": "2027-02-21",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "cloudflare/skills:skills/cloudflare-one/SKILL.md",
+        "snoozed_at": "2026-09-24",
+        "expires_at": "2027-02-21",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "cloudflare/skills:skills/cloudflare/SKILL.md",
+        "snoozed_at": "2026-09-24",
+        "expires_at": "2027-02-21",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/claude-in-chrome-troubleshooting/skills/chrome-mcp-troubleshooting/SKILL.md",
+        "snoozed_at": "2026-09-24",
+        "expires_at": "2027-02-21",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/firebase-apk-scanner/skills/firebase-apk-scanner/SKILL.md",
+        "snoozed_at": "2026-09-24",
+        "expires_at": "2027-02-21",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/differential-review/skills/differential-review/SKILL.md",
+        "snoozed_at": "2026-09-24",
+        "expires_at": "2027-02-21",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/secure-workflow-guide/SKILL.md",
+        "snoozed_at": "2026-09-24",
+        "expires_at": "2027-02-21",
+        "days": 150,
+        "reason": "用户暂不关注"
+      }
+    ]
   }
 }

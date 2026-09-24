@@ -3,10 +3,10 @@
   "rules_version": "1.0.1",
   "generated_at": "2026-09-21T02:01:22.196060+08:00",
   "counts": {
-    "recommended": 36,
-    "candidate": 21,
-    "manual": 12,
-    "excluded": 4
+    "recommended": 26,
+    "candidate": 19,
+    "manual": 21,
+    "excluded": 7
   },
   "entries": [
     {
@@ -39,7 +39,7 @@
         ],
         "terms": []
       },
-      "status": "candidate",
+      "status": "excluded",
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -47,7 +47,8 @@
         "NO_DOMAIN_TERM_MATCH"
       ],
       "reason_codes": [
-        "UNRESOLVED_UNKNOWN"
+        "UNRESOLVED_UNKNOWN",
+        "MANUAL_EXCLUDED"
       ],
       "limitations": "仅推荐 Claude Academy 内容，需要可联网获取目录；目录可能过时且不可自行编造条目。",
       "evaluation_rules_version": "1.0.1",
@@ -237,8 +238,13 @@
       "upstream_status": "ok",
       "license": null,
       "excluded": false,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-24",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "skill_type": null,
       "example_requests": [
         "“制作海报、艺术设计等静态视觉内容”"
@@ -298,14 +304,16 @@
         ],
         "terms": []
       },
-      "status": "recommended",
+      "status": "excluded",
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
       "flags": [
         "NO_DOMAIN_TERM_MATCH"
       ],
-      "reason_codes": [],
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "limitations": "正文引用的 shared/ 与 {lang}/ 文件未包含在材料中，需按需读取；模型与价格信息为缓存（2026-06-24），可能过时；仅适用于 Claude/Anthropic，不生成 OpenAI 等其他提供商代码。",
       "evaluation_rules_version": "1.0.1",
       "first_seen": "2026-09-20T16:59:36+00:00",
@@ -556,8 +564,13 @@
       "upstream_status": "ok",
       "license": null,
       "excluded": false,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-24",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      },
       "skill_type": "guideline",
       "example_requests": [
         "“需要避免模板化外观的界面设计”"
@@ -1444,7 +1457,12 @@
       ],
       "key_features": [
         "支持 git push、CLI 及无认证回退方案"
-      ]
+      ],
+      "snooze": {
+        "snoozed_at": "2026-09-24",
+        "expires_at": "2027-02-21",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "vercel-labs/agent-skills:skills/react-best-practices/SKILL.md",
@@ -1693,7 +1711,12 @@
       "example_requests": [
         "“非交互式登录的部署、环境变量管理、域名管理、部署检查”"
       ],
-      "key_features": []
+      "key_features": [],
+      "snooze": {
+        "snoozed_at": "2026-09-24",
+        "expires_at": "2027-02-21",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "vercel-labs/agent-skills:skills/vercel-optimize/SKILL.md",
@@ -1753,7 +1776,12 @@
       "example_requests": [],
       "key_features": [
         "覆盖 Next.js、SvelteKit、Nuxt 及有限 Astro 支持"
-      ]
+      ],
+      "snooze": {
+        "snoozed_at": "2026-09-24",
+        "expires_at": "2027-02-21",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "vercel-labs/agent-skills:skills/web-design-guidelines/SKILL.md",
@@ -2121,7 +2149,12 @@
       "example_requests": [],
       "key_features": [
         "涵盖架构、策略、隧道、设备客户端、DLP、CASB 等场景"
-      ]
+      ],
+      "snooze": {
+        "snoozed_at": "2026-09-24",
+        "expires_at": "2027-02-21",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "cloudflare/skills:skills/cloudflare/SKILL.md",
@@ -2176,7 +2209,12 @@
       "example_requests": [
         "“架构设计与云产品选型”"
       ],
-      "key_features": []
+      "key_features": [],
+      "snooze": {
+        "snoozed_at": "2026-09-24",
+        "expires_at": "2027-02-21",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "cloudflare/skills:skills/durable-objects/SKILL.md",
@@ -2540,8 +2578,13 @@
       "upstream_status": "ok",
       "license": null,
       "excluded": false,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-24",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      },
       "skill_type": null,
       "example_requests": [
         "“保护表单、登录、注册等用户触发请求”"
@@ -2961,8 +3004,13 @@
       "upstream_status": "ok",
       "license": null,
       "excluded": false,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-24",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      },
       "skill_type": null,
       "example_requests": [
         "“即将接受外部安全审计的项目”"
@@ -3135,8 +3183,13 @@
       "upstream_status": "ok",
       "license": null,
       "excluded": false,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-24",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      },
       "skill_type": null,
       "example_requests": [
         "“审计自定义模块、审查 IBC 集成或链上线前安全评估”"
@@ -3193,8 +3246,13 @@
       "upstream_status": "ok",
       "license": null,
       "excluded": false,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-24",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      },
       "skill_type": null,
       "example_requests": [],
       "key_features": [
@@ -3264,7 +3322,12 @@
       ],
       "key_features": [
         "涵盖 Slither 扫描、特殊功能检查、可视化安全图表、安全属性记录与人工审查"
-      ]
+      ],
+      "snooze": {
+        "snoozed_at": "2026-09-24",
+        "expires_at": "2027-02-21",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/solana-vulnerability-scanner/SKILL.md",
@@ -3439,8 +3502,13 @@
       "upstream_status": "ok",
       "license": null,
       "excluded": false,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-24",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      },
       "skill_type": null,
       "example_requests": [
         "“代币集成或审计”"
@@ -3699,7 +3767,12 @@
       "example_requests": [
         "“macOS 环境中 MCP 工具连接失败或不稳定”"
       ],
-      "key_features": []
+      "key_features": [],
+      "snooze": {
+        "snoozed_at": "2026-09-24",
+        "expires_at": "2027-02-21",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "trailofbits/skills:plugins/code-improver/skills/code-improver/SKILL.md",
@@ -4185,14 +4258,16 @@
         ],
         "terms": []
       },
-      "status": "recommended",
+      "status": "excluded",
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
       "flags": [
         "NO_DOMAIN_TERM_MATCH"
       ],
-      "reason_codes": [],
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "limitations": "仅用于开发环境，不适用于生产容器；需要用户具备 Dev Container 使用基础；上游未提供 resources/ 和 references/ 目录内容，无法验证模板文件完整性。",
       "evaluation_rules_version": "1.0.1",
       "first_seen": "2026-09-20T16:59:36+00:00",
@@ -4268,7 +4343,12 @@
       ],
       "key_features": [
         "覆盖率分析生成 Markdown 报告"
-      ]
+      ],
+      "snooze": {
+        "snoozed_at": "2026-09-24",
+        "expires_at": "2027-02-21",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "trailofbits/skills:plugins/dimensional-analysis/skills/dimensional-analysis/SKILL.md",
@@ -4332,8 +4412,13 @@
       "upstream_status": "ok",
       "license": null,
       "excluded": false,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-24",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      },
       "skill_type": null,
       "example_requests": [
         "“DeFi、区块链及其他数值计算代码，用于发现单位不匹配和公式错误”"
@@ -4452,8 +4537,13 @@
       "upstream_status": "ok",
       "license": null,
       "excluded": false,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-24",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      },
       "skill_type": null,
       "example_requests": [],
       "key_features": [
@@ -4518,7 +4608,12 @@
       "example_requests": [
         "“授权移动应用安全审计和渗透测试”"
       ],
-      "key_features": []
+      "key_features": [],
+      "snooze": {
+        "snoozed_at": "2026-09-24",
+        "expires_at": "2027-02-21",
+        "reason": "用户暂不关注"
+      }
     }
   ],
   "overrides": {
@@ -4597,6 +4692,60 @@
         "reason": "用户收藏",
         "added_at": "2026-09-22",
         "from": "recommended"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/frontend-design/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-24",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/token-integration-analyzer/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-24",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/entry-point-analyzer/skills/entry-point-analyzer/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-24",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/dimensional-analysis/skills/dimensional-analysis/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-24",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/guidelines-advisor/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-24",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/cosmos-vulnerability-scanner/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-24",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/audit-prep-assistant/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-24",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "cloudflare/skills:skills/turnstile-spin/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-24",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/canvas-design/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-24",
+        "from": "candidate"
       }
     ],
     "manual_exclusions": [
@@ -4614,14 +4763,93 @@
         "skill_id": "trailofbits/skills:plugins/constant-time-analysis/skills/constant-time-analysis/SKILL.md",
         "reason": "用户屏蔽/删除",
         "added_at": "2026-09-22"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/devcontainer-setup/skills/devcontainer-setup/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-24"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/claude-api/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-24"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/academy-guide/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-24"
       }
     ]
   },
   "snoozed": {
     "snooze_version": "1.0.0",
-    "source": "docs/运行说明.md §10",
-    "note": "临时冷冻/暂不关注名单：条目冷冻期默认为 150 天（snoozed_at <= today < expires_at）。冷冻期内前端隐藏且流水线跳过（0 Token 消耗）；到期当天自动解冻恢复展示。",
     "default_snooze_days": 150,
-    "snoozed": []
+    "source": "docs/运行说明.md §9.2",
+    "note": "临时不关注名单（snoozed）：由用户在网页端维护。在 snoozed_at <= today < expires_at 期间冷冻（默认150天），到期当天自动恢复显示与候选处理。流水线扫描时跳过模型调用，0 额外模型 token 消耗。",
+    "snoozed": [
+      {
+        "skill_id": "vercel-labs/agent-skills:skills/vercel-cli-with-tokens/SKILL.md",
+        "snoozed_at": "2026-09-24",
+        "expires_at": "2027-02-21",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "vercel-labs/agent-skills:skills/deploy-to-vercel/SKILL.md",
+        "snoozed_at": "2026-09-24",
+        "expires_at": "2027-02-21",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "vercel-labs/agent-skills:skills/vercel-optimize/SKILL.md",
+        "snoozed_at": "2026-09-24",
+        "expires_at": "2027-02-21",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "cloudflare/skills:skills/cloudflare-one/SKILL.md",
+        "snoozed_at": "2026-09-24",
+        "expires_at": "2027-02-21",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "cloudflare/skills:skills/cloudflare/SKILL.md",
+        "snoozed_at": "2026-09-24",
+        "expires_at": "2027-02-21",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/claude-in-chrome-troubleshooting/skills/chrome-mcp-troubleshooting/SKILL.md",
+        "snoozed_at": "2026-09-24",
+        "expires_at": "2027-02-21",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/firebase-apk-scanner/skills/firebase-apk-scanner/SKILL.md",
+        "snoozed_at": "2026-09-24",
+        "expires_at": "2027-02-21",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/differential-review/skills/differential-review/SKILL.md",
+        "snoozed_at": "2026-09-24",
+        "expires_at": "2027-02-21",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/secure-workflow-guide/SKILL.md",
+        "snoozed_at": "2026-09-24",
+        "expires_at": "2027-02-21",
+        "days": 150,
+        "reason": "用户暂不关注"
+      }
+    ]
   }
 }

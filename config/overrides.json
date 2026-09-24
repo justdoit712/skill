@@ -74,6 +74,60 @@
       "reason": "用户收藏",
       "added_at": "2026-09-22",
       "from": "recommended"
+    },
+    {
+      "skill_id": "anthropics/skills:skills/frontend-design/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-24",
+      "from": "recommended"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/token-integration-analyzer/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-24",
+      "from": "recommended"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/entry-point-analyzer/skills/entry-point-analyzer/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-24",
+      "from": "recommended"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/dimensional-analysis/skills/dimensional-analysis/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-24",
+      "from": "recommended"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/guidelines-advisor/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-24",
+      "from": "recommended"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/cosmos-vulnerability-scanner/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-24",
+      "from": "recommended"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/audit-prep-assistant/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-24",
+      "from": "recommended"
+    },
+    {
+      "skill_id": "cloudflare/skills:skills/turnstile-spin/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-24",
+      "from": "recommended"
+    },
+    {
+      "skill_id": "anthropics/skills:skills/canvas-design/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-24",
+      "from": "candidate"
     }
   ],
   "manual_exclusions": [
@@ -91,6 +145,21 @@
       "skill_id": "trailofbits/skills:plugins/constant-time-analysis/skills/constant-time-analysis/SKILL.md",
       "reason": "用户屏蔽/删除",
       "added_at": "2026-09-22"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/devcontainer-setup/skills/devcontainer-setup/SKILL.md",
+      "reason": "用户屏蔽/删除",
+      "added_at": "2026-09-24"
+    },
+    {
+      "skill_id": "anthropics/skills:skills/claude-api/SKILL.md",
+      "reason": "用户屏蔽/删除",
+      "added_at": "2026-09-24"
+    },
+    {
+      "skill_id": "anthropics/skills:skills/academy-guide/SKILL.md",
+      "reason": "用户屏蔽/删除",
+      "added_at": "2026-09-24"
     }
   ]
 }
