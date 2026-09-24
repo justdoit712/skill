@@ -7,7 +7,7 @@
    - 结构兼容前端双模消费；
 3. 公共快照发布条件矩阵判断（`should_update_public_snapshot`）：
    - 正常完成有推荐 -> 更新；
-   - 正常完成 0 推荐 -> 覆盖写空（防止旧主题残留误导）；
+   - 正常完成 0 推荐（包括全部已收录） -> 覆盖写空（防止旧主题残留误导）；
    - 中断/熔断但有部分条目 -> 更新带状态的部分结果；
    - 早期完全失败 0 成功 -> 坚决保留旧快照，不写空破坏已有展示；
 4. 原子写入本地及公共报告（`write_local_report`, `update_public_snapshot`）。
@@ -27,7 +27,7 @@ from src.shared.runtime import now_local
 STATUS_SUPPORTED = "supported"
 
 
-PUBLIC_REASONS = {"completed", "target_reached", "candidates_exhausted", "token_limit", "evaluation_limit",
+PUBLIC_REASONS = {"completed", "target_reached", "candidates_exhausted", "all_candidates_owned", "token_limit", "evaluation_limit",
                   "usage_unknown", "model_failures", "interrupted", "search_failed", "expansion_failed",
                   "material_failed", "plan_failed", "execution_error", "artifact_failed"}
 
@@ -61,6 +61,8 @@ def _count(value):
 
 def render_find_markdown_report(report: dict[str, Any]) -> str:
     """将查找结果格式化为高可读性的 Markdown 报告。"""
+    raw_stop_reason = str(report.get("stop_reason") or "")
+    raw_coverage_incomplete = bool(report.get("coverage_incomplete"))
     report = _escape_markdown(report)
     topic = report.get("topic", "")
     params = report.get("parameters", {})
@@ -68,6 +70,7 @@ def render_find_markdown_report(report: dict[str, Any]) -> str:
     plan = report.get("plan") or {}
     search = report.get("search") or {}
 
+    skipped_str = f"，已收录跳过 {search['skipped_owned']} 个" if search.get("skipped_owned") else ""
     lines = [
         "# 定向查找 Skill 报告",
         "",
@@ -75,18 +78,25 @@ def render_find_markdown_report(report: dict[str, Any]) -> str:
         f"- **分析归纳**：{plan.get('intent', '（未完成）')}",
         f"- **运行编号**：`{report.get('run_id')}`（{report.get('started_at', '')}）",
         f"- **运行状态**：{report.get('stop_reason') or report.get('status')}",
-        f"- **检查范围**：检索查询 {len(search.get('queries_executed', []))} 条，发现仓库 {search.get('repos_discovered', 0)} 个，展开技能文件 {search.get('candidates_found', 0)} 个，实际评估 {report.get('evaluated_count', 0)} 个",
+        f"- **检查范围**：检索查询 {len(search.get('queries_executed', []))} 条，发现仓库 {search.get('repos_discovered', 0)} 个，展开技能文件 {search.get('candidates_found', 0)} 个{skipped_str}，实际评估 {report.get('evaluated_count', 0)} 个",
         f"- **Token 用量**：输入 {_count(usage.get('prompt_tokens'))}，输出 {_count(usage.get('completion_tokens'))}，总计 {_count(usage.get('total_tokens'))} Token（本次停止阈值 {_count(params.get('max_tokens'))}）",
+    ]
+    if raw_coverage_incomplete:
+        lines.append("- **检索覆盖**：本次检索覆盖不完整，部分来源读取失败或超出读取范围。")
+    lines.extend([
         "",
         "---",
         "",
         f"## 优先查看（短名单 {len(report.get('shortlist', []))} 个）",
         "",
-    ]
+    ])
 
     shortlist = report.get("shortlist") or []
     if not shortlist:
-        lines.append("本次未找到完全符合所有必需条件且说明完整的强匹配技能。请参考下方的相关备选与差距说明。\n")
+        if raw_stop_reason == "all_candidates_owned":
+            lines.append("本次发现的候选已全部收录。\n")
+        else:
+            lines.append("本次未找到完全符合所有必需条件且说明完整的强匹配技能。请参考下方的相关备选与差距说明。\n")
     else:
         for idx, item in enumerate(shortlist, start=1):
             cand = item.get("candidate", {})
@@ -267,6 +277,7 @@ def sanitize_report_for_public(report: dict[str, Any]) -> dict[str, Any]:
             "queries_executed": sanitized_queries,
             "repos_discovered": int(search.get("repos_discovered") or 0),
             "candidates_found": int(search.get("candidates_found") or 0),
+            "skipped_owned": int(search.get("skipped_owned") or 0),
         },
         "evaluation_attempts": report.get("evaluation_attempts"),
         "evaluated_count": report.get("evaluated_count"),
@@ -295,7 +306,7 @@ def should_update_public_snapshot(report: dict[str, Any]) -> bool:
     """根据规范 4.2 公共快照更新条件矩阵判定是否应该写出 public/data/find-report.json：
 
     1. 正常完成且有推荐结果 (evaluated > 0 或 shortlist/alternatives > 0): True
-    2. 正常完成但 0 匹配 (status in (completed, target_reached) 或 candidates_exhausted): True (写入空结果快照)
+    2. 正常完成但 0 匹配 (status in (completed, target_reached) 或 candidates_exhausted, all_candidates_owned): True (写入空结果快照)
     3. 异常中断/熔断，但已有部分有效评估 (evaluated_count > 0 或 shortlist/alternatives > 0): True
     4. 完全失败/启动错误，0 成功 (0 evaluated, status is error / plan_failed / search_failed 等): False (保留上次有效快照)
     """
@@ -312,7 +323,7 @@ def should_update_public_snapshot(report: dict[str, Any]) -> bool:
             return False
 
     # 1 & 2. 正常完成（包含有推荐或 0 匹配自然结束）
-    if status == "completed" or stop_reason in ("target_reached", "candidates_exhausted", "completed"):
+    if status == "completed" or stop_reason in ("target_reached", "candidates_exhausted", "all_candidates_owned", "completed"):
         return True
 
     # 3. 异常中断/熔断，但已有部分有效条目

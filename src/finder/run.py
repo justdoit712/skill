@@ -4,7 +4,8 @@
 1. 查找运行状态追踪（FinderRunState）；
 2. 严密的 3 计数器（尝试次数、已评估数、Token 用量）记账与安全熔断；
 3. 统一收尾（finalize_run）与多退出码规范映射（0/1/2/130）；
-4. 零目录依赖与零目录副作用红线保障。
+4. 零目录依赖与零目录副作用红线保障；
+5. 过滤已收录项，全收录正常完成（all_candidates_owned）。
 """
 
 from __future__ import annotations
@@ -24,6 +25,7 @@ from uuid import uuid4
 
 from src.infra.files import write_json_atomic
 from src.infra.llm import call_model, resolve_api_key
+from src.shared.owned import is_skill_owned
 from src.shared.runtime import now_local
 from src.shared.usage import UsageTotals
 
@@ -67,6 +69,7 @@ STATUS_COMPLETED = "completed"
 STATUS_TOKEN_LIMIT = "token_limit"
 STATUS_EVALUATION_LIMIT = "evaluation_limit"
 STATUS_CANDIDATES_EXHAUSTED = "candidates_exhausted"
+STATUS_ALL_CANDIDATES_OWNED = "all_candidates_owned"
 STATUS_MODEL_FAILURES = "model_failures"
 STATUS_USAGE_UNKNOWN = "usage_unknown"
 STATUS_INTERRUPTED = "interrupted"
@@ -90,7 +93,8 @@ class FinderRunState:
             "shortlist": [], "alternatives": [], "calls": [], "errors": [],
             "coverage_incomplete": False,
             "search": {"queries_executed": [], "repos_discovered": 0,
-                       "candidates_found": 0, "expansions": [], "skipped": []}}
+                       "candidates_found": 0, "expansions": [], "skipped": [],
+                       "skipped_owned": 0, "skipped_owned_ids": []}}
 
     def save(self):
         self.report["usage"] = self.usage.snapshot()
@@ -129,7 +133,7 @@ def finalize_run(report, stop_reason, *, status=None, evaluated_items=None, plan
     if status is None:
         status = (STATUS_INTERRUPTED if stop_reason == STATUS_INTERRUPTED else
                   STATUS_STOPPED if stop_reason in (STATUS_TOKEN_LIMIT, STATUS_EVALUATION_LIMIT, STATUS_USAGE_UNKNOWN, STATUS_MODEL_FAILURES) else
-                  STATUS_COMPLETED if stop_reason in (STATUS_TARGET_REACHED, STATUS_CANDIDATES_EXHAUSTED, STATUS_COMPLETED) else STATUS_ERROR)
+                  STATUS_COMPLETED if stop_reason in (STATUS_TARGET_REACHED, STATUS_CANDIDATES_EXHAUSTED, STATUS_ALL_CANDIDATES_OWNED, STATUS_COMPLETED) else STATUS_ERROR)
     report.update(schema_version="1.0.0", status=status, stop_reason=stop_reason,
                   updated_at=now_local().isoformat())
     items = evaluated_items if evaluated_items is not None else report.get("evaluations", [])
@@ -141,6 +145,8 @@ def finalize_run(report, stop_reason, *, status=None, evaluated_items=None, plan
         report["evaluation_attempts"] = evaluation_attempts
     if usage is not None:
         report["usage"] = usage.snapshot()
+    if stop_reason == STATUS_ALL_CANDIDATES_OWNED:
+        log("本次发现的候选已全部收录。")
     if run_dir is not None:
         try:
             write_local_report(report, run_dir)
@@ -161,7 +167,7 @@ def finalize_run(report, stop_reason, *, status=None, evaluated_items=None, plan
     return report
 
 
-def _find_candidates(state, search, expand, sleep, log):
+def _find_candidates(state, search, expand, sleep, log, owned_ids=None):
     report, plan = state.report, state.report["plan"]
     groups = []
     for query in plan["queries"]:
@@ -183,8 +189,31 @@ def _find_candidates(state, search, expand, sleep, log):
     report["coverage_incomplete"] |= any(not e.get("ok", False) or e.get("truncated") or e.get("omitted_files", 0) for e in expansions)
     if expansions and all(not e.get("ok", False) for e in expansions):
         return [], "expansion_failed"
-    scheduled = schedule_candidates_fairly(candidates)
-    report["search"]["omitted_candidates"] = len(candidates) - len(scheduled)
+
+    # 过滤已收录项（必须在调度截断前完成，避免已收录项占满候选上限）
+    remaining_candidates = []
+    skipped_owned_cands = []
+    for c in candidates:
+        if is_skill_owned(c.skill_id, owned_ids):
+            skipped_owned_cands.append(c)
+        else:
+            remaining_candidates.append(c)
+
+    report["search"]["skipped_owned"] = len(skipped_owned_cands)
+    report["search"]["skipped_owned_ids"] = [c.skill_id for c in skipped_owned_cands]
+    for c in skipped_owned_cands:
+        report["search"]["skipped"].append({
+            "skill_id": c.skill_id,
+            "code": "owned",
+            "message": "已收录跳过",
+        })
+
+    if candidates and not remaining_candidates:
+        state.save()
+        return [], STATUS_ALL_CANDIDATES_OWNED
+
+    scheduled = schedule_candidates_fairly(remaining_candidates)
+    report["search"]["omitted_candidates"] = len(remaining_candidates) - len(scheduled)
     report["coverage_incomplete"] |= bool(report["search"]["omitted_candidates"] or report["search"]["omitted_repositories"])
     state.save()
     return scheduled, None if scheduled else STATUS_CANDIDATES_EXHAUSTED
@@ -248,9 +277,13 @@ def _evaluate_candidates(state, candidates, cfg, api_key, transport, fetch, slee
 def execute_find_skill(topic, *, limit=None, max_evaluations=None, max_tokens=None,
                        root_dir=".", model_cfg=None, log=print, sleep=time.sleep,
                        call_model_fn=None, fetch_candidate_materials_fn=None,
-                       expand_and_collect_candidates_fn=None, search_github_repos_fn=None):
+                       expand_and_collect_candidates_fn=None, search_github_repos_fn=None,
+                       owned_ids=None):
     from src.infra.llm import validate_model_config
+    from src.infra.owned import load_owned_ids
     root = Path(root_dir).resolve()
+    if owned_ids is None:
+        owned_ids = load_owned_ids(root / "config")
     run_cfg = load_finder_run_config(root / "config")
     if not isinstance(topic, str) or not topic.strip():
         raise ValueError("必须提供有效非空的查找需求 topic")
@@ -286,7 +319,7 @@ def execute_find_skill(topic, *, limit=None, max_evaluations=None, max_tokens=No
         elif result.ok and result.content:
             state.report["plan"] = parse_query_plan(result.content)
             candidates, reason = _find_candidates(state, search_github_repos_fn or search_github_repos_for_query,
-                expand_and_collect_candidates_fn or expand_and_collect_candidates, sleep, log)
+                expand_and_collect_candidates_fn or expand_and_collect_candidates, sleep, log, owned_ids=owned_ids)
             if reason is None:
                 cfg.setdefault("limits", {})["max_output_tokens"] = EVAL_MAX_OUTPUT_TOKENS
                 reason = _evaluate_candidates(state, candidates, cfg, api_key, transport,
@@ -295,6 +328,8 @@ def execute_find_skill(topic, *, limit=None, max_evaluations=None, max_tokens=No
             state.report["errors"].append({"stage": "planning", "code": "plan_failed", "message": result.error})
     except KeyboardInterrupt:
         reason = STATUS_INTERRUPTED
+    except ValueError:
+        raise
     except Exception as exc:
         state.report["errors"].append({"stage": "execution", "code": "execution_error", "message": str(exc)})
         reason = "plan_failed" if state.report["plan"] is None else "execution_error"
@@ -415,3 +450,7 @@ def main(argv: list[str] | None = None, *, root: Path | None = None) -> int:
     if status == STATUS_COMPLETED:
         return 0
     return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
