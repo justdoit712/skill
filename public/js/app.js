@@ -25,11 +25,9 @@ import {
   populateOwnedBaseline,
   reconcileOwnedStaged,
   markOwned,
-  unmarkOwned,
-  getEffectiveOwnedList
+  unmarkOwned
 } from "./owned-state.js";
 import {
-  renderOwnedList,
   showToast,
   initPrivateDetailsModal,
   initPrivateBackup
@@ -63,12 +61,10 @@ const el = {
   tabCand: document.getElementById("tab-candidate"),
   tabManual: document.getElementById("tab-manual"),
   tabFind: document.getElementById("tab-find"),
-  tabOwned: document.getElementById("tab-owned"),
   badgeRec: document.getElementById("count-recommended"),
   badgeCand: document.getElementById("count-candidate"),
   badgeManual: document.getElementById("count-manual"),
   badgeFind: document.getElementById("count-find"),
-  badgeOwned: document.getElementById("count-owned"),
   controls: document.querySelector(".controls"),
   syncBar: document.getElementById("sync-bar"),
   syncSummary: document.getElementById("sync-summary"),
@@ -109,9 +105,6 @@ const el = {
 export function apply() {
   if (!state.data) return;
 
-  const effectiveOwned = getEffectiveOwnedList(ownedState, state.allEntries);
-  if (el.badgeOwned) el.badgeOwned.textContent = effectiveOwned.length;
-
   if (state.tab === "find") {
     if (el.controls) el.controls.style.display = "none";
     renderFindView(el.list, state.findReport, ownedState);
@@ -123,15 +116,6 @@ export function apply() {
     } else {
       el.meta.textContent = "定向查找：暂无查找报告。";
     }
-    updateSyncBar(el.syncBar, el.syncSummary, overridesState, ownedState);
-    return;
-  }
-
-  if (state.tab === "owned") {
-    if (el.controls) el.controls.style.display = "";
-    const shown = renderOwnedList(el.list, effectiveOwned, { q: state.q });
-    el.meta.hidden = false;
-    el.meta.textContent = "已收录共 " + effectiveOwned.length + " 条，当前显示 " + shown + " 条。";
     updateSyncBar(el.syncBar, el.syncSummary, overridesState, ownedState);
     return;
   }
@@ -172,17 +156,16 @@ export function apply() {
  * 切换主 Tab。
  */
 export function setTab(tab) {
+  if (!["recommended", "candidate", "manual", "find"].includes(tab)) return;
   state.tab = tab;
   el.tabRec.classList.toggle("is-active", tab === "recommended");
   el.tabCand.classList.toggle("is-active", tab === "candidate");
   el.tabManual.classList.toggle("is-active", tab === "manual");
   if (el.tabFind) el.tabFind.classList.toggle("is-active", tab === "find");
-  if (el.tabOwned) el.tabOwned.classList.toggle("is-active", tab === "owned");
   el.tabRec.setAttribute("aria-selected", tab === "recommended" ? "true" : "false");
   el.tabCand.setAttribute("aria-selected", tab === "candidate" ? "true" : "false");
   el.tabManual.setAttribute("aria-selected", tab === "manual" ? "true" : "false");
   if (el.tabFind) el.tabFind.setAttribute("aria-selected", tab === "find" ? "true" : "false");
-  if (el.tabOwned) el.tabOwned.setAttribute("aria-selected", tab === "owned" ? "true" : "false");
   apply();
 }
 
@@ -269,7 +252,6 @@ el.tabRec.addEventListener("click", () => setTab("recommended"));
 el.tabCand.addEventListener("click", () => setTab("candidate"));
 el.tabManual.addEventListener("click", () => setTab("manual"));
 if (el.tabFind) el.tabFind.addEventListener("click", () => setTab("find"));
-if (el.tabOwned) el.tabOwned.addEventListener("click", () => setTab("owned"));
 
 // 初始化私人详情与备份控制器
 const privateModalController = initPrivateDetailsModal(el, ownedState, () => apply());

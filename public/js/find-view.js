@@ -69,7 +69,7 @@ export function renderFindView(container, report, ownedState = null) {
   // 已收录隐藏提示
   if (hiddenOwnedCount > 0) {
     if (rawShortlist.length + rawAlternatives.length > 0 && shortlist.length + alternatives.length === 0) {
-      bannerHtml += '<div class="find-status-banner info">ℹ️ 本报告中的条目已全部收录，可在“已收录”中管理。</div>';
+      bannerHtml += '<div class="find-status-banner info">ℹ️ 本报告中的条目已全部收录，已自动隐藏。</div>';
     } else {
       bannerHtml += '<div class="find-status-banner info">ℹ️ 原报告推荐 ' + rawShortlist.length + ' 项、备选 ' + rawAlternatives.length + ' 项；当前已收录隐藏 ' + hiddenOwnedCount + ' 项。</div>';
     }

@@ -34,10 +34,6 @@
         <span>收藏区</span>
         <span id="count-manual" class="tab-badge">0</span>
       </button>
-      <button id="tab-owned" class="tab" role="tab" aria-selected="false">
-        <span>✓ 已收录</span>
-        <span id="count-owned" class="tab-badge">0</span>
-      </button>
       <button id="tab-find" class="tab" role="tab" aria-selected="false">
         <span>🔍 定向查找</span>
         <span id="count-find" class="tab-badge">0</span>
@@ -48,7 +44,7 @@
   <section class="controls" aria-label="筛选">
     <div class="control control-search">
       <label for="q">关键词</label>
-      <input id="q" type="search" placeholder="搜索名称、简述、作者或私人备注…" autocomplete="off">
+      <input id="q" type="search" placeholder="搜索名称、简述或作者…" autocomplete="off">
     </div>
     <div class="control control-cat">
       <label for="category">主分类</label>
@@ -86,8 +82,8 @@
       <dd>属于收录范围但存在 <code>unknown</code>、说明不完整或尚需核验，均注明原因。</dd>
       <dt>收藏区</dt>
       <dd>由用户手工指定并长期保留的条目。三区互斥，上游变化不自动重评或降级，程序不自动移出。</dd>
-      <dt>已收录区</dt>
-      <dd>用户已收录在自己仓库或本地环境的条目。在推荐、候选及定向查找中自动隐藏，流水线扫描零 Token 消耗跳过。提供私人管理链接与备注管理。</dd>
+      <dt>已收录标记</dt>
+      <dd>标记后从推荐、候选、收藏及定向查找中隐藏，不单独展示分区或数量。同步到仓库后，流水线扫描零 Token 消耗跳过。</dd>
       <dt>内容已变化，待复核</dt>
       <dd>已推荐技能的上游内容发生变化。保留推荐状态并醒目标记，同时展示原评估对应的版本；复核不通过则降级。</dd>
     </dl>
