@@ -214,6 +214,7 @@ class SyncConfigDeployWorkflowTest(unittest.TestCase):
         paths = self.trig["push"]["paths"]
         self.assertIn("config/overrides.json", paths)
         self.assertIn("config/snoozed.json", paths)
+        self.assertIn("config/owned-skills.json", paths)
         self.assertIn("workflow_dispatch", self.trig)
 
     def test_executes_offline_sync_and_reuses_deploy_pages(self) -> None:
