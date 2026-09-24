@@ -10,6 +10,18 @@
       "from": "candidate"
     },
     {
+      "skill_id": "anthropics/skills:skills/discernment-nudge/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-24",
+      "from": "candidate"
+    },
+    {
+      "skill_id": "anthropics/skills:skills/doc-coauthoring/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-24",
+      "from": "recommended"
+    },
+    {
       "skill_id": "anthropics/skills:skills/docx/SKILL.md",
       "reason": "用户收藏",
       "added_at": "2026-09-22",
@@ -20,6 +32,12 @@
       "reason": "用户收藏",
       "added_at": "2026-09-24",
       "from": "recommended"
+    },
+    {
+      "skill_id": "anthropics/skills:skills/internal-comms/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-24",
+      "from": "candidate"
     },
     {
       "skill_id": "anthropics/skills:skills/mcp-builder/SKILL.md",
@@ -118,24 +136,6 @@
       "from": "recommended"
     },
     {
-      "skill_id": "trailofbits/skills:plugins/dimensional-analysis/skills/dimensional-analysis/SKILL.md",
-      "reason": "用户收藏",
-      "added_at": "2026-09-24",
-      "from": "recommended"
-    },
-    {
-      "skill_id": "trailofbits/skills:plugins/entry-point-analyzer/skills/entry-point-analyzer/SKILL.md",
-      "reason": "用户收藏",
-      "added_at": "2026-09-24",
-      "from": "recommended"
-    },
-    {
-      "skill_id": "anthropics/skills:skills/doc-coauthoring/SKILL.md",
-      "reason": "用户收藏",
-      "added_at": "2026-09-24",
-      "from": "recommended"
-    },
-    {
       "skill_id": "trailofbits/skills:plugins/code-improver/skills/code-improver/SKILL.md",
       "reason": "用户收藏",
       "added_at": "2026-09-24",
@@ -154,13 +154,43 @@
       "from": "recommended"
     },
     {
-      "skill_id": "anthropics/skills:skills/discernment-nudge/SKILL.md",
+      "skill_id": "trailofbits/skills:plugins/dimensional-analysis/skills/dimensional-analysis/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-24",
+      "from": "recommended"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/entry-point-analyzer/skills/entry-point-analyzer/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-24",
+      "from": "recommended"
+    },
+    {
+      "skill_id": "anthropics/skills:skills/pdf/SKILL.md",
       "reason": "用户收藏",
       "added_at": "2026-09-24",
       "from": "candidate"
     },
     {
-      "skill_id": "anthropics/skills:skills/internal-comms/SKILL.md",
+      "skill_id": "anthropics/skills:skills/skill-creator/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-24",
+      "from": "candidate"
+    },
+    {
+      "skill_id": "vercel-labs/agent-skills:skills/composition-patterns/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-24",
+      "from": "candidate"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/culture-index/skills/interpreting-culture-index/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-24",
+      "from": "candidate"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/code-improver/tests/fixtures/pr-review-toolkit/skills/review-pr/SKILL.md",
       "reason": "用户收藏",
       "added_at": "2026-09-24",
       "from": "candidate"
@@ -214,6 +244,26 @@
     },
     {
       "skill_id": "trailofbits/skills:plugins/burpsuite-project-parser/skills/burpsuite-project-parser/SKILL.md",
+      "reason": "用户屏蔽/删除",
+      "added_at": "2026-09-24"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/code-maturity-assessor/SKILL.md",
+      "reason": "用户屏蔽/删除",
+      "added_at": "2026-09-24"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/solana-vulnerability-scanner/SKILL.md",
+      "reason": "用户屏蔽/删除",
+      "added_at": "2026-09-24"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/ton-vulnerability-scanner/SKILL.md",
+      "reason": "用户屏蔽/删除",
+      "added_at": "2026-09-24"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/dwarf-expert/skills/dwarf-expert/SKILL.md",
       "reason": "用户屏蔽/删除",
       "added_at": "2026-09-24"
     }

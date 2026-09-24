@@ -136,6 +136,27 @@
       "expires_at": "2027-02-21",
       "days": 150,
       "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "cloudflare/skills:skills/sandbox-migrate-to-next/SKILL.md",
+      "snoozed_at": "2026-09-24",
+      "expires_at": "2027-02-21",
+      "days": 150,
+      "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "cloudflare/skills:skills/web-perf/SKILL.md",
+      "snoozed_at": "2026-09-24",
+      "expires_at": "2027-02-21",
+      "days": 150,
+      "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/agentic-actions-auditor/skills/agentic-actions-auditor/SKILL.md",
+      "snoozed_at": "2026-09-24",
+      "expires_at": "2027-02-21",
+      "days": 150,
+      "reason": "用户暂不关注"
     }
   ]
 }
