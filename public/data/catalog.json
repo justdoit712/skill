@@ -4,13 +4,13 @@
   "rules_version": "1.1.0",
   "counts": {
     "recommended": 51,
-    "candidate": 53,
+    "candidate": 51,
     "manual": 10,
     "pending": 0,
     "processing_failure": 0,
-    "total_evaluated": 114,
-    "owned": 12,
-    "owned_in_catalog": 12
+    "total_evaluated": 112,
+    "owned": 14,
+    "owned_in_catalog": 14
   },
   "categories": [
     {
@@ -35,7 +35,7 @@
     },
     {
       "id": "finance",
-      "count": 13
+      "count": 11
     },
     {
       "id": "product",
@@ -3347,7 +3347,11 @@
       "status": "recommended",
       "manual_pick": false,
       "manual_note": null,
-      "snooze": null,
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      },
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -5848,7 +5852,11 @@
       "status": "candidate",
       "manual_pick": false,
       "manual_note": null,
-      "snooze": null,
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      },
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -5859,156 +5867,6 @@
       "limitations": "仅适用于 TypeScript/JavaScript 环境，且依赖 Better Auth 库及其生态。",
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-26T14:37:38+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
-      "skill_id": "gauss314/skills:skills/alpaca-data/SKILL.md",
-      "name": "alpaca-data",
-      "url": "https://github.com/gauss314/skills/blob/HEAD/skills/alpaca-data/SKILL.md",
-      "author": "gauss314",
-      "summary_zh": "提供 Alpaca 市场数据 API 的使用指南，涵盖股票、加密货币和期权的历史与实时数据获取，包括认证、SDK 配置及常见错误处理。",
-      "quality_summary": {
-        "review_status": "not_required",
-        "review_note": null,
-        "blocking_reasons": [
-          "初评：质量门槛未通过：actionability: 步骤清晰：安装 SDK -> 获取 Keys -> 设置环境变量 -> 调用 API。代码示例完整且符合 alpaca-py 语法。；程序未能核实所引原文与行号。",
-          "初评：介绍中提到的功能（股票、加密货币、期权数据，实时/历史）均在正文中有对应的代码示例和说明，内容一致。；程序未能核实所引原文与行号。",
-          "初评：明确声明了依赖 `alpaca-py` SDK 和 Python 环境，并指出了需要 API Keys（对于股票数据）以及免费/付费数据源的区别。；程序未能核实所引原文与行号。"
-        ],
-        "checks": {
-          "practical_value": {
-            "value": "pass",
-            "evidence": "直接解决了开发者接入 Alpaca 数据 API 的需求，提供了可复制的代码片段和关键配置信息，比泛泛而谈的 API 文档更具操作性。"
-          },
-          "actionability": {
-            "value": "unknown",
-            "evidence": "步骤清晰：安装 SDK -> 获取 Keys -> 设置环境变量 -> 调用 API。代码示例完整且符合 alpaca-py 语法。；程序未能核实所引原文与行号。"
-          },
-          "verification": {
-            "value": "pass",
-            "evidence": "提供了常见错误表（403, 429 等）及其解决方案，帮助用户验证调用是否成功及排查问题。"
-          }
-        },
-        "review_checks": {}
-      },
-      "skill_type": "reference",
-      "example_requests": [
-        "如何使用 Python 获取 AAPL 的历史日线数据？",
-        "Alpaca 免费数据源和付费数据源有什么区别？"
-      ],
-      "key_features": [
-        "支持股票、加密货币和期权数据",
-        "提供详细的 Python SDK 代码示例",
-        "明确区分免费 (IEX) 和付费 (SIP) 数据源限制"
-      ],
-      "main_category": {
-        "id": "finance",
-        "name": "金融与投资"
-      },
-      "tags": [
-        "市场数据",
-        "API",
-        "Python",
-        "Alpaca"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "alpaca-py",
-        "Python",
-        "Alpaca API Keys (for stocks)"
-      ],
-      "source_type": "community_list",
-      "status": "candidate",
-      "manual_pick": false,
-      "manual_note": null,
-      "snooze": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [
-        "QUALITY_BELOW_BAR",
-        "INSUFFICIENT_EVIDENCE"
-      ],
-      "limitations": "免费层仅支持 IEX 数据源（约 5 年历史，单一交易所），部分数据（如期权）可能需要特定权限或付费计划。",
-      "first_seen": "2026-09-24T09:09:16+00:00",
-      "last_checked": "2026-09-26T14:47:28+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
-      "skill_id": "gauss314/skills:skills/alpha-vantage/SKILL.md",
-      "name": "alpha-vantage",
-      "url": "https://github.com/gauss314/skills/blob/HEAD/skills/alpha-vantage/SKILL.md",
-      "author": "gauss314",
-      "summary_zh": "该技能封装了 Alpha Vantage 金融数据 API，用于获取股票、外汇、加密货币、技术指标及基本面数据。它提供了认证指南、速率限制说明、Python 代码示例及下载脚本，适用于需要程序化获取全球金融市场数据的开发者或分析师。",
-      "quality_summary": {
-        "review_status": "not_required",
-        "review_note": null,
-        "blocking_reasons": [
-          "初评：质量门槛未通过：verification: The skill includes expected JSON responses for errors (line 59-63) and code that prints specific output (line 164), allowing users to verify if the connection and data retrieval are working correctly.；程序未能核实所引原文与行号。",
-          "初评领域检查：The skill provides access to financial data (stocks, forex, crypto, indicators). It does not promise returns, does not perform live trading (only data download), and includes rate limit warnings which act as practical constraints. It distinguishes between free and premium data availability.；程序未能核实所引原文与行号。"
-        ],
-        "checks": {
-          "practical_value": {
-            "value": "pass",
-            "evidence": "The skill provides concrete, actionable code for fetching specific financial data points, which is highly useful for developers building trading bots, dashboards, or analysis tools. It goes beyond generic advice by providing exact API parameters and error handling tips."
-          },
-          "actionability": {
-            "value": "pass",
-            "evidence": "Steps are clear: get API key, use provided code snippets, or run referenced scripts. The code is copy-paste ready (with key substitution). Error messages are documented with solutions."
-          },
-          "verification": {
-            "value": "unknown",
-            "evidence": "The skill includes expected JSON responses for errors (line 59-63) and code that prints specific output (line 164), allowing users to verify if the connection and data retrieval are working correctly.；程序未能核实所引原文与行号。"
-          }
-        },
-        "review_checks": {}
-      },
-      "skill_type": "tool_script",
-      "example_requests": [
-        "使用 Python 获取 AAPL 的当前报价",
-        "下载 IBM 最近 100 天的每日 OHLCV 数据"
-      ],
-      "key_features": [
-        "支持股票、外汇、加密货币及技术指标数据获取",
-        "提供详细的免费与高级套餐速率限制及应对建议",
-        "包含可直接使用的 Python 代码示例及批量下载脚本"
-      ],
-      "main_category": {
-        "id": "finance",
-        "name": "金融与投资"
-      },
-      "tags": [
-        "Alpha Vantage",
-        "金融数据",
-        "API",
-        "Python",
-        "股票",
-        "加密货币"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "Python (requests library)",
-        "Alpha Vantage API Key"
-      ],
-      "source_type": "community_list",
-      "status": "candidate",
-      "manual_pick": false,
-      "manual_note": null,
-      "snooze": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [
-        "QUALITY_BELOW_BAR",
-        "INSUFFICIENT_EVIDENCE"
-      ],
-      "limitations": "受限于 Alpha Vantage 的免费套餐速率（25次/天，5次/分钟），部分高级数据（如日内数据、完整历史、内幕交易）需要付费订阅。",
-      "first_seen": "2026-09-24T09:09:16+00:00",
-      "last_checked": "2026-09-26T14:51:32+08:00",
       "content_changed_at": null,
       "upstream_status": "ok",
       "license": null
@@ -7956,6 +7814,168 @@
       "upstream_status": "ok",
       "license": null,
       "original_partition": "manual"
+    },
+    {
+      "skill_id": "gauss314/skills:skills/alpaca-data/SKILL.md",
+      "name": "alpaca-data",
+      "url": "https://github.com/gauss314/skills/blob/HEAD/skills/alpaca-data/SKILL.md",
+      "author": "gauss314",
+      "summary_zh": "提供 Alpaca 市场数据 API 的使用指南，涵盖股票、加密货币和期权的历史与实时数据获取，包括认证、SDK 配置及常见错误处理。",
+      "quality_summary": {
+        "review_status": "not_required",
+        "review_note": null,
+        "blocking_reasons": [
+          "初评：质量门槛未通过：actionability: 步骤清晰：安装 SDK -> 获取 Keys -> 设置环境变量 -> 调用 API。代码示例完整且符合 alpaca-py 语法。；程序未能核实所引原文与行号。",
+          "初评：介绍中提到的功能（股票、加密货币、期权数据，实时/历史）均在正文中有对应的代码示例和说明，内容一致。；程序未能核实所引原文与行号。",
+          "初评：明确声明了依赖 `alpaca-py` SDK 和 Python 环境，并指出了需要 API Keys（对于股票数据）以及免费/付费数据源的区别。；程序未能核实所引原文与行号。"
+        ],
+        "checks": {
+          "practical_value": {
+            "value": "pass",
+            "evidence": "直接解决了开发者接入 Alpaca 数据 API 的需求，提供了可复制的代码片段和关键配置信息，比泛泛而谈的 API 文档更具操作性。"
+          },
+          "actionability": {
+            "value": "unknown",
+            "evidence": "步骤清晰：安装 SDK -> 获取 Keys -> 设置环境变量 -> 调用 API。代码示例完整且符合 alpaca-py 语法。；程序未能核实所引原文与行号。"
+          },
+          "verification": {
+            "value": "pass",
+            "evidence": "提供了常见错误表（403, 429 等）及其解决方案，帮助用户验证调用是否成功及排查问题。"
+          }
+        },
+        "review_checks": {}
+      },
+      "skill_type": "reference",
+      "example_requests": [
+        "如何使用 Python 获取 AAPL 的历史日线数据？",
+        "Alpaca 免费数据源和付费数据源有什么区别？"
+      ],
+      "key_features": [
+        "支持股票、加密货币和期权数据",
+        "提供详细的 Python SDK 代码示例",
+        "明确区分免费 (IEX) 和付费 (SIP) 数据源限制"
+      ],
+      "main_category": {
+        "id": "finance",
+        "name": "金融与投资"
+      },
+      "tags": [
+        "市场数据",
+        "API",
+        "Python",
+        "Alpaca"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "alpaca-py",
+        "Python",
+        "Alpaca API Keys (for stocks)"
+      ],
+      "source_type": "community_list",
+      "status": "candidate",
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-27",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
+      "snooze": null,
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "reason_codes": [
+        "QUALITY_BELOW_BAR",
+        "INSUFFICIENT_EVIDENCE"
+      ],
+      "limitations": "免费层仅支持 IEX 数据源（约 5 年历史，单一交易所），部分数据（如期权）可能需要特定权限或付费计划。",
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-26T14:47:28+08:00",
+      "content_changed_at": null,
+      "upstream_status": "ok",
+      "license": null,
+      "original_partition": "manual"
+    },
+    {
+      "skill_id": "gauss314/skills:skills/alpha-vantage/SKILL.md",
+      "name": "alpha-vantage",
+      "url": "https://github.com/gauss314/skills/blob/HEAD/skills/alpha-vantage/SKILL.md",
+      "author": "gauss314",
+      "summary_zh": "该技能封装了 Alpha Vantage 金融数据 API，用于获取股票、外汇、加密货币、技术指标及基本面数据。它提供了认证指南、速率限制说明、Python 代码示例及下载脚本，适用于需要程序化获取全球金融市场数据的开发者或分析师。",
+      "quality_summary": {
+        "review_status": "not_required",
+        "review_note": null,
+        "blocking_reasons": [
+          "初评：质量门槛未通过：verification: The skill includes expected JSON responses for errors (line 59-63) and code that prints specific output (line 164), allowing users to verify if the connection and data retrieval are working correctly.；程序未能核实所引原文与行号。",
+          "初评领域检查：The skill provides access to financial data (stocks, forex, crypto, indicators). It does not promise returns, does not perform live trading (only data download), and includes rate limit warnings which act as practical constraints. It distinguishes between free and premium data availability.；程序未能核实所引原文与行号。"
+        ],
+        "checks": {
+          "practical_value": {
+            "value": "pass",
+            "evidence": "The skill provides concrete, actionable code for fetching specific financial data points, which is highly useful for developers building trading bots, dashboards, or analysis tools. It goes beyond generic advice by providing exact API parameters and error handling tips."
+          },
+          "actionability": {
+            "value": "pass",
+            "evidence": "Steps are clear: get API key, use provided code snippets, or run referenced scripts. The code is copy-paste ready (with key substitution). Error messages are documented with solutions."
+          },
+          "verification": {
+            "value": "unknown",
+            "evidence": "The skill includes expected JSON responses for errors (line 59-63) and code that prints specific output (line 164), allowing users to verify if the connection and data retrieval are working correctly.；程序未能核实所引原文与行号。"
+          }
+        },
+        "review_checks": {}
+      },
+      "skill_type": "tool_script",
+      "example_requests": [
+        "使用 Python 获取 AAPL 的当前报价",
+        "下载 IBM 最近 100 天的每日 OHLCV 数据"
+      ],
+      "key_features": [
+        "支持股票、外汇、加密货币及技术指标数据获取",
+        "提供详细的免费与高级套餐速率限制及应对建议",
+        "包含可直接使用的 Python 代码示例及批量下载脚本"
+      ],
+      "main_category": {
+        "id": "finance",
+        "name": "金融与投资"
+      },
+      "tags": [
+        "Alpha Vantage",
+        "金融数据",
+        "API",
+        "Python",
+        "股票",
+        "加密货币"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "Python (requests library)",
+        "Alpha Vantage API Key"
+      ],
+      "source_type": "community_list",
+      "status": "candidate",
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-27",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
+      "snooze": null,
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "reason_codes": [
+        "QUALITY_BELOW_BAR",
+        "INSUFFICIENT_EVIDENCE"
+      ],
+      "limitations": "受限于 Alpha Vantage 的免费套餐速率（25次/天，5次/分钟），部分高级数据（如日内数据、完整历史、内幕交易）需要付费订阅。",
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-26T14:51:32+08:00",
+      "content_changed_at": null,
+      "upstream_status": "ok",
+      "license": null,
+      "original_partition": "manual"
     }
   ],
   "overrides": {
@@ -8013,6 +8033,12 @@
       },
       {
         "skill_id": "google-labs-code/stitch-skills:plugins/stitch-build/skills/react-components/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-26",
+        "from": "candidate"
+      },
+      {
+        "skill_id": "getsentry/skills:skills/commit/SKILL.md",
         "reason": "用户收藏",
         "added_at": "2026-09-26",
         "from": "candidate"
@@ -8084,15 +8110,21 @@
         "from": "candidate"
       },
       {
-        "skill_id": "getsentry/skills:skills/commit/SKILL.md",
+        "skill_id": "getsentry/skills:skills/agents-md/SKILL.md",
         "reason": "用户收藏",
         "added_at": "2026-09-26",
         "from": "candidate"
       },
       {
-        "skill_id": "getsentry/skills:skills/agents-md/SKILL.md",
+        "skill_id": "gauss314/skills:skills/alpaca-data/SKILL.md",
         "reason": "用户收藏",
-        "added_at": "2026-09-26",
+        "added_at": "2026-09-27",
+        "from": "candidate"
+      },
+      {
+        "skill_id": "gauss314/skills:skills/alpha-vantage/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-27",
         "from": "candidate"
       }
     ],
@@ -8935,6 +8967,20 @@
         "expires_at": "2027-02-23",
         "days": 150,
         "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "expo/skills:plugins/expo/skills/expo-native-ui/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "better-auth/skills:better-auth/create-auth/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
       }
     ]
   },
@@ -8942,34 +8988,10 @@
     "schema_version": "1.0.0",
     "items": [
       {
-        "skill_id": "anthropics/skills:skills/pdf/SKILL.md",
-        "name": "pdf",
-        "added_at": "2026-09-24",
-        "source_url": "https://github.com/anthropics/skills/blob/HEAD/skills/pdf/SKILL.md"
-      },
-      {
-        "skill_id": "anthropics/skills:skills/docx/SKILL.md",
-        "name": "docx",
-        "added_at": "2026-09-24",
-        "source_url": "https://github.com/anthropics/skills/blob/HEAD/skills/docx/SKILL.md"
-      },
-      {
-        "skill_id": "anthropics/skills:skills/xlsx/SKILL.md",
-        "name": "xlsx",
-        "added_at": "2026-09-24",
-        "source_url": "https://github.com/anthropics/skills/blob/HEAD/skills/xlsx/SKILL.md"
-      },
-      {
-        "skill_id": "anthropics/skills:skills/frontend-design/SKILL.md",
-        "name": "frontend-design",
+        "skill_id": "anthropics/skills:skills/discernment-nudge/SKILL.md",
+        "name": "discernment-nudge",
         "added_at": "2026-09-26",
-        "source_url": "https://github.com/anthropics/skills/blob/HEAD/skills/frontend-design/SKILL.md"
-      },
-      {
-        "skill_id": "vercel-labs/agent-skills:skills/react-best-practices/SKILL.md",
-        "name": "react-best-practices",
-        "added_at": "2026-09-26",
-        "source_url": "https://github.com/vercel-labs/agent-skills/blob/HEAD/skills/react-best-practices/SKILL.md"
+        "source_url": "https://github.com/anthropics/skills/blob/HEAD/skills/discernment-nudge/SKILL.md"
       },
       {
         "skill_id": "anthropics/skills:skills/doc-coauthoring/SKILL.md",
@@ -8978,10 +9000,28 @@
         "source_url": "https://github.com/anthropics/skills/blob/HEAD/skills/doc-coauthoring/SKILL.md"
       },
       {
+        "skill_id": "anthropics/skills:skills/docx/SKILL.md",
+        "name": "docx",
+        "added_at": "2026-09-24",
+        "source_url": "https://github.com/anthropics/skills/blob/HEAD/skills/docx/SKILL.md"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/frontend-design/SKILL.md",
+        "name": "frontend-design",
+        "added_at": "2026-09-26",
+        "source_url": "https://github.com/anthropics/skills/blob/HEAD/skills/frontend-design/SKILL.md"
+      },
+      {
         "skill_id": "anthropics/skills:skills/internal-comms/SKILL.md",
         "name": "internal-comms",
         "added_at": "2026-09-26",
         "source_url": "https://github.com/anthropics/skills/blob/HEAD/skills/internal-comms/SKILL.md"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/pdf/SKILL.md",
+        "name": "pdf",
+        "added_at": "2026-09-24",
+        "source_url": "https://github.com/anthropics/skills/blob/HEAD/skills/pdf/SKILL.md"
       },
       {
         "skill_id": "anthropics/skills:skills/pptx/SKILL.md",
@@ -8990,16 +9030,28 @@
         "source_url": "https://github.com/anthropics/skills/blob/HEAD/skills/pptx/SKILL.md"
       },
       {
-        "skill_id": "anthropics/skills:skills/discernment-nudge/SKILL.md",
-        "name": "discernment-nudge",
-        "added_at": "2026-09-26",
-        "source_url": "https://github.com/anthropics/skills/blob/HEAD/skills/discernment-nudge/SKILL.md"
+        "skill_id": "anthropics/skills:skills/xlsx/SKILL.md",
+        "name": "xlsx",
+        "added_at": "2026-09-24",
+        "source_url": "https://github.com/anthropics/skills/blob/HEAD/skills/xlsx/SKILL.md"
       },
       {
-        "skill_id": "vercel-labs/agent-skills:skills/writing-guidelines/SKILL.md",
-        "name": "writing-guidelines",
+        "skill_id": "gauss314/skills:skills/alpaca-data/SKILL.md",
+        "name": "alpaca-data",
+        "added_at": "2026-09-27",
+        "source_url": "https://github.com/gauss314/skills/blob/HEAD/skills/alpaca-data/SKILL.md"
+      },
+      {
+        "skill_id": "gauss314/skills:skills/alpha-vantage/SKILL.md",
+        "name": "alpha-vantage",
+        "added_at": "2026-09-27",
+        "source_url": "https://github.com/gauss314/skills/blob/HEAD/skills/alpha-vantage/SKILL.md"
+      },
+      {
+        "skill_id": "getsentry/skills:skills/agents-md/SKILL.md",
+        "name": "agents-md",
         "added_at": "2026-09-26",
-        "source_url": "https://github.com/vercel-labs/agent-skills/blob/HEAD/skills/writing-guidelines/SKILL.md"
+        "source_url": "https://github.com/getsentry/skills/blob/HEAD/skills/agents-md/SKILL.md"
       },
       {
         "skill_id": "getsentry/skills:skills/code-simplifier/SKILL.md",
@@ -9008,10 +9060,16 @@
         "source_url": "https://github.com/getsentry/skills/blob/HEAD/skills/code-simplifier/SKILL.md"
       },
       {
-        "skill_id": "getsentry/skills:skills/agents-md/SKILL.md",
-        "name": "agents-md",
+        "skill_id": "vercel-labs/agent-skills:skills/react-best-practices/SKILL.md",
+        "name": "react-best-practices",
         "added_at": "2026-09-26",
-        "source_url": "https://github.com/getsentry/skills/blob/HEAD/skills/agents-md/SKILL.md"
+        "source_url": "https://github.com/vercel-labs/agent-skills/blob/HEAD/skills/react-best-practices/SKILL.md"
+      },
+      {
+        "skill_id": "vercel-labs/agent-skills:skills/writing-guidelines/SKILL.md",
+        "name": "writing-guidelines",
+        "added_at": "2026-09-26",
+        "source_url": "https://github.com/vercel-labs/agent-skills/blob/HEAD/skills/writing-guidelines/SKILL.md"
       }
     ]
   }

@@ -3,9 +3,10 @@
   "rules_version": "1.1.0",
   "generated_at": "2026-09-26T17:12:35.413703+08:00",
   "counts": {
-    "excluded": 53,
-    "candidate": 63,
-    "recommended": 63
+    "recommended": 51,
+    "candidate": 51,
+    "manual": 24,
+    "excluded": 53
   },
   "entries": [
     {
@@ -10564,7 +10565,12 @@
         }
       },
       "last_evaluation_id": "expo/skills:plugins/expo/skills/expo-native-ui/SKILL.md|sha256:52d8c3bdf6d466dda826a89b3d0846b5|1.1.0|1.0.0",
-      "evaluated_at": "2026-09-26T11:03:13.011399+08:00"
+      "evaluated_at": "2026-09-26T11:03:13.011399+08:00",
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "better-auth/skills:better-auth/create-auth/SKILL.md",
@@ -10648,7 +10654,12 @@
         "review_checks": {}
       },
       "last_evaluation_id": "better-auth/skills:better-auth/create-auth/SKILL.md|sha256:e3f24141de734690c803c577cc30f19a|1.1.0|1.0.0",
-      "evaluated_at": "2026-09-26T14:37:38.188515+08:00"
+      "evaluated_at": "2026-09-26T14:37:38.188515+08:00",
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "gauss314/skills:skills/alpaca-data/SKILL.md",
@@ -10700,8 +10711,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-27",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "evaluation_rules_version": "1.1.0",
       "quality_summary": {
         "review_status": "not_required",
@@ -10863,8 +10879,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-27",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "evaluation_rules_version": "1.1.0",
       "quality_summary": {
         "review_status": "not_required",
@@ -12392,6 +12413,12 @@
         "from": "candidate"
       },
       {
+        "skill_id": "getsentry/skills:skills/commit/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-26",
+        "from": "candidate"
+      },
+      {
         "skill_id": "anthropics/skills:skills/discernment-nudge/SKILL.md",
         "reason": "用户收藏",
         "added_at": "2026-09-24",
@@ -12458,15 +12485,21 @@
         "from": "candidate"
       },
       {
-        "skill_id": "getsentry/skills:skills/commit/SKILL.md",
+        "skill_id": "getsentry/skills:skills/agents-md/SKILL.md",
         "reason": "用户收藏",
         "added_at": "2026-09-26",
         "from": "candidate"
       },
       {
-        "skill_id": "getsentry/skills:skills/agents-md/SKILL.md",
+        "skill_id": "gauss314/skills:skills/alpaca-data/SKILL.md",
         "reason": "用户收藏",
-        "added_at": "2026-09-26",
+        "added_at": "2026-09-27",
+        "from": "candidate"
+      },
+      {
+        "skill_id": "gauss314/skills:skills/alpha-vantage/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-27",
         "from": "candidate"
       }
     ],
@@ -13309,6 +13342,20 @@
         "expires_at": "2027-02-23",
         "days": 150,
         "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "expo/skills:plugins/expo/skills/expo-native-ui/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "better-auth/skills:better-auth/create-auth/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
       }
     ]
   },
@@ -13316,34 +13363,10 @@
     "schema_version": "1.0.0",
     "items": [
       {
-        "skill_id": "anthropics/skills:skills/pdf/SKILL.md",
-        "name": "pdf",
-        "added_at": "2026-09-24",
-        "source_url": "https://github.com/anthropics/skills/blob/HEAD/skills/pdf/SKILL.md"
-      },
-      {
-        "skill_id": "anthropics/skills:skills/docx/SKILL.md",
-        "name": "docx",
-        "added_at": "2026-09-24",
-        "source_url": "https://github.com/anthropics/skills/blob/HEAD/skills/docx/SKILL.md"
-      },
-      {
-        "skill_id": "anthropics/skills:skills/xlsx/SKILL.md",
-        "name": "xlsx",
-        "added_at": "2026-09-24",
-        "source_url": "https://github.com/anthropics/skills/blob/HEAD/skills/xlsx/SKILL.md"
-      },
-      {
-        "skill_id": "anthropics/skills:skills/frontend-design/SKILL.md",
-        "name": "frontend-design",
+        "skill_id": "anthropics/skills:skills/discernment-nudge/SKILL.md",
+        "name": "discernment-nudge",
         "added_at": "2026-09-26",
-        "source_url": "https://github.com/anthropics/skills/blob/HEAD/skills/frontend-design/SKILL.md"
-      },
-      {
-        "skill_id": "vercel-labs/agent-skills:skills/react-best-practices/SKILL.md",
-        "name": "react-best-practices",
-        "added_at": "2026-09-26",
-        "source_url": "https://github.com/vercel-labs/agent-skills/blob/HEAD/skills/react-best-practices/SKILL.md"
+        "source_url": "https://github.com/anthropics/skills/blob/HEAD/skills/discernment-nudge/SKILL.md"
       },
       {
         "skill_id": "anthropics/skills:skills/doc-coauthoring/SKILL.md",
@@ -13352,10 +13375,28 @@
         "source_url": "https://github.com/anthropics/skills/blob/HEAD/skills/doc-coauthoring/SKILL.md"
       },
       {
+        "skill_id": "anthropics/skills:skills/docx/SKILL.md",
+        "name": "docx",
+        "added_at": "2026-09-24",
+        "source_url": "https://github.com/anthropics/skills/blob/HEAD/skills/docx/SKILL.md"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/frontend-design/SKILL.md",
+        "name": "frontend-design",
+        "added_at": "2026-09-26",
+        "source_url": "https://github.com/anthropics/skills/blob/HEAD/skills/frontend-design/SKILL.md"
+      },
+      {
         "skill_id": "anthropics/skills:skills/internal-comms/SKILL.md",
         "name": "internal-comms",
         "added_at": "2026-09-26",
         "source_url": "https://github.com/anthropics/skills/blob/HEAD/skills/internal-comms/SKILL.md"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/pdf/SKILL.md",
+        "name": "pdf",
+        "added_at": "2026-09-24",
+        "source_url": "https://github.com/anthropics/skills/blob/HEAD/skills/pdf/SKILL.md"
       },
       {
         "skill_id": "anthropics/skills:skills/pptx/SKILL.md",
@@ -13364,16 +13405,28 @@
         "source_url": "https://github.com/anthropics/skills/blob/HEAD/skills/pptx/SKILL.md"
       },
       {
-        "skill_id": "anthropics/skills:skills/discernment-nudge/SKILL.md",
-        "name": "discernment-nudge",
-        "added_at": "2026-09-26",
-        "source_url": "https://github.com/anthropics/skills/blob/HEAD/skills/discernment-nudge/SKILL.md"
+        "skill_id": "anthropics/skills:skills/xlsx/SKILL.md",
+        "name": "xlsx",
+        "added_at": "2026-09-24",
+        "source_url": "https://github.com/anthropics/skills/blob/HEAD/skills/xlsx/SKILL.md"
       },
       {
-        "skill_id": "vercel-labs/agent-skills:skills/writing-guidelines/SKILL.md",
-        "name": "writing-guidelines",
+        "skill_id": "gauss314/skills:skills/alpaca-data/SKILL.md",
+        "name": "alpaca-data",
+        "added_at": "2026-09-27",
+        "source_url": "https://github.com/gauss314/skills/blob/HEAD/skills/alpaca-data/SKILL.md"
+      },
+      {
+        "skill_id": "gauss314/skills:skills/alpha-vantage/SKILL.md",
+        "name": "alpha-vantage",
+        "added_at": "2026-09-27",
+        "source_url": "https://github.com/gauss314/skills/blob/HEAD/skills/alpha-vantage/SKILL.md"
+      },
+      {
+        "skill_id": "getsentry/skills:skills/agents-md/SKILL.md",
+        "name": "agents-md",
         "added_at": "2026-09-26",
-        "source_url": "https://github.com/vercel-labs/agent-skills/blob/HEAD/skills/writing-guidelines/SKILL.md"
+        "source_url": "https://github.com/getsentry/skills/blob/HEAD/skills/agents-md/SKILL.md"
       },
       {
         "skill_id": "getsentry/skills:skills/code-simplifier/SKILL.md",
@@ -13382,10 +13435,16 @@
         "source_url": "https://github.com/getsentry/skills/blob/HEAD/skills/code-simplifier/SKILL.md"
       },
       {
-        "skill_id": "getsentry/skills:skills/agents-md/SKILL.md",
-        "name": "agents-md",
+        "skill_id": "vercel-labs/agent-skills:skills/react-best-practices/SKILL.md",
+        "name": "react-best-practices",
         "added_at": "2026-09-26",
-        "source_url": "https://github.com/getsentry/skills/blob/HEAD/skills/agents-md/SKILL.md"
+        "source_url": "https://github.com/vercel-labs/agent-skills/blob/HEAD/skills/react-best-practices/SKILL.md"
+      },
+      {
+        "skill_id": "vercel-labs/agent-skills:skills/writing-guidelines/SKILL.md",
+        "name": "writing-guidelines",
+        "added_at": "2026-09-26",
+        "source_url": "https://github.com/vercel-labs/agent-skills/blob/HEAD/skills/writing-guidelines/SKILL.md"
       }
     ],
     "source": "docs/plans/2026-09-24-已收录管理实施方案.md",
