@@ -22,12 +22,6 @@
       "from": "recommended"
     },
     {
-      "skill_id": "anthropics/skills:skills/docx/SKILL.md",
-      "reason": "用户收藏",
-      "added_at": "2026-09-22",
-      "from": "recommended"
-    },
-    {
       "skill_id": "anthropics/skills:skills/frontend-design/SKILL.md",
       "reason": "用户收藏",
       "added_at": "2026-09-24",
@@ -65,12 +59,6 @@
     },
     {
       "skill_id": "anthropics/skills:skills/theme-factory/SKILL.md",
-      "reason": "用户收藏",
-      "added_at": "2026-09-22",
-      "from": "recommended"
-    },
-    {
-      "skill_id": "anthropics/skills:skills/xlsx/SKILL.md",
       "reason": "用户收藏",
       "added_at": "2026-09-22",
       "from": "recommended"
@@ -142,9 +130,57 @@
       "from": "candidate"
     },
     {
+      "skill_id": "anthropics/skills:skills/docx/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-22",
+      "from": "recommended"
+    },
+    {
+      "skill_id": "anthropics/skills:skills/xlsx/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-22",
+      "from": "recommended"
+    },
+    {
       "skill_id": "anthropics/skills:skills/pdf/SKILL.md",
       "reason": "用户收藏",
       "added_at": "2026-09-24",
+      "from": "candidate"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/goal-prompt/skills/goal-prompt/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-26",
+      "from": "recommended"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/trailmark/skills/graph-evolution/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-26",
+      "from": "recommended"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/trailmark/skills/diagramming-code/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-26",
+      "from": "recommended"
+    },
+    {
+      "skill_id": "anthropics/skills:skills/webapp-testing/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-26",
+      "from": "candidate"
+    },
+    {
+      "skill_id": "vercel-labs/skills:skills/find-skills/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-26",
+      "from": "candidate"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/gh-cli/skills/gh-cli/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-26",
       "from": "candidate"
     }
   ],
@@ -258,6 +294,126 @@
       "skill_id": "vercel-labs/agent-skills:skills/web-design-guidelines/SKILL.md",
       "reason": "用户屏蔽/删除",
       "added_at": "2026-09-24"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/audit-context-building/skills/audit-context-building/SKILL.md",
+      "reason": "用户屏蔽/删除",
+      "added_at": "2026-09-26"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/modern-cpp/skills/modern-cpp/SKILL.md",
+      "reason": "用户屏蔽/删除",
+      "added_at": "2026-09-26"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/review-walkthrough/skills/review-walkthrough/SKILL.md",
+      "reason": "用户屏蔽/删除",
+      "added_at": "2026-09-26"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/second-opinion/skills/second-opinion/SKILL.md",
+      "reason": "用户屏蔽/删除",
+      "added_at": "2026-09-26"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/static-analysis/skills/sarif-parsing/SKILL.md",
+      "reason": "用户屏蔽/删除",
+      "added_at": "2026-09-26"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/static-analysis/skills/semgrep/SKILL.md",
+      "reason": "用户屏蔽/删除",
+      "added_at": "2026-09-26"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/testing-handbook-skills/skills/address-sanitizer/SKILL.md",
+      "reason": "用户屏蔽/删除",
+      "added_at": "2026-09-26"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/testing-handbook-skills/skills/aflpp/SKILL.md",
+      "reason": "用户屏蔽/删除",
+      "added_at": "2026-09-26"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/testing-handbook-skills/skills/coverage-analysis/SKILL.md",
+      "reason": "用户屏蔽/删除",
+      "added_at": "2026-09-26"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/testing-handbook-skills/skills/harness-writing/SKILL.md",
+      "reason": "用户屏蔽/删除",
+      "added_at": "2026-09-26"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/testing-handbook-skills/skills/libfuzzer/SKILL.md",
+      "reason": "用户屏蔽/删除",
+      "added_at": "2026-09-26"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/trailmark/skills/mermaid-to-proverif/SKILL.md",
+      "reason": "用户屏蔽/删除",
+      "added_at": "2026-09-26"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/trailmark/skills/slicing-code-context/SKILL.md",
+      "reason": "用户屏蔽/删除",
+      "added_at": "2026-09-26"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/trailmark/skills/trailmark-structural/SKILL.md",
+      "reason": "用户屏蔽/删除",
+      "added_at": "2026-09-26"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/trailmark/skills/trailmark-summary/SKILL.md",
+      "reason": "用户屏蔽/删除",
+      "added_at": "2026-09-26"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/trailmark/skills/trailmark-variant-neighborhood/SKILL.md",
+      "reason": "用户屏蔽/删除",
+      "added_at": "2026-09-26"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/trailmark/skills/trailmark/SKILL.md",
+      "reason": "用户屏蔽/删除",
+      "added_at": "2026-09-26"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/supply-chain-risk-auditor/skills/supply-chain-risk-auditor/SKILL.md",
+      "reason": "用户屏蔽/删除",
+      "added_at": "2026-09-26"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/post-patch-validation/skills/post-patch-validation/SKILL.md",
+      "reason": "用户屏蔽/删除",
+      "added_at": "2026-09-26"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/testing-handbook-skills/skills/atheris/SKILL.md",
+      "reason": "用户屏蔽/删除",
+      "added_at": "2026-09-26"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/testing-handbook-skills/skills/wycheproof/SKILL.md",
+      "reason": "用户屏蔽/删除",
+      "added_at": "2026-09-26"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/testing-handbook-skills/skills/ossfuzz/SKILL.md",
+      "reason": "用户屏蔽/删除",
+      "added_at": "2026-09-26"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/trailmark/skills/genotoxic/SKILL.md",
+      "reason": "用户屏蔽/删除",
+      "added_at": "2026-09-26"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/let-fate-decide/skills/let-fate-decide/SKILL.md",
+      "reason": "用户屏蔽/删除",
+      "added_at": "2026-09-26"
     }
   ]
 }
