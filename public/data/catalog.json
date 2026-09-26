@@ -5,12 +5,12 @@
   "counts": {
     "recommended": 42,
     "candidate": 13,
-    "manual": 29,
+    "manual": 26,
     "pending": 0,
     "processing_failure": 0,
-    "total_evaluated": 84,
-    "owned": 5,
-    "owned_in_catalog": 5
+    "total_evaluated": 81,
+    "owned": 8,
+    "owned_in_catalog": 8
   },
   "categories": [
     {
@@ -31,7 +31,7 @@
     },
     {
       "id": "docs",
-      "count": 7
+      "count": 4
     },
     {
       "id": "product",
@@ -139,100 +139,6 @@
       "license": null
     },
     {
-      "skill_id": "anthropics/skills:skills/doc-coauthoring/SKILL.md",
-      "name": "doc-coauthoring",
-      "url": "https://github.com/anthropics/skills/blob/HEAD/skills/doc-coauthoring/SKILL.md",
-      "author": "anthropics",
-      "summary_zh": "引导用户通过背景收集、细化结构与读者测试三个阶段协作撰写文档，适用于撰写文档、提案、技术规格、决策文档等场景。",
-      "quality_summary": null,
-      "skill_type": null,
-      "example_requests": [
-        "“撰写文档、提案、技术规格、决策文档”"
-      ],
-      "key_features": [
-        "引导用户通过背景收集、细化结构与读者测试三个阶段协作撰写文档"
-      ],
-      "main_category": {
-        "id": "docs",
-        "name": "文档办公"
-      },
-      "tags": [
-        "文档协作",
-        "写作辅助",
-        "结构化写作",
-        "提案写作",
-        "技术文档"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [],
-      "source_type": "official",
-      "status": "recommended",
-      "manual_pick": true,
-      "manual_note": {
-        "added_at": "2026-09-24",
-        "reason": "用户收藏",
-        "from": "recommended",
-        "auto_status": "recommended"
-      },
-      "snooze": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [],
-      "limitations": "需要用户提供充分上下文；部分功能依赖可选的 Claude 集成（artifacts、子代理、连接器），在无这些环境时采用手动替代流程。",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-21T01:19:28.138168+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
-      "skill_id": "anthropics/skills:skills/internal-comms/SKILL.md",
-      "name": "internal-comms",
-      "url": "https://github.com/anthropics/skills/blob/HEAD/skills/internal-comms/SKILL.md",
-      "author": "anthropics",
-      "summary_zh": "帮助编写公司内部沟通文档，如3P更新、公司通讯、FAQ、状态报告等，按公司偏好的格式和语气撰写。",
-      "quality_summary": null,
-      "skill_type": null,
-      "example_requests": [],
-      "key_features": [
-        "帮助编写公司内部沟通文档"
-      ],
-      "main_category": {
-        "id": "docs",
-        "name": "文档办公"
-      },
-      "tags": [
-        "内部沟通",
-        "状态报告",
-        "3P更新",
-        "公司通讯",
-        "FAQ"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [],
-      "source_type": "official",
-      "status": "candidate",
-      "manual_pick": true,
-      "manual_note": {
-        "added_at": "2026-09-24",
-        "reason": "用户收藏",
-        "from": "candidate",
-        "auto_status": "candidate"
-      },
-      "snooze": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [],
-      "limitations": "该技能的具体格式指南位于 examples/ 目录，未在评估材料中提供，实际使用时需参考仓库中的这些文件。",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-21T01:22:16.798458+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
       "skill_id": "anthropics/skills:skills/mcp-builder/SKILL.md",
       "name": "mcp-builder",
       "url": "https://github.com/anthropics/skills/blob/HEAD/skills/mcp-builder/SKILL.md",
@@ -279,61 +185,6 @@
       "limitations": "指南依赖参考文件，具体实现需按语言指南进行；未包含具体 API 服务细节。",
       "first_seen": "2026-09-20T16:59:36+00:00",
       "last_checked": "2026-09-21T01:22:53.506382+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
-      "skill_id": "anthropics/skills:skills/pptx/SKILL.md",
-      "name": "pptx",
-      "url": "https://github.com/anthropics/skills/blob/HEAD/skills/pptx/SKILL.md",
-      "author": "anthropics",
-      "summary_zh": "该技能用于创建、编辑、读取和分析 PowerPoint 演示文稿（.pptx/.potx），涵盖从模板生成、内容修改到视觉 QA 的全流程，适用于制作幻灯片、解析演示文稿内容等场景。",
-      "quality_summary": null,
-      "skill_type": null,
-      "example_requests": [
-        "“制作幻灯片、解析演示文稿内容”"
-      ],
-      "key_features": [
-        "涵盖从模板生成、内容修改到视觉 QA 的全流程"
-      ],
-      "main_category": {
-        "id": "docs",
-        "name": "文档办公"
-      },
-      "tags": [
-        "PPT",
-        "演示文稿",
-        "幻灯片",
-        "文档生成"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "pptxgenjs",
-        "markitdown[pptx]",
-        "Pillow",
-        "defusedxml",
-        "lxml",
-        "LibreOffice (soffice)",
-        "pdftoppm (Poppler)"
-      ],
-      "source_type": "official",
-      "status": "recommended",
-      "manual_pick": true,
-      "manual_note": {
-        "added_at": "2026-09-22",
-        "reason": "用户收藏",
-        "from": "recommended",
-        "auto_status": "recommended"
-      },
-      "snooze": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [],
-      "limitations": "字体渲染在 LibreOffice 预览中可能不准确；操作需遵循特定脚本和规则，直接编辑 XML 有风险；依赖较多，需预先安装。",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-21T01:24:03.458704+08:00",
       "content_changed_at": null,
       "upstream_status": "ok",
       "license": null
@@ -4795,6 +4646,55 @@
   ],
   "owned_entries": [
     {
+      "skill_id": "anthropics/skills:skills/doc-coauthoring/SKILL.md",
+      "name": "doc-coauthoring",
+      "url": "https://github.com/anthropics/skills/blob/HEAD/skills/doc-coauthoring/SKILL.md",
+      "author": "anthropics",
+      "summary_zh": "引导用户通过背景收集、细化结构与读者测试三个阶段协作撰写文档，适用于撰写文档、提案、技术规格、决策文档等场景。",
+      "quality_summary": null,
+      "skill_type": null,
+      "example_requests": [
+        "“撰写文档、提案、技术规格、决策文档”"
+      ],
+      "key_features": [
+        "引导用户通过背景收集、细化结构与读者测试三个阶段协作撰写文档"
+      ],
+      "main_category": {
+        "id": "docs",
+        "name": "文档办公"
+      },
+      "tags": [
+        "文档协作",
+        "写作辅助",
+        "结构化写作",
+        "提案写作",
+        "技术文档"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "source_type": "official",
+      "status": "recommended",
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-24",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      },
+      "snooze": null,
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "reason_codes": [],
+      "limitations": "需要用户提供充分上下文；部分功能依赖可选的 Claude 集成（artifacts、子代理、连接器），在无这些环境时采用手动替代流程。",
+      "first_seen": "2026-09-20T16:59:36+00:00",
+      "last_checked": "2026-09-21T01:19:28.138168+08:00",
+      "content_changed_at": null,
+      "upstream_status": "ok",
+      "license": null,
+      "original_partition": "manual"
+    },
+    {
       "skill_id": "anthropics/skills:skills/docx/SKILL.md",
       "name": "docx",
       "url": "https://github.com/anthropics/skills/blob/HEAD/skills/docx/SKILL.md",
@@ -4899,6 +4799,53 @@
       "original_partition": "manual"
     },
     {
+      "skill_id": "anthropics/skills:skills/internal-comms/SKILL.md",
+      "name": "internal-comms",
+      "url": "https://github.com/anthropics/skills/blob/HEAD/skills/internal-comms/SKILL.md",
+      "author": "anthropics",
+      "summary_zh": "帮助编写公司内部沟通文档，如3P更新、公司通讯、FAQ、状态报告等，按公司偏好的格式和语气撰写。",
+      "quality_summary": null,
+      "skill_type": null,
+      "example_requests": [],
+      "key_features": [
+        "帮助编写公司内部沟通文档"
+      ],
+      "main_category": {
+        "id": "docs",
+        "name": "文档办公"
+      },
+      "tags": [
+        "内部沟通",
+        "状态报告",
+        "3P更新",
+        "公司通讯",
+        "FAQ"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "source_type": "official",
+      "status": "candidate",
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-24",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
+      "snooze": null,
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "reason_codes": [],
+      "limitations": "该技能的具体格式指南位于 examples/ 目录，未在评估材料中提供，实际使用时需参考仓库中的这些文件。",
+      "first_seen": "2026-09-20T16:59:36+00:00",
+      "last_checked": "2026-09-21T01:22:16.798458+08:00",
+      "content_changed_at": null,
+      "upstream_status": "ok",
+      "license": null,
+      "original_partition": "manual"
+    },
+    {
       "skill_id": "anthropics/skills:skills/pdf/SKILL.md",
       "name": "pdf",
       "url": "https://github.com/anthropics/skills/blob/HEAD/skills/pdf/SKILL.md",
@@ -4957,6 +4904,62 @@
       "limitations": "表单填写和高级功能依赖未提供的 FORMS.md 和 REFERENCE.md；未提供完整的依赖安装说明；未声明支持的平台和 Python 版本。",
       "first_seen": "2026-09-20T16:59:36+00:00",
       "last_checked": "2026-09-21T01:23:40.719525+08:00",
+      "content_changed_at": null,
+      "upstream_status": "ok",
+      "license": null,
+      "original_partition": "manual"
+    },
+    {
+      "skill_id": "anthropics/skills:skills/pptx/SKILL.md",
+      "name": "pptx",
+      "url": "https://github.com/anthropics/skills/blob/HEAD/skills/pptx/SKILL.md",
+      "author": "anthropics",
+      "summary_zh": "该技能用于创建、编辑、读取和分析 PowerPoint 演示文稿（.pptx/.potx），涵盖从模板生成、内容修改到视觉 QA 的全流程，适用于制作幻灯片、解析演示文稿内容等场景。",
+      "quality_summary": null,
+      "skill_type": null,
+      "example_requests": [
+        "“制作幻灯片、解析演示文稿内容”"
+      ],
+      "key_features": [
+        "涵盖从模板生成、内容修改到视觉 QA 的全流程"
+      ],
+      "main_category": {
+        "id": "docs",
+        "name": "文档办公"
+      },
+      "tags": [
+        "PPT",
+        "演示文稿",
+        "幻灯片",
+        "文档生成"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "pptxgenjs",
+        "markitdown[pptx]",
+        "Pillow",
+        "defusedxml",
+        "lxml",
+        "LibreOffice (soffice)",
+        "pdftoppm (Poppler)"
+      ],
+      "source_type": "official",
+      "status": "recommended",
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-22",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      },
+      "snooze": null,
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "reason_codes": [],
+      "limitations": "字体渲染在 LibreOffice 预览中可能不准确；操作需遵循特定脚本和规则，直接编辑 XML 有风险；依赖较多，需预先安装。",
+      "first_seen": "2026-09-20T16:59:36+00:00",
+      "last_checked": "2026-09-21T01:24:03.458704+08:00",
       "content_changed_at": null,
       "upstream_status": "ok",
       "license": null,
@@ -5919,6 +5922,24 @@
         "name": "react-best-practices",
         "added_at": "2026-09-26",
         "source_url": "https://github.com/vercel-labs/agent-skills/blob/HEAD/skills/react-best-practices/SKILL.md"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/doc-coauthoring/SKILL.md",
+        "name": "doc-coauthoring",
+        "added_at": "2026-09-26",
+        "source_url": "https://github.com/anthropics/skills/blob/HEAD/skills/doc-coauthoring/SKILL.md"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/internal-comms/SKILL.md",
+        "name": "internal-comms",
+        "added_at": "2026-09-26",
+        "source_url": "https://github.com/anthropics/skills/blob/HEAD/skills/internal-comms/SKILL.md"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/pptx/SKILL.md",
+        "name": "pptx",
+        "added_at": "2026-09-26",
+        "source_url": "https://github.com/anthropics/skills/blob/HEAD/skills/pptx/SKILL.md"
       }
     ]
   }

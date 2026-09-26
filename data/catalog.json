@@ -9937,6 +9937,24 @@
         "name": "react-best-practices",
         "added_at": "2026-09-26",
         "source_url": "https://github.com/vercel-labs/agent-skills/blob/HEAD/skills/react-best-practices/SKILL.md"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/doc-coauthoring/SKILL.md",
+        "name": "doc-coauthoring",
+        "added_at": "2026-09-26",
+        "source_url": "https://github.com/anthropics/skills/blob/HEAD/skills/doc-coauthoring/SKILL.md"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/internal-comms/SKILL.md",
+        "name": "internal-comms",
+        "added_at": "2026-09-26",
+        "source_url": "https://github.com/anthropics/skills/blob/HEAD/skills/internal-comms/SKILL.md"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/pptx/SKILL.md",
+        "name": "pptx",
+        "added_at": "2026-09-26",
+        "source_url": "https://github.com/anthropics/skills/blob/HEAD/skills/pptx/SKILL.md"
       }
     ],
     "source": "docs/plans/2026-09-24-已收录管理实施方案.md",
