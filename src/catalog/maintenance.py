@@ -348,13 +348,14 @@ def reconcile_pool(root_dir: str | Path = ".", *, apply: bool = False) -> dict[s
                     rec = read_json(p)
                     eid = rec.get("evaluation_id")
                     if eid:
-                        records_by_eid[eid] = rec
+                        # 与运行器一致：先读本地记录，Actions 仅作缺失时的回退。
+                        records_by_eid.setdefault(eid, rec)
                     sk_id = rec.get("skill_id")
                     fp = rec.get("content_fingerprint")
                     rv = rec.get("rules_version")
                     mv = rec.get("model_config_version")
                     if sk_id and fp:
-                        records_by_identity[(sk_id, fp, str(rv or ""), str(mv or ""))] = rec
+                        records_by_identity.setdefault((sk_id, fp, str(rv or ""), str(mv or "")), rec)
                 except Exception:
                     continue
 

@@ -824,6 +824,38 @@ class LocalRunTest(unittest.TestCase):
         self.assertEqual(len(rec1_after["resume_history"]), 1)
         self.assertEqual(rec1_after["resume_history"][0]["reason"], "已修复提示词")
 
+    def test_reconcile_prefers_local_result_and_falls_back_to_actions(self):
+        from src.catalog.maintenance import reconcile_pool
+        from src.catalog.pool import create_pool_from_candidates, save_pool, load_pool
+        from src.catalog.evaluation import evaluation_id
+        from src.catalog.budget import evaluation_filename
+        from src.infra.files import write_json_atomic
+        candidates = [self.candidate(i) for i in range(3)]
+        for candidate in candidates:
+            candidate.content_fingerprint = 'fp'
+        pool_file = self.root / 'data/local/pool.json'
+        save_pool(pool_file, create_pool_from_candidates(candidates))
+        for i, candidate in enumerate(candidates):
+            eid = evaluation_id(candidate, self.cfg['model'], self.cfg['rules'])
+            record = {'evaluation_id': eid, 'skill_id': candidate.skill_id,
+                      'content_fingerprint': 'fp', 'rules_version': self.cfg['rules']['rules_version'],
+                      'model_config_version': self.cfg['model'].get('model_config_version'),
+                      'status': 'failed', 'retryable': False, 'attempts': 1,
+                      'error': {'reason_code': 'MODEL_ERROR'}}
+            write_json_atomic(self.root / 'data/state/evaluations' / evaluation_filename(eid), record)
+            if i < 2:
+                record.update(status='completed' if i == 0 else 'failed',
+                              error=None if i == 0 else {'reason_code': 'LENGTH_EXCEEDED'})
+                write_json_atomic(self.root / 'data/local/state/evaluations' / evaluation_filename(eid), record)
+        preview = reconcile_pool(self.root)
+        self.assertEqual([(c['seq'], c['target_status']) for c in preview['changes']],
+                         [(1, 'length_exceeded'), (2, 'blocked')])
+        applied = reconcile_pool(self.root, apply=True)
+        self.assertEqual(applied['reconciled'], 2)
+        self.assertEqual([item.status for item in load_pool(pool_file).items],
+                         ['pending', 'length_exceeded', 'blocked'])
+        self.assertEqual(reconcile_pool(self.root)['reconciled'], 0)
+
 
 if __name__ == "__main__":
     unittest.main()
