@@ -232,14 +232,15 @@ class LocalRunTest(unittest.TestCase):
         self.assertEqual(report["failed_evaluations"], 3)
         self.assertNotIn("test-secret-never-print", json.dumps(report))
 
-    def test_network_failure_logs_safe_details_and_stops_on_unknown_usage(self):
+    def test_network_failure_logs_safe_details_and_stops_when_no_retries_remain(self):
         def failure(candidate, text, **kwargs):
             self.calls.append(candidate.skill_id)
             return {"ok": False, "reason_code": "NETWORK_ERROR", "error": "test-secret-never-print",
                     "call": ModelCallResult(error_type="ReadTimeout", latency_ms=30000, attempts=1,
                                             error="test-secret-never-print")}
         report = self.collect(evaluate_fn=failure)
-        self.assertEqual(report["stop_reason"], "usage_unknown")
+        self.assertEqual(report["stop_reason"], "retry_exhausted")
+        self.assertNotIn('usage_unknown', report['stop_causes'])
         self.assertEqual(len(self.calls), 1)
         self.assertEqual(report["calls"][0]["diagnostics"]["error_type"], "ReadTimeout")
         self.assertEqual(report["calls"][0]["diagnostics"]["latency_ms"], 30000)
@@ -942,6 +943,98 @@ class LocalRunTest(unittest.TestCase):
                 self.assertEqual(record['error']['reason_code'], 'RESUME_STATE_INVALID')
                 pool = json.loads(pool_file.read_text(encoding='utf-8'))
                 self.assertEqual(pool['candidates'][0]['status'], 'blocked')
+
+
+    def collect_with_real_evaluator(self, responses):
+        from unittest.mock import patch
+        from src.catalog.evaluation import evaluate
+        from tests.test_catalog_quality import TEXT
+        def fetch(url, **kwargs):
+            return FetchResult(url=url, ok=True, text=TEXT)
+        with patch('src.catalog.evaluation.call_model', side_effect=responses) as model:
+            result = self.collect(count=2, evaluate_fn=evaluate, fetch_fn=fetch)
+        return result, model.call_count
+
+    def timeout_response(self):
+        return ModelCallResult(ok=False, reason_code='NETWORK_ERROR', error_type='ReadTimeout',
+                               attempts=1, latency_ms=180300)
+
+    def valid_responses(self):
+        from tests.test_catalog_quality import assessment, response
+        return [response(assessment(self.cfg['rules'])), response(assessment(self.cfg['rules']))]
+
+    def test_production_callback_retries_five_timeouts_and_retains_unknown_budget(self):
+        self.settings.update(max_retries=5, target_recommended=1)
+        result, calls = self.collect_with_real_evaluator(
+            [self.timeout_response() for _ in range(5)] + self.valid_responses())
+        self.assertEqual(calls, 7)
+        self.assertEqual(result['stop_reason'], 'target_reached')
+        self.assertEqual(result['usage']['requests'], 7)
+        self.assertEqual(result['usage']['unknown_usage_requests'], 5)
+        self.assertEqual(result['usage']['total_tokens'], 200)
+        self.assertEqual(result['budget_tokens'], 200 + result['unknown_usage_reserved_tokens'])
+        self.assertGreater(result['unknown_usage_reserved_tokens'], 0)
+        self.assertEqual([c['attempt'] for c in result['calls']], [1, 2, 3, 4, 5, 6, 6])
+        self.assertIn('重连 5/5', '\n'.join(self.logs))
+        self.assertNotIn('usage_unknown', result['stop_causes'])
+        record = json.loads(next((self.root / 'data/local/state/evaluations').glob('*.json')).read_text(encoding='utf-8'))
+        self.assertEqual(len(record['requests']), 7)
+        self.assertEqual(sum(c['unknown_usage_reserved_tokens'] for c in record['requests']),
+                         result['unknown_usage_reserved_tokens'])
+
+    def test_production_retryable_http_failures_recover(self):
+        self.settings.update(max_retries=5, target_recommended=1)
+        responses = [ModelCallResult(ok=False, reason_code='MODEL_ERROR', http_status=status, attempts=1)
+                     for status in (429, 500, 503)]
+        result, calls = self.collect_with_real_evaluator(responses + self.valid_responses())
+        self.assertEqual(calls, 5)
+        self.assertEqual(result['stop_reason'], 'target_reached')
+        self.assertEqual(result['usage']['unknown_usage_requests'], 3)
+
+    def test_production_timeout_exhaustion_requires_six_attempts(self):
+        self.settings['max_retries'] = 5
+        result, calls = self.collect_with_real_evaluator([self.timeout_response() for _ in range(6)])
+        self.assertEqual(calls, 6)
+        self.assertEqual(result['stop_reason'], 'retry_exhausted')
+        self.assertEqual(result['stop_causes'], ['retry_exhausted'])
+        self.assertEqual(result['usage']['unknown_usage_requests'], 6)
+        self.assertEqual(result['failed_requests'], 6)
+
+    def test_production_timeout_budget_stop_is_not_retry_exhaustion(self):
+        self.settings.update(max_retries=5, max_total_tokens=150)
+        result, calls = self.collect_with_real_evaluator([self.timeout_response()])
+        self.assertEqual(calls, 1)
+        self.assertEqual(result['stop_reason'], 'token_limit')
+        self.assertEqual(result['stop_causes'], ['token_limit'])
+        self.assertGreaterEqual(result['unknown_usage_reserved_tokens'], 150)
+
+    def test_production_success_without_usage_stops_before_review(self):
+        self.settings['max_retries'] = 5
+        responses = self.valid_responses()
+        responses[0].usage = {}
+        result, calls = self.collect_with_real_evaluator(responses)
+        self.assertEqual(calls, 1)
+        self.assertEqual(result['stop_reason'], 'usage_unknown')
+        self.assertNotIn('retry_exhausted', result['stop_causes'])
+
+    def test_production_truncated_response_without_usage_still_stops(self):
+        self.settings['max_retries'] = 5
+        result, calls = self.collect_with_real_evaluator([self.length_result(usage=False)['call']])
+        self.assertEqual(calls, 1)
+        self.assertEqual(result['skipped_length_exceeded'], 1)
+        self.assertEqual(result['stop_reason'], 'usage_unknown')
+        self.assertNotIn('retry_exhausted', result['stop_causes'])
+
+    def test_production_review_timeout_retains_both_rounds_usage(self):
+        self.settings.update(max_retries=5, target_recommended=1)
+        result, calls = self.collect_with_real_evaluator(
+            [self.valid_responses()[0], self.timeout_response()] + self.valid_responses())
+        self.assertEqual(calls, 4)
+        self.assertEqual(result['stop_reason'], 'target_reached')
+        self.assertEqual(result['usage']['total_tokens'], 300)
+        self.assertEqual(result['usage']['unknown_usage_requests'], 1)
+        self.assertEqual([c['stage'] for c in result['calls']],
+                         ['assessment', 'review', 'assessment', 'review'])
 
 
 if __name__ == "__main__":

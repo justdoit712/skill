@@ -484,6 +484,25 @@ class LocalCollection:
             root=self.root, cfg=self.cfg)
         self.dirty = True
 
+def _record_request_usage(state, call, *, retryable):
+    """真实回调和单次适配器共用记账与未知用量策略。"""
+    unknown_before = state.usage.unknown_usage_requests
+    state.active_call['usage'] = state.usage.add(call)
+    reserved = (state.usage.unknown_usage_requests - unknown_before) * state.unknown_reserve
+    state.report['unknown_usage_reserved_tokens'] += reserved
+    state.active_call['unknown_usage_reserved_tokens'] = reserved
+    state.active_call['diagnostics'] = {
+        'error_type': getattr(call, 'error_type', None),
+        'http_status': getattr(call, 'http_status', None),
+        'latency_ms': getattr(call, 'latency_ms', None),
+    }
+    # 网络/临时 HTTP 失败仍是未知用量，但允许在估算预算与尝试额度内重试。
+    # 非重试结果缺账单（含截断/格式错误）继续停机保护。
+    if state.active_call['usage']['total_tokens'] is None and not retryable:
+        state.stop_causes.add(STOP_USAGE_UNKNOWN)
+        state.report['stop_reason'] = resolve_primary_stop_reason(state.stop_causes)
+
+
 def _evaluate_with_retries(state, candidate, text, eid, record):
     resume_error = validate_pending_evaluation(candidate, text, state.cfg['rules'],
                                                state.cfg['taxonomy'], record.get('pending_evaluation'))
@@ -529,13 +548,9 @@ def _evaluate_with_retries(state, candidate, text, eid, record):
                 state.ledger.save_record(eid, checkpoint)
                 state.save()
                 return True
-            unknown_before = state.usage.unknown_usage_requests
-            state.active_call['usage'] = state.usage.add(request_call)
-            reserved = (state.usage.unknown_usage_requests - unknown_before) * state.unknown_reserve
-            state.report['unknown_usage_reserved_tokens'] += reserved
-            state.active_call['unknown_usage_reserved_tokens'] = reserved
-            state.active_call['diagnostics'] = {'error_type': getattr(request_call, 'error_type', None),
-                'http_status': getattr(request_call, 'http_status', None), 'latency_ms': getattr(request_call, 'latency_ms', None)}
+            request_decision = classify_result({'ok': request_call.ok, 'call': request_call,
+                                                'reason_code': request_call.reason_code})
+            _record_request_usage(state, request_call, retryable=request_decision.retryable)
             state.active_call['status'] = 'completed' if request_call.ok else 'failed'
             if getattr(request_call, 'reason_code', None) == REASON_LENGTH_EXCEEDED:
                 state.active_call.update(status=STATUS_LENGTH_EXCEEDED,
@@ -544,23 +559,14 @@ def _evaluate_with_retries(state, candidate, text, eid, record):
             checkpoint['requests'][-1] = dict(state.active_call)
             state.ledger.save_record(eid, checkpoint)
             observed.append(request_call)
-            if state.active_call['usage']['total_tokens'] is None:
-                state.stop_causes.add(STOP_USAGE_UNKNOWN)
-                state.report['stop_reason'] = resolve_primary_stop_reason(state.stop_causes)
             state.save()
 
         result = state.evaluate_fn(candidate, text, model_cfg=state.cfg['model'], rules=state.cfg['rules'], taxonomy=state.cfg['taxonomy'], sleep=state.sleep, on_request=on_request, pending_evaluation=record.get('pending_evaluation'))
         call = result.get('call')
+        decision = classify_result(result)
         if not observed and call is not None:
             # 兼容单次评估适配器；生产评估逐请求即时落账。
-            unknown_before = state.usage.unknown_usage_requests
-            state.active_call['usage'] = state.usage.add(call)
-            reserved_tokens = (state.usage.unknown_usage_requests - unknown_before) * state.unknown_reserve
-            state.report['unknown_usage_reserved_tokens'] += reserved_tokens
-            state.active_call['unknown_usage_reserved_tokens'] = reserved_tokens
-            state.active_call['diagnostics'] = {'error_type': getattr(call, 'error_type', None), 'http_status': getattr(call, 'http_status', None), 'latency_ms': getattr(call, 'latency_ms', None)}
-        
-        decision = classify_result(result)
+            _record_request_usage(state, call, retryable=decision.retryable)
         if state.active_call:
             state.active_call['stage'] = result.get('stage') or state.active_call.get('stage')
             state.active_call['status'] = (STATUS_LENGTH_EXCEEDED
@@ -880,9 +886,11 @@ def process_candidate(state, item):
         state.consecutive_failures, state.format_failures = update_failure_counters(
             result, decision, state.consecutive_failures, state.format_failures
         )
-        if _retryable(result) and state.max_retries:
-            state.stop_causes.add(STOP_RETRY_EXHAUSTED)
-        elif not _retryable(result):
+        if decision.retryable:
+            final_record = state.ledger.get(eid) or {}
+            if int(final_record.get('attempts') or 0) >= int(final_record.get('max_attempts') or state.max_attempts):
+                state.stop_causes.add(STOP_RETRY_EXHAUSTED)
+        else:
             block_info = {
                 'evaluation_id': eid,
                 'reason': 'NON_RETRYABLE_FAILURE',
@@ -902,7 +910,8 @@ def process_candidate(state, item):
             state.log(f"[阻止] #{seq} {candidate.skill_id}：评估失败且不可重试（{result.get('reason_code')}），已持久化为 blocked。")
         if state.consecutive_failures >= state.settings['max_consecutive_failures']:
             state.stop_causes.add(STOP_MODEL_FAILURES)
-    if state.active_call and (state.active_call.get('usage') or {}).get('total_tokens') is None:
+    if (state.active_call and (state.active_call.get('usage') or {}).get('total_tokens') is None
+            and not decision.retryable):
         state.stop_causes.add(STOP_USAGE_UNKNOWN)
         state.log("[停止] 当前响应用量未知；本条状态已保存，后续付费调用已停止。")
     state.active_eid = state.active_call = None
@@ -1012,7 +1021,7 @@ def _collect(root, local, settings, cfg, discover_fn, fetch_fn, evaluate_fn, log
             state.stop_causes.add(STOP_TOKEN_LIMIT)
         elif state.settings.get('max_evaluations') and state.report['evaluations'] >= state.settings['max_evaluations']:
             state.stop_causes.add(STOP_EVALUATION_LIMIT)
-        else:
+        elif not state.stop_causes:
             state.stop_causes.add(STOP_CANDIDATES_EXHAUSTED)
         state.report['stop_causes'] = sorted(list(state.stop_causes))
         state.report['stop_reason'] = resolve_primary_stop_reason(state.stop_causes)
