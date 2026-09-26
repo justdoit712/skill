@@ -6,7 +6,7 @@
 <title>Skills 导航目录</title>
 <meta name="description" content="公开的 AI Agent Skills 导航目录：只收录技能的名称、原始链接、中文简述、分类与评估依据，不下载、不镜像、不安装、不执行任何技能包。">
 <link rel="canonical" href="https://justdoit712.github.io/skill/">
-<link rel="stylesheet" href="styles.css?v=20260927_1">
+<link rel="stylesheet" href="styles.css?v=20260927_2">
 </head>
 <body>
 
@@ -146,41 +146,6 @@
   </div>
 </div>
 
-<!-- 私人详情管理弹窗 -->
-<div id="private-modal" class="modal-overlay" hidden>
-  <div class="modal-content" role="dialog" aria-labelledby="private-modal-title" aria-modal="true">
-    <div class="modal-head">
-      <h3 id="private-modal-title">编辑私人详情</h3>
-      <button id="btn-close-private-modal" class="modal-close" aria-label="关闭">&times;</button>
-    </div>
-    <div class="modal-body">
-      <p class="private-modal-hint" style="font-size: 13px; color: #64748b; background: #f8fafc; padding: 8px 12px; border-radius: 6px; border: 1px solid #e2e8f0; margin-bottom: 14px;">
-        ℹ️ <strong>隐私说明：</strong>管理链接与备注<strong>仅保存于当前浏览器</strong>，不会随名单配置同步到 GitHub，也不会进入公开部署产物。清除浏览器数据会丢失未备份的私人详情。
-      </p>
-      <div class="form-group" style="margin-bottom: 12px;">
-        <label for="private-skill-id-display" style="display:block; font-size:12px; color:#64748b; font-weight:600; margin-bottom:4px;">技能 ID</label>
-        <input id="private-skill-id-display" type="text" readonly disabled style="width:100%; padding:8px 10px; font-size:13px; background:#f1f5f9; border:1px solid #cbd5e1; border-radius:6px; color:#475569;">
-      </div>
-      <div class="form-group" style="margin-bottom: 12px;">
-        <label for="private-managed-url" style="display:block; font-size:12px; color:#64748b; font-weight:600; margin-bottom:4px;">我的管理链接（可选，仅支持 http/https，如个人 fork 或微调工作流）：</label>
-        <input id="private-managed-url" type="url" placeholder="https://github.com/my-account/my-customized-skill" style="width:100%; padding:8px 10px; font-size:13px; border:1px solid #cbd5e1; border-radius:6px;">
-        <div id="private-url-error" style="color:#dc2626; font-size:12px; margin-top:4px;"></div>
-      </div>
-      <div class="form-group" style="margin-bottom: 14px;">
-        <label for="private-note" style="display:block; font-size:12px; color:#64748b; font-weight:600; margin-bottom:4px;">私人备注（可选，例如定制说明、适用场景或私有配置）：</label>
-        <textarea id="private-note" rows="3" placeholder="例如：已在内网工作流中引入，调整了提示词模板与环境依赖。" style="width:100%; padding:8px 10px; font-size:13px; border:1px solid #cbd5e1; border-radius:6px; resize:vertical; font-family:inherit;"></textarea>
-      </div>
-    </div>
-    <div class="modal-actions" style="display:flex; justify-content:space-between;">
-      <button id="btn-delete-private" class="btn-action btn-block" style="color:#dc2626;">删除私人详情</button>
-      <div style="display:flex; gap:8px;">
-        <button id="btn-cancel-private" class="btn-secondary">取消</button>
-        <button id="btn-save-private" class="btn-primary" style="background:#16a34a; border-color:#16a34a; color:#fff;">保存到本浏览器</button>
-      </div>
-    </div>
-  </div>
-</div>
-
 <!-- 收藏区收录二次确认弹窗 -->
 <div id="confirm-modal" class="modal-overlay" hidden>
   <div class="modal-content" role="dialog" aria-labelledby="confirm-modal-title" aria-modal="true" style="max-width: 480px;">
@@ -197,7 +162,7 @@
         <ul style="margin: 6px 0 0 16px; padding: 0;">
           <li>将从公开目录与定向查找中立即隐藏；</li>
           <li>本地维护及流水线运行时将 0 Token 跳过评估；</li>
-          <li>将加入待同步的已收录名单（可在顶部浮动栏或已收录视图中导出）。</li>
+          <li>将加入待同步的已收录名单（可在底部浮动栏中查看并导出变更包）。</li>
         </ul>
       </div>
     </div>
@@ -208,7 +173,6 @@
   </div>
 </div>
 
-<input type="file" id="private-backup-file-input" accept=".json,application/json" style="display:none;">
 <div id="toast-container" class="toast-container" aria-live="polite"></div>
 
 <footer class="site-footer">
@@ -219,7 +183,7 @@
   </div>
 </footer>
 
-<script type="module" src="js/app.js?v=20260927_1"></script>
+<script type="module" src="js/app.js?v=20260927_2"></script>
 
 </body>
 </html>

@@ -27,11 +27,7 @@ import {
   markOwned,
   unmarkOwned
 } from "./owned-state.js";
-import {
-  showToast,
-  initPrivateDetailsModal,
-  initPrivateBackup
-} from "./owned-view.js";
+import { showToast } from "./owned-view.js";
 
 // 全局应用运行时状态
 const state = {
@@ -88,15 +84,6 @@ const el = {
   btnOpenSnoozed: document.getElementById("btn-open-snoozed"),
   countSnoozedActive: document.getElementById("count-snoozed-active"),
   snoozedList: document.getElementById("snoozed-list"),
-  privateModal: document.getElementById("private-modal"),
-  btnClosePrivateModal: document.getElementById("btn-close-private-modal"),
-  btnCancelPrivate: document.getElementById("btn-cancel-private"),
-  btnSavePrivate: document.getElementById("btn-save-private"),
-  btnDeletePrivate: document.getElementById("btn-delete-private"),
-  privateSkillIdDisplay: document.getElementById("private-skill-id-display"),
-  privateManagedUrl: document.getElementById("private-managed-url"),
-  privateNote: document.getElementById("private-note"),
-  privateUrlError: document.getElementById("private-url-error"),
   confirmModal: document.getElementById("confirm-modal"),
   confirmModalSkillName: document.getElementById("confirm-modal-skill-name"),
   btnCloseConfirmModal: document.getElementById("btn-close-confirm-modal"),
@@ -251,9 +238,7 @@ el.tabCand.addEventListener("click", () => setTab("candidate"));
 el.tabManual.addEventListener("click", () => setTab("manual"));
 if (el.tabFind) el.tabFind.addEventListener("click", () => setTab("find"));
 
-// 初始化私人详情与备份控制器
-const privateModalController = initPrivateDetailsModal(el, ownedState, () => apply());
-initPrivateBackup(el, ownedState, () => apply());
+// 初始化确认弹窗控制器
 const confirmModalController = initConfirmModal(el);
 
 function executeMarkOwned(sid, skillName, sourceUrl, fromWhere, card) {
@@ -338,10 +323,6 @@ el.list.addEventListener("click", e => {
       apply();
     }
     showToast("已取消已收录并按原分区规则恢复");
-  } else if (action === "edit-private") {
-    if (privateModalController) {
-      privateModalController.open(sid);
-    }
   }
 });
 

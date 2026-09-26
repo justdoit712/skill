@@ -731,16 +731,6 @@ code {
   border-color: #fca5a5;
 }
 
-.btn-action.btn-private {
-  color: #4f46e5;
-  border-color: #c7d2fe;
-  background: #eef2ff;
-}
-.btn-action.btn-private:hover {
-  background: #e0e7ff;
-  border-color: #a5b4fc;
-}
-
 .tag.tag-owned {
   background: #d1fae5;
   color: #065f46;
@@ -750,48 +740,6 @@ code {
 .tag.tag-origin {
   background: #f1f5f9;
   color: #475569;
-}
-
-.owned-toolbar-card {
-  list-style: none;
-  margin-bottom: 16px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 12px 16px;
-}
-.owned-toolbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-.owned-toolbar-desc {
-  font-size: 13px;
-  color: var(--muted);
-}
-.owned-toolbar-desc strong {
-  color: var(--text);
-}
-.owned-backup-actions {
-  display: flex;
-  gap: 8px;
-}
-
-.detail.private-link,
-.detail.private-note {
-  margin: 8px 0 0;
-  font-size: 13px;
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
-  border-radius: 6px;
-  padding: 6px 10px;
-  word-break: break-all;
-}
-.detail.private-link a {
-  color: #2563eb;
-  text-decoration: underline;
 }
 
 .toast-container {
