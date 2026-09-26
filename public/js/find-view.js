@@ -56,6 +56,8 @@ export function renderFindView(container, report, ownedState = null) {
     bannerHtml = '<div class="find-status-banner info">已达到检索轮数上限，尚未集齐目标数量；当前结果已保存，可增加轮数后续跑。</div>';
   } else if (stopReason === "target_reached") {
     bannerHtml = '<div class="find-status-banner info">已集齐目标短名单，查找提前完成。</div>';
+  } else if (stopReason === "candidates_exhausted") {
+    bannerHtml = '<div class="find-status-banner info">ℹ️ 本次检索候选已全部评估完毕；未发现满足强匹配标准的条目，已列出相关备选供参考。</div>';
   } else if (stopReason === "interrupted") {
     bannerHtml = '<div class="find-status-banner warning">⏸️ 用户主动中断查找过程 (interrupted)；已安全保留中断前已评估的全部结果与 Token 用量。</div>';
   } else if (stopReason === "model_failures") {

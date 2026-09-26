@@ -31,5 +31,5 @@
 - **运行环境**：本项目仅在 Windows PowerShell 环境下本地运行与开发，不部署亦不在 Linux 中运行。
 - **Python 解释器**：优先使用项目内的虚拟环境解释器 `.\.venv\Scripts\python.exe`。
 - **本地任务入口**：`.\.venv\Scripts\python.exe tools/run_local.py`
-- **前端测试**：`node --test tests/frontend`
+- **前端测试**：`npm test`
 - **单元测试**：`.\.venv\Scripts\python.exe -m unittest discover -s tests -q`

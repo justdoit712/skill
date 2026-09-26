@@ -61,3 +61,8 @@ test("target reached and exhausted rounds explain different outcomes", () => {
   assert.match(render({ ...report, stop_reason: "target_reached" }), /提前完成/);
   assert.match(render({ ...report, status: "stopped", stop_reason: "round_limit" }), /尚未集齐目标数量/);
 });
+
+test("candidates exhausted explains that no strong match was found", () => {
+  assert.match(render({ ...report, stop_reason: "candidates_exhausted" }), /全部评估完毕；未发现满足强匹配标准的条目/);
+});
+
