@@ -4,13 +4,13 @@
   "rules_version": "1.1.0",
   "counts": {
     "recommended": 50,
-    "candidate": 32,
-    "manual": 13,
+    "candidate": 33,
+    "manual": 10,
     "pending": 0,
     "processing_failure": 0,
-    "total_evaluated": 95,
-    "owned": 10,
-    "owned_in_catalog": 10
+    "total_evaluated": 93,
+    "owned": 12,
+    "owned_in_catalog": 12
   },
   "categories": [
     {
@@ -27,7 +27,7 @@
     },
     {
       "id": "dev",
-      "count": 59
+      "count": 57
     },
     {
       "id": "docs",
@@ -292,53 +292,6 @@
       "license": null
     },
     {
-      "skill_id": "vercel-labs/agent-skills:skills/composition-patterns/SKILL.md",
-      "name": "composition-patterns",
-      "url": "https://github.com/vercel-labs/agent-skills/blob/HEAD/skills/composition-patterns/SKILL.md",
-      "author": "vercel-labs",
-      "summary_zh": "提供 React 组件组合模式指南，用于重构布尔属性过多的组件、构建灵活组件库和设计可复用 API，典型使用场景包括组件架构设计、状态管理与 React 19 迁移。",
-      "quality_summary": null,
-      "skill_type": null,
-      "example_requests": [],
-      "key_features": [
-        "提供 React 组件组合模式指南"
-      ],
-      "main_category": {
-        "id": "dev",
-        "name": "编程开发"
-      },
-      "tags": [
-        "react",
-        "composition-patterns",
-        "component-architecture",
-        "frontend"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "React 19+ (仅适用于 react19 规则)"
-      ],
-      "source_type": "official",
-      "status": "candidate",
-      "manual_pick": true,
-      "manual_note": {
-        "added_at": "2026-09-24",
-        "reason": "用户收藏",
-        "from": "candidate",
-        "auto_status": "candidate"
-      },
-      "snooze": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [],
-      "limitations": "仅提供规则索引，具体规则和代码示例需查阅配套规则文件；React 19 部分仅适用于 React 19+。",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-24T17:17:43.316611+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
       "skill_id": "trailofbits/skills:plugins/goal-prompt/skills/goal-prompt/SKILL.md",
       "name": "goal-prompt",
       "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/goal-prompt/skills/goal-prompt/SKILL.md",
@@ -582,69 +535,59 @@
       "license": null
     },
     {
-      "skill_id": "google-labs-code/stitch-skills:plugins/stitch-build/skills/react-native/SKILL.md",
-      "name": "react-native",
-      "url": "https://github.com/google-labs-code/stitch-skills/blob/HEAD/plugins/stitch-build/skills/react-native/SKILL.md",
-      "author": "google-labs-code",
-      "summary_zh": "把 Stitch 网页设计（HTML/CSS + Tailwind 配置）转换为使用 StyleSheet 的 React Native 组件，或同步更新已有原生组件以对齐最新设计。适用于移动端开发中按设计稿生成组件、主题令牌、数据层与导航结构的场景。",
+      "skill_id": "getsentry/skills:skills/commit/SKILL.md",
+      "name": "commit",
+      "url": "https://github.com/getsentry/skills/blob/HEAD/skills/commit/SKILL.md",
+      "author": "getsentry",
+      "summary_zh": "该技能用于指导生成符合Sentry规范的Git提交信息，包括分支检查、提交类型定义及命令执行示例。",
       "quality_summary": {
         "review_status": "not_required",
         "review_note": null,
         "blocking_reasons": [
-          "初评：质量门槛未通过：actionability: 提供可直接照做的映射表（HTML→RN 组件）、样式逐项映射（font-size→fontSize 等）、不支持属性清单以及 Platform.select 平台差异代码示例，另有组件模板文件作为起点；步骤具体、判断条件明确。；程序未能核实所引原文与行号。",
-          "初评：frontmatter 明确声明 allowed-tools（含 Stitch MCP 通配、Bash、Read、Write、web_fetch）；正文提到需 npm install、react-native-svg、react-native-safe-area-context、React Navigation 等依赖及平台差异处理，依赖有声明但未声明具体版本与运行环境。；程序未能核实所引原文与行号。"
+          "初评：材料属于编程开发领域，涉及Git提交规范与代码管理。；程序未能核实所引原文与行号。",
+          "初评：第3行描述：'Use for every request to commit changes or draft a commit message.' 明确用途为生成Sentry风格的提交信息。；程序未能核实所引原文与行号。",
+          "初评：质量门槛未通过：practical_value: 提供了具体的提交类型列表和格式约束，比通用提示词更具针对性。；程序未能核实所引原文与行号。；actionability: 包含明确的分支检查步骤和可直接复制的git commit命令模板。；程序未能核实所引原文与行号。",
+          "初评：技能名称'Sentry Commit Messages'与内容中强调的'Sentry-style'、'Fixes SENTRY-xxx'等特征一致。；程序未能核实所引原文与行号。",
+          "初评：依赖标准命令行工具 git，未声明特殊外部依赖。；程序未能核实所引原文与行号。",
+          "初评：第38-39行明确要求不包含客户名称、PII等敏感信息，符合安全规范。；程序未能核实所引原文与行号。"
         ],
         "checks": {
           "practical_value": {
-            "value": "pass",
-            "evidence": "面向具体交付物：将 Stitch 设计转换为可编译的 React Native 组件，产出 src/theme.ts、src/data/mockData.ts、atoms/molecules/organisms 组件与 App.tsx 导航；相比泛泛提示词，额外提供元素映射表、主题令牌提取要求、原子化拆分与逻辑隔离规则。"
+            "value": "unknown",
+            "evidence": "提供了具体的提交类型列表和格式约束，比通用提示词更具针对性。；程序未能核实所引原文与行号。"
           },
           "actionability": {
             "value": "unknown",
-            "evidence": "提供可直接照做的映射表（HTML→RN 组件）、样式逐项映射（font-size→fontSize 等）、不支持属性清单以及 Platform.select 平台差异代码示例，另有组件模板文件作为起点；步骤具体、判断条件明确。；程序未能核实所引原文与行号。"
+            "evidence": "包含明确的分支检查步骤和可直接复制的git commit命令模板。；程序未能核实所引原文与行号。"
           },
           "verification": {
             "value": "pass",
-            "evidence": "给出可检查的完成条件：每个 Phase 的 GATE、npm run validate 逐文件校验、tsc --noEmit 编译检查、architecture-checklist.md 对照，以及 Troubleshooting 中的失败处理（缺导出 Props 接口、硬编码颜色、Text 外裸字符串、图片尺寸、FlatList 嵌套 ScrollView）；其中 validate 脚本与检查清单文件未随材料提供，实际可执行性无法完全核验。"
+            "evidence": "通过具体的格式规则（如长度限制、标点符号）和命令示例提供验收标准。"
           }
         },
         "review_checks": {}
       },
       "skill_type": "guideline",
       "example_requests": [
-        "把 Stitch 里的设计稿转成 React Native 组件",
-        "同步更新我现有的原生组件以对齐最新的 Stitch 设计"
+        "帮我写一个修复API空指针异常的提交信息",
+        "生成一个包含Breaking Change的提交记录"
       ],
       "key_features": [
-        "提供 HTML→React Native 元素与 CSS→StyleSheet 映射规则表",
-        "强制把颜色/间距/字号提取到 src/theme.ts，禁止硬编码",
-        "分四阶段并设 GATE，含 validate 与 tsc 校验步骤"
+        "强制要求非main/master分支提交",
+        "规定Subject行不超过70字符且使用祈使句",
+        "禁止在提交信息中包含PII或机密数据"
       ],
       "main_category": {
         "id": "dev",
         "name": "编程开发"
       },
       "tags": [
-        "React Native",
-        "设计稿转代码",
-        "移动端开发",
-        "StyleSheet",
-        "主题令牌"
+        "git",
+        "commit-message",
+        "conventional-commits"
       ],
       "platform_declared": null,
-      "dependencies_declared": [
-        "Stitch MCP 工具（stitch*:*）",
-        "Bash / Read / Write / web_fetch",
-        "Node.js 与 npm（npm install）",
-        "React Native、TypeScript",
-        "react-native-svg",
-        "react-native-safe-area-context",
-        "React Navigation",
-        "react-native-reanimated（动画替代方案）",
-        "scripts/fetch-stitch.sh",
-        "resources/component-template.tsx",
-        "resources/architecture-checklist.md"
-      ],
+      "dependencies_declared": [],
       "source_type": "official",
       "status": "candidate",
       "manual_pick": true,
@@ -662,184 +605,9 @@
         "QUALITY_BELOW_BAR",
         "INSUFFICIENT_EVIDENCE"
       ],
-      "limitations": "依赖 Stitch MCP 前缀工具与上游插件的脚本/资源文件（fetch-stitch.sh、component-template.tsx、architecture-checklist.md 未随材料提供，无法核验）；未声明 React Native/依赖版本与运行环境要求；校验步骤（npm run validate、模拟器审计）为可选且需用户授权。",
+      "limitations": "仅适用于遵循Sentry风格规范的Git仓库，通用性受限。",
       "first_seen": "2026-09-24T09:09:16+00:00",
-      "last_checked": "2026-09-26T09:06:52.644738+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
-      "skill_id": "google-labs-code/stitch-skills:plugins/stitch-build/skills/shadcn-ui/SKILL.md",
-      "name": "shadcn-ui",
-      "url": "https://github.com/google-labs-code/stitch-skills/blob/HEAD/plugins/stitch-build/skills/shadcn-ui/SKILL.md",
-      "author": "google-labs-code",
-      "summary_zh": "一份面向前端开发的 shadcn/ui 集成指南，指导组件的发现、安装、注册表查询、主题与变体定制以及可访问性维护。适用于在 React + Tailwind 项目中引入和定制 shadcn/ui 组件、排查导入与样式冲突等场景。",
-      "quality_summary": {
-        "review_status": "disagreed",
-        "review_note": "两轮独立评估存在分歧，留在候选区等待核实。",
-        "blocking_reasons": [
-          "初评：两轮独立评估存在分歧，留在候选区等待核实。",
-          "复核领域检查：该技能为前端组件集成指南，不涉及金融数据、回测或交易，非金融领域条目。；程序未能核实所引原文与行号。"
-        ],
-        "checks": {
-          "practical_value": {
-            "value": "pass",
-            "evidence": "面向具体任务：安装组件、初始化项目配置、定制主题与变体、扩展组件、排错。给出可直接执行的 CLI 命令与配置项说明、目录结构、cn()/cva/wrapper 组件代码，比泛泛提示词提供更明确的增量（例如 CLI 会自适应 Radix 或 Base UI 并更新 components.json）。"
-          },
-          "actionability": {
-            "value": "pass",
-            "evidence": "提供可复制的命令、MCP 工具调用名、目录结构、cn() 与 cva 代码、主题变量与扩展组件示例、常见问题判断条件（别名配置、Tailwind 配置、globals.css 导入、CSS 变量名一致性、依赖缺失）。属指南形态，无需附带可执行脚本。"
-          },
-          "verification": {
-            "value": "pass",
-            "evidence": "设有「Validation and Quality」提交前检查清单（tsc --noEmit 类型检查、lint、axe DevTools 可访问性测试、明暗模式视觉核对、断点响应检查），并有 Troubleshooting 一节点名失败现象与排查动作；对纯文档型技能属清晰验收条件。"
-          }
-        },
-        "review_checks": {
-          "practical_value": {
-            "value": "pass",
-            "evidence": "面向具体任务：新项目 create、已有项目 init、组件 add 与手动集成，并交付 components.json 配置、cn() 工具和 cva 变体等可直接复用的代码，优于泛泛的前端提示词。"
-          },
-          "actionability": {
-            "value": "pass",
-            "evidence": "提供可直接执行的命令（npx shadcn@latest add/init/create）、手动集成分步流程、组件扩展与 cva 变体示例代码，并列出 Import/Style/Dependency/Version 四类排错判断条件。"
-          },
-          "verification": {
-            "value": "pass",
-            "evidence": "设有明确的提交前校验清单（tsc --noEmit、lint、axe 无障碍检查、明暗模式视觉 QA、断点响应式检查），并在排错章节给出依赖与版本核对方式，构成可检查的验收条件。"
-          }
-        }
-      },
-      "skill_type": "guideline",
-      "example_requests": [
-        "把 shadcn 的 dialog 组件加进我的 React 项目",
-        "怎么配置 shadcn 的主题 CSS 变量和暗色模式"
-      ],
-      "key_features": [
-        "组件源码复制进项目，完全掌控与自由定制",
-        "支持自定义 Registry 与 blocks 目录查询",
-        "强调键盘导航、ARIA 与焦点管理的可访问性"
-      ],
-      "main_category": {
-        "id": "dev",
-        "name": "编程开发"
-      },
-      "tags": [
-        "前端",
-        "React",
-        "UI组件",
-        "Tailwind CSS",
-        "shadcn/ui"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "React 18+",
-        "Tailwind CSS 3.0+",
-        "Radix UI 或 Base UI",
-        "class-variance-authority",
-        "clsx",
-        "tailwind-merge",
-        "shadcn CLI：npx shadcn@latest",
-        "shadcn MCP 工具（list_components、get_component_metadata 等）"
-      ],
-      "source_type": "official",
-      "status": "candidate",
-      "manual_pick": true,
-      "manual_note": {
-        "added_at": "2026-09-26",
-        "reason": "用户收藏",
-        "from": "candidate",
-        "auto_status": "candidate"
-      },
-      "snooze": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [
-        "NEEDS_VERIFICATION"
-      ],
-      "limitations": "材料仅含 SKILL.md 本体；文末引用的 resources/*.md 与 examples/ 目录未提供，无法核验其内容。未声明除 React/Tailwind/UI 原语与 shadcn CLI、MCP 之外的运行环境与平台兼容性。",
-      "first_seen": "2026-09-24T09:09:16+00:00",
-      "last_checked": "2026-09-26T09:10:40.417198+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
-      "skill_id": "google-labs-code/stitch-skills:plugins/stitch-design/skills/extract-design-md/SKILL.md",
-      "name": "extract-design-md",
-      "url": "https://github.com/google-labs-code/stitch-skills/blob/HEAD/plugins/stitch-design/skills/extract-design-md/SKILL.md",
-      "author": "google-labs-code",
-      "summary_zh": "从 React/Vue/Svelte/Angular 或纯 HTML/CSS 前端源码中逆向提取设计系统（颜色、字体、间距、组件与布局规则），产出含 YAML frontmatter 的 .stitch/DESIGN.md。适用于项目无法构建或渲染时审计样式、统一设计令牌，或把既有视觉语言迁移到 Stitch。",
-      "quality_summary": {
-        "review_status": "not_required",
-        "review_note": null,
-        "blocking_reasons": [
-          "初评：所提供材料未见可疑行为：功能为读取项目源文件并写出 .stitch/DESIGN.md，无凭据读取/外传、无命令注入诱导、无越权说明；allowed-tools 中的 web_fetch 仅列为可用工具，正文未要求抓取或上传数据。但 references/*.md、examples/DESIGN.md 及 Phase 4 依赖的 manage-design-system 技能未随材料提供，无法核实其实际内容。；程序未能核实所引原文与行号。"
-        ],
-        "checks": {
-          "practical_value": {
-            "value": "pass",
-            "evidence": "面向具体任务（从前端源码提取设计系统并写出 .stitch/DESIGN.md），交付物明确；相比泛泛提示词，额外给出按框架定位样式的信号文件表、颜色按功能分组与近色去重、组件与布局的提取维度，属可复用增量。"
-          },
-          "actionability": {
-            "value": "pass",
-            "evidence": "步骤具体可执行：Phase 1 给出信号文件→框架映射表与目录结构示例并指引对应 references 文件；Phase 2 按 6 个设计维度列出检索位置与判断方式；Phase 3 给出 DESIGN.md 章节骨架与落盘路径。"
-          },
-          "verification": {
-            "value": "pass",
-            "evidence": "提供 8 条 Quality Checklist 作为交付前验收条件，并强制要求 YAML frontmatter（缺失即视为使用失败），Phase 3/4 亦说明完成条件（只需文档则 Phase 3 后结束）。未提供自动化测试，但属可检查的成品验收标准。"
-          }
-        },
-        "review_checks": {}
-      },
-      "skill_type": "guideline",
-      "example_requests": [
-        "从这个前端仓库提取设计系统，生成 DESIGN.md",
-        "审计这个项目的样式，说明它的设计语言"
-      ],
-      "key_features": [
-        "只读源码提取设计系统，无需构建或渲染应用",
-        "覆盖 React/Vue/Svelte/Angular/纯 CSS 与 Tailwind 配置",
-        "产出 .stitch/DESIGN.md，强制要求 YAML frontmatter"
-      ],
-      "main_category": {
-        "id": "product",
-        "name": "产品与设计"
-      },
-      "tags": [
-        "设计系统",
-        "前端源码分析",
-        "设计令牌",
-        "DESIGN.md",
-        "样式审计"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "允许工具：stitch*:*、Bash、Read、Write、web_fetch（SKILL.md frontmatter）",
-        "核心提取流程声明无需构建或运行时依赖"
-      ],
-      "source_type": "official",
-      "status": "candidate",
-      "manual_pick": true,
-      "manual_note": {
-        "added_at": "2026-09-26",
-        "reason": "用户收藏",
-        "from": "candidate",
-        "auto_status": "candidate"
-      },
-      "snooze": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [
-        "NEEDS_VERIFICATION",
-        "INSUFFICIENT_EVIDENCE"
-      ],
-      "limitations": "references/react-tailwind.md、vue.md、svelte.md、angular.md、plain-css.md 与 examples/DESIGN.md 未随材料提供，框架专项提取细节和输出模板无法核实；Phase 4 集成依赖未提供的 manage-design-system 技能与 Stitch MCP；未声明平台兼容性。",
-      "first_seen": "2026-09-24T09:09:16+00:00",
-      "last_checked": "2026-09-26T09:13:21.336136+08:00",
+      "last_checked": "2026-09-26T11:41:26.324526+08:00",
       "content_changed_at": null,
       "upstream_status": "ok",
       "license": null
@@ -3528,6 +3296,52 @@
       "license": null
     },
     {
+      "skill_id": "vercel-labs/agent-skills:skills/composition-patterns/SKILL.md",
+      "name": "composition-patterns",
+      "url": "https://github.com/vercel-labs/agent-skills/blob/HEAD/skills/composition-patterns/SKILL.md",
+      "author": "vercel-labs",
+      "summary_zh": "提供 React 组件组合模式指南，用于重构布尔属性过多的组件、构建灵活组件库和设计可复用 API，典型使用场景包括组件架构设计、状态管理与 React 19 迁移。",
+      "quality_summary": null,
+      "skill_type": null,
+      "example_requests": [],
+      "key_features": [
+        "提供 React 组件组合模式指南"
+      ],
+      "main_category": {
+        "id": "dev",
+        "name": "编程开发"
+      },
+      "tags": [
+        "react",
+        "composition-patterns",
+        "component-architecture",
+        "frontend"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "React 19+ (仅适用于 react19 规则)"
+      ],
+      "source_type": "official",
+      "status": "candidate",
+      "manual_pick": false,
+      "manual_note": null,
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      },
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "reason_codes": [],
+      "limitations": "仅提供规则索引，具体规则和代码示例需查阅配套规则文件；React 19 部分仅适用于 React 19+。",
+      "first_seen": "2026-09-20T16:59:36+00:00",
+      "last_checked": "2026-09-24T17:17:43.316611+08:00",
+      "content_changed_at": null,
+      "upstream_status": "ok",
+      "license": null
+    },
+    {
       "skill_id": "cloudflare/skills:skills/sandbox-migrate-to-next/SKILL.md",
       "name": "sandbox-migrate-to-next",
       "url": "https://github.com/cloudflare/skills/blob/HEAD/skills/sandbox-migrate-to-next/SKILL.md",
@@ -3966,6 +3780,266 @@
       "limitations": "材料仅含 SKILL.md，所引用的 references/root-cause.md、searching.md、triage.md、reporting.md 与 resources/ 下的查询、报告模板均未提供，其内容与可用性无法核实；未声明运行环境及 CodeQL/Semgrep 的安装与版本要求。",
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-26T08:57:39.424035+08:00",
+      "content_changed_at": null,
+      "upstream_status": "ok",
+      "license": null
+    },
+    {
+      "skill_id": "google-labs-code/stitch-skills:plugins/stitch-build/skills/react-native/SKILL.md",
+      "name": "react-native",
+      "url": "https://github.com/google-labs-code/stitch-skills/blob/HEAD/plugins/stitch-build/skills/react-native/SKILL.md",
+      "author": "google-labs-code",
+      "summary_zh": "把 Stitch 网页设计（HTML/CSS + Tailwind 配置）转换为使用 StyleSheet 的 React Native 组件，或同步更新已有原生组件以对齐最新设计。适用于移动端开发中按设计稿生成组件、主题令牌、数据层与导航结构的场景。",
+      "quality_summary": {
+        "review_status": "not_required",
+        "review_note": null,
+        "blocking_reasons": [
+          "初评：质量门槛未通过：actionability: 提供可直接照做的映射表（HTML→RN 组件）、样式逐项映射（font-size→fontSize 等）、不支持属性清单以及 Platform.select 平台差异代码示例，另有组件模板文件作为起点；步骤具体、判断条件明确。；程序未能核实所引原文与行号。",
+          "初评：frontmatter 明确声明 allowed-tools（含 Stitch MCP 通配、Bash、Read、Write、web_fetch）；正文提到需 npm install、react-native-svg、react-native-safe-area-context、React Navigation 等依赖及平台差异处理，依赖有声明但未声明具体版本与运行环境。；程序未能核实所引原文与行号。"
+        ],
+        "checks": {
+          "practical_value": {
+            "value": "pass",
+            "evidence": "面向具体交付物：将 Stitch 设计转换为可编译的 React Native 组件，产出 src/theme.ts、src/data/mockData.ts、atoms/molecules/organisms 组件与 App.tsx 导航；相比泛泛提示词，额外提供元素映射表、主题令牌提取要求、原子化拆分与逻辑隔离规则。"
+          },
+          "actionability": {
+            "value": "unknown",
+            "evidence": "提供可直接照做的映射表（HTML→RN 组件）、样式逐项映射（font-size→fontSize 等）、不支持属性清单以及 Platform.select 平台差异代码示例，另有组件模板文件作为起点；步骤具体、判断条件明确。；程序未能核实所引原文与行号。"
+          },
+          "verification": {
+            "value": "pass",
+            "evidence": "给出可检查的完成条件：每个 Phase 的 GATE、npm run validate 逐文件校验、tsc --noEmit 编译检查、architecture-checklist.md 对照，以及 Troubleshooting 中的失败处理（缺导出 Props 接口、硬编码颜色、Text 外裸字符串、图片尺寸、FlatList 嵌套 ScrollView）；其中 validate 脚本与检查清单文件未随材料提供，实际可执行性无法完全核验。"
+          }
+        },
+        "review_checks": {}
+      },
+      "skill_type": "guideline",
+      "example_requests": [
+        "把 Stitch 里的设计稿转成 React Native 组件",
+        "同步更新我现有的原生组件以对齐最新的 Stitch 设计"
+      ],
+      "key_features": [
+        "提供 HTML→React Native 元素与 CSS→StyleSheet 映射规则表",
+        "强制把颜色/间距/字号提取到 src/theme.ts，禁止硬编码",
+        "分四阶段并设 GATE，含 validate 与 tsc 校验步骤"
+      ],
+      "main_category": {
+        "id": "dev",
+        "name": "编程开发"
+      },
+      "tags": [
+        "React Native",
+        "设计稿转代码",
+        "移动端开发",
+        "StyleSheet",
+        "主题令牌"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "Stitch MCP 工具（stitch*:*）",
+        "Bash / Read / Write / web_fetch",
+        "Node.js 与 npm（npm install）",
+        "React Native、TypeScript",
+        "react-native-svg",
+        "react-native-safe-area-context",
+        "React Navigation",
+        "react-native-reanimated（动画替代方案）",
+        "scripts/fetch-stitch.sh",
+        "resources/component-template.tsx",
+        "resources/architecture-checklist.md"
+      ],
+      "source_type": "official",
+      "status": "candidate",
+      "manual_pick": false,
+      "manual_note": null,
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      },
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "reason_codes": [
+        "QUALITY_BELOW_BAR",
+        "INSUFFICIENT_EVIDENCE"
+      ],
+      "limitations": "依赖 Stitch MCP 前缀工具与上游插件的脚本/资源文件（fetch-stitch.sh、component-template.tsx、architecture-checklist.md 未随材料提供，无法核验）；未声明 React Native/依赖版本与运行环境要求；校验步骤（npm run validate、模拟器审计）为可选且需用户授权。",
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-26T09:06:52.644738+08:00",
+      "content_changed_at": null,
+      "upstream_status": "ok",
+      "license": null
+    },
+    {
+      "skill_id": "google-labs-code/stitch-skills:plugins/stitch-build/skills/shadcn-ui/SKILL.md",
+      "name": "shadcn-ui",
+      "url": "https://github.com/google-labs-code/stitch-skills/blob/HEAD/plugins/stitch-build/skills/shadcn-ui/SKILL.md",
+      "author": "google-labs-code",
+      "summary_zh": "一份面向前端开发的 shadcn/ui 集成指南，指导组件的发现、安装、注册表查询、主题与变体定制以及可访问性维护。适用于在 React + Tailwind 项目中引入和定制 shadcn/ui 组件、排查导入与样式冲突等场景。",
+      "quality_summary": {
+        "review_status": "disagreed",
+        "review_note": "两轮独立评估存在分歧，留在候选区等待核实。",
+        "blocking_reasons": [
+          "初评：两轮独立评估存在分歧，留在候选区等待核实。",
+          "复核领域检查：该技能为前端组件集成指南，不涉及金融数据、回测或交易，非金融领域条目。；程序未能核实所引原文与行号。"
+        ],
+        "checks": {
+          "practical_value": {
+            "value": "pass",
+            "evidence": "面向具体任务：安装组件、初始化项目配置、定制主题与变体、扩展组件、排错。给出可直接执行的 CLI 命令与配置项说明、目录结构、cn()/cva/wrapper 组件代码，比泛泛提示词提供更明确的增量（例如 CLI 会自适应 Radix 或 Base UI 并更新 components.json）。"
+          },
+          "actionability": {
+            "value": "pass",
+            "evidence": "提供可复制的命令、MCP 工具调用名、目录结构、cn() 与 cva 代码、主题变量与扩展组件示例、常见问题判断条件（别名配置、Tailwind 配置、globals.css 导入、CSS 变量名一致性、依赖缺失）。属指南形态，无需附带可执行脚本。"
+          },
+          "verification": {
+            "value": "pass",
+            "evidence": "设有「Validation and Quality」提交前检查清单（tsc --noEmit 类型检查、lint、axe DevTools 可访问性测试、明暗模式视觉核对、断点响应检查），并有 Troubleshooting 一节点名失败现象与排查动作；对纯文档型技能属清晰验收条件。"
+          }
+        },
+        "review_checks": {
+          "practical_value": {
+            "value": "pass",
+            "evidence": "面向具体任务：新项目 create、已有项目 init、组件 add 与手动集成，并交付 components.json 配置、cn() 工具和 cva 变体等可直接复用的代码，优于泛泛的前端提示词。"
+          },
+          "actionability": {
+            "value": "pass",
+            "evidence": "提供可直接执行的命令（npx shadcn@latest add/init/create）、手动集成分步流程、组件扩展与 cva 变体示例代码，并列出 Import/Style/Dependency/Version 四类排错判断条件。"
+          },
+          "verification": {
+            "value": "pass",
+            "evidence": "设有明确的提交前校验清单（tsc --noEmit、lint、axe 无障碍检查、明暗模式视觉 QA、断点响应式检查），并在排错章节给出依赖与版本核对方式，构成可检查的验收条件。"
+          }
+        }
+      },
+      "skill_type": "guideline",
+      "example_requests": [
+        "把 shadcn 的 dialog 组件加进我的 React 项目",
+        "怎么配置 shadcn 的主题 CSS 变量和暗色模式"
+      ],
+      "key_features": [
+        "组件源码复制进项目，完全掌控与自由定制",
+        "支持自定义 Registry 与 blocks 目录查询",
+        "强调键盘导航、ARIA 与焦点管理的可访问性"
+      ],
+      "main_category": {
+        "id": "dev",
+        "name": "编程开发"
+      },
+      "tags": [
+        "前端",
+        "React",
+        "UI组件",
+        "Tailwind CSS",
+        "shadcn/ui"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "React 18+",
+        "Tailwind CSS 3.0+",
+        "Radix UI 或 Base UI",
+        "class-variance-authority",
+        "clsx",
+        "tailwind-merge",
+        "shadcn CLI：npx shadcn@latest",
+        "shadcn MCP 工具（list_components、get_component_metadata 等）"
+      ],
+      "source_type": "official",
+      "status": "candidate",
+      "manual_pick": false,
+      "manual_note": null,
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      },
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "reason_codes": [
+        "NEEDS_VERIFICATION"
+      ],
+      "limitations": "材料仅含 SKILL.md 本体；文末引用的 resources/*.md 与 examples/ 目录未提供，无法核验其内容。未声明除 React/Tailwind/UI 原语与 shadcn CLI、MCP 之外的运行环境与平台兼容性。",
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-26T09:10:40.417198+08:00",
+      "content_changed_at": null,
+      "upstream_status": "ok",
+      "license": null
+    },
+    {
+      "skill_id": "google-labs-code/stitch-skills:plugins/stitch-design/skills/extract-design-md/SKILL.md",
+      "name": "extract-design-md",
+      "url": "https://github.com/google-labs-code/stitch-skills/blob/HEAD/plugins/stitch-design/skills/extract-design-md/SKILL.md",
+      "author": "google-labs-code",
+      "summary_zh": "从 React/Vue/Svelte/Angular 或纯 HTML/CSS 前端源码中逆向提取设计系统（颜色、字体、间距、组件与布局规则），产出含 YAML frontmatter 的 .stitch/DESIGN.md。适用于项目无法构建或渲染时审计样式、统一设计令牌，或把既有视觉语言迁移到 Stitch。",
+      "quality_summary": {
+        "review_status": "not_required",
+        "review_note": null,
+        "blocking_reasons": [
+          "初评：所提供材料未见可疑行为：功能为读取项目源文件并写出 .stitch/DESIGN.md，无凭据读取/外传、无命令注入诱导、无越权说明；allowed-tools 中的 web_fetch 仅列为可用工具，正文未要求抓取或上传数据。但 references/*.md、examples/DESIGN.md 及 Phase 4 依赖的 manage-design-system 技能未随材料提供，无法核实其实际内容。；程序未能核实所引原文与行号。"
+        ],
+        "checks": {
+          "practical_value": {
+            "value": "pass",
+            "evidence": "面向具体任务（从前端源码提取设计系统并写出 .stitch/DESIGN.md），交付物明确；相比泛泛提示词，额外给出按框架定位样式的信号文件表、颜色按功能分组与近色去重、组件与布局的提取维度，属可复用增量。"
+          },
+          "actionability": {
+            "value": "pass",
+            "evidence": "步骤具体可执行：Phase 1 给出信号文件→框架映射表与目录结构示例并指引对应 references 文件；Phase 2 按 6 个设计维度列出检索位置与判断方式；Phase 3 给出 DESIGN.md 章节骨架与落盘路径。"
+          },
+          "verification": {
+            "value": "pass",
+            "evidence": "提供 8 条 Quality Checklist 作为交付前验收条件，并强制要求 YAML frontmatter（缺失即视为使用失败），Phase 3/4 亦说明完成条件（只需文档则 Phase 3 后结束）。未提供自动化测试，但属可检查的成品验收标准。"
+          }
+        },
+        "review_checks": {}
+      },
+      "skill_type": "guideline",
+      "example_requests": [
+        "从这个前端仓库提取设计系统，生成 DESIGN.md",
+        "审计这个项目的样式，说明它的设计语言"
+      ],
+      "key_features": [
+        "只读源码提取设计系统，无需构建或渲染应用",
+        "覆盖 React/Vue/Svelte/Angular/纯 CSS 与 Tailwind 配置",
+        "产出 .stitch/DESIGN.md，强制要求 YAML frontmatter"
+      ],
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "tags": [
+        "设计系统",
+        "前端源码分析",
+        "设计令牌",
+        "DESIGN.md",
+        "样式审计"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "允许工具：stitch*:*、Bash、Read、Write、web_fetch（SKILL.md frontmatter）",
+        "核心提取流程声明无需构建或运行时依赖"
+      ],
+      "source_type": "official",
+      "status": "candidate",
+      "manual_pick": false,
+      "manual_note": null,
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      },
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "reason_codes": [
+        "NEEDS_VERIFICATION",
+        "INSUFFICIENT_EVIDENCE"
+      ],
+      "limitations": "references/react-tailwind.md、vue.md、svelte.md、angular.md、plain-css.md 与 examples/DESIGN.md 未随材料提供，框架专项提取细节和输出模板无法核实；Phase 4 集成依赖未提供的 manage-design-system 技能与 Stitch MCP；未声明平台兼容性。",
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-26T09:13:21.336136+08:00",
       "content_changed_at": null,
       "upstream_status": "ok",
       "license": null
@@ -4556,79 +4630,6 @@
       "license": null
     },
     {
-      "skill_id": "getsentry/skills:skills/agents-md/SKILL.md",
-      "name": "agents-md",
-      "url": "https://github.com/getsentry/skills/blob/HEAD/skills/agents-md/SKILL.md",
-      "author": "getsentry",
-      "summary_zh": "该技能提供了一套用于创建和维护项目级 AI 代理指令文件（AGENTS.md/CLAUDE.md）的操作规范，旨在确保指令简洁、可执行且引用准确。",
-      "quality_summary": {
-        "review_status": "not_required",
-        "review_note": null,
-        "blocking_reasons": [
-          "初评：材料第3行 description: 'Creates and maintains concise AGENTS.md and CLAUDE.md project instruction files.'，属于编程开发中的代码规范与文档管理范畴。；程序未能核实所引原文与行号。",
-          "初评：材料第3-4行明确描述了用途：创建和维护项目指令文件（AGENTS.md/CLAUDE.md），用于指导编码代理。；程序未能核实所引原文与行号。",
-          "初评：质量门槛未通过：practical_value: 提供了具体的增量价值：将通用的 AI 交互转化为标准化的项目上下文，避免了冗长的提示词堆砌。；程序未能核实所引原文与行号。",
-          "初评：材料内容完全围绕如何编写和维持 AGENTS.md 展开，描述与实际提供的指南一致。；程序未能核实所引原文与行号。",
-          "初评：材料为纯文本操作指南，未声明任何外部工具或依赖，符合纯文本技能无依赖的通过标准。；程序未能核实所引原文与行号。",
-          "初评：未发现可疑行为，仅涉及项目文档规范。；程序未能核实所引原文与行号。"
-        ],
-        "checks": {
-          "practical_value": {
-            "value": "unknown",
-            "evidence": "提供了具体的增量价值：将通用的 AI 交互转化为标准化的项目上下文，避免了冗长的提示词堆砌。；程序未能核实所引原文与行号。"
-          },
-          "actionability": {
-            "value": "pass",
-            "evidence": "步骤清晰，包括检查现有文件、选择作用域、编写内容及验证路径，并提供了具体的章节模板。"
-          },
-          "verification": {
-            "value": "pass",
-            "evidence": "提供了明确的验收标准，如行数限制、格式要求（标题、列表、表格）以及反模式检查。"
-          }
-        },
-        "review_checks": {}
-      },
-      "skill_type": "guideline",
-      "example_requests": [
-        "帮我创建一个符合规范的 AGENTS.md 文件",
-        "更新现有的 AGENTS.md 以包含新的测试命令"
-      ],
-      "key_features": [
-        "规定了不超过60行的篇幅限制",
-        "提供了标准的 Markdown 模板结构",
-        "强调使用相对路径和具体命令而非模糊描述"
-      ],
-      "main_category": {
-        "id": "dev",
-        "name": "编程开发"
-      },
-      "tags": [
-        "AI Agent 配置",
-        "项目文档规范",
-        "代码审查辅助"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [],
-      "source_type": "official",
-      "status": "candidate",
-      "manual_pick": false,
-      "manual_note": null,
-      "snooze": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [
-        "QUALITY_BELOW_BAR",
-        "INSUFFICIENT_EVIDENCE"
-      ],
-      "limitations": "主要限制在于其适用范围仅限于生成或维护特定格式的指令文件，不具备自动执行这些指令的能力。",
-      "first_seen": "2026-09-24T09:09:16+00:00",
-      "last_checked": "2026-09-26T11:34:46.390246+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
       "skill_id": "getsentry/skills:skills/blog-writing-guide/SKILL.md",
       "name": "blog-writing-guide",
       "url": "https://github.com/getsentry/skills/blob/HEAD/skills/blog-writing-guide/SKILL.md",
@@ -4686,7 +4687,11 @@
       "status": "candidate",
       "manual_pick": false,
       "manual_note": null,
-      "snooze": null,
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      },
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -4759,7 +4764,11 @@
       "status": "candidate",
       "manual_pick": false,
       "manual_note": null,
-      "snooze": null,
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      },
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -4832,7 +4841,11 @@
       "status": "candidate",
       "manual_pick": false,
       "manual_note": null,
-      "snooze": null,
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      },
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -4843,154 +4856,6 @@
       "limitations": "主要限制为基于Sentry特定工程实践，可能不完全适用于所有非Sentry项目或不同技术栈。",
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-26T11:39:09.101575+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
-      "skill_id": "getsentry/skills:skills/code-simplifier/SKILL.md",
-      "name": "code-simplifier",
-      "url": "https://github.com/getsentry/skills/blob/HEAD/skills/code-simplifier/SKILL.md",
-      "author": "getsentry",
-      "summary_zh": "这是一个专注于代码简化和重构的技能，旨在通过应用项目特定的最佳实践来提升代码的清晰度、一致性和可维护性，同时严格保持原有功能不变。",
-      "quality_summary": {
-        "review_status": "not_required",
-        "review_note": null,
-        "blocking_reasons": [
-          "初评：材料第3行 description: Simplifies and refines code for clarity, consistency, and maintainability... 属于编程开发领域的重构、调试范畴。；程序未能核实所引原文与行号。",
-          "初评：材料第3行明确说明用途：'Simplifies and refines code... Use when asked to simplify code...'；第13-14行定义角色为 'expert code simplification specialist'。；程序未能核实所引原文与行号。",
-          "初评：质量门槛未通过：practical_value: 提供了具体的重构原则（如避免嵌套三元、消除冗余抽象）和对比示例，相比通用提示词更具针对性。；程序未能核实所引原文与行号。；actionability: 包含明确的6步处理流程（第59-67行）和5项核心原则（第15-58行），指导性强。；程序未能核实所引原文与行号。；verification: 要求验证功能不变（Step 4）和更易于维护（Step 5），并通过 Before/After 示例展示预期输出标准。；程序未能核实所引原文与行号。",
-          "初评：材料第6-9行引用了上游来源 'Based on Anthropic's code-simplifier agent'，且内容确实围绕代码简化展开，介绍与内容一致。；程序未能核实所引原文与行号。",
-          "初评：材料第23行指出依赖 'CLAUDE.md' 中的编码标准，未声明其他外部工具或运行环境，符合纯文本/提示词技能特征。；程序未能核实所引原文与行号。",
-          "初评：材料第17-19行强调 'Never change what the code does'，无安全风险或违规内容。；程序未能核实所引原文与行号。"
-        ],
-        "checks": {
-          "practical_value": {
-            "value": "unknown",
-            "evidence": "提供了具体的重构原则（如避免嵌套三元、消除冗余抽象）和对比示例，相比通用提示词更具针对性。；程序未能核实所引原文与行号。"
-          },
-          "actionability": {
-            "value": "unknown",
-            "evidence": "包含明确的6步处理流程（第59-67行）和5项核心原则（第15-58行），指导性强。；程序未能核实所引原文与行号。"
-          },
-          "verification": {
-            "value": "unknown",
-            "evidence": "要求验证功能不变（Step 4）和更易于维护（Step 5），并通过 Before/After 示例展示预期输出标准。；程序未能核实所引原文与行号。"
-          }
-        },
-        "review_checks": {}
-      },
-      "skill_type": "guideline",
-      "example_requests": [
-        "简化这段嵌套三元运算符的代码",
-        "清理这个函数的冗余抽象逻辑"
-      ],
-      "key_features": [
-        "严格保持原有功能不变，仅优化实现方式",
-        "依据 CLAUDE.md 等文件应用项目特定编码标准",
-        "提供从嵌套三元表达式到清晰步骤的具体重构示例"
-      ],
-      "main_category": {
-        "id": "dev",
-        "name": "编程开发"
-      },
-      "tags": [
-        "代码重构",
-        "代码审查",
-        "可读性优化"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "CLAUDE.md (项目编码规范)"
-      ],
-      "source_type": "official",
-      "status": "candidate",
-      "manual_pick": false,
-      "manual_note": null,
-      "snooze": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [
-        "QUALITY_BELOW_BAR",
-        "INSUFFICIENT_EVIDENCE"
-      ],
-      "limitations": "依赖项目特定的编码标准文件（如 CLAUDE.md），若缺失可能导致无法应用具体规范；主要关注近期修改的代码。",
-      "first_seen": "2026-09-24T09:09:16+00:00",
-      "last_checked": "2026-09-26T11:40:15.295555+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
-      "skill_id": "getsentry/skills:skills/commit/SKILL.md",
-      "name": "commit",
-      "url": "https://github.com/getsentry/skills/blob/HEAD/skills/commit/SKILL.md",
-      "author": "getsentry",
-      "summary_zh": "该技能用于指导生成符合Sentry规范的Git提交信息，包括分支检查、提交类型定义及命令执行示例。",
-      "quality_summary": {
-        "review_status": "not_required",
-        "review_note": null,
-        "blocking_reasons": [
-          "初评：材料属于编程开发领域，涉及Git提交规范与代码管理。；程序未能核实所引原文与行号。",
-          "初评：第3行描述：'Use for every request to commit changes or draft a commit message.' 明确用途为生成Sentry风格的提交信息。；程序未能核实所引原文与行号。",
-          "初评：质量门槛未通过：practical_value: 提供了具体的提交类型列表和格式约束，比通用提示词更具针对性。；程序未能核实所引原文与行号。；actionability: 包含明确的分支检查步骤和可直接复制的git commit命令模板。；程序未能核实所引原文与行号。",
-          "初评：技能名称'Sentry Commit Messages'与内容中强调的'Sentry-style'、'Fixes SENTRY-xxx'等特征一致。；程序未能核实所引原文与行号。",
-          "初评：依赖标准命令行工具 git，未声明特殊外部依赖。；程序未能核实所引原文与行号。",
-          "初评：第38-39行明确要求不包含客户名称、PII等敏感信息，符合安全规范。；程序未能核实所引原文与行号。"
-        ],
-        "checks": {
-          "practical_value": {
-            "value": "unknown",
-            "evidence": "提供了具体的提交类型列表和格式约束，比通用提示词更具针对性。；程序未能核实所引原文与行号。"
-          },
-          "actionability": {
-            "value": "unknown",
-            "evidence": "包含明确的分支检查步骤和可直接复制的git commit命令模板。；程序未能核实所引原文与行号。"
-          },
-          "verification": {
-            "value": "pass",
-            "evidence": "通过具体的格式规则（如长度限制、标点符号）和命令示例提供验收标准。"
-          }
-        },
-        "review_checks": {}
-      },
-      "skill_type": "guideline",
-      "example_requests": [
-        "帮我写一个修复API空指针异常的提交信息",
-        "生成一个包含Breaking Change的提交记录"
-      ],
-      "key_features": [
-        "强制要求非main/master分支提交",
-        "规定Subject行不超过70字符且使用祈使句",
-        "禁止在提交信息中包含PII或机密数据"
-      ],
-      "main_category": {
-        "id": "dev",
-        "name": "编程开发"
-      },
-      "tags": [
-        "git",
-        "commit-message",
-        "conventional-commits"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [],
-      "source_type": "official",
-      "status": "candidate",
-      "manual_pick": false,
-      "manual_note": null,
-      "snooze": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [
-        "QUALITY_BELOW_BAR",
-        "INSUFFICIENT_EVIDENCE"
-      ],
-      "limitations": "仅适用于遵循Sentry风格规范的Git仓库，通用性受限。",
-      "first_seen": "2026-09-24T09:09:16+00:00",
-      "last_checked": "2026-09-26T11:41:26.324526+08:00",
       "content_changed_at": null,
       "upstream_status": "ok",
       "license": null
@@ -5055,7 +4920,11 @@
       "status": "candidate",
       "manual_pick": false,
       "manual_note": null,
-      "snooze": null,
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      },
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -5129,7 +4998,11 @@
       "status": "candidate",
       "manual_pick": false,
       "manual_note": null,
-      "snooze": null,
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      },
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -5209,7 +5082,11 @@
       "status": "candidate",
       "manual_pick": false,
       "manual_note": null,
-      "snooze": null,
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      },
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -5286,7 +5163,11 @@
       "status": "candidate",
       "manual_pick": false,
       "manual_note": null,
-      "snooze": null,
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      },
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -5363,7 +5244,11 @@
       "status": "candidate",
       "manual_pick": false,
       "manual_note": null,
-      "snooze": null,
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      },
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -5439,7 +5324,11 @@
       "status": "candidate",
       "manual_pick": false,
       "manual_note": null,
-      "snooze": null,
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      },
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -5515,7 +5404,11 @@
       "status": "candidate",
       "manual_pick": false,
       "manual_note": null,
-      "snooze": null,
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      },
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -5596,7 +5489,11 @@
       "status": "candidate",
       "manual_pick": false,
       "manual_note": null,
-      "snooze": null,
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      },
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -5670,7 +5567,11 @@
       "status": "candidate",
       "manual_pick": false,
       "manual_note": null,
-      "snooze": null,
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      },
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -5748,7 +5649,11 @@
       "status": "candidate",
       "manual_pick": false,
       "manual_note": null,
-      "snooze": null,
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      },
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -6274,6 +6179,166 @@
       "upstream_status": "ok",
       "license": null,
       "original_partition": "manual"
+    },
+    {
+      "skill_id": "getsentry/skills:skills/agents-md/SKILL.md",
+      "name": "agents-md",
+      "url": "https://github.com/getsentry/skills/blob/HEAD/skills/agents-md/SKILL.md",
+      "author": "getsentry",
+      "summary_zh": "该技能提供了一套用于创建和维护项目级 AI 代理指令文件（AGENTS.md/CLAUDE.md）的操作规范，旨在确保指令简洁、可执行且引用准确。",
+      "quality_summary": {
+        "review_status": "not_required",
+        "review_note": null,
+        "blocking_reasons": [
+          "初评：材料第3行 description: 'Creates and maintains concise AGENTS.md and CLAUDE.md project instruction files.'，属于编程开发中的代码规范与文档管理范畴。；程序未能核实所引原文与行号。",
+          "初评：材料第3-4行明确描述了用途：创建和维护项目指令文件（AGENTS.md/CLAUDE.md），用于指导编码代理。；程序未能核实所引原文与行号。",
+          "初评：质量门槛未通过：practical_value: 提供了具体的增量价值：将通用的 AI 交互转化为标准化的项目上下文，避免了冗长的提示词堆砌。；程序未能核实所引原文与行号。",
+          "初评：材料内容完全围绕如何编写和维持 AGENTS.md 展开，描述与实际提供的指南一致。；程序未能核实所引原文与行号。",
+          "初评：材料为纯文本操作指南，未声明任何外部工具或依赖，符合纯文本技能无依赖的通过标准。；程序未能核实所引原文与行号。",
+          "初评：未发现可疑行为，仅涉及项目文档规范。；程序未能核实所引原文与行号。"
+        ],
+        "checks": {
+          "practical_value": {
+            "value": "unknown",
+            "evidence": "提供了具体的增量价值：将通用的 AI 交互转化为标准化的项目上下文，避免了冗长的提示词堆砌。；程序未能核实所引原文与行号。"
+          },
+          "actionability": {
+            "value": "pass",
+            "evidence": "步骤清晰，包括检查现有文件、选择作用域、编写内容及验证路径，并提供了具体的章节模板。"
+          },
+          "verification": {
+            "value": "pass",
+            "evidence": "提供了明确的验收标准，如行数限制、格式要求（标题、列表、表格）以及反模式检查。"
+          }
+        },
+        "review_checks": {}
+      },
+      "skill_type": "guideline",
+      "example_requests": [
+        "帮我创建一个符合规范的 AGENTS.md 文件",
+        "更新现有的 AGENTS.md 以包含新的测试命令"
+      ],
+      "key_features": [
+        "规定了不超过60行的篇幅限制",
+        "提供了标准的 Markdown 模板结构",
+        "强调使用相对路径和具体命令而非模糊描述"
+      ],
+      "main_category": {
+        "id": "dev",
+        "name": "编程开发"
+      },
+      "tags": [
+        "AI Agent 配置",
+        "项目文档规范",
+        "代码审查辅助"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "source_type": "official",
+      "status": "candidate",
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-26",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
+      "snooze": null,
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "reason_codes": [
+        "QUALITY_BELOW_BAR",
+        "INSUFFICIENT_EVIDENCE"
+      ],
+      "limitations": "主要限制在于其适用范围仅限于生成或维护特定格式的指令文件，不具备自动执行这些指令的能力。",
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-26T11:34:46.390246+08:00",
+      "content_changed_at": null,
+      "upstream_status": "ok",
+      "license": null,
+      "original_partition": "manual"
+    },
+    {
+      "skill_id": "getsentry/skills:skills/code-simplifier/SKILL.md",
+      "name": "code-simplifier",
+      "url": "https://github.com/getsentry/skills/blob/HEAD/skills/code-simplifier/SKILL.md",
+      "author": "getsentry",
+      "summary_zh": "这是一个专注于代码简化和重构的技能，旨在通过应用项目特定的最佳实践来提升代码的清晰度、一致性和可维护性，同时严格保持原有功能不变。",
+      "quality_summary": {
+        "review_status": "not_required",
+        "review_note": null,
+        "blocking_reasons": [
+          "初评：材料第3行 description: Simplifies and refines code for clarity, consistency, and maintainability... 属于编程开发领域的重构、调试范畴。；程序未能核实所引原文与行号。",
+          "初评：材料第3行明确说明用途：'Simplifies and refines code... Use when asked to simplify code...'；第13-14行定义角色为 'expert code simplification specialist'。；程序未能核实所引原文与行号。",
+          "初评：质量门槛未通过：practical_value: 提供了具体的重构原则（如避免嵌套三元、消除冗余抽象）和对比示例，相比通用提示词更具针对性。；程序未能核实所引原文与行号。；actionability: 包含明确的6步处理流程（第59-67行）和5项核心原则（第15-58行），指导性强。；程序未能核实所引原文与行号。；verification: 要求验证功能不变（Step 4）和更易于维护（Step 5），并通过 Before/After 示例展示预期输出标准。；程序未能核实所引原文与行号。",
+          "初评：材料第6-9行引用了上游来源 'Based on Anthropic's code-simplifier agent'，且内容确实围绕代码简化展开，介绍与内容一致。；程序未能核实所引原文与行号。",
+          "初评：材料第23行指出依赖 'CLAUDE.md' 中的编码标准，未声明其他外部工具或运行环境，符合纯文本/提示词技能特征。；程序未能核实所引原文与行号。",
+          "初评：材料第17-19行强调 'Never change what the code does'，无安全风险或违规内容。；程序未能核实所引原文与行号。"
+        ],
+        "checks": {
+          "practical_value": {
+            "value": "unknown",
+            "evidence": "提供了具体的重构原则（如避免嵌套三元、消除冗余抽象）和对比示例，相比通用提示词更具针对性。；程序未能核实所引原文与行号。"
+          },
+          "actionability": {
+            "value": "unknown",
+            "evidence": "包含明确的6步处理流程（第59-67行）和5项核心原则（第15-58行），指导性强。；程序未能核实所引原文与行号。"
+          },
+          "verification": {
+            "value": "unknown",
+            "evidence": "要求验证功能不变（Step 4）和更易于维护（Step 5），并通过 Before/After 示例展示预期输出标准。；程序未能核实所引原文与行号。"
+          }
+        },
+        "review_checks": {}
+      },
+      "skill_type": "guideline",
+      "example_requests": [
+        "简化这段嵌套三元运算符的代码",
+        "清理这个函数的冗余抽象逻辑"
+      ],
+      "key_features": [
+        "严格保持原有功能不变，仅优化实现方式",
+        "依据 CLAUDE.md 等文件应用项目特定编码标准",
+        "提供从嵌套三元表达式到清晰步骤的具体重构示例"
+      ],
+      "main_category": {
+        "id": "dev",
+        "name": "编程开发"
+      },
+      "tags": [
+        "代码重构",
+        "代码审查",
+        "可读性优化"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "CLAUDE.md (项目编码规范)"
+      ],
+      "source_type": "official",
+      "status": "candidate",
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-26",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
+      "snooze": null,
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "reason_codes": [
+        "QUALITY_BELOW_BAR",
+        "INSUFFICIENT_EVIDENCE"
+      ],
+      "limitations": "依赖项目特定的编码标准文件（如 CLAUDE.md），若缺失可能导致无法应用具体规范；主要关注近期修改的代码。",
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-26T11:40:15.295555+08:00",
+      "content_changed_at": null,
+      "upstream_status": "ok",
+      "license": null,
+      "original_partition": "manual"
     }
   ],
   "overrides": {
@@ -6283,12 +6348,6 @@
     "manual_picks": [
       {
         "skill_id": "anthropics/skills:skills/canvas-design/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-24",
-        "from": "candidate"
-      },
-      {
-        "skill_id": "anthropics/skills:skills/discernment-nudge/SKILL.md",
         "reason": "用户收藏",
         "added_at": "2026-09-24",
         "from": "candidate"
@@ -6318,18 +6377,6 @@
         "from": "candidate"
       },
       {
-        "skill_id": "vercel-labs/agent-skills:skills/composition-patterns/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-24",
-        "from": "candidate"
-      },
-      {
-        "skill_id": "vercel-labs/agent-skills:skills/writing-guidelines/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-22",
-        "from": "recommended"
-      },
-      {
         "skill_id": "trailofbits/skills:plugins/goal-prompt/skills/goal-prompt/SKILL.md",
         "reason": "用户收藏",
         "added_at": "2026-09-26",
@@ -6354,22 +6401,16 @@
         "from": "candidate"
       },
       {
-        "skill_id": "google-labs-code/stitch-skills:plugins/stitch-build/skills/react-native/SKILL.md",
+        "skill_id": "anthropics/skills:skills/discernment-nudge/SKILL.md",
         "reason": "用户收藏",
-        "added_at": "2026-09-26",
+        "added_at": "2026-09-24",
         "from": "candidate"
       },
       {
-        "skill_id": "google-labs-code/stitch-skills:plugins/stitch-build/skills/shadcn-ui/SKILL.md",
+        "skill_id": "vercel-labs/agent-skills:skills/writing-guidelines/SKILL.md",
         "reason": "用户收藏",
-        "added_at": "2026-09-26",
-        "from": "candidate"
-      },
-      {
-        "skill_id": "google-labs-code/stitch-skills:plugins/stitch-design/skills/extract-design-md/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-26",
-        "from": "candidate"
+        "added_at": "2026-09-22",
+        "from": "recommended"
       },
       {
         "skill_id": "anthropics/skills:skills/doc-coauthoring/SKILL.md",
@@ -6417,6 +6458,24 @@
         "skill_id": "anthropics/skills:skills/pdf/SKILL.md",
         "reason": "用户收藏",
         "added_at": "2026-09-24",
+        "from": "candidate"
+      },
+      {
+        "skill_id": "getsentry/skills:skills/code-simplifier/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-26",
+        "from": "candidate"
+      },
+      {
+        "skill_id": "getsentry/skills:skills/commit/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-26",
+        "from": "candidate"
+      },
+      {
+        "skill_id": "getsentry/skills:skills/agents-md/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-26",
         "from": "candidate"
       }
     ],
@@ -7140,6 +7199,125 @@
         "expires_at": "2027-02-23",
         "days": 150,
         "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "getsentry/skills:skills/blog-writing-guide/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "getsentry/skills:skills/brand-guidelines/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "getsentry/skills:skills/code-review/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "getsentry/skills:skills/django-access-review/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "getsentry/skills:skills/django-perf-review/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "getsentry/skills:skills/document-api-endpoint/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "getsentry/skills:skills/find-bugs/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "getsentry/skills:skills/gh-review-requests/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "getsentry/skills:skills/pr-link-issue/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "getsentry/skills:skills/pr-writer/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "getsentry/skills:skills/presentation-creator/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "getsentry/skills:skills/security-review/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "getsentry/skills:skills/sred-work-summary/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "vercel-labs/agent-skills:skills/composition-patterns/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "google-labs-code/stitch-skills:plugins/stitch-build/skills/react-native/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "google-labs-code/stitch-skills:plugins/stitch-build/skills/shadcn-ui/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "google-labs-code/stitch-skills:plugins/stitch-design/skills/extract-design-md/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
       }
     ]
   },
@@ -7205,6 +7383,18 @@
         "name": "writing-guidelines",
         "added_at": "2026-09-26",
         "source_url": "https://github.com/vercel-labs/agent-skills/blob/HEAD/skills/writing-guidelines/SKILL.md"
+      },
+      {
+        "skill_id": "getsentry/skills:skills/code-simplifier/SKILL.md",
+        "name": "code-simplifier",
+        "added_at": "2026-09-26",
+        "source_url": "https://github.com/getsentry/skills/blob/HEAD/skills/code-simplifier/SKILL.md"
+      },
+      {
+        "skill_id": "getsentry/skills:skills/agents-md/SKILL.md",
+        "name": "agents-md",
+        "added_at": "2026-09-26",
+        "source_url": "https://github.com/getsentry/skills/blob/HEAD/skills/agents-md/SKILL.md"
       }
     ]
   }
