@@ -404,5 +404,85 @@ class TestA7TwoPhaseFingerprintProtection(PipelineHarness):
         self.assertTrue(item.get("content_changed"))
 
 
+
+
+class TestFinderResume(unittest.TestCase):
+    """测试 --resume 断点续跑功能：复用规划与已评估条目，跳过重复评估。"""
+
+    def setUp(self) -> None:
+        self.temp_dir = tempfile.TemporaryDirectory(ignore_cleanup_errors=True)
+        self.root = Path(self.temp_dir.name)
+        (self.root / "config").mkdir(parents=True)
+        (self.root / "config" / "model.local.json").write_text(
+            json.dumps({"endpoint": "https://fake", "model": "fake-model", "auth": {"api_key": "fake-key"}}),
+            encoding="utf-8",
+        )
+
+    def tearDown(self) -> None:
+        self.temp_dir.cleanup()
+
+    @patch("src.finder.run.fetch_candidate_materials")
+    @patch("src.finder.run.expand_and_collect_candidates")
+    @patch("src.finder.run.search_github_repos_for_query")
+    @patch("src.finder.run.call_model")
+    def test_resume_skips_planning_and_evaluated_candidates(
+        self, mock_call, mock_search, mock_expand, mock_fetch
+    ) -> None:
+        plan_res = ModelCallResult(
+            ok=True,
+            content=json.dumps({"intent": "test", "queries": ["q1"], "criteria": [{"id": "c1", "kind": "required", "description": "d1"}]}),
+            usage={"prompt_tokens": 100, "completion_tokens": 50, "total_tokens": 150},
+        )
+        eval_c1 = ModelCallResult(
+            ok=True,
+            content=json.dumps({
+                "match": "none",
+                "summary_zh": "第一项不匹配",
+                "documentation": "clear",
+                "criteria_results": [{"criterion_id": "c1", "status": "unsupported", "evidence": []}],
+            }),
+            usage={"prompt_tokens": 50, "completion_tokens": 20, "total_tokens": 70},
+        )
+        mock_call.side_effect = [plan_res, eval_c1]
+        mock_search.return_value = (True, [{"owner": "o1", "repo": "r1", "url": "u1", "description": "d1"}], None)
+        cand1 = candidate_from_repo(owner="o1", repo="r1", path="skills/cand1/SKILL.md", url="u1", repo_url="ru1", name="c1", description="", discovered_at="2026-01-01T00:00:00Z")
+        cand2 = candidate_from_repo(owner="o1", repo="r1", path="skills/cand2/SKILL.md", url="u2", repo_url="ru1", name="c2", description="", discovered_at="2026-01-01T00:00:00Z")
+        mock_expand.return_value = ([cand1, cand2], [])
+        mock_fetch.return_value = (True, {"skills/cand1/SKILL.md": "text1", "skills/cand2/SKILL.md": "text2"}, None)
+
+        # 第一轮：max_evaluations=1，只评估 c1 后停机
+        report1 = execute_find_skill("测试需求", limit=1, max_evaluations=1, root_dir=self.root)
+        self.assertEqual(report1["evaluation_attempts"], 1)
+        self.assertEqual(report1["evaluated_count"], 1)
+        self.assertEqual(report1["evaluations"][0]["candidate"]["name"], "c1")
+        run_dir = Path(report1["report_paths"]["json"]).parent
+
+        # 第二轮：--resume 续跑，max_evaluations 扩展为 2
+        eval_c2 = ModelCallResult(
+            ok=True,
+            content=json.dumps({
+                "match": "strong",
+                "summary_zh": "第二项强匹配",
+                "documentation": "clear",
+                "criteria_results": [
+                    {"criterion_id": "c1", "status": "supported", "evidence": [{"source_path": "skills/cand2/SKILL.md", "start_line": 1, "end_line": 1, "quote": "text2"}]}
+                ],
+            }),
+            usage={"prompt_tokens": 60, "completion_tokens": 30, "total_tokens": 90},
+        )
+        # 注意：不再需要 plan_res，也不应调用 eval_c1，只调用 eval_c2！
+        mock_call.side_effect = [eval_c2]
+        report2 = execute_find_skill(root_dir=self.root, resume_dir=run_dir, max_evaluations=2)
+
+        # 校验：复用了 c1，跳过了 c1，成功评估了 c2，总评估数变为 2
+        self.assertEqual(report2["evaluated_count"], 2)
+        self.assertEqual([e["candidate"]["name"] for e in report2["evaluations"]], ["c1", "c2"])
+        # 校验：Token 用量继承累加 (150 plan + 70 c1 + 90 c2 = 310)
+        self.assertEqual(report2["usage"]["total_tokens"], 310)
+        # 校验：短名单成功收录 c2
+        self.assertEqual(len(report2["shortlist"]), 1)
+        self.assertEqual(report2["shortlist"][0]["candidate"]["name"], "c2")
+
+
 if __name__ == "__main__":
     unittest.main()
