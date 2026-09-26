@@ -4,11 +4,11 @@
   "rules_version": "1.1.0",
   "counts": {
     "recommended": 42,
-    "candidate": 21,
-    "manual": 25,
+    "candidate": 13,
+    "manual": 29,
     "pending": 0,
     "processing_failure": 0,
-    "total_evaluated": 88,
+    "total_evaluated": 84,
     "owned": 5,
     "owned_in_catalog": 5
   },
@@ -1308,6 +1308,349 @@
       "limitations": "必须先安装 trailmark 且不得以人工比对替代；diff 的 --language 默认 python，其他语言需显式指定，否则会得到空结果；仅覆盖 trailmark 支持的语言；依赖 git ref 或目录形式的两个快照。",
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-24T17:43:39.803608+08:00",
+      "content_changed_at": null,
+      "upstream_status": "ok",
+      "license": null
+    },
+    {
+      "skill_id": "google-labs-code/stitch-skills:plugins/stitch-build/skills/react-components/SKILL.md",
+      "name": "react-components",
+      "url": "https://github.com/google-labs-code/stitch-skills/blob/HEAD/plugins/stitch-build/skills/react-components/SKILL.md",
+      "author": "google-labs-code",
+      "summary_zh": "把 Stitch 设计稿转换为模块化的 Vite + React 组件，或将已有 React 组件同步更新到最新设计；适用于前端设计稿落地与组件重构场景。",
+      "quality_summary": {
+        "review_status": "not_required",
+        "review_note": null,
+        "blocking_reasons": [
+          "初评：四个 Phase 均给出编号步骤、GATE 条件与反模式清单（下载脚本用法、样式抽取、架构规则、执行步骤），足以理解用途与执行路径。；程序未能核实所引原文与行号。"
+        ],
+        "checks": {
+          "practical_value": {
+            "value": "pass",
+            "evidence": "面向具体任务：把 Stitch 设计稿落地为 React 组件并给出明确交付物路径（src/components/、src/hooks/、src/data/mockData.ts、style-guide.json），比泛泛提示词多出模块化拆分、导航路由接线与暗色模式等约束。"
+          },
+          "actionability": {
+            "value": "pass",
+            "evidence": "给出可直接照做的命令与替换规则（fetch-stitch.sh 下载命令及 =w{width} 参数、组件模板 StitchComponent 全量替换、npm install），并配有每阶段反模式清单作为判断条件。"
+          },
+          "verification": {
+            "value": "pass",
+            "evidence": "提供可检查的验收手段：对每个 .tsx 运行 npm run validate、tsc --noEmit 检查编译、对照 architecture-checklist.md，并在 Troubleshooting 中给出失败处理路径（缺 Props 接口、样式令牌过期、失效导航）。注意这些校验被标注为可选且需用户同意。"
+          }
+        },
+        "review_checks": {}
+      },
+      "skill_type": "guideline",
+      "example_requests": [
+        "把这个 Stitch 设计稿转成模块化的 React 组件",
+        "同步更新现有 React 组件以匹配最新的 Stitch 设计"
+      ],
+      "key_features": [
+        "四阶段流程并设 GATE，未满足条件不得继续",
+        "强制模块化组件、hooks 逻辑隔离与 mockData 数据解耦",
+        "AST 校验要求每个组件含 Props 接口，禁止硬编码色值"
+      ],
+      "main_category": {
+        "id": "dev",
+        "name": "编程开发"
+      },
+      "tags": [
+        "前端开发",
+        "React",
+        "设计稿转代码",
+        "组件重构"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "Stitch MCP 工具（stitch*:*）",
+        "Bash、Read、Write、web_fetch 工具",
+        "Node.js / npm（npm install、npm run validate、npm run dev）",
+        "TypeScript（tsc --noEmit）",
+        "skill 内脚本与资源：scripts/fetch-stitch.sh、resources/style-guide.json、resources/component-template.tsx、resources/architecture-checklist.md"
+      ],
+      "source_type": "official",
+      "status": "candidate",
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-26",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
+      "snooze": null,
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "reason_codes": [
+        "NEEDS_VERIFICATION",
+        "INSUFFICIENT_EVIDENCE"
+      ],
+      "limitations": "材料中未提供 scripts/fetch-stitch.sh、resources/ 下模板与清单、以及 npm run validate 的实现，其可用性无法从本材料核实；Phase 4 的校验、dev server 与浏览器审计被标注为可选且需用户同意，因此验证强度取决于用户选择；未声明平台兼容性。",
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-26T09:05:43.202398+08:00",
+      "content_changed_at": null,
+      "upstream_status": "ok",
+      "license": null
+    },
+    {
+      "skill_id": "google-labs-code/stitch-skills:plugins/stitch-build/skills/react-native/SKILL.md",
+      "name": "react-native",
+      "url": "https://github.com/google-labs-code/stitch-skills/blob/HEAD/plugins/stitch-build/skills/react-native/SKILL.md",
+      "author": "google-labs-code",
+      "summary_zh": "把 Stitch 网页设计（HTML/CSS + Tailwind 配置）转换为使用 StyleSheet 的 React Native 组件，或同步更新已有原生组件以对齐最新设计。适用于移动端开发中按设计稿生成组件、主题令牌、数据层与导航结构的场景。",
+      "quality_summary": {
+        "review_status": "not_required",
+        "review_note": null,
+        "blocking_reasons": [
+          "初评：质量门槛未通过：actionability: 提供可直接照做的映射表（HTML→RN 组件）、样式逐项映射（font-size→fontSize 等）、不支持属性清单以及 Platform.select 平台差异代码示例，另有组件模板文件作为起点；步骤具体、判断条件明确。；程序未能核实所引原文与行号。",
+          "初评：frontmatter 明确声明 allowed-tools（含 Stitch MCP 通配、Bash、Read、Write、web_fetch）；正文提到需 npm install、react-native-svg、react-native-safe-area-context、React Navigation 等依赖及平台差异处理，依赖有声明但未声明具体版本与运行环境。；程序未能核实所引原文与行号。"
+        ],
+        "checks": {
+          "practical_value": {
+            "value": "pass",
+            "evidence": "面向具体交付物：将 Stitch 设计转换为可编译的 React Native 组件，产出 src/theme.ts、src/data/mockData.ts、atoms/molecules/organisms 组件与 App.tsx 导航；相比泛泛提示词，额外提供元素映射表、主题令牌提取要求、原子化拆分与逻辑隔离规则。"
+          },
+          "actionability": {
+            "value": "unknown",
+            "evidence": "提供可直接照做的映射表（HTML→RN 组件）、样式逐项映射（font-size→fontSize 等）、不支持属性清单以及 Platform.select 平台差异代码示例，另有组件模板文件作为起点；步骤具体、判断条件明确。；程序未能核实所引原文与行号。"
+          },
+          "verification": {
+            "value": "pass",
+            "evidence": "给出可检查的完成条件：每个 Phase 的 GATE、npm run validate 逐文件校验、tsc --noEmit 编译检查、architecture-checklist.md 对照，以及 Troubleshooting 中的失败处理（缺导出 Props 接口、硬编码颜色、Text 外裸字符串、图片尺寸、FlatList 嵌套 ScrollView）；其中 validate 脚本与检查清单文件未随材料提供，实际可执行性无法完全核验。"
+          }
+        },
+        "review_checks": {}
+      },
+      "skill_type": "guideline",
+      "example_requests": [
+        "把 Stitch 里的设计稿转成 React Native 组件",
+        "同步更新我现有的原生组件以对齐最新的 Stitch 设计"
+      ],
+      "key_features": [
+        "提供 HTML→React Native 元素与 CSS→StyleSheet 映射规则表",
+        "强制把颜色/间距/字号提取到 src/theme.ts，禁止硬编码",
+        "分四阶段并设 GATE，含 validate 与 tsc 校验步骤"
+      ],
+      "main_category": {
+        "id": "dev",
+        "name": "编程开发"
+      },
+      "tags": [
+        "React Native",
+        "设计稿转代码",
+        "移动端开发",
+        "StyleSheet",
+        "主题令牌"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "Stitch MCP 工具（stitch*:*）",
+        "Bash / Read / Write / web_fetch",
+        "Node.js 与 npm（npm install）",
+        "React Native、TypeScript",
+        "react-native-svg",
+        "react-native-safe-area-context",
+        "React Navigation",
+        "react-native-reanimated（动画替代方案）",
+        "scripts/fetch-stitch.sh",
+        "resources/component-template.tsx",
+        "resources/architecture-checklist.md"
+      ],
+      "source_type": "official",
+      "status": "candidate",
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-26",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
+      "snooze": null,
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "reason_codes": [
+        "QUALITY_BELOW_BAR",
+        "INSUFFICIENT_EVIDENCE"
+      ],
+      "limitations": "依赖 Stitch MCP 前缀工具与上游插件的脚本/资源文件（fetch-stitch.sh、component-template.tsx、architecture-checklist.md 未随材料提供，无法核验）；未声明 React Native/依赖版本与运行环境要求；校验步骤（npm run validate、模拟器审计）为可选且需用户授权。",
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-26T09:06:52.644738+08:00",
+      "content_changed_at": null,
+      "upstream_status": "ok",
+      "license": null
+    },
+    {
+      "skill_id": "google-labs-code/stitch-skills:plugins/stitch-build/skills/shadcn-ui/SKILL.md",
+      "name": "shadcn-ui",
+      "url": "https://github.com/google-labs-code/stitch-skills/blob/HEAD/plugins/stitch-build/skills/shadcn-ui/SKILL.md",
+      "author": "google-labs-code",
+      "summary_zh": "一份面向前端开发的 shadcn/ui 集成指南，指导组件的发现、安装、注册表查询、主题与变体定制以及可访问性维护。适用于在 React + Tailwind 项目中引入和定制 shadcn/ui 组件、排查导入与样式冲突等场景。",
+      "quality_summary": {
+        "review_status": "disagreed",
+        "review_note": "两轮独立评估存在分歧，留在候选区等待核实。",
+        "blocking_reasons": [
+          "初评：两轮独立评估存在分歧，留在候选区等待核实。",
+          "复核领域检查：该技能为前端组件集成指南，不涉及金融数据、回测或交易，非金融领域条目。；程序未能核实所引原文与行号。"
+        ],
+        "checks": {
+          "practical_value": {
+            "value": "pass",
+            "evidence": "面向具体任务：安装组件、初始化项目配置、定制主题与变体、扩展组件、排错。给出可直接执行的 CLI 命令与配置项说明、目录结构、cn()/cva/wrapper 组件代码，比泛泛提示词提供更明确的增量（例如 CLI 会自适应 Radix 或 Base UI 并更新 components.json）。"
+          },
+          "actionability": {
+            "value": "pass",
+            "evidence": "提供可复制的命令、MCP 工具调用名、目录结构、cn() 与 cva 代码、主题变量与扩展组件示例、常见问题判断条件（别名配置、Tailwind 配置、globals.css 导入、CSS 变量名一致性、依赖缺失）。属指南形态，无需附带可执行脚本。"
+          },
+          "verification": {
+            "value": "pass",
+            "evidence": "设有「Validation and Quality」提交前检查清单（tsc --noEmit 类型检查、lint、axe DevTools 可访问性测试、明暗模式视觉核对、断点响应检查），并有 Troubleshooting 一节点名失败现象与排查动作；对纯文档型技能属清晰验收条件。"
+          }
+        },
+        "review_checks": {
+          "practical_value": {
+            "value": "pass",
+            "evidence": "面向具体任务：新项目 create、已有项目 init、组件 add 与手动集成，并交付 components.json 配置、cn() 工具和 cva 变体等可直接复用的代码，优于泛泛的前端提示词。"
+          },
+          "actionability": {
+            "value": "pass",
+            "evidence": "提供可直接执行的命令（npx shadcn@latest add/init/create）、手动集成分步流程、组件扩展与 cva 变体示例代码，并列出 Import/Style/Dependency/Version 四类排错判断条件。"
+          },
+          "verification": {
+            "value": "pass",
+            "evidence": "设有明确的提交前校验清单（tsc --noEmit、lint、axe 无障碍检查、明暗模式视觉 QA、断点响应式检查），并在排错章节给出依赖与版本核对方式，构成可检查的验收条件。"
+          }
+        }
+      },
+      "skill_type": "guideline",
+      "example_requests": [
+        "把 shadcn 的 dialog 组件加进我的 React 项目",
+        "怎么配置 shadcn 的主题 CSS 变量和暗色模式"
+      ],
+      "key_features": [
+        "组件源码复制进项目，完全掌控与自由定制",
+        "支持自定义 Registry 与 blocks 目录查询",
+        "强调键盘导航、ARIA 与焦点管理的可访问性"
+      ],
+      "main_category": {
+        "id": "dev",
+        "name": "编程开发"
+      },
+      "tags": [
+        "前端",
+        "React",
+        "UI组件",
+        "Tailwind CSS",
+        "shadcn/ui"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "React 18+",
+        "Tailwind CSS 3.0+",
+        "Radix UI 或 Base UI",
+        "class-variance-authority",
+        "clsx",
+        "tailwind-merge",
+        "shadcn CLI：npx shadcn@latest",
+        "shadcn MCP 工具（list_components、get_component_metadata 等）"
+      ],
+      "source_type": "official",
+      "status": "candidate",
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-26",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
+      "snooze": null,
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "reason_codes": [
+        "NEEDS_VERIFICATION"
+      ],
+      "limitations": "材料仅含 SKILL.md 本体；文末引用的 resources/*.md 与 examples/ 目录未提供，无法核验其内容。未声明除 React/Tailwind/UI 原语与 shadcn CLI、MCP 之外的运行环境与平台兼容性。",
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-26T09:10:40.417198+08:00",
+      "content_changed_at": null,
+      "upstream_status": "ok",
+      "license": null
+    },
+    {
+      "skill_id": "google-labs-code/stitch-skills:plugins/stitch-design/skills/extract-design-md/SKILL.md",
+      "name": "extract-design-md",
+      "url": "https://github.com/google-labs-code/stitch-skills/blob/HEAD/plugins/stitch-design/skills/extract-design-md/SKILL.md",
+      "author": "google-labs-code",
+      "summary_zh": "从 React/Vue/Svelte/Angular 或纯 HTML/CSS 前端源码中逆向提取设计系统（颜色、字体、间距、组件与布局规则），产出含 YAML frontmatter 的 .stitch/DESIGN.md。适用于项目无法构建或渲染时审计样式、统一设计令牌，或把既有视觉语言迁移到 Stitch。",
+      "quality_summary": {
+        "review_status": "not_required",
+        "review_note": null,
+        "blocking_reasons": [
+          "初评：所提供材料未见可疑行为：功能为读取项目源文件并写出 .stitch/DESIGN.md，无凭据读取/外传、无命令注入诱导、无越权说明；allowed-tools 中的 web_fetch 仅列为可用工具，正文未要求抓取或上传数据。但 references/*.md、examples/DESIGN.md 及 Phase 4 依赖的 manage-design-system 技能未随材料提供，无法核实其实际内容。；程序未能核实所引原文与行号。"
+        ],
+        "checks": {
+          "practical_value": {
+            "value": "pass",
+            "evidence": "面向具体任务（从前端源码提取设计系统并写出 .stitch/DESIGN.md），交付物明确；相比泛泛提示词，额外给出按框架定位样式的信号文件表、颜色按功能分组与近色去重、组件与布局的提取维度，属可复用增量。"
+          },
+          "actionability": {
+            "value": "pass",
+            "evidence": "步骤具体可执行：Phase 1 给出信号文件→框架映射表与目录结构示例并指引对应 references 文件；Phase 2 按 6 个设计维度列出检索位置与判断方式；Phase 3 给出 DESIGN.md 章节骨架与落盘路径。"
+          },
+          "verification": {
+            "value": "pass",
+            "evidence": "提供 8 条 Quality Checklist 作为交付前验收条件，并强制要求 YAML frontmatter（缺失即视为使用失败），Phase 3/4 亦说明完成条件（只需文档则 Phase 3 后结束）。未提供自动化测试，但属可检查的成品验收标准。"
+          }
+        },
+        "review_checks": {}
+      },
+      "skill_type": "guideline",
+      "example_requests": [
+        "从这个前端仓库提取设计系统，生成 DESIGN.md",
+        "审计这个项目的样式，说明它的设计语言"
+      ],
+      "key_features": [
+        "只读源码提取设计系统，无需构建或渲染应用",
+        "覆盖 React/Vue/Svelte/Angular/纯 CSS 与 Tailwind 配置",
+        "产出 .stitch/DESIGN.md，强制要求 YAML frontmatter"
+      ],
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "tags": [
+        "设计系统",
+        "前端源码分析",
+        "设计令牌",
+        "DESIGN.md",
+        "样式审计"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "允许工具：stitch*:*、Bash、Read、Write、web_fetch（SKILL.md frontmatter）",
+        "核心提取流程声明无需构建或运行时依赖"
+      ],
+      "source_type": "official",
+      "status": "candidate",
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-26",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
+      "snooze": null,
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "reason_codes": [
+        "NEEDS_VERIFICATION",
+        "INSUFFICIENT_EVIDENCE"
+      ],
+      "limitations": "references/react-tailwind.md、vue.md、svelte.md、angular.md、plain-css.md 与 examples/DESIGN.md 未随材料提供，框架专项提取细节和输出模板无法核实；Phase 4 集成依赖未提供的 manage-design-system 技能与 Stitch MCP；未声明平台兼容性。",
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-26T09:13:21.336136+08:00",
       "content_changed_at": null,
       "upstream_status": "ok",
       "license": null
@@ -3789,7 +4132,11 @@
       "status": "candidate",
       "manual_pick": false,
       "manual_note": null,
-      "snooze": null,
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      },
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -3858,7 +4205,11 @@
       "status": "candidate",
       "manual_pick": false,
       "manual_note": null,
-      "snooze": null,
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      },
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -3868,476 +4219,6 @@
       "limitations": "材料仅含 SKILL.md，所引用的 references/root-cause.md、searching.md、triage.md、reporting.md 与 resources/ 下的查询、报告模板均未提供，其内容与可用性无法核实；未声明运行环境及 CodeQL/Semgrep 的安装与版本要求。",
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-26T08:57:39.424035+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
-      "skill_id": "trailofbits/skills:plugins/vulnerability-triage-brocards/skills/vulnerability-triage-brocards/SKILL.md",
-      "name": "vulnerability-triage-brocards",
-      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/vulnerability-triage-brocards/skills/vulnerability-triage-brocards/SKILL.md",
-      "author": "trailofbits",
-      "summary_zh": "用 7 条可证伪的经验法则（brocard）逐项评估漏洞报告，给出 PASS/DISMISS/NEEDS-MORE-INFO 判定与结构化分诊小结。典型用于自动漏洞发现流水线在人工复核前的过滤，以及审计期间对 CVE、第三方公告和 bug bounty 提交的分诊。",
-      "quality_summary": {
-        "review_status": "not_required",
-        "review_note": null,
-        "blocking_reasons": [
-          "初评：质量门槛未通过：practical_value: 面向具体任务（分诊漏洞报告/CVE/bug bounty 提交），交付物明确为含 7 行判定表、Overall Verdict、Reasoning 与 Next Step 的分诊小结；相对泛泛提示词的增量在于把「是否值得修」拆成 7 条可证伪判据并给出默认短路与全量评估两种模式。；程序未能核实所引原文与行号。"
-        ],
-        "checks": {
-          "practical_value": {
-            "value": "unknown",
-            "evidence": "面向具体任务（分诊漏洞报告/CVE/bug bounty 提交），交付物明确为含 7 行判定表、Overall Verdict、Reasoning 与 Next Step 的分诊小结；相对泛泛提示词的增量在于把「是否值得修」拆成 7 条可证伪判据并给出默认短路与全量评估两种模式。；程序未能核实所引原文与行号。"
-          },
-          "actionability": {
-            "value": "pass",
-            "evidence": "每条 brocard 均给出判据段与一句式 quick test（例如 Brocard 1 要求回答 attacker/capability/action/impact 四要素），并规定三种 verdict 语义与默认停止规则，可直接照此执行分诊并落笔成表；属纯文本指南形态，无需代码即可操作。"
-          },
-          "verification": {
-            "value": "pass",
-            "evidence": "提供固定输出模板作为验收条件：7 行判定表逐条标注 PASS/DISMISS/NEEDS-MORE-INFO 与理由，并汇总总体结论、理由与下一步；另有「RATIONALIZATIONS TO REJECT」清单用于事后检查误判方向，形成可复核的检查项。"
-          }
-        },
-        "review_checks": {}
-      },
-      "skill_type": "guideline",
-      "example_requests": [
-        "帮我分诊这份漏洞报告，判断是否值得深入分析",
-        "评估这个 CVE 是否影响我们正在审计的代码库"
-      ],
-      "key_features": [
-        "7 条可证伪 brocard，逐条给出 PASS/DISMISS/NEEDS-MORE-INFO",
-        "定位为自动发现与人工复核之间的质量门，存活者才升级 PoC",
-        "提供结构化分诊总结表、总体结论与下一步动作模板"
-      ],
-      "main_category": {
-        "id": "security",
-        "name": "安全"
-      },
-      "tags": [
-        "漏洞分诊",
-        "安全审计",
-        "CVE评估",
-        "漏洞报告筛选"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [],
-      "source_type": "official",
-      "status": "candidate",
-      "manual_pick": false,
-      "manual_note": null,
-      "snooze": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [
-        "QUALITY_BELOW_BAR",
-        "INSUFFICIENT_EVIDENCE"
-      ],
-      "limitations": "仅提供分诊判断准则与输出模板，不含漏洞验证、可利用性证明或 PoC 能力；扩展细节文件 references/brocards-detail.md 未在材料中提供，其内容无法核实；未声明运行平台与外部依赖。",
-      "first_seen": "2026-09-24T09:09:16+00:00",
-      "last_checked": "2026-09-26T08:58:29.023571+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
-      "skill_id": "google-labs-code/stitch-skills:plugins/stitch-build/skills/react-components/SKILL.md",
-      "name": "react-components",
-      "url": "https://github.com/google-labs-code/stitch-skills/blob/HEAD/plugins/stitch-build/skills/react-components/SKILL.md",
-      "author": "google-labs-code",
-      "summary_zh": "把 Stitch 设计稿转换为模块化的 Vite + React 组件，或将已有 React 组件同步更新到最新设计；适用于前端设计稿落地与组件重构场景。",
-      "quality_summary": {
-        "review_status": "not_required",
-        "review_note": null,
-        "blocking_reasons": [
-          "初评：四个 Phase 均给出编号步骤、GATE 条件与反模式清单（下载脚本用法、样式抽取、架构规则、执行步骤），足以理解用途与执行路径。；程序未能核实所引原文与行号。"
-        ],
-        "checks": {
-          "practical_value": {
-            "value": "pass",
-            "evidence": "面向具体任务：把 Stitch 设计稿落地为 React 组件并给出明确交付物路径（src/components/、src/hooks/、src/data/mockData.ts、style-guide.json），比泛泛提示词多出模块化拆分、导航路由接线与暗色模式等约束。"
-          },
-          "actionability": {
-            "value": "pass",
-            "evidence": "给出可直接照做的命令与替换规则（fetch-stitch.sh 下载命令及 =w{width} 参数、组件模板 StitchComponent 全量替换、npm install），并配有每阶段反模式清单作为判断条件。"
-          },
-          "verification": {
-            "value": "pass",
-            "evidence": "提供可检查的验收手段：对每个 .tsx 运行 npm run validate、tsc --noEmit 检查编译、对照 architecture-checklist.md，并在 Troubleshooting 中给出失败处理路径（缺 Props 接口、样式令牌过期、失效导航）。注意这些校验被标注为可选且需用户同意。"
-          }
-        },
-        "review_checks": {}
-      },
-      "skill_type": "guideline",
-      "example_requests": [
-        "把这个 Stitch 设计稿转成模块化的 React 组件",
-        "同步更新现有 React 组件以匹配最新的 Stitch 设计"
-      ],
-      "key_features": [
-        "四阶段流程并设 GATE，未满足条件不得继续",
-        "强制模块化组件、hooks 逻辑隔离与 mockData 数据解耦",
-        "AST 校验要求每个组件含 Props 接口，禁止硬编码色值"
-      ],
-      "main_category": {
-        "id": "dev",
-        "name": "编程开发"
-      },
-      "tags": [
-        "前端开发",
-        "React",
-        "设计稿转代码",
-        "组件重构"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "Stitch MCP 工具（stitch*:*）",
-        "Bash、Read、Write、web_fetch 工具",
-        "Node.js / npm（npm install、npm run validate、npm run dev）",
-        "TypeScript（tsc --noEmit）",
-        "skill 内脚本与资源：scripts/fetch-stitch.sh、resources/style-guide.json、resources/component-template.tsx、resources/architecture-checklist.md"
-      ],
-      "source_type": "official",
-      "status": "candidate",
-      "manual_pick": false,
-      "manual_note": null,
-      "snooze": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [
-        "NEEDS_VERIFICATION",
-        "INSUFFICIENT_EVIDENCE"
-      ],
-      "limitations": "材料中未提供 scripts/fetch-stitch.sh、resources/ 下模板与清单、以及 npm run validate 的实现，其可用性无法从本材料核实；Phase 4 的校验、dev server 与浏览器审计被标注为可选且需用户同意，因此验证强度取决于用户选择；未声明平台兼容性。",
-      "first_seen": "2026-09-24T09:09:16+00:00",
-      "last_checked": "2026-09-26T09:05:43.202398+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
-      "skill_id": "google-labs-code/stitch-skills:plugins/stitch-build/skills/react-native/SKILL.md",
-      "name": "react-native",
-      "url": "https://github.com/google-labs-code/stitch-skills/blob/HEAD/plugins/stitch-build/skills/react-native/SKILL.md",
-      "author": "google-labs-code",
-      "summary_zh": "把 Stitch 网页设计（HTML/CSS + Tailwind 配置）转换为使用 StyleSheet 的 React Native 组件，或同步更新已有原生组件以对齐最新设计。适用于移动端开发中按设计稿生成组件、主题令牌、数据层与导航结构的场景。",
-      "quality_summary": {
-        "review_status": "not_required",
-        "review_note": null,
-        "blocking_reasons": [
-          "初评：质量门槛未通过：actionability: 提供可直接照做的映射表（HTML→RN 组件）、样式逐项映射（font-size→fontSize 等）、不支持属性清单以及 Platform.select 平台差异代码示例，另有组件模板文件作为起点；步骤具体、判断条件明确。；程序未能核实所引原文与行号。",
-          "初评：frontmatter 明确声明 allowed-tools（含 Stitch MCP 通配、Bash、Read、Write、web_fetch）；正文提到需 npm install、react-native-svg、react-native-safe-area-context、React Navigation 等依赖及平台差异处理，依赖有声明但未声明具体版本与运行环境。；程序未能核实所引原文与行号。"
-        ],
-        "checks": {
-          "practical_value": {
-            "value": "pass",
-            "evidence": "面向具体交付物：将 Stitch 设计转换为可编译的 React Native 组件，产出 src/theme.ts、src/data/mockData.ts、atoms/molecules/organisms 组件与 App.tsx 导航；相比泛泛提示词，额外提供元素映射表、主题令牌提取要求、原子化拆分与逻辑隔离规则。"
-          },
-          "actionability": {
-            "value": "unknown",
-            "evidence": "提供可直接照做的映射表（HTML→RN 组件）、样式逐项映射（font-size→fontSize 等）、不支持属性清单以及 Platform.select 平台差异代码示例，另有组件模板文件作为起点；步骤具体、判断条件明确。；程序未能核实所引原文与行号。"
-          },
-          "verification": {
-            "value": "pass",
-            "evidence": "给出可检查的完成条件：每个 Phase 的 GATE、npm run validate 逐文件校验、tsc --noEmit 编译检查、architecture-checklist.md 对照，以及 Troubleshooting 中的失败处理（缺导出 Props 接口、硬编码颜色、Text 外裸字符串、图片尺寸、FlatList 嵌套 ScrollView）；其中 validate 脚本与检查清单文件未随材料提供，实际可执行性无法完全核验。"
-          }
-        },
-        "review_checks": {}
-      },
-      "skill_type": "guideline",
-      "example_requests": [
-        "把 Stitch 里的设计稿转成 React Native 组件",
-        "同步更新我现有的原生组件以对齐最新的 Stitch 设计"
-      ],
-      "key_features": [
-        "提供 HTML→React Native 元素与 CSS→StyleSheet 映射规则表",
-        "强制把颜色/间距/字号提取到 src/theme.ts，禁止硬编码",
-        "分四阶段并设 GATE，含 validate 与 tsc 校验步骤"
-      ],
-      "main_category": {
-        "id": "dev",
-        "name": "编程开发"
-      },
-      "tags": [
-        "React Native",
-        "设计稿转代码",
-        "移动端开发",
-        "StyleSheet",
-        "主题令牌"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "Stitch MCP 工具（stitch*:*）",
-        "Bash / Read / Write / web_fetch",
-        "Node.js 与 npm（npm install）",
-        "React Native、TypeScript",
-        "react-native-svg",
-        "react-native-safe-area-context",
-        "React Navigation",
-        "react-native-reanimated（动画替代方案）",
-        "scripts/fetch-stitch.sh",
-        "resources/component-template.tsx",
-        "resources/architecture-checklist.md"
-      ],
-      "source_type": "official",
-      "status": "candidate",
-      "manual_pick": false,
-      "manual_note": null,
-      "snooze": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [
-        "QUALITY_BELOW_BAR",
-        "INSUFFICIENT_EVIDENCE"
-      ],
-      "limitations": "依赖 Stitch MCP 前缀工具与上游插件的脚本/资源文件（fetch-stitch.sh、component-template.tsx、architecture-checklist.md 未随材料提供，无法核验）；未声明 React Native/依赖版本与运行环境要求；校验步骤（npm run validate、模拟器审计）为可选且需用户授权。",
-      "first_seen": "2026-09-24T09:09:16+00:00",
-      "last_checked": "2026-09-26T09:06:52.644738+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
-      "skill_id": "google-labs-code/stitch-skills:plugins/stitch-build/skills/react-vite-dashboard/SKILL.md",
-      "name": "react-vite-dashboard",
-      "url": "https://github.com/google-labs-code/stitch-skills/blob/HEAD/plugins/stitch-build/skills/react-vite-dashboard/SKILL.md",
-      "author": "google-labs-code",
-      "summary_zh": "把 Stitch 设计稿转换为 React 18 + Vite + TypeScript 的数据密集型仪表盘，包含 DESIGN.md 设计令牌到 CSS 变量的映射、TanStack Query 数据接入与 Web3 只读合约模式。适用于前端仪表盘开发场景。",
-      "quality_summary": {
-        "review_status": "not_required",
-        "review_note": null,
-        "blocking_reasons": [
-          "初评：质量门槛未通过：actionability: 工作流按序号给出可执行动作（list_tools、get_screen、落盘路径、映射令牌、目录拆分），并附可直接改写的 CSS 变量桥接示例与 linter 命令。；程序未能核实所引原文与行号。"
-        ],
-        "checks": {
-          "practical_value": {
-            "value": "pass",
-            "evidence": "给出具体任务（Stitch 屏幕转 React 组件）与可交付物（src/components、pages、hooks、lib、styles 目录及令牌 CSS 变量），并给出 HTML→React 的对应实现方式，超出泛泛提示词。"
-          },
-          "actionability": {
-            "value": "unknown",
-            "evidence": "工作流按序号给出可执行动作（list_tools、get_screen、落盘路径、映射令牌、目录拆分），并附可直接改写的 CSS 变量桥接示例与 linter 命令。；程序未能核实所引原文与行号。"
-          },
-          "verification": {
-            "value": "pass",
-            "evidence": "第77-83行提供可勾选质量清单（WCAG 2.2 AA、键盘焦点顺序、375px/1280px 响应式、密钥不入库、TS strict 无 any），构成清晰验收条件。"
-          }
-        },
-        "review_checks": {}
-      },
-      "skill_type": "guideline",
-      "example_requests": [
-        "把 Stitch 设计稿转成 React + Vite 的仪表盘页面与组件",
-        "用 TanStack Query 给仪表盘接入异步数据请求"
-      ],
-      "key_features": [
-        "Stitch 屏幕转 React + Vite 组件",
-        "DESIGN.md 令牌映射为 CSS 变量",
-        "Web3 只读合约调用与钱包隔离"
-      ],
-      "main_category": {
-        "id": "dev",
-        "name": "编程开发"
-      },
-      "tags": [
-        "前端开发",
-        "React",
-        "Vite",
-        "设计稿转代码",
-        "Web3"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "Stitch MCP",
-        "项目 DESIGN.md",
-        "Vite + React + TypeScript 脚手架",
-        "React 18 / Vite / TypeScript",
-        "TanStack Query",
-        "React Router",
-        "ethers v6 或 viem（可选）"
-      ],
-      "source_type": "official",
-      "status": "candidate",
-      "manual_pick": false,
-      "manual_note": null,
-      "snooze": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [
-        "QUALITY_BELOW_BAR",
-        "INSUFFICIENT_EVIDENCE"
-      ],
-      "limitations": "需预先配置 Stitch MCP 并具备 DESIGN.md 与 Vite 脚手架；未声明平台兼容性；Web3 部分限定为只读合约调用，不含实盘下单；正文引用的 design.md linter 与 Stitch 文档链接未在本材料中提供内容，无法验证其可用性。",
-      "first_seen": "2026-09-24T09:09:16+00:00",
-      "last_checked": "2026-09-26T09:07:38.577573+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
-      "skill_id": "google-labs-code/stitch-skills:plugins/stitch-build/skills/shadcn-ui/SKILL.md",
-      "name": "shadcn-ui",
-      "url": "https://github.com/google-labs-code/stitch-skills/blob/HEAD/plugins/stitch-build/skills/shadcn-ui/SKILL.md",
-      "author": "google-labs-code",
-      "summary_zh": "一份面向前端开发的 shadcn/ui 集成指南，指导组件的发现、安装、注册表查询、主题与变体定制以及可访问性维护。适用于在 React + Tailwind 项目中引入和定制 shadcn/ui 组件、排查导入与样式冲突等场景。",
-      "quality_summary": {
-        "review_status": "disagreed",
-        "review_note": "两轮独立评估存在分歧，留在候选区等待核实。",
-        "blocking_reasons": [
-          "初评：两轮独立评估存在分歧，留在候选区等待核实。",
-          "复核领域检查：该技能为前端组件集成指南，不涉及金融数据、回测或交易，非金融领域条目。；程序未能核实所引原文与行号。"
-        ],
-        "checks": {
-          "practical_value": {
-            "value": "pass",
-            "evidence": "面向具体任务：安装组件、初始化项目配置、定制主题与变体、扩展组件、排错。给出可直接执行的 CLI 命令与配置项说明、目录结构、cn()/cva/wrapper 组件代码，比泛泛提示词提供更明确的增量（例如 CLI 会自适应 Radix 或 Base UI 并更新 components.json）。"
-          },
-          "actionability": {
-            "value": "pass",
-            "evidence": "提供可复制的命令、MCP 工具调用名、目录结构、cn() 与 cva 代码、主题变量与扩展组件示例、常见问题判断条件（别名配置、Tailwind 配置、globals.css 导入、CSS 变量名一致性、依赖缺失）。属指南形态，无需附带可执行脚本。"
-          },
-          "verification": {
-            "value": "pass",
-            "evidence": "设有「Validation and Quality」提交前检查清单（tsc --noEmit 类型检查、lint、axe DevTools 可访问性测试、明暗模式视觉核对、断点响应检查），并有 Troubleshooting 一节点名失败现象与排查动作；对纯文档型技能属清晰验收条件。"
-          }
-        },
-        "review_checks": {
-          "practical_value": {
-            "value": "pass",
-            "evidence": "面向具体任务：新项目 create、已有项目 init、组件 add 与手动集成，并交付 components.json 配置、cn() 工具和 cva 变体等可直接复用的代码，优于泛泛的前端提示词。"
-          },
-          "actionability": {
-            "value": "pass",
-            "evidence": "提供可直接执行的命令（npx shadcn@latest add/init/create）、手动集成分步流程、组件扩展与 cva 变体示例代码，并列出 Import/Style/Dependency/Version 四类排错判断条件。"
-          },
-          "verification": {
-            "value": "pass",
-            "evidence": "设有明确的提交前校验清单（tsc --noEmit、lint、axe 无障碍检查、明暗模式视觉 QA、断点响应式检查），并在排错章节给出依赖与版本核对方式，构成可检查的验收条件。"
-          }
-        }
-      },
-      "skill_type": "guideline",
-      "example_requests": [
-        "把 shadcn 的 dialog 组件加进我的 React 项目",
-        "怎么配置 shadcn 的主题 CSS 变量和暗色模式"
-      ],
-      "key_features": [
-        "组件源码复制进项目，完全掌控与自由定制",
-        "支持自定义 Registry 与 blocks 目录查询",
-        "强调键盘导航、ARIA 与焦点管理的可访问性"
-      ],
-      "main_category": {
-        "id": "dev",
-        "name": "编程开发"
-      },
-      "tags": [
-        "前端",
-        "React",
-        "UI组件",
-        "Tailwind CSS",
-        "shadcn/ui"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "React 18+",
-        "Tailwind CSS 3.0+",
-        "Radix UI 或 Base UI",
-        "class-variance-authority",
-        "clsx",
-        "tailwind-merge",
-        "shadcn CLI：npx shadcn@latest",
-        "shadcn MCP 工具（list_components、get_component_metadata 等）"
-      ],
-      "source_type": "official",
-      "status": "candidate",
-      "manual_pick": false,
-      "manual_note": null,
-      "snooze": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [
-        "NEEDS_VERIFICATION"
-      ],
-      "limitations": "材料仅含 SKILL.md 本体；文末引用的 resources/*.md 与 examples/ 目录未提供，无法核验其内容。未声明除 React/Tailwind/UI 原语与 shadcn CLI、MCP 之外的运行环境与平台兼容性。",
-      "first_seen": "2026-09-24T09:09:16+00:00",
-      "last_checked": "2026-09-26T09:10:40.417198+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
-      "skill_id": "google-labs-code/stitch-skills:plugins/stitch-design/skills/extract-design-md/SKILL.md",
-      "name": "extract-design-md",
-      "url": "https://github.com/google-labs-code/stitch-skills/blob/HEAD/plugins/stitch-design/skills/extract-design-md/SKILL.md",
-      "author": "google-labs-code",
-      "summary_zh": "从 React/Vue/Svelte/Angular 或纯 HTML/CSS 前端源码中逆向提取设计系统（颜色、字体、间距、组件与布局规则），产出含 YAML frontmatter 的 .stitch/DESIGN.md。适用于项目无法构建或渲染时审计样式、统一设计令牌，或把既有视觉语言迁移到 Stitch。",
-      "quality_summary": {
-        "review_status": "not_required",
-        "review_note": null,
-        "blocking_reasons": [
-          "初评：所提供材料未见可疑行为：功能为读取项目源文件并写出 .stitch/DESIGN.md，无凭据读取/外传、无命令注入诱导、无越权说明；allowed-tools 中的 web_fetch 仅列为可用工具，正文未要求抓取或上传数据。但 references/*.md、examples/DESIGN.md 及 Phase 4 依赖的 manage-design-system 技能未随材料提供，无法核实其实际内容。；程序未能核实所引原文与行号。"
-        ],
-        "checks": {
-          "practical_value": {
-            "value": "pass",
-            "evidence": "面向具体任务（从前端源码提取设计系统并写出 .stitch/DESIGN.md），交付物明确；相比泛泛提示词，额外给出按框架定位样式的信号文件表、颜色按功能分组与近色去重、组件与布局的提取维度，属可复用增量。"
-          },
-          "actionability": {
-            "value": "pass",
-            "evidence": "步骤具体可执行：Phase 1 给出信号文件→框架映射表与目录结构示例并指引对应 references 文件；Phase 2 按 6 个设计维度列出检索位置与判断方式；Phase 3 给出 DESIGN.md 章节骨架与落盘路径。"
-          },
-          "verification": {
-            "value": "pass",
-            "evidence": "提供 8 条 Quality Checklist 作为交付前验收条件，并强制要求 YAML frontmatter（缺失即视为使用失败），Phase 3/4 亦说明完成条件（只需文档则 Phase 3 后结束）。未提供自动化测试，但属可检查的成品验收标准。"
-          }
-        },
-        "review_checks": {}
-      },
-      "skill_type": "guideline",
-      "example_requests": [
-        "从这个前端仓库提取设计系统，生成 DESIGN.md",
-        "审计这个项目的样式，说明它的设计语言"
-      ],
-      "key_features": [
-        "只读源码提取设计系统，无需构建或渲染应用",
-        "覆盖 React/Vue/Svelte/Angular/纯 CSS 与 Tailwind 配置",
-        "产出 .stitch/DESIGN.md，强制要求 YAML frontmatter"
-      ],
-      "main_category": {
-        "id": "product",
-        "name": "产品与设计"
-      },
-      "tags": [
-        "设计系统",
-        "前端源码分析",
-        "设计令牌",
-        "DESIGN.md",
-        "样式审计"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "允许工具：stitch*:*、Bash、Read、Write、web_fetch（SKILL.md frontmatter）",
-        "核心提取流程声明无需构建或运行时依赖"
-      ],
-      "source_type": "official",
-      "status": "candidate",
-      "manual_pick": false,
-      "manual_note": null,
-      "snooze": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [
-        "NEEDS_VERIFICATION",
-        "INSUFFICIENT_EVIDENCE"
-      ],
-      "limitations": "references/react-tailwind.md、vue.md、svelte.md、angular.md、plain-css.md 与 examples/DESIGN.md 未随材料提供，框架专项提取细节和输出模板无法核实；Phase 4 集成依赖未提供的 manage-design-system 技能与 Stitch MCP；未声明平台兼容性。",
-      "first_seen": "2026-09-24T09:09:16+00:00",
-      "last_checked": "2026-09-26T09:13:21.336136+08:00",
       "content_changed_at": null,
       "upstream_status": "ok",
       "license": null
@@ -4419,7 +4300,11 @@
       "status": "candidate",
       "manual_pick": false,
       "manual_note": null,
-      "snooze": null,
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      },
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -4506,7 +4391,11 @@
       "status": "candidate",
       "manual_pick": false,
       "manual_note": null,
-      "snooze": null,
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      },
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -4663,172 +4552,6 @@
       "license": null
     },
     {
-      "skill_id": "expo/skills:plugins/expo-experiments/skills/expo-migrate-module/SKILL.md",
-      "name": "expo-migrate-module",
-      "url": "https://github.com/expo/skills/blob/HEAD/plugins/expo-experiments/skills/expo-migrate-module/SKILL.md",
-      "author": "expo",
-      "summary_zh": "把已有的 Apple/Swift Expo 原生模块从 Expo Modules API 1.0 定义 DSL 迁移到 2.0 宏 API，同时保持 JS/TS 合约不变。适用于现有 Swift 模块的增量或整体迁移，不适用于新建模块、通用 SDK 升级或 Android/Kotlin 迁移。",
-      "quality_summary": {
-        "review_status": "not_required",
-        "review_note": null,
-        "blocking_reasons": [
-          "初评领域检查：条目为 Expo 原生模块迁移，与金融/投资领域无关，不适用金融专项检查。；程序未能核实所引原文与行号。",
-          "初评领域检查：条目不含心理健康或身体健康内容，不适用健康专项检查。；程序未能核实所引原文与行号。"
-        ],
-        "checks": {
-          "practical_value": {
-            "value": "pass",
-            "evidence": "面向具体任务：将现有 Swift Expo 模块按语义组从 1.0 DSL 迁移到 2.0 宏 API，产出为迁移后模块与交接报告（第111-116行）；相对泛泛提示词的增量在于线程语义陷阱（async 成员在首个 await 前阻塞 JS 线程）、expo-module.config.json 类名遗漏导致运行期缺失等具体判断点（第67、69行）。"
-          },
-          "actionability": {
-            "value": "pass",
-            "evidence": "给出可操作的分类判据（Migrate / Keep in DSL / Blocked）、逐组迁移顺序和命名/tag 要求；属于指南型技能，不要求附带代码。但部分细节指向未提供的 references 文件。"
-          },
-          "verification": {
-            "value": "pass",
-            "evidence": "第4步列出 6 条验收动作：构建/类型检查、原生与 JS 测试、构建并启动 example app、核对 expo-module.config.json 类名、与第1步清单比对导出面、搜索残留旧 DSL 条目，并说明宏展开测试不足。"
-          }
-        },
-        "review_checks": {}
-      },
-      "skill_type": "guideline",
-      "example_requests": [
-        "把这个 Swift Expo 原生模块从 1.0 DSL 迁移到 2.0 宏 API，保持 JS 接口不变",
-        "在模块里逐步采用 @ExpoModule、@JS、@Event，先做混合模式迁移"
-      ],
-      "key_features": [
-        "以现有 JS/TS 接口与测试为兼容合约，只迁移 Swift 侧",
-        "2.0 缺失的能力保留在 1.0 DSL，支持混合模式",
-        "按语义组迁移并核对 apple.modules 与最终导出面"
-      ],
-      "main_category": {
-        "id": "dev",
-        "name": "编程开发"
-      },
-      "tags": [
-        "Expo",
-        "Swift",
-        "原生模块",
-        "代码迁移",
-        "重构"
-      ],
-      "platform_declared": "Apple/Swift（iOS）；不适用于 Android/Kotlin",
-      "dependencies_declared": [
-        "expo >= 57.0.21",
-        "expo-modules-core（版本/分支需实际核对）",
-        "Xcode 与 CocoaPods 安装流程",
-        "gh CLI（gh issue create）",
-        "npx submit-expo-feedback@latest"
-      ],
-      "source_type": "official",
-      "status": "candidate",
-      "manual_pick": false,
-      "manual_note": null,
-      "snooze": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [
-        "NEEDS_VERIFICATION",
-        "INSUFFICIENT_EVIDENCE"
-      ],
-      "limitations": "仅覆盖 Apple/Swift 侧，Kotlin 保留 1.0 DSL；2.0 宏在 SDK 57 为实验性且未文档化，API 可能变动；技能依赖 references/migration-map.md、references/example.md、references/compatibility.md，而这些文件未随材料提供，其内容与能力清单无法核实。",
-      "first_seen": "2026-09-24T09:09:16+00:00",
-      "last_checked": "2026-09-26T09:33:39.152044+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
-      "skill_id": "expo/skills:plugins/expo/skills/eas-app-stores/SKILL.md",
-      "name": "eas-app-stores",
-      "url": "https://github.com/expo/skills/blob/HEAD/plugins/expo/skills/eas-app-stores/SKILL.md",
-      "author": "expo",
-      "summary_zh": "该技能说明如何用 EAS 构建并提交 iOS/Android 应用至 TestFlight、App Store 或 Google Play，涵盖 eas.json 配置、签名、版本号与构建号、发布流水线及商店元数据，并提供构建/提交状态的查询与排查命令。适用于 Expo/React Native 项目及既有原生应用的商店发布流程。",
-      "quality_summary": {
-        "review_status": "disagreed",
-        "review_note": "两轮独立评估存在分歧，留在候选区等待核实。",
-        "blocking_reasons": [
-          "初评：两轮独立评估存在分歧，留在候选区等待核实。",
-          "复核：所提供材料未见凭据外传、实盘下单、临床决策或越权命令；凭据相关信息仅为 eas.json 中的占位符（your@email.com、serviceAccountKeyPath 本地路径）。feedback 一节让用户显式执行 npx submit-expo-feedback@latest 并向 Expo 提交文本，属用户主动发起，非自动外传，但仍建议由使用者自行确认；材料中亦无试图改变评估规则的注入内容。；程序未能核实所引原文与行号。"
-        ],
-        "checks": {
-          "practical_value": {
-            "value": "pass",
-            "evidence": "面向具体任务：EAS 初始化、生产构建、自动提交至 App Store Connect/Google Play、版本号管理（build:version:get/set）与提交状态核查；交付物为 eas.json 构建/提交配置与可执行的 release 流程，优于泛泛提示词。"
-          },
-          "actionability": {
-            "value": "pass",
-            "evidence": "提供可直接复制的命令与 eas.json 片段，并给出判断条件（发布配置已存在时保留项目与商店标识、原生路径差异、CLI 版本差异），属指南型技能所需的具体程度。"
-          },
-          "verification": {
-            "value": "pass",
-            "evidence": "给出验证手段：build:list/build:view/submit:list/submit:view 查询命令、归档与图标校验、失败时按日志 URL 排查、并要求报告构建 ID/版本与已核实的最远发布状态；同时提示构建成功或提交排队不等于 Apple 接受或上架。"
-          }
-        },
-        "review_checks": {
-          "practical_value": {
-            "value": "pass",
-            "evidence": "面向具体任务：EAS 生产构建、自动提交到商店、eas.json 配置、远程版本号管理与构建/提交状态查看，均给出可直接执行的命令与可复制配置，比泛泛提示词有明确增量；并区分纯原生 iOS、纯原生 Android 与 Expo/RN 三条路径。"
-          },
-          "actionability": {
-            "value": "pass",
-            "evidence": "按 guideline 形态看，步骤与命令具体：安装/登录、init、build:configure、生产构建与 --auto-submit、版本读写命令、提交配置模板均给出；同时给出判断条件（如保留既有项目与商店标识、提交命令需 CLI 23.2.0、纯原生路径不得套用 RN 示例）。"
-          },
-          "verification": {
-            "value": "pass",
-            "evidence": "提供可检查的验收与失败处理要点：构建成功或提交入队不等于 App Store 接受/测试者可见；需做归档与图标检查、处理与可用性检查；监控命令与 JSON 输出、返回日志 URL、报告确切 build ID/版本与已验证到的最远发布状态。"
-          }
-        }
-      },
-      "skill_type": "guideline",
-      "example_requests": [
-        "用 EAS 构建 iOS 生产包并自动提交到 App Store Connect",
-        "为 React Native 项目配置 eas.json 的 production 构建与提交"
-      ],
-      "key_features": [
-        "覆盖构建、提交、签名、版本号与商店元数据",
-        "区分 Expo/React Native 与原生 iOS 两条路径",
-        "含 eas.json 示例与 build/submit 状态核查命令"
-      ],
-      "main_category": {
-        "id": "cloud",
-        "name": "云服务与运维"
-      },
-      "tags": [
-        "移动应用发布",
-        "EAS",
-        "CI/CD",
-        "iOS",
-        "Android"
-      ],
-      "platform_declared": "iOS、Android",
-      "dependencies_declared": [
-        "EAS CLI（npm install -g eas-cli，eas.json 要求 cli >= 16.0.1）",
-        "EAS 服务账户与免费/付费计划额度",
-        "Apple Developer 会员（单独付费）",
-        "Google Play 会员（单独付费）",
-        "eas.json 构建/提交配置与商店凭据（如 service account key）"
-      ],
-      "source_type": "official",
-      "status": "candidate",
-      "manual_pick": false,
-      "manual_note": null,
-      "snooze": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [
-        "NEEDS_VERIFICATION"
-      ],
-      "limitations": "正文多处关键细节指向 references/workflows.md、testflight.md、app-store-metadata.md、play-store.md、ios-app-store.md、native-ios.md，但这些文件未随材料提供，相关能力无法核验；原生 Android 专用设置走查明确尚未包含；使用依赖付费 EAS 服务与 Apple/Google 开发者会员。",
-      "first_seen": "2026-09-24T09:09:16+00:00",
-      "last_checked": "2026-09-26T09:36:01.106384+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
       "skill_id": "expo/skills:plugins/expo/skills/eas-workflows/SKILL.md",
       "name": "eas-workflows",
       "url": "https://github.com/expo/skills/blob/HEAD/plugins/expo/skills/eas-workflows/SKILL.md",
@@ -4888,7 +4611,11 @@
       "status": "candidate",
       "manual_pick": false,
       "manual_note": null,
-      "snooze": null,
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      },
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -5356,12 +5083,6 @@
         "from": "recommended"
       },
       {
-        "skill_id": "anthropics/skills:skills/frontend-design/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-24",
-        "from": "recommended"
-      },
-      {
         "skill_id": "anthropics/skills:skills/internal-comms/SKILL.md",
         "reason": "用户收藏",
         "added_at": "2026-09-24",
@@ -5398,16 +5119,22 @@
         "from": "recommended"
       },
       {
+        "skill_id": "anthropics/skills:skills/webapp-testing/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-26",
+        "from": "candidate"
+      },
+      {
+        "skill_id": "vercel-labs/skills:skills/find-skills/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-26",
+        "from": "candidate"
+      },
+      {
         "skill_id": "vercel-labs/agent-skills:skills/composition-patterns/SKILL.md",
         "reason": "用户收藏",
         "added_at": "2026-09-24",
         "from": "candidate"
-      },
-      {
-        "skill_id": "vercel-labs/agent-skills:skills/react-best-practices/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-22",
-        "from": "recommended"
       },
       {
         "skill_id": "vercel-labs/agent-skills:skills/writing-guidelines/SKILL.md",
@@ -5464,6 +5191,42 @@
         "from": "candidate"
       },
       {
+        "skill_id": "trailofbits/skills:plugins/gh-cli/skills/gh-cli/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-26",
+        "from": "candidate"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/goal-prompt/skills/goal-prompt/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-26",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/trailmark/skills/diagramming-code/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-26",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/trailmark/skills/graph-evolution/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-26",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/frontend-design/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-24",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "vercel-labs/agent-skills:skills/react-best-practices/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-22",
+        "from": "recommended"
+      },
+      {
         "skill_id": "anthropics/skills:skills/docx/SKILL.md",
         "reason": "用户收藏",
         "added_at": "2026-09-22",
@@ -5482,37 +5245,25 @@
         "from": "candidate"
       },
       {
-        "skill_id": "trailofbits/skills:plugins/goal-prompt/skills/goal-prompt/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-26",
-        "from": "recommended"
-      },
-      {
-        "skill_id": "trailofbits/skills:plugins/trailmark/skills/graph-evolution/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-26",
-        "from": "recommended"
-      },
-      {
-        "skill_id": "trailofbits/skills:plugins/trailmark/skills/diagramming-code/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-26",
-        "from": "recommended"
-      },
-      {
-        "skill_id": "anthropics/skills:skills/webapp-testing/SKILL.md",
+        "skill_id": "google-labs-code/stitch-skills:plugins/stitch-build/skills/react-components/SKILL.md",
         "reason": "用户收藏",
         "added_at": "2026-09-26",
         "from": "candidate"
       },
       {
-        "skill_id": "vercel-labs/skills:skills/find-skills/SKILL.md",
+        "skill_id": "google-labs-code/stitch-skills:plugins/stitch-build/skills/react-native/SKILL.md",
         "reason": "用户收藏",
         "added_at": "2026-09-26",
         "from": "candidate"
       },
       {
-        "skill_id": "trailofbits/skills:plugins/gh-cli/skills/gh-cli/SKILL.md",
+        "skill_id": "google-labs-code/stitch-skills:plugins/stitch-build/skills/shadcn-ui/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-26",
+        "from": "candidate"
+      },
+      {
+        "skill_id": "google-labs-code/stitch-skills:plugins/stitch-design/skills/extract-design-md/SKILL.md",
         "reason": "用户收藏",
         "added_at": "2026-09-26",
         "from": "candidate"
@@ -5746,6 +5497,26 @@
       },
       {
         "skill_id": "trailofbits/skills:plugins/let-fate-decide/skills/let-fate-decide/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-26"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/vulnerability-triage-brocards/skills/vulnerability-triage-brocards/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-26"
+      },
+      {
+        "skill_id": "google-labs-code/stitch-skills:plugins/stitch-build/skills/react-vite-dashboard/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-26"
+      },
+      {
+        "skill_id": "expo/skills:plugins/expo-experiments/skills/expo-migrate-module/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-26"
+      },
+      {
+        "skill_id": "expo/skills:plugins/expo/skills/eas-app-stores/SKILL.md",
         "reason": "用户屏蔽/删除",
         "added_at": "2026-09-26"
       }
@@ -6074,6 +5845,41 @@
       },
       {
         "skill_id": "trailofbits/skills:plugins/trailmark/skills/trailmark-review-gate/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/trailmark/skills/vector-forge/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/variant-analysis/skills/variant-analysis/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "google-labs-code/stitch-skills:plugins/stitch-utilities/skills/design-md/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "google-labs-code/stitch-skills:plugins/stitch-design/skills/generate-design/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "expo/skills:plugins/expo/skills/eas-workflows/SKILL.md",
         "snoozed_at": "2026-09-26",
         "expires_at": "2027-02-23",
         "days": 150,

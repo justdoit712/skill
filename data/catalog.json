@@ -4,9 +4,9 @@
   "generated_at": "2026-09-26T10:06:18.483816+08:00",
   "counts": {
     "recommended": 42,
-    "candidate": 21,
-    "manual": 30,
-    "excluded": 47
+    "candidate": 13,
+    "manual": 34,
+    "excluded": 51
   },
   "entries": [
     {
@@ -7679,7 +7679,12 @@
         "review_checks": {}
       },
       "last_evaluation_id": "trailofbits/skills:plugins/trailmark/skills/vector-forge/SKILL.md|sha256:aca07e846ce5615031e9df0faca3537f|1.1.0|1.0.0",
-      "evaluated_at": "2026-09-26T08:56:45.426060+08:00"
+      "evaluated_at": "2026-09-26T08:56:45.426060+08:00",
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "trailofbits/skills:plugins/variant-analysis/skills/variant-analysis/SKILL.md",
@@ -7753,7 +7758,12 @@
         "review_checks": {}
       },
       "last_evaluation_id": "trailofbits/skills:plugins/variant-analysis/skills/variant-analysis/SKILL.md|sha256:7b6b78e499bcb88d05c68254ffc91ebc|1.1.0|1.0.0",
-      "evaluated_at": "2026-09-26T08:57:39.422545+08:00"
+      "evaluated_at": "2026-09-26T08:57:39.422545+08:00",
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "trailofbits/skills:plugins/vulnerability-triage-brocards/skills/vulnerability-triage-brocards/SKILL.md",
@@ -7789,10 +7799,11 @@
       "dependencies_declared": [],
       "limitations": "仅提供分诊判断准则与输出模板，不含漏洞验证、可利用性证明或 PoC 能力；扩展细节文件 references/brocards-detail.md 未在材料中提供，其内容无法核实；未声明运行平台与外部依赖。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
         "QUALITY_BELOW_BAR",
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-26T08:58:29.023571+08:00",
@@ -7883,8 +7894,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-26",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "evaluation_rules_version": "1.1.0",
       "quality_summary": {
         "review_status": "not_required",
@@ -7970,8 +7986,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-26",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "evaluation_rules_version": "1.1.0",
       "quality_summary": {
         "review_status": "not_required",
@@ -8040,10 +8061,11 @@
       ],
       "limitations": "需预先配置 Stitch MCP 并具备 DESIGN.md 与 Vite 脚手架；未声明平台兼容性；Web3 部分限定为只读合约调用，不含实盘下单；正文引用的 design.md linter 与 Stitch 文档链接未在本材料中提供内容，无法验证其可用性。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
         "QUALITY_BELOW_BAR",
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-26T09:07:38.577573+08:00",
@@ -8137,8 +8159,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-26",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "evaluation_rules_version": "1.1.0",
       "quality_summary": {
         "review_status": "disagreed",
@@ -8229,8 +8256,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-26",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "evaluation_rules_version": "1.1.0",
       "quality_summary": {
         "review_status": "not_required",
@@ -8351,7 +8383,12 @@
         }
       },
       "last_evaluation_id": "google-labs-code/stitch-skills:plugins/stitch-design/skills/generate-design/SKILL.md|sha256:d03d2de3a0cefbde2ca7b8cdc2c96e81|1.1.0|1.0.0",
-      "evaluated_at": "2026-09-26T09:16:55.266986+08:00"
+      "evaluated_at": "2026-09-26T09:16:55.266986+08:00",
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "google-labs-code/stitch-skills:plugins/stitch-utilities/skills/design-md/SKILL.md",
@@ -8443,7 +8480,12 @@
         }
       },
       "last_evaluation_id": "google-labs-code/stitch-skills:plugins/stitch-utilities/skills/design-md/SKILL.md|sha256:eb15f44646528f3a087ce023329ae699|1.1.0|1.0.0",
-      "evaluated_at": "2026-09-26T09:21:48.521592+08:00"
+      "evaluated_at": "2026-09-26T09:21:48.521592+08:00",
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "google-labs-code/stitch-skills:plugins/stitch-utilities/skills/stitch-loop/SKILL.md",
@@ -8636,10 +8678,11 @@
       ],
       "limitations": "仅覆盖 Apple/Swift 侧，Kotlin 保留 1.0 DSL；2.0 宏在 SDK 57 为实验性且未文档化，API 可能变动；技能依赖 references/migration-map.md、references/example.md、references/compatibility.md，而这些文件未随材料提供，其内容与能力清单无法核实。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
         "NEEDS_VERIFICATION",
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-26T09:33:39.152044+08:00",
@@ -8718,9 +8761,10 @@
       ],
       "limitations": "正文多处关键细节指向 references/workflows.md、testflight.md、app-store-metadata.md、play-store.md、ios-app-store.md、native-ios.md，但这些文件未随材料提供，相关能力无法核验；原生 Android 专用设置走查明确尚未包含；使用依赖付费 EAS 服务与 Apple/Google 开发者会员。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "NEEDS_VERIFICATION"
+        "NEEDS_VERIFICATION",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-26T09:36:01.106384+08:00",
@@ -8853,7 +8897,12 @@
         "review_checks": {}
       },
       "last_evaluation_id": "expo/skills:plugins/expo/skills/eas-workflows/SKILL.md|sha256:6c54224fa405c0167748ef97624ac79b|1.1.0|1.0.0",
-      "evaluated_at": "2026-09-26T09:46:59.787373+08:00"
+      "evaluated_at": "2026-09-26T09:46:59.787373+08:00",
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "expo/skills:plugins/expo/skills/expo-brownfield/SKILL.md",
@@ -9052,12 +9101,6 @@
         "from": "recommended"
       },
       {
-        "skill_id": "anthropics/skills:skills/frontend-design/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-24",
-        "from": "recommended"
-      },
-      {
         "skill_id": "anthropics/skills:skills/internal-comms/SKILL.md",
         "reason": "用户收藏",
         "added_at": "2026-09-24",
@@ -9094,16 +9137,22 @@
         "from": "recommended"
       },
       {
+        "skill_id": "anthropics/skills:skills/webapp-testing/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-26",
+        "from": "candidate"
+      },
+      {
+        "skill_id": "vercel-labs/skills:skills/find-skills/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-26",
+        "from": "candidate"
+      },
+      {
         "skill_id": "vercel-labs/agent-skills:skills/composition-patterns/SKILL.md",
         "reason": "用户收藏",
         "added_at": "2026-09-24",
         "from": "candidate"
-      },
-      {
-        "skill_id": "vercel-labs/agent-skills:skills/react-best-practices/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-22",
-        "from": "recommended"
       },
       {
         "skill_id": "vercel-labs/agent-skills:skills/writing-guidelines/SKILL.md",
@@ -9160,6 +9209,42 @@
         "from": "candidate"
       },
       {
+        "skill_id": "trailofbits/skills:plugins/gh-cli/skills/gh-cli/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-26",
+        "from": "candidate"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/goal-prompt/skills/goal-prompt/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-26",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/trailmark/skills/diagramming-code/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-26",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/trailmark/skills/graph-evolution/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-26",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/frontend-design/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-24",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "vercel-labs/agent-skills:skills/react-best-practices/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-22",
+        "from": "recommended"
+      },
+      {
         "skill_id": "anthropics/skills:skills/docx/SKILL.md",
         "reason": "用户收藏",
         "added_at": "2026-09-22",
@@ -9178,37 +9263,25 @@
         "from": "candidate"
       },
       {
-        "skill_id": "trailofbits/skills:plugins/goal-prompt/skills/goal-prompt/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-26",
-        "from": "recommended"
-      },
-      {
-        "skill_id": "trailofbits/skills:plugins/trailmark/skills/graph-evolution/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-26",
-        "from": "recommended"
-      },
-      {
-        "skill_id": "trailofbits/skills:plugins/trailmark/skills/diagramming-code/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-26",
-        "from": "recommended"
-      },
-      {
-        "skill_id": "anthropics/skills:skills/webapp-testing/SKILL.md",
+        "skill_id": "google-labs-code/stitch-skills:plugins/stitch-build/skills/react-components/SKILL.md",
         "reason": "用户收藏",
         "added_at": "2026-09-26",
         "from": "candidate"
       },
       {
-        "skill_id": "vercel-labs/skills:skills/find-skills/SKILL.md",
+        "skill_id": "google-labs-code/stitch-skills:plugins/stitch-build/skills/react-native/SKILL.md",
         "reason": "用户收藏",
         "added_at": "2026-09-26",
         "from": "candidate"
       },
       {
-        "skill_id": "trailofbits/skills:plugins/gh-cli/skills/gh-cli/SKILL.md",
+        "skill_id": "google-labs-code/stitch-skills:plugins/stitch-build/skills/shadcn-ui/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-26",
+        "from": "candidate"
+      },
+      {
+        "skill_id": "google-labs-code/stitch-skills:plugins/stitch-design/skills/extract-design-md/SKILL.md",
         "reason": "用户收藏",
         "added_at": "2026-09-26",
         "from": "candidate"
@@ -9442,6 +9515,26 @@
       },
       {
         "skill_id": "trailofbits/skills:plugins/let-fate-decide/skills/let-fate-decide/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-26"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/vulnerability-triage-brocards/skills/vulnerability-triage-brocards/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-26"
+      },
+      {
+        "skill_id": "google-labs-code/stitch-skills:plugins/stitch-build/skills/react-vite-dashboard/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-26"
+      },
+      {
+        "skill_id": "expo/skills:plugins/expo-experiments/skills/expo-migrate-module/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-26"
+      },
+      {
+        "skill_id": "expo/skills:plugins/expo/skills/eas-app-stores/SKILL.md",
         "reason": "用户屏蔽/删除",
         "added_at": "2026-09-26"
       }
@@ -9770,6 +9863,41 @@
       },
       {
         "skill_id": "trailofbits/skills:plugins/trailmark/skills/trailmark-review-gate/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/trailmark/skills/vector-forge/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/variant-analysis/skills/variant-analysis/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "google-labs-code/stitch-skills:plugins/stitch-utilities/skills/design-md/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "google-labs-code/stitch-skills:plugins/stitch-design/skills/generate-design/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "expo/skills:plugins/expo/skills/eas-workflows/SKILL.md",
         "snoozed_at": "2026-09-26",
         "expires_at": "2027-02-23",
         "days": 150,
