@@ -1,10 +1,10 @@
 {
   "catalog_version": "1.0.0",
   "rules_version": "1.1.0",
-  "generated_at": "2026-09-26T09:46:59.787876+08:00",
+  "generated_at": "2026-09-26T10:02:59.735905+08:00",
   "counts": {
     "recommended": 42,
-    "candidate": 19,
+    "candidate": 20,
     "manual": 30,
     "excluded": 47
   },
@@ -8854,6 +8854,98 @@
       },
       "last_evaluation_id": "expo/skills:plugins/expo/skills/eas-workflows/SKILL.md|sha256:6c54224fa405c0167748ef97624ac79b|1.1.0|1.0.0",
       "evaluated_at": "2026-09-26T09:46:59.787373+08:00"
+    },
+    {
+      "skill_id": "expo/skills:plugins/expo/skills/expo-brownfield/SKILL.md",
+      "name": "expo-brownfield",
+      "url": "https://github.com/expo/skills/blob/HEAD/plugins/expo/skills/expo-brownfield/SKILL.md",
+      "repo_url": "https://github.com/expo/skills",
+      "author": "expo",
+      "summary_zh": "指导把 Expo/React Native 增量接入既有 iOS/Android 原生应用，给出 isolated（AAR/XCFramework）与 integrated（Gradle/CocoaPods）两种路径的选型规则、环境前提与验收场景。适用于在 SwiftUI/UIKit/Kotlin 宿主中嵌入 RN 页面或把 RN 打包成原生库。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "把 React Native 页面嵌入现有 SwiftUI 应用",
+        "把 RN 打包成 AAR/XCFramework 供原生团队依赖"
+      ],
+      "key_features": [
+        "区分 isolated 与 integrated 两种集成路径并给出选型规则",
+        "说明宿主勘察要点：禁止在手工原生宿主中运行 prebuild",
+        "给出嵌入功能的验收场景：传参、返回结果、销毁与监听清理"
+      ],
+      "main_category": {
+        "id": "dev",
+        "name": "编程开发"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "移动开发",
+        "React Native",
+        "原生集成",
+        "iOS/Android"
+      ],
+      "platform_declared": "iOS、Android",
+      "dependencies_declared": [
+        "Node.js (LTS)",
+        "项目包管理器与 lockfile（npm/Yarn/pnpm/Bun）",
+        "Xcode",
+        "CocoaPods（含 Gemfile/Bundler 时按其配置）"
+      ],
+      "limitations": "详细构建、特性集成与排错步骤位于 references/brownfield-isolated.md、brownfield-integrated.md、feature-integration.md、comparison.md、troubleshooting.md、version-compatibility.md，本次材料未提供这些文件，其内容无法验证；本材料本身仅为选型与流程性指引。",
+      "license": null,
+      "status": "candidate",
+      "reason_codes": [
+        "NEEDS_VERIFICATION"
+      ],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-26T10:02:59.735905+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:aeae0460694f09ffa01417f5c9034319",
+      "source_type": "official",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.1.0",
+      "quality_summary": {
+        "review_status": "disagreed",
+        "review_note": "两轮独立评估存在分歧，留在候选区等待核实。",
+        "blocking_reasons": [
+          "初评：两轮独立评估存在分歧，留在候选区等待核实。",
+          "复核：材料为移动端集成指南，未见凭据读取/外传、命令执行提权或与收录范围冲突的功能，也未出现试图改变评估规则的注入内容。唯一对外执行点是第 66 行的反馈命令 `npx --yes submit-expo-feedback@latest`，会拉取并运行 npm 上的 latest 包，属厂商自述的反馈渠道，需谨慎但非凭据外传或越界功能。；程序未能核实所引原文与行号。"
+        ],
+        "checks": {
+          "practical_value": {
+            "value": "pass",
+            "evidence": "面向具体工程任务（把 RN 接入既有原生宿主），提供 isolated/integrated 决策矩阵、前置勘察与版本对齐做法，超出泛泛提示词的选型与约束信息（如禁止在手工原生宿主中 prebuild）。"
+          },
+          "actionability": {
+            "value": "pass",
+            "evidence": "给出可直接套用的判断条件（何时选 isolated / integrated）、环境前提清单与版本选择动作（npx expo install 对齐、使用当前稳定 SDK），属于指引形态下足够具体的可执行规则；具体命令级步骤在未提供的 references 中。"
+          },
+          "verification": {
+            "value": "pass",
+            "evidence": "第 59-61 行给出明确验收条件：打开带输入的 RN 页面、向原生返回结果、销毁后以新输入重开、检查监听清理与宿主原导航，并在 Release 构建 + Release 产物 + Metro 停止下验证；同时说明仅在 Expo Go 或示例应用中渲染不算通过。"
+          }
+        },
+        "review_checks": {
+          "practical_value": {
+            "value": "pass",
+            "evidence": "面向具体任务（把 RN 集成进既有原生宿主），提供 isolated 与 integrated 的出货物与选择条件表格、快速选择规则、前置依赖与版本对齐原则，并给出「打开带输入的 RN 页面→回传结果→关闭→重开」的验收场景，超出泛泛提示词的增量明确。"
+          },
+          "actionability": {
+            "value": "pass",
+            "evidence": "作为指南型技能，给出了可直接执行的判断条件（何时选 isolated/integrated）、宿主检查项与禁止项（不要在人工维护的原生宿主跑 prebuild）、环境依赖清单与命令（npx expo install）以及具体验收动作；平台级详细步骤由 references 承载，但选择与前置部分本身足够具体。"
+          },
+          "verification": {
+            "value": "pass",
+            "evidence": "第 59-61 行给出可检查的验收条件：带输入打开 RN 页面、向原生回传结果、关闭并重新打开新输入、检查监听器清理与宿主原有导航，并在 Metro 停止下以 Release 产物构建宿主；同时明确负向判据（仅在 Expo Go 或 producer 示例应用渲染不算通过集成）。"
+          }
+        }
+      },
+      "last_evaluation_id": "expo/skills:plugins/expo/skills/expo-brownfield/SKILL.md|sha256:aeae0460694f09ffa01417f5c9034319|1.1.0|1.0.0",
+      "evaluated_at": "2026-09-26T10:02:59.735905+08:00"
     }
   ],
   "overrides": {

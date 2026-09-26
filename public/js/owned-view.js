@@ -63,7 +63,7 @@ export function renderOwnedList(container, effectiveOwnedList, { q = "" } = {}) 
     emptyLi.className = "none";
     emptyLi.textContent = needle
       ? "未找到匹配“" + q + "”的已收录条目（支持搜索名称、来源 ID 及私人备注）。"
-      : "暂无已收录条目。可在推荐区、候选区、收藏区或定向查找中点击“标为已收录”进行标记。";
+      : "暂无已收录条目。可在收藏区中点击“标为已收录”进行标记。";
     container.appendChild(emptyLi);
     return 0;
   }

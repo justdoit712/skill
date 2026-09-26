@@ -155,12 +155,10 @@ export function renderFindView(container, report, ownedState = null) {
       const skillUrl = safeLink(cand.url || cand.repo_url || item.url || item.repo_url);
       const summaryText = ev.summary_zh || item.summary || "无简述";
       const candId = cand.skill_id || item.skill_id;
-      const ownedBtn = '<button type="button" class="btn-action btn-owned" data-action="owned" data-id="' + escapeHtml(candId) + '" data-name="' + escapeHtml(skillName) + '" data-url="' + escapeHtml(skillUrl) + '" data-from="find" title="标记为已收录（从目录与查找中隐藏，0 Token 跳过）">标为已收录</button>';
 
       li.innerHTML =
         '<div class="card-head">' +
           '<h3><a href="' + escapeHtml(skillUrl) + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(skillName) + '</a></h3>' +
-          '<div class="card-actions">' + ownedBtn + '</div>' +
         '</div>' +
         '<div class="card-tags" style="margin: 0 0 8px;">' + bits.join("") + '</div>' +
         '<p class="summary">' + escapeHtml(summaryText) + '</p>' +
@@ -204,12 +202,10 @@ export function renderFindView(container, report, ownedState = null) {
       const skillUrl = safeLink(cand.url || cand.repo_url || item.url || item.repo_url);
       const summaryText = ev.summary_zh || item.summary || "相关备选技能";
       const candId = cand.skill_id || item.skill_id;
-      const ownedBtn = '<button type="button" class="btn-action btn-owned" data-action="owned" data-id="' + escapeHtml(candId) + '" data-name="' + escapeHtml(skillName) + '" data-url="' + escapeHtml(skillUrl) + '" data-from="find" title="标记为已收录（从目录与查找中隐藏，0 Token 跳过）">标为已收录</button>';
 
       li.innerHTML =
         '<div class="card-head">' +
           '<h3><a href="' + escapeHtml(skillUrl) + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(skillName) + '</a></h3>' +
-          '<div class="card-actions">' + ownedBtn + '</div>' +
         '</div>' +
         '<div class="card-tags" style="margin: 0 0 8px;">' + bits.join("") + '</div>' +
         '<p class="summary">' + escapeHtml(summaryText) + '</p>' +
