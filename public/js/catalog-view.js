@@ -167,21 +167,14 @@ export function renderCatalogList(container, entries, overridesState, currentTab
 
     const favBtnClass = picked ? "btn-action btn-fav is-active" : "btn-action btn-fav";
     const favBtnText = picked ? "★ 已收藏" : "★ 收藏";
-    const ownedBtnManual = '<button type="button" class="btn-action btn-owned" data-action="owned" data-id="' + escapeHtml(sid) + '" title="标记为已收录（从目录与查找中隐藏，0 Token 跳过）">标为已收录</button>';
-    const ownedBtnCandidate = '<button type="button" class="btn-action btn-owned" data-action="owned" data-need-confirm="true" data-id="' + escapeHtml(sid) + '" title="标记为已收录（需二次确认，从目录与查找中隐藏，0 Token 跳过）">标为已收录</button>';
+    const ownedBtn = '<button type="button" class="btn-action btn-owned" data-action="owned" data-id="' + escapeHtml(sid) + '" title="标记为已收录（需二次确认，从目录与查找中隐藏，0 Token 跳过）">标为已收录</button>';
 
-    // 收藏区直接收录；候选区提供收录（需二次确认）；推荐区不展示收录按钮
+    // 仅收藏区展示“标为已收录”（点击需二次确认）；推荐与候选区展示收藏、暂不看、屏蔽
     let actionsHtml = "";
     if (currentTab === "manual") {
       actionsHtml =
-        ownedBtnManual +
+        ownedBtn +
         '<button type="button" class="' + favBtnClass + '" data-action="fav" data-id="' + escapeHtml(sid) + '">' + favBtnText + '</button>' +
-        '<button type="button" class="btn-action btn-block" data-action="block" data-id="' + escapeHtml(sid) + '" title="屏蔽并移入黑名单">🚫 屏蔽</button>';
-    } else if (currentTab === "candidate") {
-      actionsHtml =
-        ownedBtnCandidate +
-        '<button type="button" class="' + favBtnClass + '" data-action="fav" data-id="' + escapeHtml(sid) + '">' + favBtnText + '</button>' +
-        '<button type="button" class="btn-action btn-snooze" data-action="snooze" data-id="' + escapeHtml(sid) + '" title="暂不关注（冷冻150天，到期自动恢复）">⏳ 暂不看</button>' +
         '<button type="button" class="btn-action btn-block" data-action="block" data-id="' + escapeHtml(sid) + '" title="屏蔽并移入黑名单">🚫 屏蔽</button>';
     } else {
       actionsHtml =

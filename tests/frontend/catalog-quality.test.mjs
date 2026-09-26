@@ -50,19 +50,17 @@ test("catalog-view: action buttons partitioned correctly across tabs", () => {
     const entry = { skill_id: "test:skill", name: "test-skill", url: "https://example.com" };
     const overridesState = createOverridesState();
 
-    // 1. Manual tab: has owned button, directly without data-need-confirm
+    // 1. Manual tab: ONLY manual has owned button
     const containerManual = new Element();
     renderCatalogList(containerManual, [entry], overridesState, "manual");
     const htmlManual = containerManual.output();
     assert.ok(htmlManual.includes('class="btn-action btn-owned"'));
-    assert.ok(!htmlManual.includes('data-need-confirm="true"'));
 
-    // 2. Candidate tab: has owned button, WITH data-need-confirm="true"
+    // 2. Candidate tab: DOES NOT have owned button
     const containerCandidate = new Element();
     renderCatalogList(containerCandidate, [entry], overridesState, "candidate");
     const htmlCandidate = containerCandidate.output();
-    assert.ok(htmlCandidate.includes('class="btn-action btn-owned"'));
-    assert.ok(htmlCandidate.includes('data-need-confirm="true"'));
+    assert.ok(!htmlCandidate.includes('class="btn-action btn-owned"'));
 
     // 3. Recommended tab: DOES NOT have owned button
     const containerRec = new Element();

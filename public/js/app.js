@@ -317,11 +317,10 @@ el.list.addEventListener("click", e => {
     const entry = state.allEntries[sid];
     const skillName = btn.getAttribute("data-name") || (entry && entry.name) || sid;
     const sourceUrl = btn.getAttribute("data-url") || (entry && (entry.url || entry.repo_url)) || null;
-    const fromWhere = btn.getAttribute("data-from") || (entry && entry._baselineTab) || (state.tab === "find" ? "find" : (state.tab || "candidate"));
+    const fromWhere = btn.getAttribute("data-from") || (entry && entry._baselineTab) || "manual";
     const card = btn.closest(".card");
 
-    const needConfirm = state.tab === "candidate" || btn.getAttribute("data-need-confirm") === "true";
-    if (needConfirm && confirmModalController) {
+    if (confirmModalController) {
       confirmModalController.open(skillName, () => {
         executeMarkOwned(sid, skillName, sourceUrl, fromWhere, card);
       });
