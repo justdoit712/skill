@@ -3,14 +3,14 @@
   "generated_at": "2026-09-26T13:24:52.279870+08:00",
   "rules_version": "1.1.0",
   "counts": {
-    "recommended": 42,
-    "candidate": 29,
-    "manual": 26,
+    "recommended": 50,
+    "candidate": 32,
+    "manual": 13,
     "pending": 0,
     "processing_failure": 0,
-    "total_evaluated": 97,
-    "owned": 8,
-    "owned_in_catalog": 8
+    "total_evaluated": 95,
+    "owned": 10,
+    "owned_in_catalog": 10
   },
   "categories": [
     {
@@ -23,7 +23,7 @@
     },
     {
       "id": "content",
-      "count": 7
+      "count": 6
     },
     {
       "id": "dev",
@@ -31,7 +31,7 @@
     },
     {
       "id": "docs",
-      "count": 4
+      "count": 3
     },
     {
       "id": "product",
@@ -94,102 +94,6 @@
       "license": null
     },
     {
-      "skill_id": "anthropics/skills:skills/discernment-nudge/SKILL.md",
-      "name": "discernment-nudge",
-      "url": "https://github.com/anthropics/skills/blob/HEAD/skills/discernment-nudge/SKILL.md",
-      "author": "anthropics",
-      "summary_zh": "该技能在 AI 给出实质性回答后附加 2-3 个针对性跟进问题，帮助用户检查事实、推理和缺失上下文，适用于决策、建议、估算等场景。",
-      "quality_summary": null,
-      "skill_type": null,
-      "example_requests": [
-        "“决策、建议、估算”"
-      ],
-      "key_features": [],
-      "main_category": {
-        "id": "content",
-        "name": "内容创作"
-      },
-      "tags": [
-        "批判性思维",
-        "反思提示",
-        "内容审查",
-        "AI素养"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [],
-      "source_type": "official",
-      "status": "candidate",
-      "manual_pick": true,
-      "manual_note": {
-        "added_at": "2026-09-24",
-        "reason": "用户收藏",
-        "from": "candidate",
-        "auto_status": "candidate"
-      },
-      "snooze": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [],
-      "limitations": "不适用于用户已明确要求验证、快速答案、纯教育解释、创意写作、代码执行、用户提供素材或要求检查自身内容等情况；每会话最多一次。",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-21T01:18:53.307320+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
-      "skill_id": "anthropics/skills:skills/mcp-builder/SKILL.md",
-      "name": "mcp-builder",
-      "url": "https://github.com/anthropics/skills/blob/HEAD/skills/mcp-builder/SKILL.md",
-      "author": "anthropics",
-      "summary_zh": "提供创建高质量 MCP 服务器的开发指南，覆盖研究、实现、测试与评估，用于集成外部 API 或服务。",
-      "quality_summary": null,
-      "skill_type": "guideline",
-      "example_requests": [],
-      "key_features": [
-        "覆盖研究、实现、测试与评估",
-        "提供创建高质量 MCP 服务器的开发指南"
-      ],
-      "main_category": {
-        "id": "dev",
-        "name": "编程开发"
-      },
-      "tags": [
-        "mcp",
-        "server",
-        "api集成",
-        "开发指南"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "TypeScript SDK",
-        "Python SDK",
-        "FastMCP",
-        "MCP Inspector"
-      ],
-      "source_type": "official",
-      "status": "recommended",
-      "manual_pick": true,
-      "manual_note": {
-        "added_at": "2026-09-22",
-        "reason": "用户收藏",
-        "from": "recommended",
-        "auto_status": "recommended"
-      },
-      "snooze": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [],
-      "limitations": "指南依赖参考文件，具体实现需按语言指南进行；未包含具体 API 服务细节。",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-21T01:22:53.506382+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
       "skill_id": "anthropics/skills:skills/skill-creator/SKILL.md",
       "name": "skill-creator",
       "url": "https://github.com/anthropics/skills/blob/HEAD/skills/skill-creator/SKILL.md",
@@ -239,59 +143,6 @@
       "limitations": "Claude.ai 环境无子代理，无法并行基准测试；描述优化需要 claude CLI；Cowork 环境无浏览器需使用静态查看器。",
       "first_seen": "2026-09-20T16:59:36+00:00",
       "last_checked": "2026-09-21T01:24:36.215057+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
-      "skill_id": "anthropics/skills:skills/slack-gif-creator/SKILL.md",
-      "name": "slack-gif-creator",
-      "url": "https://github.com/anthropics/skills/blob/HEAD/skills/slack-gif-creator/SKILL.md",
-      "author": "anthropics",
-      "summary_zh": "用于创建针对 Slack 优化的动画 GIF 的工具箱，提供尺寸/参数约束、PIL 绘图与动画概念；典型场景是用户请求“给 Slack 做一个某人做某事的 GIF”。",
-      "quality_summary": null,
-      "skill_type": null,
-      "example_requests": [
-        "“给 Slack 做一个某人做某事的 GIF”"
-      ],
-      "key_features": [
-        "提供尺寸/参数约束",
-        "用于创建针对 Slack 优化的动画 GIF 的工具"
-      ],
-      "main_category": {
-        "id": "content",
-        "name": "内容创作"
-      },
-      "tags": [
-        "GIF",
-        "Slack",
-        "动画",
-        "PIL",
-        "图像生成"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "pillow",
-        "imageio",
-        "numpy"
-      ],
-      "source_type": "official",
-      "status": "recommended",
-      "manual_pick": true,
-      "manual_note": {
-        "added_at": "2026-09-22",
-        "reason": "用户收藏",
-        "from": "recommended",
-        "auto_status": "recommended"
-      },
-      "snooze": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [],
-      "limitations": "不提供预制图形、不使用 emoji 字体渲染；需要用户自行绘制或上传图片；文件大小优化需在用户要求时实施。",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-21T01:25:10.241623+08:00",
       "content_changed_at": null,
       "upstream_status": "ok",
       "license": null
@@ -483,519 +334,6 @@
       "limitations": "仅提供规则索引，具体规则和代码示例需查阅配套规则文件；React 19 部分仅适用于 React 19+。",
       "first_seen": "2026-09-20T16:59:36+00:00",
       "last_checked": "2026-09-24T17:17:43.316611+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
-      "skill_id": "vercel-labs/agent-skills:skills/writing-guidelines/SKILL.md",
-      "name": "writing-guidelines",
-      "url": "https://github.com/vercel-labs/agent-skills/blob/HEAD/skills/writing-guidelines/SKILL.md",
-      "author": "vercel-labs",
-      "summary_zh": "该技能依据外部写作指南审查文档/散文的规范符合性，适用于要求检查写作风格或进行文档审查的场景。",
-      "quality_summary": null,
-      "skill_type": "guideline",
-      "example_requests": [
-        "“检查写作风格或进行文档审查”"
-      ],
-      "key_features": [
-        "依据外部写作指南审查文档/散文的规范"
-      ],
-      "main_category": {
-        "id": "docs",
-        "name": "文档办公"
-      },
-      "tags": [
-        "写作审查",
-        "风格检查",
-        "文档"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "WebFetch"
-      ],
-      "source_type": "official",
-      "status": "recommended",
-      "manual_pick": true,
-      "manual_note": {
-        "added_at": "2026-09-22",
-        "reason": "用户收藏",
-        "from": "recommended",
-        "auto_status": "recommended"
-      },
-      "snooze": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [],
-      "limitations": "依赖外部指南URL的可用性与内容；需要网络获取WebFetch能力；指南内容可能变化。",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-24T17:17:45.308699+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
-      "skill_id": "cloudflare/skills:skills/turnstile-spin/SKILL.md",
-      "name": "turnstile-spin",
-      "url": "https://github.com/cloudflare/skills/blob/HEAD/skills/turnstile-spin/SKILL.md",
-      "author": "cloudflare",
-      "summary_zh": "为现有前端与后端设置、修复或迁移 Cloudflare Turnstile 机器人验证，包含前端挂件嵌入和服务器端 Siteverify 校验，典型用于保护表单、登录、注册等用户触发请求。",
-      "quality_summary": null,
-      "skill_type": null,
-      "example_requests": [
-        "“保护表单、登录、注册等用户触发请求”"
-      ],
-      "key_features": [],
-      "main_category": {
-        "id": "dev",
-        "name": "编程开发"
-      },
-      "tags": [
-        "Cloudflare Turnstile",
-        "bot verification",
-        "CAPTCHA",
-        "siteverify",
-        "frontend integration",
-        "backend integration",
-        "security"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "curl",
-        "jq",
-        "python3",
-        "Bash",
-        "Wrangler 4.109+ (existing-widget flow)",
-        "Cloudflare API token",
-        "scripts: auth-probe.sh, widget-create.sh, validate.sh, persist-skill.sh"
-      ],
-      "source_type": "official",
-      "status": "recommended",
-      "manual_pick": true,
-      "manual_note": {
-        "added_at": "2026-09-24",
-        "reason": "用户收藏",
-        "from": "recommended",
-        "auto_status": "recommended"
-      },
-      "snooze": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [],
-      "limitations": "要求已有可放置 siteverify 的后端；不部署额外基础设施；不实现邮件/短信通知等超出范围的功能；对既有 widget 需要 Wrangler 4.109+ 且不支持自动安装；不能无后端纯静态站点使用。",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-24T17:17:46.202856+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
-      "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/audit-prep-assistant/SKILL.md",
-      "name": "audit-prep-assistant",
-      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/building-secure-contracts/skills/audit-prep-assistant/SKILL.md",
-      "author": "trailofbits",
-      "summary_zh": "该技能帮助开发者在安全审计前按 Trail of Bits 清单准备代码库，包括设定审查目标、运行静态分析、提升测试覆盖率、清理死代码、完善文档等，适用于即将接受外部安全审计的项目。",
-      "quality_summary": null,
-      "skill_type": null,
-      "example_requests": [
-        "“即将接受外部安全审计的项目”"
-      ],
-      "key_features": [
-        "覆盖率、清理死代码、完善文档等"
-      ],
-      "main_category": {
-        "id": "security",
-        "name": "安全"
-      },
-      "tags": [
-        "security audit",
-        "code review preparation",
-        "static analysis",
-        "test coverage",
-        "documentation",
-        "smart contract security"
-      ],
-      "platform_declared": "Solidity, Rust, Go, C++",
-      "dependencies_declared": [
-        "slither",
-        "dylint",
-        "golangci-lint",
-        "CodeQL",
-        "Semgrep",
-        "Foundry",
-        "Node.js",
-        "Git"
-      ],
-      "source_type": "official",
-      "status": "recommended",
-      "manual_pick": true,
-      "manual_note": {
-        "added_at": "2026-09-24",
-        "reason": "用户收藏",
-        "from": "recommended",
-        "auto_status": "recommended"
-      },
-      "snooze": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [],
-      "limitations": "不替代专业安全审计，不执行审计；结果依赖用户运行工具与提供的信息；需要用户具备对应生态工具链。",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-24T17:18:16.403183+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
-      "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/cosmos-vulnerability-scanner/SKILL.md",
-      "name": "cosmos-vulnerability-scanner",
-      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/building-secure-contracts/skills/cosmos-vulnerability-scanner/SKILL.md",
-      "author": "trailofbits",
-      "summary_zh": "用于扫描 Cosmos SDK 模块和 CosmWasm 合约中的共识关键漏洞（链停止、资金损失、状态分歧），适用于审计自定义模块、审查 IBC 集成或链上线前安全评估。",
-      "quality_summary": null,
-      "skill_type": null,
-      "example_requests": [
-        "“审计自定义模块、审查 IBC 集成或链上线前安全评估”"
-      ],
-      "key_features": [],
-      "main_category": {
-        "id": "security",
-        "name": "安全"
-      },
-      "tags": [
-        "安全审计",
-        "区块链",
-        "Cosmos SDK",
-        "CosmWasm",
-        "漏洞扫描"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [],
-      "source_type": "official",
-      "status": "recommended",
-      "manual_pick": true,
-      "manual_note": {
-        "added_at": "2026-09-24",
-        "reason": "用户收藏",
-        "from": "recommended",
-        "auto_status": "recommended"
-      },
-      "snooze": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [],
-      "limitations": "不能用于纯 Solidity/EVM 审计、CometBFT 共识引擎内部、非共识关键代码；依赖资源文件；仅覆盖 SDK v0.53.x 版本。",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-24T17:18:17.429230+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
-      "skill_id": "trailofbits/skills:plugins/code-improver/skills/code-improver/SKILL.md",
-      "name": "code-improver",
-      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/code-improver/skills/code-improver/SKILL.md",
-      "author": "trailofbits",
-      "summary_zh": "code-improver 通过用户指定的审查者与修复子代理循环改进代码目标，直至审查无关键/主要问题，适用于按指定审查者迭代修复代码、技能或模块的场景。",
-      "quality_summary": null,
-      "skill_type": null,
-      "example_requests": [
-        "“按指定审查者迭代修复代码、技能或模块”"
-      ],
-      "key_features": [
-        "code-improver 通过用户指定的审查者与修复子代理循环改进代码"
-      ],
-      "main_category": {
-        "id": "dev",
-        "name": "编程开发"
-      },
-      "tags": [
-        "代码改进",
-        "自动化审查",
-        "工作流",
-        "代码质量"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "Workflow",
-        "Bash",
-        "Glob",
-        "Read",
-        "TaskOutput",
-        "TaskStop"
-      ],
-      "source_type": "official",
-      "status": "recommended",
-      "manual_pick": true,
-      "manual_note": {
-        "added_at": "2026-09-24",
-        "reason": "用户收藏",
-        "from": "recommended",
-        "auto_status": "recommended"
-      },
-      "snooze": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [],
-      "limitations": "仅在工作树内修改，不提交；审查者必须由用户指定且已安装；依赖工作流脚本和 Workflow 工具；不适用于一次性审查、快速修复、Claude Code skill 或分支拉取请求。",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-24T17:18:18.306117+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
-      "skill_id": "trailofbits/skills:plugins/code-improver/skills/pr-improver/SKILL.md",
-      "name": "pr-improver",
-      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/code-improver/skills/pr-improver/SKILL.md",
-      "author": "trailofbits",
-      "summary_zh": "PR Improver 自动对当前分支变更运行审查-修复循环，直到 PR 审查无严重/主要问题，适用于在创建或更新 PR 前清理分支。",
-      "quality_summary": null,
-      "skill_type": null,
-      "example_requests": [
-        "“在创建或更新 PR 前清理分支”"
-      ],
-      "key_features": [],
-      "main_category": {
-        "id": "dev",
-        "name": "编程开发"
-      },
-      "tags": [
-        "代码审查",
-        "PR改进",
-        "自动化",
-        "开发工具"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "Bash",
-        "Glob",
-        "Read",
-        "TaskOutput",
-        "TaskStop",
-        "Workflow",
-        "pr-review-toolkit",
-        "code-improver workflow improve.js"
-      ],
-      "source_type": "official",
-      "status": "recommended",
-      "manual_pick": true,
-      "manual_note": {
-        "added_at": "2026-09-24",
-        "reason": "用户收藏",
-        "from": "recommended",
-        "auto_status": "recommended"
-      },
-      "snooze": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [],
-      "limitations": "不提交代码；要求 Git 仓库且当前分支不是 base；依赖 Workflow 工具与动态 workflow 文件；默认 reviewer 需要 pr-review-toolkit 插件；不适用于一次性审查或未推送的探索性改动。",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-24T17:18:20.188820+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
-      "skill_id": "trailofbits/skills:plugins/code-improver/tests/fixtures/pr-review-toolkit/skills/review-pr/SKILL.md",
-      "name": "review-pr",
-      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/code-improver/tests/fixtures/pr-review-toolkit/skills/review-pr/SKILL.md",
-      "author": "trailofbits",
-      "summary_zh": "该技能用于审查当前分支相对基础分支的代码变更，检查正确性、测试覆盖和文档准确性，典型场景是响应分支、diff 或 PR 审查请求。",
-      "quality_summary": null,
-      "skill_type": null,
-      "example_requests": [],
-      "key_features": [
-        "覆盖和文档准确性",
-        "用于审查当前分支相对基础分支的代码"
-      ],
-      "main_category": {
-        "id": "dev",
-        "name": "编程开发"
-      },
-      "tags": [
-        "代码审查",
-        "PR审查",
-        "diff审查"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [],
-      "source_type": "official",
-      "status": "candidate",
-      "manual_pick": true,
-      "manual_note": {
-        "added_at": "2026-09-24",
-        "reason": "用户收藏",
-        "from": "candidate",
-        "auto_status": "candidate"
-      },
-      "snooze": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [],
-      "limitations": "未声明 git 依赖及运行环境要求；需要调用者提供 base 分支名称。",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-24T17:19:00.206288+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
-      "skill_id": "trailofbits/skills:plugins/code-improver/tests/fixtures/review-panel/skills/panel-review/SKILL.md",
-      "name": "panel-review",
-      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/code-improver/tests/fixtures/review-panel/skills/panel-review/SKILL.md",
-      "author": "trailofbits",
-      "summary_zh": "启动一组专家审计子代理对代码目标进行审查并合并报告，适用于请求运行 panel review 的代码审查场景。",
-      "quality_summary": null,
-      "skill_type": null,
-      "example_requests": [
-        "“请求运行 panel review 的代码审查”"
-      ],
-      "key_features": [
-        "启动一组专家审计子代理对代码"
-      ],
-      "main_category": {
-        "id": "dev",
-        "name": "编程开发"
-      },
-      "tags": [
-        "代码审查",
-        "多代理",
-        "审计"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "review-panel:naming-auditor",
-        "review-panel:todo-auditor"
-      ],
-      "source_type": "official",
-      "status": "recommended",
-      "manual_pick": true,
-      "manual_note": {
-        "added_at": "2026-09-24",
-        "reason": "用户收藏",
-        "from": "recommended",
-        "auto_status": "recommended"
-      },
-      "snooze": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [],
-      "limitations": "依赖预定义的审查子代理和 Task 调度工具；不执行具体审计规则，仅合并结果；未声明平台兼容性。",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-24T17:19:01.083951+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
-      "skill_id": "trailofbits/skills:plugins/culture-index/skills/interpreting-culture-index/SKILL.md",
-      "name": "interpreting-culture-index",
-      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/culture-index/skills/interpreting-culture-index/SKILL.md",
-      "author": "trailofbits",
-      "summary_zh": "解读 Culture Index 调查和行为画像数据，支持个人分析、团队构成、倦怠检测、招聘和冲突调解等场景。",
-      "quality_summary": null,
-      "skill_type": null,
-      "example_requests": [],
-      "key_features": [
-        "支持个人分析、团队构成、倦怠检测、招聘和冲突调解等场景"
-      ],
-      "main_category": {
-        "id": "docs",
-        "name": "文档办公"
-      },
-      "tags": [
-        "culture-index",
-        "behavioral-profile",
-        "team-analysis",
-        "hiring",
-        "burnout-detection"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "uv",
-        "extract_pdf.py"
-      ],
-      "source_type": "official",
-      "status": "candidate",
-      "manual_pick": true,
-      "manual_note": {
-        "added_at": "2026-09-24",
-        "reason": "用户收藏",
-        "from": "candidate",
-        "auto_status": "candidate"
-      },
-      "snooze": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [],
-      "limitations": "不能用于临床心理评估或诊断，不能作为招聘/解雇的唯一依据，仅适用于 Culture Index 评估",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-24T17:19:01.942279+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
-      "skill_id": "trailofbits/skills:plugins/gh-cli/skills/gh-cli/SKILL.md",
-      "name": "gh-cli",
-      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/gh-cli/skills/gh-cli/SKILL.md",
-      "author": "trailofbits",
-      "summary_zh": "该技能规范在访问 GitHub 仓库、PR、issue、release 及原始文件时优先使用已认证的 gh CLI，避免未认证的 curl/wget/WebFetch/MCP fetch 并建议克隆后本地读取。适用于需要认证访问私有仓库或更高 API 限额的 GitHub 操作场景。",
-      "quality_summary": null,
-      "skill_type": "guideline",
-      "example_requests": [
-        "用 gh 查看 owner/repo 仓库的基本信息",
-        "查看 owner/repo 中 123 号 PR 或 issue 的内容"
-      ],
-      "key_features": [
-        "优先用已认证 gh CLI 取代未认证 curl/wget/WebFetch",
-        "覆盖仓库、PR、issue、release 与 raw 文件 URL 场景",
-        "明确 when to use / when NOT to use 边界"
-      ],
-      "main_category": {
-        "id": "dev",
-        "name": "编程开发"
-      },
-      "tags": [
-        "GitHub",
-        "CLI",
-        "认证访问",
-        "工作流规范"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "gh CLI（需已认证）"
-      ],
-      "source_type": "official",
-      "status": "candidate",
-      "manual_pick": true,
-      "manual_note": {
-        "added_at": "2026-09-26",
-        "reason": "用户收藏",
-        "from": "candidate",
-        "auto_status": "candidate"
-      },
-      "snooze": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [
-        "NEEDS_VERIFICATION"
-      ],
-      "limitations": "未提供 hook 实现与 README 内容，无法核实其具体拦截逻辑；未说明 gh CLI 安装与认证（gh auth login）步骤。",
-      "first_seen": "2026-09-24T09:09:16+00:00",
-      "last_checked": "2026-09-24T17:20:14.656526+08:00",
       "content_changed_at": null,
       "upstream_status": "ok",
       "license": null
@@ -1508,6 +846,108 @@
     }
   ],
   "recommended": [
+    {
+      "skill_id": "anthropics/skills:skills/mcp-builder/SKILL.md",
+      "name": "mcp-builder",
+      "url": "https://github.com/anthropics/skills/blob/HEAD/skills/mcp-builder/SKILL.md",
+      "author": "anthropics",
+      "summary_zh": "提供创建高质量 MCP 服务器的开发指南，覆盖研究、实现、测试与评估，用于集成外部 API 或服务。",
+      "quality_summary": null,
+      "skill_type": "guideline",
+      "example_requests": [],
+      "key_features": [
+        "覆盖研究、实现、测试与评估",
+        "提供创建高质量 MCP 服务器的开发指南"
+      ],
+      "main_category": {
+        "id": "dev",
+        "name": "编程开发"
+      },
+      "tags": [
+        "mcp",
+        "server",
+        "api集成",
+        "开发指南"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "TypeScript SDK",
+        "Python SDK",
+        "FastMCP",
+        "MCP Inspector"
+      ],
+      "source_type": "official",
+      "status": "recommended",
+      "manual_pick": false,
+      "manual_note": null,
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      },
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "reason_codes": [],
+      "limitations": "指南依赖参考文件，具体实现需按语言指南进行；未包含具体 API 服务细节。",
+      "first_seen": "2026-09-20T16:59:36+00:00",
+      "last_checked": "2026-09-21T01:22:53.506382+08:00",
+      "content_changed_at": null,
+      "upstream_status": "ok",
+      "license": null
+    },
+    {
+      "skill_id": "anthropics/skills:skills/slack-gif-creator/SKILL.md",
+      "name": "slack-gif-creator",
+      "url": "https://github.com/anthropics/skills/blob/HEAD/skills/slack-gif-creator/SKILL.md",
+      "author": "anthropics",
+      "summary_zh": "用于创建针对 Slack 优化的动画 GIF 的工具箱，提供尺寸/参数约束、PIL 绘图与动画概念；典型场景是用户请求“给 Slack 做一个某人做某事的 GIF”。",
+      "quality_summary": null,
+      "skill_type": null,
+      "example_requests": [
+        "“给 Slack 做一个某人做某事的 GIF”"
+      ],
+      "key_features": [
+        "提供尺寸/参数约束",
+        "用于创建针对 Slack 优化的动画 GIF 的工具"
+      ],
+      "main_category": {
+        "id": "content",
+        "name": "内容创作"
+      },
+      "tags": [
+        "GIF",
+        "Slack",
+        "动画",
+        "PIL",
+        "图像生成"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "pillow",
+        "imageio",
+        "numpy"
+      ],
+      "source_type": "official",
+      "status": "recommended",
+      "manual_pick": false,
+      "manual_note": null,
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      },
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "reason_codes": [],
+      "limitations": "不提供预制图形、不使用 emoji 字体渲染；需要用户自行绘制或上传图片；文件大小优化需在用户要求时实施。",
+      "first_seen": "2026-09-20T16:59:36+00:00",
+      "last_checked": "2026-09-21T01:25:10.241623+08:00",
+      "content_changed_at": null,
+      "upstream_status": "ok",
+      "license": null
+    },
     {
       "skill_id": "vercel-labs/agent-skills:skills/deploy-to-vercel/SKILL.md",
       "name": "deploy-to-vercel",
@@ -2095,6 +1535,61 @@
       "license": null
     },
     {
+      "skill_id": "cloudflare/skills:skills/turnstile-spin/SKILL.md",
+      "name": "turnstile-spin",
+      "url": "https://github.com/cloudflare/skills/blob/HEAD/skills/turnstile-spin/SKILL.md",
+      "author": "cloudflare",
+      "summary_zh": "为现有前端与后端设置、修复或迁移 Cloudflare Turnstile 机器人验证，包含前端挂件嵌入和服务器端 Siteverify 校验，典型用于保护表单、登录、注册等用户触发请求。",
+      "quality_summary": null,
+      "skill_type": null,
+      "example_requests": [
+        "“保护表单、登录、注册等用户触发请求”"
+      ],
+      "key_features": [],
+      "main_category": {
+        "id": "dev",
+        "name": "编程开发"
+      },
+      "tags": [
+        "Cloudflare Turnstile",
+        "bot verification",
+        "CAPTCHA",
+        "siteverify",
+        "frontend integration",
+        "backend integration",
+        "security"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "curl",
+        "jq",
+        "python3",
+        "Bash",
+        "Wrangler 4.109+ (existing-widget flow)",
+        "Cloudflare API token",
+        "scripts: auth-probe.sh, widget-create.sh, validate.sh, persist-skill.sh"
+      ],
+      "source_type": "official",
+      "status": "recommended",
+      "manual_pick": false,
+      "manual_note": null,
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      },
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "reason_codes": [],
+      "limitations": "要求已有可放置 siteverify 的后端；不部署额外基础设施；不实现邮件/短信通知等超出范围的功能；对既有 widget 需要 Wrangler 4.109+ 且不支持自动安装；不能无后端纯静态站点使用。",
+      "first_seen": "2026-09-20T16:59:36+00:00",
+      "last_checked": "2026-09-24T17:17:46.202856+08:00",
+      "content_changed_at": null,
+      "upstream_status": "ok",
+      "license": null
+    },
+    {
       "skill_id": "cloudflare/skills:skills/workers-best-practices/SKILL.md",
       "name": "workers-best-practices",
       "url": "https://github.com/cloudflare/skills/blob/HEAD/skills/workers-best-practices/SKILL.md",
@@ -2186,6 +1681,108 @@
       "limitations": "需根据项目实际 Wrangler 版本核实文档；dry-run 不验证远程资源或运行时；回滚不包含连接资源数据；本地模拟可能与真实远程绑定不同。",
       "first_seen": "2026-09-20T16:59:36+00:00",
       "last_checked": "2026-09-21T01:41:27.898166+08:00",
+      "content_changed_at": null,
+      "upstream_status": "ok",
+      "license": null
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/audit-prep-assistant/SKILL.md",
+      "name": "audit-prep-assistant",
+      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/building-secure-contracts/skills/audit-prep-assistant/SKILL.md",
+      "author": "trailofbits",
+      "summary_zh": "该技能帮助开发者在安全审计前按 Trail of Bits 清单准备代码库，包括设定审查目标、运行静态分析、提升测试覆盖率、清理死代码、完善文档等，适用于即将接受外部安全审计的项目。",
+      "quality_summary": null,
+      "skill_type": null,
+      "example_requests": [
+        "“即将接受外部安全审计的项目”"
+      ],
+      "key_features": [
+        "覆盖率、清理死代码、完善文档等"
+      ],
+      "main_category": {
+        "id": "security",
+        "name": "安全"
+      },
+      "tags": [
+        "security audit",
+        "code review preparation",
+        "static analysis",
+        "test coverage",
+        "documentation",
+        "smart contract security"
+      ],
+      "platform_declared": "Solidity, Rust, Go, C++",
+      "dependencies_declared": [
+        "slither",
+        "dylint",
+        "golangci-lint",
+        "CodeQL",
+        "Semgrep",
+        "Foundry",
+        "Node.js",
+        "Git"
+      ],
+      "source_type": "official",
+      "status": "recommended",
+      "manual_pick": false,
+      "manual_note": null,
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      },
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "reason_codes": [],
+      "limitations": "不替代专业安全审计，不执行审计；结果依赖用户运行工具与提供的信息；需要用户具备对应生态工具链。",
+      "first_seen": "2026-09-20T16:59:36+00:00",
+      "last_checked": "2026-09-24T17:18:16.403183+08:00",
+      "content_changed_at": null,
+      "upstream_status": "ok",
+      "license": null
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/cosmos-vulnerability-scanner/SKILL.md",
+      "name": "cosmos-vulnerability-scanner",
+      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/building-secure-contracts/skills/cosmos-vulnerability-scanner/SKILL.md",
+      "author": "trailofbits",
+      "summary_zh": "用于扫描 Cosmos SDK 模块和 CosmWasm 合约中的共识关键漏洞（链停止、资金损失、状态分歧），适用于审计自定义模块、审查 IBC 集成或链上线前安全评估。",
+      "quality_summary": null,
+      "skill_type": null,
+      "example_requests": [
+        "“审计自定义模块、审查 IBC 集成或链上线前安全评估”"
+      ],
+      "key_features": [],
+      "main_category": {
+        "id": "security",
+        "name": "安全"
+      },
+      "tags": [
+        "安全审计",
+        "区块链",
+        "Cosmos SDK",
+        "CosmWasm",
+        "漏洞扫描"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "source_type": "official",
+      "status": "recommended",
+      "manual_pick": false,
+      "manual_note": null,
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      },
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "reason_codes": [],
+      "limitations": "不能用于纯 Solidity/EVM 审计、CometBFT 共识引擎内部、非共识关键代码；依赖资源文件；仅覆盖 SDK v0.53.x 版本。",
+      "first_seen": "2026-09-20T16:59:36+00:00",
+      "last_checked": "2026-09-24T17:18:17.429230+08:00",
       "content_changed_at": null,
       "upstream_status": "ok",
       "license": null
@@ -2294,6 +1891,112 @@
       "license": null
     },
     {
+      "skill_id": "trailofbits/skills:plugins/code-improver/skills/code-improver/SKILL.md",
+      "name": "code-improver",
+      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/code-improver/skills/code-improver/SKILL.md",
+      "author": "trailofbits",
+      "summary_zh": "code-improver 通过用户指定的审查者与修复子代理循环改进代码目标，直至审查无关键/主要问题，适用于按指定审查者迭代修复代码、技能或模块的场景。",
+      "quality_summary": null,
+      "skill_type": null,
+      "example_requests": [
+        "“按指定审查者迭代修复代码、技能或模块”"
+      ],
+      "key_features": [
+        "code-improver 通过用户指定的审查者与修复子代理循环改进代码"
+      ],
+      "main_category": {
+        "id": "dev",
+        "name": "编程开发"
+      },
+      "tags": [
+        "代码改进",
+        "自动化审查",
+        "工作流",
+        "代码质量"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "Workflow",
+        "Bash",
+        "Glob",
+        "Read",
+        "TaskOutput",
+        "TaskStop"
+      ],
+      "source_type": "official",
+      "status": "recommended",
+      "manual_pick": false,
+      "manual_note": null,
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      },
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "reason_codes": [],
+      "limitations": "仅在工作树内修改，不提交；审查者必须由用户指定且已安装；依赖工作流脚本和 Workflow 工具；不适用于一次性审查、快速修复、Claude Code skill 或分支拉取请求。",
+      "first_seen": "2026-09-20T16:59:36+00:00",
+      "last_checked": "2026-09-24T17:18:18.306117+08:00",
+      "content_changed_at": null,
+      "upstream_status": "ok",
+      "license": null
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/code-improver/skills/pr-improver/SKILL.md",
+      "name": "pr-improver",
+      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/code-improver/skills/pr-improver/SKILL.md",
+      "author": "trailofbits",
+      "summary_zh": "PR Improver 自动对当前分支变更运行审查-修复循环，直到 PR 审查无严重/主要问题，适用于在创建或更新 PR 前清理分支。",
+      "quality_summary": null,
+      "skill_type": null,
+      "example_requests": [
+        "“在创建或更新 PR 前清理分支”"
+      ],
+      "key_features": [],
+      "main_category": {
+        "id": "dev",
+        "name": "编程开发"
+      },
+      "tags": [
+        "代码审查",
+        "PR改进",
+        "自动化",
+        "开发工具"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "Bash",
+        "Glob",
+        "Read",
+        "TaskOutput",
+        "TaskStop",
+        "Workflow",
+        "pr-review-toolkit",
+        "code-improver workflow improve.js"
+      ],
+      "source_type": "official",
+      "status": "recommended",
+      "manual_pick": false,
+      "manual_note": null,
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      },
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "reason_codes": [],
+      "limitations": "不提交代码；要求 Git 仓库且当前分支不是 base；依赖 Workflow 工具与动态 workflow 文件；默认 reviewer 需要 pr-review-toolkit 插件；不适用于一次性审查或未推送的探索性改动。",
+      "first_seen": "2026-09-20T16:59:36+00:00",
+      "last_checked": "2026-09-24T17:18:20.188820+08:00",
+      "content_changed_at": null,
+      "upstream_status": "ok",
+      "license": null
+    },
+    {
       "skill_id": "trailofbits/skills:plugins/code-improver/skills/skill-improver/SKILL.md",
       "name": "skill-improver",
       "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/code-improver/skills/skill-improver/SKILL.md",
@@ -2343,6 +2046,54 @@
       "limitations": "循环、台账与守卫的实现位于未随材料提供的 workflows/improve.js，其具体行为无法从本材料核实；需要预先安装 plugin-dev 插件且 Workflow 工具可用，否则中止；未声明操作系统兼容性。",
       "first_seen": "2026-09-20T16:59:36+00:00",
       "last_checked": "2026-09-24T17:18:59.177378+08:00",
+      "content_changed_at": null,
+      "upstream_status": "ok",
+      "license": null
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/code-improver/tests/fixtures/review-panel/skills/panel-review/SKILL.md",
+      "name": "panel-review",
+      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/code-improver/tests/fixtures/review-panel/skills/panel-review/SKILL.md",
+      "author": "trailofbits",
+      "summary_zh": "启动一组专家审计子代理对代码目标进行审查并合并报告，适用于请求运行 panel review 的代码审查场景。",
+      "quality_summary": null,
+      "skill_type": null,
+      "example_requests": [
+        "“请求运行 panel review 的代码审查”"
+      ],
+      "key_features": [
+        "启动一组专家审计子代理对代码"
+      ],
+      "main_category": {
+        "id": "dev",
+        "name": "编程开发"
+      },
+      "tags": [
+        "代码审查",
+        "多代理",
+        "审计"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "review-panel:naming-auditor",
+        "review-panel:todo-auditor"
+      ],
+      "source_type": "official",
+      "status": "recommended",
+      "manual_pick": false,
+      "manual_note": null,
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      },
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "reason_codes": [],
+      "limitations": "依赖预定义的审查子代理和 Task 调度工具；不执行具体审计规则，仅合并结果；未声明平台兼容性。",
+      "first_seen": "2026-09-20T16:59:36+00:00",
+      "last_checked": "2026-09-24T17:19:01.083951+08:00",
       "content_changed_at": null,
       "upstream_status": "ok",
       "license": null
@@ -3925,6 +3676,151 @@
       "license": null
     },
     {
+      "skill_id": "trailofbits/skills:plugins/code-improver/tests/fixtures/pr-review-toolkit/skills/review-pr/SKILL.md",
+      "name": "review-pr",
+      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/code-improver/tests/fixtures/pr-review-toolkit/skills/review-pr/SKILL.md",
+      "author": "trailofbits",
+      "summary_zh": "该技能用于审查当前分支相对基础分支的代码变更，检查正确性、测试覆盖和文档准确性，典型场景是响应分支、diff 或 PR 审查请求。",
+      "quality_summary": null,
+      "skill_type": null,
+      "example_requests": [],
+      "key_features": [
+        "覆盖和文档准确性",
+        "用于审查当前分支相对基础分支的代码"
+      ],
+      "main_category": {
+        "id": "dev",
+        "name": "编程开发"
+      },
+      "tags": [
+        "代码审查",
+        "PR审查",
+        "diff审查"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "source_type": "official",
+      "status": "candidate",
+      "manual_pick": false,
+      "manual_note": null,
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      },
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "reason_codes": [],
+      "limitations": "未声明 git 依赖及运行环境要求；需要调用者提供 base 分支名称。",
+      "first_seen": "2026-09-20T16:59:36+00:00",
+      "last_checked": "2026-09-24T17:19:00.206288+08:00",
+      "content_changed_at": null,
+      "upstream_status": "ok",
+      "license": null
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/culture-index/skills/interpreting-culture-index/SKILL.md",
+      "name": "interpreting-culture-index",
+      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/culture-index/skills/interpreting-culture-index/SKILL.md",
+      "author": "trailofbits",
+      "summary_zh": "解读 Culture Index 调查和行为画像数据，支持个人分析、团队构成、倦怠检测、招聘和冲突调解等场景。",
+      "quality_summary": null,
+      "skill_type": null,
+      "example_requests": [],
+      "key_features": [
+        "支持个人分析、团队构成、倦怠检测、招聘和冲突调解等场景"
+      ],
+      "main_category": {
+        "id": "docs",
+        "name": "文档办公"
+      },
+      "tags": [
+        "culture-index",
+        "behavioral-profile",
+        "team-analysis",
+        "hiring",
+        "burnout-detection"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "uv",
+        "extract_pdf.py"
+      ],
+      "source_type": "official",
+      "status": "candidate",
+      "manual_pick": false,
+      "manual_note": null,
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      },
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "reason_codes": [],
+      "limitations": "不能用于临床心理评估或诊断，不能作为招聘/解雇的唯一依据，仅适用于 Culture Index 评估",
+      "first_seen": "2026-09-20T16:59:36+00:00",
+      "last_checked": "2026-09-24T17:19:01.942279+08:00",
+      "content_changed_at": null,
+      "upstream_status": "ok",
+      "license": null
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/gh-cli/skills/gh-cli/SKILL.md",
+      "name": "gh-cli",
+      "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/gh-cli/skills/gh-cli/SKILL.md",
+      "author": "trailofbits",
+      "summary_zh": "该技能规范在访问 GitHub 仓库、PR、issue、release 及原始文件时优先使用已认证的 gh CLI，避免未认证的 curl/wget/WebFetch/MCP fetch 并建议克隆后本地读取。适用于需要认证访问私有仓库或更高 API 限额的 GitHub 操作场景。",
+      "quality_summary": null,
+      "skill_type": "guideline",
+      "example_requests": [
+        "用 gh 查看 owner/repo 仓库的基本信息",
+        "查看 owner/repo 中 123 号 PR 或 issue 的内容"
+      ],
+      "key_features": [
+        "优先用已认证 gh CLI 取代未认证 curl/wget/WebFetch",
+        "覆盖仓库、PR、issue、release 与 raw 文件 URL 场景",
+        "明确 when to use / when NOT to use 边界"
+      ],
+      "main_category": {
+        "id": "dev",
+        "name": "编程开发"
+      },
+      "tags": [
+        "GitHub",
+        "CLI",
+        "认证访问",
+        "工作流规范"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "gh CLI（需已认证）"
+      ],
+      "source_type": "official",
+      "status": "candidate",
+      "manual_pick": false,
+      "manual_note": null,
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      },
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "reason_codes": [
+        "NEEDS_VERIFICATION"
+      ],
+      "limitations": "未提供 hook 实现与 README 内容，无法核实其具体拦截逻辑；未说明 gh CLI 安装与认证（gh auth login）步骤。",
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-24T17:20:14.656526+08:00",
+      "content_changed_at": null,
+      "upstream_status": "ok",
+      "license": null
+    },
+    {
       "skill_id": "trailofbits/skills:plugins/trailmark/skills/vector-forge/SKILL.md",
       "name": "vector-forge",
       "url": "https://github.com/trailofbits/skills/blob/HEAD/plugins/trailmark/skills/vector-forge/SKILL.md",
@@ -4318,7 +4214,11 @@
       "status": "candidate",
       "manual_pick": false,
       "manual_note": null,
-      "snooze": null,
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      },
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -4387,7 +4287,11 @@
       "status": "candidate",
       "manual_pick": false,
       "manual_note": null,
-      "snooze": null,
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      },
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -4554,7 +4458,11 @@
       "status": "candidate",
       "manual_pick": false,
       "manual_note": null,
-      "snooze": null,
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      },
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -4629,7 +4537,11 @@
       "status": "candidate",
       "manual_pick": false,
       "manual_note": null,
-      "snooze": null,
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      },
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
@@ -5853,6 +5765,52 @@
   ],
   "owned_entries": [
     {
+      "skill_id": "anthropics/skills:skills/discernment-nudge/SKILL.md",
+      "name": "discernment-nudge",
+      "url": "https://github.com/anthropics/skills/blob/HEAD/skills/discernment-nudge/SKILL.md",
+      "author": "anthropics",
+      "summary_zh": "该技能在 AI 给出实质性回答后附加 2-3 个针对性跟进问题，帮助用户检查事实、推理和缺失上下文，适用于决策、建议、估算等场景。",
+      "quality_summary": null,
+      "skill_type": null,
+      "example_requests": [
+        "“决策、建议、估算”"
+      ],
+      "key_features": [],
+      "main_category": {
+        "id": "content",
+        "name": "内容创作"
+      },
+      "tags": [
+        "批判性思维",
+        "反思提示",
+        "内容审查",
+        "AI素养"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "source_type": "official",
+      "status": "candidate",
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-24",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
+      "snooze": null,
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "reason_codes": [],
+      "limitations": "不适用于用户已明确要求验证、快速答案、纯教育解释、创意写作、代码执行、用户提供素材或要求检查自身内容等情况；每会话最多一次。",
+      "first_seen": "2026-09-20T16:59:36+00:00",
+      "last_checked": "2026-09-21T01:18:53.307320+08:00",
+      "content_changed_at": null,
+      "upstream_status": "ok",
+      "license": null,
+      "original_partition": "manual"
+    },
+    {
       "skill_id": "anthropics/skills:skills/doc-coauthoring/SKILL.md",
       "name": "doc-coauthoring",
       "url": "https://github.com/anthropics/skills/blob/HEAD/skills/doc-coauthoring/SKILL.md",
@@ -6267,6 +6225,55 @@
       "upstream_status": "ok",
       "license": null,
       "original_partition": "manual"
+    },
+    {
+      "skill_id": "vercel-labs/agent-skills:skills/writing-guidelines/SKILL.md",
+      "name": "writing-guidelines",
+      "url": "https://github.com/vercel-labs/agent-skills/blob/HEAD/skills/writing-guidelines/SKILL.md",
+      "author": "vercel-labs",
+      "summary_zh": "该技能依据外部写作指南审查文档/散文的规范符合性，适用于要求检查写作风格或进行文档审查的场景。",
+      "quality_summary": null,
+      "skill_type": "guideline",
+      "example_requests": [
+        "“检查写作风格或进行文档审查”"
+      ],
+      "key_features": [
+        "依据外部写作指南审查文档/散文的规范"
+      ],
+      "main_category": {
+        "id": "docs",
+        "name": "文档办公"
+      },
+      "tags": [
+        "写作审查",
+        "风格检查",
+        "文档"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "WebFetch"
+      ],
+      "source_type": "official",
+      "status": "recommended",
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-22",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      },
+      "snooze": null,
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "reason_codes": [],
+      "limitations": "依赖外部指南URL的可用性与内容；需要网络获取WebFetch能力；指南内容可能变化。",
+      "first_seen": "2026-09-20T16:59:36+00:00",
+      "last_checked": "2026-09-24T17:17:45.308699+08:00",
+      "content_changed_at": null,
+      "upstream_status": "ok",
+      "license": null,
+      "original_partition": "manual"
     }
   ],
   "overrides": {
@@ -6287,40 +6294,10 @@
         "from": "candidate"
       },
       {
-        "skill_id": "anthropics/skills:skills/doc-coauthoring/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-24",
-        "from": "recommended"
-      },
-      {
-        "skill_id": "anthropics/skills:skills/internal-comms/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-24",
-        "from": "candidate"
-      },
-      {
-        "skill_id": "anthropics/skills:skills/mcp-builder/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-22",
-        "from": "recommended"
-      },
-      {
-        "skill_id": "anthropics/skills:skills/pptx/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-22",
-        "from": "recommended"
-      },
-      {
         "skill_id": "anthropics/skills:skills/skill-creator/SKILL.md",
         "reason": "用户收藏",
         "added_at": "2026-09-24",
         "from": "candidate"
-      },
-      {
-        "skill_id": "anthropics/skills:skills/slack-gif-creator/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-22",
-        "from": "recommended"
       },
       {
         "skill_id": "anthropics/skills:skills/theme-factory/SKILL.md",
@@ -6353,60 +6330,6 @@
         "from": "recommended"
       },
       {
-        "skill_id": "cloudflare/skills:skills/turnstile-spin/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-24",
-        "from": "recommended"
-      },
-      {
-        "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/audit-prep-assistant/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-24",
-        "from": "recommended"
-      },
-      {
-        "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/cosmos-vulnerability-scanner/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-24",
-        "from": "recommended"
-      },
-      {
-        "skill_id": "trailofbits/skills:plugins/code-improver/skills/code-improver/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-24",
-        "from": "recommended"
-      },
-      {
-        "skill_id": "trailofbits/skills:plugins/code-improver/skills/pr-improver/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-24",
-        "from": "recommended"
-      },
-      {
-        "skill_id": "trailofbits/skills:plugins/code-improver/tests/fixtures/pr-review-toolkit/skills/review-pr/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-24",
-        "from": "candidate"
-      },
-      {
-        "skill_id": "trailofbits/skills:plugins/code-improver/tests/fixtures/review-panel/skills/panel-review/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-24",
-        "from": "recommended"
-      },
-      {
-        "skill_id": "trailofbits/skills:plugins/culture-index/skills/interpreting-culture-index/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-24",
-        "from": "candidate"
-      },
-      {
-        "skill_id": "trailofbits/skills:plugins/gh-cli/skills/gh-cli/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-26",
-        "from": "candidate"
-      },
-      {
         "skill_id": "trailofbits/skills:plugins/goal-prompt/skills/goal-prompt/SKILL.md",
         "reason": "用户收藏",
         "added_at": "2026-09-26",
@@ -6422,6 +6345,48 @@
         "skill_id": "trailofbits/skills:plugins/trailmark/skills/graph-evolution/SKILL.md",
         "reason": "用户收藏",
         "added_at": "2026-09-26",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "google-labs-code/stitch-skills:plugins/stitch-build/skills/react-components/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-26",
+        "from": "candidate"
+      },
+      {
+        "skill_id": "google-labs-code/stitch-skills:plugins/stitch-build/skills/react-native/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-26",
+        "from": "candidate"
+      },
+      {
+        "skill_id": "google-labs-code/stitch-skills:plugins/stitch-build/skills/shadcn-ui/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-26",
+        "from": "candidate"
+      },
+      {
+        "skill_id": "google-labs-code/stitch-skills:plugins/stitch-design/skills/extract-design-md/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-26",
+        "from": "candidate"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/doc-coauthoring/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-24",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/internal-comms/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-24",
+        "from": "candidate"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/pptx/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-22",
         "from": "recommended"
       },
       {
@@ -6452,30 +6417,6 @@
         "skill_id": "anthropics/skills:skills/pdf/SKILL.md",
         "reason": "用户收藏",
         "added_at": "2026-09-24",
-        "from": "candidate"
-      },
-      {
-        "skill_id": "google-labs-code/stitch-skills:plugins/stitch-build/skills/react-components/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-26",
-        "from": "candidate"
-      },
-      {
-        "skill_id": "google-labs-code/stitch-skills:plugins/stitch-build/skills/react-native/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-26",
-        "from": "candidate"
-      },
-      {
-        "skill_id": "google-labs-code/stitch-skills:plugins/stitch-build/skills/shadcn-ui/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-26",
-        "from": "candidate"
-      },
-      {
-        "skill_id": "google-labs-code/stitch-skills:plugins/stitch-design/skills/extract-design-md/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-26",
         "from": "candidate"
       }
     ],
@@ -7094,6 +7035,111 @@
         "expires_at": "2027-02-23",
         "days": 150,
         "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "google-labs-code/stitch-skills:plugins/stitch-utilities/skills/stitch-loop/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "supabase/agent-skills:skills/supabase-postgres-best-practices/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "expo/skills:plugins/expo/skills/expo-brownfield/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/mcp-builder/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "expo/skills:plugins/expo/skills/expo-dev-client/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/slack-gif-creator/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/cosmos-vulnerability-scanner/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/code-improver/skills/pr-improver/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "cloudflare/skills:skills/turnstile-spin/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/audit-prep-assistant/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/code-improver/skills/code-improver/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/code-improver/tests/fixtures/review-panel/skills/panel-review/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/code-improver/tests/fixtures/pr-review-toolkit/skills/review-pr/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/culture-index/skills/interpreting-culture-index/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/gh-cli/skills/gh-cli/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
       }
     ]
   },
@@ -7147,6 +7193,18 @@
         "name": "pptx",
         "added_at": "2026-09-26",
         "source_url": "https://github.com/anthropics/skills/blob/HEAD/skills/pptx/SKILL.md"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/discernment-nudge/SKILL.md",
+        "name": "discernment-nudge",
+        "added_at": "2026-09-26",
+        "source_url": "https://github.com/anthropics/skills/blob/HEAD/skills/discernment-nudge/SKILL.md"
+      },
+      {
+        "skill_id": "vercel-labs/agent-skills:skills/writing-guidelines/SKILL.md",
+        "name": "writing-guidelines",
+        "added_at": "2026-09-26",
+        "source_url": "https://github.com/vercel-labs/agent-skills/blob/HEAD/skills/writing-guidelines/SKILL.md"
       }
     ]
   }

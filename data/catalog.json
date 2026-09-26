@@ -3,9 +3,10 @@
   "rules_version": "1.1.0",
   "generated_at": "2026-09-26T13:24:52.279870+08:00",
   "counts": {
-    "excluded": 51,
-    "candidate": 44,
-    "recommended": 61
+    "recommended": 50,
+    "candidate": 32,
+    "manual": 23,
+    "excluded": 51
   },
   "entries": [
     {
@@ -706,19 +707,19 @@
       "upstream_status": "ok",
       "license": null,
       "excluded": false,
-      "manual_pick": true,
-      "manual_note": {
-        "added_at": "2026-09-22",
-        "reason": "用户收藏",
-        "from": "recommended",
-        "auto_status": "recommended"
-      },
+      "manual_pick": false,
+      "manual_note": null,
       "skill_type": "guideline",
       "example_requests": [],
       "key_features": [
         "覆盖研究、实现、测试与评估",
         "提供创建高质量 MCP 服务器的开发指南"
-      ]
+      ],
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "anthropics/skills:skills/pdf/SKILL.md",
@@ -989,13 +990,8 @@
       "upstream_status": "ok",
       "license": null,
       "excluded": false,
-      "manual_pick": true,
-      "manual_note": {
-        "added_at": "2026-09-22",
-        "reason": "用户收藏",
-        "from": "recommended",
-        "auto_status": "recommended"
-      },
+      "manual_pick": false,
+      "manual_note": null,
       "skill_type": null,
       "example_requests": [
         "“给 Slack 做一个某人做某事的 GIF”"
@@ -1003,7 +999,12 @@
       "key_features": [
         "提供尺寸/参数约束",
         "用于创建针对 Slack 优化的动画 GIF 的工具"
-      ]
+      ],
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "anthropics/skills:skills/theme-factory/SKILL.md",
@@ -2608,16 +2609,16 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": true,
-      "manual_note": {
-        "added_at": "2026-09-24",
-        "reason": "用户收藏",
-        "from": "recommended",
-        "auto_status": "recommended"
-      },
+      "manual_pick": false,
+      "manual_note": null,
       "evaluation_rules_version": "1.0.1",
       "last_evaluation_id": null,
-      "evaluated_at": null
+      "evaluated_at": null,
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "cloudflare/skills:skills/web-perf/SKILL.md",
@@ -3045,16 +3046,16 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": true,
-      "manual_note": {
-        "added_at": "2026-09-24",
-        "reason": "用户收藏",
-        "from": "recommended",
-        "auto_status": "recommended"
-      },
+      "manual_pick": false,
+      "manual_note": null,
       "evaluation_rules_version": "1.0.1",
       "last_evaluation_id": null,
-      "evaluated_at": null
+      "evaluated_at": null,
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/cairo-vulnerability-scanner/SKILL.md",
@@ -3217,16 +3218,16 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": true,
-      "manual_note": {
-        "added_at": "2026-09-24",
-        "reason": "用户收藏",
-        "from": "recommended",
-        "auto_status": "recommended"
-      },
+      "manual_pick": false,
+      "manual_note": null,
       "evaluation_rules_version": "1.0.1",
       "last_evaluation_id": null,
-      "evaluated_at": null
+      "evaluated_at": null,
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/guidelines-advisor/SKILL.md",
@@ -3854,16 +3855,16 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": true,
-      "manual_note": {
-        "added_at": "2026-09-24",
-        "reason": "用户收藏",
-        "from": "recommended",
-        "auto_status": "recommended"
-      },
+      "manual_pick": false,
+      "manual_note": null,
       "evaluation_rules_version": "1.0.1",
       "last_evaluation_id": null,
-      "evaluated_at": null
+      "evaluated_at": null,
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "trailofbits/skills:plugins/code-improver/skills/pr-improver/SKILL.md",
@@ -3912,16 +3913,16 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": true,
-      "manual_note": {
-        "added_at": "2026-09-24",
-        "reason": "用户收藏",
-        "from": "recommended",
-        "auto_status": "recommended"
-      },
+      "manual_pick": false,
+      "manual_note": null,
       "evaluation_rules_version": "1.0.1",
       "last_evaluation_id": null,
-      "evaluated_at": null
+      "evaluated_at": null,
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "trailofbits/skills:plugins/code-improver/skills/skill-improver/SKILL.md",
@@ -4020,16 +4021,16 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": true,
-      "manual_note": {
-        "added_at": "2026-09-24",
-        "reason": "用户收藏",
-        "from": "candidate",
-        "auto_status": "candidate"
-      },
+      "manual_pick": false,
+      "manual_note": null,
       "evaluation_rules_version": "1.0.1",
       "last_evaluation_id": null,
-      "evaluated_at": null
+      "evaluated_at": null,
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "trailofbits/skills:plugins/code-improver/tests/fixtures/review-panel/skills/panel-review/SKILL.md",
@@ -4073,16 +4074,16 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": true,
-      "manual_note": {
-        "added_at": "2026-09-24",
-        "reason": "用户收藏",
-        "from": "recommended",
-        "auto_status": "recommended"
-      },
+      "manual_pick": false,
+      "manual_note": null,
       "evaluation_rules_version": "1.0.1",
       "last_evaluation_id": null,
-      "evaluated_at": null
+      "evaluated_at": null,
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "trailofbits/skills:plugins/constant-time-analysis/skills/constant-time-analysis/SKILL.md",
@@ -4199,16 +4200,16 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": true,
-      "manual_note": {
-        "added_at": "2026-09-24",
-        "reason": "用户收藏",
-        "from": "candidate",
-        "auto_status": "candidate"
-      },
+      "manual_pick": false,
+      "manual_note": null,
       "evaluation_rules_version": "1.0.1",
       "last_evaluation_id": null,
-      "evaluated_at": null
+      "evaluated_at": null,
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "trailofbits/skills:plugins/devcontainer-setup/skills/devcontainer-setup/SKILL.md",
@@ -4711,16 +4712,16 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": true,
-      "manual_note": {
-        "added_at": "2026-09-26",
-        "reason": "用户收藏",
-        "from": "candidate",
-        "auto_status": "candidate"
-      },
+      "manual_pick": false,
+      "manual_note": null,
       "evaluation_rules_version": "1.0.1",
       "last_evaluation_id": "trailofbits/skills:plugins/gh-cli/skills/gh-cli/SKILL.md|sha256:3810c9ff56ae9a26f4c6c1e0d058a946|1.0.1|1.0.0",
-      "evaluated_at": "2026-09-24T17:20:14.655527+08:00"
+      "evaluated_at": "2026-09-24T17:20:14.655527+08:00",
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "trailofbits/skills:plugins/github-triage/skills/github-triage/SKILL.md",
@@ -8561,7 +8562,12 @@
         "review_checks": {}
       },
       "last_evaluation_id": "google-labs-code/stitch-skills:plugins/stitch-utilities/skills/stitch-loop/SKILL.md|sha256:05f39ecf81b0664872e6f3d6be01c53c|1.1.0|1.0.0",
-      "evaluated_at": "2026-09-26T09:26:54.631752+08:00"
+      "evaluated_at": "2026-09-26T09:26:54.631752+08:00",
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "supabase/agent-skills:skills/supabase-postgres-best-practices/SKILL.md",
@@ -8636,7 +8642,12 @@
         "review_checks": {}
       },
       "last_evaluation_id": "supabase/agent-skills:skills/supabase-postgres-best-practices/SKILL.md|sha256:ad65e776f45e761bafc609d3f506c77c|1.1.0|1.0.0",
-      "evaluated_at": "2026-09-26T09:29:34.441351+08:00"
+      "evaluated_at": "2026-09-26T09:29:34.441351+08:00",
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "expo/skills:plugins/expo-experiments/skills/expo-migrate-module/SKILL.md",
@@ -8993,7 +9004,12 @@
         }
       },
       "last_evaluation_id": "expo/skills:plugins/expo/skills/expo-brownfield/SKILL.md|sha256:aeae0460694f09ffa01417f5c9034319|1.1.0|1.0.0",
-      "evaluated_at": "2026-09-26T10:02:59.735905+08:00"
+      "evaluated_at": "2026-09-26T10:02:59.735905+08:00",
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "expo/skills:plugins/expo/skills/expo-dev-client/SKILL.md",
@@ -9073,7 +9089,12 @@
         "review_checks": {}
       },
       "last_evaluation_id": "expo/skills:plugins/expo/skills/expo-dev-client/SKILL.md|sha256:f39d8f589e3b22e93fecd4a17b5102c3|1.1.0|1.0.0",
-      "evaluated_at": "2026-09-26T10:06:18.483816+08:00"
+      "evaluated_at": "2026-09-26T10:06:18.483816+08:00",
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "getsentry/skills:skills/agents-md/SKILL.md",
@@ -10385,40 +10406,10 @@
         "from": "candidate"
       },
       {
-        "skill_id": "anthropics/skills:skills/doc-coauthoring/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-24",
-        "from": "recommended"
-      },
-      {
-        "skill_id": "anthropics/skills:skills/internal-comms/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-24",
-        "from": "candidate"
-      },
-      {
-        "skill_id": "anthropics/skills:skills/mcp-builder/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-22",
-        "from": "recommended"
-      },
-      {
-        "skill_id": "anthropics/skills:skills/pptx/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-22",
-        "from": "recommended"
-      },
-      {
         "skill_id": "anthropics/skills:skills/skill-creator/SKILL.md",
         "reason": "用户收藏",
         "added_at": "2026-09-24",
         "from": "candidate"
-      },
-      {
-        "skill_id": "anthropics/skills:skills/slack-gif-creator/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-22",
-        "from": "recommended"
       },
       {
         "skill_id": "anthropics/skills:skills/theme-factory/SKILL.md",
@@ -10451,60 +10442,6 @@
         "from": "recommended"
       },
       {
-        "skill_id": "cloudflare/skills:skills/turnstile-spin/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-24",
-        "from": "recommended"
-      },
-      {
-        "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/audit-prep-assistant/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-24",
-        "from": "recommended"
-      },
-      {
-        "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/cosmos-vulnerability-scanner/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-24",
-        "from": "recommended"
-      },
-      {
-        "skill_id": "trailofbits/skills:plugins/code-improver/skills/code-improver/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-24",
-        "from": "recommended"
-      },
-      {
-        "skill_id": "trailofbits/skills:plugins/code-improver/skills/pr-improver/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-24",
-        "from": "recommended"
-      },
-      {
-        "skill_id": "trailofbits/skills:plugins/code-improver/tests/fixtures/pr-review-toolkit/skills/review-pr/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-24",
-        "from": "candidate"
-      },
-      {
-        "skill_id": "trailofbits/skills:plugins/code-improver/tests/fixtures/review-panel/skills/panel-review/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-24",
-        "from": "recommended"
-      },
-      {
-        "skill_id": "trailofbits/skills:plugins/culture-index/skills/interpreting-culture-index/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-24",
-        "from": "candidate"
-      },
-      {
-        "skill_id": "trailofbits/skills:plugins/gh-cli/skills/gh-cli/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-26",
-        "from": "candidate"
-      },
-      {
         "skill_id": "trailofbits/skills:plugins/goal-prompt/skills/goal-prompt/SKILL.md",
         "reason": "用户收藏",
         "added_at": "2026-09-26",
@@ -10520,6 +10457,48 @@
         "skill_id": "trailofbits/skills:plugins/trailmark/skills/graph-evolution/SKILL.md",
         "reason": "用户收藏",
         "added_at": "2026-09-26",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "google-labs-code/stitch-skills:plugins/stitch-build/skills/react-components/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-26",
+        "from": "candidate"
+      },
+      {
+        "skill_id": "google-labs-code/stitch-skills:plugins/stitch-build/skills/react-native/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-26",
+        "from": "candidate"
+      },
+      {
+        "skill_id": "google-labs-code/stitch-skills:plugins/stitch-build/skills/shadcn-ui/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-26",
+        "from": "candidate"
+      },
+      {
+        "skill_id": "google-labs-code/stitch-skills:plugins/stitch-design/skills/extract-design-md/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-26",
+        "from": "candidate"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/doc-coauthoring/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-24",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/internal-comms/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-24",
+        "from": "candidate"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/pptx/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-22",
         "from": "recommended"
       },
       {
@@ -10550,30 +10529,6 @@
         "skill_id": "anthropics/skills:skills/pdf/SKILL.md",
         "reason": "用户收藏",
         "added_at": "2026-09-24",
-        "from": "candidate"
-      },
-      {
-        "skill_id": "google-labs-code/stitch-skills:plugins/stitch-build/skills/react-components/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-26",
-        "from": "candidate"
-      },
-      {
-        "skill_id": "google-labs-code/stitch-skills:plugins/stitch-build/skills/react-native/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-26",
-        "from": "candidate"
-      },
-      {
-        "skill_id": "google-labs-code/stitch-skills:plugins/stitch-build/skills/shadcn-ui/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-26",
-        "from": "candidate"
-      },
-      {
-        "skill_id": "google-labs-code/stitch-skills:plugins/stitch-design/skills/extract-design-md/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-26",
         "from": "candidate"
       }
     ],
@@ -11192,6 +11147,111 @@
         "expires_at": "2027-02-23",
         "days": 150,
         "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "google-labs-code/stitch-skills:plugins/stitch-utilities/skills/stitch-loop/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "supabase/agent-skills:skills/supabase-postgres-best-practices/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "expo/skills:plugins/expo/skills/expo-brownfield/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/mcp-builder/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "expo/skills:plugins/expo/skills/expo-dev-client/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/slack-gif-creator/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/cosmos-vulnerability-scanner/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/code-improver/skills/pr-improver/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "cloudflare/skills:skills/turnstile-spin/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/audit-prep-assistant/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/code-improver/skills/code-improver/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/code-improver/tests/fixtures/review-panel/skills/panel-review/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/code-improver/tests/fixtures/pr-review-toolkit/skills/review-pr/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/culture-index/skills/interpreting-culture-index/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/gh-cli/skills/gh-cli/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
       }
     ]
   },
@@ -11245,6 +11305,18 @@
         "name": "pptx",
         "added_at": "2026-09-26",
         "source_url": "https://github.com/anthropics/skills/blob/HEAD/skills/pptx/SKILL.md"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/discernment-nudge/SKILL.md",
+        "name": "discernment-nudge",
+        "added_at": "2026-09-26",
+        "source_url": "https://github.com/anthropics/skills/blob/HEAD/skills/discernment-nudge/SKILL.md"
+      },
+      {
+        "skill_id": "vercel-labs/agent-skills:skills/writing-guidelines/SKILL.md",
+        "name": "writing-guidelines",
+        "added_at": "2026-09-26",
+        "source_url": "https://github.com/vercel-labs/agent-skills/blob/HEAD/skills/writing-guidelines/SKILL.md"
       }
     ],
     "source": "docs/plans/2026-09-24-已收录管理实施方案.md",
