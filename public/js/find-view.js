@@ -52,6 +52,10 @@ export function renderFindView(container, report, ownedState = null) {
     bannerHtml = '<div class="find-status-banner warning">⚠️ 模型调用消耗已达到本次 Token 预算上限 (token_limit)，查找停止；已保存当前已完成结果。</div>';
   } else if (stopReason === "evaluation_limit") {
     bannerHtml = '<div class="find-status-banner info">ℹ️ 评估数量已达到本次设置上限 (evaluation_limit)，查找停止。</div>';
+  } else if (stopReason === "round_limit") {
+    bannerHtml = '<div class="find-status-banner info">已达到检索轮数上限，尚未集齐目标数量；当前结果已保存，可增加轮数后续跑。</div>';
+  } else if (stopReason === "target_reached") {
+    bannerHtml = '<div class="find-status-banner info">已集齐目标短名单，查找提前完成。</div>';
   } else if (stopReason === "interrupted") {
     bannerHtml = '<div class="find-status-banner warning">⏸️ 用户主动中断查找过程 (interrupted)；已安全保留中断前已评估的全部结果与 Token 用量。</div>';
   } else if (stopReason === "model_failures") {

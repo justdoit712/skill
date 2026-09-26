@@ -56,3 +56,8 @@ test("running, error, interruption, and empty completion have distinct output", 
   assert.match(render({ ...report, status: "interrupted", stop_reason: "interrupted" }), /中断/);
   assert.doesNotMatch(render(report), /异常中止|尚未完成/);
 });
+
+test("target reached and exhausted rounds explain different outcomes", () => {
+  assert.match(render({ ...report, stop_reason: "target_reached" }), /提前完成/);
+  assert.match(render({ ...report, status: "stopped", stop_reason: "round_limit" }), /尚未集齐目标数量/);
+});
