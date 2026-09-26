@@ -360,6 +360,111 @@
       "expires_at": "2027-02-23",
       "days": 150,
       "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "google-labs-code/stitch-skills:plugins/stitch-utilities/skills/stitch-loop/SKILL.md",
+      "snoozed_at": "2026-09-26",
+      "expires_at": "2027-02-23",
+      "days": 150,
+      "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "supabase/agent-skills:skills/supabase-postgres-best-practices/SKILL.md",
+      "snoozed_at": "2026-09-26",
+      "expires_at": "2027-02-23",
+      "days": 150,
+      "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "expo/skills:plugins/expo/skills/expo-brownfield/SKILL.md",
+      "snoozed_at": "2026-09-26",
+      "expires_at": "2027-02-23",
+      "days": 150,
+      "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "anthropics/skills:skills/mcp-builder/SKILL.md",
+      "snoozed_at": "2026-09-26",
+      "expires_at": "2027-02-23",
+      "days": 150,
+      "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "expo/skills:plugins/expo/skills/expo-dev-client/SKILL.md",
+      "snoozed_at": "2026-09-26",
+      "expires_at": "2027-02-23",
+      "days": 150,
+      "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "anthropics/skills:skills/slack-gif-creator/SKILL.md",
+      "snoozed_at": "2026-09-26",
+      "expires_at": "2027-02-23",
+      "days": 150,
+      "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/cosmos-vulnerability-scanner/SKILL.md",
+      "snoozed_at": "2026-09-26",
+      "expires_at": "2027-02-23",
+      "days": 150,
+      "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/code-improver/skills/pr-improver/SKILL.md",
+      "snoozed_at": "2026-09-26",
+      "expires_at": "2027-02-23",
+      "days": 150,
+      "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "cloudflare/skills:skills/turnstile-spin/SKILL.md",
+      "snoozed_at": "2026-09-26",
+      "expires_at": "2027-02-23",
+      "days": 150,
+      "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/audit-prep-assistant/SKILL.md",
+      "snoozed_at": "2026-09-26",
+      "expires_at": "2027-02-23",
+      "days": 150,
+      "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/code-improver/skills/code-improver/SKILL.md",
+      "snoozed_at": "2026-09-26",
+      "expires_at": "2027-02-23",
+      "days": 150,
+      "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/code-improver/tests/fixtures/review-panel/skills/panel-review/SKILL.md",
+      "snoozed_at": "2026-09-26",
+      "expires_at": "2027-02-23",
+      "days": 150,
+      "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/code-improver/tests/fixtures/pr-review-toolkit/skills/review-pr/SKILL.md",
+      "snoozed_at": "2026-09-26",
+      "expires_at": "2027-02-23",
+      "days": 150,
+      "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/culture-index/skills/interpreting-culture-index/SKILL.md",
+      "snoozed_at": "2026-09-26",
+      "expires_at": "2027-02-23",
+      "days": 150,
+      "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/gh-cli/skills/gh-cli/SKILL.md",
+      "snoozed_at": "2026-09-26",
+      "expires_at": "2027-02-23",
+      "days": 150,
+      "reason": "用户暂不关注"
     }
   ]
 }

@@ -48,6 +48,18 @@
       "name": "pptx",
       "source_url": "https://github.com/anthropics/skills/blob/HEAD/skills/pptx/SKILL.md",
       "added_at": "2026-09-26"
+    },
+    {
+      "skill_id": "anthropics/skills:skills/discernment-nudge/SKILL.md",
+      "name": "discernment-nudge",
+      "source_url": "https://github.com/anthropics/skills/blob/HEAD/skills/discernment-nudge/SKILL.md",
+      "added_at": "2026-09-26"
+    },
+    {
+      "skill_id": "vercel-labs/agent-skills:skills/writing-guidelines/SKILL.md",
+      "name": "writing-guidelines",
+      "source_url": "https://github.com/vercel-labs/agent-skills/blob/HEAD/skills/writing-guidelines/SKILL.md",
+      "added_at": "2026-09-26"
     }
   ],
   "source": "docs/plans/2026-09-24-已收录管理实施方案.md",

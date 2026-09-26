@@ -16,40 +16,10 @@
       "from": "candidate"
     },
     {
-      "skill_id": "anthropics/skills:skills/doc-coauthoring/SKILL.md",
-      "reason": "用户收藏",
-      "added_at": "2026-09-24",
-      "from": "recommended"
-    },
-    {
-      "skill_id": "anthropics/skills:skills/internal-comms/SKILL.md",
-      "reason": "用户收藏",
-      "added_at": "2026-09-24",
-      "from": "candidate"
-    },
-    {
-      "skill_id": "anthropics/skills:skills/mcp-builder/SKILL.md",
-      "reason": "用户收藏",
-      "added_at": "2026-09-22",
-      "from": "recommended"
-    },
-    {
-      "skill_id": "anthropics/skills:skills/pptx/SKILL.md",
-      "reason": "用户收藏",
-      "added_at": "2026-09-22",
-      "from": "recommended"
-    },
-    {
       "skill_id": "anthropics/skills:skills/skill-creator/SKILL.md",
       "reason": "用户收藏",
       "added_at": "2026-09-24",
       "from": "candidate"
-    },
-    {
-      "skill_id": "anthropics/skills:skills/slack-gif-creator/SKILL.md",
-      "reason": "用户收藏",
-      "added_at": "2026-09-22",
-      "from": "recommended"
     },
     {
       "skill_id": "anthropics/skills:skills/theme-factory/SKILL.md",
@@ -82,60 +52,6 @@
       "from": "recommended"
     },
     {
-      "skill_id": "cloudflare/skills:skills/turnstile-spin/SKILL.md",
-      "reason": "用户收藏",
-      "added_at": "2026-09-24",
-      "from": "recommended"
-    },
-    {
-      "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/audit-prep-assistant/SKILL.md",
-      "reason": "用户收藏",
-      "added_at": "2026-09-24",
-      "from": "recommended"
-    },
-    {
-      "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/cosmos-vulnerability-scanner/SKILL.md",
-      "reason": "用户收藏",
-      "added_at": "2026-09-24",
-      "from": "recommended"
-    },
-    {
-      "skill_id": "trailofbits/skills:plugins/code-improver/skills/code-improver/SKILL.md",
-      "reason": "用户收藏",
-      "added_at": "2026-09-24",
-      "from": "recommended"
-    },
-    {
-      "skill_id": "trailofbits/skills:plugins/code-improver/skills/pr-improver/SKILL.md",
-      "reason": "用户收藏",
-      "added_at": "2026-09-24",
-      "from": "recommended"
-    },
-    {
-      "skill_id": "trailofbits/skills:plugins/code-improver/tests/fixtures/pr-review-toolkit/skills/review-pr/SKILL.md",
-      "reason": "用户收藏",
-      "added_at": "2026-09-24",
-      "from": "candidate"
-    },
-    {
-      "skill_id": "trailofbits/skills:plugins/code-improver/tests/fixtures/review-panel/skills/panel-review/SKILL.md",
-      "reason": "用户收藏",
-      "added_at": "2026-09-24",
-      "from": "recommended"
-    },
-    {
-      "skill_id": "trailofbits/skills:plugins/culture-index/skills/interpreting-culture-index/SKILL.md",
-      "reason": "用户收藏",
-      "added_at": "2026-09-24",
-      "from": "candidate"
-    },
-    {
-      "skill_id": "trailofbits/skills:plugins/gh-cli/skills/gh-cli/SKILL.md",
-      "reason": "用户收藏",
-      "added_at": "2026-09-26",
-      "from": "candidate"
-    },
-    {
       "skill_id": "trailofbits/skills:plugins/goal-prompt/skills/goal-prompt/SKILL.md",
       "reason": "用户收藏",
       "added_at": "2026-09-26",
@@ -151,6 +67,48 @@
       "skill_id": "trailofbits/skills:plugins/trailmark/skills/graph-evolution/SKILL.md",
       "reason": "用户收藏",
       "added_at": "2026-09-26",
+      "from": "recommended"
+    },
+    {
+      "skill_id": "google-labs-code/stitch-skills:plugins/stitch-build/skills/react-components/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-26",
+      "from": "candidate"
+    },
+    {
+      "skill_id": "google-labs-code/stitch-skills:plugins/stitch-build/skills/react-native/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-26",
+      "from": "candidate"
+    },
+    {
+      "skill_id": "google-labs-code/stitch-skills:plugins/stitch-build/skills/shadcn-ui/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-26",
+      "from": "candidate"
+    },
+    {
+      "skill_id": "google-labs-code/stitch-skills:plugins/stitch-design/skills/extract-design-md/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-26",
+      "from": "candidate"
+    },
+    {
+      "skill_id": "anthropics/skills:skills/doc-coauthoring/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-24",
+      "from": "recommended"
+    },
+    {
+      "skill_id": "anthropics/skills:skills/internal-comms/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-24",
+      "from": "candidate"
+    },
+    {
+      "skill_id": "anthropics/skills:skills/pptx/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-22",
       "from": "recommended"
     },
     {
@@ -181,30 +139,6 @@
       "skill_id": "anthropics/skills:skills/pdf/SKILL.md",
       "reason": "用户收藏",
       "added_at": "2026-09-24",
-      "from": "candidate"
-    },
-    {
-      "skill_id": "google-labs-code/stitch-skills:plugins/stitch-build/skills/react-components/SKILL.md",
-      "reason": "用户收藏",
-      "added_at": "2026-09-26",
-      "from": "candidate"
-    },
-    {
-      "skill_id": "google-labs-code/stitch-skills:plugins/stitch-build/skills/react-native/SKILL.md",
-      "reason": "用户收藏",
-      "added_at": "2026-09-26",
-      "from": "candidate"
-    },
-    {
-      "skill_id": "google-labs-code/stitch-skills:plugins/stitch-build/skills/shadcn-ui/SKILL.md",
-      "reason": "用户收藏",
-      "added_at": "2026-09-26",
-      "from": "candidate"
-    },
-    {
-      "skill_id": "google-labs-code/stitch-skills:plugins/stitch-design/skills/extract-design-md/SKILL.md",
-      "reason": "用户收藏",
-      "added_at": "2026-09-26",
       "from": "candidate"
     }
   ],
