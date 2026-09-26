@@ -584,6 +584,20 @@
       "expires_at": "2027-02-23",
       "days": 150,
       "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "expo/skills:plugins/expo/skills/expo-native-ui/SKILL.md",
+      "snoozed_at": "2026-09-26",
+      "expires_at": "2027-02-23",
+      "days": 150,
+      "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "better-auth/skills:better-auth/create-auth/SKILL.md",
+      "snoozed_at": "2026-09-26",
+      "expires_at": "2027-02-23",
+      "days": 150,
+      "reason": "用户暂不关注"
     }
   ]
 }

@@ -58,6 +58,12 @@
       "from": "candidate"
     },
     {
+      "skill_id": "getsentry/skills:skills/commit/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-26",
+      "from": "candidate"
+    },
+    {
       "skill_id": "anthropics/skills:skills/discernment-nudge/SKILL.md",
       "reason": "用户收藏",
       "added_at": "2026-09-24",
@@ -124,15 +130,21 @@
       "from": "candidate"
     },
     {
-      "skill_id": "getsentry/skills:skills/commit/SKILL.md",
+      "skill_id": "getsentry/skills:skills/agents-md/SKILL.md",
       "reason": "用户收藏",
       "added_at": "2026-09-26",
       "from": "candidate"
     },
     {
-      "skill_id": "getsentry/skills:skills/agents-md/SKILL.md",
+      "skill_id": "gauss314/skills:skills/alpaca-data/SKILL.md",
       "reason": "用户收藏",
-      "added_at": "2026-09-26",
+      "added_at": "2026-09-27",
+      "from": "candidate"
+    },
+    {
+      "skill_id": "gauss314/skills:skills/alpha-vantage/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-27",
       "from": "candidate"
     }
   ],
