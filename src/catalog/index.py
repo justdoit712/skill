@@ -277,6 +277,7 @@ def build_page_data(catalog: dict) -> dict:
             failed += 1
 
     res = {
+        "catalog_version": catalog.get("catalog_version", CATALOG_VERSION),
         "generated_at": catalog.get("generated_at"),
         "rules_version": catalog.get("rules_version"),
         "counts": {
