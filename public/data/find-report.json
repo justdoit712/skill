@@ -2,12 +2,44 @@
   "schema_version": "1.0.0",
   "run_id": "20260926-133441-000913",
   "started_at": "2026-09-26T13:34:41.819054+08:00",
-  "updated_at": "2026-09-26T15:29:10.640317+08:00",
+  "updated_at": "2026-09-26T17:00:56.208166+08:00",
   "topic": "如何整理归纳，包括但不限于，软件分类，帖子分类，总而言之就是各种东西该如何分类",
-  "status": "stopped",
-  "stop_reason": "evaluation_limit",
+  "status": "completed",
+  "stop_reason": "candidates_exhausted",
   "coverage_incomplete": true,
   "errors": [
+    {
+      "stage": "evaluation",
+      "code": "invalid_result"
+    },
+    {
+      "stage": "evaluation",
+      "code": "invalid_result"
+    },
+    {
+      "stage": "evaluation",
+      "code": "invalid_result"
+    },
+    {
+      "stage": "evaluation",
+      "code": "invalid_result"
+    },
+    {
+      "stage": "evaluation",
+      "code": "invalid_result"
+    },
+    {
+      "stage": "evaluation",
+      "code": "invalid_result"
+    },
+    {
+      "stage": "evaluation",
+      "code": "invalid_result"
+    },
+    {
+      "stage": "evaluation",
+      "code": "invalid_result"
+    },
     {
       "stage": "evaluation",
       "code": "invalid_result"
@@ -103,7 +135,7 @@
   ],
   "parameters": {
     "limit": 5,
-    "max_evaluations": 80,
+    "max_evaluations": 200,
     "max_tokens": 20000000
   },
   "model": "qwen3.8-flash",
@@ -234,14 +266,62 @@
         "ok": false,
         "repos_returned": 0,
         "error": "search_failed"
+      },
+      {
+        "query": "automatic content classification custom taxonomy",
+        "ok": true,
+        "repos_returned": 20,
+        "error": null
+      },
+      {
+        "query": "multi type data classification tool",
+        "ok": true,
+        "repos_returned": 20,
+        "error": null
+      },
+      {
+        "query": "text classification accuracy evaluation",
+        "ok": true,
+        "repos_returned": 20,
+        "error": null
+      },
+      {
+        "query": "自定义分类体系 自动归类",
+        "ok": true,
+        "repos_returned": 1,
+        "error": null
+      },
+      {
+        "query": "分类准确率 自动评测",
+        "ok": true,
+        "repos_returned": 0,
+        "error": null
+      },
+      {
+        "query": "software post classification tagging",
+        "ok": true,
+        "repos_returned": 20,
+        "error": null
+      },
+      {
+        "query": "zero shot classification label output",
+        "ok": true,
+        "repos_returned": 20,
+        "error": null
+      },
+      {
+        "query": "混合内容分类 标签输出",
+        "ok": true,
+        "repos_returned": 0,
+        "error": null
       }
     ],
     "repos_discovered": 20,
-    "candidates_found": 146,
+    "candidates_found": 155,
     "skipped_owned": 0
   },
-  "evaluation_attempts": 80,
-  "evaluated_count": 57,
+  "evaluation_attempts": 106,
+  "evaluated_count": 75,
   "shortlist_count": 0,
   "alternatives_count": 2,
   "shortlist": [],
@@ -561,10 +641,10 @@
     }
   ],
   "usage": {
-    "prompt_tokens": 498739,
-    "completion_tokens": 357773,
-    "total_tokens": 856512,
-    "unknown_usage_requests": 4,
-    "requests": 84
+    "prompt_tokens": 657122,
+    "completion_tokens": 488798,
+    "total_tokens": 1145920,
+    "unknown_usage_requests": 5,
+    "requests": 110
   }
 }
