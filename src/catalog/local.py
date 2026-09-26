@@ -169,7 +169,7 @@ def prepare_pool(
 
     if pool is None:
         if force_refresh:
-            log("已指定 --refresh-pool，强制清空旧池并重新运行网络搜索...")
+            log("已指定 --refresh-pool，重新运行网络搜索并重建候选池，保留超长跳过标记...")
         else:
             log("未检测到有效本地候选池，正在首次搜索并展开真实 SKILL.md...")
         log("搜索阶段不调用模型。")
@@ -319,7 +319,7 @@ def save_and_render(
         pst = pool.stats()
         lines.append(
             f"- 候选池：共 {pst['total']} 条，待处理 {pst['pending']} 条"
-            f"（已完成 {pst['done']}，排除 {pst['excluded']}，抓取失败 {pst['fetch_failed']}，非技能 {pst['not_skill']}）"
+            f"（已完成 {pst['done']}，排除 {pst['excluded']}，抓取失败 {pst['fetch_failed']}，非技能 {pst['not_skill']}，超长跳过 {pst['length_exceeded']}）"
         )
     if report.get("skipped_owned"):
         lines.append(f"- 已收录跳过：{report['skipped_owned']}")
@@ -769,7 +769,7 @@ def main(argv=None, *, root: Path | None = None) -> int:
     parser.add_argument("--expand-limit", type=int)
     parser.add_argument("--sync-config", action="store_true", help="纯离线重建：无需模型凭据与网络，将 config/*.json 同步到 data 与 public/data")
     parser.add_argument("--enrich-catalog", action="store_true", help="离线结构化增强：从现有数据中提取形态、示例请求与亮点，不修改原中文简述")
-    parser.add_argument("--refresh-pool", action="store_true", help="强制丢弃现有候选池并重新运行网络搜索发现")
+    parser.add_argument("--refresh-pool", action="store_true", help="重新搜索并重建候选池，保留超长跳过标记")
     parser.add_argument("--pool-watermark", type=int, help="候选池待处理数量低于此水位线时自动增量补水，默认 20")
     args = parser.parse_args(argv)
     log = lambda message: print(message, flush=True)
