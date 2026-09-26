@@ -107,10 +107,13 @@ def check_quality(evaluation, text, rules):
                 invalid.append(key)
     blockers = [key for key, item in quality.items() if item["value"] != "pass"]
     if blockers:
-        out["instruction_completeness"] = {
-            "value": "unknown", "evidence": "质量门槛未通过：" + "；".join(
-                f"{key}: {quality[key]['evidence']}" for key in blockers), "citations": [],
-        }
+        # Preserve an existing negative finding and its evidence; quality gaps
+        # remain independently inspectable in quality_checks / quality_audit.
+        if out["instruction_completeness"]["value"] != "fail":
+            out["instruction_completeness"] = {
+                "value": "unknown", "evidence": "质量门槛未通过：" + "；".join(
+                    f"{key}: {quality[key]['evidence']}" for key in blockers), "citations": [],
+            }
         if "QUALITY_BELOW_BAR" not in out["reason_codes"]:
             out["reason_codes"].append("QUALITY_BELOW_BAR")
     if invalid and "INSUFFICIENT_EVIDENCE" not in out["reason_codes"]:

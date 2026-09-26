@@ -45,12 +45,15 @@ def search_github_repos_for_query(
     timeout: float = DEFAULT_TIMEOUT_SECONDS,
     session=None,
     sleep=time.sleep,
+    max_attempts: int = 3,
+    retry_info: dict | None = None,
 ) -> tuple[bool, list[dict[str, str]], str | None]:
     """执行单个关键词的 GitHub 仓库搜索（围绕查询词与 SKILL.md in:readme 检索）。"""
     full_q = f'{query.strip()} "SKILL.md" in:readme'
     ok, items, _, error = search_repositories(full_q, session=session, per_page=per_page,
                                               page=page,
-                                              timeout=timeout, sleep=sleep)
+                                              timeout=timeout, sleep=sleep,
+                                              max_attempts=max_attempts, retry_info=retry_info)
     repos = []
     for item in items:
         owner = (item.get("owner") or {}).get("login", "").lower()

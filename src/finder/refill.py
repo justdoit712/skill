@@ -4,11 +4,14 @@ from copy import deepcopy
 from dataclasses import asdict
 from types import SimpleNamespace
 import re
+import time
 
 from src.shared.models import Candidate
 from src.shared.owned import is_skill_owned
 from .plan import build_reflection_prompt, parse_reflection_queries, PLAN_MAX_OUTPUT_TOKENS
 from .search import schedule_candidates_fairly, _round_robin_merge_repos
+
+MAX_PAGE_ATTEMPTS = 3  # Includes the initial HTTP request; no nested retries.
 
 
 def initialize_search(state):
@@ -24,6 +27,93 @@ def initialize_search(state):
     completed.update(c["skill_id"] for c in report.get("calls", [])
                      if c.get("skill_id") and c.get("state") != "not_sent")
     search["processed_skill_ids"] = sorted(set(search["processed_skill_ids"]) | completed)
+    for query, cursor in search["query_cursors"].items():
+        if "page_attempts" not in cursor:
+            # Legacy failed searches already used the transport's three attempts.
+            failed = any(q.get("query") == query and q.get("page", 1) == cursor["next_page"]
+                         and not q.get("ok") for q in search["queries_executed"])
+            cursor.update(page_attempts=MAX_PAGE_ATTEMPTS if failed else 0,
+                          blocked=failed, last_error="legacy_search_failed" if failed else None)
+
+
+def reset_failed_searches(state):
+    """Explicitly reopen failed pages, preserving history and server cooldowns."""
+    initialize_search(state)
+    search = state.report["search"]
+    queries = []
+    for query, cursor in search["query_cursors"].items():
+        if cursor.get("page_attempts") and not cursor["exhausted"]:
+            queries.append(query)
+            cursor.update(page_attempts=0, blocked=False)
+    if queries:
+        search.setdefault("retry_resets", []).append({"at": time.time(), "queries": queries})
+        if search["rounds_history"]:
+            current = search["rounds_history"][-1]
+            current.update(phase="searching", retry_queries=queries)
+        state.save()
+
+
+def _wait_for_search(state, cursor, sleep, log):
+    deadline = max(cursor.get("retry_at", 0), state.report["search"].get("retry_at", 0))
+    delay = max(0, deadline - time.time())
+    if delay:
+        log(f"[检索退避] 等待 {delay:.1f} 秒，可中断后续跑。")
+    while delay > 0:
+        reason = state.stop_reason()
+        if reason:
+            return reason
+        chunk = min(delay, 60)
+        sleep(chunk)
+        delay -= chunk
+    return state.stop_reason()
+
+
+def _search_page(state, current, query, cursor, search_fn, sleep, log):
+    search = state.report["search"]
+    page = cursor["next_page"]
+    while cursor.get("page_attempts", 0) < MAX_PAGE_ATTEMPTS and not cursor.get("blocked"):
+        reason = _wait_for_search(state, cursor, sleep, log)
+        if reason:
+            return [], reason
+        attempt = cursor.get("page_attempts", 0) + 1
+        # Reserve an attempt before sending, so an interrupted request cannot
+        # gain unlimited retries through --resume.
+        cursor.update(page_attempts=attempt, last_error="request_interrupted",
+                      retry_at=time.time() + 2 ** (attempt - 1))
+        entry = {"query": query, "page": page, "attempt": attempt, "ok": False,
+                 "repos_returned": 0, "error": "request_interrupted"}
+        current["searches"].append(entry)
+        search["queries_executed"].append(dict(entry, round=current["round"]))
+        state.save()
+        log(f"[轮次 {current['round']}/{state.report['parameters']['max_rounds']}] "
+            f"检索 {query}，第 {page} 页，第 {attempt}/{MAX_PAGE_ATTEMPTS} 次尝试")
+        retry_info = {}
+        try:
+            ok, repos, error = search_fn(query, page=page, sleep=sleep,
+                                        max_attempts=1, retry_info=retry_info)
+        except BaseException:
+            state.report["coverage_incomplete"] = True
+            state.save()
+            raise
+        entry.update(ok=ok, repos_returned=len(repos), error=error)
+        search["queries_executed"][-1].update(entry)
+        if ok:
+            # The caller saves cursor advancement and discovered repos together.
+            cursor.update(next_page=page + 1, exhausted=len(repos) < 20 or page >= 50,
+                          page_attempts=0, blocked=False, last_error=None, retry_at=0)
+            return repos, None
+        state.report["coverage_incomplete"] = True
+        cooldown = retry_info.get("retry_after", 0)
+        if cooldown:
+            search["retry_at"] = time.time() + cooldown
+        cursor.update(last_error=error, retry_at=time.time() + max(2 ** (attempt - 1), cooldown),
+                      blocked=attempt >= MAX_PAGE_ATTEMPTS or retry_info.get("retryable") is False)
+        state.save()
+    cursor["blocked"] = True
+    state.report["coverage_incomplete"] = True
+    state.save()
+    log(f"[跳过失败页] {query} 第 {page} 页已停止自动重试，继续其他查询。")
+    return [], None
 
 
 def _reflect(state, current, cfg, transport, api_key, sleep, log):
@@ -78,21 +168,16 @@ def _search_pages(state, current, queries, search_fn, sleep, log):
         if reason:
             return reason
         cursor = search["query_cursors"].setdefault(query, {"next_page": 1, "exhausted": False})
-        # Saved query entries make an interrupted round resume at the next unrequested query.
-        if any(q["query"] == query for q in current["searches"]):
+        # Only a successful page is complete; failures retain their page/counter.
+        if any(q["query"] == query and q["ok"] and q["page"] == cursor["next_page"] - 1
+               for q in current["searches"]):
             continue
         if cursor["exhausted"]:
             continue
-        page = cursor["next_page"]
-        log(f"[轮次 {current['round']}/{state.report['parameters']['max_rounds']}] 检索 {query}，第 {page} 页")
-        ok, repos, error = search_fn(query, page=page, sleep=sleep)
-        entry = {"query": query, "page": page, "ok": ok, "repos_returned": len(repos), "error": error}
-        current["searches"].append(entry)
-        search["queries_executed"].append(dict(entry, round=current["round"]))
-        if not ok:
-            state.report["coverage_incomplete"] = True
-        else:
-            cursor.update(next_page=page + 1, exhausted=len(repos) < 20 or page >= 50)
+        repos, reason = _search_page(state, current, query, cursor, search_fn, sleep, log)
+        if reason:
+            return reason
+        if cursor.get("last_error") is None:
             if len(repos) >= 20:
                 state.report["coverage_incomplete"] = True
             # Persist every discovered repository, including those outside the next expansion batch.
@@ -109,7 +194,8 @@ def _search_pages(state, current, queries, search_fn, sleep, log):
             current["new_repos"] += len(new)
         state.save()
     relevant = [q for q in current["searches"] if q["query"] in queries]
-    if relevant and not any(q["ok"] for q in relevant):
+    blocked = any(search["query_cursors"][q].get("blocked") for q in queries)
+    if (relevant or blocked) and not any(q["ok"] for q in relevant):
         return "search_failed"
     return None
 
@@ -181,6 +267,9 @@ def run_rounds(state, cfg, api_key, transport, search_fn, expand, fetch, evaluat
                 queries = current["reflection_queries"]
             else:
                 queries = list(search["query_cursors"])
+            if current.get("retry_queries"):
+                queries = list(dict.fromkeys(current["retry_queries"] + queries))
+                reflect_first = False
             if not reflect_first:
                 reason = _search_pages(state, current, queries, search_fn, sleep, log)
                 if reason:
@@ -198,6 +287,7 @@ def run_rounds(state, cfg, api_key, transport, search_fn, expand, fetch, evaluat
                 if reason:
                     return reason
             current["phase"] = "processing"
+            current.pop("retry_queries", None)
             state.save()
         # Consume all saved candidates/repositories before spending on another search round.
         while True:

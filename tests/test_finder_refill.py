@@ -221,6 +221,153 @@ class RefillTest(unittest.TestCase):
         r = self.run_find()
         self.assertEqual(r["stop_reason"], "search_failed")
         self.assertEqual(self.model.call_count, 1)
+        self.assertEqual(self.search.call_count, 3)
+        self.search.reset_mock()
+        resumed = self.resume(r)
+        self.assertEqual(resumed["stop_reason"], "search_failed")
+        self.search.assert_not_called()
+        cursor = resumed["search"]["query_cursors"]["organize"]
+        self.assertEqual(cursor["next_page"], 1)
+        self.assertEqual(cursor["page_attempts"], 3)
+        self.assertTrue(cursor["blocked"])
+
+    def test_failed_page_retries_with_backoff_then_advances_once(self):
+        self.search.side_effect = [(False, [], "HTTP 503"), (False, [], "HTTP 503"),
+                                   (True, [repo(0)], None)]
+        sleep = Mock()
+        with patch("src.finder.refill.time.time", return_value=100):
+            r = self.run_find(sleep=sleep)
+        self.assertEqual(r["stop_reason"], "target_reached")
+        self.assertEqual([c.kwargs["page"] for c in self.search.call_args_list], [1, 1, 1])
+        self.assertEqual([c.kwargs["max_attempts"] for c in self.search.call_args_list], [1, 1, 1])
+        self.assertEqual([c.args[0] for c in sleep.call_args_list], [1, 2])
+        self.assertEqual(r["search"]["query_cursors"]["organize"]["next_page"], 2)
+        self.assertEqual(self.expand.call_count, 1)
+        self.assertEqual([q["ok"] for q in r["search"]["queries_executed"]], [False, False, True])
+
+    def test_resume_after_interrupted_backoff_keeps_attempt_count(self):
+        self.search.return_value = False, [], "HTTP 503"
+        r = self.run_find(sleep=Mock(side_effect=KeyboardInterrupt))
+        self.assertEqual(r["stop_reason"], "interrupted")
+        self.assertEqual(self.search.call_count, 1)
+        self.search.reset_mock()
+        self.search.return_value = True, [repo(0)], None
+        resumed = self.resume(r)
+        self.assertEqual(resumed["stop_reason"], "target_reached")
+        self.assertEqual(self.search.call_count, 1)
+        self.assertEqual(self.search.call_args.kwargs["page"], 1)
+        self.assertEqual([q["attempt"] for q in resumed["search"]["queries_executed"]], [1, 2])
+
+    def test_interrupted_requests_cannot_reset_attempt_budget(self):
+        self.search.side_effect = KeyboardInterrupt
+        r = self.run_find()
+        for _ in range(2):
+            r = self.resume(r)
+        self.assertEqual(self.search.call_count, 3)
+        self.search.reset_mock()
+        r = self.resume(r)
+        self.assertEqual(r["stop_reason"], "search_failed")
+        self.search.assert_not_called()
+
+    def test_blocked_query_does_not_prevent_other_query(self):
+        self.model.side_effect = [response(dict(PLAN, queries=["bad", "good"])), evaluated("strong")]
+        self.search.side_effect = lambda query, **kw: ((False, [], "HTTP 503") if query == "bad"
+                                                      else (True, [repo(0)], None))
+        r = self.run_find()
+        self.assertEqual(r["stop_reason"], "target_reached")
+        self.assertEqual([c.args[0] for c in self.search.call_args_list], ["bad"] * 3 + ["good"])
+        self.assertTrue(r["coverage_incomplete"])
+        self.assertTrue(r["search"]["query_cursors"]["bad"]["blocked"])
+        md = Path(r["report_paths"]["md"]).read_text(encoding="utf-8")
+        self.assertIn("未完成搜索页", md)
+        self.assertIn("--retry-failed-searches", md)
+
+    def test_explicit_retry_reopens_failed_page_and_preserves_history(self):
+        self.search.return_value = False, [], "HTTP 503"
+        r = self.run_find()
+        self.search.reset_mock()
+        self.search.return_value = True, [repo(0)], None
+        resumed = self.resume(r, retry_failed_searches=True)
+        self.assertEqual(resumed["stop_reason"], "target_reached")
+        self.assertEqual(self.search.call_count, 1)
+        self.assertEqual(self.search.call_args.kwargs["page"], 1)
+        self.assertEqual(len(resumed["search"]["queries_executed"]), 4)
+        self.assertEqual(len(resumed["search"]["retry_resets"]), 1)
+        directory = str(Path(r["report_paths"]["json"]).parent)
+        with patch("src.finder.run.execute_find_skill", return_value=resumed) as execute:
+            self.assertEqual(main(["--resume", directory, "--retry-failed-searches"], root=self.root), 0)
+            self.assertTrue(execute.call_args.kwargs["retry_failed_searches"])
+
+    def test_retry_reset_requires_resume(self):
+        with self.assertRaises(ValueError):
+            self.run_find(retry_failed_searches=True)
+        self.model.assert_not_called()
+
+    def test_blocked_query_stays_blocked_across_rounds(self):
+        self.model.side_effect = ([response(dict(PLAN, queries=["bad", "good"]))]
+                                 + [evaluated() for _ in range(20)] + [evaluated("strong")])
+        def search(query, **kw):
+            if query == "bad":
+                return False, [], "HTTP 503"
+            return True, [repo(i) for i in range(20)] if kw["page"] == 1 else [repo(20)], None
+        self.search.side_effect = search
+        r = self.run_find()
+        self.assertEqual(r["stop_reason"], "target_reached")
+        self.assertEqual([c.args[0] for c in self.search.call_args_list], ["bad"] * 3 + ["good"] * 2)
+        self.assertEqual(r["search"]["current_round"], 2)
+
+    def test_explicit_retry_after_round_completion_keeps_successful_results(self):
+        self.model.side_effect = [response(dict(PLAN, queries=["bad", "good"])), evaluated()]
+        self.search.side_effect = lambda query, **kw: ((False, [], "HTTP 503") if query == "bad"
+                                                      else (True, [repo(0)], None))
+        r = self.run_find(max_rounds=1)
+        self.assertEqual(r["stop_reason"], "round_limit")
+        self.search.reset_mock()
+        self.search.side_effect = None
+        self.search.return_value = True, [repo(0), repo(1)], None
+        self.model.side_effect = [evaluated("strong")]
+        self.fetch.reset_mock()
+        resumed = self.resume(r, retry_failed_searches=True)
+        self.assertEqual(resumed["stop_reason"], "target_reached")
+        self.assertEqual(self.search.call_count, 1)
+        self.assertEqual(self.search.call_args.args[0], "bad")
+        self.assertEqual(self.fetch.call_count, 1)
+        self.assertEqual(resumed["evaluated_count"], 2)
+
+    def test_nonretryable_http_error_skips_without_three_requests(self):
+        def denied(query, **kwargs):
+            kwargs["retry_info"]["retryable"] = False
+            return False, [], "HTTP 401"
+        self.search.side_effect = denied
+        r = self.run_find()
+        self.assertEqual(r["stop_reason"], "search_failed")
+        self.assertEqual(self.search.call_count, 1)
+
+    def test_rate_limit_cooldown_survives_resume_and_waits_in_chunks(self):
+        def limited(query, **kwargs):
+            kwargs["retry_info"].update(retry_after=125)
+            return False, [], "HTTP 429"
+        self.search.side_effect = limited
+        with patch("src.finder.refill.time.time", return_value=100):
+            r = self.run_find(sleep=Mock(side_effect=KeyboardInterrupt))
+        self.assertEqual(r["search"]["retry_at"], 225)
+        self.search.side_effect = None
+        self.search.return_value = True, [repo(0)], None
+        sleep = Mock()
+        with patch("src.finder.refill.time.time", return_value=110):
+            resumed = self.resume(r, sleep=sleep)
+        self.assertEqual(resumed["stop_reason"], "target_reached")
+        self.assertEqual([c.args[0] for c in sleep.call_args_list], [60, 55])
+
+    def test_legacy_failed_page_requires_explicit_reset(self):
+        self.search.return_value = False, [], "HTTP 503"
+        r = self.run_find()
+        r["search"]["query_cursors"]["organize"] = {"next_page": 1, "exhausted": False}
+        Path(r["report_paths"]["json"]).write_text(json.dumps(r), encoding="utf-8")
+        self.search.reset_mock()
+        resumed = self.resume(r)
+        self.assertEqual(resumed["stop_reason"], "search_failed")
+        self.search.assert_not_called()
 
     def test_invalid_round_count_is_rejected_before_model_call(self):
         with self.assertRaises(ValueError):
@@ -273,6 +420,28 @@ class RefillTest(unittest.TestCase):
 
 
 class SearchAdapterTest(unittest.TestCase):
+    def test_single_http_attempt_returns_retry_headers_without_sleeping(self):
+        session = Mock()
+        session.get.return_value.status_code = 429
+        session.get.return_value.headers = {"Retry-After": "12", "X-RateLimit-Remaining": "0",
+                                            "X-RateLimit-Reset": "125"}
+        retry_info, sleep = {}, Mock()
+        with patch("src.infra.github.time.time", return_value=100):
+            ok, _, _, error = search_repositories("q", session=session, max_attempts=1,
+                                                 retry_info=retry_info, sleep=sleep)
+        self.assertFalse(ok)
+        self.assertEqual(error, "HTTP 429")
+        self.assertEqual(retry_info, {"retry_after": 25, "retryable": True})
+        self.assertEqual(session.get.call_count, 1)
+        sleep.assert_not_called()
+
+    def test_http_date_retry_after_and_invalid_headers(self):
+        from src.infra.github import _retry_after_seconds
+        with patch("src.infra.github.time.time", return_value=100):
+            self.assertEqual(_retry_after_seconds({"Retry-After": "Thu, 01 Jan 1970 00:02:00 GMT"}), 20)
+        for value in ("bad", "nan", "inf", "-10"):
+            self.assertEqual(_retry_after_seconds({"Retry-After": value}), 0)
+
     def test_page_reaches_http_request(self):
         session = Mock()
         session.get.return_value.status_code = 200
@@ -282,6 +451,10 @@ class SearchAdapterTest(unittest.TestCase):
         with patch("src.finder.search.search_repositories", return_value=(True, [], 0, None)) as search:
             search_github_repos_for_query("q", page=4)
             self.assertEqual(search.call_args.kwargs["page"], 4)
+            info = {}
+            search_github_repos_for_query("q", max_attempts=1, retry_info=info)
+            self.assertEqual(search.call_args.kwargs["max_attempts"], 1)
+            self.assertIs(search.call_args.kwargs["retry_info"], info)
 
     def test_expansion_can_preserve_paths_beyond_ten(self):
         paths = [f"skills/{i}/SKILL.md" for i in range(13)]

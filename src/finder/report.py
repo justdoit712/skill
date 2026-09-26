@@ -84,6 +84,12 @@ def render_find_markdown_report(report: dict[str, Any]) -> str:
     ]
     if raw_coverage_incomplete:
         lines.append("- **检索覆盖**：本次检索覆盖不完整，部分来源读取失败或超出读取范围。")
+    for query, cursor in search.get("query_cursors", {}).items():
+        if cursor.get("blocked") or cursor.get("page_attempts", 0):
+            lines.append(f"- **未完成搜索页**：{query}，第 {cursor.get('next_page', 1)} 页，"
+                         f"已尝试 {cursor.get('page_attempts', 0)} 次；原因：{cursor.get('last_error')}。")
+    if any(c.get("blocked") for c in search.get("query_cursors", {}).values()):
+        lines.append("- 已停止自动重试失败页；网络恢复后可用 `--resume --retry-failed-searches` 显式重试。")
     if search.get("candidates_found") and search.get("skipped_owned") == search.get("candidates_found"):
         lines.append("- 本次发现的候选已全部收录。")
     for round_info in search.get("rounds_history", []):

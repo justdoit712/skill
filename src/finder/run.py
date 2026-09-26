@@ -60,7 +60,7 @@ from .search import (
     fetch_candidate_materials,
     search_github_repos_for_query,
 )
-from .refill import run_rounds
+from .refill import run_rounds, reset_failed_searches
 
 EVAL_MAX_OUTPUT_TOKENS = 10000
 
@@ -453,9 +453,11 @@ def execute_find_skill(topic="", *, limit=None, max_evaluations=None, max_tokens
                        call_model_fn=None, fetch_candidate_materials_fn=None,
                        expand_and_collect_candidates_fn=None, search_github_repos_fn=None,
                        owned_ids=None, max_clarification_turns=None,
-                       input_fn=input, resume_dir=None):
+                       input_fn=input, resume_dir=None, retry_failed_searches=False):
     from src.infra.llm import validate_model_config
     from src.infra.owned import load_owned_ids
+    if retry_failed_searches and resume_dir is None:
+        raise ValueError("重新尝试失败搜索必须配合 --resume 使用")
     root = Path(root_dir).resolve()
     project_root = Path(__file__).resolve().parents[2].resolve()
     if root == project_root and is_test_environment():
@@ -553,6 +555,8 @@ def execute_find_skill(topic="", *, limit=None, max_evaluations=None, max_tokens
     transport = call_model_fn or call_model
     reason = "plan_failed"
     try:
+        if retry_failed_searches:
+            reset_failed_searches(state)
         if resumed:
             pending = state.report.get("pending_evaluation")
             last = state.report["calls"][-1] if state.report["calls"] else {}
@@ -679,6 +683,8 @@ def main(argv: list[str] | None = None, *, root: Path | None = None) -> int:
         help="接着上一次中断的运行继续执行（可选指定运行目录或编号，默认自动选取最近一次运行）",
     )
     parser.add_argument("topic", nargs="?", help=topic_help)
+    parser.add_argument("--retry-failed-searches", action="store_true",
+                        help="配合 --resume 显式重置失败页的尝试次数，保留成功结果及限流等待时间")
     parser.add_argument(
         "--limit",
         type=lambda v: _parse_int_val(v, DEFAULT_LIMIT, "limit"),
@@ -745,6 +751,7 @@ def main(argv: list[str] | None = None, *, root: Path | None = None) -> int:
             root_dir=root_path,
             max_clarification_turns=args.turns,
             resume_dir=resume_path,
+            retry_failed_searches=args.retry_failed_searches,
         )
     except KeyboardInterrupt:
         return 130

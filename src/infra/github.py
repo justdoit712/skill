@@ -7,6 +7,8 @@ from __future__ import annotations
 
 import os
 import time
+import math
+from email.utils import parsedate_to_datetime
 from typing import Any
 
 import requests
@@ -26,6 +28,27 @@ SKILL_FILENAME = "SKILL.md"
 
 def _backoff_seconds(attempt: int, cap: float = 8.0) -> float:
     return min(2.0 ** (attempt - 1), cap)
+
+
+def _retry_after_seconds(headers) -> float:
+    """Honor server cooldowns (seconds, HTTP date, or GitHub reset epoch)."""
+    delays = [0.0]
+    value = headers.get("Retry-After")
+    if isinstance(value, str):
+        try:
+            delays.append(float(value))
+        except ValueError:
+            try:
+                delays.append(parsedate_to_datetime(value).timestamp() - time.time())
+            except (ValueError, TypeError, OverflowError):
+                pass
+    reset = headers.get("X-RateLimit-Reset")
+    if str(headers.get("X-RateLimit-Remaining")) == "0" and isinstance(reset, str):
+        try:
+            delays.append(float(reset) - time.time())
+        except ValueError:
+            pass
+    return max(d for d in delays if math.isfinite(d))
 
 
 def apply_github_auth(session: requests.Session) -> bool:
@@ -134,8 +157,11 @@ def search_repositories(
     timeout: float = DEFAULT_TIMEOUT_SECONDS,
     max_attempts: int = DEFAULT_MAX_ATTEMPTS,
     sleep=time.sleep,
+    retry_info: dict | None = None,
 ) -> tuple[bool, list[dict], int, str | None]:
     """执行 GitHub 仓库搜索。返回 (ok, items, total_count, error)。"""
+    if retry_info is not None:
+        retry_info.clear()
     owns = session is None
     sess = session if session is not None else requests.Session()
     sess.headers.setdefault("User-Agent", USER_AGENT)
@@ -159,9 +185,12 @@ def search_repositories(
             try:
                 status = response.status_code
                 if status >= 400:
+                    delay = _retry_after_seconds(response.headers)
+                    if retry_info is not None:
+                        retry_info.update(retry_after=delay, retryable=status in RETRYABLE_STATUS)
                     if status in RETRYABLE_STATUS and attempt < max_attempts:
                         response.close()
-                        sleep(_backoff_seconds(attempt))
+                        sleep(max(_backoff_seconds(attempt), delay))
                         continue
                     return False, [], 0, f"HTTP {status}"
 

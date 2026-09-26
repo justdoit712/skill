@@ -227,6 +227,8 @@ class TestFinderOwnedIntegration(unittest.TestCase):
         # q-fail 失败，q-ok 成功
         mock_search.side_effect = [
             (False, [], "GitHub API 500 error"),
+            (False, [], "GitHub API 500 error"),
+            (False, [], "GitHub API 500 error"),
             (True, [{"owner": "test-owner", "repo": "test-repo", "url": "u", "description": "d"}], None),
         ]
 

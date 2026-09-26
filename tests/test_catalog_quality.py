@@ -158,6 +158,22 @@ class QualityTest(unittest.TestCase):
         self.assertEqual(result["quality_checks"]["verification"]["value"], "unknown")
         self.assertEqual(result["quality_audit"]["missing_quality_checks"], ["verification"])
 
+    def test_quality_gaps_preserve_instruction_failure_and_evidence(self):
+        for missing in (True, False):
+            with self.subTest(missing=missing):
+                raw = deepcopy(self.raw)
+                raw["instruction_completeness"].update(value="fail", evidence="缺少可执行步骤")
+                original = deepcopy(raw["instruction_completeness"])
+                if missing:
+                    raw.pop("quality_checks")
+                else:
+                    raw["quality_checks"]["verification"]["value"] = "fail"
+                raw = parse_evaluation(json.dumps(raw), self.rules, None, self.taxonomy)
+                result = check_quality(raw, TEXT, self.rules)
+                self.assertEqual(result["instruction_completeness"], original)
+                self.assertIn("verification", result["quality_audit"]["blocking_checks"])
+                self.assertEqual(decide(result, self.rules)["decision"], "candidate")
+
     def test_prompt_example_contains_quality_and_citations_only_when_enabled(self):
         from src.catalog.evaluation import build_prompt
         system, _ = build_prompt(self.candidate, TEXT, self.rules, self.taxonomy)
