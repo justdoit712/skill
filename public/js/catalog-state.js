@@ -100,7 +100,15 @@ export function loadStorage(overridesState, storageKey = STORAGE_KEY, legacyKey 
     const storage = storageObj || (typeof localStorage !== "undefined" ? localStorage : null);
     if (!storage) return;
     const raw = storage.getItem(storageKey) || storage.getItem(legacyKey);
-    if (!raw) return;
+    if (!raw) {
+      overridesState.stagedPicks = {};
+      overridesState.stagedExclusions = {};
+      overridesState.stagedSnoozed = {};
+      overridesState.removedPicks = new Set();
+      overridesState.removedExclusions = new Set();
+      overridesState.removedSnoozed = new Set();
+      return;
+    }
     const saved = JSON.parse(raw);
     if (saved.stagedPicks) overridesState.stagedPicks = saved.stagedPicks;
     if (saved.stagedExclusions) overridesState.stagedExclusions = saved.stagedExclusions;

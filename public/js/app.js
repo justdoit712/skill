@@ -219,18 +219,11 @@ export function fail(reason) {
   el.emptyReason.textContent = reason;
 }
 
-// 多标签页并发状态同步（遵循 O-02）
-window.addEventListener("storage", e => {
-  if (e.key === "skills_catalog_owned_staged_v1" || e.key === "skills_catalog_owned_private_v1") {
-    loadOwnedStagedStorage(ownedState);
-    loadOwnedPrivateStorage(ownedState);
-    reconcileOwnedStaged(ownedState);
-    apply();
-  } else if (e.key === "skills_catalog_overrides_v2" || e.key === "skill_overrides_v2") {
-    loadStorage(overridesState);
-    apply();
-  }
-});
+// 前端状态与同步边界说明：
+// 本站部署于 GitHub Pages 静态环境，无服务端、无 WebSocket、不支持亦无需自动双向同步。
+// 所有已收录标记、人工干预均在当前单页面内由 LocalStorage 暂存，业务同步模型为“本地暂存 -> 导出变更包/复制 JSON -> 手动合入仓库”。
+// 单页面内的“标记、清空、导出”形成完整闭环，不维护复杂的跨标签页 Storage 广播监听。
+
 
 // 事件监听与委托
 el.q.addEventListener("input", e => {

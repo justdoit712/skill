@@ -477,7 +477,12 @@ export function loadOwnedStagedStorage(ownedState, storageObj = null) {
     const storage = storageObj || (typeof localStorage !== "undefined" ? localStorage : null);
     if (!storage) return;
     const raw = storage.getItem(STORAGE_KEY_OWNED_STAGED);
-    if (!raw) return;
+    if (!raw) {
+      ownedState.stagedAdds = {};
+      ownedState.stagedDeletes = new Set();
+      ownedState._stagedChanges = {};
+      return;
+    }
     const saved = JSON.parse(raw);
     if (saved.stagedAdds && typeof saved.stagedAdds === "object") {
       ownedState.stagedAdds = saved.stagedAdds;
@@ -572,7 +577,11 @@ export function loadOwnedPrivateStorage(ownedState, storageObj = null) {
     const storage = storageObj || (typeof localStorage !== "undefined" ? localStorage : null);
     if (!storage) return;
     const raw = storage.getItem(STORAGE_KEY_OWNED_PRIVATE);
-    if (!raw) return;
+    if (!raw) {
+      ownedState.privateDetails = {};
+      ownedState._privateChanges = {};
+      return;
+    }
     const saved = JSON.parse(raw);
     if (saved && typeof saved === "object") {
       ownedState.privateDetails = saved;
