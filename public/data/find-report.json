@@ -1,1374 +1,570 @@
 {
   "schema_version": "1.0.0",
-  "run_id": "20260922-213434-13a1ec",
-  "started_at": "2026-09-22T21:34:34.641685+08:00",
-  "updated_at": "2026-09-22T22:24:56.554875+08:00",
-  "topic": "生成高质量 Prompt",
-  "status": "completed",
-  "stop_reason": "completed",
+  "run_id": "20260926-133441-000913",
+  "started_at": "2026-09-26T13:34:41.819054+08:00",
+  "updated_at": "2026-09-26T15:29:10.640317+08:00",
+  "topic": "如何整理归纳，包括但不限于，软件分类，帖子分类，总而言之就是各种东西该如何分类",
+  "status": "stopped",
+  "stop_reason": "evaluation_limit",
+  "coverage_incomplete": true,
+  "errors": [
+    {
+      "stage": "evaluation",
+      "code": "invalid_result"
+    },
+    {
+      "stage": "evaluation",
+      "code": "invalid_result"
+    },
+    {
+      "stage": "evaluation",
+      "code": "invalid_result"
+    },
+    {
+      "stage": "evaluation",
+      "code": "invalid_result"
+    },
+    {
+      "stage": "evaluation",
+      "code": "invalid_result"
+    },
+    {
+      "stage": "evaluation",
+      "code": "invalid_result"
+    },
+    {
+      "stage": "evaluation",
+      "code": "invalid_result"
+    },
+    {
+      "stage": "evaluation",
+      "code": "invalid_result"
+    },
+    {
+      "stage": "evaluation",
+      "code": "invalid_result"
+    },
+    {
+      "stage": "evaluation",
+      "code": "invalid_result"
+    },
+    {
+      "stage": "evaluation",
+      "code": "invalid_result"
+    },
+    {
+      "stage": "evaluation",
+      "code": "invalid_result"
+    },
+    {
+      "stage": "evaluation",
+      "code": "invalid_result"
+    },
+    {
+      "stage": "evaluation",
+      "code": "invalid_result"
+    },
+    {
+      "stage": "evaluation",
+      "code": "invalid_result"
+    },
+    {
+      "stage": "evaluation",
+      "code": "invalid_result"
+    },
+    {
+      "stage": "evaluation",
+      "code": "invalid_result"
+    },
+    {
+      "stage": "evaluation",
+      "code": "invalid_result"
+    },
+    {
+      "stage": "evaluation",
+      "code": "invalid_result"
+    },
+    {
+      "stage": "evaluation",
+      "code": "invalid_result"
+    },
+    {
+      "stage": "evaluation",
+      "code": "invalid_result"
+    },
+    {
+      "stage": "evaluation",
+      "code": "invalid_result"
+    },
+    {
+      "stage": "evaluation",
+      "code": "invalid_result"
+    }
+  ],
   "parameters": {
     "limit": 5,
     "max_evaluations": 80,
     "max_tokens": 20000000
   },
-  "model": "deepseek-v4-pro",
+  "model": "qwen3.8-flash",
   "plan": {
-    "intent": "寻找能够生成高质量提示词（Prompt）的工具或技能",
+    "intent": "寻找可基于用户自定义分类体系，对软件、帖子等混合内容进行自动归类，并具备分类准确率自动评测能力、最终输出明确类别标签的技能或工具。",
     "criteria": [
       {
-        "id": "generate_high_quality_prompt",
+        "id": "custom_classification",
         "kind": "required",
-        "description": "明确支持生成高质量的提示词，能够产出清晰、有效、针对性强的 Prompt。"
+        "description": "支持用户自定义分类体系，并能对混合内容或多种数据类型执行自动分类，输出明确类别标签"
       },
       {
-        "id": "provide_templates_or_examples",
-        "kind": "quality_signal",
-        "description": "提供提示词模板或示例，帮助用户理解如何构建高质量提示词。"
+        "id": "accuracy_evaluation",
+        "kind": "required",
+        "description": "包含分类效果评测模块，能够对分类准确率或相关指标进行自动打分"
       },
       {
-        "id": "task_specific_customization",
+        "id": "mixed_data_support",
         "kind": "quality_signal",
-        "description": "支持根据具体任务类型（如写作、翻译、问答、代码生成等）定制提示词。"
+        "description": "适配软件、帖子、结构化数据、文本片段等混合场景，而非只支持单一数据类型"
       },
       {
-        "id": "optimization_and_iteration",
+        "id": "simple_label_output",
         "kind": "quality_signal",
-        "description": "能够对现有提示词进行分析、提供优化建议或支持迭代改进。"
+        "description": "最终结果可简洁表达为所属类别，同时兼容结构化输出或人工可读格式"
       },
       {
-        "id": "explain_principles",
+        "id": "usage_examples",
         "kind": "quality_signal",
-        "description": "说明高质量提示词的设计原则或最佳实践，帮助用户学习。"
+        "description": "提供分类配置、评测流程或示例，便于快速验证自定义分类体系与准确率评估能力"
       }
     ]
   },
   "search": {
     "queries_executed": [
       {
-        "query": "prompt generator",
+        "query": "automatic content classification custom taxonomy",
         "ok": true,
         "repos_returned": 20,
         "error": null
+      },
+      {
+        "query": "multi type data classification tool",
+        "ok": true,
+        "repos_returned": 20,
+        "error": null
+      },
+      {
+        "query": "text classification accuracy evaluation",
+        "ok": true,
+        "repos_returned": 20,
+        "error": null
+      },
+      {
+        "query": "自定义分类体系 自动归类",
+        "ok": true,
+        "repos_returned": 1,
+        "error": null
+      },
+      {
+        "query": "分类准确率 自动评测",
+        "ok": true,
+        "repos_returned": 0,
+        "error": null
+      },
+      {
+        "query": "software post classification tagging",
+        "ok": true,
+        "repos_returned": 20,
+        "error": null
+      },
+      {
+        "query": "zero shot classification label output",
+        "ok": true,
+        "repos_returned": 20,
+        "error": null
+      },
+      {
+        "query": "混合内容分类 标签输出",
+        "ok": true,
+        "repos_returned": 0,
+        "error": null
+      },
+      {
+        "query": "automatic content classification custom taxonomy",
+        "ok": true,
+        "repos_returned": 20,
+        "error": null
+      },
+      {
+        "query": "multi type data classification tool",
+        "ok": true,
+        "repos_returned": 20,
+        "error": null
+      },
+      {
+        "query": "text classification accuracy evaluation",
+        "ok": true,
+        "repos_returned": 20,
+        "error": null
+      },
+      {
+        "query": "自定义分类体系 自动归类",
+        "ok": true,
+        "repos_returned": 1,
+        "error": null
+      },
+      {
+        "query": "分类准确率 自动评测",
+        "ok": true,
+        "repos_returned": 0,
+        "error": null
+      },
+      {
+        "query": "software post classification tagging",
+        "ok": true,
+        "repos_returned": 20,
+        "error": null
+      },
+      {
+        "query": "zero shot classification label output",
+        "ok": false,
+        "repos_returned": 0,
+        "error": "search_failed"
+      },
+      {
+        "query": "混合内容分类 标签输出",
+        "ok": false,
+        "repos_returned": 0,
+        "error": "search_failed"
       }
     ],
     "repos_discovered": 20,
-    "candidates_found": 10837
+    "candidates_found": 146,
+    "skipped_owned": 0
   },
-  "evaluation_attempts": 0,
-  "evaluated_count": 79,
-  "shortlist_count": 2,
-  "alternatives_count": 9,
-  "shortlist": [
-    {
-      "candidate": {
-        "skill_id": "luongnv89/claude-howto:03-skills/claude-md/SKILL.md",
-        "name": "claude-md",
-        "repo_url": "https://github.com/luongnv89/claude-howto",
-        "url": "https://github.com/luongnv89/claude-howto/blob/HEAD/03-skills/claude-md/SKILL.md",
-        "author": "luongnv89",
-        "path": "03-skills/claude-md/SKILL.md"
-      },
-      "evaluation": {
-        "match": "strong",
-        "documentation": "clear",
-        "summary_zh": "该技能专注于创建或更新高质量 CLAUDE.md 项目上下文文件，遵循 AI 代理 onboarding 的最佳实践，并提供模板、审计和更新流程，可视为生成高质量项目级提示上下文。",
-        "why_consider": "它提供结构化的黄金规则、完整模板和审计/更新流程，能直接产出高质量 AI 代理上下文（CLAUDE.md），而非空泛的通用提示词。",
-        "usage_zh": "在用户输入中指定 `create`（创建新文件）、`update`（改进现有文件）、`audit`（仅生成质量报告）或具体路径（如 `src/api/CLAUDE.md`）。技能会分析项目结构，依据 WHAT/WHY/HOW 策略和 Essential Sections 模板起草或更新内容，并在批准后写入目标位置。",
-        "dependencies": [],
-        "limitations": [
-          "仅聚焦 CLAUDE.md/AGENTS.md 项目上下文文件，不生成通用任务级提示词。",
-          "明确禁止任务特定指令，不能按写作、翻译、问答、代码生成等具体任务定制 prompt。",
-          "更新和创建需要用户批准后才写入；audit 模式只报告不修改文件。",
-          "技能要求用户验证命令是否可用后再纳入文档。"
-        ],
-        "criteria_results": [
-          {
-            "criterion_id": "generate_high_quality_prompt",
-            "status": "supported",
-            "explanation": "技能明确用于创建/更新 CLAUDE.md 文件，遵循最佳实践以实现 AI 代理的最佳 onboarding，并包含质量约束与验证清单，能产出清晰、有效的项目级指令上下文。",
-            "evidence": [
-              {
-                "source_path": "03-skills/claude-md/SKILL.md",
-                "start_line": 3,
-                "end_line": 3,
-                "quote": "description: Create or update CLAUDE.md files following best practices for optimal AI agent onboarding"
-              },
-              {
-                "source_path": "03-skills/claude-md/SKILL.md",
-                "start_line": 20,
-                "end_line": 20,
-                "quote": "LLMs are stateless: CLAUDE.md is the only file automatically included in every conversation. It serves as the primary onboarding document for AI agents into your codebase."
-              }
-            ]
-          },
-          {
-            "criterion_id": "provide_templates_or_examples",
-            "status": "supported",
-            "explanation": "Essential Sections 部分提供了完整的 CLAUDE.md 结构模板，包含项目描述、技术栈、项目结构、开发命令、关键约定和已知问题等示例。",
-            "evidence": [
-              {
-                "source_path": "03-skills/claude-md/SKILL.md",
-                "start_line": 106,
-                "end_line": 111,
-                "quote": "```markdown # Project Name Brief one-line description. ## Tech Stack"
-              }
-            ]
-          },
-          {
-            "criterion_id": "task_specific_customization",
-            "status": "unsupported",
-            "explanation": "技能明确要求只包含适用于所有会话的通用内容，并将任务特定指令移出 CLAUDE.md，因此不支持按具体任务类型定制提示词。",
-            "evidence": []
-          },
-          {
-            "criterion_id": "optimization_and_iteration",
-            "status": "supported",
-            "explanation": "技能提供 update 和 audit 流程，可审计现有 CLAUDE.md、识别问题、给出改进建议，并支持审查后迭代更新。",
-            "evidence": [
-              {
-                "source_path": "03-skills/claude-md/SKILL.md",
-                "start_line": 185,
-                "end_line": 190,
-                "quote": "2. Generate a report with: - Current line count vs target - Percentage of universally-applicable content - List of anti-patterns found - Recommendations for improvement 3. Do NOT modify the file, only report"
-              }
-            ]
-          },
-          {
-            "criterion_id": "explain_principles",
-            "status": "supported",
-            "explanation": "技能通过 Golden Rules、Quality Constraints、Anti-Patterns 和 Validation Checklist 等多个部分说明高质量 CLAUDE.md 的设计原则与最佳实践。",
-            "evidence": [
-              {
-                "source_path": "03-skills/claude-md/SKILL.md",
-                "start_line": 24,
-                "end_line": 24,
-                "quote": "1. **Less is More**: Frontier LLMs can follow ~150-200 instructions. Claude Code's system prompt already uses ~50. Keep your CLAUDE.md focused and concise."
-              },
-              {
-                "source_path": "03-skills/claude-md/SKILL.md",
-                "start_line": 96,
-                "end_line": 96,
-                "quote": "1. **Target Length**: Keep it under a few hundred lines; shorter is better"
-              }
-            ]
-          }
-        ]
-      },
-      "skill_id": "luongnv89/claude-howto:03-skills/claude-md/SKILL.md",
-      "name": "claude-md",
-      "url": "https://github.com/luongnv89/claude-howto/blob/HEAD/03-skills/claude-md/SKILL.md",
-      "repo_url": "https://github.com/luongnv89/claude-howto",
-      "match_level": "strong",
-      "summary": "该技能专注于创建或更新高质量 CLAUDE.md 项目上下文文件，遵循 AI 代理 onboarding 的最佳实践，并提供模板、审计和更新流程，可视为生成高质量项目级提示上下文。",
-      "matched_criteria": [
-        "generate_high_quality_prompt",
-        "provide_templates_or_examples",
-        "optimization_and_iteration",
-        "explain_principles"
-      ],
-      "verified_evidence": [
-        {
-          "source_path": "03-skills/claude-md/SKILL.md",
-          "start_line": 3,
-          "end_line": 3,
-          "quote": "description: Create or update CLAUDE.md files following best practices for optimal AI agent onboarding"
-        },
-        {
-          "source_path": "03-skills/claude-md/SKILL.md",
-          "start_line": 20,
-          "end_line": 20,
-          "quote": "LLMs are stateless: CLAUDE.md is the only file automatically included in every conversation. It serves as the primary onboarding document for AI agents into your codebase."
-        },
-        {
-          "source_path": "03-skills/claude-md/SKILL.md",
-          "start_line": 106,
-          "end_line": 111,
-          "quote": "```markdown # Project Name Brief one-line description. ## Tech Stack"
-        },
-        {
-          "source_path": "03-skills/claude-md/SKILL.md",
-          "start_line": 185,
-          "end_line": 190,
-          "quote": "2. Generate a report with: - Current line count vs target - Percentage of universally-applicable content - List of anti-patterns found - Recommendations for improvement 3. Do NOT modify the file, only report"
-        },
-        {
-          "source_path": "03-skills/claude-md/SKILL.md",
-          "start_line": 24,
-          "end_line": 24,
-          "quote": "1. **Less is More**: Frontier LLMs can follow ~150-200 instructions. Claude Code's system prompt already uses ~50. Keep your CLAUDE.md focused and concise."
-        },
-        {
-          "source_path": "03-skills/claude-md/SKILL.md",
-          "start_line": 96,
-          "end_line": 96,
-          "quote": "1. **Target Length**: Keep it under a few hundred lines; shorter is better"
-        }
-      ]
-    },
-    {
-      "candidate": {
-        "skill_id": "charlie947/social-media-skills:skills/gemini-carousel/SKILL.md",
-        "name": "gemini-carousel",
-        "repo_url": "https://github.com/charlie947/social-media-skills",
-        "url": "https://github.com/charlie947/social-media-skills/blob/HEAD/skills/gemini-carousel/SKILL.md",
-        "author": "charlie947",
-        "path": "skills/gemini-carousel/SKILL.md"
-      },
-      "evaluation": {
-        "match": "strong",
-        "documentation": "clear",
-        "summary_zh": "该技能专注于生成 LinkedIn carousel 的高质量图像生成提示词，提供结构化的 prompt 模板、定制化选项和审批流程，完全匹配用户寻找生成高质量提示词工具的需求。",
-        "why_consider": "提供了一套结构化、含审批门控的 prompt 生成工作流，可生成高度定制且视觉一致的 LinkedIn carousel 图像提示词。",
-        "usage_zh": "当用户说出“carousel”、“build a carousel”等触发词时加载技能；系统会要求粘贴内容，然后询问品牌风格（从品牌文件、手动输入或建议）和幻灯片数量（6/8/10）；随后构建逐张幻灯片设计简报，等待用户批准；批准后输出每张幻灯片的 Gemini 图像生成提示词，每个提示词放在独立代码块中；用户可将提示词粘贴到启用了 Create Image 和 Nano Banana 的 Gemini 聊天中逐个生成。",
-        "dependencies": [
-          "Gemini（需启用 Create Image 并选择 Nano Banana）",
-          "AskUserQuestion 或等效提问工具",
-          "可选的 brand-kit.md、about-me.md、voice.md 等品牌文件"
-        ],
-        "limitations": [
-          "仅适用于 LinkedIn carousel 图像生成提示词",
-          "不生成图像本身，只输出提示词",
-          "需要用户提供源内容",
-          "生成前必须经过用户批准设计简报",
-          "默认使用英式英语，除非 voice.md 另有规定"
-        ],
-        "criteria_results": [
-          {
-            "criterion_id": "generate_high_quality_prompt",
-            "status": "supported",
-            "explanation": "技能明确输出每张幻灯片的 Gemini 图像生成提示词，每个提示词都包含专家角色、品牌风格、内容、布局指令和约束条件，结构完整，针对性极强。",
-            "evidence": [
-              {
-                "source_path": "skills/gemini-carousel/SKILL.md",
-                "start_line": 85,
-                "end_line": 111,
-                "quote": "Act as an expert graphic designer. Create a LinkedIn carousel slide at 1080x1350 pixels (4:5 aspect ratio). Brand style: - Primary colour: [HEX] - Secondary colour: [HEX] - Accent colour: [HEX] - Typography: [bold industrial headline font, clean geometric body font] - Aesthetic: modern, authoritative, high contrast Slide [N of M]: [slide purpose] Content: - Headline: \"[headline text]\" - Body: \"[body text]\" - Visual element: [specific visual suggestion] Layout instructions: - [Headline placement and size] - [Body placement and size] - [Visual placement] - [Background treatment] Constraints: - Vertical 4:5 aspect ratio at exactly 1080x1350 pixels - No watermarks, no logos unless specified above - Maintain visual consistency with the other slides in the set"
-              }
-            ]
-          },
-          {
-            "criterion_id": "provide_templates_or_examples",
-            "status": "supported",
-            "explanation": "技能在 Step 3 中明确提供了每个提示词必须遵循的结构模板，包含占位符和固定格式，可直接使用。",
-            "evidence": [
-              {
-                "source_path": "skills/gemini-carousel/SKILL.md",
-                "start_line": 83,
-                "end_line": 85,
-                "quote": "Every prompt follows this structure: ``` Act as an expert graphic designer. Create a LinkedIn carousel slide at 1080x1350 pixels (4:5 aspect ratio)."
-              }
-            ]
-          },
-          {
-            "criterion_id": "task_specific_customization",
-            "status": "supported",
-            "explanation": "技能根据用户提供的内容和品牌风格选择，定制每张幻灯片的标题、正文和视觉建议，且幻灯片数量可调整，完全针对 LinkedIn carousel 这一具体任务。",
-            "evidence": [
-              {
-                "source_path": "skills/gemini-carousel/SKILL.md",
-                "start_line": 60,
-                "end_line": 71,
-                "quote": "Analyse the content and produce a slide-by-slide brief with: - **Slide 1 (Cover)**: hook, large bold text, visual direction - **Slides 2 to N-1 (Body)**: one idea per slide, concise copy and a specific illustration or diagram that explains it. Preserve all required items and source qualifications; propose more slides if needed. - **Slide N (Ending)**: useful conclusion or next action, with a CTA only for a real user-approved offer or link For each slide include: - Slide number - Headline (max 8 words) - Body text (max 15 words) - Visual suggestion (icon, colour block, illustration, diagram)"
-              }
-            ]
-          },
-          {
-            "criterion_id": "optimization_and_iteration",
-            "status": "unsupported",
-            "explanation": "材料仅包含生成前的设计简报审批环节，用户可修改简报后重新生成提示词，但未提到对已生成的提示词进行分析、提供优化建议或迭代改进。",
-            "evidence": []
-          },
-          {
-            "criterion_id": "explain_principles",
-            "status": "unknown",
-            "explanation": "规则部分包含品牌一致性、视觉区分等约束，但材料未明确说明这些是高质量提示词的设计原则或最佳实践，也未系统解释，因此无法确认是否满足该准则。",
-            "evidence": []
-          }
-        ]
-      },
-      "skill_id": "charlie947/social-media-skills:skills/gemini-carousel/SKILL.md",
-      "name": "gemini-carousel",
-      "url": "https://github.com/charlie947/social-media-skills/blob/HEAD/skills/gemini-carousel/SKILL.md",
-      "repo_url": "https://github.com/charlie947/social-media-skills",
-      "match_level": "strong",
-      "summary": "该技能专注于生成 LinkedIn carousel 的高质量图像生成提示词，提供结构化的 prompt 模板、定制化选项和审批流程，完全匹配用户寻找生成高质量提示词工具的需求。",
-      "matched_criteria": [
-        "generate_high_quality_prompt",
-        "provide_templates_or_examples",
-        "task_specific_customization"
-      ],
-      "verified_evidence": [
-        {
-          "source_path": "skills/gemini-carousel/SKILL.md",
-          "start_line": 85,
-          "end_line": 111,
-          "quote": "Act as an expert graphic designer. Create a LinkedIn carousel slide at 1080x1350 pixels (4:5 aspect ratio). Brand style: - Primary colour: [HEX] - Secondary colour: [HEX] - Accent colour: [HEX] - Typography: [bold industrial headline font, clean geometric body font] - Aesthetic: modern, authoritative, high contrast Slide [N of M]: [slide purpose] Content: - Headline: \"[headline text]\" - Body: \"[body text]\" - Visual element: [specific visual suggestion] Layout instructions: - [Headline placement and size] - [Body placement and size] - [Visual placement] - [Background treatment] Constraints: - Vertical 4:5 aspect ratio at exactly 1080x1350 pixels - No watermarks, no logos unless specified above - Maintain visual consistency with the other slides in the set"
-        },
-        {
-          "source_path": "skills/gemini-carousel/SKILL.md",
-          "start_line": 83,
-          "end_line": 85,
-          "quote": "Every prompt follows this structure: ``` Act as an expert graphic designer. Create a LinkedIn carousel slide at 1080x1350 pixels (4:5 aspect ratio)."
-        },
-        {
-          "source_path": "skills/gemini-carousel/SKILL.md",
-          "start_line": 60,
-          "end_line": 71,
-          "quote": "Analyse the content and produce a slide-by-slide brief with: - **Slide 1 (Cover)**: hook, large bold text, visual direction - **Slides 2 to N-1 (Body)**: one idea per slide, concise copy and a specific illustration or diagram that explains it. Preserve all required items and source qualifications; propose more slides if needed. - **Slide N (Ending)**: useful conclusion or next action, with a CTA only for a real user-approved offer or link For each slide include: - Slide number - Headline (max 8 words) - Body text (max 15 words) - Visual suggestion (icon, colour block, illustration, diagram)"
-        }
-      ]
-    }
-  ],
+  "evaluation_attempts": 80,
+  "evaluated_count": 57,
+  "shortlist_count": 0,
+  "alternatives_count": 2,
+  "shortlist": [],
   "alternatives": [
     {
       "candidate": {
-        "skill_id": "marketingjuliancongdanh79-pixel/skill-generator:SKILL.md",
-        "name": "skill-generator",
-        "repo_url": "https://github.com/marketingjuliancongdanh79-pixel/skill-generator",
-        "url": "https://github.com/marketingjuliancongdanh79-pixel/skill-generator/blob/HEAD/SKILL.md",
-        "author": "marketingjuliancongdanh79-pixel",
-        "path": "SKILL.md"
+        "skill_id": "2fastlabs/agent-squad:swift/SKILL.md",
+        "name": "swift",
+        "repo_url": "https://github.com/2FastLabs/agent-squad",
+        "url": "https://github.com/2fastlabs/agent-squad/blob/HEAD/swift/SKILL.md",
+        "author": "2fastlabs",
+        "path": "swift/SKILL.md"
       },
       "evaluation": {
         "match": "partial",
         "documentation": "clear",
-        "summary_zh": "该技能是一个完整的AI Skill生成器，通过8阶段流水线将用户工作流转化为生产级Skill，但并非直接生成独立Prompt，而是生成包含描述、指令、示例和约束的系统性Skill包。",
-        "why_consider": "它提供了系统的8阶段流程和7条设计原则，能够将用户工作流转化为生产级AI Skill，并包含定量评估和迭代优化，有助于生成高质量的提示词组件。",
-        "usage_zh": "当用户描述想要自动化的流程或说“tạo skill”时，该技能会启动智能访谈，根据复杂度选择快速通道或完整8阶段流程，生成包含描述、指令、示例和约束的完整Skill包，并进行测试、评估和优化。",
-        "dependencies": [],
-        "limitations": [
-          "不是直接生成独立Prompt，而是生成完整的AI Skill包，可能超出用户对简单Prompt生成器的需求。",
-          "材料为越南语，对非越南语用户可能存在理解障碍。",
-          "需要用户参与访谈，不适用于快速生成单个Prompt的场景。"
-        ],
-        "criteria_results": [
-          {
-            "criterion_id": "generate_high_quality_prompt",
-            "status": "unknown",
-            "explanation": "材料明确目标是生成AI Skill而非独立的Prompt，虽然Skill内部包含高质量的提示词元素（如description、instructions），但未直接声明生成高质量Prompt，因此该项证据不足，标记为unknown。",
-            "evidence": []
-          },
-          {
-            "criterion_id": "provide_templates_or_examples",
-            "status": "supported",
-            "explanation": "材料提供了完整的Skill示例（weekly-report-writer），并引用了模板文件，明确支持提供模板和示例。",
-            "evidence": [
-              {
-                "source_path": "SKILL.md",
-                "start_line": 55,
-                "end_line": 58,
-                "quote": "Đây là output cuối cùng của pipeline — skill hoàn chỉnh, sẵn sàng deploy:"
-              },
-              {
-                "source_path": "SKILL.md",
-                "start_line": 197,
-                "end_line": 197,
-                "quote": "> **Tham khảo:** `resources/skill_template.md`, `resources/prompt_engineering.md`"
-              }
-            ]
-          },
-          {
-            "criterion_id": "task_specific_customization",
-            "status": "supported",
-            "explanation": "技能通过深度访谈提取用户特定任务信息，自动检测模式并选择合适架构，支持根据具体工作流定制Skill。",
-            "evidence": [
-              {
-                "source_path": "SKILL.md",
-                "start_line": 140,
-                "end_line": 140,
-                "quote": "Mục tiêu: Hiểu công việc + quy trình + quy tắc từ góc nhìn người dùng."
-              },
-              {
-                "source_path": "SKILL.md",
-                "start_line": 164,
-                "end_line": 164,
-                "quote": "Mục tiêu: Dựa vào thông tin, tự động chọn kiến trúc phù hợp."
-              }
-            ]
-          },
-          {
-            "criterion_id": "optimization_and_iteration",
-            "status": "supported",
-            "explanation": "技能提供Phase 6定量评估、Phase 7迭代循环、Phase 8描述优化等阶段，明确支持对现有Skill进行分析、优化和迭代改进。",
-            "evidence": [
-              {
-                "source_path": "SKILL.md",
-                "start_line": 221,
-                "end_line": 223,
-                "quote": "## Phase 6: 📊 Quantitative Eval (Optional) 📚 **Đọc chi tiết:** `phases/phase6_eval.md` **Khi nào chạy:** Skill có output đo lường + sẽ dùng lâu dài."
-              },
-              {
-                "source_path": "SKILL.md",
-                "start_line": 240,
-                "end_line": 244,
-                "quote": "## Phase 7: 🔄 Iteration Loop (Optional) 📚 **Đọc chi tiết:** `phases/phase7_iterate.md` **Khi nào chạy:** Sau Phase 6 nếu chưa đạt, hoặc user muốn cải thiện skill."
-              }
-            ]
-          },
-          {
-            "criterion_id": "explain_principles",
-            "status": "supported",
-            "explanation": "材料明确列出7条完美Skill原则，并在多处解释设计最佳实践，帮助用户学习。",
-            "evidence": [
-              {
-                "source_path": "SKILL.md",
-                "start_line": 41,
-                "end_line": 51,
-                "quote": "**7 Nguyên Tắc Skill Hoàn Hảo:** | # | Nguyên tắc | Tóm tắt | | --- | --- | --- | | 1 | **Atomic Logic** | 1 skill = 1 việc hoàn hảo. Tên có \"and\" → tách. | | 2 | **Semantic Trigger** | Description phải chính xác đến mức AI tự kích hoạt. | | 3 | **4 Core Sections** | Goal + Instructions + Examples + Constraints = BẮT BUỘC. | | 4 | **Show Don't Tell** | 2-3 ví dụ hoàn hảo > 50 dòng quy tắc. | | 5 | **Semantic Precision** | Generate/Analyze/Execute — KHÔNG dùng \"xử lý\", \"kiểm tra\". | | 6 | **Error Recovery** | Confidence scores + Decision Tree + ask-back khi mơ hồ. | | 7 | **Black Box Scripts** | AI dùng `--help` để tự học, KHÔNG đọc source code. |"
-              }
-            ]
-          }
-        ]
-      },
-      "skill_id": "marketingjuliancongdanh79-pixel/skill-generator:SKILL.md",
-      "name": "skill-generator",
-      "url": "https://github.com/marketingjuliancongdanh79-pixel/skill-generator/blob/HEAD/SKILL.md",
-      "repo_url": "https://github.com/marketingjuliancongdanh79-pixel/skill-generator",
-      "match_level": "partial",
-      "summary": "该技能是一个完整的AI Skill生成器，通过8阶段流水线将用户工作流转化为生产级Skill，但并非直接生成独立Prompt，而是生成包含描述、指令、示例和约束的系统性Skill包。",
-      "matched_criteria": [
-        "provide_templates_or_examples",
-        "task_specific_customization",
-        "optimization_and_iteration",
-        "explain_principles"
-      ],
-      "verified_evidence": [
-        {
-          "source_path": "SKILL.md",
-          "start_line": 55,
-          "end_line": 58,
-          "quote": "Đây là output cuối cùng của pipeline — skill hoàn chỉnh, sẵn sàng deploy:"
-        },
-        {
-          "source_path": "SKILL.md",
-          "start_line": 197,
-          "end_line": 197,
-          "quote": "> **Tham khảo:** `resources/skill_template.md`, `resources/prompt_engineering.md`"
-        },
-        {
-          "source_path": "SKILL.md",
-          "start_line": 140,
-          "end_line": 140,
-          "quote": "Mục tiêu: Hiểu công việc + quy trình + quy tắc từ góc nhìn người dùng."
-        },
-        {
-          "source_path": "SKILL.md",
-          "start_line": 164,
-          "end_line": 164,
-          "quote": "Mục tiêu: Dựa vào thông tin, tự động chọn kiến trúc phù hợp."
-        },
-        {
-          "source_path": "SKILL.md",
-          "start_line": 221,
-          "end_line": 223,
-          "quote": "## Phase 6: 📊 Quantitative Eval (Optional) 📚 **Đọc chi tiết:** `phases/phase6_eval.md` **Khi nào chạy:** Skill có output đo lường + sẽ dùng lâu dài."
-        },
-        {
-          "source_path": "SKILL.md",
-          "start_line": 240,
-          "end_line": 244,
-          "quote": "## Phase 7: 🔄 Iteration Loop (Optional) 📚 **Đọc chi tiết:** `phases/phase7_iterate.md` **Khi nào chạy:** Sau Phase 6 nếu chưa đạt, hoặc user muốn cải thiện skill."
-        },
-        {
-          "source_path": "SKILL.md",
-          "start_line": 41,
-          "end_line": 51,
-          "quote": "**7 Nguyên Tắc Skill Hoàn Hảo:** | # | Nguyên tắc | Tóm tắt | | --- | --- | --- | | 1 | **Atomic Logic** | 1 skill = 1 việc hoàn hảo. Tên có \"and\" → tách. | | 2 | **Semantic Trigger** | Description phải chính xác đến mức AI tự kích hoạt. | | 3 | **4 Core Sections** | Goal + Instructions + Examples + Constraints = BẮT BUỘC. | | 4 | **Show Don't Tell** | 2-3 ví dụ hoàn hảo > 50 dòng quy tắc. | | 5 | **Semantic Precision** | Generate/Analyze/Execute — KHÔNG dùng \"xử lý\", \"kiểm tra\". | | 6 | **Error Recovery** | Confidence scores + Decision Tree + ask-back khi mơ hồ. | | 7 | **Black Box Scripts** | AI dùng `--help` để tự học, KHÔNG đọc source code. |"
-        }
-      ]
-    },
-    {
-      "candidate": {
-        "skill_id": "charlie947/social-media-skills:skills/gemini-infographic/SKILL.md",
-        "name": "gemini-infographic",
-        "repo_url": "https://github.com/charlie947/social-media-skills",
-        "url": "https://github.com/charlie947/social-media-skills/blob/HEAD/skills/gemini-infographic/SKILL.md",
-        "author": "charlie947",
-        "path": "skills/gemini-infographic/SKILL.md"
-      },
-      "evaluation": {
-        "match": "partial",
-        "documentation": "clear",
-        "summary_zh": "该技能将源内容转化为手绘白板信息图的 Gemini 图像生成提示词，包含 brief 构建、模板输出和迭代建议，但仅适用于信息图这一种用例，并非通用提示词生成器。",
-        "why_consider": "该技能为手绘白板信息图提示词提供了清晰的结构化生成流程和详细手绘风格指令，适合快速制作社交媒体的视觉内容提示词。",
-        "usage_zh": "当用户提到“whiteboard infographic”等触发词时技能自动启动，依次询问源内容，构建 brief 并等待批准，然后输出代码块形式的 Gemini 提示词，指导用户粘贴到启用 Create Image 和 Nano Banana 的 Gemini 对话中生成 1080x1350 图像；后续可反馈问题以调整提示词。",
+        "summary_zh": "该技能为iOS/macOS端多智能体编排框架，提供基于LLM的可选分类路由功能，支持自定义分类器实现，但未包含分类准确率自动评测模块。",
+        "why_consider": "若需在iOS/macOS端实现基于LLM的多智能体路由且能接受自行构建评测逻辑，该框架提供了清晰的分类器扩展接口。",
+        "usage_zh": "通过SwiftPM引入AgentSquad，实例化Orchestrator并配置LLMClassifier或自定义Classifier实现。调用orchestrator.route()方法处理输入，框架自动执行分类路由并返回对应Agent的响应流。",
         "dependencies": [
-          "Gemini 图像生成服务（需启用 Create Image 并选择 Nano Banana）",
-          "用户项目中的品牌上下文文件（可选）：about-me.md、voice.md、brand-kit.md、colours.md"
+          "Swift 6.2",
+          "iOS 16+ / macOS 14+",
+          "OpenAI-compatible LLM API",
+          "AVFoundation (for voice)"
         ],
         "limitations": [
-          "仅适用于生成手绘白板信息图这一种图像提示词，不适用于其他类型的提示词生成",
-          "技能不直接生成图像，只输出提示词文本，用户需手动在 Gemini 中操作",
-          "要求用户先批准 brief 才输出最终提示词，流程较严格",
-          "未提供通用 prompt 设计原则教学，仅针对该特定场景的最佳实践"
+          "仅限Apple平台 (iOS/macOS)",
+          "缺乏内置的分类准确率自动评测模块",
+          "分类器主要用于Agent路由而非通用文本分类任务"
         ],
         "criteria_results": [
           {
-            "criterion_id": "generate_high_quality_prompt",
+            "criterion_id": "custom_classification",
             "status": "supported",
-            "explanation": "技能明确生成完整、结构化的 Gemini 图像生成提示词，包含 brief 分析和最终提示词模板。",
+            "explanation": "框架内置LLMClassifier用于路由，且提供Classifier协议供用户自定义分类实现，满足基于自定义分类体系进行自动归类的需求。",
             "evidence": [
               {
-                "source_path": "skills/gemini-infographic/SKILL.md",
-                "start_line": 3,
-                "end_line": 4,
-                "quote": "Generate a hand-drawn whiteboard infographic prompt. Takes source content (a post, newsletter, blog, research note) and returns a complete Gemini image generation prompt with a structured brief."
+                "source_path": "swift/SKILL.md",
+                "start_line": 21,
+                "end_line": 21,
+                "quote": "**Several specialists** → multiple agents + an `LLMClassifier`; the orchestrator routes each turn."
               },
               {
-                "source_path": "skills/gemini-infographic/SKILL.md",
-                "start_line": 35,
-                "end_line": 42,
-                "quote": "Analyse the content and produce an infographic brief in plain language. Include: - **Title** (6 words or fewer, punchy) - **Subtitle** (optional, one line of context) - **Core structure**: decide between steps, framework, comparison, stats, or list - **Key points**: aim for 3 to 7 short bullets. Preserve every required step, item and qualification; if they do not fit legibly, propose a split in the brief rather than silently dropping content. - **Visual suggestions**: arrows, boxes, highlighted numbers, icons, color accents. Be specific about placement and colour. - **Footer CTA**: handwritten text reading \"Follow [Name] [Tagline] for more helpful content | Repost ♻️\""
+                "source_path": "swift/SKILL.md",
+                "start_line": 108,
+                "end_line": 108,
+                "quote": "| Classifier | `Classifier` (return an agent from the passed list, or `nil`) | `Core/Classifier/` · `classifiers/custom` |"
               }
             ]
           },
           {
-            "criterion_id": "provide_templates_or_examples",
-            "status": "supported",
-            "explanation": "技能提供了一个完整的 Gemini 提示词模板（代码块），包含占位符和固定样式指令。",
-            "evidence": [
-              {
-                "source_path": "skills/gemini-infographic/SKILL.md",
-                "start_line": 52,
-                "end_line": 55,
-                "quote": "Once approved, output the full prompt in a code block, with the brief inserted into the `[INSERT YOUR INFOGRAPHIC CONTENT AND LAYOUT HERE]` placeholder: ``` Generate a single image of a physical, hand-drawn infographic on a large whiteboard or notebook page."
-              }
-            ]
-          },
-          {
-            "criterion_id": "task_specific_customization",
+            "criterion_id": "accuracy_evaluation",
             "status": "unsupported",
-            "explanation": "技能仅针对手绘白板信息图这一种任务类型，未声明支持写作、翻译、问答、代码生成等其他任务定制。",
+            "explanation": "材料中仅提及Tracing（追踪）和Storage（存储）用于记录对话历史和调试，未提及任何关于分类效果评测、准确率打分或相关指标自动计算的功能。",
             "evidence": []
           },
           {
-            "criterion_id": "optimization_and_iteration",
+            "criterion_id": "mixed_data_support",
             "status": "supported",
-            "explanation": "技能提供迭代步骤，允许用户反馈生成问题并重写提示词，并给出常见修复建议。",
+            "explanation": "框架支持文本输入，且通过GroundedAgent和Tools支持结构化数据（如价格、库存）及HTTP API数据，能够处理混合场景下的内容路由。",
             "evidence": [
               {
-                "source_path": "skills/gemini-infographic/SKILL.md",
-                "start_line": 80,
-                "end_line": 82,
-                "quote": "After the prompt, offer: > If the first generation misses, tell me what to adjust and I will rewrite the prompt. Common fixes: fewer colours, bigger title, different layout direction."
+                "source_path": "swift/SKILL.md",
+                "start_line": 22,
+                "end_line": 23,
+                "quote": "**Answers must not drift from data** (prices, stock, balances) → `GroundedAgent`: a Brain calls tools, an isolated Presenter speaks only from the curated results"
               }
             ]
           },
           {
-            "criterion_id": "explain_principles",
+            "criterion_id": "simple_label_output",
             "status": "supported",
-            "explanation": "技能在提示词模板中给出了明确的手绘风格设计原则（如 medium、no digital fonts 等）。",
+            "explanation": "分类器的输出被描述为从列表返回一个代理或nil，这在代码层面表现为明确的类别标签（即选定的Agent实例），符合简洁表达所属类别的要求。",
             "evidence": [
               {
-                "source_path": "skills/gemini-infographic/SKILL.md",
-                "start_line": 59,
-                "end_line": 59,
-                "quote": "Medium: The image must look like a photograph of a real whiteboard or large paper notepad."
-              },
-              {
-                "source_path": "skills/gemini-infographic/SKILL.md",
-                "start_line": 63,
-                "end_line": 63,
-                "quote": "No Digital Fonts: All text, headings, and bullet points must appear handwritten or hand-printed in marker pen."
-              }
-            ]
-          }
-        ]
-      },
-      "skill_id": "charlie947/social-media-skills:skills/gemini-infographic/SKILL.md",
-      "name": "gemini-infographic",
-      "url": "https://github.com/charlie947/social-media-skills/blob/HEAD/skills/gemini-infographic/SKILL.md",
-      "repo_url": "https://github.com/charlie947/social-media-skills",
-      "match_level": "partial",
-      "summary": "该技能将源内容转化为手绘白板信息图的 Gemini 图像生成提示词，包含 brief 构建、模板输出和迭代建议，但仅适用于信息图这一种用例，并非通用提示词生成器。",
-      "matched_criteria": [
-        "generate_high_quality_prompt",
-        "provide_templates_or_examples",
-        "optimization_and_iteration",
-        "explain_principles"
-      ],
-      "verified_evidence": [
-        {
-          "source_path": "skills/gemini-infographic/SKILL.md",
-          "start_line": 3,
-          "end_line": 4,
-          "quote": "Generate a hand-drawn whiteboard infographic prompt. Takes source content (a post, newsletter, blog, research note) and returns a complete Gemini image generation prompt with a structured brief."
-        },
-        {
-          "source_path": "skills/gemini-infographic/SKILL.md",
-          "start_line": 35,
-          "end_line": 42,
-          "quote": "Analyse the content and produce an infographic brief in plain language. Include: - **Title** (6 words or fewer, punchy) - **Subtitle** (optional, one line of context) - **Core structure**: decide between steps, framework, comparison, stats, or list - **Key points**: aim for 3 to 7 short bullets. Preserve every required step, item and qualification; if they do not fit legibly, propose a split in the brief rather than silently dropping content. - **Visual suggestions**: arrows, boxes, highlighted numbers, icons, color accents. Be specific about placement and colour. - **Footer CTA**: handwritten text reading \"Follow [Name] [Tagline] for more helpful content | Repost ♻️\""
-        },
-        {
-          "source_path": "skills/gemini-infographic/SKILL.md",
-          "start_line": 52,
-          "end_line": 55,
-          "quote": "Once approved, output the full prompt in a code block, with the brief inserted into the `[INSERT YOUR INFOGRAPHIC CONTENT AND LAYOUT HERE]` placeholder: ``` Generate a single image of a physical, hand-drawn infographic on a large whiteboard or notebook page."
-        },
-        {
-          "source_path": "skills/gemini-infographic/SKILL.md",
-          "start_line": 80,
-          "end_line": 82,
-          "quote": "After the prompt, offer: > If the first generation misses, tell me what to adjust and I will rewrite the prompt. Common fixes: fewer colours, bigger title, different layout direction."
-        },
-        {
-          "source_path": "skills/gemini-infographic/SKILL.md",
-          "start_line": 59,
-          "end_line": 59,
-          "quote": "Medium: The image must look like a photograph of a real whiteboard or large paper notepad."
-        },
-        {
-          "source_path": "skills/gemini-infographic/SKILL.md",
-          "start_line": 63,
-          "end_line": 63,
-          "quote": "No Digital Fonts: All text, headings, and bullet points must appear handwritten or hand-printed in marker pen."
-        }
-      ]
-    },
-    {
-      "candidate": {
-        "skill_id": "leonxlnx/taste-skill:skills/brandkit/SKILL.md",
-        "name": "brandkit",
-        "repo_url": "https://github.com/Leonxlnx/taste-skill",
-        "url": "https://github.com/leonxlnx/taste-skill/blob/HEAD/skills/brandkit/SKILL.md",
-        "author": "leonxlnx",
-        "path": "skills/brandkit/SKILL.md"
-      },
-      "evaluation": {
-        "match": "partial",
-        "documentation": "clear",
-        "summary_zh": "该技能提供系统化品牌图像生成指令和内置提示词模板，但主要输出是品牌套件图像而非提示词文本，与直接生成高质量 Prompt 的需求部分相关。",
-        "why_consider": "它提供了结构化、反通用的品牌图像生成提示词模板和丰富的设计原则与视觉模式，能帮助用户获得高品质品牌视觉方案。",
-        "usage_zh": "使用该技能时，可依据 PROMPT TEMPLATE 提供品牌名称、品牌策略、布局（如 3×3、2×3 等）、视觉模式、调色板等字段；AI 会按此模板生成品牌套件图像的高质量提示词并渲染图像。",
-        "dependencies": [],
-        "limitations": [
-          "主要输出是品牌套件图像，而非可独立提取的 Prompt 文本。",
-          "不支持对现有提示词的优化与迭代改进。"
-        ],
-        "criteria_results": [
-          {
-            "criterion_id": "generate_high_quality_prompt",
-            "status": "supported",
-            "explanation": "材料包含明确的 PROMPT TEMPLATE，要求按品牌策略、布局、视觉模式、调色板等要素构建清晰、针对性强的品牌图像生成提示词。",
-            "evidence": [
-              {
-                "source_path": "skills/brandkit/SKILL.md",
-                "start_line": 740,
-                "end_line": 747,
-                "quote": "Create a premium brand-kit overview image for \"[BRAND NAME]\". Brand strategy: - category: [category] - audience: [audience] - personality: [traits] - core metaphor: [metaphor] - logo idea: [how the mark combines symbol + name + category meaning]"
+                "source_path": "swift/SKILL.md",
+                "start_line": 108,
+                "end_line": 108,
+                "quote": "| Classifier | `Classifier` (return an agent from the passed list, or `nil`) | `Core/Classifier/` · `classifiers/custom` |"
               }
             ]
           },
           {
-            "criterion_id": "provide_templates_or_examples",
+            "criterion_id": "usage_examples",
             "status": "supported",
-            "explanation": "提供了完整的提示词模板（PROMPT TEMPLATE）以及按品牌类别给出的符号逻辑示例表格。",
+            "explanation": "提供了Orchestrator路由的Swift代码示例，并指引用户参考文档站点中的worked recipes以获取自定义分类器的示例。",
             "evidence": [
               {
-                "source_path": "skills/brandkit/SKILL.md",
-                "start_line": 119,
-                "end_line": 120,
-                "quote": "| Developer tool | building, speed, precision, control | cursor, frame, bolt, scaffold, grid | | AI assistant | delegation, intelligence, clarity | spark, orbit, signal, path, node |"
-              }
-            ]
-          },
-          {
-            "criterion_id": "task_specific_customization",
-            "status": "supported",
-            "explanation": "材料根据开发者工具、安全、奢侈品、语音 AI 等不同品牌类型提供独立的视觉模式和定制要素。",
-            "evidence": [
-              {
-                "source_path": "skills/brandkit/SKILL.md",
-                "start_line": 343,
-                "end_line": 346,
-                "quote": "## Dark Developer / Builder Use for: developer tools, coding agents, infra, automation, AI builders."
-              }
-            ]
-          },
-          {
-            "criterion_id": "optimization_and_iteration",
-            "status": "unsupported",
-            "explanation": "材料未提供对现有提示词的分析、优化建议或迭代改进机制，只给出一次性生成输出标准。",
-            "evidence": []
-          },
-          {
-            "criterion_id": "explain_principles",
-            "status": "supported",
-            "explanation": "材料详细阐述了品牌图像生成的核心原则、反通用规则和高质量设计标准。",
-            "evidence": [
-              {
-                "source_path": "skills/brandkit/SKILL.md",
-                "start_line": 59,
-                "end_line": 63,
-                "quote": "A premium brand kit is not decoration. It is a visual argument for why the brand exists. Every generated board must answer:"
-              }
-            ]
-          }
-        ]
-      },
-      "skill_id": "leonxlnx/taste-skill:skills/brandkit/SKILL.md",
-      "name": "brandkit",
-      "url": "https://github.com/leonxlnx/taste-skill/blob/HEAD/skills/brandkit/SKILL.md",
-      "repo_url": "https://github.com/Leonxlnx/taste-skill",
-      "match_level": "partial",
-      "summary": "该技能提供系统化品牌图像生成指令和内置提示词模板，但主要输出是品牌套件图像而非提示词文本，与直接生成高质量 Prompt 的需求部分相关。",
-      "matched_criteria": [
-        "generate_high_quality_prompt",
-        "provide_templates_or_examples",
-        "task_specific_customization",
-        "explain_principles"
-      ],
-      "verified_evidence": [
-        {
-          "source_path": "skills/brandkit/SKILL.md",
-          "start_line": 740,
-          "end_line": 747,
-          "quote": "Create a premium brand-kit overview image for \"[BRAND NAME]\". Brand strategy: - category: [category] - audience: [audience] - personality: [traits] - core metaphor: [metaphor] - logo idea: [how the mark combines symbol + name + category meaning]"
-        },
-        {
-          "source_path": "skills/brandkit/SKILL.md",
-          "start_line": 119,
-          "end_line": 120,
-          "quote": "| Developer tool | building, speed, precision, control | cursor, frame, bolt, scaffold, grid | | AI assistant | delegation, intelligence, clarity | spark, orbit, signal, path, node |"
-        },
-        {
-          "source_path": "skills/brandkit/SKILL.md",
-          "start_line": 343,
-          "end_line": 346,
-          "quote": "## Dark Developer / Builder Use for: developer tools, coding agents, infra, automation, AI builders."
-        },
-        {
-          "source_path": "skills/brandkit/SKILL.md",
-          "start_line": 59,
-          "end_line": 63,
-          "quote": "A premium brand kit is not decoration. It is a visual argument for why the brand exists. Every generated board must answer:"
-        }
-      ]
-    },
-    {
-      "candidate": {
-        "skill_id": "charlie947/social-media-skills:skills/graphic-designer/SKILL.md",
-        "name": "graphic-designer",
-        "repo_url": "https://github.com/charlie947/social-media-skills",
-        "url": "https://github.com/charlie947/social-media-skills/blob/HEAD/skills/graphic-designer/SKILL.md",
-        "author": "charlie947",
-        "path": "skills/graphic-designer/SKILL.md"
-      },
-      "evaluation": {
-        "match": "partial",
-        "documentation": "clear",
-        "summary_zh": "该技能主要用于为 LinkedIn 帖子创建图形，但其中包含生成图像生成提示词（Prompt）的详细模板和指导，能够产出高质量、针对性强的图像生成 Prompt，不过仅限图形设计领域，并非通用提示词生成工具。",
-        "why_consider": "该技能提供了结构清晰、细节丰富的图像生成提示词模板，能够直接产出高质量、风格明确的 LinkedIn 帖子图形 Prompt。",
-        "usage_zh": "当用户要求为 LinkedIn 帖子创建图形时触发；读取帖子内容，通过 AskUserQuestion 询问图形类型（HTML/CSS、Whiteboard infographic、Branded infographic 或自动决定）；根据选择构建 HTML 文件或输出完整的图像生成提示词，用户可将提示词粘贴到 Gemini 或其他图像生成器。",
-        "dependencies": [
-          "Gemini 图像生成服务",
-          "浏览器截图或本地渲染工具（用于 HTML 导出 PNG）"
-        ],
-        "limitations": [
-          "仅适用于 LinkedIn 帖子图形设计，不支持通用提示词生成",
-          "不支持对已有提示词的优化和迭代改进",
-          "不解释提示词设计的一般原则或最佳实践",
-          "需要外部图像生成器（如 Gemini）才能实际生成图像"
-        ],
-        "criteria_results": [
-          {
-            "criterion_id": "generate_high_quality_prompt",
-            "status": "supported",
-            "explanation": "技能在 Path B 中明确指导如何构建图像生成提示词，包括提取内容、套用模板、输出完整提示词，并强调提示词需清晰、自包含且针对性强。",
-            "evidence": [
-              {
-                "source_path": "skills/graphic-designer/SKILL.md",
-                "start_line": 86,
-                "end_line": 86,
-                "quote": "Use this prompt template. Fill in the content sections from the post."
-              },
-              {
-                "source_path": "skills/graphic-designer/SKILL.md",
-                "start_line": 140,
-                "end_line": 142,
-                "quote": "Output the complete prompt in a code block. Tell the user: > Paste this into Gemini or your image generator. The prompt is ready to go."
-              }
-            ]
-          },
-          {
-            "criterion_id": "provide_templates_or_examples",
-            "status": "supported",
-            "explanation": "技能提供了两个完整的图像生成提示词模板（Whiteboard infographic 和 Branded infographic），包含具体风格指令、布局和内容占位符。",
-            "evidence": [
-              {
-                "source_path": "skills/graphic-designer/SKILL.md",
-                "start_line": 91,
-                "end_line": 94,
-                "quote": "Crucial Style Instructions (Read First): Medium: The image must look like a photograph of a real whiteboard or large paper notepad. Texture: All elements must look created by hand using colored marker pens (black, blue, red, green) and highlighters (yellow/orange). Lines should be slightly imperfect, wobbly, and have the texture of ink on a surface. No Digital Fonts: All text, headings, and bullet points must appear handwritten or hand-printed in marker pen."
-              }
-            ]
-          },
-          {
-            "criterion_id": "task_specific_customization",
-            "status": "supported",
-            "explanation": "技能根据帖子内容类型（如步骤、框架、数据等）和用户选择的风格（HTML/CSS、Whiteboard infographic、Branded infographic）定制不同的提示词生成路径。",
-            "evidence": [
-              {
-                "source_path": "skills/graphic-designer/SKILL.md",
-                "start_line": 49,
-                "end_line": 49,
-                "quote": "If \"You decide\": analyse the post. If it contains numbered steps, frameworks, comparisons, or data tables, go Path A (HTML/CSS). If it recaps a workflow, shares tips, teaches a concept, or tells a story, go Path B (image prompt) and pick whichever style fits better."
-              }
-            ]
-          },
-          {
-            "criterion_id": "optimization_and_iteration",
-            "status": "unsupported",
-            "explanation": "材料中未提及对已有提示词进行分析、提供优化建议或支持迭代改进，仅生成新的提示词。",
-            "evidence": []
-          },
-          {
-            "criterion_id": "explain_principles",
-            "status": "unsupported",
-            "explanation": "技能提供了具体的提示词模板和风格指令，但没有向用户解释高质量提示词设计的一般原则或最佳实践，而是直接给出可用的提示词。",
-            "evidence": []
-          }
-        ]
-      },
-      "skill_id": "charlie947/social-media-skills:skills/graphic-designer/SKILL.md",
-      "name": "graphic-designer",
-      "url": "https://github.com/charlie947/social-media-skills/blob/HEAD/skills/graphic-designer/SKILL.md",
-      "repo_url": "https://github.com/charlie947/social-media-skills",
-      "match_level": "partial",
-      "summary": "该技能主要用于为 LinkedIn 帖子创建图形，但其中包含生成图像生成提示词（Prompt）的详细模板和指导，能够产出高质量、针对性强的图像生成 Prompt，不过仅限图形设计领域，并非通用提示词生成工具。",
-      "matched_criteria": [
-        "generate_high_quality_prompt",
-        "provide_templates_or_examples",
-        "task_specific_customization"
-      ],
-      "verified_evidence": [
-        {
-          "source_path": "skills/graphic-designer/SKILL.md",
-          "start_line": 86,
-          "end_line": 86,
-          "quote": "Use this prompt template. Fill in the content sections from the post."
-        },
-        {
-          "source_path": "skills/graphic-designer/SKILL.md",
-          "start_line": 140,
-          "end_line": 142,
-          "quote": "Output the complete prompt in a code block. Tell the user: > Paste this into Gemini or your image generator. The prompt is ready to go."
-        },
-        {
-          "source_path": "skills/graphic-designer/SKILL.md",
-          "start_line": 91,
-          "end_line": 94,
-          "quote": "Crucial Style Instructions (Read First): Medium: The image must look like a photograph of a real whiteboard or large paper notepad. Texture: All elements must look created by hand using colored marker pens (black, blue, red, green) and highlighters (yellow/orange). Lines should be slightly imperfect, wobbly, and have the texture of ink on a surface. No Digital Fonts: All text, headings, and bullet points must appear handwritten or hand-printed in marker pen."
-        },
-        {
-          "source_path": "skills/graphic-designer/SKILL.md",
-          "start_line": 49,
-          "end_line": 49,
-          "quote": "If \"You decide\": analyse the post. If it contains numbered steps, frameworks, comparisons, or data tables, go Path A (HTML/CSS). If it recaps a workflow, shares tips, teaches a concept, or tells a story, go Path B (image prompt) and pick whichever style fits better."
-        }
-      ]
-    },
-    {
-      "candidate": {
-        "skill_id": "composiohq/awesome-claude-skills:canvas-design/SKILL.md",
-        "name": "canvas-design",
-        "repo_url": "https://github.com/ComposioHQ/awesome-claude-skills",
-        "url": "https://github.com/composiohq/awesome-claude-skills/blob/HEAD/canvas-design/SKILL.md",
-        "author": "composiohq",
-        "path": "canvas-design/SKILL.md"
-      },
-      "evaluation": {
-        "match": "partial",
-        "documentation": "clear",
-        "summary_zh": "该技能专注于生成视觉艺术设计哲学并据此创作 .png/.pdf 作品，虽包含高质量设计原则和示例，但并非通用提示词生成器，仅部分满足用户需求。",
-        "why_consider": "该技能提供了详细的设计哲学生成框架、多个示例和明确的视觉表达原则，可作为视觉创意领域高质量指令设计的参考。",
-        "usage_zh": "当用户要求创建海报、艺术品、设计或其他静态作品时调用。首先创建设计哲学（4-6 段，输出 .md 文件），然后依据该哲学在画布上生成单个 .pdf 或 .png 文件，最后可参考 FINAL STEP 进行精炼。",
-        "dependencies": [
-          "canvas-fonts 目录（用于搜索和下载字体）",
-          "支持生成 .md/.pdf/.png 文件的环境"
-        ],
-        "limitations": [
-          "未提供通用提示词生成功能，仅限视觉艺术设计领域",
-          "不支持按具体任务类型定制提示词",
-          "不包含对现有提示词进行优化或迭代的专门流程"
-        ],
-        "criteria_results": [
-          {
-            "criterion_id": "generate_high_quality_prompt",
-            "status": "supported",
-            "explanation": "技能明确要求生成一份 4-6 段的设计哲学 .md 文件，作为指导后续视觉表达的高质量指令，并强调避免冗余、专家工艺等质量标准。",
-            "evidence": [
-              {
-                "source_path": "canvas-design/SKILL.md",
-                "start_line": 7,
-                "end_line": 7,
-                "quote": "These are instructions for creating design philosophies - aesthetic movements that are then EXPRESSED VISUALLY. Output only .md files, .pdf files, and .png files."
-              },
-              {
-                "source_path": "canvas-design/SKILL.md",
+                "source_path": "swift/SKILL.md",
                 "start_line": 46,
-                "end_line": 48,
-                "quote": "**CRITICAL GUIDELINES:** - **Avoid redundancy**: Each design aspect should be mentioned once. Avoid repeating points about color theory, spatial relationships, or typographic principles unless adding new depth. - **Emphasize craftsmanship REPEATEDLY**: The philosophy MUST stress multiple times that the final work should appear as though it took countless hours to create, was labored over with care, and comes from someone at the absolute top of their field. This framing is essential - repeat phrases like \"meticulously crafted,\" \"the product of deep expertise,\" \"painstaking attention,\" \"master-level execution.\""
-              }
-            ]
-          },
-          {
-            "criterion_id": "provide_templates_or_examples",
-            "status": "supported",
-            "explanation": "技能提供了多个设计哲学示例（如 Concrete Poetry、Chromatic Language 等），可作为模板帮助理解如何构建。",
-            "evidence": [
-              {
-                "source_path": "canvas-design/SKILL.md",
-                "start_line": 55,
-                "end_line": 56,
-                "quote": "**\"Concrete Poetry\"** Philosophy: Communication through monumental form and bold geometry."
-              }
-            ]
-          },
-          {
-            "criterion_id": "task_specific_customization",
-            "status": "unsupported",
-            "explanation": "材料未提及根据具体任务类型（如写作、翻译、问答、代码生成等）定制提示词，仅专注于视觉艺术设计。",
-            "evidence": []
-          },
-          {
-            "criterion_id": "optimization_and_iteration",
-            "status": "unsupported",
-            "explanation": "技能包含对视觉作品的精炼优化步骤（FINAL STEP），但未提及对提示词本身进行分析或迭代改进。",
-            "evidence": []
-          },
-          {
-            "criterion_id": "explain_principles",
-            "status": "supported",
-            "explanation": "材料明确列出 ESSENTIAL PRINCIPLES，说明高质量设计哲学应遵循的原则，如视觉哲学、极简文本、空间表达、专家工艺等。",
-            "evidence": [
-              {
-                "source_path": "canvas-design/SKILL.md",
-                "start_line": 78,
-                "end_line": 82,
-                "quote": "- **VISUAL PHILOSOPHY**: Create an aesthetic worldview to be expressed through design - **MINIMAL TEXT**: Always emphasize that text is sparse, essential-only, integrated as visual element - never lengthy - **SPATIAL EXPRESSION**: Ideas communicate through space, form, color, composition - not paragraphs - **ARTISTIC FREEDOM**: The next Claude interprets the philosophy visually - provide creative room - **PURE DESIGN**: This is about making ART OBJECTS, not documents with decoration"
+                "end_line": 54,
+                "quote": "```swift for try await event in orchestrator.route(.text(\"hello\"), userId: \"u1\", sessionId: \"s1\") { switch event { case .textDelta(let token): /* stream tokens */ case .final(let message): /* the message that was persisted */ case .toolCall, .widget, .thinking, .error: break // .error is a user-facing string } } ```"
               }
             ]
           }
         ]
       },
-      "skill_id": "composiohq/awesome-claude-skills:canvas-design/SKILL.md",
-      "name": "canvas-design",
-      "url": "https://github.com/composiohq/awesome-claude-skills/blob/HEAD/canvas-design/SKILL.md",
-      "repo_url": "https://github.com/ComposioHQ/awesome-claude-skills",
+      "skill_id": "2fastlabs/agent-squad:swift/SKILL.md",
+      "name": "swift",
+      "url": "https://github.com/2fastlabs/agent-squad/blob/HEAD/swift/SKILL.md",
+      "repo_url": "https://github.com/2FastLabs/agent-squad",
       "match_level": "partial",
-      "summary": "该技能专注于生成视觉艺术设计哲学并据此创作 .png/.pdf 作品，虽包含高质量设计原则和示例，但并非通用提示词生成器，仅部分满足用户需求。",
+      "summary": "该技能为iOS/macOS端多智能体编排框架，提供基于LLM的可选分类路由功能，支持自定义分类器实现，但未包含分类准确率自动评测模块。",
       "matched_criteria": [
-        "generate_high_quality_prompt",
-        "provide_templates_or_examples",
-        "explain_principles"
+        "custom_classification",
+        "mixed_data_support",
+        "simple_label_output",
+        "usage_examples"
       ],
       "verified_evidence": [
         {
-          "source_path": "canvas-design/SKILL.md",
-          "start_line": 7,
-          "end_line": 7,
-          "quote": "These are instructions for creating design philosophies - aesthetic movements that are then EXPRESSED VISUALLY. Output only .md files, .pdf files, and .png files."
+          "source_path": "swift/SKILL.md",
+          "start_line": 21,
+          "end_line": 21,
+          "quote": "**Several specialists** → multiple agents + an `LLMClassifier`; the orchestrator routes each turn."
         },
         {
-          "source_path": "canvas-design/SKILL.md",
+          "source_path": "swift/SKILL.md",
+          "start_line": 108,
+          "end_line": 108,
+          "quote": "| Classifier | `Classifier` (return an agent from the passed list, or `nil`) | `Core/Classifier/` · `classifiers/custom` |"
+        },
+        {
+          "source_path": "swift/SKILL.md",
+          "start_line": 22,
+          "end_line": 23,
+          "quote": "**Answers must not drift from data** (prices, stock, balances) → `GroundedAgent`: a Brain calls tools, an isolated Presenter speaks only from the curated results"
+        },
+        {
+          "source_path": "swift/SKILL.md",
+          "start_line": 108,
+          "end_line": 108,
+          "quote": "| Classifier | `Classifier` (return an agent from the passed list, or `nil`) | `Core/Classifier/` · `classifiers/custom` |"
+        },
+        {
+          "source_path": "swift/SKILL.md",
           "start_line": 46,
-          "end_line": 48,
-          "quote": "**CRITICAL GUIDELINES:** - **Avoid redundancy**: Each design aspect should be mentioned once. Avoid repeating points about color theory, spatial relationships, or typographic principles unless adding new depth. - **Emphasize craftsmanship REPEATEDLY**: The philosophy MUST stress multiple times that the final work should appear as though it took countless hours to create, was labored over with care, and comes from someone at the absolute top of their field. This framing is essential - repeat phrases like \"meticulously crafted,\" \"the product of deep expertise,\" \"painstaking attention,\" \"master-level execution.\""
-        },
-        {
-          "source_path": "canvas-design/SKILL.md",
-          "start_line": 55,
-          "end_line": 56,
-          "quote": "**\"Concrete Poetry\"** Philosophy: Communication through monumental form and bold geometry."
-        },
-        {
-          "source_path": "canvas-design/SKILL.md",
-          "start_line": 78,
-          "end_line": 82,
-          "quote": "- **VISUAL PHILOSOPHY**: Create an aesthetic worldview to be expressed through design - **MINIMAL TEXT**: Always emphasize that text is sparse, essential-only, integrated as visual element - never lengthy - **SPATIAL EXPRESSION**: Ideas communicate through space, form, color, composition - not paragraphs - **ARTISTIC FREEDOM**: The next Claude interprets the philosophy visually - provide creative room - **PURE DESIGN**: This is about making ART OBJECTS, not documents with decoration"
+          "end_line": 54,
+          "quote": "```swift for try await event in orchestrator.route(.text(\"hello\"), userId: \"u1\", sessionId: \"s1\") { switch event { case .textDelta(let token): /* stream tokens */ case .final(let message): /* the message that was persisted */ case .toolCall, .widget, .thinking, .error: break // .error is a user-facing string } } ```"
         }
       ]
     },
     {
       "candidate": {
-        "skill_id": "majidmanzarpour/threejs-game-skills:skills/threejs-3d-generator/SKILL.md",
-        "name": "threejs-3d-generator",
-        "repo_url": "https://github.com/majidmanzarpour/threejs-game-skills",
-        "url": "https://github.com/majidmanzarpour/threejs-game-skills/blob/HEAD/skills/threejs-3d-generator/SKILL.md",
-        "author": "majidmanzarpour",
-        "path": "skills/threejs-3d-generator/SKILL.md"
-      },
-      "evaluation": {
-        "match": "partial",
-        "documentation": "clear",
-        "summary_zh": "该技能是 Three.js 3D 资产生成器，核心不是生成提示词，但包含多个 3D 生成提示词示例和少量改进提示词的建议，与用户需求部分相关。",
-        "why_consider": "命令示例中包含构造精良的 3D 生成提示词（如材质、轮廓、PBR 等约束），对学习特定领域的提示词设计有参考价值。",
-        "usage_zh": "使用 python3 运行脚本，通过 text/image/character-pipeline 子命令生成 3D 资产，支持 --prompt 传入提示词，并可结合 checkpoint 进行断点续传。",
-        "dependencies": [
-          "Tripo API key (TRIPO_API_KEY)",
-          "python3",
-          "threejs-3d-generator scripts",
-          "可选：threejs-image-generator 用于概念图"
-        ],
-        "limitations": [
-          "不是通用提示词生成工具，仅针对 3D 生成任务提供提示词示例",
-          "依赖外部 Tripo API 和有效凭证",
-          "下载 URL 过期快，需及时下载"
-        ],
-        "criteria_results": [
-          {
-            "criterion_id": "generate_high_quality_prompt",
-            "status": "unsupported",
-            "explanation": "技能未明确支持生成高质量提示词；其核心是 3D 资产生成，提示词仅作为生成输入。",
-            "evidence": []
-          },
-          {
-            "criterion_id": "provide_templates_or_examples",
-            "status": "supported",
-            "explanation": "提供了多个 3D 生成的提示词示例。",
-            "evidence": [
-              {
-                "source_path": "skills/threejs-3d-generator/SKILL.md",
-                "start_line": 42,
-                "end_line": 42,
-                "quote": "--prompt \"game-ready sci-fi hover bike, sleek armored panels, strong readable silhouette, layered hard-surface detail, PBR materials, clean topology, centered pivot, front facing, no text\""
-              }
-            ]
-          },
-          {
-            "criterion_id": "task_specific_customization",
-            "status": "supported",
-            "explanation": "针对不同 3D 生成任务（如人形角色、四足生物）提供定制化的提示词。",
-            "evidence": [
-              {
-                "source_path": "skills/threejs-3d-generator/SKILL.md",
-                "start_line": 70,
-                "end_line": 70,
-                "quote": "--prompt \"stylized cyber runner character, T-pose, full body, game-ready outfit, readable silhouette\""
-              },
-              {
-                "source_path": "skills/threejs-3d-generator/SKILL.md",
-                "start_line": 81,
-                "end_line": 81,
-                "quote": "--prompt \"stylized wolf, quadrupedal stance, all four legs planted and separated, full body\""
-              }
-            ]
-          },
-          {
-            "criterion_id": "optimization_and_iteration",
-            "status": "unsupported",
-            "explanation": "未提供对提示词的分析、迭代优化或反馈流程。",
-            "evidence": []
-          },
-          {
-            "criterion_id": "explain_principles",
-            "status": "unsupported",
-            "explanation": "未说明高质量提示词的设计原则或最佳实践。",
-            "evidence": []
-          }
-        ]
-      },
-      "skill_id": "majidmanzarpour/threejs-game-skills:skills/threejs-3d-generator/SKILL.md",
-      "name": "threejs-3d-generator",
-      "url": "https://github.com/majidmanzarpour/threejs-game-skills/blob/HEAD/skills/threejs-3d-generator/SKILL.md",
-      "repo_url": "https://github.com/majidmanzarpour/threejs-game-skills",
-      "match_level": "partial",
-      "summary": "该技能是 Three.js 3D 资产生成器，核心不是生成提示词，但包含多个 3D 生成提示词示例和少量改进提示词的建议，与用户需求部分相关。",
-      "matched_criteria": [
-        "provide_templates_or_examples",
-        "task_specific_customization"
-      ],
-      "verified_evidence": [
-        {
-          "source_path": "skills/threejs-3d-generator/SKILL.md",
-          "start_line": 42,
-          "end_line": 42,
-          "quote": "--prompt \"game-ready sci-fi hover bike, sleek armored panels, strong readable silhouette, layered hard-surface detail, PBR materials, clean topology, centered pivot, front facing, no text\""
-        },
-        {
-          "source_path": "skills/threejs-3d-generator/SKILL.md",
-          "start_line": 70,
-          "end_line": 70,
-          "quote": "--prompt \"stylized cyber runner character, T-pose, full body, game-ready outfit, readable silhouette\""
-        },
-        {
-          "source_path": "skills/threejs-3d-generator/SKILL.md",
-          "start_line": 81,
-          "end_line": 81,
-          "quote": "--prompt \"stylized wolf, quadrupedal stance, all four legs planted and separated, full body\""
-        }
-      ]
-    },
-    {
-      "candidate": {
-        "skill_id": "ericosiu/ai-marketing-skills:closed-loop-analytics-upgrade/SKILL.md",
-        "name": "closed-loop-analytics-upgrade",
-        "repo_url": "https://github.com/ericosiu/ai-marketing-skills",
-        "url": "https://github.com/ericosiu/ai-marketing-skills/blob/HEAD/closed-loop-analytics-upgrade/SKILL.md",
-        "author": "ericosiu",
-        "path": "closed-loop-analytics-upgrade/SKILL.md"
-      },
-      "evaluation": {
-        "match": "partial",
-        "documentation": "clear",
-        "summary_zh": "该技能主要聚焦于通过平台数据闭环分析来升级营销、内容和 SEO 等工作流，并非直接生成高质量提示词，但支持对现有 prompt 进行基于数据的迭代优化和补丁建议。",
-        "why_consider": "该技能提供数据驱动的闭环分析框架，可基于平台真实表现迭代优化 prompt 和营销 playbook，适合希望用数据验证提示词效果的团队。",
-        "usage_zh": "在需要闭环学习的工作流中，输入使用日志、平台分析和反馈，AI 将比较基线与候选方案，产出补丁（包括 prompt 补丁），并根据成功率等指标决定是否推广或继续测试。",
-        "dependencies": [
-          "X/Twitter Analytics",
-          "YouTube Analytics",
-          "Google Search Console",
-          "Google Analytics 4",
-          "Ahrefs"
-        ],
-        "limitations": [
-          "不直接生成新的高质量提示词，仅针对已有变更提供补丁优化",
-          "依赖平台分析数据，低数据量时无法可靠判断",
-          "外部写入操作需人工审批",
-          "主要面向营销和内容工作流，非通用提示词生成场景"
-        ],
-        "criteria_results": [
-          {
-            "criterion_id": "generate_high_quality_prompt",
-            "status": "unsupported",
-            "explanation": "材料未声称支持生成高质量提示词，而是提供分析现有变更表现并产出补丁的方法。",
-            "evidence": []
-          },
-          {
-            "criterion_id": "provide_templates_or_examples",
-            "status": "unsupported",
-            "explanation": "材料中的模板是针对回读分析（readback）的输出格式，并非用于构建提示词的模板或示例。",
-            "evidence": []
-          },
-          {
-            "criterion_id": "task_specific_customization",
-            "status": "unsupported",
-            "explanation": "材料按营销平台（X、YouTube、SEO 等）划分分析维度，但未提及根据任务类型定制提示词。",
-            "evidence": []
-          },
-          {
-            "criterion_id": "optimization_and_iteration",
-            "status": "supported",
-            "explanation": "材料明确描述了基线对比、补丁提议和推广判断的闭环迭代流程，且输出补丁可针对 prompt。",
-            "evidence": [
-              {
-                "source_path": "closed-loop-analytics-upgrade/SKILL.md",
-                "start_line": 18,
-                "end_line": 18,
-                "quote": "candidate patch to a prompt, skill, connector, brief template, scoring rubric, or next-action rule."
-              },
-              {
-                "source_path": "closed-loop-analytics-upgrade/SKILL.md",
-                "start_line": 20,
-                "end_line": 20,
-                "quote": "promote only if it beats baseline. Otherwise keep testing, rollback, or mark unproven."
-              }
-            ]
-          },
-          {
-            "criterion_id": "explain_principles",
-            "status": "unsupported",
-            "explanation": "材料解释了闭环分析的原则（基于证据更新 playbook），而非高质量提示词的设计原则。",
-            "evidence": []
-          }
-        ]
-      },
-      "skill_id": "ericosiu/ai-marketing-skills:closed-loop-analytics-upgrade/SKILL.md",
-      "name": "closed-loop-analytics-upgrade",
-      "url": "https://github.com/ericosiu/ai-marketing-skills/blob/HEAD/closed-loop-analytics-upgrade/SKILL.md",
-      "repo_url": "https://github.com/ericosiu/ai-marketing-skills",
-      "match_level": "partial",
-      "summary": "该技能主要聚焦于通过平台数据闭环分析来升级营销、内容和 SEO 等工作流，并非直接生成高质量提示词，但支持对现有 prompt 进行基于数据的迭代优化和补丁建议。",
-      "matched_criteria": [
-        "optimization_and_iteration"
-      ],
-      "verified_evidence": [
-        {
-          "source_path": "closed-loop-analytics-upgrade/SKILL.md",
-          "start_line": 18,
-          "end_line": 18,
-          "quote": "candidate patch to a prompt, skill, connector, brief template, scoring rubric, or next-action rule."
-        },
-        {
-          "source_path": "closed-loop-analytics-upgrade/SKILL.md",
-          "start_line": 20,
-          "end_line": 20,
-          "quote": "promote only if it beats baseline. Otherwise keep testing, rollback, or mark unproven."
-        }
-      ]
-    },
-    {
-      "candidate": {
-        "skill_id": "meleantonio/chernycode:.cursor/skills/llm-development/SKILL.md",
-        "name": "llm-development",
-        "repo_url": "https://github.com/meleantonio/ChernyCode",
-        "url": "https://github.com/meleantonio/chernycode/blob/HEAD/.cursor/skills/llm-development/SKILL.md",
-        "author": "meleantonio",
-        "path": ".cursor/skills/llm-development/SKILL.md"
+        "skill_id": "2fastlabs/agent-squad:typescript/SKILL.md",
+        "name": "typescript",
+        "repo_url": "https://github.com/2FastLabs/agent-squad",
+        "url": "https://github.com/2fastlabs/agent-squad/blob/HEAD/typescript/SKILL.md",
+        "author": "2fastlabs",
+        "path": "typescript/SKILL.md"
       },
       "evaluation": {
         "match": "partial",
         "documentation": "partial",
-        "summary_zh": "该技能主要聚焦 LLM/ML 开发工程实践，包含 LangChain、配置管理、数据管道等内容，Prompt Engineering 部分仅涉及提示词存储、版本控制、测试和文档化，未明确支持生成高质量提示词或提供详细指导。",
-        "why_consider": "该技能包含 Prompt Engineering 部分，涉及提示词版本控制和测试，对管理提示词资产有一定参考价值。",
-        "usage_zh": "在构建 AI/ML 应用时可参考该技能了解 LLM/ML 开发最佳实践，包括配置管理、数据管道、模型版本控制、LangChain 使用和 Prompt Engineering 实践，但缺少详细操作步骤。",
+        "summary_zh": "该技能是 TypeScript 多智能体编排框架，可自定义分类器将输入路由到代理并返回类别与置信度，但未说明混合数据批量分类或准确率评测。",
+        "why_consider": "如果已采用 agent-squad 做多智能体编排，可直接利用其可自定义提示词的分类器输出 selectedAgent/agentName/confidence 作为类别标签。",
+        "usage_zh": "安装 agent-squad 后，创建 AgentSquad 并传入 BedrockClassifier、AnthropicClassifier 或 OpenAIClassifier，使用 addAgent 注册带 name/description 的代理作为类别，调用 routeRequest(userInput, userId, sessionId, additionalParams) 自动分类并读取 response.metadata.agentName 或 ClassifierResult.selectedAgent；可通过 setSystemPrompt 或自定义 Classifier 扩展分类逻辑。",
         "dependencies": [
-          "LangChain",
-          "transformers",
-          "Hydra",
-          "DVC",
-          "MLflow"
+          "Node.js / TypeScript",
+          "npm 包 agent-squad",
+          "@aws-sdk/client-bedrock-runtime",
+          "@anthropic-ai/sdk",
+          "openai"
         ],
         "limitations": [
-          "未提供生成高质量 Prompt 的具体方法或模板库",
-          "未说明提示词优化与迭代改进流程",
-          "内容偏向工程实践而非提示词设计指导"
+          "未提供分类准确率或相关指标的自动评测模块",
+          "未确认支持软件、帖子、结构化数据等混合数据类型的批量分类",
+          "分类器主要用于多智能体对话路由，不是独立内容分类器",
+          "需要配置对应 LLM 提供商凭证或可选依赖",
+          "评测流程需要用户自行实现数据集、指标计算和对比逻辑"
         ],
         "criteria_results": [
           {
-            "criterion_id": "generate_high_quality_prompt",
-            "status": "unsupported",
-            "explanation": "材料未明确声称或展示如何生成高质量、清晰、有效、针对性强的提示词，仅提及提示词工程的管理实践。",
-            "evidence": []
-          },
-          {
-            "criterion_id": "provide_templates_or_examples",
+            "criterion_id": "custom_classification",
             "status": "supported",
-            "explanation": "材料中提供了一个简单的 LangChain 提示词模板示例。",
+            "explanation": "材料说明可用代理 name/description 构成分类体系，classifier 对 userInput 自动分类并返回 selectedAgent/agentName 等类别标签；但未证明软件、帖子、结构化数据等混合数据类型支持。",
             "evidence": [
               {
-                "source_path": ".cursor/skills/llm-development/SKILL.md",
+                "source_path": "typescript/SKILL.md",
                 "start_line": 52,
-                "end_line": 52,
-                "quote": "prompt = ChatPromptTemplate.from_template(\"Summarize: {text}\")"
+                "end_line": 53,
+                "quote": "`routeRequest` is the single entry point. It classifies the input, dispatches to the selected agent, saves the exchange, and returns an `AgentResponse`."
+              },
+              {
+                "source_path": "typescript/SKILL.md",
+                "start_line": 196,
+                "end_line": 198,
+                "quote": "All classifiers support `setSystemPrompt(template?, variables?)` to override the routing prompt. Template variables use `{{VAR_NAME}}` syntax; `AGENT_DESCRIPTIONS` and `HISTORY` are always injected automatically."
+              },
+              {
+                "source_path": "typescript/SKILL.md",
+                "start_line": 290,
+                "end_line": 290,
+                "quote": "`ClassifierResult` shape: `{ selectedAgent: Agent | null, confidence: number }`."
               }
             ]
           },
           {
-            "criterion_id": "task_specific_customization",
+            "criterion_id": "accuracy_evaluation",
             "status": "unsupported",
-            "explanation": "材料未提及根据写作、翻译、问答等具体任务类型定制提示词。",
+            "explanation": "材料只描述分类器路由、selectedAgent 和 confidence，没有分类效果评测模块、准确率指标、自动打分或评测流程。",
             "evidence": []
           },
           {
-            "criterion_id": "optimization_and_iteration",
+            "criterion_id": "mixed_data_support",
             "status": "unsupported",
-            "explanation": "材料仅建议测试提示词，未提供对现有提示词的分析、优化建议或迭代改进方法。",
+            "explanation": "材料将输入描述为对话式 userInput 并按 turn 分类，没有说明可处理软件、帖子、结构化数据、文本片段等混合数据场景或批量分类。",
             "evidence": []
           },
           {
-            "criterion_id": "explain_principles",
-            "status": "unsupported",
-            "explanation": "材料未说明高质量提示词的设计原则或最佳实践，只给出提示词存储、版本控制等工程建议。",
-            "evidence": []
-          }
-        ]
-      },
-      "skill_id": "meleantonio/chernycode:.cursor/skills/llm-development/SKILL.md",
-      "name": "llm-development",
-      "url": "https://github.com/meleantonio/chernycode/blob/HEAD/.cursor/skills/llm-development/SKILL.md",
-      "repo_url": "https://github.com/meleantonio/ChernyCode",
-      "match_level": "partial",
-      "summary": "该技能主要聚焦 LLM/ML 开发工程实践，包含 LangChain、配置管理、数据管道等内容，Prompt Engineering 部分仅涉及提示词存储、版本控制、测试和文档化，未明确支持生成高质量提示词或提供详细指导。",
-      "matched_criteria": [
-        "provide_templates_or_examples"
-      ],
-      "verified_evidence": [
-        {
-          "source_path": ".cursor/skills/llm-development/SKILL.md",
-          "start_line": 52,
-          "end_line": 52,
-          "quote": "prompt = ChatPromptTemplate.from_template(\"Summarize: {text}\")"
-        }
-      ]
-    },
-    {
-      "candidate": {
-        "skill_id": "sickn33/agentic-awesome-skills:plugins/agentic-awesome-skills-claude/skills/10-andruia-skill-smith/SKILL.md",
-        "name": "10-andruia-skill-smith",
-        "repo_url": "https://github.com/sickn33/agentic-awesome-skills",
-        "url": "https://github.com/sickn33/agentic-awesome-skills/blob/HEAD/plugins/agentic-awesome-skills-claude/skills/10-andruia-skill-smith/SKILL.md",
-        "author": "sickn33",
-        "path": "plugins/agentic-awesome-skills-claude/skills/10-andruia-skill-smith/SKILL.md"
-      },
-      "evaluation": {
-        "match": "partial",
-        "documentation": "clear",
-        "summary_zh": "该技能用于在仓库中设计、编写和部署新技能，强制要求生成的技能指令包含 Few-shot 或 Chain of Thought 提示工程技巧；但它并非直接面向独立提示词生成，且未提供提示词模板、任务定制、优化迭代或原则说明。",
-        "why_consider": "该技能在设计技能时强制要求使用 Few-shot 和 Chain of Thought 技巧以提升提示词精度，适合需要生成结构化技能说明的场景。",
-        "usage_zh": "当需要设计新技能时，按 FASE 1 收集技术名称、专家角色和关键输出；FASE 2 生成个性化 README 和注册片段；FASE 3 在指定目录创建文件夹、写入 README 并更新主注册表。",
-        "dependencies": [
-          "需要在 agentic-awesome-skills 仓库目录中具有创建文件夹和更新注册表的权限"
-        ],
-        "limitations": [
-          "仅适用于设计新技能，不直接生成独立提示词",
-          "输出不替代环境验证、测试或专家审查",
-          "缺少输入、权限或成功标准时会暂停询问"
-        ],
-        "criteria_results": [
-          {
-            "criterion_id": "generate_high_quality_prompt",
+            "criterion_id": "simple_label_output",
             "status": "supported",
-            "explanation": "材料明确要求生成的技能指令必须包含 Few-shot 或 Chain of Thought 技术以获得最大精度，可视为支持生成高质量提示词。",
+            "explanation": "分类结果可通过 ClassifierResult.selectedAgent 和 response.metadata.agentName/agentId 表达为明确类别标签，并包含 confidence。",
             "evidence": [
               {
-                "source_path": "plugins/agentic-awesome-skills-claude/skills/10-andruia-skill-smith/SKILL.md",
-                "start_line": 44,
-                "end_line": 44,
-                "quote": "- **Prompt Engineering:** Las instrucciones deben incluir técnicas de \"Few-shot\" o \"Chain of Thought\" para máxima precisión."
+                "source_path": "typescript/SKILL.md",
+                "start_line": 89,
+                "end_line": 89,
+                "quote": "// response.metadata: { agentId, agentName, userId, sessionId, userInput, additionalParams }"
+              },
+              {
+                "source_path": "typescript/SKILL.md",
+                "start_line": 290,
+                "end_line": 290,
+                "quote": "`ClassifierResult` shape: `{ selectedAgent: Agent | null, confidence: number }`."
               }
             ]
           },
           {
-            "criterion_id": "provide_templates_or_examples",
-            "status": "unsupported",
-            "explanation": "材料中的 Example 仅展示了一个用户请求，未提供任何提示词模板或高质量提示词示例。",
-            "evidence": []
-          },
-          {
-            "criterion_id": "task_specific_customization",
-            "status": "unsupported",
-            "explanation": "工作流要求收集角色和输出，但未提及按写作、翻译、问答、代码生成等具体任务类型定制提示词。",
-            "evidence": []
-          },
-          {
-            "criterion_id": "optimization_and_iteration",
-            "status": "unsupported",
-            "explanation": "材料未提及对现有提示词进行分析、提供优化建议或支持迭代改进。",
-            "evidence": []
-          },
-          {
-            "criterion_id": "explain_principles",
-            "status": "unsupported",
-            "explanation": "仅提及使用 Few-shot 和 Chain of Thought，但未解释这些技巧的原理或最佳实践。",
-            "evidence": []
+            "criterion_id": "usage_examples",
+            "status": "supported",
+            "explanation": "提供了创建 AgentSquad、注册代理、调用 routeRequest、覆盖分类提示词和自定义 Classifier 的示例；但没有准确率评测示例。",
+            "evidence": [
+              {
+                "source_path": "typescript/SKILL.md",
+                "start_line": 56,
+                "end_line": 63,
+                "quote": "```typescript import { AgentSquad, BedrockLLMAgent, BedrockClassifier } from 'agent-squad'; const orchestrator = new AgentSquad({ classifier: new BedrockClassifier(), // default when omitted // storage: new DynamoDbChatStorage(...), // config: { LOG_AGENT_CHAT: true, MAX_MESSAGE_PAIRS_PER_AGENT: 50 }, });"
+              },
+              {
+                "source_path": "typescript/SKILL.md",
+                "start_line": 286,
+                "end_line": 286,
+                "quote": "| Classifier | `Classifier` | `processRequest(inputText, chatHistory)` returns `Promise<ClassifierResult>` | `typescript/src/classifiers/classifier.ts` |"
+              },
+              {
+                "source_path": "typescript/SKILL.md",
+                "start_line": 292,
+                "end_line": 294,
+                "quote": "`Classifier` base class provides `setAgents`, `setHistory`, `setSystemPrompt`, and `getAgentById(agentId)` — use `getAgentById` in your `processRequest` to look up the selected agent from the classifier's registered map."
+              }
+            ]
           }
         ]
       },
-      "skill_id": "sickn33/agentic-awesome-skills:plugins/agentic-awesome-skills-claude/skills/10-andruia-skill-smith/SKILL.md",
-      "name": "10-andruia-skill-smith",
-      "url": "https://github.com/sickn33/agentic-awesome-skills/blob/HEAD/plugins/agentic-awesome-skills-claude/skills/10-andruia-skill-smith/SKILL.md",
-      "repo_url": "https://github.com/sickn33/agentic-awesome-skills",
+      "skill_id": "2fastlabs/agent-squad:typescript/SKILL.md",
+      "name": "typescript",
+      "url": "https://github.com/2fastlabs/agent-squad/blob/HEAD/typescript/SKILL.md",
+      "repo_url": "https://github.com/2FastLabs/agent-squad",
       "match_level": "partial",
-      "summary": "该技能用于在仓库中设计、编写和部署新技能，强制要求生成的技能指令包含 Few-shot 或 Chain of Thought 提示工程技巧；但它并非直接面向独立提示词生成，且未提供提示词模板、任务定制、优化迭代或原则说明。",
+      "summary": "该技能是 TypeScript 多智能体编排框架，可自定义分类器将输入路由到代理并返回类别与置信度，但未说明混合数据批量分类或准确率评测。",
       "matched_criteria": [
-        "generate_high_quality_prompt"
+        "custom_classification",
+        "simple_label_output",
+        "usage_examples"
       ],
       "verified_evidence": [
         {
-          "source_path": "plugins/agentic-awesome-skills-claude/skills/10-andruia-skill-smith/SKILL.md",
-          "start_line": 44,
-          "end_line": 44,
-          "quote": "- **Prompt Engineering:** Las instrucciones deben incluir técnicas de \"Few-shot\" o \"Chain of Thought\" para máxima precisión."
+          "source_path": "typescript/SKILL.md",
+          "start_line": 52,
+          "end_line": 53,
+          "quote": "`routeRequest` is the single entry point. It classifies the input, dispatches to the selected agent, saves the exchange, and returns an `AgentResponse`."
+        },
+        {
+          "source_path": "typescript/SKILL.md",
+          "start_line": 196,
+          "end_line": 198,
+          "quote": "All classifiers support `setSystemPrompt(template?, variables?)` to override the routing prompt. Template variables use `{{VAR_NAME}}` syntax; `AGENT_DESCRIPTIONS` and `HISTORY` are always injected automatically."
+        },
+        {
+          "source_path": "typescript/SKILL.md",
+          "start_line": 290,
+          "end_line": 290,
+          "quote": "`ClassifierResult` shape: `{ selectedAgent: Agent | null, confidence: number }`."
+        },
+        {
+          "source_path": "typescript/SKILL.md",
+          "start_line": 89,
+          "end_line": 89,
+          "quote": "// response.metadata: { agentId, agentName, userId, sessionId, userInput, additionalParams }"
+        },
+        {
+          "source_path": "typescript/SKILL.md",
+          "start_line": 290,
+          "end_line": 290,
+          "quote": "`ClassifierResult` shape: `{ selectedAgent: Agent | null, confidence: number }`."
+        },
+        {
+          "source_path": "typescript/SKILL.md",
+          "start_line": 56,
+          "end_line": 63,
+          "quote": "```typescript import { AgentSquad, BedrockLLMAgent, BedrockClassifier } from 'agent-squad'; const orchestrator = new AgentSquad({ classifier: new BedrockClassifier(), // default when omitted // storage: new DynamoDbChatStorage(...), // config: { LOG_AGENT_CHAT: true, MAX_MESSAGE_PAIRS_PER_AGENT: 50 }, });"
+        },
+        {
+          "source_path": "typescript/SKILL.md",
+          "start_line": 286,
+          "end_line": 286,
+          "quote": "| Classifier | `Classifier` | `processRequest(inputText, chatHistory)` returns `Promise<ClassifierResult>` | `typescript/src/classifiers/classifier.ts` |"
+        },
+        {
+          "source_path": "typescript/SKILL.md",
+          "start_line": 292,
+          "end_line": 294,
+          "quote": "`Classifier` base class provides `setAgents`, `setHistory`, `setSystemPrompt`, and `getAgentById(agentId)` — use `getAgentById` in your `processRequest` to look up the selected agent from the classifier's registered map."
         }
       ]
     }
   ],
   "usage": {
-    "prompt_tokens": 352796,
-    "completion_tokens": 221950,
-    "total_tokens": 574746
+    "prompt_tokens": 498739,
+    "completion_tokens": 357773,
+    "total_tokens": 856512,
+    "unknown_usage_requests": 4,
+    "requests": 84
   }
 }
