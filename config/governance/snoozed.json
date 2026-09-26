@@ -325,6 +325,41 @@
       "expires_at": "2027-02-23",
       "days": 150,
       "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/trailmark/skills/vector-forge/SKILL.md",
+      "snoozed_at": "2026-09-26",
+      "expires_at": "2027-02-23",
+      "days": 150,
+      "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/variant-analysis/skills/variant-analysis/SKILL.md",
+      "snoozed_at": "2026-09-26",
+      "expires_at": "2027-02-23",
+      "days": 150,
+      "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "google-labs-code/stitch-skills:plugins/stitch-utilities/skills/design-md/SKILL.md",
+      "snoozed_at": "2026-09-26",
+      "expires_at": "2027-02-23",
+      "days": 150,
+      "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "google-labs-code/stitch-skills:plugins/stitch-design/skills/generate-design/SKILL.md",
+      "snoozed_at": "2026-09-26",
+      "expires_at": "2027-02-23",
+      "days": 150,
+      "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "expo/skills:plugins/expo/skills/eas-workflows/SKILL.md",
+      "snoozed_at": "2026-09-26",
+      "expires_at": "2027-02-23",
+      "days": 150,
+      "reason": "用户暂不关注"
     }
   ]
 }

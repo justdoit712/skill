@@ -22,12 +22,6 @@
       "from": "recommended"
     },
     {
-      "skill_id": "anthropics/skills:skills/frontend-design/SKILL.md",
-      "reason": "用户收藏",
-      "added_at": "2026-09-24",
-      "from": "recommended"
-    },
-    {
       "skill_id": "anthropics/skills:skills/internal-comms/SKILL.md",
       "reason": "用户收藏",
       "added_at": "2026-09-24",
@@ -64,16 +58,22 @@
       "from": "recommended"
     },
     {
+      "skill_id": "anthropics/skills:skills/webapp-testing/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-26",
+      "from": "candidate"
+    },
+    {
+      "skill_id": "vercel-labs/skills:skills/find-skills/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-26",
+      "from": "candidate"
+    },
+    {
       "skill_id": "vercel-labs/agent-skills:skills/composition-patterns/SKILL.md",
       "reason": "用户收藏",
       "added_at": "2026-09-24",
       "from": "candidate"
-    },
-    {
-      "skill_id": "vercel-labs/agent-skills:skills/react-best-practices/SKILL.md",
-      "reason": "用户收藏",
-      "added_at": "2026-09-22",
-      "from": "recommended"
     },
     {
       "skill_id": "vercel-labs/agent-skills:skills/writing-guidelines/SKILL.md",
@@ -130,6 +130,42 @@
       "from": "candidate"
     },
     {
+      "skill_id": "trailofbits/skills:plugins/gh-cli/skills/gh-cli/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-26",
+      "from": "candidate"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/goal-prompt/skills/goal-prompt/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-26",
+      "from": "recommended"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/trailmark/skills/diagramming-code/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-26",
+      "from": "recommended"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/trailmark/skills/graph-evolution/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-26",
+      "from": "recommended"
+    },
+    {
+      "skill_id": "anthropics/skills:skills/frontend-design/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-24",
+      "from": "recommended"
+    },
+    {
+      "skill_id": "vercel-labs/agent-skills:skills/react-best-practices/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-22",
+      "from": "recommended"
+    },
+    {
       "skill_id": "anthropics/skills:skills/docx/SKILL.md",
       "reason": "用户收藏",
       "added_at": "2026-09-22",
@@ -148,37 +184,25 @@
       "from": "candidate"
     },
     {
-      "skill_id": "trailofbits/skills:plugins/goal-prompt/skills/goal-prompt/SKILL.md",
-      "reason": "用户收藏",
-      "added_at": "2026-09-26",
-      "from": "recommended"
-    },
-    {
-      "skill_id": "trailofbits/skills:plugins/trailmark/skills/graph-evolution/SKILL.md",
-      "reason": "用户收藏",
-      "added_at": "2026-09-26",
-      "from": "recommended"
-    },
-    {
-      "skill_id": "trailofbits/skills:plugins/trailmark/skills/diagramming-code/SKILL.md",
-      "reason": "用户收藏",
-      "added_at": "2026-09-26",
-      "from": "recommended"
-    },
-    {
-      "skill_id": "anthropics/skills:skills/webapp-testing/SKILL.md",
+      "skill_id": "google-labs-code/stitch-skills:plugins/stitch-build/skills/react-components/SKILL.md",
       "reason": "用户收藏",
       "added_at": "2026-09-26",
       "from": "candidate"
     },
     {
-      "skill_id": "vercel-labs/skills:skills/find-skills/SKILL.md",
+      "skill_id": "google-labs-code/stitch-skills:plugins/stitch-build/skills/react-native/SKILL.md",
       "reason": "用户收藏",
       "added_at": "2026-09-26",
       "from": "candidate"
     },
     {
-      "skill_id": "trailofbits/skills:plugins/gh-cli/skills/gh-cli/SKILL.md",
+      "skill_id": "google-labs-code/stitch-skills:plugins/stitch-build/skills/shadcn-ui/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-26",
+      "from": "candidate"
+    },
+    {
+      "skill_id": "google-labs-code/stitch-skills:plugins/stitch-design/skills/extract-design-md/SKILL.md",
       "reason": "用户收藏",
       "added_at": "2026-09-26",
       "from": "candidate"
@@ -412,6 +436,26 @@
     },
     {
       "skill_id": "trailofbits/skills:plugins/let-fate-decide/skills/let-fate-decide/SKILL.md",
+      "reason": "用户屏蔽/删除",
+      "added_at": "2026-09-26"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/vulnerability-triage-brocards/skills/vulnerability-triage-brocards/SKILL.md",
+      "reason": "用户屏蔽/删除",
+      "added_at": "2026-09-26"
+    },
+    {
+      "skill_id": "google-labs-code/stitch-skills:plugins/stitch-build/skills/react-vite-dashboard/SKILL.md",
+      "reason": "用户屏蔽/删除",
+      "added_at": "2026-09-26"
+    },
+    {
+      "skill_id": "expo/skills:plugins/expo-experiments/skills/expo-migrate-module/SKILL.md",
+      "reason": "用户屏蔽/删除",
+      "added_at": "2026-09-26"
+    },
+    {
+      "skill_id": "expo/skills:plugins/expo/skills/eas-app-stores/SKILL.md",
       "reason": "用户屏蔽/删除",
       "added_at": "2026-09-26"
     }
