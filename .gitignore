@@ -19,6 +19,7 @@ logs/
 *.log
 *.tmp
 *.bak
+*.lock
 .cache/
 
 # 运行期暂存：上游原文，仅在同一 runner 内复用，不入库

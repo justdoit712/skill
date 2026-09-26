@@ -33,3 +33,20 @@ def week_id(moment: datetime | None = None) -> str:
 def iso_now(moment: datetime | None = None) -> str:
     """格式化当前时间为 ISO 字符串（秒精度）。"""
     return (moment or now_local()).replace(microsecond=0).isoformat()
+
+
+def is_test_environment() -> bool:
+    """检测当前是否运行在自动化测试环境（unittest 或 pytest）中。"""
+    import inspect
+    import os
+    import sys
+
+    if "pytest" in sys.modules or os.environ.get("PYTEST_CURRENT_TEST"):
+        return True
+    if "unittest" in sys.modules:
+        for frame in inspect.stack():
+            fn = frame.filename.replace("\\", "/")
+            if "unittest" in fn or "pytest" in fn:
+                return True
+    return False
+

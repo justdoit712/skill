@@ -26,7 +26,7 @@ from uuid import uuid4
 from src.infra.files import write_json_atomic
 from src.infra.llm import call_model, resolve_api_key
 from src.shared.owned import is_skill_owned
-from src.shared.runtime import now_local
+from src.shared.runtime import is_test_environment, now_local
 from src.shared.usage import UsageTotals
 
 from .config import (
@@ -461,6 +461,12 @@ def execute_find_skill(topic="", *, limit=None, max_evaluations=None, max_tokens
     from src.infra.llm import validate_model_config
     from src.infra.owned import load_owned_ids
     root = Path(root_dir).resolve()
+    project_root = Path(__file__).resolve().parents[2].resolve()
+    if root == project_root and is_test_environment():
+        raise RuntimeError(
+            "测试环境中禁止直接写入工程生产 data/local 目录！"
+            "请在测试用例中显式提供临时隔离目录（如 tempfile.TemporaryDirectory）。"
+        )
     if owned_ids is None:
         owned_ids = load_owned_ids(root / "config")
     run_cfg = load_finder_run_config(root / "config")
@@ -710,6 +716,11 @@ def main(argv: list[str] | None = None, *, root: Path | None = None) -> int:
     except ValueError as exc:
         print(f"参数错误：{exc}", file=sys.stderr)
         return 2
+    except RuntimeError as exc:
+        if is_test_environment() and "测试环境中禁止直接写入" in str(exc):
+            raise
+        print(f"运行错误：{exc}", file=sys.stderr)
+        return 1
     except Exception as exc:
         print(f"启动错误：{exc}", file=sys.stderr)
         return 1

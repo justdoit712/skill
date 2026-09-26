@@ -49,6 +49,7 @@ from .evaluation import (
 )
 from src.infra.http import fetch_text
 from src.infra.llm import REASON_LENGTH_EXCEEDED
+from src.shared.runtime import is_test_environment
 from src.shared.usage import UsageTotals
 from .index import CatalogContext, build_catalog, build_entry, index_by_id
 from .store import mutate_catalog
@@ -408,6 +409,12 @@ def run_local(
     """每个候选本轮最多处理一次；每次模型响应后立即保存用量、记录与页面数据。"""
     _valid_settings(settings)
     root = Path(root).resolve()
+    project_root = Path(__file__).resolve().parents[2].resolve()
+    if root == project_root and is_test_environment():
+        raise RuntimeError(
+            "测试环境中禁止直接写入工程生产 data/local 目录！"
+            "请在测试用例中显式提供临时隔离目录（如 tempfile.TemporaryDirectory）。"
+        )
     cfg = deepcopy(cfg if cfg is not None else load_all_config(root / "config"))
     problems = precheck(cfg)
     if not resolve_api_key(cfg["model"]):

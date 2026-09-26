@@ -6,6 +6,7 @@ from inspect import signature
 from pathlib import Path
 import hashlib
 from src.infra.files import read_json, write_json_atomic, file_lock, LockConflict
+from src.shared.runtime import is_test_environment
 
 _sessions = ContextVar("catalog_sessions", default=frozenset())
 catalog_lock = file_lock
@@ -14,6 +15,12 @@ catalog_lock = file_lock
 @contextmanager
 def catalog_session(data_dir, timeout=0):
     path = Path(data_dir).resolve()
+    project_data = (Path(__file__).resolve().parents[2] / "data").resolve()
+    if path == project_data and is_test_environment():
+        raise RuntimeError(
+            "测试环境中禁止直接写入工程生产 data/local 目录！"
+            "请在测试用例中显式提供临时隔离目录（如 tempfile.TemporaryDirectory）。"
+        )
     if path in _sessions.get():
         yield
         return
