@@ -3,9 +3,10 @@
   "rules_version": "1.0.1",
   "generated_at": "2026-09-24T17:47:54.881484+08:00",
   "counts": {
-    "excluded": 23,
-    "candidate": 16,
-    "recommended": 84
+    "recommended": 42,
+    "candidate": 4,
+    "manual": 30,
+    "excluded": 47
   },
   "entries": [
     {
@@ -1186,8 +1187,13 @@
       "upstream_status": "ok",
       "license": null,
       "excluded": false,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-26",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "skill_type": null,
       "example_requests": [],
       "key_features": [
@@ -1353,8 +1359,13 @@
       "upstream_status": "ok",
       "license": null,
       "excluded": false,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-26",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "skill_type": null,
       "example_requests": [],
       "key_features": [
@@ -2902,8 +2913,10 @@
       ],
       "limitations": "仅做上下文理解，不命名漏洞、不提修复、不写 PoC、不评严重性；依赖插件子代理与工作流工具，材料中未给出所引用 resources 文件内容，也未声明运行平台。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-20T16:59:36+00:00",
       "last_checked": "2026-09-24T17:18:15.466053+08:00",
       "content_changed_at": null,
@@ -3963,7 +3976,12 @@
       "manual_note": null,
       "evaluation_rules_version": "1.0.1",
       "last_evaluation_id": "trailofbits/skills:plugins/code-improver/skills/skill-improver/SKILL.md|sha256:5764d6f51c5cd2e9dccb650b2a8f0428|1.0.1|1.0.0",
-      "evaluated_at": "2026-09-24T17:18:59.176377+08:00"
+      "evaluated_at": "2026-09-24T17:18:59.176377+08:00",
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "trailofbits/skills:plugins/code-improver/tests/fixtures/pr-review-toolkit/skills/review-pr/SKILL.md",
@@ -4640,7 +4658,12 @@
       "manual_note": null,
       "evaluation_rules_version": "1.0.1",
       "last_evaluation_id": "trailofbits/skills:plugins/fp-check/skills/fp-check/SKILL.md|sha256:129223b79b8cb1e7c289c90cbe4ba288|1.0.1|1.0.0",
-      "evaluated_at": "2026-09-24T17:19:37.756930+08:00"
+      "evaluated_at": "2026-09-24T17:19:37.756930+08:00",
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "trailofbits/skills:plugins/gh-cli/skills/gh-cli/SKILL.md",
@@ -4689,8 +4712,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-26",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "evaluation_rules_version": "1.0.1",
       "last_evaluation_id": "trailofbits/skills:plugins/gh-cli/skills/gh-cli/SKILL.md|sha256:3810c9ff56ae9a26f4c6c1e0d058a946|1.0.1|1.0.0",
       "evaluated_at": "2026-09-24T17:20:14.655527+08:00"
@@ -4747,7 +4775,12 @@
       "manual_note": null,
       "evaluation_rules_version": "1.0.1",
       "last_evaluation_id": "trailofbits/skills:plugins/github-triage/skills/github-triage/SKILL.md|sha256:b3289e800b7b5dc9c37c9de2768ca052|1.0.1|1.0.0",
-      "evaluated_at": "2026-09-24T17:20:42.469570+08:00"
+      "evaluated_at": "2026-09-24T17:20:42.469570+08:00",
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "trailofbits/skills:plugins/goal-prompt/skills/goal-prompt/SKILL.md",
@@ -4797,8 +4830,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-26",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      },
       "evaluation_rules_version": "1.0.1",
       "last_evaluation_id": "trailofbits/skills:plugins/goal-prompt/skills/goal-prompt/SKILL.md|sha256:684bd98d836f88e7b7ec552cc329e4e4|1.0.1|1.0.0",
       "evaluated_at": "2026-09-24T17:22:13.686753+08:00"
@@ -4839,8 +4877,10 @@
       ],
       "limitations": "必须能运行 uv/Python 脚本，脚本失败时按规则跳过占卜且不得伪造随机；引用文件（scripts/、references/、houses/、cards/）本体未在材料中提供，无法核验其存在与内容；上游未声明平台兼容性；不得用于安全关键决策的最终裁定。",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-24T17:22:55.863763+08:00",
       "content_changed_at": null,
@@ -4892,8 +4932,10 @@
       ],
       "limitations": "仅为指导性文档，不含可执行脚本或工具实现；构建系统（CMake/Meson/Bazel）配置明确不在范围内；contracts 与 std::execution 等 C++26 特性仍标注需谨慎或等待生态成熟。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-24T17:23:25.895746+08:00",
       "content_changed_at": null,
@@ -4966,7 +5008,12 @@
       "manual_note": null,
       "evaluation_rules_version": "1.0.1",
       "last_evaluation_id": "trailofbits/skills:plugins/modern-python/skills/modern-python/SKILL.md|sha256:ef774b925eb1d1fc12e4f5ddc3f5ad92|1.0.1|1.0.0",
-      "evaluated_at": "2026-09-24T17:23:44.745456+08:00"
+      "evaluated_at": "2026-09-24T17:23:44.745456+08:00",
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "trailofbits/skills:plugins/mutation-testing/skills/mutation-testing/SKILL.md",
@@ -5021,7 +5068,12 @@
       "manual_note": null,
       "evaluation_rules_version": "1.0.1",
       "last_evaluation_id": "trailofbits/skills:plugins/mutation-testing/skills/mutation-testing/SKILL.md|sha256:20e6ee2b6cec91bad7572dea966b5fce|1.0.1|1.0.0",
-      "evaluated_at": "2026-09-24T17:24:12.429718+08:00"
+      "evaluated_at": "2026-09-24T17:24:12.429718+08:00",
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "trailofbits/skills:plugins/open-sourcing/skills/open-sourcing/SKILL.md",
@@ -5076,7 +5128,12 @@
       "manual_note": null,
       "evaluation_rules_version": "1.0.1",
       "last_evaluation_id": "trailofbits/skills:plugins/open-sourcing/skills/open-sourcing/SKILL.md|sha256:da8d876edfc13f234cb88a2531da86a5|1.0.1|1.0.0",
-      "evaluated_at": "2026-09-24T17:24:48.105219+08:00"
+      "evaluated_at": "2026-09-24T17:24:48.105219+08:00",
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "trailofbits/skills:plugins/post-patch-validation/skills/post-patch-validation/SKILL.md",
@@ -5115,8 +5172,10 @@
       ],
       "limitations": "仅执行本地代码与测试，不适用于远程或生产目标，且需用户授权执行仓库代码；其隔离不是主机沙箱，不可信检查代码需另用 OS/容器沙箱；超时、缺少 PPV_REACHED 标记或控制组失败会留下 validation gap；source/build 级证据不能证明运行时行为。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-24T17:25:28.894338+08:00",
       "content_changed_at": null,
@@ -5189,7 +5248,12 @@
       "manual_note": null,
       "evaluation_rules_version": "1.0.1",
       "last_evaluation_id": "trailofbits/skills:plugins/property-based-testing/skills/property-based-testing/SKILL.md|sha256:9448cacb65c6237a7c22dc5960266717|1.0.1|1.0.0",
-      "evaluated_at": "2026-09-24T17:26:01.480178+08:00"
+      "evaluated_at": "2026-09-24T17:26:01.480178+08:00",
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "trailofbits/skills:plugins/review-walkthrough/skills/review-walkthrough/SKILL.md",
@@ -5229,8 +5293,10 @@
       ],
       "limitations": "仅在显式调用时使用（disable-model-invocation: true）；只读评审，不运行测试或安装依赖；范围为已提交至 HEAD 的改动，未提交改动不在内；PR 评论仅生成可复制的 gh api 命令，不自动发布；无仓库自述可对照。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-24T17:26:36.646532+08:00",
       "content_changed_at": null,
@@ -5305,7 +5371,12 @@
       "manual_note": null,
       "evaluation_rules_version": "1.0.1",
       "last_evaluation_id": "trailofbits/skills:plugins/rust-review/skills/rust-review/SKILL.md|sha256:52ee8b08876b0ad90ecdf4a58de8d41f|1.0.1|1.0.0",
-      "evaluated_at": "2026-09-24T17:27:23.803105+08:00"
+      "evaluated_at": "2026-09-24T17:27:23.803105+08:00",
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "trailofbits/skills:plugins/second-opinion/skills/second-opinion/SKILL.md",
@@ -5344,8 +5415,10 @@
       ],
       "limitations": "仅生成评审发现，不应用修复、不提交到远端服务；依赖外部 CLI 与账号配置，缺少可执行文件或账号时视为评审失败；需读取各提供方引用文件与 review-input.md 方可执行。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-24T17:27:50.191550+08:00",
       "content_changed_at": null,
@@ -5416,7 +5489,12 @@
       "manual_note": null,
       "evaluation_rules_version": "1.0.1",
       "last_evaluation_id": "trailofbits/skills:plugins/semgrep-rule-creator/skills/semgrep-rule-creator/SKILL.md|sha256:6ca2e3b8520ed20af1b0879b7cab3188|1.0.1|1.0.0",
-      "evaluated_at": "2026-09-24T17:28:18.486705+08:00"
+      "evaluated_at": "2026-09-24T17:28:18.486705+08:00",
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "trailofbits/skills:plugins/semgrep-rule-variant-creator/skills/semgrep-rule-variant-creator/SKILL.md",
@@ -5470,7 +5548,12 @@
       "manual_note": null,
       "evaluation_rules_version": "1.0.1",
       "last_evaluation_id": "trailofbits/skills:plugins/semgrep-rule-variant-creator/skills/semgrep-rule-variant-creator/SKILL.md|sha256:a456a7897a8042b1e2be81e10a7ac78f|1.0.1|1.0.0",
-      "evaluated_at": "2026-09-24T17:29:10.878100+08:00"
+      "evaluated_at": "2026-09-24T17:29:10.878100+08:00",
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "trailofbits/skills:plugins/sharp-edges/skills/sharp-edges/SKILL.md",
@@ -5523,7 +5606,12 @@
       "manual_note": null,
       "evaluation_rules_version": "1.0.1",
       "last_evaluation_id": "trailofbits/skills:plugins/sharp-edges/skills/sharp-edges/SKILL.md|sha256:3b69a709c2f8f0cfcf57d40a3186e166|1.0.1|1.0.0",
-      "evaluated_at": "2026-09-24T17:29:41.863312+08:00"
+      "evaluated_at": "2026-09-24T17:29:41.863312+08:00",
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "trailofbits/skills:plugins/spec-to-code-compliance/skills/spec-to-code-compliance/SKILL.md",
@@ -5582,7 +5670,12 @@
       "manual_note": null,
       "evaluation_rules_version": "1.0.1",
       "last_evaluation_id": "trailofbits/skills:plugins/spec-to-code-compliance/skills/spec-to-code-compliance/SKILL.md|sha256:eb0d91b50a9c06f50baf8763d1e23566|1.0.1|1.0.0",
-      "evaluated_at": "2026-09-24T17:30:09.097112+08:00"
+      "evaluated_at": "2026-09-24T17:30:09.097112+08:00",
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "trailofbits/skills:plugins/static-analysis/skills/codeql/SKILL.md",
@@ -5637,7 +5730,12 @@
       "manual_note": null,
       "evaluation_rules_version": "1.0.1",
       "last_evaluation_id": "trailofbits/skills:plugins/static-analysis/skills/codeql/SKILL.md|sha256:1a6d919ff80f83b262daf650552af6eb|1.0.1|1.0.0",
-      "evaluated_at": "2026-09-24T17:30:47.274875+08:00"
+      "evaluated_at": "2026-09-24T17:30:47.274875+08:00",
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "trailofbits/skills:plugins/static-analysis/skills/sarif-parsing/SKILL.md",
@@ -5683,8 +5781,10 @@
       ],
       "limitations": "仅处理已有的 SARIF 结果文件，不运行扫描也不编写 CodeQL/Semgrep 规则；实际使用依赖 jq、pysarif、sarif-tools 等外部工具与库，且引用的 resources 与 fixtures 文件未在本材料中展示。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-24T17:31:16.385920+08:00",
       "content_changed_at": null,
@@ -5738,8 +5838,10 @@
       ],
       "limitations": "OSS 模式无法跨文件跟踪数据流；完整执行依赖材料中未给出的 scripts/run-scans.sh、merge_sarif.py 及 references/rulesets.md、scan-workflow.md；需克隆第三方规则集仓库并依赖网络与 Git；未声明操作系统等平台兼容性。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-24T17:31:56.523778+08:00",
       "content_changed_at": null,
@@ -5796,8 +5898,10 @@
       ],
       "limitations": "仅支持 npm、PyPI、Go 生态；不读 yarn.lock/pnpm-lock.yaml/poetry.lock；不做许可证合规审计、不扫描目标自身源码的漏洞或密钥、不判断项目能否安装或构建；PyPI 与 Go 的多数准则结构性无法评估。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-24T17:32:19.423489+08:00",
       "content_changed_at": null,
@@ -5859,8 +5963,10 @@
       ],
       "limitations": "ASan 需约 20TB 虚拟内存（须对 fuzzer 取消内存限制，如 -rss_limit_mb=0 或 -m none），带来约 2-4x 性能开销，不适合生产代码；macOS 支持有限、Windows 为实验性；纯安全语言（如纯 Go、纯 Java）无 FFI 时收益不大。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-24T17:32:51.200605+08:00",
       "content_changed_at": null,
@@ -5919,8 +6025,10 @@
       ],
       "limitations": "主要面向 Linux（推荐 Debian/Ubuntu）；afl-system-config/afl-persistent-config 需 root 并禁用内核安全缓解措施，会牺牲系统安全性；Docker 模式存在虚拟化性能损耗且 wrapper 不保留参数引号（含空格参数会被拆分）；ASan 下不支持 -m 内存限制。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-24T17:33:30.318346+08:00",
       "content_changed_at": null,
@@ -5978,8 +6086,10 @@
       ],
       "limitations": "仅面向 Python 目标；本地对 C 扩展进行模糊测试需手动设置 clang 编译标志与 LD_PRELOAD；正文引用的 structured-input.md、examples.md 等配套文件未在本材料中给出。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-24T17:34:03.842992+08:00",
       "content_changed_at": null,
@@ -6055,7 +6165,12 @@
       "manual_note": null,
       "evaluation_rules_version": "1.0.1",
       "last_evaluation_id": "trailofbits/skills:plugins/testing-handbook-skills/skills/cargo-fuzz/SKILL.md|sha256:8e8f882604f68c682afde3562ba1bd38|1.0.1|1.0.0",
-      "evaluated_at": "2026-09-24T17:35:19.696610+08:00"
+      "evaluated_at": "2026-09-24T17:35:19.696610+08:00",
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "trailofbits/skills:plugins/testing-handbook-skills/skills/constant-time-testing/SKILL.md",
@@ -6112,7 +6227,12 @@
       "manual_note": null,
       "evaluation_rules_version": "1.0.1",
       "last_evaluation_id": "trailofbits/skills:plugins/testing-handbook-skills/skills/constant-time-testing/SKILL.md|sha256:d294126ee90dbb949261145fbf1fb05d|1.0.1|1.0.0",
-      "evaluated_at": "2026-09-24T17:35:43.614628+08:00"
+      "evaluated_at": "2026-09-24T17:35:43.614628+08:00",
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "trailofbits/skills:plugins/testing-handbook-skills/skills/coverage-analysis/SKILL.md",
@@ -6156,8 +6276,10 @@
       ],
       "limitations": "未声明支持的操作系统与平台；依赖具体编译器插桩工具链（LLVM/GCC 不能混用）；上游明确建议在覆盖率基础设施未搭建或代码库过大时跳过该方法。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-24T17:36:12.501584+08:00",
       "content_changed_at": null,
@@ -6228,7 +6350,12 @@
       "manual_note": null,
       "evaluation_rules_version": "1.0.1",
       "last_evaluation_id": "trailofbits/skills:plugins/testing-handbook-skills/skills/fuzzing-dictionary/SKILL.md|sha256:b71fa7cab36ca466647123efa07c665c|1.0.1|1.0.0",
-      "evaluated_at": "2026-09-24T17:36:50.088461+08:00"
+      "evaluated_at": "2026-09-24T17:36:50.088461+08:00",
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "trailofbits/skills:plugins/testing-handbook-skills/skills/fuzzing-obstacles/SKILL.md",
@@ -6288,7 +6415,12 @@
       "manual_note": null,
       "evaluation_rules_version": "1.0.1",
       "last_evaluation_id": "trailofbits/skills:plugins/testing-handbook-skills/skills/fuzzing-obstacles/SKILL.md|sha256:7d77500c3e0a2db1ce5fd5dbb0559b80|1.0.1|1.0.0",
-      "evaluated_at": "2026-09-24T17:37:26.346596+08:00"
+      "evaluated_at": "2026-09-24T17:37:26.346596+08:00",
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "trailofbits/skills:plugins/testing-handbook-skills/skills/harness-writing/SKILL.md",
@@ -6334,8 +6466,10 @@
       ],
       "limitations": "仅针对 C/C++ 与 Rust（另提及 Go/Python 工具的 harness 形态）的模糊测试 harness 编写；示例中的 target_function、divide、concat 等为示意符号，需使用者替换为自身代码；未声明操作系统、编译器版本等运行平台要求，也未给出完整可运行工程。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-24T17:37:58.401313+08:00",
       "content_changed_at": null,
@@ -6405,7 +6539,12 @@
       "manual_note": null,
       "evaluation_rules_version": "1.0.1",
       "last_evaluation_id": "trailofbits/skills:plugins/testing-handbook-skills/skills/libafl/SKILL.md|sha256:2f7f261439c2d87a15ddbb8a04a387fb|1.0.1|1.0.0",
-      "evaluated_at": "2026-09-24T17:38:24.778031+08:00"
+      "evaluated_at": "2026-09-24T17:38:24.778031+08:00",
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "trailofbits/skills:plugins/testing-handbook-skills/skills/libfuzzer/SKILL.md",
@@ -6445,8 +6584,10 @@
       ],
       "limitations": "libFuzzer 自 2022 年底起处于仅维护模式；多核支持有限，材料建议重负载多核场景改用 AFL++/Honggfuzz/LibAFL；启用 ASan 有 2-4x 性能损失并需约 20TB 虚拟内存；-seed 复现仅限单核。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-24T17:38:54.821429+08:00",
       "content_changed_at": null,
@@ -6502,8 +6643,10 @@
       ],
       "limitations": "依赖 Docker 与 uv 运行环境；公共 OSS-Fuzz 对项目设有 criticality score 门槛，低分项目需自建实例；覆盖率分析需额外安装 gsutil。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-24T17:39:27.222205+08:00",
       "content_changed_at": null,
@@ -6575,7 +6718,12 @@
       "manual_note": null,
       "evaluation_rules_version": "1.0.1",
       "last_evaluation_id": "trailofbits/skills:plugins/testing-handbook-skills/skills/ruzzy/SKILL.md|sha256:46374463b7ff99b028692ed8d30f1c9f|1.0.1|1.0.0",
-      "evaluated_at": "2026-09-24T17:39:49.780538+08:00"
+      "evaluated_at": "2026-09-24T17:39:49.780538+08:00",
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "trailofbits/skills:plugins/testing-handbook-skills/skills/testing-handbook-generator/SKILL.md",
@@ -6629,7 +6777,12 @@
       "manual_note": null,
       "evaluation_rules_version": "1.0.1",
       "last_evaluation_id": "trailofbits/skills:plugins/testing-handbook-skills/skills/testing-handbook-generator/SKILL.md|sha256:84d2022bff1675f77f71a219aa3999b0|1.0.1|1.0.0",
-      "evaluated_at": "2026-09-24T17:40:46.651277+08:00"
+      "evaluated_at": "2026-09-24T17:40:46.651277+08:00",
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "trailofbits/skills:plugins/testing-handbook-skills/skills/wycheproof/SKILL.md",
@@ -6670,8 +6823,10 @@
       ],
       "limitations": "仅覆盖已确立的标准密码算法，不适用于自定义/实验性算法；不用于时序侧信道测试或发现未知新漏洞（需配合 constant-time 测试与 fuzzing）；材料未声明具体平台兼容性。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-24T17:41:17.617728+08:00",
       "content_changed_at": null,
@@ -6742,7 +6897,12 @@
       "manual_note": null,
       "evaluation_rules_version": "1.0.1",
       "last_evaluation_id": "trailofbits/skills:plugins/trailmark/skills/audit-augmentation/SKILL.md|sha256:164ab881bfc63e77c782cfc6b67b2bb6|1.0.1|1.0.0",
-      "evaluated_at": "2026-09-24T17:41:49.381260+08:00"
+      "evaluated_at": "2026-09-24T17:41:49.381260+08:00",
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "trailofbits/skills:plugins/trailmark/skills/crypto-protocol-diagram/SKILL.md",
@@ -6805,7 +6965,12 @@
       "manual_note": null,
       "evaluation_rules_version": "1.0.1",
       "last_evaluation_id": "trailofbits/skills:plugins/trailmark/skills/crypto-protocol-diagram/SKILL.md|sha256:11e665a8180bfc5dcac16cb4baa01100|1.0.1|1.0.0",
-      "evaluated_at": "2026-09-24T17:42:15.500645+08:00"
+      "evaluated_at": "2026-09-24T17:42:15.500645+08:00",
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "trailofbits/skills:plugins/trailmark/skills/diagramming-code/SKILL.md",
@@ -6853,8 +7018,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-26",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      },
       "evaluation_rules_version": "1.0.1",
       "last_evaluation_id": "trailofbits/skills:plugins/trailmark/skills/diagramming-code/SKILL.md|sha256:1d2397bd08607b686122078afe8d2742|1.0.1|1.0.0",
       "evaluated_at": "2026-09-24T17:42:37.769833+08:00"
@@ -6899,9 +7069,10 @@
       ],
       "limitations": "要求代码库已有可通过的测试套件，且不适用于纯文档/配置改动或逻辑极简单的单文件脚本；核心分诊算法（batch_triage、test-to-production 映射）位于未随材料提供的 references/graph-analysis.md、triage-methodology.md 与 mutation-frameworks.md 中。",
       "license": null,
-      "status": "recommended",
+      "status": "excluded",
       "reason_codes": [
-        "NEEDS_VERIFICATION"
+        "NEEDS_VERIFICATION",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-24T17:43:07.243342+08:00",
@@ -6966,8 +7137,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-26",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      },
       "evaluation_rules_version": "1.0.1",
       "last_evaluation_id": "trailofbits/skills:plugins/trailmark/skills/graph-evolution/SKILL.md|sha256:009055f8ad529fd9fa3bfe58c510fae7|1.0.1|1.0.0",
       "evaluated_at": "2026-09-24T17:43:39.802784+08:00"
@@ -7010,8 +7186,10 @@
       ],
       "limitations": "必须先有 Mermaid sequenceDiagram 输入（通常来自 crypto-protocol-diagram 技能）；仅生成 .pv 模型文件，不包含运行 ProVerif 验证；不适用于非密码学系统（状态机、访问控制）。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-24T17:44:07.350113+08:00",
       "content_changed_at": null,
@@ -7065,8 +7243,10 @@
       ],
       "limitations": "依赖 Trailmark 静态分析可见性，运行期行为、生成代码、宏与动态分派场景不适用；worker 只能提议修改，最终判断与落盘由协调者完成；仅允许一次聚焦扩展，第二次仍缺上下文即停止委托；8K token 预算只约束估算的渲染包体，不等于满足模型完整上下文窗口。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-24T17:44:34.242213+08:00",
       "content_changed_at": null,
@@ -7132,7 +7312,12 @@
       "manual_note": null,
       "evaluation_rules_version": "1.0.1",
       "last_evaluation_id": "trailofbits/skills:plugins/trailmark/skills/trailmark-finding-triage/SKILL.md|sha256:9f76e25b1ef98076e462dcac78afb488|1.0.1|1.0.0",
-      "evaluated_at": "2026-09-24T17:45:01.303796+08:00"
+      "evaluated_at": "2026-09-24T17:45:01.303796+08:00",
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "trailofbits/skills:plugins/trailmark/skills/trailmark-review-gate/SKILL.md",
@@ -7184,7 +7369,12 @@
       "manual_note": null,
       "evaluation_rules_version": "1.0.1",
       "last_evaluation_id": "trailofbits/skills:plugins/trailmark/skills/trailmark-review-gate/SKILL.md|sha256:fad45861eca1e8fe7c44d20a178816e5|1.0.1|1.0.0",
-      "evaluated_at": "2026-09-24T17:45:28.249038+08:00"
+      "evaluated_at": "2026-09-24T17:45:28.249038+08:00",
+      "snooze": {
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "trailofbits/skills:plugins/trailmark/skills/trailmark-structural/SKILL.md",
@@ -7223,8 +7413,10 @@
       ],
       "limitations": "依赖用户自行安装的 Trailmark；未安装时直接返回不进行分析；能力受 Trailmark 支持语言限制；部分 pass 或子图可能输出为空；v0.4+/0.5+ 字段需运行时探测，未声明支持平台。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-24T17:46:01.938898+08:00",
       "content_changed_at": null,
@@ -7276,8 +7468,10 @@
       ],
       "limitations": "依赖外部 trailmark CLI 及 python3/uv 环境，且不自动安装；仅提供结构概览，不包含热点分数、污点数据或详细代码图查询，这些需改用 trailmark-structural 或主 trailmark 技能。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-24T17:46:25.662300+08:00",
       "content_changed_at": null,
@@ -7332,9 +7526,10 @@
       ],
       "limitations": "必须先将种子绑定到 Trailmark 图节点，否则中止；依赖 Trailmark 对目标语言的支持；无明确示例；引用的 references/neighborhood-patterns.md、ranking.md、output-format.md 未包含在材料中，无法核对细则；仅产出候选而非确认漏洞。",
       "license": null,
-      "status": "recommended",
+      "status": "excluded",
       "reason_codes": [
-        "NEEDS_VERIFICATION"
+        "NEEDS_VERIFICATION",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-24T17:47:11.829526+08:00",
@@ -7389,8 +7584,10 @@
       ],
       "limitations": "静态分析工具，不做过程间污点分析，reachability 不等于 taint；不自行反汇编二进制，二进制图需外部 JSON 导入；部分能力（diagram、subgraph_edges、SQL 解析、links.toml 等）依赖 v0.4+/v0.5+ 版本；详细文档位于材料未包含的 references/ 文件；需先安装外部 trailmark CLI。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-24T17:47:54.881484+08:00",
       "content_changed_at": null,
@@ -7431,12 +7628,6 @@
         "from": "recommended"
       },
       {
-        "skill_id": "anthropics/skills:skills/docx/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-22",
-        "from": "recommended"
-      },
-      {
         "skill_id": "anthropics/skills:skills/frontend-design/SKILL.md",
         "reason": "用户收藏",
         "added_at": "2026-09-24",
@@ -7474,12 +7665,6 @@
       },
       {
         "skill_id": "anthropics/skills:skills/theme-factory/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-22",
-        "from": "recommended"
-      },
-      {
-        "skill_id": "anthropics/skills:skills/xlsx/SKILL.md",
         "reason": "用户收藏",
         "added_at": "2026-09-22",
         "from": "recommended"
@@ -7551,9 +7736,57 @@
         "from": "candidate"
       },
       {
+        "skill_id": "anthropics/skills:skills/docx/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-22",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/xlsx/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-22",
+        "from": "recommended"
+      },
+      {
         "skill_id": "anthropics/skills:skills/pdf/SKILL.md",
         "reason": "用户收藏",
         "added_at": "2026-09-24",
+        "from": "candidate"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/goal-prompt/skills/goal-prompt/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-26",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/trailmark/skills/graph-evolution/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-26",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/trailmark/skills/diagramming-code/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-26",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/webapp-testing/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-26",
+        "from": "candidate"
+      },
+      {
+        "skill_id": "vercel-labs/skills:skills/find-skills/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-26",
+        "from": "candidate"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/gh-cli/skills/gh-cli/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-26",
         "from": "candidate"
       }
     ],
@@ -7667,6 +7900,126 @@
         "skill_id": "vercel-labs/agent-skills:skills/web-design-guidelines/SKILL.md",
         "reason": "用户屏蔽/删除",
         "added_at": "2026-09-24"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/audit-context-building/skills/audit-context-building/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-26"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/modern-cpp/skills/modern-cpp/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-26"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/review-walkthrough/skills/review-walkthrough/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-26"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/second-opinion/skills/second-opinion/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-26"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/static-analysis/skills/sarif-parsing/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-26"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/static-analysis/skills/semgrep/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-26"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/testing-handbook-skills/skills/address-sanitizer/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-26"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/testing-handbook-skills/skills/aflpp/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-26"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/testing-handbook-skills/skills/coverage-analysis/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-26"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/testing-handbook-skills/skills/harness-writing/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-26"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/testing-handbook-skills/skills/libfuzzer/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-26"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/trailmark/skills/mermaid-to-proverif/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-26"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/trailmark/skills/slicing-code-context/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-26"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/trailmark/skills/trailmark-structural/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-26"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/trailmark/skills/trailmark-summary/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-26"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/trailmark/skills/trailmark-variant-neighborhood/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-26"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/trailmark/skills/trailmark/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-26"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/supply-chain-risk-auditor/skills/supply-chain-risk-auditor/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-26"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/post-patch-validation/skills/post-patch-validation/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-26"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/testing-handbook-skills/skills/atheris/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-26"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/testing-handbook-skills/skills/wycheproof/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-26"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/testing-handbook-skills/skills/ossfuzz/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-26"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/trailmark/skills/genotoxic/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-26"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/let-fate-decide/skills/let-fate-decide/SKILL.md",
+        "reason": "用户屏蔽/删除",
+        "added_at": "2026-09-26"
       }
     ]
   },
@@ -7827,6 +8180,174 @@
         "skill_id": "trailofbits/skills:plugins/agentic-actions-auditor/skills/agentic-actions-auditor/SKILL.md",
         "snoozed_at": "2026-09-24",
         "expires_at": "2027-02-21",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/github-triage/skills/github-triage/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/modern-python/skills/modern-python/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/mutation-testing/skills/mutation-testing/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/open-sourcing/skills/open-sourcing/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/rust-review/skills/rust-review/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/semgrep-rule-variant-creator/skills/semgrep-rule-variant-creator/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/sharp-edges/skills/sharp-edges/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/spec-to-code-compliance/skills/spec-to-code-compliance/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/static-analysis/skills/codeql/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/testing-handbook-skills/skills/cargo-fuzz/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/testing-handbook-skills/skills/constant-time-testing/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/testing-handbook-skills/skills/libafl/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/testing-handbook-skills/skills/ruzzy/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/code-improver/skills/skill-improver/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/fp-check/skills/fp-check/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/property-based-testing/skills/property-based-testing/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/semgrep-rule-creator/skills/semgrep-rule-creator/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/testing-handbook-skills/skills/fuzzing-dictionary/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/testing-handbook-skills/skills/fuzzing-obstacles/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/testing-handbook-skills/skills/testing-handbook-generator/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/trailmark/skills/audit-augmentation/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/trailmark/skills/crypto-protocol-diagram/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/trailmark/skills/trailmark-finding-triage/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
+        "days": 150,
+        "reason": "用户暂不关注"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/trailmark/skills/trailmark-review-gate/SKILL.md",
+        "snoozed_at": "2026-09-26",
+        "expires_at": "2027-02-23",
         "days": 150,
         "reason": "用户暂不关注"
       }
