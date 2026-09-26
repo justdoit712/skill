@@ -1,14 +1,14 @@
 {
   "catalog_version": "1.0.0",
-  "generated_at": "2026-09-26T13:24:52.279870+08:00",
+  "generated_at": "2026-09-26T14:51:32+08:00",
   "rules_version": "1.1.0",
   "counts": {
-    "recommended": 50,
-    "candidate": 33,
+    "recommended": 51,
+    "candidate": 36,
     "manual": 10,
     "pending": 0,
     "processing_failure": 0,
-    "total_evaluated": 93,
+    "total_evaluated": 97,
     "owned": 12,
     "owned_in_catalog": 12
   },
@@ -27,10 +27,14 @@
     },
     {
       "id": "dev",
-      "count": 57
+      "count": 59
     },
     {
       "id": "docs",
+      "count": 3
+    },
+    {
+      "id": "finance",
       "count": 3
     },
     {
@@ -201,45 +205,51 @@
       "name": "webapp-testing",
       "url": "https://github.com/anthropics/skills/blob/HEAD/skills/webapp-testing/SKILL.md",
       "author": "anthropics",
-      "summary_zh": "用于测试和调试本地 Web 应用的工具集，通过编写 Python Playwright 脚本验证前端功能、捕获截图和浏览器日志。",
+      "summary_zh": "基于 Playwright 的本地 Web 应用测试工具包，支持前端功能验证、UI 调试、截图及日志查看。提供服务器生命周期管理脚本及测试决策指南。",
       "quality_summary": null,
-      "skill_type": null,
-      "example_requests": [],
+      "skill_type": "tool_script",
+      "example_requests": [
+        "使用 Playwright 测试本地运行的 React 应用前端功能",
+        "调试动态网页并捕获浏览器控制台日志"
+      ],
       "key_features": [
-        "用于测试和调试本地 Web 应用的工具"
+        "基于 Playwright 的自动化测试",
+        "内置服务器生命周期管理脚本",
+        "提供前端调试与 UI 行为验证指南"
       ],
       "main_category": {
         "id": "dev",
         "name": "编程开发"
       },
       "tags": [
-        "webapp-testing",
+        "web-testing",
         "playwright",
-        "browser-automation",
-        "testing"
+        "automation",
+        "frontend"
       ],
       "platform_declared": null,
       "dependencies_declared": [
         "Python",
-        "Playwright"
+        "Playwright",
+        "npm (用于启动前端服务器)"
       ],
       "source_type": "official",
-      "status": "candidate",
+      "status": "recommended",
       "manual_pick": true,
       "manual_note": {
         "added_at": "2026-09-26",
         "reason": "用户收藏",
         "from": "candidate",
-        "auto_status": "candidate"
+        "auto_status": "recommended"
       },
       "snooze": null,
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
       "reason_codes": [],
-      "limitations": "仅适用于本地 Web 应用；依赖 Playwright 和 Python，但未说明安装方式；提供的 helper 脚本需作为黑盒调用，不建议阅读源码。",
+      "limitations": "主要适用于本地 Web 应用测试，依赖 Playwright 环境配置。",
       "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-21T01:26:49.967019+08:00",
+      "last_checked": "2026-09-24T17:10:40+08:00",
       "content_changed_at": null,
       "upstream_status": "ok",
       "license": null
@@ -249,12 +259,17 @@
       "name": "find-skills",
       "url": "https://github.com/vercel-labs/skills/blob/HEAD/skills/find-skills/SKILL.md",
       "author": "vercel-labs",
-      "summary_zh": "帮助用户发现和安装开源 agent skills 的元技能；当用户询问是否有现成技能或希望扩展能力时，通过 npx skills 搜索、验证质量并推荐安装。",
+      "summary_zh": "帮助用户发现并安装开放 agent skills 生态中的技能：先查 skills.sh 安装量榜单，再用 npx skills find 搜索，核验质量后给出安装命令或代为安装。适用于用户说「有没有能做 X 的技能」或希望扩展 agent 能力时。",
       "quality_summary": null,
-      "skill_type": null,
-      "example_requests": [],
+      "skill_type": "guideline",
+      "example_requests": [
+        "帮我找一个能优化 React 性能的 skill",
+        "有没有做 PR review 的技能？帮我装上"
+      ],
       "key_features": [
-        "帮助用户发现和安装开源 agent skills 的元技能"
+        "先查 skills.sh 安装量榜单，再跑 npx skills find 搜索",
+        "按安装量、来源信誉、GitHub stars 核验质量后再推荐",
+        "提供 npx skills add/find/update/init 完整命令支持安装与自建"
       ],
       "main_category": {
         "id": "automation",
@@ -264,11 +279,14 @@
         "技能发现",
         "技能安装",
         "CLI",
-        "agent-skills"
+        "包管理",
+        "agent skills"
       ],
       "platform_declared": null,
       "dependencies_declared": [
-        "npx skills (Skills CLI)"
+        "npx skills CLI",
+        "https://skills.sh/ 技能浏览站点",
+        "GitHub（技能来源仓库，如 vercel-labs/agent-skills）"
       ],
       "source_type": "official",
       "status": "candidate",
@@ -283,10 +301,12 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "reason_codes": [],
-      "limitations": "依赖 npx/skills CLI 及 skills.sh 生态；材料未声明平台兼容性、Node.js 版本或网络要求。",
+      "reason_codes": [
+        "NEEDS_VERIFICATION"
+      ],
+      "limitations": "依赖网络访问与 `npx skills` CLI 可用性；未声明 Node.js 版本或其他运行环境要求；质量推荐依赖安装量、来源与 star 数等外部指标，未说明第三方技能的权限与安全校验方式；材料未给出平台兼容性说明。",
       "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-21T01:27:55.230355+08:00",
+      "last_checked": "2026-09-24T17:11:33+08:00",
       "content_changed_at": null,
       "upstream_status": "ok",
       "license": null
@@ -3243,6 +3263,103 @@
       "content_changed_at": null,
       "upstream_status": "ok",
       "license": null
+    },
+    {
+      "skill_id": "expo/skills:plugins/expo/skills/expo-native-ui/SKILL.md",
+      "name": "expo-native-ui",
+      "url": "https://github.com/expo/skills/blob/HEAD/plugins/expo/skills/expo-native-ui/SKILL.md",
+      "author": "expo",
+      "summary_zh": "一份 Expo 原生 UI 开发指南，规定 iOS（Apple HIG）与 Android（Material 3）双平台下的样式、语义色、原生控件、响应式布局与视觉特效写法，并说明何时必须从 Expo Go 切换到自定义构建。适用于使用 Expo/React Native 编写移动端界面代码的场景。",
+      "quality_summary": {
+        "review_status": "passed",
+        "review_note": null,
+        "blocking_reasons": [],
+        "checks": {
+          "practical_value": {
+            "value": "pass",
+            "evidence": "给出可直接落地的库选择与写法判断（如任何 sheet/picker/slider 先用 @expo/ui、分组行用 List/ListItem、长列表回退 FlatList/FlashList），并明确禁用已移除模块，比泛泛的“做好看的界面”提示更有增量。"
+          },
+          "actionability": {
+            "value": "pass",
+            "evidence": "以逐条规则加代码片段形式给出可直接套用的做法（主题色集中定义、Platform.select 回退、boxShadow、safe area 处理），并说明何时切换到自定义构建。"
+          },
+          "verification": {
+            "value": "pass",
+            "evidence": "提供明确的完成前自检要求（覆盖主任务与一次失败/恢复、键盘与返回行为、长标题/缺图/无结果/大字号系统文本，并报告已验证与未运行部分），并规定控件必须实现其声明的行为、异步保存需保留草稿。"
+          }
+        },
+        "review_checks": {
+          "practical_value": {
+            "value": "pass",
+            "evidence": "给出具体任务与交付物形态：按平台设计语言构建屏幕、用 Color API 集中管理主题色、选择原生控件的优先级与回退规则，超出泛泛提示词的增量明显。"
+          },
+          "actionability": {
+            "value": "pass",
+            "evidence": "包含可直接执行的命令序列（npx expo start 先在 Expo Go 验证、何时才需要 run:ios/run:android 或 eas build）以及逐条可落地的编码规则（文件名 kebab-case、boxShadow 取代 legacy shadow、ScrollView 的 contentInsetAdjustmentBehavior、useWindowDimensions 等）。"
+          },
+          "verification": {
+            "value": "pass",
+            "evidence": "给出明确的完成前验收流程：走一遍主任务、包含一次数据加载/保存失败与恢复、检查键盘与返回/关闭行为、测试长标题/缺图/空搜索结果/大字号系统文字，并要求报告已测与未能运行的部分；另有“每个控件必须真正执行其宣称动作”的验收条件。"
+          }
+        }
+      },
+      "skill_type": "guideline",
+      "example_requests": [
+        "用 Expo 做一个带原生分段控件和开关的设置页",
+        "帮我给 Expo 应用配置 iOS/Android 的语义色主题和深色模式"
+      ],
+      "key_features": [
+        "iOS 遵循 Apple HIG、Android 遵循 Material 3，禁止跨平台套壳",
+        "用 expo-router 的 Color API 给语义色主题示例代码",
+        "明确 Expo Go 优先、何时才需 run:ios/android 或 eas build"
+      ],
+      "main_category": {
+        "id": "dev",
+        "name": "编程开发"
+      },
+      "tags": [
+        "Expo",
+        "React Native",
+        "移动端 UI",
+        "原生组件样式",
+        "响应式布局"
+      ],
+      "platform_declared": [
+        "iOS",
+        "Android"
+      ],
+      "dependencies_declared": [
+        "Expo Go / Expo SDK 56+",
+        "expo-router",
+        "@expo/ui",
+        "expo-symbols",
+        "expo-glass-effect",
+        "expo-blur",
+        "expo-image",
+        "expo-haptics",
+        "expo-audio",
+        "expo-video",
+        "react-native-safe-area-context",
+        "SQLite / AsyncStorage / SecureStore",
+        "Xcode 或 Android Studio（自定义构建时）"
+      ],
+      "source_type": "official",
+      "status": "recommended",
+      "manual_pick": false,
+      "manual_note": null,
+      "snooze": null,
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "reason_codes": [
+        "NEEDS_VERIFICATION"
+      ],
+      "limitations": "材料仅提供 SKILL.md 正文，其引用的 references/*.md（controls、gradients、icons、media、storage、visual-effects、webgpu-three）未随材料提供，这些细节无法核实；该技能为规则型指南而非可执行代码，依赖具体 Expo SDK 版本与多个 expo 包。",
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-26T11:03:13+08:00",
+      "content_changed_at": null,
+      "upstream_status": "ok",
+      "license": null
     }
   ],
   "candidates": [
@@ -5663,6 +5780,235 @@
       "limitations": "仅适用于getsentry组织内的GitHub仓库；需要用户手动提供用户名和仓库列表；依赖外部MCP服务或CLI工具访问数据源。",
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-26T13:24:52.279870+08:00",
+      "content_changed_at": null,
+      "upstream_status": "ok",
+      "license": null
+    },
+    {
+      "skill_id": "better-auth/skills:better-auth/create-auth/SKILL.md",
+      "name": "create-auth",
+      "url": "https://github.com/better-auth/skills/blob/HEAD/better-auth/create-auth/SKILL.md",
+      "author": "better-auth",
+      "summary_zh": "该技能提供在 TypeScript/JavaScript 应用中使用 Better Auth 实现认证的完整指南，包括框架检测、数据库配置、路由设置及 UI 创建。适用于需要为项目添加登录、注册或迁移认证系统的开发者。",
+      "quality_summary": {
+        "review_status": "not_required",
+        "review_note": null,
+        "blocking_reasons": [
+          "初评：质量门槛未通过：practical_value: 技能提供了从项目扫描、需求确认到代码实施的具体步骤，包括多种框架和数据库适配器的配置示例，具有直接指导价值。；程序未能核实所引原文与行号。；actionability: 提供了具体的安装命令、环境变量设置、代码文件结构示例、迁移命令及插件配置方法，可直接用于指导实施。；程序未能核实所引原文与行号。；verification: 包含安全检查清单和故障排除表格，提供了验证配置正确性和处理常见问题的方法。；程序未能核实所引原文与行号。",
+          "初评：SKILL.md 明确列出核心依赖 better-auth 及可选插件包（如 @better-auth/passkey），并给出安装命令。；程序未能核实所引原文与行号。",
+          "初评：材料为编程开发指南，包含安全配置建议，未发现可疑行为或超出范围功能。；程序未能核实所引原文与行号。"
+        ],
+        "checks": {
+          "practical_value": {
+            "value": "unknown",
+            "evidence": "技能提供了从项目扫描、需求确认到代码实施的具体步骤，包括多种框架和数据库适配器的配置示例，具有直接指导价值。；程序未能核实所引原文与行号。"
+          },
+          "actionability": {
+            "value": "unknown",
+            "evidence": "提供了具体的安装命令、环境变量设置、代码文件结构示例、迁移命令及插件配置方法，可直接用于指导实施。；程序未能核实所引原文与行号。"
+          },
+          "verification": {
+            "value": "unknown",
+            "evidence": "包含安全检查清单和故障排除表格，提供了验证配置正确性和处理常见问题的方法。；程序未能核实所引原文与行号。"
+          }
+        },
+        "review_checks": {}
+      },
+      "skill_type": "guideline",
+      "example_requests": [
+        "使用 Better Auth 为 Next.js 应用添加邮箱密码登录和 Google OAuth",
+        "将现有应用从 NextAuth 迁移到 Better Auth 并配置 Prisma 适配器"
+      ],
+      "key_features": [
+        "自动检测项目框架、数据库 ORM 和包管理器",
+        "提供从规划到实施的完整工作流，含结构化提问",
+        "涵盖多种认证方式（邮箱、OAuth、Passkey）及插件配置"
+      ],
+      "main_category": {
+        "id": "dev",
+        "name": "编程开发"
+      },
+      "tags": [
+        "认证",
+        "Better Auth",
+        "TypeScript",
+        "JavaScript",
+        "全栈开发"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "better-auth",
+        "@better-auth/passkey",
+        "@better-auth/sso",
+        "@better-auth/stripe",
+        "@better-auth/scim",
+        "@better-auth/expo"
+      ],
+      "source_type": "official",
+      "status": "candidate",
+      "manual_pick": false,
+      "manual_note": null,
+      "snooze": null,
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "reason_codes": [
+        "QUALITY_BELOW_BAR",
+        "INSUFFICIENT_EVIDENCE"
+      ],
+      "limitations": "仅适用于 TypeScript/JavaScript 环境，且依赖 Better Auth 库及其生态。",
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-26T14:37:38+08:00",
+      "content_changed_at": null,
+      "upstream_status": "ok",
+      "license": null
+    },
+    {
+      "skill_id": "gauss314/skills:skills/alpaca-data/SKILL.md",
+      "name": "alpaca-data",
+      "url": "https://github.com/gauss314/skills/blob/HEAD/skills/alpaca-data/SKILL.md",
+      "author": "gauss314",
+      "summary_zh": "提供 Alpaca 市场数据 API 的使用指南，涵盖股票、加密货币和期权的历史与实时数据获取，包括认证、SDK 配置及常见错误处理。",
+      "quality_summary": {
+        "review_status": "not_required",
+        "review_note": null,
+        "blocking_reasons": [
+          "初评：质量门槛未通过：actionability: 步骤清晰：安装 SDK -> 获取 Keys -> 设置环境变量 -> 调用 API。代码示例完整且符合 alpaca-py 语法。；程序未能核实所引原文与行号。",
+          "初评：介绍中提到的功能（股票、加密货币、期权数据，实时/历史）均在正文中有对应的代码示例和说明，内容一致。；程序未能核实所引原文与行号。",
+          "初评：明确声明了依赖 `alpaca-py` SDK 和 Python 环境，并指出了需要 API Keys（对于股票数据）以及免费/付费数据源的区别。；程序未能核实所引原文与行号。"
+        ],
+        "checks": {
+          "practical_value": {
+            "value": "pass",
+            "evidence": "直接解决了开发者接入 Alpaca 数据 API 的需求，提供了可复制的代码片段和关键配置信息，比泛泛而谈的 API 文档更具操作性。"
+          },
+          "actionability": {
+            "value": "unknown",
+            "evidence": "步骤清晰：安装 SDK -> 获取 Keys -> 设置环境变量 -> 调用 API。代码示例完整且符合 alpaca-py 语法。；程序未能核实所引原文与行号。"
+          },
+          "verification": {
+            "value": "pass",
+            "evidence": "提供了常见错误表（403, 429 等）及其解决方案，帮助用户验证调用是否成功及排查问题。"
+          }
+        },
+        "review_checks": {}
+      },
+      "skill_type": "reference",
+      "example_requests": [
+        "如何使用 Python 获取 AAPL 的历史日线数据？",
+        "Alpaca 免费数据源和付费数据源有什么区别？"
+      ],
+      "key_features": [
+        "支持股票、加密货币和期权数据",
+        "提供详细的 Python SDK 代码示例",
+        "明确区分免费 (IEX) 和付费 (SIP) 数据源限制"
+      ],
+      "main_category": {
+        "id": "finance",
+        "name": "金融与投资"
+      },
+      "tags": [
+        "市场数据",
+        "API",
+        "Python",
+        "Alpaca"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "alpaca-py",
+        "Python",
+        "Alpaca API Keys (for stocks)"
+      ],
+      "source_type": "community_list",
+      "status": "candidate",
+      "manual_pick": false,
+      "manual_note": null,
+      "snooze": null,
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "reason_codes": [
+        "QUALITY_BELOW_BAR",
+        "INSUFFICIENT_EVIDENCE"
+      ],
+      "limitations": "免费层仅支持 IEX 数据源（约 5 年历史，单一交易所），部分数据（如期权）可能需要特定权限或付费计划。",
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-26T14:47:28+08:00",
+      "content_changed_at": null,
+      "upstream_status": "ok",
+      "license": null
+    },
+    {
+      "skill_id": "gauss314/skills:skills/alpha-vantage/SKILL.md",
+      "name": "alpha-vantage",
+      "url": "https://github.com/gauss314/skills/blob/HEAD/skills/alpha-vantage/SKILL.md",
+      "author": "gauss314",
+      "summary_zh": "该技能封装了 Alpha Vantage 金融数据 API，用于获取股票、外汇、加密货币、技术指标及基本面数据。它提供了认证指南、速率限制说明、Python 代码示例及下载脚本，适用于需要程序化获取全球金融市场数据的开发者或分析师。",
+      "quality_summary": {
+        "review_status": "not_required",
+        "review_note": null,
+        "blocking_reasons": [
+          "初评：质量门槛未通过：verification: The skill includes expected JSON responses for errors (line 59-63) and code that prints specific output (line 164), allowing users to verify if the connection and data retrieval are working correctly.；程序未能核实所引原文与行号。",
+          "初评领域检查：The skill provides access to financial data (stocks, forex, crypto, indicators). It does not promise returns, does not perform live trading (only data download), and includes rate limit warnings which act as practical constraints. It distinguishes between free and premium data availability.；程序未能核实所引原文与行号。"
+        ],
+        "checks": {
+          "practical_value": {
+            "value": "pass",
+            "evidence": "The skill provides concrete, actionable code for fetching specific financial data points, which is highly useful for developers building trading bots, dashboards, or analysis tools. It goes beyond generic advice by providing exact API parameters and error handling tips."
+          },
+          "actionability": {
+            "value": "pass",
+            "evidence": "Steps are clear: get API key, use provided code snippets, or run referenced scripts. The code is copy-paste ready (with key substitution). Error messages are documented with solutions."
+          },
+          "verification": {
+            "value": "unknown",
+            "evidence": "The skill includes expected JSON responses for errors (line 59-63) and code that prints specific output (line 164), allowing users to verify if the connection and data retrieval are working correctly.；程序未能核实所引原文与行号。"
+          }
+        },
+        "review_checks": {}
+      },
+      "skill_type": "tool_script",
+      "example_requests": [
+        "使用 Python 获取 AAPL 的当前报价",
+        "下载 IBM 最近 100 天的每日 OHLCV 数据"
+      ],
+      "key_features": [
+        "支持股票、外汇、加密货币及技术指标数据获取",
+        "提供详细的免费与高级套餐速率限制及应对建议",
+        "包含可直接使用的 Python 代码示例及批量下载脚本"
+      ],
+      "main_category": {
+        "id": "finance",
+        "name": "金融与投资"
+      },
+      "tags": [
+        "Alpha Vantage",
+        "金融数据",
+        "API",
+        "Python",
+        "股票",
+        "加密货币"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "Python (requests library)",
+        "Alpha Vantage API Key"
+      ],
+      "source_type": "community_list",
+      "status": "candidate",
+      "manual_pick": false,
+      "manual_note": null,
+      "snooze": null,
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "reason_codes": [
+        "QUALITY_BELOW_BAR",
+        "INSUFFICIENT_EVIDENCE"
+      ],
+      "limitations": "受限于 Alpha Vantage 的免费套餐速率（25次/天，5次/分钟），部分高级数据（如日内数据、完整历史、内幕交易）需要付费订阅。",
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-26T14:51:32+08:00",
       "content_changed_at": null,
       "upstream_status": "ok",
       "license": null
