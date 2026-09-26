@@ -232,3 +232,55 @@ export function initSnoozedModal(elements, overridesState, getAllEntries, onUnsn
 
   return { openSnoozedModal, closeSnoozedModal, refreshList };
 }
+
+/**
+ * 初始化候选区二次确认弹窗控制器。
+ */
+export function initConfirmModal(elements) {
+  let pendingConfirmCallback = null;
+
+  function open(skillName, onConfirm) {
+    if (!elements.confirmModal) {
+      if (onConfirm) onConfirm();
+      return;
+    }
+    pendingConfirmCallback = onConfirm;
+    if (elements.confirmModalSkillName) {
+      elements.confirmModalSkillName.textContent = skillName || "";
+    }
+    elements.confirmModal.hidden = false;
+  }
+
+  function close() {
+    if (elements.confirmModal) {
+      elements.confirmModal.hidden = true;
+    }
+    pendingConfirmCallback = null;
+  }
+
+  if (elements.btnCancelConfirm) {
+    elements.btnCancelConfirm.addEventListener("click", close);
+  }
+  if (elements.btnCloseConfirmModal) {
+    elements.btnCloseConfirmModal.addEventListener("click", close);
+  }
+  if (elements.btnSubmitConfirm) {
+    elements.btnSubmitConfirm.addEventListener("click", () => {
+      const cb = pendingConfirmCallback;
+      close();
+      if (cb) cb();
+    });
+  }
+  if (elements.confirmModal) {
+    elements.confirmModal.addEventListener("click", e => {
+      if (e.target === elements.confirmModal) close();
+    });
+  }
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape" && elements.confirmModal && !elements.confirmModal.hidden) {
+      close();
+    }
+  });
+
+  return { open, close };
+}

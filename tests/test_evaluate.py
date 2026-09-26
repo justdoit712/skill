@@ -117,6 +117,25 @@ class NoLeakInSourceTest(unittest.TestCase):
 
 
 class ModelDiagnosticsTest(unittest.TestCase):
+    def test_length_is_non_retryable_sample_error_with_usage(self):
+        for content in (None, '{"partial":'):
+            with self.subTest(content=content):
+                usage = {"prompt_tokens": 120, "completion_tokens": 8000, "total_tokens": 8120,
+                         "completion_tokens_details": {"reasoning_tokens": 7000}}
+                response = Mock(status_code=200)
+                response.json.return_value = {"choices": [{"finish_reason": "length",
+                    "message": {"content": content}}], "usage": usage}
+                session = Mock()
+                session.post.return_value = response
+                result = call_model({"model": "test", "limits": {"max_output_tokens": 8000},
+                    "request": {"max_attempts": 6}}, "s", "u", api_key="fake", session=session)
+                self.assertFalse(result.ok)
+                self.assertTrue(result.is_sample_error)
+                self.assertEqual(result.reason_code, "LENGTH_EXCEEDED")
+                self.assertEqual(result.http_status, 200)
+                self.assertEqual(result.usage, usage)
+                self.assertEqual(session.post.call_count, 1)
+
     def test_network_exception_keeps_type_for_safe_logging(self):
         session = Mock()
         session.post.side_effect = requests.exceptions.ReadTimeout("sensitive response detail")

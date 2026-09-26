@@ -102,6 +102,108 @@ class LocalRunTest(unittest.TestCase):
         self.assertNotIn("test-secret-never-print", text)
         self.assertTrue(all(u.startswith("https://raw.githubusercontent.com/") for u in self.urls))
 
+    def length_result(self, usage=True):
+        return {"ok": False, "reason_code": "LENGTH_EXCEEDED", "evaluation": None,
+                "call": ModelCallResult(reason_code="LENGTH_EXCEEDED", is_sample_error=True,
+                    finish_reason="length", http_status=200, attempts=1,
+                    usage={"prompt_tokens": 80, "completion_tokens": 20, "total_tokens": 100,
+                           "completion_tokens_details": {"reasoning_tokens": 15}} if usage else {})}
+
+    def test_five_length_skips_continue_to_target_and_survive_restart_and_refresh(self):
+        self.settings['max_retries'] = 5
+        attempts = []
+        def mixed(candidate, text, **kwargs):
+            attempts.append(candidate.skill_id)
+            if len(attempts) <= 5:
+                return self.length_result()
+            return self.evaluate(candidate, text, **kwargs)
+        report = self.collect(count=7, evaluate_fn=mixed)
+        self.assertEqual(report['stop_reason'], 'target_reached')
+        self.assertEqual(len(attempts), 7)
+        self.assertEqual(report['skipped_length_exceeded'], 5)
+        self.assertEqual(report['failed_requests'], 0)
+        self.assertEqual(report['failed_evaluations'], 0)
+        self.assertEqual(report['usage']['total_tokens'], 700)
+        self.assertEqual(report['usage']['reasoning_tokens'], 75)
+        self.assertEqual(report['calls'][0]['status'], 'length_exceeded')
+        self.assertFalse(any('请求失败' in line or '重连 ' in line for line in self.logs))
+        self.assertEqual(sum('[自动跳过]' in line for line in self.logs), 5)
+        markdown = Path(report['report_path']).with_suffix('.md').read_text(encoding='utf-8')
+        self.assertIn('超长跳过候选：5 条', markdown)
+        pool_file = self.root / 'data/local/pool.json'
+        pool = json.loads(pool_file.read_text(encoding='utf-8'))
+        self.assertEqual(pool['stats']['length_exceeded'], 5)
+        def no_more_calls(*args, **kwargs):
+            self.fail('terminal candidates must not be evaluated again')
+        self.collect(count=7, evaluate_fn=no_more_calls)
+        # 模拟账本已记录截断、池终态尚未保存就中断。
+        pool['candidates'][0]['status'] = 'pending'
+        pool_file.write_text(json.dumps(pool), encoding='utf-8')
+        recovered = self.collect(count=7, evaluate_fn=no_more_calls)
+        self.assertEqual(recovered['skipped_length_exceeded'], 1)
+        pool = json.loads(pool_file.read_text(encoding='utf-8'))
+        pool['built_at'] = '2000-01-01T00:00:00+08:00'
+        pool_file.write_text(json.dumps(pool), encoding='utf-8')
+        self.collect(count=7, evaluate_fn=no_more_calls)
+        self.settings['refresh_pool'] = True
+        self.collect(count=7, evaluate_fn=no_more_calls)
+        pool = json.loads(pool_file.read_text(encoding='utf-8'))
+        self.assertEqual(pool['stats']['length_exceeded'], 5)
+
+    def test_length_still_respects_budget_and_unknown_usage(self):
+        self.settings['max_total_tokens'] = 100
+        report = self.collect(evaluate_fn=lambda *a, **k: self.length_result())
+        self.assertEqual(report['stop_reason'], 'token_limit')
+        self.assertEqual(report['evaluations'], 1)
+        self.assertEqual(report['skipped_length_exceeded'], 1)
+        self.settings['max_total_tokens'] = 100000
+        report = self.collect(evaluate_fn=lambda *a, **k: self.length_result(usage=False))
+        self.assertEqual(report['stop_reason'], 'usage_unknown')
+        self.assertEqual(report['evaluations'], 1)
+        self.assertEqual(report['skipped_length_exceeded'], 1)
+
+    def test_length_resets_failure_streak_but_real_failures_still_stop(self):
+        attempts = []
+        def mixed(*args, **kwargs):
+            attempts.append(1)
+            if len(attempts) == 3:
+                return self.length_result()
+            result = self.length_result()
+            result['reason_code'] = 'MODEL_ERROR'
+            result['call'].reason_code = 'MODEL_ERROR'
+            result['call'].is_sample_error = False
+            return result
+        report = self.collect(count=8, evaluate_fn=mixed)
+        self.assertEqual(report['stop_reason'], 'model_failures')
+        self.assertEqual(len(attempts), 6)
+        self.assertEqual(report['skipped_length_exceeded'], 1)
+        self.assertEqual(report['failed_evaluations'], 5)
+
+    def test_review_length_counts_both_calls_and_continues(self):
+        from unittest.mock import patch
+        from src.catalog.evaluation import evaluate
+        from tests.test_catalog_quality import TEXT, assessment, response
+        self.settings['target_recommended'] = 1
+        raw = assessment(self.cfg['rules'])
+        def fetch(url, **kwargs):
+            return FetchResult(url=url, ok=True, text=TEXT)
+        responses = [response(raw), self.length_result()['call'], response(raw), response(raw)]
+        with patch('src.catalog.evaluation.call_model', side_effect=responses) as model:
+            report = self.collect(count=2, evaluate_fn=evaluate, fetch_fn=fetch)
+        self.assertEqual(model.call_count, 4)
+        self.assertEqual(report['stop_reason'], 'target_reached')
+        self.assertEqual(report['skipped_length_exceeded'], 1)
+        self.assertEqual(report['usage']['total_tokens'], 400)
+        self.assertEqual(report['usage']['requests'], 4)
+        self.assertEqual(report['calls'][1]['stage'], 'review')
+        self.assertEqual(report['calls'][1]['status'], 'length_exceeded')
+        records = [json.loads(p.read_text(encoding='utf-8'))
+                   for p in (self.root / 'data/local/state/evaluations').glob('*.json')]
+        failed = next(r for r in records if r['status'] == 'failed')
+        self.assertEqual(len(failed['requests']), 2)
+        self.assertEqual(failed['requests'][1]['reason_code'], 'LENGTH_EXCEEDED')
+        self.assertFalse(failed['retryable'])
+
     def test_token_limit_stops_following_request(self):
         self.settings.update(target_recommended=5, max_total_tokens=150)
         report = self.collect()

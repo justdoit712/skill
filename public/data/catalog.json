@@ -1,14 +1,14 @@
 {
   "catalog_version": "1.0.0",
-  "generated_at": "2026-09-26T10:02:59.735905+08:00",
+  "generated_at": "2026-09-26T10:06:18.483816+08:00",
   "rules_version": "1.1.0",
   "counts": {
     "recommended": 42,
-    "candidate": 20,
+    "candidate": 21,
     "manual": 25,
     "pending": 0,
     "processing_failure": 0,
-    "total_evaluated": 87,
+    "total_evaluated": 88,
     "owned": 5,
     "owned_in_catalog": 5
   },
@@ -27,7 +27,7 @@
     },
     {
       "id": "dev",
-      "count": 50
+      "count": 51
     },
     {
       "id": "docs",
@@ -4986,6 +4986,81 @@
       "limitations": "详细构建、特性集成与排错步骤位于 references/brownfield-isolated.md、brownfield-integrated.md、feature-integration.md、comparison.md、troubleshooting.md、version-compatibility.md，本次材料未提供这些文件，其内容无法验证；本材料本身仅为选型与流程性指引。",
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-26T10:02:59.735905+08:00",
+      "content_changed_at": null,
+      "upstream_status": "ok",
+      "license": null
+    },
+    {
+      "skill_id": "expo/skills:plugins/expo/skills/expo-dev-client/SKILL.md",
+      "name": "expo-dev-client",
+      "url": "https://github.com/expo/skills/blob/HEAD/plugins/expo/skills/expo-dev-client/SKILL.md",
+      "author": "expo",
+      "summary_zh": "指导使用 EAS Build 在本地或云端构建 Expo 开发客户端（dev client），并提交到 TestFlight 供内测，涵盖 eas.json 配置、构建/安装命令、构建状态查询与故障排查。适用于需要在真机测试自定义原生模块或原生改动时的移动端开发场景。",
+      "quality_summary": {
+        "review_status": "not_required",
+        "review_note": null,
+        "blocking_reasons": [
+          "初评：正文标注了 iOS 本地构建需要 Xcode、EAS CLI 版本要求、Apple Developer 付费账号与 EAS 计划构建分钟等前提，未把平台兼容性或依赖夸大为无前提。；程序未能核实所引原文与行号。"
+        ],
+        "checks": {
+          "practical_value": {
+            "value": "pass",
+            "evidence": "给出可直接采用的 eas.json development profile 字段组合与整套构建/安装/查询命令，较泛泛提示词多出可落地的配置与操作产出物（.ipa/.apk/.aab、TestFlight 内测包）。"
+          },
+          "actionability": {
+            "value": "pass",
+            "evidence": "步骤具体：构建、解包、模拟器/真机/Android 安装命令齐全，并给出 Metro 启动与连接方式，可直接照做。"
+          },
+          "verification": {
+            "value": "pass",
+            "evidence": "提供可检查的输出与状态查询方式：本地构建产物类型、TestFlight 邮件通知、eas build:list / build:view 查询，以及针对签名失败、缓存、CLI 版本的故障处理命令。"
+          }
+        },
+        "review_checks": {}
+      },
+      "skill_type": "guideline",
+      "example_requests": [
+        "本地构建 iOS 开发客户端并在模拟器安装",
+        "把 Android 开发客户端构建好并用 adb 安装"
+      ],
+      "key_features": [
+        "提供 eas.json development profile 配置示例与关键字段说明",
+        "覆盖本地与云端构建、TestFlight 提交与设备安装命令",
+        "含构建状态查询与签名/缓存/CLI 版本故障排查"
+      ],
+      "main_category": {
+        "id": "dev",
+        "name": "编程开发"
+      },
+      "tags": [
+        "Expo",
+        "EAS Build",
+        "开发客户端",
+        "TestFlight",
+        "移动端构建"
+      ],
+      "platform_declared": "iOS、Android",
+      "dependencies_declared": [
+        "EAS CLI（cli.version >= 16.0.1）",
+        "Xcode（iOS 本地构建）",
+        "Apple Developer 付费账号（设备/TestFlight 分发）",
+        "EAS 计划构建分钟（云端构建付费）",
+        "adb、ideviceinstaller（本地安装调试）"
+      ],
+      "source_type": "official",
+      "status": "candidate",
+      "manual_pick": false,
+      "manual_note": null,
+      "snooze": null,
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "reason_codes": [
+        "INSUFFICIENT_EVIDENCE"
+      ],
+      "limitations": "仅覆盖开发客户端（dev client）的构建与内测分发，生产 TestFlight 发布与商店提审需另用 eas-app-stores 技能；云端构建需付费 EAS 计划与付费 Apple 开发者账号；反馈渠道依赖 npx 执行外部 npm 包。",
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-26T10:06:18.483816+08:00",
       "content_changed_at": null,
       "upstream_status": "ok",
       "license": null

@@ -17,3 +17,106 @@ test("quality rationale and review disagreement are visible and escaped", () => 
   assert.ok(html.includes("&lt;script&gt;"));
   assert.ok(!html.includes("<script>"));
 });
+
+import { renderCatalogList } from "../../public/js/catalog-view.js";
+import { initConfirmModal } from "../../public/js/modals.js";
+import { createOverridesState } from "../../public/js/catalog-state.js";
+
+class Element {
+  constructor() {
+    this.children = [];
+    this.html = "";
+    this.listeners = {};
+    this.hidden = true;
+    this.textContent = "";
+  }
+  set innerHTML(value) { this.html = value; this.children = []; }
+  get innerHTML() { return this.html; }
+  appendChild(child) { this.children.push(child); }
+  addEventListener(event, fn) {
+    if (!this.listeners[event]) this.listeners[event] = [];
+    this.listeners[event].push(fn);
+  }
+  trigger(event, data = {}) {
+    (this.listeners[event] || []).forEach(fn => fn(data));
+  }
+  output() { return this.html + this.children.map(child => child.output()).join(""); }
+}
+
+test("catalog-view: action buttons partitioned correctly across tabs", () => {
+  const prevDoc = globalThis.document;
+  globalThis.document = { createElement: () => new Element() };
+  try {
+    const entry = { skill_id: "test:skill", name: "test-skill", url: "https://example.com" };
+    const overridesState = createOverridesState();
+
+    // 1. Manual tab: has owned button, directly without data-need-confirm
+    const containerManual = new Element();
+    renderCatalogList(containerManual, [entry], overridesState, "manual");
+    const htmlManual = containerManual.output();
+    assert.ok(htmlManual.includes('class="btn-action btn-owned"'));
+    assert.ok(!htmlManual.includes('data-need-confirm="true"'));
+
+    // 2. Candidate tab: has owned button, WITH data-need-confirm="true"
+    const containerCandidate = new Element();
+    renderCatalogList(containerCandidate, [entry], overridesState, "candidate");
+    const htmlCandidate = containerCandidate.output();
+    assert.ok(htmlCandidate.includes('class="btn-action btn-owned"'));
+    assert.ok(htmlCandidate.includes('data-need-confirm="true"'));
+
+    // 3. Recommended tab: DOES NOT have owned button
+    const containerRec = new Element();
+    renderCatalogList(containerRec, [entry], overridesState, "recommended");
+    const htmlRec = containerRec.output();
+    assert.ok(!htmlRec.includes('class="btn-action btn-owned"'));
+  } finally {
+    globalThis.document = prevDoc;
+  }
+});
+
+test("modals: initConfirmModal handles open, cancel, and confirm flow", () => {
+  const prevDoc = globalThis.document;
+  const docListeners = {};
+  globalThis.document = {
+    addEventListener: (event, fn) => {
+      if (!docListeners[event]) docListeners[event] = [];
+      docListeners[event].push(fn);
+    }
+  };
+
+  try {
+    const elements = {
+      confirmModal: new Element(),
+      confirmModalSkillName: new Element(),
+      btnCancelConfirm: new Element(),
+      btnSubmitConfirm: new Element(),
+      btnCloseConfirmModal: new Element()
+    };
+
+    const controller = initConfirmModal(elements);
+    let confirmed = false;
+
+    // Test open
+    controller.open("my-awesome-skill", () => {
+      confirmed = true;
+    });
+    assert.equal(elements.confirmModal.hidden, false);
+    assert.equal(elements.confirmModalSkillName.textContent, "my-awesome-skill");
+
+    // Test cancel
+    elements.btnCancelConfirm.trigger("click");
+    assert.equal(elements.confirmModal.hidden, true);
+    assert.equal(confirmed, false);
+
+    // Test open again and confirm
+    controller.open("my-awesome-skill", () => {
+      confirmed = true;
+    });
+    assert.equal(elements.confirmModal.hidden, false);
+    elements.btnSubmitConfirm.trigger("click");
+    assert.equal(elements.confirmModal.hidden, true);
+    assert.equal(confirmed, true);
+  } finally {
+    globalThis.document = prevDoc;
+  }
+});

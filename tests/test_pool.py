@@ -89,6 +89,8 @@ class PoolTest(unittest.TestCase):
                 "excluded": 0,
                 "fetch_failed": 0,
                 "not_skill": 0,
+                "length_exceeded": 0,
+                "length_exceeded": 0,
             },
         )
 
@@ -131,6 +133,8 @@ class PoolTest(unittest.TestCase):
                 "excluded": 1,
                 "fetch_failed": 1,
                 "not_skill": 1,
+                "length_exceeded": 0,
+                "length_exceeded": 0,
             },
         )
 

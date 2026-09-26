@@ -16,7 +16,7 @@ import {
 } from "./catalog-state.js";
 import { renderCatalogList } from "./catalog-view.js";
 import { renderFindView } from "./find-view.js";
-import { updateSyncBar, initSyncModal, initSnoozedModal } from "./modals.js";
+import { updateSyncBar, initSyncModal, initSnoozedModal, initConfirmModal } from "./modals.js";
 import {
   createOwnedState,
   loadOwnedStagedStorage,
@@ -96,7 +96,12 @@ const el = {
   privateSkillIdDisplay: document.getElementById("private-skill-id-display"),
   privateManagedUrl: document.getElementById("private-managed-url"),
   privateNote: document.getElementById("private-note"),
-  privateUrlError: document.getElementById("private-url-error")
+  privateUrlError: document.getElementById("private-url-error"),
+  confirmModal: document.getElementById("confirm-modal"),
+  confirmModalSkillName: document.getElementById("confirm-modal-skill-name"),
+  btnCloseConfirmModal: document.getElementById("btn-close-confirm-modal"),
+  btnCancelConfirm: document.getElementById("btn-cancel-confirm"),
+  btnSubmitConfirm: document.getElementById("btn-submit-confirm")
 };
 
 /**
@@ -249,6 +254,32 @@ if (el.tabFind) el.tabFind.addEventListener("click", () => setTab("find"));
 // 初始化私人详情与备份控制器
 const privateModalController = initPrivateDetailsModal(el, ownedState, () => apply());
 initPrivateBackup(el, ownedState, () => apply());
+const confirmModalController = initConfirmModal(el);
+
+function executeMarkOwned(sid, skillName, sourceUrl, fromWhere, card) {
+  markOwned(ownedState, {
+    skill_id: sid,
+    name: skillName,
+    source_url: sourceUrl,
+    original_partition: fromWhere
+  });
+  saveOwnedStagedStorage(ownedState);
+
+  if (card) {
+    card.classList.add("is-dismissing");
+    setTimeout(() => apply(), 250);
+  } else {
+    apply();
+  }
+
+  showToast("已将「" + skillName + "」标记为已收录", {
+    onUndo: () => {
+      unmarkOwned(ownedState, sid);
+      saveOwnedStagedStorage(ownedState);
+      apply();
+    }
+  });
+}
 
 // 列表卡片按钮委托
 el.list.addEventListener("click", e => {
@@ -287,30 +318,16 @@ el.list.addEventListener("click", e => {
     const skillName = btn.getAttribute("data-name") || (entry && entry.name) || sid;
     const sourceUrl = btn.getAttribute("data-url") || (entry && (entry.url || entry.repo_url)) || null;
     const fromWhere = btn.getAttribute("data-from") || (entry && entry._baselineTab) || (state.tab === "find" ? "find" : (state.tab || "candidate"));
-
-    markOwned(ownedState, {
-      skill_id: sid,
-      name: skillName,
-      source_url: sourceUrl,
-      original_partition: fromWhere
-    });
-    saveOwnedStagedStorage(ownedState);
-
     const card = btn.closest(".card");
-    if (card) {
-      card.classList.add("is-dismissing");
-      setTimeout(() => apply(), 250);
-    } else {
-      apply();
-    }
 
-    showToast("已将「" + skillName + "」标记为已收录", {
-      onUndo: () => {
-        unmarkOwned(ownedState, sid);
-        saveOwnedStagedStorage(ownedState);
-        apply();
-      }
-    });
+    const needConfirm = state.tab === "candidate" || btn.getAttribute("data-need-confirm") === "true";
+    if (needConfirm && confirmModalController) {
+      confirmModalController.open(skillName, () => {
+        executeMarkOwned(sid, skillName, sourceUrl, fromWhere, card);
+      });
+    } else {
+      executeMarkOwned(sid, skillName, sourceUrl, fromWhere, card);
+    }
   } else if (action === "unmark-owned") {
     unmarkOwned(ownedState, sid);
     saveOwnedStagedStorage(ownedState);

@@ -32,6 +32,7 @@ DEFAULT_MAX_ATTEMPTS = 2
 RETRYABLE_STATUS = frozenset({408, 429, 500, 502, 503, 504})
 REASON_MODEL_ERROR = "MODEL_ERROR"
 REASON_NETWORK_ERROR = "NETWORK_ERROR"
+REASON_LENGTH_EXCEEDED = "LENGTH_EXCEEDED"
 
 
 @dataclass
@@ -51,6 +52,7 @@ class ModelCallResult:
     # 可安全持久化的诊断字段；不包含服务端正文、请求 URL 或认证头。
     error_type: str | None = None
     http_status: int | None = None
+    is_sample_error: bool = False
 
     @property
     def reasoning_tokens(self) -> int:
@@ -193,7 +195,8 @@ def call_model(
             if result.finish_reason == "length":
                 # 推理 token 与正文共用 max_tokens，额度不足时 content 可能为空且不报错
                 result.ok = False
-                result.reason_code = REASON_MODEL_ERROR
+                result.reason_code = REASON_LENGTH_EXCEEDED
+                result.is_sample_error = True
                 result.error = (
                     f"输出被截断（finish_reason=length，max_tokens={max_output_tokens}，"
                     f"reasoning_tokens={result.reasoning_tokens}）"

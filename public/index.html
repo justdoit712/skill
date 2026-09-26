@@ -181,6 +181,33 @@
   </div>
 </div>
 
+<!-- 候选区收录二次确认弹窗 -->
+<div id="confirm-modal" class="modal-overlay" hidden>
+  <div class="modal-content" role="dialog" aria-labelledby="confirm-modal-title" aria-modal="true" style="max-width: 480px;">
+    <div class="modal-head">
+      <h3 id="confirm-modal-title">确认标记为已收录？</h3>
+      <button id="btn-close-confirm-modal" class="modal-close" aria-label="关闭">&times;</button>
+    </div>
+    <div class="modal-body">
+      <p id="confirm-modal-desc" style="font-size: 14px; color: var(--text); margin-bottom: 12px; line-height: 1.6;">
+        确定将候选区技能<strong>「<span id="confirm-modal-skill-name"></span>」</strong>标记为已收录吗？
+      </p>
+      <div style="background: #fffbeb; border: 1px solid #fef3c7; border-radius: 6px; padding: 10px 12px; font-size: 12px; color: #92400e; line-height: 1.5; margin-bottom: 12px;">
+        ⚠️ <strong>提示：</strong>该条目目前位于<strong>候选区</strong>（可能尚未经深度复核或评估存在分歧）。标记为已收录后：
+        <ul style="margin: 6px 0 0 16px; padding: 0;">
+          <li>将从公开目录与定向查找中立即隐藏；</li>
+          <li>本地维护及流水线运行时将 0 Token 跳过评估；</li>
+          <li>将加入待同步的已收录名单（可在顶部浮动栏或已收录视图中导出）。</li>
+        </ul>
+      </div>
+    </div>
+    <div class="modal-actions" style="display:flex; justify-content:flex-end; gap:8px;">
+      <button id="btn-cancel-confirm" class="btn-secondary">取消</button>
+      <button id="btn-submit-confirm" class="btn-primary" style="background:#16a34a; border-color:#16a34a; color:#fff;">确认收录</button>
+    </div>
+  </div>
+</div>
+
 <input type="file" id="private-backup-file-input" accept=".json,application/json" style="display:none;">
 <div id="toast-container" class="toast-container" aria-live="polite"></div>
 

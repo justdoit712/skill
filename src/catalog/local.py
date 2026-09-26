@@ -41,6 +41,7 @@ from .entry_state import (
 )
 from .evaluation import RETRYABLE_STATUS, build_prompt, evaluate, evaluation_id, resolve_api_key
 from src.infra.http import fetch_text
+from src.infra.llm import REASON_LENGTH_EXCEEDED
 from src.shared.usage import UsageTotals
 from .index import CatalogContext, build_catalog, build_entry, index_by_id
 from .store import mutate_catalog
@@ -51,6 +52,7 @@ from .pool import (
     STATUS_EXCLUDED as POOL_STATUS_EXCLUDED,
     STATUS_FETCH_FAILED,
     STATUS_NOT_SKILL,
+    STATUS_LENGTH_EXCEEDED,
     STATUS_PENDING as POOL_STATUS_PENDING,
     append_new_candidates,
     create_pool_from_candidates,
@@ -145,6 +147,9 @@ def prepare_pool(
     watermark = settings.get("pool_watermark", 20)
     max_age_days = settings.get("pool_max_age_days", 7)
     pool = None
+    previous_pool = load_pool(pool_path)
+    length_skips = {it.candidate.skill_id: it for it in previous_pool.items
+                    if it.status == STATUS_LENGTH_EXCEEDED} if previous_pool else {}
 
     def count_actionable(p) -> int:
         return sum(
@@ -157,7 +162,7 @@ def prepare_pool(
         )
 
     if not force_refresh:
-        pool = load_pool(pool_path)
+        pool = previous_pool
         if pool is not None and is_pool_expired(pool, max_age_days=max_age_days):
             log(f"本地候选池已超过 {max_age_days} 天有效期，重新运行发现并重建候选池...")
             pool = None
@@ -179,9 +184,16 @@ def prepare_pool(
         )
         if report is not None:
             report["discovery_failures"] = sum(not item.ok for item in outcomes)
-        pool = create_pool_from_candidates(candidates, old_recommended, cfg["source_types"])
+        pool = create_pool_from_candidates(
+            list(candidates) + [it.candidate for it in length_skips.values()],
+            old_recommended, cfg["source_types"])
+        for item in pool.items:
+            previous_skip = length_skips.get(item.candidate.skill_id)
+            if previous_skip:
+                update_candidate_status(pool, item.seq, STATUS_LENGTH_EXCEEDED,
+                                        checked_at=previous_skip.checked_at)
         save_pool(pool_path, pool)
-        log(f"候选池已构建并保存至 {pool_path}，共 {len(pool)} 条候选（全部待处理）。")
+        log(f"候选池已构建并保存至 {pool_path}，共 {len(pool)} 条候选，待处理 {pool.pending_count} 条。")
     else:
         actionable_count = count_actionable(pool)
         pending_count = pool.pending_count
@@ -311,6 +323,7 @@ def save_and_render(
         )
     if report.get("skipped_owned"):
         lines.append(f"- 已收录跳过：{report['skipped_owned']}")
+    lines.append(f"- 超长跳过候选：{report.get('skipped_length_exceeded', 0)} 条（超过单条输出 Token 上限）")
     lines.extend([
         f"- 本次新增推荐：{report['new_recommended']} / {settings['target_recommended']}",
         f"- 评估次数：{report['evaluations']}；复用已有评估：{report['cached']}",
@@ -475,6 +488,9 @@ def _evaluate_with_retries(state, candidate, text, eid, record):
             state.active_call['diagnostics'] = {'error_type': getattr(request_call, 'error_type', None),
                 'http_status': getattr(request_call, 'http_status', None), 'latency_ms': getattr(request_call, 'latency_ms', None)}
             state.active_call['status'] = 'completed' if request_call.ok else 'failed'
+            if getattr(request_call, 'reason_code', None) == REASON_LENGTH_EXCEEDED:
+                state.active_call.update(status=STATUS_LENGTH_EXCEEDED,
+                                         reason_code=REASON_LENGTH_EXCEEDED, is_sample_error=True)
             checkpoint = state.ledger.get(eid)
             checkpoint['requests'][-1] = dict(state.active_call)
             state.ledger.save_record(eid, checkpoint)
@@ -493,7 +509,9 @@ def _evaluate_with_retries(state, candidate, text, eid, record):
             state.report['unknown_usage_reserved_tokens'] += reserved_tokens
             state.active_call['unknown_usage_reserved_tokens'] = reserved_tokens
             state.active_call['diagnostics'] = {'error_type': getattr(call, 'error_type', None), 'http_status': getattr(call, 'http_status', None), 'latency_ms': getattr(call, 'latency_ms', None)}
-        state.active_call['status'] = 'completed' if result['ok'] else 'failed'
+        state.active_call['status'] = (STATUS_LENGTH_EXCEEDED
+            if result.get('reason_code') == REASON_LENGTH_EXCEEDED
+            else 'completed' if result['ok'] else 'failed')
         state.save()
         if result.get('pending_evaluation'):
             checkpoint = state.ledger.get(eid)
@@ -521,6 +539,11 @@ def _evaluate_with_retries(state, candidate, text, eid, record):
         state.ledger.save_record(eid, failure_record)
         state.active_eid = None
         state.active_call['reason_code'] = code
+        if code == REASON_LENGTH_EXCEEDED:
+            state.active_call['status'] = STATUS_LENGTH_EXCEEDED
+            state.active_call['is_sample_error'] = True
+            state.save()
+            break
         state.report['failed_requests'] += 1
         state.save()
         state.log(f'请求失败：{candidate.name}；{message}。')
@@ -602,6 +625,13 @@ def process_candidate(state, item):
         save_pool(state.pool_path, state.pool)
         state.save()
         return True
+    if (record.get('error') or {}).get('reason_code') == REASON_LENGTH_EXCEEDED:
+        # 账本已落盘而候选池写入前中断时，补齐终态，不再付费重试。
+        update_candidate_status(state.pool, seq, STATUS_LENGTH_EXCEEDED)
+        save_pool(state.pool_path, state.pool)
+        state.report['skipped_length_exceeded'] += 1
+        state.save()
+        return True
     resumable_failure = bool(local_record and record.get('status') == 'failed' and ((record.get('error') or {}).get('reason_code') == 'NETWORK_ERROR' or record.get('retryable')) and (int(record.get('attempts') or 0) < state.max_attempts))
     if record.get('status') in ('failed', 'in_progress', 'needs_recovery') and (not resumable_failure):
         state.report['blocked_records'] += 1
@@ -631,6 +661,13 @@ def process_candidate(state, item):
         state.consecutive_failures = 0
         update_candidate_status(state.pool, seq, STATUS_DONE)
         save_pool(state.pool_path, state.pool)
+    elif result.get('reason_code') == REASON_LENGTH_EXCEEDED:
+        update_candidate_status(state.pool, seq, STATUS_LENGTH_EXCEEDED)
+        save_pool(state.pool_path, state.pool)
+        state.consecutive_failures = 0
+        state.report['skipped_length_exceeded'] += 1
+        limit = state.cfg['model'].get('limits', {}).get('max_output_tokens', 4000)
+        state.log(f"[自动跳过] {candidate.name}：模型输出达到上限（{limit} Token），已标记超长跳过。")
     elif not result.get('pending_evaluation'):
         state.report['failed_evaluations'] += 1
         state.consecutive_failures += 1
@@ -664,7 +701,7 @@ def _collect(root, local, settings, cfg, discover_fn, fetch_fn, evaluate_fn, log
     owned_cfg = cfg.get('owned') or {}
     owned_ids = {it['skill_id'] for it in owned_cfg.get('items', [])}
     skipped_owned_ids = set()
-    report = {'run_id': run_id, 'started_at': now_local().isoformat(), 'status': 'running', 'model': cfg['model']['model'], 'settings': settings, 'discovered': 0, 'checked': 0, 'evaluations': 0, 'cached': 0, 'fetch_failed': 0, 'prescreen_excluded': 0, 'not_skill_files': 0, 'blocked_records': 0, 'failed_evaluations': 0, 'new_recommended': 0, 'failed_requests': 0, 'unknown_usage_reserved_tokens': 0, 'skipped_owned': 0, 'recommendations': [], 'calls': [], 'stop_reason': None, 'report_path': str(run_dir / 'report.json')}
+    report = {'run_id': run_id, 'started_at': now_local().isoformat(), 'status': 'running', 'model': cfg['model']['model'], 'settings': settings, 'discovered': 0, 'checked': 0, 'evaluations': 0, 'cached': 0, 'fetch_failed': 0, 'prescreen_excluded': 0, 'not_skill_files': 0, 'blocked_records': 0, 'failed_evaluations': 0, 'new_recommended': 0, 'failed_requests': 0, 'unknown_usage_reserved_tokens': 0, 'skipped_owned': 0, 'skipped_length_exceeded': 0, 'recommendations': [], 'calls': [], 'stop_reason': None, 'report_path': str(run_dir / 'report.json')}
     ledger = BudgetLedger.load(local / 'state', cap=1, max_attempts=max_attempts)
     ledger.rollover()
     ledger.mark_in_progress_as_needs_recovery()

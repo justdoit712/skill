@@ -2,7 +2,7 @@
 
 本地运行每次完整搜索需调用上百次 GitHub API 并展开数十个仓库（耗时十余分钟且易限流）。
 本模块将初次发现的候选名单冻结在 data/local/pool.json 中，为每个候选赋予唯一 seq 序号，
-并记录处理状态（pending / done / excluded / fetch_failed / not_skill）。
+并记录处理状态（pending / done / excluded / fetch_failed / not_skill / length_exceeded）。
 
 下次启动时：
 - 若池中待处理候选充足（>= 水位线），直接跳过网络搜索（0.1s 秒级启动）；
@@ -27,6 +27,7 @@ STATUS_DONE = "done"
 STATUS_EXCLUDED = "excluded"
 STATUS_FETCH_FAILED = "fetch_failed"
 STATUS_NOT_SKILL = "not_skill"
+STATUS_LENGTH_EXCEEDED = "length_exceeded"
 
 VALID_STATUSES = {
     STATUS_PENDING,
@@ -34,6 +35,7 @@ VALID_STATUSES = {
     STATUS_EXCLUDED,
     STATUS_FETCH_FAILED,
     STATUS_NOT_SKILL,
+    STATUS_LENGTH_EXCEEDED,
 }
 
 
@@ -64,6 +66,7 @@ class CandidatePool:
             "excluded": 0,
             "fetch_failed": 0,
             "not_skill": 0,
+            "length_exceeded": 0,
         }
         for item in self.items:
             counts[item.status] = counts.get(item.status, 0) + 1
