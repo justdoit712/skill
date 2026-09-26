@@ -11,7 +11,7 @@ from __future__ import annotations
 
 import argparse
 from copy import deepcopy
-from dataclasses import dataclass, asdict
+from dataclasses import dataclass, asdict, field
 import json
 import os
 from pathlib import Path
@@ -65,19 +65,35 @@ from .pool import (
 )
 from .prescreen import prescreen
 from .report import build_report, write_report
-
-
-STOP_LABELS = {
-    "target_reached": "已达到本次新增推荐目标",
-    "token_limit": "已达到本次 Token 上限",
-    "evaluation_limit": "已达到本次评估次数上限",
-    "candidates_exhausted": "本轮发现的候选已处理完，未达到推荐目标",
-    "usage_unknown": "接口用量缺失或请求结果不明，停止后续付费调用",
-    "model_failures": "模型连续失败，停止后续付费调用",
-    "retry_exhausted": "模型重连次数已用尽，停止后续付费调用",
-    "interrupted": "用户中断；已收到的用量和结果已保存",
-    "error": "运行异常；已收到的用量和结果已保存",
-}
+from .failure_policy import (
+    ACTION_BLOCKED,
+    ACTION_DONE,
+    ACTION_LENGTH_EXCEEDED,
+    ACTION_RETRY,
+    ERROR_KIND_OUTPUT_JSON_INVALID,
+    ERROR_KIND_OUTPUT_SCHEMA_INVALID,
+    ERROR_KIND_RESUME_STATE_INVALID,
+    REASON_ACCESS_DENIED,
+    REASON_REQUEST_CONFIG_ERROR,
+    REASON_RESUME_STATE_INVALID,
+    STOP_ACCESS_DENIED,
+    STOP_CANDIDATES_EXHAUSTED,
+    STOP_EVALUATION_LIMIT,
+    STOP_FORMAT_FAILURES,
+    STOP_INTERRUPTED,
+    STOP_LABELS,
+    STOP_MODEL_FAILURES,
+    STOP_REQUEST_CONFIG_ERROR,
+    STOP_RESUME_STATE_INVALID,
+    STOP_RETRY_EXHAUSTED,
+    STOP_STORAGE_ERROR,
+    STOP_TARGET_REACHED,
+    STOP_TOKEN_LIMIT,
+    STOP_USAGE_UNKNOWN,
+    classify_result,
+    resolve_primary_stop_reason,
+    update_failure_counters,
+)
 
 
 def _read(path: Path, default=None):
@@ -92,6 +108,9 @@ def _valid_settings(settings: dict) -> None:
         value = settings.get(name)
         if isinstance(value, bool) or not isinstance(value, int) or value < 1:
             raise ValueError(f"{name} 必须是正整数")
+    format_limit = settings.get("max_format_failures_without_valid_result", 10)
+    if isinstance(format_limit, bool) or not isinstance(format_limit, int) or format_limit < 1:
+        raise ValueError("max_format_failures_without_valid_result 必须是正整数")
     for name in ("max_evaluations", "limit_queries", "expand_limit"):
         value = settings.get(name)
         minimum = 0 if name == "limit_queries" else 1
@@ -441,6 +460,9 @@ class LocalCollection:
     pending_items: Any
     owned_ids: Any
     skipped_owned_ids: Any
+    format_failures: int = 0
+    max_format_failures: int = 10
+    stop_causes: set = field(default_factory=set)
 
     def save(self):
         save_and_render(self.run_dir, self.local, self.report, self.pool, self.usage,
@@ -461,7 +483,8 @@ def _evaluate_with_retries(state, candidate, text, eid, record):
     initial_attempts = int(record.get('attempts') or 0)
     for index in range(initial_attempts, attempt_limit):
         if state.report['budget_tokens'] >= state.settings['max_total_tokens']:
-            state.report['stop_reason'] = 'token_limit'
+            state.stop_causes.add(STOP_TOKEN_LIMIT)
+            state.report['stop_reason'] = resolve_primary_stop_reason(state.stop_causes)
             break
         if index and (not record.get('pending_evaluation') or index > initial_attempts):
             delay = min(2 ** (index - 1), 8)
@@ -478,7 +501,8 @@ def _evaluate_with_retries(state, candidate, text, eid, record):
             if event == 'before':
                 if stage == 'review':
                     if state.report['budget_tokens'] >= state.settings['max_total_tokens']:
-                        state.report['stop_reason'] = 'token_limit'
+                        state.stop_causes.add(STOP_TOKEN_LIMIT)
+                        state.report['stop_reason'] = resolve_primary_stop_reason(state.stop_causes)
                         return False
                     if observed:
                         state.active_call = {'skill_id': candidate.skill_id, 'attempt': attempt,
@@ -506,12 +530,13 @@ def _evaluate_with_retries(state, candidate, text, eid, record):
             state.ledger.save_record(eid, checkpoint)
             observed.append(request_call)
             if state.active_call['usage']['total_tokens'] is None:
-                state.report['stop_reason'] = 'usage_unknown'
+                state.stop_causes.add(STOP_USAGE_UNKNOWN)
+                state.report['stop_reason'] = resolve_primary_stop_reason(state.stop_causes)
             state.save()
 
         result = state.evaluate_fn(candidate, text, model_cfg=state.cfg['model'], rules=state.cfg['rules'], taxonomy=state.cfg['taxonomy'], sleep=state.sleep, on_request=on_request, pending_evaluation=record.get('pending_evaluation'))
         call = result.get('call')
-        if not observed:
+        if not observed and call is not None:
             # 兼容单次评估适配器；生产评估逐请求即时落账。
             unknown_before = state.usage.unknown_usage_requests
             state.active_call['usage'] = state.usage.add(call)
@@ -519,45 +544,77 @@ def _evaluate_with_retries(state, candidate, text, eid, record):
             state.report['unknown_usage_reserved_tokens'] += reserved_tokens
             state.active_call['unknown_usage_reserved_tokens'] = reserved_tokens
             state.active_call['diagnostics'] = {'error_type': getattr(call, 'error_type', None), 'http_status': getattr(call, 'http_status', None), 'latency_ms': getattr(call, 'latency_ms', None)}
-        state.active_call['status'] = (STATUS_LENGTH_EXCEEDED
-            if result.get('reason_code') == REASON_LENGTH_EXCEEDED
-            else 'completed' if result['ok'] else 'failed')
+        
+        decision = classify_result(result)
+        if state.active_call:
+            state.active_call['stage'] = result.get('stage') or state.active_call.get('stage')
+            state.active_call['status'] = (STATUS_LENGTH_EXCEEDED
+                if decision.is_length_exceeded
+                else 'completed' if result['ok'] else 'failed')
+            if decision.is_length_exceeded:
+                state.active_call['reason_code'] = REASON_LENGTH_EXCEEDED
+                state.active_call['is_sample_error'] = True
+            elif decision.is_format_error:
+                state.active_call['reason_code'] = decision.reason_code
+                state.active_call['error_kind'] = decision.error_kind
+                state.active_call['is_sample_error'] = True
+            elif not result['ok']:
+                state.active_call['reason_code'] = decision.reason_code
+                state.active_call['error_kind'] = decision.error_kind
         state.save()
         if result.get('pending_evaluation'):
             checkpoint = state.ledger.get(eid)
             checkpoint.update(status='reserved', pending_evaluation=result['pending_evaluation'],
                               max_attempts=state.max_attempts + 1)
             state.ledger.save_record(eid, checkpoint)
-            state.active_call['status'] = 'completed'
+            if state.active_call:
+                state.active_call['status'] = 'completed'
             state.active_eid = None
             break
         if result['ok']:
             break
-        code = result.get('reason_code') or 'MODEL_ERROR'
-        diagnostic = state.active_call['diagnostics']
+        code = result.get('reason_code') or decision.reason_code or 'MODEL_ERROR'
+        diagnostic = state.active_call['diagnostics'] if state.active_call else {}
         details = [code]
-        if diagnostic['error_type']:
+        if result.get('error_kind'):
+            details.append(result['error_kind'])
+        if diagnostic.get('error_type'):
             details.append(diagnostic['error_type'])
-        if diagnostic['http_status'] is not None:
+        if diagnostic.get('http_status') is not None:
             details.append(f"HTTP {diagnostic['http_status']}")
-        if diagnostic['latency_ms'] is not None:
+        if diagnostic.get('latency_ms') is not None:
             details.append(f"耗时 {diagnostic['latency_ms'] / 1000:.1f} 秒")
         message = '；'.join(details)
         state.ledger.fail(eid, code, message)
         failure_record = state.ledger.get(eid)
-        failure_record['retryable'] = _retryable(result)
+        failure_record['retryable'] = decision.retryable
+        if result.get('error_kind'):
+            failure_record['error_kind'] = result.get('error_kind')
+        if result.get('stage'):
+            failure_record['stage'] = result.get('stage')
         state.ledger.save_record(eid, failure_record)
         state.active_eid = None
-        state.active_call['reason_code'] = code
-        if code == REASON_LENGTH_EXCEEDED:
-            state.active_call['status'] = STATUS_LENGTH_EXCEEDED
-            state.active_call['is_sample_error'] = True
+        if state.active_call:
+            state.active_call['reason_code'] = code
+        if decision.is_length_exceeded:
+            if state.active_call:
+                state.active_call['status'] = STATUS_LENGTH_EXCEEDED
+                state.active_call['is_sample_error'] = True
+            state.save()
+            break
+        if decision.is_format_error:
+            # 格式异常为样本异常，不触发服务重连
+            state.save()
+            break
+        if decision.stop_cause in (STOP_ACCESS_DENIED, STOP_RESUME_STATE_INVALID, STOP_REQUEST_CONFIG_ERROR):
+            state.stop_causes.add(decision.stop_cause)
+            state.report['stop_reason'] = resolve_primary_stop_reason(state.stop_causes)
             state.save()
             break
         state.report['failed_requests'] += 1
         state.save()
         state.log(f'请求失败：{candidate.name}；{message}。')
-        if not _retryable(result) or state.report['stop_reason']:
+        if not decision.retryable or state.report['stop_reason']:
             break
     return result
 
@@ -581,14 +638,19 @@ def process_candidate(state, item):
         return True
     if candidate.skill_id in state.manual_exclusions:
         return True
+    if state.report.get('stop_reason'):
+        return False
     if state.report['new_recommended'] >= state.settings['target_recommended']:
-        state.report['stop_reason'] = 'target_reached'
+        state.stop_causes.add(STOP_TARGET_REACHED)
+        state.report['stop_reason'] = resolve_primary_stop_reason(state.stop_causes)
         return False
     if state.report['budget_tokens'] >= state.settings['max_total_tokens']:
-        state.report['stop_reason'] = 'token_limit'
+        state.stop_causes.add(STOP_TOKEN_LIMIT)
+        state.report['stop_reason'] = resolve_primary_stop_reason(state.stop_causes)
         return False
     if state.settings.get('max_evaluations') and state.report['evaluations'] >= state.settings['max_evaluations']:
-        state.report['stop_reason'] = 'evaluation_limit'
+        state.stop_causes.add(STOP_EVALUATION_LIMIT)
+        state.report['stop_reason'] = resolve_primary_stop_reason(state.stop_causes)
         return False
     state.report['checked'] += 1
     if candidate.path.split('/')[-1] != 'SKILL.md':
@@ -649,6 +711,7 @@ def process_candidate(state, item):
         update_candidate_status(state.pool, seq, STATUS_LENGTH_EXCEEDED)
         save_pool(state.pool_path, state.pool)
         state.report['skipped_length_exceeded'] += 1
+        state.report['reconciled_blocked'] += 1
         state.save()
         return True
     resumable_failure = bool(local_record and record.get('status') == 'failed' and ((record.get('error') or {}).get('reason_code') == 'NETWORK_ERROR' or record.get('retryable')) and (int(record.get('attempts') or 0) < state.max_attempts))
@@ -658,12 +721,17 @@ def process_candidate(state, item):
             'evaluation_id': eid,
             'reason': reason,
             'reason_code': (record.get('error') or {}).get('reason_code'),
+            'error_kind': (record.get('error') or {}).get('error_kind') or record.get('error_kind'),
+            'stage': record.get('stage'),
             'http_status': (record.get('error') or {}).get('http_status'),
             'blocked_at': now_local().isoformat(),
             'source': 'local_ledger',
+            'model': state.cfg['model'].get('model'),
+            'model_config_version': state.cfg['model'].get('model_config_version'),
         }
         _update_blocked(state.pool, seq, block_info)
         state.report['blocked_records'] += 1
+        state.report['reconciled_blocked'] += 1
         save_pool(state.pool_path, state.pool)
         state.log(f"[阻止] #{seq} {candidate.skill_id}：存在不可重试评估记录（{reason}），已持久化为 blocked，本次未调用模型。")
         state.save()
@@ -679,54 +747,154 @@ def process_candidate(state, item):
     result = _evaluate_with_retries(state, candidate, text, eid, record)
     if result is None:
         return False
+    decision = classify_result(result)
     if result['ok']:
         evaluation = result['evaluation']
-        outcome = {**decide(evaluation, state.cfg['rules']), 'evaluation': evaluation, 'materials': primary_material_bundle(candidate, text, now_local().isoformat()).manifest(), 'main_category': evaluation.get('main_category'), 'usage': state.active_call['usage']}
+        outcome = {**decide(evaluation, state.cfg['rules']), 'evaluation': evaluation, 'materials': primary_material_bundle(candidate, text, now_local().isoformat()).manifest(), 'main_category': evaluation.get('main_category'), 'usage': state.active_call['usage'] if state.active_call else None}
         outcome['candidate'] = asdict(candidate)
         outcome['request_usage'] = (state.ledger.get(eid) or {}).get('requests', [])
         outcome['prescreen'] = asdict(pres)
         outcome['evaluated_at'] = now_local().isoformat()
         state.ledger.complete(eid, outcome)
-        state.active_eid = None
-        state.active_call['decision'] = outcome['decision']
+        if state.active_call:
+            state.active_call['decision'] = outcome['decision']
         state.publish(candidate, pres, outcome)
-        state.consecutive_failures = 0
+        state.consecutive_failures, state.format_failures = update_failure_counters(
+            result, decision, state.consecutive_failures, state.format_failures
+        )
         update_candidate_status(state.pool, seq, STATUS_DONE)
         save_pool(state.pool_path, state.pool)
-    elif result.get('reason_code') == REASON_LENGTH_EXCEEDED:
+    elif decision.is_length_exceeded:
         update_candidate_status(state.pool, seq, STATUS_LENGTH_EXCEEDED)
         save_pool(state.pool_path, state.pool)
-        state.consecutive_failures = 0
+        state.consecutive_failures, state.format_failures = update_failure_counters(
+            result, decision, state.consecutive_failures, state.format_failures
+        )
         state.report['skipped_length_exceeded'] += 1
         limit = state.cfg['model'].get('limits', {}).get('max_output_tokens', 4000)
-        state.log(f"[自动跳过] {candidate.name}：模型输出达到上限（{limit} Token），已标记超长跳过。")
+        state.log(f"[自动跳过] #{seq} {candidate.name}：输出达到 {limit} Token 上限，已保存 length_exceeded。")
+    elif decision.is_format_error:
+        block_info = {
+            'evaluation_id': eid,
+            'reason': decision.block_reason or 'OUTPUT_FORMAT_INVALID',
+            'reason_code': decision.reason_code,
+            'error_kind': decision.error_kind,
+            'stage': decision.stage,
+            'http_status': decision.http_status or 200,
+            'blocked_at': now_local().isoformat(),
+            'source': 'local_ledger',
+            'model': state.cfg['model'].get('model'),
+            'model_config_version': state.cfg['model'].get('model_config_version'),
+        }
+        _update_blocked(state.pool, seq, block_info)
+        save_pool(state.pool_path, state.pool)
+        state.consecutive_failures, state.format_failures = update_failure_counters(
+            result, decision, state.consecutive_failures, state.format_failures
+        )
+        state.report['skipped_output_format'] += 1
+        state.report['blocked_records'] += 1
+        state.report['blocked_new'] += 1
+        stage_desc = "复核" if decision.stage == "review" else "初评"
+        state.log(f"[格式异常] #{seq} {candidate.name}：{stage_desc}输出格式不合法（{decision.error_kind}），已保存 blocked（距上次有效结果累计 {state.format_failures}/{state.max_format_failures}）。")
+        if state.format_failures >= state.max_format_failures:
+            state.stop_causes.add(STOP_FORMAT_FAILURES)
+            state.log("[停止] 输出格式异常达到阈值，请检查模型与评估输出契约；后续候选未调用。")
+    elif decision.category == 'access_denied':
+        block_info = {
+            'evaluation_id': eid,
+            'reason': decision.block_reason or 'ACCESS_DENIED',
+            'reason_code': decision.reason_code,
+            'error_kind': decision.error_kind,
+            'stage': decision.stage,
+            'http_status': decision.http_status,
+            'blocked_at': now_local().isoformat(),
+            'source': 'local_ledger',
+            'model': state.cfg['model'].get('model'),
+            'model_config_version': state.cfg['model'].get('model_config_version'),
+        }
+        _update_blocked(state.pool, seq, block_info)
+        save_pool(state.pool_path, state.pool)
+        state.report['blocked_records'] += 1
+        state.report['blocked_new'] += 1
+        state.stop_causes.add(STOP_ACCESS_DENIED)
+        state.log(f"[停止] 访问认证或权限失败 (HTTP {decision.http_status})，已将本条标记 blocked 并终止运行。")
+    elif decision.category == 'resume_state_invalid':
+        block_info = {
+            'evaluation_id': eid,
+            'reason': decision.block_reason or 'RESUME_STATE_INVALID',
+            'reason_code': decision.reason_code,
+            'error_kind': decision.error_kind,
+            'stage': decision.stage,
+            'blocked_at': now_local().isoformat(),
+            'source': 'local_ledger',
+            'model': state.cfg['model'].get('model'),
+            'model_config_version': state.cfg['model'].get('model_config_version'),
+        }
+        _update_blocked(state.pool, seq, block_info)
+        save_pool(state.pool_path, state.pool)
+        state.report['blocked_records'] += 1
+        state.report['blocked_new'] += 1
+        state.stop_causes.add(STOP_RESUME_STATE_INVALID)
+        state.log(f"[停止] 恢复状态冲突：{result.get('error')}，已停止运行。")
+    elif decision.category == 'request_config_error':
+        block_info = {
+            'evaluation_id': eid,
+            'reason': decision.block_reason or 'REQUEST_CONFIG_ERROR',
+            'reason_code': decision.reason_code,
+            'error_kind': decision.error_kind,
+            'stage': decision.stage,
+            'http_status': decision.http_status,
+            'blocked_at': now_local().isoformat(),
+            'source': 'local_ledger',
+            'model': state.cfg['model'].get('model'),
+            'model_config_version': state.cfg['model'].get('model_config_version'),
+        }
+        _update_blocked(state.pool, seq, block_info)
+        save_pool(state.pool_path, state.pool)
+        state.report['blocked_records'] += 1
+        state.report['blocked_new'] += 1
+        state.stop_causes.add(STOP_REQUEST_CONFIG_ERROR)
+        state.log(f"[停止] 请求配置错误 (HTTP {decision.http_status})，已停止运行。")
     elif not result.get('pending_evaluation'):
         state.report['failed_evaluations'] += 1
-        state.consecutive_failures += 1
+        state.consecutive_failures, state.format_failures = update_failure_counters(
+            result, decision, state.consecutive_failures, state.format_failures
+        )
         if _retryable(result) and state.max_retries:
-            state.report['stop_reason'] = state.report['stop_reason'] or 'retry_exhausted'
+            state.stop_causes.add(STOP_RETRY_EXHAUSTED)
         elif not _retryable(result):
-            # 本轮首次收到不可重试失败：立即持久化 blocked，防止重启后重复抓取。
             block_info = {
                 'evaluation_id': eid,
                 'reason': 'NON_RETRYABLE_FAILURE',
                 'reason_code': result.get('reason_code'),
+                'error_kind': result.get('error_kind'),
+                'stage': result.get('stage'),
                 'http_status': getattr(result.get('call'), 'http_status', None),
                 'blocked_at': now_local().isoformat(),
                 'source': 'local_ledger',
+                'model': state.cfg['model'].get('model'),
+                'model_config_version': state.cfg['model'].get('model_config_version'),
             }
             _update_blocked(state.pool, seq, block_info)
+            save_pool(state.pool_path, state.pool)
             state.report['blocked_records'] += 1
+            state.report['blocked_new'] += 1
             state.log(f"[阻止] #{seq} {candidate.skill_id}：评估失败且不可重试（{result.get('reason_code')}），已持久化为 blocked。")
-    if state.active_call['usage']['total_tokens'] is None:
-        state.report['stop_reason'] = state.report['stop_reason'] or 'usage_unknown'
+        if state.consecutive_failures >= state.settings['max_consecutive_failures']:
+            state.stop_causes.add(STOP_MODEL_FAILURES)
+    if state.active_call and (state.active_call.get('usage') or {}).get('total_tokens') is None:
+        state.stop_causes.add(STOP_USAGE_UNKNOWN)
+        state.log("[停止] 当前响应用量未知；本条状态已保存，后续付费调用已停止。")
     state.active_eid = state.active_call = None
+    state.report['format_failures_without_valid_result'] = state.format_failures
+    state.report['blocked_total'] = state.pool.stats().get('blocked', 0) if state.pool else 0
+    state.report['stop_causes'] = sorted(list(state.stop_causes))
+    primary_stop = resolve_primary_stop_reason(state.stop_causes)
+    if primary_stop:
+        state.report['stop_reason'] = primary_stop
     state.save()
     state.log(f"新增推荐 {state.report['new_recommended']}/{state.settings['target_recommended']}；输入 {state.usage.prompt_tokens:,}，输出 {state.usage.completion_tokens:,}，合计 {state.usage.total_tokens:,} Token。")
     if state.report['stop_reason']:
-        return False
-    if state.consecutive_failures >= state.settings['max_consecutive_failures']:
-        state.report['stop_reason'] = 'model_failures'
         return False
     return True
 
@@ -736,6 +904,7 @@ def _collect(root, local, settings, cfg, discover_fn, fetch_fn, evaluate_fn, log
     usage = UsageTotals()
     max_retries = settings.get('max_retries', 5)
     max_attempts = max_retries + 1
+    max_format_failures = settings.get('max_format_failures_without_valid_result', 10)
     manual_picks = get_manual_picks(cfg.get('overrides') or {})
     manual_exclusions = get_manual_exclusions(cfg.get('overrides') or {})
     baseline = _read(root / 'data' / 'catalog.json', {'entries': []})
@@ -746,7 +915,37 @@ def _collect(root, local, settings, cfg, discover_fn, fetch_fn, evaluate_fn, log
     owned_cfg = cfg.get('owned') or {}
     owned_ids = {it['skill_id'] for it in owned_cfg.get('items', [])}
     skipped_owned_ids = set()
-    report = {'run_id': run_id, 'started_at': now_local().isoformat(), 'status': 'running', 'model': cfg['model']['model'], 'settings': settings, 'discovered': 0, 'checked': 0, 'evaluations': 0, 'cached': 0, 'fetch_failed': 0, 'prescreen_excluded': 0, 'not_skill_files': 0, 'blocked_records': 0, 'failed_evaluations': 0, 'new_recommended': 0, 'failed_requests': 0, 'unknown_usage_reserved_tokens': 0, 'skipped_owned': 0, 'skipped_length_exceeded': 0, 'recommendations': [], 'calls': [], 'stop_reason': None, 'report_path': str(run_dir / 'report.json')}
+    report = {
+        'run_id': run_id,
+        'started_at': now_local().isoformat(),
+        'status': 'running',
+        'model': cfg['model']['model'],
+        'settings': settings,
+        'discovered': 0,
+        'checked': 0,
+        'evaluations': 0,
+        'cached': 0,
+        'fetch_failed': 0,
+        'prescreen_excluded': 0,
+        'not_skill_files': 0,
+        'blocked_records': 0,
+        'blocked_new': 0,
+        'blocked_total': 0,
+        'reconciled_blocked': 0,
+        'skipped_output_format': 0,
+        'format_failures_without_valid_result': 0,
+        'failed_evaluations': 0,
+        'new_recommended': 0,
+        'failed_requests': 0,
+        'unknown_usage_reserved_tokens': 0,
+        'skipped_owned': 0,
+        'skipped_length_exceeded': 0,
+        'recommendations': [],
+        'calls': [],
+        'stop_causes': [],
+        'stop_reason': None,
+        'report_path': str(run_dir / 'report.json'),
+    }
     ledger = BudgetLedger.load(local / 'state', cap=1, max_attempts=max_attempts)
     ledger.rollover()
     ledger.mark_in_progress_as_needs_recovery()
@@ -756,15 +955,30 @@ def _collect(root, local, settings, cfg, discover_fn, fetch_fn, evaluate_fn, log
     pool_path = local / 'pool.json'
     pool = None
     consecutive_failures = 0
+    format_failures = 0
+    stop_causes = set()
     active_eid = None
     active_call = None
     unknown_reserve = 0
-    state = LocalCollection(root=root, local=local, settings=settings, cfg=cfg, discover_fn=discover_fn, fetch_fn=fetch_fn, evaluate_fn=evaluate_fn, log=log, sleep=sleep, run_id=run_id, run_dir=run_dir, usage=usage, report=report, ledger=ledger, context=context, entries=entries, old_recommended=old_recommended, baseline=baseline, active_snoozed=active_snoozed, manual_exclusions=manual_exclusions, manual_picks=manual_picks, pool_path=pool_path, pool=pool, dirty=dirty, consecutive_failures=consecutive_failures, active_eid=active_eid, active_call=active_call, unknown_reserve=unknown_reserve, max_attempts=max_attempts, max_retries=max_retries, pending_items=[], owned_ids=owned_ids, skipped_owned_ids=skipped_owned_ids)
+    state = LocalCollection(
+        root=root, local=local, settings=settings, cfg=cfg, discover_fn=discover_fn,
+        fetch_fn=fetch_fn, evaluate_fn=evaluate_fn, log=log, sleep=sleep, run_id=run_id,
+        run_dir=run_dir, usage=usage, report=report, ledger=ledger, context=context,
+        entries=entries, old_recommended=old_recommended, baseline=baseline,
+        active_snoozed=active_snoozed, manual_exclusions=manual_exclusions,
+        manual_picks=manual_picks, pool_path=pool_path, pool=pool, dirty=dirty,
+        consecutive_failures=consecutive_failures, format_failures=format_failures,
+        max_format_failures=max_format_failures, stop_causes=stop_causes,
+        active_eid=active_eid, active_call=active_call, unknown_reserve=unknown_reserve,
+        max_attempts=max_attempts, max_retries=max_retries, pending_items=[],
+        owned_ids=owned_ids, skipped_owned_ids=skipped_owned_ids,
+    )
     try:
         state.save()
         state.log(f"目标：新增 {state.settings['target_recommended']} 个推荐技能；上限 {state.settings['max_total_tokens']:,} Token。")
         state.pool = prepare_pool(state.root, state.local, state.cfg, state.settings, state.old_recommended, discover_fn=state.discover_fn, sleep=state.sleep, log=state.log, report=state.report)
         state.report['discovered'] = len(state.pool)
+        state.report['blocked_total'] = state.pool.stats().get('blocked', 0)
         state.ledger.cap = state.ledger.reserved_count + max(1, len(state.pool))
         state.ledger.save()
         state.save()
@@ -773,26 +987,36 @@ def _collect(root, local, settings, cfg, discover_fn, fetch_fn, evaluate_fn, log
             if not process_candidate(state, item):
                 break
         if state.report['new_recommended'] >= state.settings['target_recommended']:
-            state.report['stop_reason'] = state.report['stop_reason'] or 'target_reached'
+            state.stop_causes.add(STOP_TARGET_REACHED)
         elif state.report['budget_tokens'] >= state.settings['max_total_tokens']:
-            state.report['stop_reason'] = state.report['stop_reason'] or 'token_limit'
+            state.stop_causes.add(STOP_TOKEN_LIMIT)
         elif state.settings.get('max_evaluations') and state.report['evaluations'] >= state.settings['max_evaluations']:
-            state.report['stop_reason'] = state.report['stop_reason'] or 'evaluation_limit'
-        state.report['stop_reason'] = state.report['stop_reason'] or 'candidates_exhausted'
+            state.stop_causes.add(STOP_EVALUATION_LIMIT)
+        else:
+            state.stop_causes.add(STOP_CANDIDATES_EXHAUSTED)
+        state.report['stop_causes'] = sorted(list(state.stop_causes))
+        state.report['stop_reason'] = resolve_primary_stop_reason(state.stop_causes)
     except KeyboardInterrupt:
-        state.report['stop_reason'] = 'interrupted'
+        state.stop_causes.add(STOP_INTERRUPTED)
+        state.report['stop_causes'] = sorted(list(state.stop_causes))
+        state.report['stop_reason'] = resolve_primary_stop_reason(state.stop_causes)
     except Exception as exc:
-        state.report['stop_reason'] = 'error'
+        state.stop_causes.add('error')
+        state.report['stop_causes'] = sorted(list(state.stop_causes))
+        state.report['stop_reason'] = resolve_primary_stop_reason(state.stop_causes) or 'error'
         state.report['error_type'] = type(exc).__name__
     finally:
         if state.pool is not None:
             save_pool(state.pool_path, state.pool)
         if state.active_eid:
             state.ledger.mark_needs_recovery(state.active_eid, '运行中断或异常，禁止自动重复付费请求')
-            if state.active_call['usage'] is None:
+            if state.active_call and state.active_call.get('usage') is None:
                 state.usage.add(None)
                 state.report['unknown_usage_reserved_tokens'] += state.unknown_reserve
                 state.active_call['status'] = 'unknown'
+        state.report['blocked_total'] = state.pool.stats().get('blocked', 0) if state.pool else 0
+        state.report['stop_causes'] = sorted(list(state.stop_causes))
+        state.report['stop_reason'] = resolve_primary_stop_reason(state.stop_causes) or state.report.get('stop_reason')
         state.report['status'] = 'completed' if state.report['stop_reason'] == 'target_reached' else 'stopped'
         state.save()
         if state.dirty:
@@ -810,6 +1034,7 @@ def main(argv=None, *, root: Path | None = None) -> int:
     parser.add_argument("--max-tokens", type=int, help="输入加输出的本次 Token 上限")
     parser.add_argument("--max-evaluations", type=int, help="可选：本次最多评估多少条")
     parser.add_argument("--max-retries", type=int, help="首次失败后的最多重连次数，默认 5")
+    parser.add_argument("--max-format-failures", type=int, help="距上次有效评估允许的最大连续格式异常数，默认 10")
     parser.add_argument("--limit-queries", type=int)
     parser.add_argument("--expand-limit", type=int)
     parser.add_argument("--sync-config", action="store_true", help="纯离线重建：无需模型凭据与网络，将 config/*.json 同步到 data 与 public/data")
@@ -864,6 +1089,7 @@ def main(argv=None, *, root: Path | None = None) -> int:
         if not run_file.exists():
             run_file = root / "config" / "local-run.json"
         settings = _read(run_file)
+        settings.setdefault("max_format_failures_without_valid_result", 10)
         for argument, key in (
             ("target", "target_recommended"),
             ("max_tokens", "max_total_tokens"),
@@ -871,6 +1097,7 @@ def main(argv=None, *, root: Path | None = None) -> int:
             ("limit_queries", "limit_queries"),
             ("expand_limit", "expand_limit"),
             ("max_retries", "max_retries"),
+            ("max_format_failures", "max_format_failures_without_valid_result"),
             ("pool_watermark", "pool_watermark"),
         ):
             if getattr(args, argument) is not None:
@@ -894,11 +1121,16 @@ def main(argv=None, *, root: Path | None = None) -> int:
             return 0
         result = run_local(root, settings, cfg=cfg, log=log)
         usage = result["usage"]
-        log(STOP_LABELS[result["stop_reason"]])
+        stop_reason = result.get("stop_reason")
+        log(STOP_LABELS.get(stop_reason, stop_reason or "运行结束"))
         log(f"本次新增推荐：{result['new_recommended']}/{settings['target_recommended']}；评估 {result['evaluations']} 次。")
         if result.get("pool_stats"):
             pst = result["pool_stats"]
             log(f"候选池状态：总计 {pst['total']} 条，待处理 {pst['pending']} 条，已完成 {pst['done']} 条，排除 {pst['excluded']} 条。")
+        if result.get("skipped_length_exceeded"):
+            log(f"超长跳过：{result['skipped_length_exceeded']} 条（输出达 Token 上限，已标 length_exceeded）。")
+        if result.get("skipped_output_format"):
+            log(f"格式异常隔离：{result['skipped_output_format']} 条（输出非合法结构，已标 blocked）。")
         log(f"请求 {usage['requests']} 次（含重试），失败请求 {result['failed_requests']} 次。")
         log(f"已知输入 {usage['prompt_tokens']:,} / 输出 {usage['completion_tokens']:,} / 合计 {usage['total_tokens']:,} Token。")
         log(f"其中推理 {usage['reasoning_tokens']:,}（已含在输出中）；用量未知请求 {usage['unknown_usage_requests']}。")

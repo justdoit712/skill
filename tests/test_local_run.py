@@ -224,7 +224,7 @@ class LocalRunTest(unittest.TestCase):
     def test_failure_tokens_count_and_consecutive_failure_stops(self):
         def failure(candidate, text, **kwargs):
             result = self.evaluate(candidate, text, **kwargs)
-            result.update(ok=False, reason_code="PARSE_ERROR", error="untrusted echo test-secret-never-print")
+            result.update(ok=False, reason_code="MODEL_ERROR", error="untrusted echo test-secret-never-print")
             return result
         report = self.collect(evaluate_fn=failure)
         self.assertEqual(report["stop_reason"], "model_failures")
@@ -309,7 +309,7 @@ class LocalRunTest(unittest.TestCase):
                     "call": ModelCallResult(http_status=401, attempts=1)}
         report = self.collect(evaluate_fn=unauthorized)
         self.assertEqual(len(self.calls), 1)
-        self.assertEqual(report["stop_reason"], "usage_unknown")
+        self.assertEqual(report["stop_reason"], "access_denied")
         self.assertIn("HTTP 401", "\n".join(self.logs))
 
     def test_retryable_http_response_counts_all_reported_tokens(self):
@@ -642,6 +642,187 @@ class LocalRunTest(unittest.TestCase):
         blocked_names = [c["candidate"]["name"] for c in pool_data2["candidates"] if c["status"] == "blocked"]
         self.assertEqual(blocked_names, ["tool-0"])
         self.assertNotIn("example/skills:skills/tool-0/SKILL.md", model_calls_round2)
+
+    def format_failure_result(self, error_kind="OUTPUT_SCHEMA_INVALID"):
+        return {
+            "ok": False,
+            "reason_code": "PARSE_ERROR",
+            "error_kind": error_kind,
+            "stage": "assessment",
+            "evaluation": None,
+            "call": ModelCallResult(
+                ok=True,
+                http_status=200,
+                attempts=1,
+                usage={"prompt_tokens": 80, "completion_tokens": 20, "total_tokens": 100},
+            ),
+        }
+
+    def test_five_format_failures_continue_to_target_and_save_blocked(self):
+        """连续 5 个格式异常不会熔断服务，继续寻找候选并达成目标，5 个异常项记为 blocked。"""
+        attempts = []
+
+        def mixed(candidate, text, **kwargs):
+            attempts.append(candidate.skill_id)
+            if len(attempts) <= 5:
+                return self.format_failure_result()
+            return self.evaluate(candidate, text, **kwargs)
+
+        self.settings["target_recommended"] = 2
+        report = self.collect(count=8, evaluate_fn=mixed)
+        self.assertEqual(report["stop_reason"], "target_reached")
+        self.assertEqual(report["new_recommended"], 2)
+        self.assertEqual(report["skipped_output_format"], 5)
+        self.assertEqual(report["blocked_records"], 5)
+        self.assertEqual(len(attempts), 7)
+
+        pool_file = self.root / "data" / "local" / "pool.json"
+        pool_data = json.loads(pool_file.read_text(encoding="utf-8"))
+        self.assertEqual(pool_data["stats"]["blocked"], 5)
+        self.assertEqual(pool_data["stats"]["done"], 2)
+
+        blocked_items = [c for c in pool_data["candidates"] if c["status"] == "blocked"]
+        self.assertEqual(len(blocked_items), 5)
+        self.assertEqual(blocked_items[0]["block_info"]["reason"], "OUTPUT_FORMAT_INVALID")
+        self.assertEqual(blocked_items[0]["block_info"]["error_kind"], "OUTPUT_SCHEMA_INVALID")
+
+    def test_ten_format_failures_stop_with_format_failures(self):
+        """连续 10 个格式异常达到阈值停止，第 11 个候选不调用。"""
+        attempts = []
+
+        def always_format_failure(candidate, text, **kwargs):
+            attempts.append(candidate.skill_id)
+            return self.format_failure_result()
+
+        report = self.collect(count=15, evaluate_fn=always_format_failure)
+        self.assertEqual(report["stop_reason"], "format_failures")
+        self.assertEqual(report["skipped_output_format"], 10)
+        self.assertEqual(len(attempts), 10)
+
+    def test_format_failures_alternating_with_length_do_not_reset_format_streak(self):
+        """格式异常与 length 交替出现时，length 不清空格式计数，格式计数达到阈值时仍停止。"""
+        self.settings["max_format_failures_without_valid_result"] = 3
+        attempts = []
+
+        def alternating(candidate, text, **kwargs):
+            attempts.append(candidate.skill_id)
+            # 1: format, 2: length, 3: format, 4: length, 5: format -> 达到 3 次格式异常
+            if len(attempts) in (1, 3, 5):
+                return self.format_failure_result()
+            return self.length_result()
+
+        report = self.collect(count=8, evaluate_fn=alternating)
+        self.assertEqual(report["stop_reason"], "format_failures")
+        self.assertEqual(report["skipped_output_format"], 3)
+        self.assertEqual(report["skipped_length_exceeded"], 2)
+        self.assertEqual(len(attempts), 5)
+
+    def test_manage_pool_reconcile_and_resume(self):
+        """测试 manage_pool 的离线对账 (reconcile) 与显式恢复 (resume)。"""
+        from src.catalog.maintenance import reconcile_pool, resume_candidate
+        from src.catalog.pool import save_pool, load_pool, create_pool_from_candidates
+        from src.catalog.budget import evaluation_filename
+        from src.infra.files import write_json_atomic
+
+        # 准备候选池，含 2 个 pending 候选
+        c0 = self.candidate(0)
+        c0.content_fingerprint = "fp_0"
+        c1 = self.candidate(1)
+        c1.content_fingerprint = "fp_1"
+        pool = create_pool_from_candidates([c0, c1], {}, {})
+        pool_file = self.root / "data" / "local" / "pool.json"
+        pool_file.parent.mkdir(parents=True, exist_ok=True)
+        save_pool(pool_file, pool)
+
+        # 模拟账本记录：
+        # c0 有明确的 LENGTH_EXCEEDED 记录
+        from src.catalog.evaluation import evaluation_id
+        eid0 = evaluation_id(c0, self.cfg["model"], self.cfg["rules"])
+        hash0 = evaluation_filename(eid0)
+        rec0_path = self.root / "data" / "local" / "state" / "evaluations" / hash0
+        rec0_path.parent.mkdir(parents=True, exist_ok=True)
+        write_json_atomic(rec0_path, {
+            "evaluation_id": eid0,
+            "skill_id": c0.skill_id,
+            "content_fingerprint": c0.content_fingerprint,
+            "rules_version": self.cfg["rules"].get("rules_version", "1.0.0"),
+            "model_config_version": self.cfg["model"].get("model_config_version", "1.0.0"),
+            "status": "failed",
+            "attempts": 1,
+            "max_attempts": 2,
+            "error": {"reason_code": "LENGTH_EXCEEDED"},
+            "requests": [{"status": "length_exceeded", "reason_code": "LENGTH_EXCEEDED"}],
+        })
+
+        # c1 有格式异常不可重试记录
+        eid1 = evaluation_id(c1, self.cfg["model"], self.cfg["rules"])
+        hash1 = evaluation_filename(eid1)
+        rec1_path = self.root / "data" / "local" / "state" / "evaluations" / hash1
+        write_json_atomic(rec1_path, {
+            "evaluation_id": eid1,
+            "skill_id": c1.skill_id,
+            "content_fingerprint": c1.content_fingerprint,
+            "rules_version": self.cfg["rules"].get("rules_version", "1.0.0"),
+            "model_config_version": self.cfg["model"].get("model_config_version", "1.0.0"),
+            "status": "failed",
+            "attempts": 2,
+            "max_attempts": 2,
+            "retryable": False,
+            "error": {"reason_code": "PARSE_ERROR", "error_kind": "OUTPUT_SCHEMA_INVALID"},
+        })
+
+        # 1. 预览对账 (dry-run)
+        preview = reconcile_pool(self.root, apply=False)
+        self.assertEqual(preview["reconciled"], 2)
+        self.assertFalse(preview["apply"])
+
+        # 确认池尚未修改
+        loaded = load_pool(pool_file)
+        self.assertEqual(loaded.items[0].status, "pending")
+        self.assertEqual(loaded.items[1].status, "pending")
+
+        # 2. 应用对账 (apply)
+        applied = reconcile_pool(self.root, apply=True)
+        self.assertEqual(applied["reconciled"], 2)
+        self.assertTrue(applied["apply"])
+        self.assertIsNotNone(applied["backup_path"])
+
+        # 确认池已对齐
+        loaded2 = load_pool(pool_file)
+        self.assertEqual(loaded2.items[0].status, "length_exceeded")
+        self.assertEqual(loaded2.items[1].status, "blocked")
+        self.assertEqual(loaded2.items[1].block_info["reason_code"], "PARSE_ERROR")
+
+        # 3. 显式恢复 c1 (resume)
+        # 先 dry-run
+        resume_preview = resume_candidate(
+            self.root, evaluation_id=eid1, reason="已修复提示词", extra_attempts=1, apply=False
+        )
+        self.assertTrue(resume_preview["dry_run"])
+        self.assertEqual(resume_preview["target_status"], "pending")
+        self.assertEqual(resume_preview["new_max_attempts"], 3)
+
+        # 确认池中仍为 blocked
+        loaded3 = load_pool(pool_file)
+        self.assertEqual(loaded3.items[1].status, "blocked")
+
+        # 再 apply
+        resume_applied = resume_candidate(
+            self.root, evaluation_id=eid1, reason="已修复提示词", extra_attempts=1, apply=True
+        )
+        self.assertFalse(resume_applied["dry_run"])
+        self.assertEqual(resume_applied["new_max_attempts"], 3)
+
+        # 确认池中 c1 已恢复为 pending，账本 max_attempts 增为 3 且记录 resume_history
+        loaded4 = load_pool(pool_file)
+        self.assertEqual(loaded4.items[1].status, "pending")
+        self.assertIsNone(loaded4.items[1].block_info)
+
+        rec1_after = json.loads(rec1_path.read_text(encoding="utf-8"))
+        self.assertEqual(rec1_after["max_attempts"], 3)
+        self.assertTrue(rec1_after["retryable"])
+        self.assertEqual(len(rec1_after["resume_history"]), 1)
+        self.assertEqual(rec1_after["resume_history"][0]["reason"], "已修复提示词")
 
 
 if __name__ == "__main__":

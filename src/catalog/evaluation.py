@@ -39,6 +39,38 @@ from .quality import enabled, prompt_instructions, check_quality, hold_for_revie
 from .models import Candidate
 
 REASON_PARSE_ERROR = "PARSE_ERROR"
+REASON_RESUME_STATE_INVALID = "RESUME_STATE_INVALID"
+
+ERROR_KIND_OUTPUT_JSON_INVALID = "OUTPUT_JSON_INVALID"
+ERROR_KIND_OUTPUT_SCHEMA_INVALID = "OUTPUT_SCHEMA_INVALID"
+ERROR_KIND_RESUME_STATE_INVALID = "RESUME_STATE_INVALID"
+ERROR_KIND_RESPONSE_EMPTY = "RESPONSE_EMPTY"
+ERROR_KIND_LEGACY_PARSE_UNKNOWN = "LEGACY_PARSE_UNKNOWN"
+
+
+class EvaluationError(ValueError):
+    """评估层异常基类。"""
+    error_kind: str = ERROR_KIND_LEGACY_PARSE_UNKNOWN
+
+
+class OutputJsonError(EvaluationError):
+    """模型输出不是合法的 JSON。"""
+    error_kind = ERROR_KIND_OUTPUT_JSON_INVALID
+
+
+class OutputSchemaError(EvaluationError):
+    """模型输出字段缺失、类型非法或结构校验不合格。"""
+    error_kind = ERROR_KIND_OUTPUT_SCHEMA_INVALID
+
+
+class ResumeStateError(EvaluationError):
+    """待复核初评与当前材料或规则版本不一致，或恢复快照损坏。"""
+    error_kind = ERROR_KIND_RESUME_STATE_INVALID
+
+
+class ResponseEmptyError(EvaluationError):
+    """模型正常结束但未返回有效内容，且非 length 截断。"""
+    error_kind = ERROR_KIND_RESPONSE_EMPTY
 
 CHECK_VALUE_DOMAIN = ("pass", "fail", "unknown")
 
@@ -178,13 +210,13 @@ def normalize_main_category(raw_value, taxonomy: dict) -> str:
 def parse_evaluation(
     content: str, rules: dict, source_fingerprint: str | None, taxonomy: dict | None = None
 ) -> dict:
-    """解析模型输出并校验结构。结构无效时抛 ValueError，由调用方记为处理失败。"""
+    """解析模型输出并校验结构。结构无效时抛 OutputJsonError 或 OutputSchemaError。"""
     try:
         raw = json.loads(_strip_fence(content))
     except json.JSONDecodeError as exc:
-        raise ValueError(f"模型输出不是合法 JSON：{exc}") from exc
+        raise OutputJsonError(f"模型输出不是合法 JSON：{exc}") from exc
     if not isinstance(raw, dict):
-        raise ValueError("模型输出的顶层不是对象")
+        raise OutputSchemaError("模型输出的顶层不是对象")
 
     check_ids = [c["id"] for c in rules.get("checks", [])]
     invalid = [
@@ -193,15 +225,18 @@ def parse_evaluation(
         if not isinstance(raw.get(cid), dict) or raw[cid].get("value") not in CHECK_VALUE_DOMAIN
     ]
     if invalid:
-        raise ValueError("以下检查项缺失或取值非法：" + "、".join(invalid))
+        raise OutputSchemaError("以下检查项缺失或取值非法：" + "、".join(invalid))
 
     evaluation = dict(raw)
     if not isinstance(raw.get("domain_checks", {}), dict):
-        raise ValueError("domain_checks 必须是对象")
+        raise OutputSchemaError("domain_checks 必须是对象")
     if not isinstance(raw.get("reason_codes", []), list) or any(not isinstance(code, str) for code in raw.get("reason_codes", [])):
-        raise ValueError("reason_codes 必须是字符串数组")
+        raise OutputSchemaError("reason_codes 必须是字符串数组")
     if taxonomy is not None:
-        evaluation["main_category"] = normalize_main_category(raw.get("main_category"), taxonomy)
+        try:
+            evaluation["main_category"] = normalize_main_category(raw.get("main_category"), taxonomy)
+        except ValueError as exc:
+            raise OutputSchemaError(str(exc)) from exc
     evaluation["rules_version"] = rules.get("rules_version")
     evaluation["source_fingerprint"] = source_fingerprint
     evaluation.setdefault("domain_checks", {})
@@ -236,9 +271,28 @@ def evaluate(
     call 为最后一次响应，calls 包含所有响应；on_request 在各请求前后供编排落账。
     任何失败都返回明确的处理失败，不生成中文简介或结论。
     """
-    system, user = build_prompt(candidate, text, rules, taxonomy)
     calls = []
     call = None
+
+    # 请求发出前先校验待复核数据，避免不合法的状态凭空发起调用或记录未知用量 (§3.2, §5.1)
+    if pending_evaluation is not None:
+        if (
+            not isinstance(pending_evaluation, dict)
+            or pending_evaluation.get("source_fingerprint") != candidate.content_fingerprint
+            or pending_evaluation.get("rules_version") != rules.get("rules_version")
+        ):
+            return {
+                "ok": False,
+                "evaluation": None,
+                "call": None,
+                "calls": calls,
+                "stage": "resume",
+                "reason_code": REASON_RESUME_STATE_INVALID,
+                "error_kind": ERROR_KIND_RESUME_STATE_INVALID,
+                "error": "待复核初评与当前材料或规则版本不一致",
+            }
+
+    system, user = build_prompt(candidate, text, rules, taxonomy)
     if pending_evaluation is None:
         if on_request is not None:
             on_request("before", "assessment", None)
@@ -247,28 +301,55 @@ def evaluate(
         if on_request is not None:
             on_request("after", "assessment", call)
         if not call.ok:
-            return {"ok": False, "evaluation": None, "call": call, "calls": calls,
-                    "reason_code": call.reason_code or REASON_MODEL_ERROR, "error": call.error}
+            return {
+                "ok": False,
+                "evaluation": None,
+                "call": call,
+                "calls": calls,
+                "stage": "assessment",
+                "reason_code": call.reason_code or REASON_MODEL_ERROR,
+                "error_kind": getattr(call, "reason_code", None) or REASON_MODEL_ERROR,
+                "error": call.error,
+            }
+        if not (call.content or "").strip() and call.finish_reason != "length":
+            return {
+                "ok": False,
+                "evaluation": None,
+                "call": call,
+                "calls": calls,
+                "stage": "assessment",
+                "reason_code": REASON_MODEL_ERROR,
+                "error_kind": ERROR_KIND_RESPONSE_EMPTY,
+                "error": "模型正常结束但未提供有效正文",
+            }
 
     try:
-        if pending_evaluation is not None and (
-            not isinstance(pending_evaluation, dict)
-            or pending_evaluation.get("source_fingerprint") != candidate.content_fingerprint
-            or pending_evaluation.get("rules_version") != rules.get("rules_version")
-        ):
-            raise ValueError("待复核初评与当前材料或规则版本不一致")
         evaluation = parse_evaluation(
             json.dumps(pending_evaluation, ensure_ascii=False) if pending_evaluation is not None else call.content or "",
             rules, candidate.content_fingerprint, taxonomy
         )
         if enabled(rules):
             evaluation = check_quality(evaluation, text, rules)
-    except ValueError as exc:
+    except OutputJsonError as exc:
         return {
             "ok": False,
             "evaluation": None,
             "call": call,
+            "calls": calls,
+            "stage": "assessment",
             "reason_code": REASON_PARSE_ERROR,
+            "error_kind": ERROR_KIND_OUTPUT_JSON_INVALID,
+            "error": str(exc),
+        }
+    except (OutputSchemaError, ValueError) as exc:
+        return {
+            "ok": False,
+            "evaluation": None,
+            "call": call,
+            "calls": calls,
+            "stage": "assessment",
+            "reason_code": REASON_PARSE_ERROR,
+            "error_kind": getattr(exc, "error_kind", ERROR_KIND_OUTPUT_SCHEMA_INVALID),
             "error": str(exc),
         }
 
@@ -278,13 +359,29 @@ def evaluate(
             usage.add(call)
         # 用量未知时停止，不把缺失统计当成免费的复核。
         if usage.unknown_usage_requests:
-            return {"ok": False, "evaluation": None, "pending_evaluation": evaluation,
-                    "call": call, "calls": calls, "reason_code": "REVIEW_PENDING",
-                    "error": "初评用量不明，本轮停止；已保存初评，下次只继续复核。"}
+            return {
+                "ok": False,
+                "evaluation": None,
+                "pending_evaluation": evaluation,
+                "call": call,
+                "calls": calls,
+                "stage": "assessment",
+                "reason_code": "REVIEW_PENDING",
+                "error_kind": "REVIEW_PENDING",
+                "error": "初评用量不明，本轮停止；已保存初评，下次只继续复核。",
+            }
         elif on_request is not None and on_request("before", "review", None) is False:
-            return {"ok": False, "evaluation": None, "pending_evaluation": evaluation,
-                    "call": call, "calls": calls, "reason_code": "REVIEW_PENDING",
-                    "error": "预算已达上限；已保存初评，下次只继续复核。"}
+            return {
+                "ok": False,
+                "evaluation": None,
+                "pending_evaluation": evaluation,
+                "call": call,
+                "calls": calls,
+                "stage": "assessment",
+                "reason_code": "REVIEW_PENDING",
+                "error_kind": "REVIEW_PENDING",
+                "error": "预算已达上限；已保存初评，下次只继续复核。",
+            }
         else:
             reviewer_system = system + "\n\n你是独立复核员。重新从原文判断，重点寻找泛泛建议、缺失步骤、无法验证的承诺和依赖缺口。不得为了凑数推荐，也不得因篇幅短机械否定。"
             review_call = call_model(model_cfg, reviewer_system, user, api_key=api_key, session=session, sleep=sleep)
@@ -293,20 +390,72 @@ def evaluate(
                 on_request("after", "review", review_call)
             if not review_call.ok:
                 # 技术失败不伪装为质量不合格；已有推荐由状态机保留。
-                return {"ok": False, "evaluation": None, "call": review_call, "calls": calls,
-                        "reason_code": review_call.reason_code or REASON_MODEL_ERROR, "error": "独立复核调用失败"}
+                return {
+                    "ok": False,
+                    "evaluation": None,
+                    "call": review_call,
+                    "calls": calls,
+                    "stage": "review",
+                    "reason_code": review_call.reason_code or REASON_MODEL_ERROR,
+                    "error_kind": getattr(review_call, "reason_code", None) or REASON_MODEL_ERROR,
+                    "error": "独立复核调用失败",
+                }
+            if not (review_call.content or "").strip() and review_call.finish_reason != "length":
+                return {
+                    "ok": False,
+                    "evaluation": None,
+                    "call": review_call,
+                    "calls": calls,
+                    "stage": "review",
+                    "reason_code": REASON_MODEL_ERROR,
+                    "error_kind": ERROR_KIND_RESPONSE_EMPTY,
+                    "error": "独立复核正常结束但未提供有效正文",
+                }
             try:
-                review = check_quality(parse_evaluation(review_call.content or "", rules,
-                    candidate.content_fingerprint, taxonomy), text, rules)
-            except ValueError as exc:
-                return {"ok": False, "evaluation": None, "call": review_call, "calls": calls,
-                        "reason_code": REASON_PARSE_ERROR, "error": f"独立复核输出无效：{exc}"}
+                review = check_quality(
+                    parse_evaluation(
+                        review_call.content or "", rules, candidate.content_fingerprint, taxonomy
+                    ),
+                    text,
+                    rules,
+                )
+            except OutputJsonError as exc:
+                return {
+                    "ok": False,
+                    "evaluation": None,
+                    "call": review_call,
+                    "calls": calls,
+                    "stage": "review",
+                    "reason_code": REASON_PARSE_ERROR,
+                    "error_kind": ERROR_KIND_OUTPUT_JSON_INVALID,
+                    "error": f"独立复核输出不是合法 JSON：{exc}",
+                }
+            except (OutputSchemaError, ValueError) as exc:
+                return {
+                    "ok": False,
+                    "evaluation": None,
+                    "call": review_call,
+                    "calls": calls,
+                    "stage": "review",
+                    "reason_code": REASON_PARSE_ERROR,
+                    "error_kind": getattr(exc, "error_kind", ERROR_KIND_OUTPUT_SCHEMA_INVALID),
+                    "error": f"独立复核输出无效：{exc}",
+                }
             if decide(review, rules)["decision"] != "recommended" or review.get("main_category") != evaluation.get("main_category"):
                 evaluation = hold_for_review(evaluation, "disagreed", "两轮独立评估存在分歧，留在候选区等待核实。")
             else:
                 evaluation["quality_audit"]["review_status"] = "passed"
             evaluation["quality_audit"]["review"] = review
-    return {"ok": True, "evaluation": evaluation, "call": calls[-1] if calls else None, "calls": calls, "reason_code": None, "error": None}
+    return {
+        "ok": True,
+        "evaluation": evaluation,
+        "call": calls[-1] if calls else None,
+        "calls": calls,
+        "stage": "review" if len(calls) > 1 or pending_evaluation is not None else "assessment",
+        "reason_code": None,
+        "error_kind": None,
+        "error": None,
+    }
 
 
 def evaluation_id(candidate: Candidate, model_cfg: dict, rules: dict) -> str:
@@ -324,6 +473,17 @@ def evaluation_id(candidate: Candidate, model_cfg: dict, rules: dict) -> str:
 
 __all__ = [
     "REASON_PARSE_ERROR",
+    "REASON_RESUME_STATE_INVALID",
+    "ERROR_KIND_OUTPUT_JSON_INVALID",
+    "ERROR_KIND_OUTPUT_SCHEMA_INVALID",
+    "ERROR_KIND_RESUME_STATE_INVALID",
+    "ERROR_KIND_RESPONSE_EMPTY",
+    "ERROR_KIND_LEGACY_PARSE_UNKNOWN",
+    "EvaluationError",
+    "OutputJsonError",
+    "OutputSchemaError",
+    "ResumeStateError",
+    "ResponseEmptyError",
     "CHECK_VALUE_DOMAIN",
     "UNTRUSTED_NOTICE",
     "build_prompt",

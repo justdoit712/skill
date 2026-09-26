@@ -149,6 +149,8 @@ def enrich_catalog_offline(
 __all__ = [
     "sync_config_offline",
     "enrich_catalog_offline",
+    "reconcile_pool",
+    "resume_candidate",
 ]
 
 
@@ -304,4 +306,247 @@ def enrich_catalog(root: Path | str) -> dict[str, Any]:
         "with_key_features": with_key_features,
         "catalog_path": str(catalog_file),
         "page_path": str(public_file),
+    }
+
+
+@catalog_task
+def reconcile_pool(root_dir: str | Path = ".", *, apply: bool = False) -> dict[str, Any]:
+    """离线对账：精确比对本地候选池与账本记录，对齐 length_exceeded 与 blocked 状态 (§7.1)。
+
+    不联网、不调用模型、不修改用量或删除账本。
+    默认只预览 (--dry-run)；应用时持有目录任务锁并生成迁移前备份。
+    """
+    import shutil
+    from .pool import (
+        load_pool,
+        save_pool,
+        STATUS_PENDING,
+        STATUS_LENGTH_EXCEEDED,
+        STATUS_BLOCKED,
+        update_candidate_status,
+    )
+    from .budget import evaluation_filename
+    from .config import load_all_config
+    from .evaluation import evaluation_id
+    from src.shared.runtime import now_local
+
+    root = Path(root_dir).resolve()
+    pool_path = root / "data" / "local" / "pool.json"
+    if not pool_path.exists():
+        return {"status": "no_pool", "reconciled": 0, "apply": apply, "changes": [], "unverified": []}
+
+    pool = load_pool(pool_path)
+    cfg = load_all_config(root / "config")
+
+    records_by_eid: dict[str, dict] = {}
+    records_by_identity: dict[tuple, dict] = {}
+    for state_dir in (root / "data" / "local" / "state", root / "data" / "state"):
+        eval_dir = state_dir / "evaluations"
+        if eval_dir.exists():
+            for p in eval_dir.glob("*.json"):
+                try:
+                    rec = read_json(p)
+                    eid = rec.get("evaluation_id")
+                    if eid:
+                        records_by_eid[eid] = rec
+                    sk_id = rec.get("skill_id")
+                    fp = rec.get("content_fingerprint")
+                    rv = rec.get("rules_version")
+                    mv = rec.get("model_config_version")
+                    if sk_id and fp:
+                        records_by_identity[(sk_id, fp, str(rv or ""), str(mv or ""))] = rec
+                except Exception:
+                    continue
+
+    changes: list[dict] = []
+    unverified: list[dict] = []
+
+    for item in pool.items:
+        if item.status != STATUS_PENDING:
+            continue
+        candidate = item.candidate
+        fp = candidate.content_fingerprint
+        if not fp:
+            unverified.append({
+                "seq": item.seq,
+                "skill_id": candidate.skill_id,
+                "reason": "missing_fingerprint",
+            })
+            continue
+
+        rules_v = str(cfg["rules"].get("rules_version") or "")
+        model_v = str(cfg["model"].get("model_config_version") or "")
+        eid = evaluation_id(candidate, cfg["model"], cfg["rules"])
+        record = records_by_eid.get(eid) or records_by_identity.get((candidate.skill_id, fp, rules_v, model_v))
+        if not record:
+            continue
+
+        error = record.get("error") or {}
+        reason_code = error.get("reason_code") or record.get("reason_code")
+        requests_list = record.get("requests") or []
+        has_length = (
+            reason_code == "LENGTH_EXCEEDED"
+            or any(r.get("reason_code") == "LENGTH_EXCEEDED" or r.get("status") == "length_exceeded" for r in requests_list)
+        )
+
+        if has_length:
+            changes.append({
+                "seq": item.seq,
+                "skill_id": candidate.skill_id,
+                "evaluation_id": eid,
+                "target_status": STATUS_LENGTH_EXCEEDED,
+                "reason": "LENGTH_EXCEEDED",
+            })
+            if apply:
+                update_candidate_status(pool, item.seq, STATUS_LENGTH_EXCEEDED)
+        elif record.get("status") in ("failed", "needs_recovery"):
+            retryable = error.get("retryable") or record.get("retryable")
+            attempts = int(record.get("attempts") or 0)
+            max_attempts = int(record.get("max_attempts") or 2)
+            if not retryable or attempts >= max_attempts:
+                block_info = {
+                    "evaluation_id": eid,
+                    "reason": "RECONCILED_FAILURE",
+                    "reason_code": reason_code,
+                    "error_kind": error.get("error_kind") or record.get("error_kind") or (
+                        "LEGACY_PARSE_UNKNOWN" if reason_code == "PARSE_ERROR" else None
+                    ),
+                    "stage": record.get("stage"),
+                    "http_status": error.get("http_status"),
+                    "blocked_at": now_local().isoformat(),
+                    "source": "reconcile",
+                    "model": record.get("model") or cfg["model"].get("model"),
+                    "model_config_version": model_v,
+                }
+                changes.append({
+                    "seq": item.seq,
+                    "skill_id": candidate.skill_id,
+                    "evaluation_id": eid,
+                    "target_status": STATUS_BLOCKED,
+                    "block_info": block_info,
+                    "reason": reason_code or "NON_RETRYABLE_FAILURE",
+                })
+                if apply:
+                    item.block_info = block_info
+                    update_candidate_status(pool, item.seq, STATUS_BLOCKED)
+
+    backup_path = None
+    if apply and changes:
+        backup_path = pool_path.parent / f"pool.backup.{now_local().strftime('%Y%m%d_%H%M%S')}.json"
+        shutil.copyfile(pool_path, backup_path)
+        save_pool(pool_path, pool)
+
+    return {
+        "status": "ok",
+        "reconciled": len(changes),
+        "apply": apply,
+        "backup_path": str(backup_path) if backup_path else None,
+        "changes": changes,
+        "unverified": unverified,
+    }
+
+
+@catalog_task
+def resume_candidate(
+    root_dir: str | Path = ".",
+    *,
+    evaluation_id: str,
+    reason: str,
+    extra_attempts: int = 1,
+    apply: bool = False,
+) -> dict[str, Any]:
+    """显式恢复接口：解除特定条目的 blocked 状态并授予额外尝试额度 (§7.2)。
+
+    恢复事件追加到本地账本，保留历史请求、用量与 attempts，绝不将尝试清零。
+    """
+    import shutil
+    from .pool import load_pool, save_pool, STATUS_PENDING, STATUS_BLOCKED
+    from .budget import evaluation_filename
+    from src.infra.files import write_json_atomic
+    from src.shared.runtime import now_local
+
+    if not evaluation_id or not evaluation_id.strip():
+        raise ValueError("必须指定 --evaluation-id")
+    if not reason or not reason.strip():
+        raise ValueError("必须指定恢复原因 --reason")
+    if extra_attempts < 1:
+        raise ValueError("额外尝试次数必须 >= 1")
+
+    root = Path(root_dir).resolve()
+    pool_path = root / "data" / "local" / "pool.json"
+    if not pool_path.exists():
+        raise FileNotFoundError("候选池文件不存在")
+
+    pool = load_pool(pool_path)
+    matched_item = None
+    for item in pool.items:
+        b_info = item.block_info or {}
+        if b_info.get("evaluation_id") == evaluation_id:
+            matched_item = item
+            break
+
+    if matched_item is None:
+        raise ValueError(f"候选池中未找到与评估 ID 匹配的 blocked 条目：{evaluation_id}")
+    if matched_item.status != STATUS_BLOCKED:
+        raise ValueError(f"候选 #{matched_item.seq} 当前状态为 {matched_item.status}，非 blocked")
+
+    hash_fn = evaluation_filename(evaluation_id)
+    local_rec_path = root / "data" / "local" / "state" / "evaluations" / hash_fn
+    actions_rec_path = root / "data" / "state" / "evaluations" / hash_fn
+    rec_path = local_rec_path if local_rec_path.exists() else actions_rec_path if actions_rec_path.exists() else None
+    if not rec_path:
+        raise FileNotFoundError(f"未找到评估记录文件：{hash_fn}")
+
+    record = read_json(rec_path)
+    current_max_attempts = int(record.get("max_attempts") or 2)
+    new_max_attempts = current_max_attempts + extra_attempts
+
+    resume_event = {
+        "resumed_at": now_local().isoformat(),
+        "reason": reason.strip(),
+        "extra_attempts": extra_attempts,
+        "previous_attempts": record.get("attempts", 0),
+        "previous_max_attempts": current_max_attempts,
+        "new_max_attempts": new_max_attempts,
+    }
+
+    if not apply:
+        return {
+            "dry_run": True,
+            "evaluation_id": evaluation_id,
+            "seq": matched_item.seq,
+            "skill_id": matched_item.candidate.skill_id,
+            "current_status": matched_item.status,
+            "target_status": STATUS_PENDING,
+            "reason": reason.strip(),
+            "extra_attempts": extra_attempts,
+            "current_max_attempts": current_max_attempts,
+            "new_max_attempts": new_max_attempts,
+        }
+
+    backup_path = pool_path.parent / f"pool.backup.{now_local().strftime('%Y%m%d_%H%M%S')}.json"
+    shutil.copyfile(pool_path, backup_path)
+
+    record.setdefault("resume_history", []).append(resume_event)
+    record["max_attempts"] = new_max_attempts
+    record["retryable"] = True
+    record["status"] = "failed"
+
+    local_rec_path.parent.mkdir(parents=True, exist_ok=True)
+    write_json_atomic(local_rec_path, record)
+
+    matched_item.status = STATUS_PENDING
+    matched_item.block_info = None
+    save_pool(pool_path, pool)
+
+    return {
+        "dry_run": False,
+        "evaluation_id": evaluation_id,
+        "seq": matched_item.seq,
+        "skill_id": matched_item.candidate.skill_id,
+        "status": STATUS_PENDING,
+        "reason": reason.strip(),
+        "extra_attempts": extra_attempts,
+        "new_max_attempts": new_max_attempts,
+        "backup_path": str(backup_path),
     }

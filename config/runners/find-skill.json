@@ -1,5 +1,5 @@
 {
-  "topic": "生成高质量 Prompt",
+  "topic": "如何整理归纳，包括但不限于，软件分类，帖子分类，总而言之就是各种东西该如何分类",
   "limit": 5,
   "max_evaluations": 80,
   "max_tokens": "20 000 000",

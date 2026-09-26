@@ -1,12 +1,11 @@
 {
   "catalog_version": "1.0.0",
   "rules_version": "1.1.0",
-  "generated_at": "2026-09-26T10:06:18.483816+08:00",
+  "generated_at": "2026-09-26T13:24:52.279870+08:00",
   "counts": {
-    "recommended": 42,
-    "candidate": 13,
-    "manual": 34,
-    "excluded": 51
+    "excluded": 51,
+    "candidate": 44,
+    "recommended": 61
   },
   "entries": [
     {
@@ -9075,6 +9074,1297 @@
       },
       "last_evaluation_id": "expo/skills:plugins/expo/skills/expo-dev-client/SKILL.md|sha256:f39d8f589e3b22e93fecd4a17b5102c3|1.1.0|1.0.0",
       "evaluated_at": "2026-09-26T10:06:18.483816+08:00"
+    },
+    {
+      "skill_id": "getsentry/skills:skills/agents-md/SKILL.md",
+      "name": "agents-md",
+      "url": "https://github.com/getsentry/skills/blob/HEAD/skills/agents-md/SKILL.md",
+      "repo_url": "https://github.com/getsentry/skills",
+      "author": "getsentry",
+      "summary_zh": "该技能提供了一套用于创建和维护项目级 AI 代理指令文件（AGENTS.md/CLAUDE.md）的操作规范，旨在确保指令简洁、可执行且引用准确。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "帮我创建一个符合规范的 AGENTS.md 文件",
+        "更新现有的 AGENTS.md 以包含新的测试命令"
+      ],
+      "key_features": [
+        "规定了不超过60行的篇幅限制",
+        "提供了标准的 Markdown 模板结构",
+        "强调使用相对路径和具体命令而非模糊描述"
+      ],
+      "main_category": {
+        "id": "dev",
+        "name": "编程开发"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "AI Agent 配置",
+        "项目文档规范",
+        "代码审查辅助"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "limitations": "主要限制在于其适用范围仅限于生成或维护特定格式的指令文件，不具备自动执行这些指令的能力。",
+      "license": null,
+      "status": "candidate",
+      "reason_codes": [
+        "QUALITY_BELOW_BAR",
+        "INSUFFICIENT_EVIDENCE"
+      ],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-26T11:34:46.390246+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:8a91ada35068f43ef7ee03e38937863b",
+      "source_type": "official",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.1.0",
+      "quality_summary": {
+        "review_status": "not_required",
+        "review_note": null,
+        "blocking_reasons": [
+          "初评：材料第3行 description: 'Creates and maintains concise AGENTS.md and CLAUDE.md project instruction files.'，属于编程开发中的代码规范与文档管理范畴。；程序未能核实所引原文与行号。",
+          "初评：材料第3-4行明确描述了用途：创建和维护项目指令文件（AGENTS.md/CLAUDE.md），用于指导编码代理。；程序未能核实所引原文与行号。",
+          "初评：质量门槛未通过：practical_value: 提供了具体的增量价值：将通用的 AI 交互转化为标准化的项目上下文，避免了冗长的提示词堆砌。；程序未能核实所引原文与行号。",
+          "初评：材料内容完全围绕如何编写和维持 AGENTS.md 展开，描述与实际提供的指南一致。；程序未能核实所引原文与行号。",
+          "初评：材料为纯文本操作指南，未声明任何外部工具或依赖，符合纯文本技能无依赖的通过标准。；程序未能核实所引原文与行号。",
+          "初评：未发现可疑行为，仅涉及项目文档规范。；程序未能核实所引原文与行号。"
+        ],
+        "checks": {
+          "practical_value": {
+            "value": "unknown",
+            "evidence": "提供了具体的增量价值：将通用的 AI 交互转化为标准化的项目上下文，避免了冗长的提示词堆砌。；程序未能核实所引原文与行号。"
+          },
+          "actionability": {
+            "value": "pass",
+            "evidence": "步骤清晰，包括检查现有文件、选择作用域、编写内容及验证路径，并提供了具体的章节模板。"
+          },
+          "verification": {
+            "value": "pass",
+            "evidence": "提供了明确的验收标准，如行数限制、格式要求（标题、列表、表格）以及反模式检查。"
+          }
+        },
+        "review_checks": {}
+      },
+      "last_evaluation_id": "getsentry/skills:skills/agents-md/SKILL.md|sha256:8a91ada35068f43ef7ee03e38937863b|1.1.0|1.0.0",
+      "evaluated_at": "2026-09-26T11:34:46.389234+08:00"
+    },
+    {
+      "skill_id": "getsentry/skills:skills/blog-writing-guide/SKILL.md",
+      "name": "blog-writing-guide",
+      "url": "https://github.com/getsentry/skills/blob/HEAD/skills/blog-writing-guide/SKILL.md",
+      "repo_url": "https://github.com/getsentry/skills",
+      "author": "getsentry",
+      "summary_zh": "一份针对Sentry工程博客的写作与审核指南，涵盖语气规范、文章结构、SEO技巧及技术质量标准，适用于撰写或优化技术类博文。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "帮我写一个关于分布式追踪系统的深度技术博客开头",
+        "审查这篇草稿，指出其中不符合Sentry语气的部分并修改"
+      ],
+      "key_features": [
+        "禁止使用特定营销词汇和AI常见行文模式",
+        "提供基于读者视角的文章结构模板",
+        "包含具体的技术准确性与编辑审核检查清单"
+      ],
+      "main_category": {
+        "id": "content",
+        "name": "内容创作"
+      },
+      "candidate_domains": [
+        "content"
+      ],
+      "tags": [
+        "技术写作",
+        "博客指南",
+        "内容审核"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "limitations": "仅适用于Sentry工程博客或类似开发者受众的技术内容，通用性受限。",
+      "license": null,
+      "status": "candidate",
+      "reason_codes": [
+        "QUALITY_BELOW_BAR",
+        "INSUFFICIENT_EVIDENCE"
+      ],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-26T11:35:55.014195+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:8aba654d1af0820ee83370ddcbe51c24",
+      "source_type": "official",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.1.0",
+      "quality_summary": {
+        "review_status": "not_required",
+        "review_note": null,
+        "blocking_reasons": [
+          "初评：材料属于内容创作领域，具体为技术博客写作指南。；程序未能核实所引原文与行号。",
+          "初评：第3行明确说明用途：'Write, review, and improve blog posts for the Sentry engineering blog...'；程序未能核实所引原文与行号。",
+          "初评：质量门槛未通过：practical_value: 提供了具体的写作标准（如语气、结构、SEO），相比泛泛的写作提示词具有更高的增量价值。；程序未能核实所引原文与行号。；actionability: 包含清晰的结构步骤（第48-57行）和可执行的审核清单（第191-214行）。；程序未能核实所引原文与行号。；verification: 提供了明确的审核标准和示例对比，可用于验证输出质量。；程序未能核实所引原文与行号。",
+          "初评：SKILL.md全文均为Sentry内部写作规范的具体描述，无外部来源引用需求。；程序未能核实所引原文与行号。",
+          "初评：纯文本指导规范，未声明特殊工具或依赖。；程序未能核实所引原文与行号。",
+          "初评：内容为写作规范，无安全风险。；程序未能核实所引原文与行号。"
+        ],
+        "checks": {
+          "practical_value": {
+            "value": "unknown",
+            "evidence": "提供了具体的写作标准（如语气、结构、SEO），相比泛泛的写作提示词具有更高的增量价值。；程序未能核实所引原文与行号。"
+          },
+          "actionability": {
+            "value": "unknown",
+            "evidence": "包含清晰的结构步骤（第48-57行）和可执行的审核清单（第191-214行）。；程序未能核实所引原文与行号。"
+          },
+          "verification": {
+            "value": "unknown",
+            "evidence": "提供了明确的审核标准和示例对比，可用于验证输出质量。；程序未能核实所引原文与行号。"
+          }
+        },
+        "review_checks": {}
+      },
+      "last_evaluation_id": "getsentry/skills:skills/blog-writing-guide/SKILL.md|sha256:8aba654d1af0820ee83370ddcbe51c24|1.1.0|1.0.0",
+      "evaluated_at": "2026-09-26T11:35:55.012061+08:00"
+    },
+    {
+      "skill_id": "getsentry/skills:skills/brand-guidelines/SKILL.md",
+      "name": "brand-guidelines",
+      "url": "https://github.com/getsentry/skills/blob/HEAD/skills/brand-guidelines/SKILL.md",
+      "repo_url": "https://github.com/getsentry/skills",
+      "author": "getsentry",
+      "summary_zh": "一份针对 Sentry 产品的品牌文案写作指南，涵盖 UI 文本、错误消息及营销内容的语气选择（Plain Speech 与 Sentry Voice）和具体写作规范。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "根据 Sentry 品牌指南，为一个新的 'Delete Project' 确认对话框编写文案。",
+        "为产品空状态页面生成符合 Sentry Voice 语气的提示文本。"
+      ],
+      "key_features": [
+        "区分 Plain Speech 和 Sentry Voice 两种语气的适用场景。",
+        "提供具体的 UI 元素（按钮、错误消息、空状态）写作规则与正反例。",
+        "包含拼写、标点符号及连字符使用的详细规范。"
+      ],
+      "main_category": {
+        "id": "content",
+        "name": "内容创作"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "文案写作",
+        "品牌规范",
+        "UI Copywriting"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "limitations": "仅适用于遵循 Sentry 品牌规范的特定场景，具有强烈的品牌私有性，通用性较低。",
+      "license": null,
+      "status": "candidate",
+      "reason_codes": [
+        "QUALITY_BELOW_BAR",
+        "INSUFFICIENT_EVIDENCE"
+      ],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-26T11:37:05.855294+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:59c75b089fc355f34862172222344801",
+      "source_type": "official",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.1.0",
+      "quality_summary": {
+        "review_status": "not_required",
+        "review_note": null,
+        "blocking_reasons": [
+          "初评：材料描述为 'Write copy following Sentry brand guidelines... Covers both Plain Speech (default) and Sentry Voice tones.'，属于内容创作中的文案写作规范。；程序未能核实所引原文与行号。",
+          "初评：第3行明确说明用途：'Use when writing UI text, error messages, empty states, onboarding flows, 404 pages, documentation, marketing copy...'。；程序未能核实所引原文与行号。",
+          "初评：质量门槛未通过：practical_value: 提供了具体的文案替换示例（如 'Click here to save' -> 'Save'）和语气选择矩阵，比通用提示词更具针对性。；程序未能核实所引原文与行号。；actionability: 明确了不同场景下的语气选择（如 404 页用 Sentry Voice，错误消息用 Plain Speech），并给出了具体的语法和词汇建议。；程序未能核实所引原文与行号。；verification: 通过提供 'Good' 和 'Bad' 的对比示例，使得输出结果可被直接验证是否符合规范。；程序未能核实所引原文与行号。",
+          "初评：技能内容完全围绕 Sentry 品牌指南展开，并在 References 部分（167-168行）提供了外部链接作为依据，内容与介绍一致。；程序未能核实所引原文与行号。",
+          "初评：纯文本指导文件，无代码执行或外部工具依赖。第167-168行引用了 Sentry 官方文档作为参考来源。；程序未能核实所引原文与行号。",
+          "初评：内容为文案写作规范，不涉及安全风险、实盘交易或临床诊断。；程序未能核实所引原文与行号。"
+        ],
+        "checks": {
+          "practical_value": {
+            "value": "unknown",
+            "evidence": "提供了具体的文案替换示例（如 'Click here to save' -> 'Save'）和语气选择矩阵，比通用提示词更具针对性。；程序未能核实所引原文与行号。"
+          },
+          "actionability": {
+            "value": "unknown",
+            "evidence": "明确了不同场景下的语气选择（如 404 页用 Sentry Voice，错误消息用 Plain Speech），并给出了具体的语法和词汇建议。；程序未能核实所引原文与行号。"
+          },
+          "verification": {
+            "value": "unknown",
+            "evidence": "通过提供 'Good' 和 'Bad' 的对比示例，使得输出结果可被直接验证是否符合规范。；程序未能核实所引原文与行号。"
+          }
+        },
+        "review_checks": {}
+      },
+      "last_evaluation_id": "getsentry/skills:skills/brand-guidelines/SKILL.md|sha256:59c75b089fc355f34862172222344801|1.1.0|1.0.0",
+      "evaluated_at": "2026-09-26T11:37:05.853783+08:00"
+    },
+    {
+      "skill_id": "getsentry/skills:skills/code-review/SKILL.md",
+      "name": "code-review",
+      "url": "https://github.com/getsentry/skills/blob/HEAD/skills/code-review/SKILL.md",
+      "repo_url": "https://github.com/getsentry/skills",
+      "author": "getsentry",
+      "summary_zh": "基于Sentry工程实践的代码审查指南，涵盖问题识别、设计评估、测试覆盖及反馈规范，适用于PR审查和代码质量提升。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "Review this PR for potential N+1 query issues in Django.",
+        "Check if the React useEffect dependencies are correct."
+      ],
+      "key_features": [
+        "提供针对运行时错误、性能、副作用等的具体问题检查清单。",
+        "包含Python/Django和TypeScript/React的具体反模式示例。",
+        "定义了礼貌且可操作的反馈语气及审批标准。"
+      ],
+      "main_category": {
+        "id": "dev",
+        "name": "编程开发"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "code-review",
+        "quality-assurance",
+        "sentry-practices"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "limitations": "主要限制为基于Sentry特定工程实践，可能不完全适用于所有非Sentry项目或不同技术栈。",
+      "license": null,
+      "status": "candidate",
+      "reason_codes": [
+        "QUALITY_BELOW_BAR",
+        "INSUFFICIENT_EVIDENCE"
+      ],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-26T11:39:09.101575+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:ec5fc8855cb4648b4f2c79b608f8c882",
+      "source_type": "official",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.1.0",
+      "quality_summary": {
+        "review_status": "not_required",
+        "review_note": null,
+        "blocking_reasons": [
+          "初评：材料属于编程开发领域，涉及代码审查、安全、性能等，符合 config/taxonomy.json 中 'dev' 的 scope。；程序未能核实所引原文与行号。",
+          "初评：第3行 description: Perform code reviews following Sentry engineering practices. Use when reviewing pull requests, examining code changes, or providing feedback on code quality.；程序未能核实所引原文与行号。",
+          "初评：质量门槛未通过：actionability: 结构化的Checklist和明确的Feedback Guidelines使得执行者可以直接按步骤进行审查。；程序未能核实所引原文与行号。",
+          "初评：SKILL.md 内容（如 Sentry Code Review, Python/Django patterns）与上游仓库 getsentry/skills 及其引用的 develop.sentry.dev 指南一致。；程序未能核实所引原文与行号。",
+          "初评：纯文本技能，明确声明无外部依赖，仅作为操作规范。；程序未能核实所引原文与行号。",
+          "初评：未发现明显可疑行为或与收录范围冲突的功能。；程序未能核实所引原文与行号。"
+        ],
+        "checks": {
+          "practical_value": {
+            "value": "pass",
+            "evidence": "提供了具体的检查维度（如N+1查询、ORM性能）和代码级反模式示例，比通用提示词更具针对性。"
+          },
+          "actionability": {
+            "value": "unknown",
+            "evidence": "结构化的Checklist和明确的Feedback Guidelines使得执行者可以直接按步骤进行审查。；程序未能核实所引原文与行号。"
+          },
+          "verification": {
+            "value": "pass",
+            "evidence": "通过提供具体的Bad/Good代码对比示例，明确了审查结果的验收标准。"
+          }
+        },
+        "review_checks": {}
+      },
+      "last_evaluation_id": "getsentry/skills:skills/code-review/SKILL.md|sha256:ec5fc8855cb4648b4f2c79b608f8c882|1.1.0|1.0.0",
+      "evaluated_at": "2026-09-26T11:39:09.100066+08:00"
+    },
+    {
+      "skill_id": "getsentry/skills:skills/code-simplifier/SKILL.md",
+      "name": "code-simplifier",
+      "url": "https://github.com/getsentry/skills/blob/HEAD/skills/code-simplifier/SKILL.md",
+      "repo_url": "https://github.com/getsentry/skills",
+      "author": "getsentry",
+      "summary_zh": "这是一个专注于代码简化和重构的技能，旨在通过应用项目特定的最佳实践来提升代码的清晰度、一致性和可维护性，同时严格保持原有功能不变。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "简化这段嵌套三元运算符的代码",
+        "清理这个函数的冗余抽象逻辑"
+      ],
+      "key_features": [
+        "严格保持原有功能不变，仅优化实现方式",
+        "依据 CLAUDE.md 等文件应用项目特定编码标准",
+        "提供从嵌套三元表达式到清晰步骤的具体重构示例"
+      ],
+      "main_category": {
+        "id": "dev",
+        "name": "编程开发"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "代码重构",
+        "代码审查",
+        "可读性优化"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "CLAUDE.md (项目编码规范)"
+      ],
+      "limitations": "依赖项目特定的编码标准文件（如 CLAUDE.md），若缺失可能导致无法应用具体规范；主要关注近期修改的代码。",
+      "license": null,
+      "status": "candidate",
+      "reason_codes": [
+        "QUALITY_BELOW_BAR",
+        "INSUFFICIENT_EVIDENCE"
+      ],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-26T11:40:15.295555+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:ad4ce00d2759e0773bee88f267f4ae0f",
+      "source_type": "official",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.1.0",
+      "quality_summary": {
+        "review_status": "not_required",
+        "review_note": null,
+        "blocking_reasons": [
+          "初评：材料第3行 description: Simplifies and refines code for clarity, consistency, and maintainability... 属于编程开发领域的重构、调试范畴。；程序未能核实所引原文与行号。",
+          "初评：材料第3行明确说明用途：'Simplifies and refines code... Use when asked to simplify code...'；第13-14行定义角色为 'expert code simplification specialist'。；程序未能核实所引原文与行号。",
+          "初评：质量门槛未通过：practical_value: 提供了具体的重构原则（如避免嵌套三元、消除冗余抽象）和对比示例，相比通用提示词更具针对性。；程序未能核实所引原文与行号。；actionability: 包含明确的6步处理流程（第59-67行）和5项核心原则（第15-58行），指导性强。；程序未能核实所引原文与行号。；verification: 要求验证功能不变（Step 4）和更易于维护（Step 5），并通过 Before/After 示例展示预期输出标准。；程序未能核实所引原文与行号。",
+          "初评：材料第6-9行引用了上游来源 'Based on Anthropic's code-simplifier agent'，且内容确实围绕代码简化展开，介绍与内容一致。；程序未能核实所引原文与行号。",
+          "初评：材料第23行指出依赖 'CLAUDE.md' 中的编码标准，未声明其他外部工具或运行环境，符合纯文本/提示词技能特征。；程序未能核实所引原文与行号。",
+          "初评：材料第17-19行强调 'Never change what the code does'，无安全风险或违规内容。；程序未能核实所引原文与行号。"
+        ],
+        "checks": {
+          "practical_value": {
+            "value": "unknown",
+            "evidence": "提供了具体的重构原则（如避免嵌套三元、消除冗余抽象）和对比示例，相比通用提示词更具针对性。；程序未能核实所引原文与行号。"
+          },
+          "actionability": {
+            "value": "unknown",
+            "evidence": "包含明确的6步处理流程（第59-67行）和5项核心原则（第15-58行），指导性强。；程序未能核实所引原文与行号。"
+          },
+          "verification": {
+            "value": "unknown",
+            "evidence": "要求验证功能不变（Step 4）和更易于维护（Step 5），并通过 Before/After 示例展示预期输出标准。；程序未能核实所引原文与行号。"
+          }
+        },
+        "review_checks": {}
+      },
+      "last_evaluation_id": "getsentry/skills:skills/code-simplifier/SKILL.md|sha256:ad4ce00d2759e0773bee88f267f4ae0f|1.1.0|1.0.0",
+      "evaluated_at": "2026-09-26T11:40:15.293558+08:00"
+    },
+    {
+      "skill_id": "getsentry/skills:skills/commit/SKILL.md",
+      "name": "commit",
+      "url": "https://github.com/getsentry/skills/blob/HEAD/skills/commit/SKILL.md",
+      "repo_url": "https://github.com/getsentry/skills",
+      "author": "getsentry",
+      "summary_zh": "该技能用于指导生成符合Sentry规范的Git提交信息，包括分支检查、提交类型定义及命令执行示例。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "帮我写一个修复API空指针异常的提交信息",
+        "生成一个包含Breaking Change的提交记录"
+      ],
+      "key_features": [
+        "强制要求非main/master分支提交",
+        "规定Subject行不超过70字符且使用祈使句",
+        "禁止在提交信息中包含PII或机密数据"
+      ],
+      "main_category": {
+        "id": "dev",
+        "name": "编程开发"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "git",
+        "commit-message",
+        "conventional-commits"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "limitations": "仅适用于遵循Sentry风格规范的Git仓库，通用性受限。",
+      "license": null,
+      "status": "candidate",
+      "reason_codes": [
+        "QUALITY_BELOW_BAR",
+        "INSUFFICIENT_EVIDENCE"
+      ],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-26T11:41:26.324526+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:0307d3ecfe3b3e70246cbd88b19dc585",
+      "source_type": "official",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.1.0",
+      "quality_summary": {
+        "review_status": "not_required",
+        "review_note": null,
+        "blocking_reasons": [
+          "初评：材料属于编程开发领域，涉及Git提交规范与代码管理。；程序未能核实所引原文与行号。",
+          "初评：第3行描述：'Use for every request to commit changes or draft a commit message.' 明确用途为生成Sentry风格的提交信息。；程序未能核实所引原文与行号。",
+          "初评：质量门槛未通过：practical_value: 提供了具体的提交类型列表和格式约束，比通用提示词更具针对性。；程序未能核实所引原文与行号。；actionability: 包含明确的分支检查步骤和可直接复制的git commit命令模板。；程序未能核实所引原文与行号。",
+          "初评：技能名称'Sentry Commit Messages'与内容中强调的'Sentry-style'、'Fixes SENTRY-xxx'等特征一致。；程序未能核实所引原文与行号。",
+          "初评：依赖标准命令行工具 git，未声明特殊外部依赖。；程序未能核实所引原文与行号。",
+          "初评：第38-39行明确要求不包含客户名称、PII等敏感信息，符合安全规范。；程序未能核实所引原文与行号。"
+        ],
+        "checks": {
+          "practical_value": {
+            "value": "unknown",
+            "evidence": "提供了具体的提交类型列表和格式约束，比通用提示词更具针对性。；程序未能核实所引原文与行号。"
+          },
+          "actionability": {
+            "value": "unknown",
+            "evidence": "包含明确的分支检查步骤和可直接复制的git commit命令模板。；程序未能核实所引原文与行号。"
+          },
+          "verification": {
+            "value": "pass",
+            "evidence": "通过具体的格式规则（如长度限制、标点符号）和命令示例提供验收标准。"
+          }
+        },
+        "review_checks": {}
+      },
+      "last_evaluation_id": "getsentry/skills:skills/commit/SKILL.md|sha256:0307d3ecfe3b3e70246cbd88b19dc585|1.1.0|1.0.0",
+      "evaluated_at": "2026-09-26T11:41:26.322668+08:00"
+    },
+    {
+      "skill_id": "getsentry/skills:skills/django-access-review/SKILL.md",
+      "name": "django-access-review",
+      "url": "https://github.com/getsentry/skills/blob/HEAD/skills/django-access-review/SKILL.md",
+      "repo_url": "https://github.com/getsentry/skills",
+      "author": "getsentry",
+      "summary_zh": "这是一个针对 Django 项目的访问控制和 IDOR（不安全的直接对象引用）安全审查指南。它指导用户通过理解代码库的授权模型、映射攻击面、追踪数据流来发现权限漏洞，并提供标准化的报告格式和修复建议。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "审查 Django ViewSet 中的 IDOR 漏洞",
+        "检查 Django 模型的权限控制实现"
+      ],
+      "key_features": [
+        "提供分阶段的代码审查方法论而非简单的模式匹配",
+        "包含具体的 Bash grep 命令用于快速定位授权相关代码",
+        "定义了高/中/低置信度的漏洞报告标准及修复建议规范"
+      ],
+      "main_category": {
+        "id": "security",
+        "name": "安全"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "Django",
+        "IDOR",
+        "访问控制",
+        "代码审计",
+        "OWASP"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "limitations": "仅适用于 Django/Python 技术栈；需要人工结合上下文确认中间件或基类的影响；无法自动执行修复，仅提供建议。",
+      "license": null,
+      "status": "candidate",
+      "reason_codes": [
+        "QUALITY_BELOW_BAR",
+        "INSUFFICIENT_EVIDENCE"
+      ],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-26T11:43:36.913784+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:75a58e3cf7bd7f3b65402c36424623e3",
+      "source_type": "official",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.1.0",
+      "quality_summary": {
+        "review_status": "not_required",
+        "review_note": null,
+        "blocking_reasons": [
+          "初评：技能名称为 django-access-review，描述为 'Django access control and IDOR security review'，属于安全领域的漏洞检测与代码审计。；程序未能核实所引原文与行号。",
+          "初评：第3行明确描述用途：'Use when reviewing Django views, DRF viewsets, ORM queries, or any Python/Django code handling user authorization.' 并列出触发关键词。；程序未能核实所引原文与行号。",
+          "初评：质量门槛未通过：practical_value: 提供了具体的审查步骤（如追踪 get_queryset 是否过滤用户ID）、置信度分级和报告模板，比通用提示词更具针对性。；程序未能核实所引原文与行号。；verification: 提供了明确的验证逻辑（如检查 get_queryset 是否返回 .all()），并规定了报告格式和置信度评估标准。；程序未能核实所引原文与行号。",
+          "初评：第9-10行注明参考了 OWASP Cheat Sheet Series，且内容完全围绕 Django/Python 代码的安全审查展开，介绍与内容一致。；程序未能核实所引原文与行号。",
+          "初评：第4行声明 allowed-tools: Read, Grep, Glob, Bash, Task。这些是标准文件操作和命令行工具，无特殊外部依赖声明。；程序未能核实所引原文与行号。",
+          "初评：技能仅用于代码审查和安全分析，不涉及实盘交易、临床诊断或凭据外传。；程序未能核实所引原文与行号。"
+        ],
+        "checks": {
+          "practical_value": {
+            "value": "unknown",
+            "evidence": "提供了具体的审查步骤（如追踪 get_queryset 是否过滤用户ID）、置信度分级和报告模板，比通用提示词更具针对性。；程序未能核实所引原文与行号。"
+          },
+          "actionability": {
+            "value": "pass",
+            "evidence": "包含具体的 Phase 1-5 操作步骤，Phase 1 提供了具体的 grep 命令示例，Phase 4 提供了详细的代码追踪案例。"
+          },
+          "verification": {
+            "value": "unknown",
+            "evidence": "提供了明确的验证逻辑（如检查 get_queryset 是否返回 .all()），并规定了报告格式和置信度评估标准。；程序未能核实所引原文与行号。"
+          }
+        },
+        "review_checks": {}
+      },
+      "last_evaluation_id": "getsentry/skills:skills/django-access-review/SKILL.md|sha256:75a58e3cf7bd7f3b65402c36424623e3|1.1.0|1.0.0",
+      "evaluated_at": "2026-09-26T11:43:36.911125+08:00"
+    },
+    {
+      "skill_id": "getsentry/skills:skills/django-perf-review/SKILL.md",
+      "name": "django-perf-review",
+      "url": "https://github.com/getsentry/skills/blob/HEAD/skills/django-perf-review/SKILL.md",
+      "repo_url": "https://github.com/getsentry/skills",
+      "author": "getsentry",
+      "summary_zh": "这是一个用于审查Django代码性能的指南，帮助识别N+1查询、未分页查询集、缺失索引等性能问题，并提供验证步骤和报告模板。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "Review Django performance for N+1 queries in user_list view",
+        "Find unbounded querysets causing memory exhaustion"
+      ],
+      "key_features": [
+        "提供5个优先级的性能问题分类及CRITICAL/HIGH/LOW影响评估",
+        "包含具体的Python代码示例展示问题模式与修复方案",
+        "提供严格的Validation Checklist确保发现的问题真实有效"
+      ],
+      "main_category": {
+        "id": "dev",
+        "name": "编程开发"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "Django",
+        "性能优化",
+        "代码审查",
+        "ORM"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "limitations": "仅适用于Django框架的Python后端代码；需要访问代码库才能执行审查；不处理非数据库相关的性能问题（如CPU密集型计算）。",
+      "license": null,
+      "status": "candidate",
+      "reason_codes": [
+        "QUALITY_BELOW_BAR",
+        "INSUFFICIENT_EVIDENCE"
+      ],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-26T11:44:57.202963+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:d45298cb3c2b06777a28a2cadbcbb4ea",
+      "source_type": "official",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.1.0",
+      "quality_summary": {
+        "review_status": "not_required",
+        "review_note": null,
+        "blocking_reasons": [
+          "初评：材料描述为 'Django performance code review'，属于代码审查和性能优化范畴，符合 '编程开发' 领域。；程序未能核实所引原文与行号。",
+          "初评：第3行 description: 'Django performance code review. Use when asked to ... optimize Django ... audit Django code for performance problems.' 明确了用途。；程序未能核实所引原文与行号。",
+          "初评：质量门槛未通过：practical_value: 针对Django特定痛点（如N+1、Unbounded Querysets）提供具体解决方案，比通用提示词更具针对性。；程序未能核实所引原文与行号。",
+          "初评：技能内容（Django ORM性能问题）与标题及描述完全一致，无夸大或偏离。；程序未能核实所引原文与行号。",
+          "初评：第4行 allowed-tools: Read, Grep, Glob, Bash, Task 明确声明了所需工具。纯文本指南类技能，无额外外部依赖。；程序未能核实所引原文与行号。",
+          "初评：内容为静态代码审查指导，不涉及实盘交易、临床诊断或凭据外传。；程序未能核实所引原文与行号。"
+        ],
+        "checks": {
+          "practical_value": {
+            "value": "unknown",
+            "evidence": "针对Django特定痛点（如N+1、Unbounded Querysets）提供具体解决方案，比通用提示词更具针对性。；程序未能核实所引原文与行号。"
+          },
+          "actionability": {
+            "value": "pass",
+            "evidence": "提供了清晰的审查步骤（Research first, Validate before reporting）和具体的代码修改示例，可直接指导开发者进行重构。"
+          },
+          "verification": {
+            "value": "pass",
+            "evidence": "每个优先级都附带了Validation Checklist，且Output Format规定了必须包含Location, Issue, Validation, Evidence, Fix等字段，便于验证结果。"
+          }
+        },
+        "review_checks": {}
+      },
+      "last_evaluation_id": "getsentry/skills:skills/django-perf-review/SKILL.md|sha256:d45298cb3c2b06777a28a2cadbcbb4ea|1.1.0|1.0.0",
+      "evaluated_at": "2026-09-26T11:44:57.201957+08:00"
+    },
+    {
+      "skill_id": "getsentry/skills:skills/document-api-endpoint/SKILL.md",
+      "name": "document-api-endpoint",
+      "url": "https://github.com/getsentry/skills/blob/HEAD/skills/document-api-endpoint/SKILL.md",
+      "repo_url": "https://github.com/getsentry/skills",
+      "author": "getsentry",
+      "summary_zh": "针对Sentry项目API端点编写和修复OpenAPI文档及类型定义的技能，涵盖@extend_schema装饰器使用、类型漂移修正及旧版文档迁移。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "为新的API端点添加OpenAPI文档和类型定义",
+        "修复现有端点响应类型与实际返回数据不一致的问题"
+      ],
+      "key_features": [
+        "提供基于drf-spectacular的@extend_schema装饰器使用规范",
+        "包含处理类型漂移（Type Drift）的具体对比和修正方法",
+        "提供旧版JSON文档迁移至新Schema的完整工作流"
+      ],
+      "main_category": {
+        "id": "dev",
+        "name": "编程开发"
+      },
+      "candidate_domains": [
+        "docs"
+      ],
+      "tags": [
+        "API文档",
+        "OpenAPI",
+        "Python",
+        "Django REST Framework"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "drf-spectacular",
+        "curl",
+        "jq",
+        "pytest",
+        "prek"
+      ],
+      "limitations": "仅适用于使用drf-spectacular和特定Sentry内部结构的项目，通用性受限。",
+      "license": null,
+      "status": "candidate",
+      "reason_codes": [
+        "QUALITY_BELOW_BAR",
+        "INSUFFICIENT_EVIDENCE"
+      ],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-26T11:47:02.348323+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:40c7592cdfbef2e02bf004133446d7a9",
+      "source_type": "official",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.1.0",
+      "quality_summary": {
+        "review_status": "not_required",
+        "review_note": null,
+        "blocking_reasons": [
+          "初评：材料内容涉及编写/修复API端点的OpenAPI文档、类型定义及装饰器，属于'编程开发'领域中的代码审查与重构范畴。；程序未能核实所引原文与行号。",
+          "初评：第3行description明确列出任务：Document and type a Sentry API endpoint. Write or fix @extend_schema decorators...；第6-8行标题和简介进一步说明用途。；程序未能核实所引原文与行号。",
+          "初评：质量门槛未通过：practical_value: 解决了API文档与运行时类型不一致的具体痛点，提供了复用类型和迁移旧文档的具体策略，比通用提示词更具针对性。；程序未能核实所引原文与行号。",
+          "初评：第8行引用了官方文档链接 https://develop.sentry.dev/backend/api/public/，且技能内容（drf-spectacular, TypedDict等）与该上下文一致。；程序未能核实所引原文与行号。",
+          "初评：第8行提及 'drf-spectacular'；第23行提及 'curl', 'jq'；第49-53行提及 'make', 'pnpm', 'pytest', 'prek'。依赖工具明确列出。；程序未能核实所引原文与行号。",
+          "初评：无风险行为。仅涉及API文档生成和类型检查。；程序未能核实所引原文与行号。"
+        ],
+        "checks": {
+          "practical_value": {
+            "value": "unknown",
+            "evidence": "解决了API文档与运行时类型不一致的具体痛点，提供了复用类型和迁移旧文档的具体策略，比通用提示词更具针对性。；程序未能核实所引原文与行号。"
+          },
+          "actionability": {
+            "value": "pass",
+            "evidence": "提供了明确的5步工作流（第10-16行），包括具体的装饰器用法、文件路径参考（parameters.py）以及验证命令（第46-53行）。"
+          },
+          "verification": {
+            "value": "pass",
+            "evidence": "第46-53行提供了具体的验证命令，包括构建文档、验证示例、运行测试和静态检查，确保产出符合预期。"
+          }
+        },
+        "review_checks": {}
+      },
+      "last_evaluation_id": "getsentry/skills:skills/document-api-endpoint/SKILL.md|sha256:40c7592cdfbef2e02bf004133446d7a9|1.1.0|1.0.0",
+      "evaluated_at": "2026-09-26T11:47:02.346326+08:00"
+    },
+    {
+      "skill_id": "getsentry/skills:skills/find-bugs/SKILL.md",
+      "name": "find-bugs",
+      "url": "https://github.com/getsentry/skills/blob/HEAD/skills/find-bugs/SKILL.md",
+      "repo_url": "https://github.com/getsentry/skills",
+      "author": "getsentry",
+      "summary_zh": "这是一个用于代码审查的技能，通过系统化步骤（获取Diff、映射攻击面、安全检查清单、验证）来发现分支变更中的Bug和安全漏洞，并生成结构化报告。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "审查当前分支的代码变更，找出潜在的安全漏洞",
+        "检查本次提交中是否存在SQL注入或XSS风险"
+      ],
+      "key_features": [
+        "提供5阶段系统化审查流程，从输入收集到最终审计",
+        "包含针对SQL注入、XSS、CSRF等11项具体安全检查清单",
+        "强制要求区分严重性并提供修复建议，禁止虚构问题"
+      ],
+      "main_category": {
+        "id": "security",
+        "name": "安全"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "代码审计",
+        "安全扫描",
+        "Git Diff分析"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "git",
+        "gh (GitHub CLI)"
+      ],
+      "limitations": "仅适用于基于Git的版本控制系统，且需安装GitHub CLI；主要关注逻辑与安全漏洞，可能忽略非功能性性能问题。",
+      "license": null,
+      "status": "candidate",
+      "reason_codes": [
+        "QUALITY_BELOW_BAR",
+        "INSUFFICIENT_EVIDENCE"
+      ],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-26T11:48:08.782841+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:08664c3698f89116a4b04d12f699f95c",
+      "source_type": "official",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.1.0",
+      "quality_summary": {
+        "review_status": "not_required",
+        "review_note": null,
+        "blocking_reasons": [
+          "初评：材料第3行描述为 'Find bugs, security vulnerabilities... review changes'，属于安全领域的漏洞检测与代码审计范畴。；程序未能核实所引原文与行号。",
+          "初评：材料第3-8行明确说明用途是审查本地分支变更中的bug、安全漏洞和代码质量问题。；程序未能核实所引原文与行号。",
+          "初评：质量门槛未通过：practical_value: 提供了具体的攻击面映射维度（用户输入、DB查询等）和详细的OWASP相关检查项，比通用提示词更具针对性。；程序未能核实所引原文与行号。；actionability: 给出了具体的Git命令获取Diff，并规定了严格的检查清单和输出格式，可直接执行。；程序未能核实所引原文与行号。；verification: Phase 4要求验证问题是否已处理或已有测试覆盖，Phase 5要求列出未完全验证的区域，输出格式要求提供证据和引用。；程序未能核实所引原文与行号。",
+          "初评：技能描述与实际提供的检查清单（如SQL注入、XSS、CSRF等）及输出格式高度一致，无夸大或矛盾。；程序未能核实所引原文与行号。",
+          "初评：材料第12行明确声明依赖 `git` 和 `gh` (GitHub CLI) 命令，未声明其他外部工具。；程序未能核实所引原文与行号。",
+          "初评：材料第74行明确指示 'Do not make changes - just report findings'，仅报告不执行修改，无凭据外传或实盘交易风险。；程序未能核实所引原文与行号。",
+          "初评领域检查：包含详细的安全检查清单（Phase 3），涵盖注入、XSS、认证、授权等常见Web安全漏洞，符合安全领域收录标准。；程序未能核实所引原文与行号。"
+        ],
+        "checks": {
+          "practical_value": {
+            "value": "unknown",
+            "evidence": "提供了具体的攻击面映射维度（用户输入、DB查询等）和详细的OWASP相关检查项，比通用提示词更具针对性。；程序未能核实所引原文与行号。"
+          },
+          "actionability": {
+            "value": "unknown",
+            "evidence": "给出了具体的Git命令获取Diff，并规定了严格的检查清单和输出格式，可直接执行。；程序未能核实所引原文与行号。"
+          },
+          "verification": {
+            "value": "unknown",
+            "evidence": "Phase 4要求验证问题是否已处理或已有测试覆盖，Phase 5要求列出未完全验证的区域，输出格式要求提供证据和引用。；程序未能核实所引原文与行号。"
+          }
+        },
+        "review_checks": {}
+      },
+      "last_evaluation_id": "getsentry/skills:skills/find-bugs/SKILL.md|sha256:08664c3698f89116a4b04d12f699f95c|1.1.0|1.0.0",
+      "evaluated_at": "2026-09-26T11:48:08.781843+08:00"
+    },
+    {
+      "skill_id": "getsentry/skills:skills/gh-review-requests/SKILL.md",
+      "name": "gh-review-requests",
+      "url": "https://github.com/getsentry/skills/blob/HEAD/skills/gh-review-requests/SKILL.md",
+      "repo_url": "https://github.com/getsentry/skills",
+      "author": "getsentry",
+      "summary_zh": "该技能用于通过 GitHub CLI 和 Python 脚本获取指定团队的未读 PR 审查请求，并以 Markdown 表格形式展示结果，适用于开发者管理代码审查任务。",
+      "skill_type": "tool_script",
+      "example_requests": [
+        "查找我需要审查的 PR",
+        "显示我的审查请求队列"
+      ],
+      "key_features": [
+        "支持按 GitHub 团队筛选未读 PR 审查请求",
+        "自动过滤已合并或关闭的 PR",
+        "提供脚本失败时的手动 API 调用回退方案"
+      ],
+      "main_category": {
+        "id": "dev",
+        "name": "编程开发"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "GitHub",
+        "代码审查",
+        "CLI",
+        "Python"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "GitHub CLI (gh)",
+        "uv (Python package manager)"
+      ],
+      "limitations": "依赖特定的 GitHub 组织配置（如 getsentry org）和团队结构；需要用户预先认证 GitHub CLI 并安装 uv。",
+      "license": null,
+      "status": "candidate",
+      "reason_codes": [
+        "QUALITY_BELOW_BAR",
+        "INSUFFICIENT_EVIDENCE"
+      ],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-26T11:49:44.413344+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:c03fa31242d4dfa9002c1610376954cd",
+      "source_type": "official",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.1.0",
+      "quality_summary": {
+        "review_status": "not_required",
+        "review_note": null,
+        "blocking_reasons": [
+          "初评：材料描述为 'Fetch unread GitHub notifications for open PRs where review is requested... Use when asked to find PRs I need to review'，属于代码审查辅助工作流，符合 '编程开发' 领域。；程序未能核实所引原文与行号。",
+          "初评：第3行明确描述了用途：'Fetch unread GitHub notifications for open PRs where review is requested from a specified team or opened by a team member.' 以及典型场景如 'find PRs I need to review'。；程序未能核实所引原文与行号。",
+          "初评：质量门槛未通过：practical_value: 解决了从大量通知中快速定位特定团队相关 PR 的具体痛点，提供了结构化的 JSON 输出和 Markdown 表格展示，比直接查看通知列表更高效。；程序未能核实所引原文与行号。",
+          "初评：SKILL.md 中描述的脚本输出 JSON 结构（第37-52行）与 Step 2 中的脚本功能一致；Fallback 部分的 gh api 命令逻辑与 Step 2 的自动化逻辑对应。；程序未能核实所引原文与行号。",
+          "初评：第11行声明 'Requires: GitHub CLI (gh) authenticated'；第13行声明 'Requires: The uv CLI for python package management'。；程序未能核实所引原文与行号。",
+          "初评：仅涉及读取 GitHub PR 通知和元数据，无写入、删除或敏感凭据外传行为。；程序未能核实所引原文与行号。"
+        ],
+        "checks": {
+          "practical_value": {
+            "value": "unknown",
+            "evidence": "解决了从大量通知中快速定位特定团队相关 PR 的具体痛点，提供了结构化的 JSON 输出和 Markdown 表格展示，比直接查看通知列表更高效。；程序未能核实所引原文与行号。"
+          },
+          "actionability": {
+            "value": "pass",
+            "evidence": "提供了清晰的命令行执行示例 `uv run scripts/fetch_review_requests.py --org getsentry --teams <team-slug>`，并详细说明了输入处理（团队名称转换）和输出格式。"
+          },
+          "verification": {
+            "value": "pass",
+            "evidence": "定义了明确的输出数据结构（JSON 示例）和展示规则（Markdown 表格），并规定了当结果为 0 时的具体反馈文案，便于验证执行结果。"
+          }
+        },
+        "review_checks": {}
+      },
+      "last_evaluation_id": "getsentry/skills:skills/gh-review-requests/SKILL.md|sha256:c03fa31242d4dfa9002c1610376954cd|1.1.0|1.0.0",
+      "evaluated_at": "2026-09-26T11:49:44.412344+08:00"
+    },
+    {
+      "skill_id": "getsentry/skills:skills/pr-link-issue/SKILL.md",
+      "name": "pr-link-issue",
+      "url": "https://github.com/getsentry/skills/blob/HEAD/skills/pr-link-issue/SKILL.md",
+      "repo_url": "https://github.com/getsentry/skills",
+      "author": "getsentry",
+      "summary_zh": "该技能通过GitHub CLI自动将GitHub Issue链接及其对应的Linear工单号添加到Pull Request的描述中，适用于需要关联问题追踪系统的开发工作流。",
+      "skill_type": "tool_script",
+      "example_requests": [
+        "link issue to pr https://github.com/getsentry/sentry/issues/123",
+        "add issue refs to pr #456"
+      ],
+      "key_features": [
+        "自动解析当前分支对应的PR编号",
+        "从Issue评论中提取Linear工单Key",
+        "智能追加或替换PR描述中的Issues区块"
+      ],
+      "main_category": {
+        "id": "automation",
+        "name": "自动化"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "GitHub",
+        "Linear",
+        "PR管理",
+        "CLI"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "gh (GitHub CLI)"
+      ],
+      "limitations": "依赖于GitHub Issue中存在由'linear-code'用户发布的包含Linear Key的评论；若不存在需人工介入或忽略Linear部分",
+      "license": null,
+      "status": "candidate",
+      "reason_codes": [
+        "QUALITY_BELOW_BAR",
+        "INSUFFICIENT_EVIDENCE"
+      ],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-26T11:55:03.435865+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:ae3fff3e5bec03c993ca8059669c785f",
+      "source_type": "official",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.1.0",
+      "quality_summary": {
+        "review_status": "not_required",
+        "review_note": null,
+        "blocking_reasons": [
+          "初评：技能用于自动化GitHub PR描述更新，属于'自动化'领域（浏览器操作、文件处理、工具集成、工作流）；程序未能核实所引原文与行号。",
+          "初评：第3行 description: Append a GitHub issue link and its Linear ticket to the current PR's description.；程序未能核实所引原文与行号。",
+          "初评：质量门槛未通过：practical_value: 解决了手动在PR描述中查找并添加Linear工单号的繁琐过程，提供标准化的#### Issues格式；程序未能核实所引原文与行号。；actionability: 提供了完整的bash命令序列，包括如何获取PR号、如何grep提取Linear Key、如何编辑PR body；程序未能核实所引原文与行号。；verification: 最后一步要求echo resulting PR URL以确认更新成功，且步骤中包含对PR是否存在的检查；程序未能核实所引原文与行号。",
+          "初评：SKILL.md内容描述了具体的GitHub CLI操作，与技能名称pr-link-issue及功能描述一致；程序未能核实所引原文与行号。",
+          "初评：第20、30、40、57、66行明确使用了`gh` (GitHub CLI) 命令，依赖该工具运行；程序未能核实所引原文与行号。",
+          "初评：仅涉及PR描述文本的读取和追加/替换，无敏感数据泄露或危险操作；程序未能核实所引原文与行号。"
+        ],
+        "checks": {
+          "practical_value": {
+            "value": "unknown",
+            "evidence": "解决了手动在PR描述中查找并添加Linear工单号的繁琐过程，提供标准化的#### Issues格式；程序未能核实所引原文与行号。"
+          },
+          "actionability": {
+            "value": "unknown",
+            "evidence": "提供了完整的bash命令序列，包括如何获取PR号、如何grep提取Linear Key、如何编辑PR body；程序未能核实所引原文与行号。"
+          },
+          "verification": {
+            "value": "unknown",
+            "evidence": "最后一步要求echo resulting PR URL以确认更新成功，且步骤中包含对PR是否存在的检查；程序未能核实所引原文与行号。"
+          }
+        },
+        "review_checks": {}
+      },
+      "last_evaluation_id": "getsentry/skills:skills/pr-link-issue/SKILL.md|sha256:ae3fff3e5bec03c993ca8059669c785f|1.1.0|1.0.0",
+      "evaluated_at": "2026-09-26T11:55:03.435865+08:00"
+    },
+    {
+      "skill_id": "getsentry/skills:skills/pr-writer/SKILL.md",
+      "name": "pr-writer",
+      "url": "https://github.com/getsentry/skills/blob/HEAD/skills/pr-writer/SKILL.md",
+      "repo_url": "https://github.com/getsentry/skills",
+      "author": "getsentry",
+      "summary_zh": "该技能指导如何使用 GitHub CLI (gh) 检查和生成面向代码审查者的 Pull Request 标题与正文，适用于新 PR 创建或现有 PR 更新场景。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "为当前分支创建一个草稿 PR，并生成符合规范的标题和描述",
+        "更新现有 PR 的标题和正文以反映最新的代码变更"
+      ],
+      "key_features": [
+        "要求使用 gh CLI 获取分支、PR 和 Diff 信息",
+        "规定严格的标题格式（如 feat(scope): subject）",
+        "禁止包含日志、文件列表等冗余信息，聚焦行为变更"
+      ],
+      "main_category": {
+        "id": "dev",
+        "name": "编程开发"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "PR撰写",
+        "代码审查",
+        "GitHub CLI"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "gh (GitHub CLI)",
+        "git"
+      ],
+      "limitations": "仅适用于使用 GitHub CLI 的环境；需要认证才能执行 gh 命令；主要关注 PR 文本生成，不涉及代码逻辑验证。",
+      "license": null,
+      "status": "candidate",
+      "reason_codes": [
+        "QUALITY_BELOW_BAR",
+        "INSUFFICIENT_EVIDENCE"
+      ],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-26T11:56:23.631941+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:785a2b1f084407e42f61661f83c7b0c6",
+      "source_type": "official",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.1.0",
+      "quality_summary": {
+        "review_status": "not_required",
+        "review_note": null,
+        "blocking_reasons": [
+          "初评：技能用于创建或刷新 PR 标题和描述，属于代码审查辅助工作流，符合 '编程开发' 领域（代码审查、前后端）；程序未能核实所引原文与行号。",
+          "初评：第3行 description: Create or refresh reviewer-facing PR titles and descriptions. Use when opening a PR, updating its title or body, or preparing branch changes for review.；程序未能核实所引原文与行号。",
+          "初评：质量门槛未通过：practical_value: 提供了具体的 PR 标题类型限制（feat, fix等）和正文结构模板，相比通用提示词，更专注于减少审查者重构成本，具有明确的增量价值。；程序未能核实所引原文与行号。",
+          "初评：SKILL.md 内容自洽，介绍了如何生成 PR 描述，且包含具体示例（Examples section），介绍与实际内容一致。；程序未能核实所引原文与行号。",
+          "初评：第13行明确声明 Requires authenticated `gh`。第17-21行展示了依赖的命令行工具 gh 和 git。；程序未能核实所引原文与行号。",
+          "初评：第106-107行明确禁止包含客户名称、用户邮箱、支持工单内容、密钥或个人身份信息（PII），符合安全规范。；程序未能核实所引原文与行号。"
+        ],
+        "checks": {
+          "practical_value": {
+            "value": "unknown",
+            "evidence": "提供了具体的 PR 标题类型限制（feat, fix等）和正文结构模板，相比通用提示词，更专注于减少审查者重构成本，具有明确的增量价值。；程序未能核实所引原文与行号。"
+          },
+          "actionability": {
+            "value": "pass",
+            "evidence": "包含了可执行的 bash 命令片段（如 gh pr view, gh pr create）以及具体的 Markdown 输出模板，步骤清晰。"
+          },
+          "verification": {
+            "value": "pass",
+            "evidence": "通过提供 Small change 和 Breaking contract 两个具体示例，明确了合格输出的样子，便于验证生成内容是否符合规范。"
+          }
+        },
+        "review_checks": {}
+      },
+      "last_evaluation_id": "getsentry/skills:skills/pr-writer/SKILL.md|sha256:785a2b1f084407e42f61661f83c7b0c6|1.1.0|1.0.0",
+      "evaluated_at": "2026-09-26T11:56:23.629922+08:00"
+    },
+    {
+      "skill_id": "getsentry/skills:skills/presentation-creator/SKILL.md",
+      "name": "presentation-creator",
+      "url": "https://github.com/getsentry/skills/blob/HEAD/skills/presentation-creator/SKILL.md",
+      "repo_url": "https://github.com/getsentry/skills",
+      "author": "getsentry",
+      "summary_zh": "该技能指导使用React、Vite和Recharts创建带有Sentry品牌风格的交互式数据驱动演示文稿，支持键盘导航和单文件HTML输出。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "创建一个关于Q3季度销售数据的PPT",
+        "制作一个包含技术深度分析图表的演示文稿"
+      ],
+      "key_features": [
+        "强制要求仅对真实定量数据生成图表，禁止伪造数据",
+        "提供完整的React+Vite项目脚手架代码",
+        "内置Sentry设计系统样式与动画效果"
+      ],
+      "main_category": {
+        "id": "content",
+        "name": "内容创作"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "PPT制作",
+        "数据可视化",
+        "React",
+        "Sentry"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "react",
+        "react-dom",
+        "recharts",
+        "vite",
+        "@vitejs/plugin-react",
+        "vite-plugin-singlefile"
+      ],
+      "limitations": "需要Node.js环境运行Vite；依赖外部参考文件（references/design-system.md等）；仅适用于有真实数据支撑的场景。",
+      "license": null,
+      "status": "candidate",
+      "reason_codes": [
+        "QUALITY_BELOW_BAR",
+        "INSUFFICIENT_EVIDENCE"
+      ],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-26T11:58:03.327114+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:28c0cef62578ec5423da646049e33606",
+      "source_type": "official",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.1.0",
+      "quality_summary": {
+        "review_status": "not_required",
+        "review_note": null,
+        "blocking_reasons": [
+          "初评：材料第3行描述为 'Create data-driven presentation slides'，属于内容创作领域。；程序未能核实所引原文与行号。",
+          "初评：材料第3-8行明确说明用途是创建基于React/Vite/Recharts的数据驱动演示文稿，并指定了触发场景。；程序未能核实所引原文与行号。",
+          "初评：质量门槛未通过：practical_value: 提供了具体的技术栈组合和Sentry品牌规范，相比通用提示词具有更高的落地价值。；程序未能核实所引原文与行号。；actionability: 包含了详细的文件结构、关键代码片段（如App.jsx, package.json）和构建命令。；程序未能核实所引原文与行号。；verification: 明确了验收标准：可运行的React项目、键盘导航、无伪造数据、单HTML输出。；程序未能核实所引原文与行号。",
+          "初评：SKILL.md内容与技能名称、描述一致，详细列出了技术栈和具体实现逻辑。；程序未能核实所引原文与行号。",
+          "初评：材料第70-73行明确声明了依赖：react, react-dom, recharts, vite, @vitejs/plugin-react, vite-plugin-singlefile。；程序未能核实所引原文与行号。",
+          "初评：未发现明显风险，且明确要求不伪造数据（第20-25行）。；程序未能核实所引原文与行号。"
+        ],
+        "checks": {
+          "practical_value": {
+            "value": "unknown",
+            "evidence": "提供了具体的技术栈组合和Sentry品牌规范，相比通用提示词具有更高的落地价值。；程序未能核实所引原文与行号。"
+          },
+          "actionability": {
+            "value": "unknown",
+            "evidence": "包含了详细的文件结构、关键代码片段（如App.jsx, package.json）和构建命令。；程序未能核实所引原文与行号。"
+          },
+          "verification": {
+            "value": "unknown",
+            "evidence": "明确了验收标准：可运行的React项目、键盘导航、无伪造数据、单HTML输出。；程序未能核实所引原文与行号。"
+          }
+        },
+        "review_checks": {}
+      },
+      "last_evaluation_id": "getsentry/skills:skills/presentation-creator/SKILL.md|sha256:28c0cef62578ec5423da646049e33606|1.1.0|1.0.0",
+      "evaluated_at": "2026-09-26T11:58:03.326070+08:00"
+    },
+    {
+      "skill_id": "getsentry/skills:skills/security-review/SKILL.md",
+      "name": "security-review",
+      "url": "https://github.com/getsentry/skills/blob/HEAD/skills/security-review/SKILL.md",
+      "repo_url": "https://github.com/getsentry/skills",
+      "author": "getsentry",
+      "summary_zh": "这是一个用于代码安全审查的技能，旨在通过系统性分析识别高置信度的安全漏洞（如注入、XSS等），并生成结构化的审计报告。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "对提供的API接口代码进行安全审查，查找注入漏洞",
+        "检查前端模板代码是否存在XSS风险"
+      ],
+      "key_features": [
+        "基于置信度分级报告（High/Medium/Low），仅报告高置信度漏洞",
+        "提供详细的上下文研究步骤，区分攻击者可控与服务端可控输入",
+        "内置多种语言框架的误报过滤规则（如Django自动转义、ORM参数化）"
+      ],
+      "main_category": {
+        "id": "security",
+        "name": "安全"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "代码审计",
+        "漏洞检测",
+        "OWASP",
+        "安全审查"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "limitations": "依赖上游仓库中的本地参考文件（references/, languages/, infrastructure/）才能完整执行所有检查项；若这些文件缺失，部分指导可能无法应用。",
+      "license": null,
+      "status": "candidate",
+      "reason_codes": [
+        "QUALITY_BELOW_BAR",
+        "INSUFFICIENT_EVIDENCE"
+      ],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-26T12:00:18.677572+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:6d36fa39ada88c8e66fdd4c52c3b846b",
+      "source_type": "official",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.1.0",
+      "quality_summary": {
+        "review_status": "not_required",
+        "review_note": null,
+        "blocking_reasons": [
+          "初评：领域检查：安全（漏洞检测、代码安全、审计）；材料内容明确为 Security code review for vulnerabilities。；程序未能核实所引原文与行号。",
+          "初评：第3行 description: Security code review for vulnerabilities. Use when asked to \"security review\", \"find vulnerabilities\"...；程序未能核实所引原文与行号。",
+          "初评：质量门槛未通过：practical_value: 提供了具体的漏洞模式匹配（第188-239行）和严格的置信度过滤机制，相比通用提示词能显著减少误报并提供结构化输出。；程序未能核实所引原文与行号。；actionability: 明确了操作步骤：检测上下文->加载语言/基础设施指南->研究数据流->验证可利用性->报告。包含具体的工具允许列表。；程序未能核实所引原文与行号。；verification: 定义了明确的验证标准（第144-168行），要求确认输入是否受控、框架是否有缓解措施，并规定了输出格式中包含证据和修复建议。；程序未能核实所引原文与行号。",
+          "初评：第9-11行注明 Reference material based on OWASP Cheat Sheet Series，且正文逻辑与OWASP常见漏洞审查流程一致。；程序未能核实所引原文与行号。",
+          "初评：第4行 allowed-tools: Read, Grep, Glob, Bash, Task。第98-131行引用了本地参考文件（如 references/injection.md），未声明外部网络依赖或特殊运行环境。；程序未能核实所引原文与行号。",
+          "初评：技能仅用于代码审计和漏洞识别，不涉及实盘交易、临床诊断或凭据外传。；程序未能核实所引原文与行号。"
+        ],
+        "checks": {
+          "practical_value": {
+            "value": "unknown",
+            "evidence": "提供了具体的漏洞模式匹配（第188-239行）和严格的置信度过滤机制，相比通用提示词能显著减少误报并提供结构化输出。；程序未能核实所引原文与行号。"
+          },
+          "actionability": {
+            "value": "unknown",
+            "evidence": "明确了操作步骤：检测上下文->加载语言/基础设施指南->研究数据流->验证可利用性->报告。包含具体的工具允许列表。；程序未能核实所引原文与行号。"
+          },
+          "verification": {
+            "value": "unknown",
+            "evidence": "定义了明确的验证标准（第144-168行），要求确认输入是否受控、框架是否有缓解措施，并规定了输出格式中包含证据和修复建议。；程序未能核实所引原文与行号。"
+          }
+        },
+        "review_checks": {}
+      },
+      "last_evaluation_id": "getsentry/skills:skills/security-review/SKILL.md|sha256:6d36fa39ada88c8e66fdd4c52c3b846b|1.1.0|1.0.0",
+      "evaluated_at": "2026-09-26T12:00:18.676508+08:00"
+    },
+    {
+      "skill_id": "getsentry/skills:skills/sred-work-summary/SKILL.md",
+      "name": "sred-work-summary",
+      "url": "https://github.com/getsentry/skills/blob/HEAD/skills/sred-work-summary/SKILL.md",
+      "repo_url": "https://github.com/getsentry/skills",
+      "author": "getsentry",
+      "summary_zh": "该技能用于自动化收集用户在过去一年中GitHub PR、Notion文档和Linear工单，将其按项目归类并生成一份私有的Notion年度工作总结文档。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "帮我整理去年在getsentry组织下的所有PR和Notion文档，生成一份SRED工作总结。",
+        "收集我过去一年的Linear工单和GitHub提交记录，并按项目分组放入Notion。"
+      ],
+      "key_features": [
+        "自动聚合GitHub、Notion和Linear三平台的工作数据",
+        "支持排除特定Incident文档（如INC-X前缀）",
+        "将分散的任务链接智能归类为具体项目并生成结构化报告"
+      ],
+      "main_category": {
+        "id": "automation",
+        "name": "自动化"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "work-summary",
+        "notion",
+        "github",
+        "linear",
+        "automation"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "MCP (for Notion and Linear)",
+        "gh CLI (alternative for GitHub)"
+      ],
+      "limitations": "仅适用于getsentry组织内的GitHub仓库；需要用户手动提供用户名和仓库列表；依赖外部MCP服务或CLI工具访问数据源。",
+      "license": null,
+      "status": "candidate",
+      "reason_codes": [
+        "INSUFFICIENT_EVIDENCE"
+      ],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-26T13:24:52.279870+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:2ccbcb74155d8b53e00584aa3eedfb18",
+      "source_type": "official",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.1.0",
+      "quality_summary": {
+        "review_status": "not_required",
+        "review_note": null,
+        "blocking_reasons": [
+          "初评：材料描述为收集Github PRs、Notion docs和Linear tickets并整理成文档，属于工作流自动化范畴。对应主分类 'automation' (浏览器操作、文件处理、工具集成、工作流)。；程序未能核实所引原文与行号。",
+          "初评：第3行 description: 'Go back through the previous year of work and create a Notion doc that groups relevant links into projects...'；第8行 'Collect all the Github PRs... Group the links... Put everything into a private Notion document...'；程序未能核实所引原文与行号。",
+          "初评：提供了从Step 1到Step 8的完整流程，包括获取年份、收集用户输入、创建文档、查询各平台数据、分组整理及返回链接的具体步骤。；程序未能核实所引原文与行号。",
+          "初评：第140行提供了一个具体的Notion文档示例链接，与技能目标（创建SRED Work Summary）一致。；程序未能核实所引原文与行号。",
+          "初评：第12-14行明确声明依赖：'Github, Notion and Linear can be accessed. Notion and Linear should be connected using an MCP. Github can be connected with an MCP, but if you have access to the gh CLI tool, you can use that instead.'；程序未能核实所引原文与行号。",
+          "初评：第58行要求创建 'private Notion document'，且未涉及实盘交易、临床诊断或凭据外传等高风险行为。；程序未能核实所引原文与行号。"
+        ],
+        "checks": {
+          "practical_value": {
+            "value": "pass",
+            "evidence": "针对年终总结这一具体场景，提供了从多平台拉取数据到结构化输出的完整方案，比通用提示词更具针对性。"
+          },
+          "actionability": {
+            "value": "pass",
+            "evidence": "提供了详细的Step-by-step指令，包括具体的bash命令（如date +%Y, find . -maxdepth 2...）和判断逻辑（如检查INC-XXXX）。"
+          },
+          "verification": {
+            "value": "pass",
+            "evidence": "在每个Step后都列出了Ensure检查点，如确保链接不截断、确保时间窗口正确、确保文档私有等，提供了明确的验收标准。"
+          }
+        },
+        "review_checks": {}
+      },
+      "last_evaluation_id": "getsentry/skills:skills/sred-work-summary/SKILL.md|sha256:2ccbcb74155d8b53e00584aa3eedfb18|1.1.0|1.0.0",
+      "evaluated_at": "2026-09-26T13:24:52.277758+08:00"
     }
   ],
   "overrides": {
