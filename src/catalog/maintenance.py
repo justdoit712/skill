@@ -69,13 +69,34 @@ def recover_completed_results(root_dir: str | Path = ".") -> dict:
         previous = entries.get(candidate.skill_id)
         if previous and previous.get("last_evaluation_id") == record.get("evaluation_id"):
             continue
-        if previous and previous.get("content_fingerprint") != candidate.content_fingerprint:
-            # A later observation must never be replaced by an older result.
+        if previous:
+            # A later observation or evaluation must never be replaced by an older result,
+            # regardless of whether the content fingerprint is identical or changed.
             from datetime import datetime
-            checked, evaluated = previous.get("last_checked"), record.get("updated_at")
+
+            prev_rules = previous.get("evaluation_rules_version")
+            rec_rules = record.get("rules_version")
+            if prev_rules and rec_rules:
+                try:
+                    p_tuple = tuple(int(x) for x in str(prev_rules).split(".") if x.isdigit())
+                    r_tuple = tuple(int(x) for x in str(rec_rules).split(".") if x.isdigit())
+                    if p_tuple > r_tuple:
+                        continue
+                except Exception:
+                    pass
+
+            prev_time = previous.get("evaluated_at") or previous.get("last_checked")
+            rec_time = outcome.get("evaluated_at") or record.get("updated_at")
             try:
-                if checked and evaluated and datetime.fromisoformat(checked) >= datetime.fromisoformat(evaluated):
-                    continue
+                if prev_time and rec_time:
+                    prev_dt = datetime.fromisoformat(prev_time)
+                    rec_dt = datetime.fromisoformat(rec_time)
+                    if prev_dt.tzinfo is not None and rec_dt.tzinfo is None:
+                        rec_dt = rec_dt.replace(tzinfo=prev_dt.tzinfo)
+                    elif prev_dt.tzinfo is None and rec_dt.tzinfo is not None:
+                        prev_dt = prev_dt.replace(tzinfo=rec_dt.tzinfo)
+                    if prev_dt >= rec_dt:
+                        continue
             except (ValueError, TypeError):
                 skipped.append({"evaluation_id": record.get("evaluation_id"), "reason": "ambiguous_version_order"})
                 continue
