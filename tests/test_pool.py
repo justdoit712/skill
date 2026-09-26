@@ -9,6 +9,7 @@ import unittest
 from src.catalog.dedupe import candidate_from_repo
 from src.catalog.models import Candidate
 from src.catalog.pool import (
+    STATUS_BLOCKED,
     STATUS_DONE,
     STATUS_EXCLUDED,
     STATUS_FETCH_FAILED,
@@ -90,6 +91,7 @@ class PoolTest(unittest.TestCase):
                 "fetch_failed": 0,
                 "not_skill": 0,
                 "length_exceeded": 0,
+                "blocked": 0,
             },
         )
 
@@ -133,6 +135,7 @@ class PoolTest(unittest.TestCase):
                 "fetch_failed": 1,
                 "not_skill": 1,
                 "length_exceeded": 0,
+                "blocked": 0,
             },
         )
 
@@ -211,6 +214,61 @@ class PoolTest(unittest.TestCase):
         next_pending = get_pending_candidates(reloaded)
         self.assertEqual([p.seq for p in next_pending], [2, 3, 4])
         self.assertEqual(next_pending[0].candidate.name, "tool-2")
+
+
+    def test_blocked_status_and_block_info(self):
+        """blocked 状态应正常存储 block_info 并通过序列化往返。"""
+        candidates = [self._sample_candidate(i) for i in range(3)]
+        pool = create_pool_from_candidates(candidates)
+        pool_file = self.dir / "pool.json"
+
+        block_info = {
+            "evaluation_id": "test-eid-001",
+            "reason": "NON_RETRYABLE_FAILURE",
+            "reason_code": "MODEL_ERROR",
+            "http_status": 200,
+            "blocked_at": "2026-09-26T10:00:00+08:00",
+            "source": "local_ledger",
+        }
+        pool.items[1].block_info = block_info
+        update_candidate_status(pool, 1, STATUS_BLOCKED)
+
+        # 验证内存状态
+        self.assertEqual(pool[1].status, STATUS_BLOCKED)
+        self.assertEqual(pool[1].block_info["reason_code"], "MODEL_ERROR")
+        self.assertEqual(pool.pending_count, 2)
+        stats = pool.stats()
+        self.assertEqual(stats["blocked"], 1)
+        self.assertEqual(stats["pending"], 2)
+        self.assertEqual(
+            stats,
+            {
+                "total": 3,
+                "pending": 2,
+                "done": 0,
+                "excluded": 0,
+                "fetch_failed": 0,
+                "not_skill": 0,
+                "length_exceeded": 0,
+                "blocked": 1,
+            },
+        )
+
+        # 验证序列化往返
+        save_pool(pool_file, pool)
+        loaded = load_pool(pool_file)
+        self.assertIsNotNone(loaded)
+        self.assertEqual(loaded[1].status, STATUS_BLOCKED)
+        self.assertEqual(loaded[1].block_info["evaluation_id"], "test-eid-001")
+        self.assertEqual(loaded[1].block_info["reason"], "NON_RETRYABLE_FAILURE")
+        # blocked 条目不算 pending
+        self.assertEqual(loaded.pending_count, 2)
+        # blocked 条目的 block_info 为 None 时也能反序列化
+        loaded[0].block_info = None
+        update_candidate_status(loaded, 0, STATUS_BLOCKED)
+        save_pool(pool_file, loaded)
+        reloaded = load_pool(pool_file)
+        self.assertIsNone(reloaded[0].block_info)
 
 
 if __name__ == "__main__":

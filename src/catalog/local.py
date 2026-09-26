@@ -53,6 +53,7 @@ from .pool import (
     STATUS_FETCH_FAILED,
     STATUS_NOT_SKILL,
     STATUS_LENGTH_EXCEEDED,
+    STATUS_BLOCKED,
     STATUS_PENDING as POOL_STATUS_PENDING,
     append_new_candidates,
     create_pool_from_candidates,
@@ -150,6 +151,8 @@ def prepare_pool(
     previous_pool = load_pool(pool_path)
     length_skips = {it.candidate.skill_id: it for it in previous_pool.items
                     if it.status == STATUS_LENGTH_EXCEEDED} if previous_pool else {}
+    blocked_skips = {it.candidate.skill_id: it for it in previous_pool.items
+                     if it.status == STATUS_BLOCKED} if previous_pool else {}
 
     def count_actionable(p) -> int:
         return sum(
@@ -185,13 +188,20 @@ def prepare_pool(
         if report is not None:
             report["discovery_failures"] = sum(not item.ok for item in outcomes)
         pool = create_pool_from_candidates(
-            list(candidates) + [it.candidate for it in length_skips.values()],
+            list(candidates) + [it.candidate for it in length_skips.values()]
+            + [it.candidate for it in blocked_skips.values()],
             old_recommended, cfg["source_types"])
         for item in pool.items:
             previous_skip = length_skips.get(item.candidate.skill_id)
             if previous_skip:
                 update_candidate_status(pool, item.seq, STATUS_LENGTH_EXCEEDED,
                                         checked_at=previous_skip.checked_at)
+                continue
+            previous_blocked = blocked_skips.get(item.candidate.skill_id)
+            if previous_blocked:
+                item.block_info = previous_blocked.block_info
+                update_candidate_status(pool, item.seq, STATUS_BLOCKED,
+                                        checked_at=previous_blocked.checked_at)
         save_pool(pool_path, pool)
         log(f"候选池已构建并保存至 {pool_path}，共 {len(pool)} 条候选，待处理 {pool.pending_count} 条。")
     else:
@@ -319,7 +329,7 @@ def save_and_render(
         pst = pool.stats()
         lines.append(
             f"- 候选池：共 {pst['total']} 条，待处理 {pst['pending']} 条"
-            f"（已完成 {pst['done']}，排除 {pst['excluded']}，抓取失败 {pst['fetch_failed']}，非技能 {pst['not_skill']}，超长跳过 {pst['length_exceeded']}）"
+            f"（已完成 {pst['done']}，排除 {pst['excluded']}，抓取失败 {pst['fetch_failed']}，非技能 {pst['not_skill']}，超长跳过 {pst['length_exceeded']}，已阻止 {pst['blocked']}）"
         )
     if report.get("skipped_owned"):
         lines.append(f"- 已收录跳过：{report['skipped_owned']}")
@@ -551,6 +561,15 @@ def _evaluate_with_retries(state, candidate, text, eid, record):
             break
     return result
 
+
+def _update_blocked(pool, seq: int, block_info: dict) -> None:
+    """把候选池条目推进为 blocked 状态并记录阻止元数据。"""
+    item = next((it for it in pool.items if it.seq == seq), None)
+    if item is not None:
+        item.block_info = block_info
+    update_candidate_status(pool, seq, STATUS_BLOCKED)
+
+
 def process_candidate(state, item):
     candidate = item.candidate
     seq = item.seq
@@ -634,7 +653,20 @@ def process_candidate(state, item):
         return True
     resumable_failure = bool(local_record and record.get('status') == 'failed' and ((record.get('error') or {}).get('reason_code') == 'NETWORK_ERROR' or record.get('retryable')) and (int(record.get('attempts') or 0) < state.max_attempts))
     if record.get('status') in ('failed', 'in_progress', 'needs_recovery') and (not resumable_failure):
+        reason = 'NON_RETRYABLE_FAILURE' if record.get('status') == 'failed' else 'UNKNOWN_IN_PROGRESS'
+        block_info = {
+            'evaluation_id': eid,
+            'reason': reason,
+            'reason_code': (record.get('error') or {}).get('reason_code'),
+            'http_status': (record.get('error') or {}).get('http_status'),
+            'blocked_at': now_local().isoformat(),
+            'source': 'local_ledger',
+        }
+        _update_blocked(state.pool, seq, block_info)
         state.report['blocked_records'] += 1
+        save_pool(state.pool_path, state.pool)
+        state.log(f"[阻止] #{seq} {candidate.skill_id}：存在不可重试评估记录（{reason}），已持久化为 blocked，本次未调用模型。")
+        state.save()
         return True
     state.ledger.reserve([{'evaluation_id': eid, 'skill_id': candidate.skill_id, 'content_fingerprint': candidate.content_fingerprint, 'rules_version': state.cfg['rules']['rules_version'], 'model_config_version': state.cfg['model'].get('model_config_version')}])
     record = state.ledger.get(eid)
@@ -673,6 +705,19 @@ def process_candidate(state, item):
         state.consecutive_failures += 1
         if _retryable(result) and state.max_retries:
             state.report['stop_reason'] = state.report['stop_reason'] or 'retry_exhausted'
+        elif not _retryable(result):
+            # 本轮首次收到不可重试失败：立即持久化 blocked，防止重启后重复抓取。
+            block_info = {
+                'evaluation_id': eid,
+                'reason': 'NON_RETRYABLE_FAILURE',
+                'reason_code': result.get('reason_code'),
+                'http_status': getattr(result.get('call'), 'http_status', None),
+                'blocked_at': now_local().isoformat(),
+                'source': 'local_ledger',
+            }
+            _update_blocked(state.pool, seq, block_info)
+            state.report['blocked_records'] += 1
+            state.log(f"[阻止] #{seq} {candidate.skill_id}：评估失败且不可重试（{result.get('reason_code')}），已持久化为 blocked。")
     if state.active_call['usage']['total_tokens'] is None:
         state.report['stop_reason'] = state.report['stop_reason'] or 'usage_unknown'
     state.active_eid = state.active_call = None

@@ -479,6 +479,171 @@ class LocalRunTest(unittest.TestCase):
         self.assertEqual([c["candidate"]["name"] for c in pool_data2["candidates"][:2]], ["tool-2", "tool-3"])
 
 
+    def non_retryable_result(self, reason_code="MODEL_ERROR", http_status=200):
+        """模拟不可重试的评估失败结果。"""
+        from src.infra.llm import ModelCallResult
+        return {
+            "ok": False,
+            "reason_code": reason_code,
+            "evaluation": None,
+            "call": ModelCallResult(
+                reason_code=reason_code,
+                is_sample_error=False,
+                finish_reason="stop",
+                http_status=http_status,
+                attempts=1,
+                usage={"prompt_tokens": 50, "completion_tokens": 10, "total_tokens": 60},
+            ),
+        }
+
+    def test_non_retryable_failure_becomes_blocked_on_restart(self):
+        """不可重试失败当轮持久化为 blocked；再次运行不重复抓取，也不调用模型。"""
+        fetch_calls = []
+        model_calls = []
+
+        def failing_evaluate(candidate, text, **kwargs):
+            model_calls.append(candidate.skill_id)
+            # tool-0 失败且不可重试；其余正常通过
+            if len(model_calls) == 1:
+                return self.non_retryable_result()
+            return self.evaluate(candidate, text, **kwargs)
+
+        def counting_fetch(url, **kwargs):
+            fetch_calls.append(url)
+            return self.fetch(url, **kwargs)
+
+        # 第一轮：tool-0 不可重试失败，tool-1、tool-2 推荐成功
+        self.settings["target_recommended"] = 2
+        report1 = self.collect(count=3, evaluate_fn=failing_evaluate, fetch_fn=counting_fetch)
+        self.assertEqual(report1["stop_reason"], "target_reached")
+        self.assertEqual(len(model_calls), 3)  # tool-0 失败 + tool-1, tool-2 成功
+
+        pool_file = self.root / "data" / "local" / "pool.json"
+        pool_data = json.loads(pool_file.read_text(encoding="utf-8"))
+        blocked_items = [c for c in pool_data["candidates"] if c["status"] == "blocked"]
+        self.assertEqual(len(blocked_items), 1, "tool-0 应已被标记为 blocked")
+        self.assertEqual(blocked_items[0]["candidate"]["name"], "tool-0")
+        self.assertIsNotNone(blocked_items[0]["block_info"])
+        self.assertEqual(blocked_items[0]["block_info"]["reason"], "NON_RETRYABLE_FAILURE")
+        self.assertEqual(pool_data["stats"]["blocked"], 1)
+
+        # 第二轮：pool 中 tool-0 已是 blocked，不应再被抓取或调用模型
+        fetch_calls.clear()
+        model_calls.clear()
+
+        def no_more_model_calls(*args, **kwargs):
+            self.fail("blocked 候选不得再次调用模型")
+
+        # 重新运行（tool-0 已 blocked，tool-1/tool-2 已 done，tool-3 新加入）
+        self.settings["target_recommended"] = 3
+        self.collect(count=4, evaluate_fn=no_more_model_calls if False else self.evaluate, fetch_fn=counting_fetch)
+        # tool-0 不应出现在抓取记录中
+        blocked_skill_url = "https://raw.githubusercontent.com/example/skills/HEAD/skills/tool-0/SKILL.md"
+        self.assertNotIn(blocked_skill_url, fetch_calls, "blocked 候选不应被重复抓取")
+
+    def test_blocked_survives_pool_rebuild_and_refresh(self):
+        """blocked 状态在池过期重建和 --refresh-pool 时应被保留。"""
+        fetch_calls = []
+        model_calls = []
+
+        def failing_first(candidate, text, **kwargs):
+            model_calls.append(candidate.skill_id)
+            if len(model_calls) == 1:
+                return self.non_retryable_result(reason_code="MODEL_ERROR", http_status=403)
+            return self.evaluate(candidate, text, **kwargs)
+
+        def counting_fetch(url, **kwargs):
+            fetch_calls.append(url)
+            return self.fetch(url, **kwargs)
+
+        # 第一轮：tool-0 变为 blocked
+        self.settings["target_recommended"] = 2
+        self.collect(count=5, evaluate_fn=failing_first, fetch_fn=counting_fetch)
+
+        pool_file = self.root / "data" / "local" / "pool.json"
+        pool_data = json.loads(pool_file.read_text(encoding="utf-8"))
+        self.assertEqual(pool_data["stats"]["blocked"], 1)
+        blocked_candidate = next(c for c in pool_data["candidates"] if c["status"] == "blocked")
+        self.assertEqual(blocked_candidate["block_info"]["http_status"], 403)
+
+        # 模拟池过期（修改 built_at 为 8 天前）
+        pool_data["built_at"] = "2000-01-01T00:00:00+08:00"
+        pool_file.write_text(json.dumps(pool_data), encoding="utf-8")
+
+        fetch_calls.clear()
+        model_calls.clear()
+
+        def no_blocked_calls(candidate, text, **kwargs):
+            self.assertNotEqual(candidate.name, "tool-0", "blocked 候选不应进入模型评估")
+            return self.evaluate(candidate, text, **kwargs)
+
+        # 池过期触发重建；blocked 应保留
+        self.settings["target_recommended"] = 3
+        self.collect(count=5, evaluate_fn=no_blocked_calls, fetch_fn=counting_fetch)
+        pool_data2 = json.loads(pool_file.read_text(encoding="utf-8"))
+        self.assertEqual(pool_data2["stats"]["blocked"], 1, "池重建后 blocked 应保留")
+        blocked_candidate2 = next(c for c in pool_data2["candidates"] if c["status"] == "blocked")
+        self.assertIsNotNone(blocked_candidate2["block_info"], "block_info 应保留")
+
+        fetch_calls.clear()
+        model_calls.clear()
+
+        # --refresh-pool 显式刷新；blocked 也应保留
+        self.settings["refresh_pool"] = True
+        self.collect(count=5, evaluate_fn=no_blocked_calls, fetch_fn=counting_fetch)
+        pool_data3 = json.loads(pool_file.read_text(encoding="utf-8"))
+        self.assertEqual(pool_data3["stats"]["blocked"], 1, "--refresh-pool 后 blocked 应保留")
+
+    def test_ledger_blocked_record_not_refetched_on_restart(self):
+        """历史账本记录为不可重试失败时，重启后首次遇到即标记 blocked，不再抓取。"""
+        from src.catalog.local import prepare_pool
+        # 第一轮：tool-0 失败且不可重试
+        model_calls = []
+
+        def one_failure(candidate, text, **kwargs):
+            model_calls.append(candidate.skill_id)
+            if len(model_calls) == 1:
+                return self.non_retryable_result()
+            return self.evaluate(candidate, text, **kwargs)
+
+        self.settings["target_recommended"] = 2
+        self.collect(count=4, evaluate_fn=one_failure)
+
+        pool_file = self.root / "data" / "local" / "pool.json"
+        pool_data = json.loads(pool_file.read_text(encoding="utf-8"))
+        self.assertEqual(pool_data["stats"]["blocked"], 1)
+
+        # 模拟：将 blocked 条目手动重置为 pending（模拟旧版行为中的卡住条目）
+        for c in pool_data["candidates"]:
+            if c["status"] == "blocked":
+                c["status"] = "pending"
+                c["block_info"] = None
+        pool_file.write_text(json.dumps(pool_data), encoding="utf-8")
+
+        fetch_calls_round2 = []
+        model_calls_round2 = []
+
+        def second_round_eval(candidate, text, **kwargs):
+            model_calls_round2.append(candidate.skill_id)
+            return self.evaluate(candidate, text, **kwargs)
+
+        def second_round_fetch(url, **kwargs):
+            fetch_calls_round2.append(url)
+            return self.fetch(url, **kwargs)
+
+        # 第二轮：tool-0 的评估账本仍然是 failed+not-retryable
+        # 应在遇到时（读取账本后）转为 blocked，不进入模型
+        self.settings["target_recommended"] = 3
+        self.collect(count=4, evaluate_fn=second_round_eval, fetch_fn=second_round_fetch)
+
+        pool_data2 = json.loads(pool_file.read_text(encoding="utf-8"))
+        self.assertEqual(pool_data2["stats"]["blocked"], 1, "重启后 tool-0 应再次被标为 blocked")
+        # tool-0 不应出现在本轮模型调用中
+        blocked_names = [c["candidate"]["name"] for c in pool_data2["candidates"] if c["status"] == "blocked"]
+        self.assertEqual(blocked_names, ["tool-0"])
+        self.assertNotIn("example/skills:skills/tool-0/SKILL.md", model_calls_round2)
+
+
 if __name__ == "__main__":
     unittest.main()
 

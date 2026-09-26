@@ -28,6 +28,7 @@ STATUS_EXCLUDED = "excluded"
 STATUS_FETCH_FAILED = "fetch_failed"
 STATUS_NOT_SKILL = "not_skill"
 STATUS_LENGTH_EXCEEDED = "length_exceeded"
+STATUS_BLOCKED = "blocked"
 
 VALID_STATUSES = {
     STATUS_PENDING,
@@ -36,6 +37,7 @@ VALID_STATUSES = {
     STATUS_FETCH_FAILED,
     STATUS_NOT_SKILL,
     STATUS_LENGTH_EXCEEDED,
+    STATUS_BLOCKED,
 }
 
 
@@ -47,6 +49,7 @@ class PoolItem:
     candidate: Candidate
     status: str = STATUS_PENDING
     checked_at: str | None = None
+    block_info: dict | None = None
 
 
 @dataclass
@@ -67,6 +70,7 @@ class CandidatePool:
             "fetch_failed": 0,
             "not_skill": 0,
             "length_exceeded": 0,
+            "blocked": 0,
         }
         for item in self.items:
             counts[item.status] = counts.get(item.status, 0) + 1
@@ -136,6 +140,7 @@ def pool_to_dict(pool: CandidatePool) -> dict[str, Any]:
                 "seq": item.seq,
                 "status": item.status,
                 "checked_at": item.checked_at,
+                "block_info": item.block_info,
                 "candidate": candidate_to_dict(item.candidate),
             }
             for item in pool.items
@@ -149,6 +154,7 @@ def pool_from_dict(data: dict[str, Any]) -> CandidatePool:
             seq=int(c["seq"]),
             status=c.get("status", STATUS_PENDING),
             checked_at=c.get("checked_at"),
+            block_info=c.get("block_info"),
             candidate=candidate_from_dict(c["candidate"]),
         )
         for c in data.get("candidates", [])
