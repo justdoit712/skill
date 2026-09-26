@@ -35,7 +35,7 @@ from src.infra.llm import (
 from src.shared.schema import normalize_skill_type, normalize_string_list
 from src.shared.usage import UsageTotals
 from .decide import NON_BLOCKING_DOMAIN_VALUES, decide
-from .quality import enabled, prompt_instructions, check_quality, hold_for_review
+from .quality import QUALITY_CHECKS, enabled, prompt_instructions, check_quality, hold_for_review
 from .models import Candidate
 
 REASON_PARSE_ERROR = "PARSE_ERROR"
@@ -141,8 +141,11 @@ def build_prompt(candidate: Candidate, text: str, rules: dict, taxonomy: dict) -
             "输出 JSON 结构：",
             json.dumps(
                 {
-                    **{c["id"]: {"value": "pass|fail|unknown", "evidence": "证据位置或片段"} for c in checks},
-                    "domain_checks": {"finance": {"value": "pass|fail|unknown|not_applicable", "evidence": ""}},
+                    **{c["id"]: {"value": "unknown", "evidence": "判定理由",
+                       **({"citations": []} if enabled(rules) else {})} for c in checks},
+                    "domain_checks": {},
+                    **({"quality_checks": {key: {"value": "unknown", "evidence": "缺少哪些证据",
+                       "citations": []} for key in QUALITY_CHECKS}} if enabled(rules) else {}),
                     "summary_zh": "一至两句中文简述，说明做什么及典型使用场景",
                     "skill_type": "tool_script|guideline|template|reference|null",
                     "example_requests": ["用户典型请求示例1", "用户典型请求示例2"],
@@ -241,6 +244,7 @@ def parse_evaluation(
     evaluation["source_fingerprint"] = source_fingerprint
     evaluation.setdefault("domain_checks", {})
     evaluation.setdefault("reason_codes", [])
+    evaluation["tags"] = normalize_string_list(raw.get("tags"), max_items=10, max_length=60)
     evaluation["skill_type"] = normalize_skill_type(raw.get("skill_type"))
     evaluation["example_requests"] = normalize_string_list(
         raw.get("example_requests"), max_items=2, max_length=100

@@ -9,6 +9,8 @@ QUALITY_CHECKS = {
     "verification": "结果验证：提供可检查的输出要求、示例、检查清单、测试或失败处理；简单任务可用清晰验收条件，不强求复杂测试框架。",
 }
 
+MAX_CITATION_LINES = 60
+
 
 def enabled(rules):
     return (rules.get("quality_review") or {}).get("enabled") is True
@@ -23,42 +25,70 @@ def prompt_instructions():
         *[f"- {key}: {description}" for key, description in QUALITY_CHECKS.items()],
         "所有基础检查、领域检查和质量检查都增加 citations 数组。",
         '每条引用格式：{"start_line": 1, "end_line": 2, "quote": "两行完整原文"}。',
-        "行号来自下方 SKILL.md 的编号；quote 不包含编号，必须逐字复制完整连续行，每条最多 20 行，最多 3 条。",
+        "行号来自下方 SKILL.md 的编号；quote 不包含编号，必须逐字复制完整连续行，每条最多 60 行，最多 3 条。优先引用最短的充分证据，避免重复长段落。",
         "pass 必须有至少一条支持该判定的引用；fail/unknown 可用空数组，并解释缺少什么。",
         "risk_review 的 pass 仅指所提供材料未见明显风险，不代表完整安全审计。",
         "依赖的缺席不证明无依赖；仅有免责声明不证明功能可靠。",
     ])
 
 
-def verified_citations(citations, text):
+def locate_citations(citations, text):
+    """核实完整连续行；修正定位漂移，不接受局部相似或截取片段。"""
     if not isinstance(citations, list) or not 1 <= len(citations) <= 3:
-        return False
+        return None
     lines = text.splitlines()
+    located = []
     for citation in citations:
         if not isinstance(citation, dict):
-            return False
+            return None
         start, end, quote = (citation.get(k) for k in ("start_line", "end_line", "quote"))
         if type(start) is not int or type(end) is not int:
-            return False
-        if not 1 <= start <= end <= len(lines) or end - start >= 20:
-            return False
+            return None
+        if not 1 <= start <= end:
+            return None
         if not isinstance(quote, str) or not quote.strip():
-            return False
-        if quote.replace("\r\n", "\n") != "\n".join(lines[start - 1:end]):
-            return False
-    return True
+            return None
+        quoted = quote.replace("\r\n", "\n").splitlines()
+        if not 1 <= len(quoted) <= MAX_CITATION_LINES:
+            return None
+        matches = [i for i in range(len(lines) - len(quoted) + 1)
+                   if lines[i:i + len(quoted)] == quoted]
+        if not matches:
+            return None
+        exact = start - 1 in matches and end - start + 1 == len(quoted)
+        nearby = [i for i in matches if abs(i + 1 - start) <= 3 and abs(i + len(quoted) - end) <= 3]
+        if exact:
+            pos, method = start - 1, "exact"
+        elif len(nearby) == 1:
+            pos, method = nearby[0], "nearby"
+        elif len(matches) == 1:
+            pos, method = matches[0], "relocated"
+        else:
+            return None  # 重复原文且定位不明确，不能随意选一处。
+        located.append({"start_line": pos + 1, "end_line": pos + len(quoted),
+                        "quote": "\n".join(quoted), "match_method": method,
+                        "original_start_line": start, "original_end_line": end})
+    return located
+
+
+def verified_citations(citations, text):
+    return locate_citations(citations, text) is not None
 
 
 def check_quality(evaluation, text, rules):
     """复制评估，降级没有真实引用的通过项，并把质量缺口映射到基础门槛。"""
     out = deepcopy(evaluation)
-    quality = out.get("quality_checks")
-    if not isinstance(quality, dict) or set(quality) != set(QUALITY_CHECKS):
-        raise ValueError("quality_checks 必须完整且精确覆盖三项质量标准")
+    quality = out.setdefault("quality_checks", {})
+    if not isinstance(quality, dict) or set(quality) - set(QUALITY_CHECKS):
+        raise ValueError("quality_checks 结构无效或含未知质量标准")
+    missing = [key for key in QUALITY_CHECKS if key not in quality]
+    for key in missing:
+        quality[key] = {"value": "unknown", "evidence": "模型未提供该质量项，等待补充评估。", "citations": []}
     groups = [(out, [c["id"] for c in rules.get("checks", [])]),
               (out.get("domain_checks") or {}, list((out.get("domain_checks") or {}).keys())),
               (quality, list(QUALITY_CHECKS))]
     invalid = []
+    locations = {}
     for group, keys in groups:
         for key in keys:
             item = group.get(key)
@@ -68,7 +98,10 @@ def check_quality(evaluation, text, rules):
                 raise ValueError(f"{key} 缺少判定理由")
             if key in QUALITY_CHECKS and item["value"] == "not_applicable":
                 raise ValueError(f"{key} 不允许跳过质量判断")
-            if item["value"] in ("pass", "not_applicable") and not verified_citations(item.get("citations"), text):
+            verified = locate_citations(item.get("citations"), text)
+            if verified is not None:
+                locations[key] = verified
+            if item["value"] in ("pass", "not_applicable") and verified is None:
                 item["value"] = "unknown"
                 item["evidence"] += "；程序未能核实所引原文与行号。"
                 invalid.append(key)
@@ -82,7 +115,8 @@ def check_quality(evaluation, text, rules):
             out["reason_codes"].append("QUALITY_BELOW_BAR")
     if invalid and "INSUFFICIENT_EVIDENCE" not in out["reason_codes"]:
         out["reason_codes"].append("INSUFFICIENT_EVIDENCE")
-    out["quality_audit"] = {"version": "1", "invalid_citations": invalid,
+    out["quality_audit"] = {"version": "2", "invalid_citations": invalid,
+                            "verified_citations": locations, "missing_quality_checks": missing,
                             "blocking_checks": blockers, "review_status": "not_required"}
     return out
 

@@ -116,10 +116,58 @@ class QualityTest(unittest.TestCase):
     def test_citations_reject_booleans_wrong_lines_and_partial_quotes(self):
         valid = deepcopy(self.raw["scope_match"]["citations"])
         self.assertTrue(verified_citations(valid, TEXT))
-        for changes in ({"start_line": True}, {"start_line": 0}, {"end_line": 99},
+        for changes in ({"start_line": True}, {"start_line": 0},
                         {"quote": "定位错误"}, {"quote": ""}):
             with self.subTest(changes=changes):
                 self.assertFalse(verified_citations([{**valid[0], **changes}], TEXT))
+
+    def test_relocation_keeps_full_quote_and_records_actual_lines(self):
+        self.raw["purpose_clarity"]["citations"][0].update(start_line=2, end_line=2)
+        checked = check_quality(self.raw, TEXT, self.rules)
+        self.assertEqual(checked["purpose_clarity"]["value"], "pass")
+        citation = checked["quality_audit"]["verified_citations"]["purpose_clarity"][0]
+        self.assertEqual((citation["start_line"], citation["end_line"], citation["match_method"]), (5, 5, "nearby"))
+
+    def test_missing_quality_stays_candidate_without_processing_failure(self):
+        del self.raw["quality_checks"]
+        result, model = self.run_evaluation([response(self.raw)])
+        self.assertTrue(result["ok"])
+        self.assertEqual(decide(result["evaluation"], self.rules)["decision"], "candidate")
+        self.assertEqual(model.call_count, 1)
+        self.assertEqual(set(result["evaluation"]["quality_audit"]["missing_quality_checks"]), set(QUALITY_CHECKS))
+
+    def test_full_quote_limit_and_ambiguous_relocation(self):
+        from src.catalog.quality import locate_citations
+        text = "\n".join(f"line {i}" for i in range(65))
+        quote = "\n".join(text.splitlines()[:60])
+        self.assertTrue(verified_citations([{"start_line": 1, "end_line": 60, "quote": quote}], text))
+        self.assertFalse(verified_citations([{"start_line": 1, "end_line": 61, "quote": quote + "\nline 60"}], text))
+        self.assertIsNone(locate_citations([{"start_line": 50, "end_line": 50, "quote": "repeated"}], "repeated\nx\nrepeated"))
+
+    def test_distant_quote_is_relocated_without_rewriting_model_evidence(self):
+        self.raw["purpose_clarity"]["citations"][0].update(start_line=100, end_line=110)
+        result = check_quality(self.raw, TEXT, self.rules)
+        self.assertEqual(result["purpose_clarity"], self.raw["purpose_clarity"])
+        self.assertEqual(result["quality_audit"]["verified_citations"]["purpose_clarity"][0]["match_method"], "relocated")
+
+    def test_only_missing_quality_item_is_filled_and_existing_fail_preserved(self):
+        del self.raw["quality_checks"]["verification"]
+        self.raw["quality_checks"]["actionability"]["value"] = "fail"
+        result = check_quality(self.raw, TEXT, self.rules)
+        self.assertEqual(result["quality_checks"]["actionability"]["value"], "fail")
+        self.assertEqual(result["quality_checks"]["verification"]["value"], "unknown")
+        self.assertEqual(result["quality_audit"]["missing_quality_checks"], ["verification"])
+
+    def test_prompt_example_contains_quality_and_citations_only_when_enabled(self):
+        from src.catalog.evaluation import build_prompt
+        system, _ = build_prompt(self.candidate, TEXT, self.rules, self.taxonomy)
+        example = json.JSONDecoder().raw_decode(system.split("输出 JSON 结构：\n", 1)[1])[0]
+        self.assertEqual(set(example["quality_checks"]), set(QUALITY_CHECKS))
+        self.assertIn("citations", example["scope_match"])
+        rules = deepcopy(self.rules)
+        rules["quality_review"]["enabled"] = False
+        system, _ = build_prompt(self.candidate, TEXT, rules, self.taxonomy)
+        self.assertNotIn('"quality_checks"', system)
 
 
 class LocalQualityIntegrationTest(unittest.TestCase):
