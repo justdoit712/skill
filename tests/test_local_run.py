@@ -824,6 +824,55 @@ class LocalRunTest(unittest.TestCase):
         self.assertEqual(len(rec1_after["resume_history"]), 1)
         self.assertEqual(rec1_after["resume_history"][0]["reason"], "已修复提示词")
 
+    def test_explicit_resume_retries_after_default_attempt_limit(self):
+        from src.catalog.maintenance import resume_candidate
+        from src.catalog.evaluation import evaluate
+        from unittest.mock import patch
+        self.settings['target_recommended'] = 1
+        invalid = ModelCallResult(ok=True, content='not json', attempts=1,
+                                  usage={'prompt_tokens': 80, 'completion_tokens': 20, 'total_tokens': 100})
+        with patch('src.catalog.evaluation.call_model', return_value=invalid):
+            self.collect(count=1, evaluate_fn=evaluate)
+        pool_file = self.root / 'data/local/pool.json'
+        pool = json.loads(pool_file.read_text(encoding='utf-8'))
+        eid = pool['candidates'][0]['block_info']['evaluation_id']
+        record_path = next((self.root / 'data/local/state/evaluations').glob('*.json'))
+        before = json.loads(record_path.read_text(encoding='utf-8'))
+        resumed = resume_candidate(self.root, evaluation_id=eid, reason='fixed format', apply=True)
+        self.assertEqual(resumed['new_max_attempts'], 2)
+        result = self.collect(count=1)
+        self.assertEqual(result['stop_reason'], 'target_reached')
+        self.assertEqual(len(self.calls), 1)
+        self.assertEqual(result['calls'][0]['attempt'], 2)
+        after = json.loads(record_path.read_text(encoding='utf-8'))
+        self.assertEqual(after['max_attempts'], 2)
+        self.assertEqual(after['requests'][:len(before['requests'])], before['requests'])
+        self.assertEqual(len(after['resume_history']), 1)
+
+    def test_resume_authorization_survives_new_reservation_and_larger_defaults(self):
+        from src.catalog.maintenance import resume_candidate
+        from src.infra.files import write_json_atomic
+        self.collect(count=1, evaluate_fn=self.non_retryable_result_adapter)
+        pool_file = self.root / 'data/local/pool.json'
+        pool = json.loads(pool_file.read_text(encoding='utf-8'))
+        eid = pool['candidates'][0]['block_info']['evaluation_id']
+        resume_candidate(self.root, evaluation_id=eid, reason='fixed', apply=True)
+        budget_file = self.root / 'data/local/state/budget.json'
+        budget = json.loads(budget_file.read_text(encoding='utf-8'))
+        budget.update(reserved=[], reserved_count=0)
+        write_json_atomic(budget_file, budget)
+        self.settings.update(max_retries=5, target_recommended=1)
+        result = self.collect(count=1)
+        self.assertEqual(result['stop_reason'], 'target_reached')
+        record_path = next((self.root / 'data/local/state/evaluations').glob('*.json'))
+        record = json.loads(record_path.read_text(encoding='utf-8'))
+        self.assertEqual(record['max_attempts'], 2)
+        self.assertEqual(record['attempts'], 2)
+        self.assertEqual(len(record['resume_history']), 1)
+
+    def non_retryable_result_adapter(self, *args, **kwargs):
+        return self.non_retryable_result()
+
     def test_reconcile_prefers_local_result_and_falls_back_to_actions(self):
         from src.catalog.maintenance import reconcile_pool
         from src.catalog.pool import create_pool_from_candidates, save_pool, load_pool

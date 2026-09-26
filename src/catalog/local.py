@@ -580,7 +580,8 @@ def _evaluate_with_retries(state, candidate, text, eid, record):
         if result.get('pending_evaluation'):
             checkpoint = state.ledger.get(eid)
             checkpoint.update(status='reserved', pending_evaluation=result['pending_evaluation'],
-                              max_attempts=state.max_attempts + 1)
+                              max_attempts=(attempt_limit if checkpoint.get('resume_history') else
+                                            max(int(checkpoint.get('max_attempts') or 0), state.max_attempts + 1)))
             state.ledger.save_record(eid, checkpoint)
             if state.active_call:
                 state.active_call['status'] = 'completed'
@@ -729,7 +730,9 @@ def process_candidate(state, item):
         state.report['reconciled_blocked'] += 1
         state.save()
         return True
-    resumable_failure = bool(local_record and record.get('status') == 'failed' and ((record.get('error') or {}).get('reason_code') == 'NETWORK_ERROR' or record.get('retryable')) and (int(record.get('attempts') or 0) < state.max_attempts))
+    effective_attempt_limit = (int(record.get('max_attempts') or state.max_attempts)
+                               if record.get('resume_history') else state.max_attempts)
+    resumable_failure = bool(local_record and record.get('status') == 'failed' and ((record.get('error') or {}).get('reason_code') == 'NETWORK_ERROR' or record.get('retryable')) and (int(record.get('attempts') or 0) < effective_attempt_limit))
     if record.get('status') in ('failed', 'in_progress', 'needs_recovery') and (not resumable_failure):
         reason = 'NON_RETRYABLE_FAILURE' if record.get('status') == 'failed' else 'UNKNOWN_IN_PROGRESS'
         block_info = {
@@ -753,7 +756,9 @@ def process_candidate(state, item):
         return True
     state.ledger.reserve([{'evaluation_id': eid, 'skill_id': candidate.skill_id, 'content_fingerprint': candidate.content_fingerprint, 'rules_version': state.cfg['rules']['rules_version'], 'model_config_version': state.cfg['model'].get('model_config_version')}])
     record = state.ledger.get(eid)
-    record['max_attempts'] = state.max_attempts + int(bool(record.get('pending_evaluation')))
+    record['max_attempts'] = (int(record.get('max_attempts') or effective_attempt_limit)
+                             if record.get('resume_history')
+                             else state.max_attempts + int(bool(record.get('pending_evaluation'))))
     state.ledger.save_record(eid, record)
     state.report['evaluations'] += 1
     state.log(f"评估 #{state.report['evaluations']}：{candidate.name}（累计 {state.usage.total_tokens:,} Token）")
