@@ -10,12 +10,6 @@
       "from": "candidate"
     },
     {
-      "skill_id": "anthropics/skills:skills/discernment-nudge/SKILL.md",
-      "reason": "用户收藏",
-      "added_at": "2026-09-24",
-      "from": "candidate"
-    },
-    {
       "skill_id": "anthropics/skills:skills/skill-creator/SKILL.md",
       "reason": "用户收藏",
       "added_at": "2026-09-24",
@@ -38,18 +32,6 @@
       "reason": "用户收藏",
       "added_at": "2026-09-26",
       "from": "candidate"
-    },
-    {
-      "skill_id": "vercel-labs/agent-skills:skills/composition-patterns/SKILL.md",
-      "reason": "用户收藏",
-      "added_at": "2026-09-24",
-      "from": "candidate"
-    },
-    {
-      "skill_id": "vercel-labs/agent-skills:skills/writing-guidelines/SKILL.md",
-      "reason": "用户收藏",
-      "added_at": "2026-09-22",
-      "from": "recommended"
     },
     {
       "skill_id": "trailofbits/skills:plugins/goal-prompt/skills/goal-prompt/SKILL.md",
@@ -76,22 +58,16 @@
       "from": "candidate"
     },
     {
-      "skill_id": "google-labs-code/stitch-skills:plugins/stitch-build/skills/react-native/SKILL.md",
+      "skill_id": "anthropics/skills:skills/discernment-nudge/SKILL.md",
       "reason": "用户收藏",
-      "added_at": "2026-09-26",
+      "added_at": "2026-09-24",
       "from": "candidate"
     },
     {
-      "skill_id": "google-labs-code/stitch-skills:plugins/stitch-build/skills/shadcn-ui/SKILL.md",
+      "skill_id": "vercel-labs/agent-skills:skills/writing-guidelines/SKILL.md",
       "reason": "用户收藏",
-      "added_at": "2026-09-26",
-      "from": "candidate"
-    },
-    {
-      "skill_id": "google-labs-code/stitch-skills:plugins/stitch-design/skills/extract-design-md/SKILL.md",
-      "reason": "用户收藏",
-      "added_at": "2026-09-26",
-      "from": "candidate"
+      "added_at": "2026-09-22",
+      "from": "recommended"
     },
     {
       "skill_id": "anthropics/skills:skills/doc-coauthoring/SKILL.md",
@@ -139,6 +115,24 @@
       "skill_id": "anthropics/skills:skills/pdf/SKILL.md",
       "reason": "用户收藏",
       "added_at": "2026-09-24",
+      "from": "candidate"
+    },
+    {
+      "skill_id": "getsentry/skills:skills/code-simplifier/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-26",
+      "from": "candidate"
+    },
+    {
+      "skill_id": "getsentry/skills:skills/commit/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-26",
+      "from": "candidate"
+    },
+    {
+      "skill_id": "getsentry/skills:skills/agents-md/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-26",
       "from": "candidate"
     }
   ],

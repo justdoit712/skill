@@ -465,6 +465,125 @@
       "expires_at": "2027-02-23",
       "days": 150,
       "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "getsentry/skills:skills/blog-writing-guide/SKILL.md",
+      "snoozed_at": "2026-09-26",
+      "expires_at": "2027-02-23",
+      "days": 150,
+      "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "getsentry/skills:skills/brand-guidelines/SKILL.md",
+      "snoozed_at": "2026-09-26",
+      "expires_at": "2027-02-23",
+      "days": 150,
+      "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "getsentry/skills:skills/code-review/SKILL.md",
+      "snoozed_at": "2026-09-26",
+      "expires_at": "2027-02-23",
+      "days": 150,
+      "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "getsentry/skills:skills/django-access-review/SKILL.md",
+      "snoozed_at": "2026-09-26",
+      "expires_at": "2027-02-23",
+      "days": 150,
+      "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "getsentry/skills:skills/django-perf-review/SKILL.md",
+      "snoozed_at": "2026-09-26",
+      "expires_at": "2027-02-23",
+      "days": 150,
+      "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "getsentry/skills:skills/document-api-endpoint/SKILL.md",
+      "snoozed_at": "2026-09-26",
+      "expires_at": "2027-02-23",
+      "days": 150,
+      "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "getsentry/skills:skills/find-bugs/SKILL.md",
+      "snoozed_at": "2026-09-26",
+      "expires_at": "2027-02-23",
+      "days": 150,
+      "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "getsentry/skills:skills/gh-review-requests/SKILL.md",
+      "snoozed_at": "2026-09-26",
+      "expires_at": "2027-02-23",
+      "days": 150,
+      "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "getsentry/skills:skills/pr-link-issue/SKILL.md",
+      "snoozed_at": "2026-09-26",
+      "expires_at": "2027-02-23",
+      "days": 150,
+      "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "getsentry/skills:skills/pr-writer/SKILL.md",
+      "snoozed_at": "2026-09-26",
+      "expires_at": "2027-02-23",
+      "days": 150,
+      "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "getsentry/skills:skills/presentation-creator/SKILL.md",
+      "snoozed_at": "2026-09-26",
+      "expires_at": "2027-02-23",
+      "days": 150,
+      "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "getsentry/skills:skills/security-review/SKILL.md",
+      "snoozed_at": "2026-09-26",
+      "expires_at": "2027-02-23",
+      "days": 150,
+      "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "getsentry/skills:skills/sred-work-summary/SKILL.md",
+      "snoozed_at": "2026-09-26",
+      "expires_at": "2027-02-23",
+      "days": 150,
+      "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "vercel-labs/agent-skills:skills/composition-patterns/SKILL.md",
+      "snoozed_at": "2026-09-26",
+      "expires_at": "2027-02-23",
+      "days": 150,
+      "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "google-labs-code/stitch-skills:plugins/stitch-build/skills/react-native/SKILL.md",
+      "snoozed_at": "2026-09-26",
+      "expires_at": "2027-02-23",
+      "days": 150,
+      "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "google-labs-code/stitch-skills:plugins/stitch-build/skills/shadcn-ui/SKILL.md",
+      "snoozed_at": "2026-09-26",
+      "expires_at": "2027-02-23",
+      "days": 150,
+      "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "google-labs-code/stitch-skills:plugins/stitch-design/skills/extract-design-md/SKILL.md",
+      "snoozed_at": "2026-09-26",
+      "expires_at": "2027-02-23",
+      "days": 150,
+      "reason": "用户暂不关注"
     }
   ]
 }

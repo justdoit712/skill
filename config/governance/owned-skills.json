@@ -60,6 +60,18 @@
       "name": "writing-guidelines",
       "source_url": "https://github.com/vercel-labs/agent-skills/blob/HEAD/skills/writing-guidelines/SKILL.md",
       "added_at": "2026-09-26"
+    },
+    {
+      "skill_id": "getsentry/skills:skills/code-simplifier/SKILL.md",
+      "name": "code-simplifier",
+      "source_url": "https://github.com/getsentry/skills/blob/HEAD/skills/code-simplifier/SKILL.md",
+      "added_at": "2026-09-26"
+    },
+    {
+      "skill_id": "getsentry/skills:skills/agents-md/SKILL.md",
+      "name": "agents-md",
+      "source_url": "https://github.com/getsentry/skills/blob/HEAD/skills/agents-md/SKILL.md",
+      "added_at": "2026-09-26"
     }
   ],
   "source": "docs/plans/2026-09-24-已收录管理实施方案.md",
