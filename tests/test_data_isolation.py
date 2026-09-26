@@ -87,9 +87,10 @@ class TestDataIsolationGuard(unittest.TestCase):
         with patch("src.finder.run.call_model", mock_call), patch(
             "src.finder.run.search_github_repos_for_query", return_value=(True, [], None)
         ), patch("src.finder.run.expand_and_collect_candidates", return_value=([], [])):
-            report = execute_find_skill("隔离测试需求", root_dir=self.isolated_root)
+            report = execute_find_skill("隔离测试需求", root_dir=self.isolated_root, max_rounds=1)
 
-        self.assertEqual(report["status"], "completed")
+        self.assertEqual(report["status"], "stopped")
+        self.assertEqual(report["stop_reason"], "round_limit")
         # 验证产物在临时目录中生成
         isolated_find_dir = self.isolated_root / "data" / "local" / "find-skills"
         self.assertTrue(isolated_find_dir.exists())

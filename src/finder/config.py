@@ -14,8 +14,9 @@ from src.infra.files import read_json
 from src.infra.llm import validate_model_config
 
 DEFAULT_LIMIT = 5
-DEFAULT_MAX_EVALUATIONS = 20
-DEFAULT_MAX_TOKENS = 200000
+DEFAULT_MAX_EVALUATIONS = 200
+DEFAULT_MAX_TOKENS = 20000000
+DEFAULT_MAX_ROUNDS = 3
 
 MAX_REPOS_TO_EXPAND = 20
 MAX_SEARCH_REPOS_PER_QUERY = 20
@@ -132,16 +133,21 @@ def validate_finder_parameters(params: dict[str, Any]) -> dict[str, Any]:
     limit = _parse_int_val(params.get("limit"), DEFAULT_LIMIT, "limit")
     max_evals = _parse_int_val(params.get("max_evaluations"), DEFAULT_MAX_EVALUATIONS, "max_evaluations")
     max_tokens = _parse_int_val(params.get("max_tokens"), DEFAULT_MAX_TOKENS, "max_tokens")
+    max_rounds = _parse_int_val(params.get("max_rounds"), DEFAULT_MAX_ROUNDS, "max_rounds")
+    if limit < 1 or max_evals < limit or max_tokens < 1000 or max_rounds < 1:
+        raise ValueError("要求 limit >= 1、max_evaluations >= limit、max_tokens >= 1000、max_rounds >= 1")
 
     return {
         "limit": limit,
         "max_evaluations": max_evals,
         "max_tokens": max_tokens,
+        "max_rounds": max_rounds,
     }
 
 
 __all__ = [
     "DEFAULT_LIMIT",
+    "DEFAULT_MAX_ROUNDS",
     "DEFAULT_MAX_EVALUATIONS",
     "DEFAULT_MAX_TOKENS",
     "MAX_REPOS_TO_EXPAND",

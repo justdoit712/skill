@@ -98,15 +98,15 @@ class TestFinderOwnedIntegration(unittest.TestCase):
         mock_expand.return_value = ([owned_cand], [{"owner": "test-owner", "repo": "test-repo", "ok": True}])
 
         # 执行查找
-        report = execute_find_skill("PDF 工具", root_dir=self.root)
+        report = execute_find_skill("PDF 工具", root_dir=self.root, max_rounds=1)
 
         # 验证：仅发生了 1 次规划模型调用，抓取与评估模型调用为 0
         self.assertEqual(mock_call.call_count, 1)
         self.assertEqual(mock_fetch.call_count, 0)
 
         # 验证报告状态
-        self.assertEqual(report["status"], STATUS_COMPLETED)
-        self.assertEqual(report["stop_reason"], STATUS_ALL_CANDIDATES_OWNED)
+        self.assertEqual(report["status"], "stopped")
+        self.assertEqual(report["stop_reason"], "round_limit")
         self.assertEqual(report["evaluated_count"], 0)
         self.assertEqual(len(report["shortlist"]), 0)
         self.assertEqual(len(report["alternatives"]), 0)
@@ -132,8 +132,8 @@ class TestFinderOwnedIntegration(unittest.TestCase):
         public_snapshot = self.root / "public" / "data" / "find-report.json"
         self.assertTrue(public_snapshot.exists())
         snap_data = json.loads(public_snapshot.read_text(encoding="utf-8"))
-        self.assertEqual(snap_data["status"], "completed")
-        self.assertEqual(snap_data["stop_reason"], "all_candidates_owned")
+        self.assertEqual(snap_data["status"], "stopped")
+        self.assertEqual(snap_data["stop_reason"], "round_limit")
         self.assertEqual(snap_data["search"]["skipped_owned"], 1)
 
     @patch("src.finder.run.fetch_candidate_materials")
@@ -195,7 +195,7 @@ class TestFinderOwnedIntegration(unittest.TestCase):
         mock_expand.return_value = ([owned_cand, unowned_cand], [{"owner": "test-owner", "repo": "test-repo", "ok": True}])
         mock_fetch.return_value = (True, {"skills/excel/SKILL.md": "extract excel"}, None)
 
-        report = execute_find_skill("测试", root_dir=self.root)
+        report = execute_find_skill("测试", root_dir=self.root, limit=1)
 
         # 验证：第 1 个候选跳过，第 2 个未收录候选成功评估
         self.assertEqual(mock_fetch.call_count, 1)
@@ -242,10 +242,10 @@ class TestFinderOwnedIntegration(unittest.TestCase):
         )
         mock_expand.return_value = ([owned_cand], [{"owner": "test-owner", "repo": "test-repo", "ok": True}])
 
-        report = execute_find_skill("测试覆盖率", root_dir=self.root)
+        report = execute_find_skill("测试覆盖率", root_dir=self.root, max_rounds=1)
 
-        self.assertEqual(report["status"], STATUS_COMPLETED)
-        self.assertEqual(report["stop_reason"], STATUS_ALL_CANDIDATES_OWNED)
+        self.assertEqual(report["status"], "stopped")
+        self.assertEqual(report["stop_reason"], "round_limit")
         self.assertTrue(report["coverage_incomplete"])
 
         md_text = Path(report["report_paths"]["md"]).read_text(encoding="utf-8")
@@ -258,7 +258,7 @@ class TestFinderOwnedIntegration(unittest.TestCase):
         (self.root / "config" / "owned-skills.json").write_text("{bad json}", encoding="utf-8")
 
         with self.assertRaises(ValueError) as ctx:
-            execute_find_skill("测试", root_dir=self.root)
+            execute_find_skill("测试", root_dir=self.root, limit=1)
         self.assertIn("已收录配置文件 JSON 格式损坏", str(ctx.exception))
         self.assertEqual(mock_call.call_count, 0)
 

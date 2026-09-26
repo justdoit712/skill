@@ -41,6 +41,7 @@ def search_github_repos_for_query(
     query: str,
     *,
     per_page: int = MAX_SEARCH_REPOS_PER_QUERY,
+    page: int = 1,
     timeout: float = DEFAULT_TIMEOUT_SECONDS,
     session=None,
     sleep=time.sleep,
@@ -48,6 +49,7 @@ def search_github_repos_for_query(
     """执行单个关键词的 GitHub 仓库搜索（围绕查询词与 SKILL.md in:readme 检索）。"""
     full_q = f'{query.strip()} "SKILL.md" in:readme'
     ok, items, _, error = search_repositories(full_q, session=session, per_page=per_page,
+                                              page=page,
                                               timeout=timeout, sleep=sleep)
     repos = []
     for item in items:
@@ -118,6 +120,7 @@ def expand_and_collect_candidates(
     *,
     keywords: set[str] | None = None,
     max_repos: int = MAX_REPOS_TO_EXPAND,
+    max_files_per_repo: int | None = MAX_FILES_PER_REPO,
     sleep=time.sleep,
     log=print,
 ) -> tuple[list[Candidate], list[dict[str, Any]]]:
@@ -160,9 +163,9 @@ def expand_and_collect_candidates(
                     related.append(p)
                 else:
                     generic.append(p)
-            selected_paths = _interleave_paths(related, generic, max_count=MAX_FILES_PER_REPO)
+            selected_paths = _interleave_paths(related, generic, max_count=max_files_per_repo or len(valid_paths))
         else:
-            selected_paths = valid_paths[:MAX_FILES_PER_REPO]
+            selected_paths = valid_paths[:max_files_per_repo]
 
         expansion_logs[-1]["omitted_files"] = max(0, len(valid_paths) - len(selected_paths))
         for p in selected_paths:
@@ -185,7 +188,8 @@ def expand_and_collect_candidates(
     return candidates, expansion_logs
 
 
-def schedule_candidates_fairly(candidates: list[Candidate]) -> list[Candidate]:
+def schedule_candidates_fairly(candidates: list[Candidate], *, max_total: int | None = MAX_TOTAL_FILES_TO_FETCH,
+                               max_per_repo: int | None = MAX_FILES_PER_REPO) -> list[Candidate]:
     """跨仓库公平轮转排序，避免首个大型合集垄断读取配额。"""
     by_repo: dict[str, list[Candidate]] = {}
     for c in candidates:
@@ -199,9 +203,9 @@ def schedule_candidates_fairly(candidates: list[Candidate]) -> list[Candidate]:
     for depth in range(max_depth):
         for r_key in repo_keys:
             c_list = by_repo[r_key]
-            if depth < len(c_list) and depth < MAX_FILES_PER_REPO:
+            if depth < len(c_list) and (max_per_repo is None or depth < max_per_repo):
                 ordered.append(c_list[depth])
-                if len(ordered) >= MAX_TOTAL_FILES_TO_FETCH:
+                if max_total is not None and len(ordered) >= max_total:
                     return ordered
     return ordered
 

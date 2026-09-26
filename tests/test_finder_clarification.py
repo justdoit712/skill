@@ -285,11 +285,13 @@ class TestInteractivePlanningExecution(unittest.TestCase):
             "测试需求",
             root_dir=self.root,
             max_clarification_turns=2,
+            max_rounds=1,
             input_fn=mock_input,
             log=lambda *a, **k: None,
         )
 
-        self.assertEqual(report["status"], STATUS_COMPLETED)
+        self.assertEqual(report["status"], "stopped")
+        self.assertEqual(report["stop_reason"], "round_limit")
         self.assertEqual(report["plan"]["intent"], "代码开发提示词技能")
         self.assertEqual(mock_call.call_count, 2)
 

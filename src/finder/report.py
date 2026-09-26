@@ -29,7 +29,7 @@ STATUS_SUPPORTED = "supported"
 
 PUBLIC_REASONS = {"completed", "target_reached", "candidates_exhausted", "all_candidates_owned", "token_limit", "evaluation_limit",
                   "usage_unknown", "model_failures", "interrupted", "search_failed", "expansion_failed",
-                  "material_failed", "plan_failed", "execution_error", "artifact_failed"}
+                  "material_failed", "plan_failed", "execution_error", "artifact_failed", "round_limit", "reflection_failed"}
 
 
 def _escape_markdown(value):
@@ -78,11 +78,17 @@ def render_find_markdown_report(report: dict[str, Any]) -> str:
         f"- **分析归纳**：{plan.get('intent', '（未完成）')}",
         f"- **运行编号**：`{report.get('run_id')}`（{report.get('started_at', '')}）",
         f"- **运行状态**：{report.get('stop_reason') or report.get('status')}",
+        f"- **检索轮次**：{search.get('current_round', 1)} / {params.get('max_rounds', 1)}（包含首轮）",
         f"- **检查范围**：检索查询 {len(search.get('queries_executed', []))} 条，发现仓库 {search.get('repos_discovered', 0)} 个，展开技能文件 {search.get('candidates_found', 0)} 个{skipped_str}，实际评估 {report.get('evaluated_count', 0)} 个",
         f"- **Token 用量**：输入 {_count(usage.get('prompt_tokens'))}，输出 {_count(usage.get('completion_tokens'))}，总计 {_count(usage.get('total_tokens'))} Token（本次停止阈值 {_count(params.get('max_tokens'))}）",
     ]
     if raw_coverage_incomplete:
         lines.append("- **检索覆盖**：本次检索覆盖不完整，部分来源读取失败或超出读取范围。")
+    if search.get("candidates_found") and search.get("skipped_owned") == search.get("candidates_found"):
+        lines.append("- 本次发现的候选已全部收录。")
+    for round_info in search.get("rounds_history", []):
+        lines.append(f"- 第 {round_info.get('round')} 轮：{round_info.get('strategy')}，新增仓库 {round_info.get('new_repos', 0)} 个，"
+                     f"新增候选 {round_info.get('candidates', 0)} 个，已评估 {round_info.get('evaluated', 0)} 个。")
     lines.extend([
         "",
         "---",
@@ -267,6 +273,7 @@ def sanitize_report_for_public(report: dict[str, Any]) -> dict[str, Any]:
             "limit": params.get("limit", 5),
             "max_evaluations": params.get("max_evaluations", 20),
             "max_tokens": params.get("max_tokens", 200000),
+            "max_rounds": params.get("max_rounds", 1),
         },
         "model": str(report.get("model") or ""),
         "plan": {
@@ -278,6 +285,10 @@ def sanitize_report_for_public(report: dict[str, Any]) -> dict[str, Any]:
             "repos_discovered": int(search.get("repos_discovered") or 0),
             "candidates_found": int(search.get("candidates_found") or 0),
             "skipped_owned": int(search.get("skipped_owned") or 0),
+            "current_round": int(search.get("current_round") or 0),
+            "rounds_history": [{"round": r.get("round"), "strategy": r.get("strategy"),
+                                "repos": r.get("new_repos", 0), "candidates": r.get("candidates", 0),
+                                "evaluated": r.get("evaluated", 0)} for r in search.get("rounds_history", [])],
         },
         "evaluation_attempts": report.get("evaluation_attempts"),
         "evaluated_count": report.get("evaluated_count"),
@@ -323,7 +334,7 @@ def should_update_public_snapshot(report: dict[str, Any]) -> bool:
             return False
 
     # 1 & 2. 正常完成（包含有推荐或 0 匹配自然结束）
-    if status == "completed" or stop_reason in ("target_reached", "candidates_exhausted", "all_candidates_owned", "completed"):
+    if status == "completed" or stop_reason in ("target_reached", "candidates_exhausted", "all_candidates_owned", "completed", "round_limit"):
         return True
 
     # 3. 异常中断/熔断，但已有部分有效条目

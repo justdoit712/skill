@@ -130,6 +130,7 @@ def search_repositories(
     *,
     session: requests.Session | None = None,
     per_page: int = DEFAULT_PER_PAGE,
+    page: int = 1,
     timeout: float = DEFAULT_TIMEOUT_SECONDS,
     max_attempts: int = DEFAULT_MAX_ATTEMPTS,
     sleep=time.sleep,
@@ -146,7 +147,7 @@ def search_repositories(
             try:
                 response = sess.get(
                     GITHUB_SEARCH_ENDPOINT,
-                    params={"q": query_str, "per_page": per_page},
+                    params={"q": query_str, "per_page": per_page, "page": page},
                     timeout=timeout,
                 )
             except requests.exceptions.RequestException as exc:

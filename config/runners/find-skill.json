@@ -1,8 +1,9 @@
 {
   "topic": "如何整理归纳，包括但不限于，软件分类，帖子分类，总而言之就是各种东西该如何分类",
   "limit": 5,
-  "max_evaluations": 80,
+  "max_evaluations": 200,
+  "max_rounds": 3,
   "max_tokens": "20 000 000",
   "max_clarification_turns": 3,
-  "note": "定向查找 Skill 配置：topic 为需求目标文字；limit 为推荐展示数；max_evaluations 为最多评估候选数；max_tokens 为用量停止熔断阈值；max_clarification_turns 为阶段一人机澄清轮数（默认3轮）。可在命令行临时覆盖。"
+  "note": "limit 为达标即停的短名单目标；max_rounds 为总检索轮数（包含首轮）；max_evaluations 为累计评估尝试上限；max_tokens 包含规划、评估和反思，用量达到阈值后不再发起请求；max_clarification_turns 为人机澄清轮数。续跑继承累计预算，可用命令行覆盖。"
 }

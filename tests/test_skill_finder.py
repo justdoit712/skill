@@ -158,7 +158,7 @@ class TestT02AccountingAndAttempts(unittest.TestCase):
         mock_fetch.side_effect = fake_fetch
 
         report = execute_find_skill("测试需求", limit=1, max_evaluations=2, root_dir=self.root)
-        self.assertEqual(report["stop_reason"], STATUS_EVALUATION_LIMIT)
+        self.assertEqual(report["stop_reason"], "target_reached")
         self.assertEqual(report["evaluation_attempts"], 2)
         self.assertEqual(report["evaluated_count"], 1)
         self.assertEqual(mock_call.call_count, 3)

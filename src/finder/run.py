@@ -5,32 +5,30 @@
 2. 严密的 3 计数器（尝试次数、已评估数、Token 用量）记账与安全熔断；
 3. 统一收尾（finalize_run）与多退出码规范映射（0/1/2/130）；
 4. 零目录依赖与零目录副作用红线保障；
-5. 过滤已收录项，全收录正常完成（all_candidates_owned）。
+5. 已收录项过滤、多轮补水和检查点恢复。
 """
 
 from __future__ import annotations
 
 import argparse
 from copy import deepcopy
-from datetime import datetime, timezone
+from dataclasses import asdict
 import json
-import os
 from pathlib import Path
-import re
 import sys
 import time
 from typing import Any
-from urllib.parse import urlparse
+from types import SimpleNamespace
 from uuid import uuid4
 
 from src.infra.files import write_json_atomic
 from src.infra.llm import call_model, resolve_api_key
-from src.shared.owned import is_skill_owned
 from src.shared.runtime import is_test_environment, now_local
 from src.shared.usage import UsageTotals
 
 from .config import (
     DEFAULT_LIMIT,
+    DEFAULT_MAX_ROUNDS,
     DEFAULT_MAX_EVALUATIONS,
     DEFAULT_MAX_TOKENS,
     _parse_int_val,
@@ -54,18 +52,15 @@ from .plan import (
     parse_query_plan,
 )
 from .report import (
-    render_find_markdown_report,
     update_public_snapshot,
     write_local_report,
 )
 from .search import (
-    MAX_REPOS_TO_EXPAND,
-    _round_robin_merge_repos,
     expand_and_collect_candidates,
     fetch_candidate_materials,
-    schedule_candidates_fairly,
     search_github_repos_for_query,
 )
+from .refill import run_rounds
 
 EVAL_MAX_OUTPUT_TOKENS = 10000
 
@@ -73,6 +68,7 @@ STATUS_TARGET_REACHED = "target_reached"
 STATUS_COMPLETED = "completed"
 STATUS_TOKEN_LIMIT = "token_limit"
 STATUS_EVALUATION_LIMIT = "evaluation_limit"
+STATUS_ROUND_LIMIT = "round_limit"
 STATUS_CANDIDATES_EXHAUSTED = "candidates_exhausted"
 STATUS_ALL_CANDIDATES_OWNED = "all_candidates_owned"
 STATUS_MODEL_FAILURES = "model_failures"
@@ -86,12 +82,20 @@ STATUS_INVALID_CONFIG = "invalid_config"
 MAX_CONSECUTIVE_FAILURES = 20
 
 
+class RunStopped(Exception):
+    def __init__(self, reason):
+        self.reason = reason
+        super().__init__(reason)
+
+
 class FinderRunState:
     """Per-run facts; no catalog state or global execution context."""
 
     def __init__(self, topic, params, run_dir=None):
         self.run_dir = run_dir
         self.usage = UsageTotals()
+        params = {"limit": DEFAULT_LIMIT, "max_evaluations": DEFAULT_MAX_EVALUATIONS,
+                  "max_tokens": DEFAULT_MAX_TOKENS, "max_rounds": DEFAULT_MAX_ROUNDS, **params}
         self.report = {"schema_version": "1.0.0", "topic": topic, "parameters": params,
             "status": "running", "stop_reason": None, "plan": None,
             "evaluation_attempts": 0, "evaluated_count": 0, "evaluations": [],
@@ -107,8 +111,24 @@ class FinderRunState:
         # During execution only the authoritative JSON is updated.
         write_json_atomic(self.run_dir / "report.json", self.report)
 
-    def call(self, transport, cfg, system, user, *, api_key, sleep, candidate_id=None):
-        call = {"stage": "evaluation" if candidate_id else "planning", "skill_id": candidate_id,
+    def stop_reason(self):
+        if self.usage.unknown_usage_requests or any(c.get("state") in ("started", "unknown") for c in self.report["calls"]):
+            return STATUS_USAGE_UNKNOWN
+        if _target_reached(self):
+            return STATUS_TARGET_REACHED
+        if self.usage.total_tokens >= self.report["parameters"]["max_tokens"]:
+            return STATUS_TOKEN_LIMIT
+        if self.report["evaluation_attempts"] >= self.report["parameters"]["max_evaluations"]:
+            return STATUS_EVALUATION_LIMIT
+        if self.report["search"].get("consecutive_failures", 0) >= MAX_CONSECUTIVE_FAILURES:
+            return STATUS_MODEL_FAILURES
+        return None
+
+    def call(self, transport, cfg, system, user, *, api_key, sleep, candidate_id=None, stage=None):
+        reason = self.stop_reason()
+        if reason:
+            raise RunStopped(reason)
+        call = {"stage": stage or ("evaluation" if candidate_id else "planning"), "skill_id": candidate_id,
                 "state": "started", "usage": None}
         self.report["calls"].append(call)
         if candidate_id:
@@ -125,14 +145,17 @@ class FinderRunState:
         except BaseException:
             call["state"] = "unknown"
             self.usage.record_unknown_request()
+            self.save()
             raise
         call["usage"] = self.usage.add(result)
+        call["response"] = {key: getattr(result, key, None) for key in
+                            ("ok", "content", "error", "reason_code", "finish_reason")}
         if not getattr(result, "ok", False):
             call["state"] = "not_sent" if call["usage"]["attempts"] == 0 else "error"
         else:
             call["state"] = "unknown" if call["usage"]["total_tokens"] is None else "received"
         self.save()
-        return result, (call["state"] == "unknown")
+        return result, bool(self.usage.unknown_usage_requests)
 
 
 def finalize_run(report, stop_reason, *, status=None, evaluated_items=None, plan=None,
@@ -140,8 +163,11 @@ def finalize_run(report, stop_reason, *, status=None, evaluated_items=None, plan
                  evaluation_attempts=None, evaluated_count=None, log=print):
     if status is None:
         status = (STATUS_INTERRUPTED if stop_reason == STATUS_INTERRUPTED else
-                  STATUS_STOPPED if stop_reason in (STATUS_TOKEN_LIMIT, STATUS_EVALUATION_LIMIT, STATUS_USAGE_UNKNOWN, STATUS_MODEL_FAILURES) else
+                  STATUS_STOPPED if stop_reason in (STATUS_TOKEN_LIMIT, STATUS_EVALUATION_LIMIT, STATUS_USAGE_UNKNOWN, STATUS_MODEL_FAILURES, STATUS_ROUND_LIMIT) else
                   STATUS_COMPLETED if stop_reason in (STATUS_TARGET_REACHED, STATUS_CANDIDATES_EXHAUSTED, STATUS_ALL_CANDIDATES_OWNED, STATUS_COMPLETED) else STATUS_ERROR)
+    history = report.get("search", {}).get("rounds_history", [])
+    if history:
+        history[-1]["evaluated"] = len(report.get("evaluations", [])) - history[-1].get("evaluation_start", 0)
     report.update(schema_version="1.0.0", status=status, stop_reason=stop_reason,
                   updated_at=now_local().isoformat())
     items = evaluated_items if evaluated_items is not None else report.get("evaluations", [])
@@ -196,106 +222,64 @@ def finalize_run(report, stop_reason, *, status=None, evaluated_items=None, plan
     return report
 
 
-def _find_candidates(state, search, expand, sleep, log, owned_ids=None):
-    report, plan = state.report, state.report["plan"]
-    groups = []
-    total_q = len(plan["queries"])
-    for idx, query in enumerate(plan["queries"], 1):
-        log(f"[检索 {idx}/{total_q}] 正在 GitHub 搜索: {query}...")
-        ok, repos, error = search(query, sleep=sleep)
-        report["search"]["queries_executed"].append({"query": query, "ok": ok, "repos_returned": len(repos), "error": error})
-        report["coverage_incomplete"] |= not ok or len(repos) >= 20
-        groups.append(repos if ok else [])
-    state.save()
-    if not any(q["ok"] for q in report["search"]["queries_executed"]):
-        return [], "search_failed"
-    repos = _round_robin_merge_repos(groups, max_repos=MAX_REPOS_TO_EXPAND)
-    report["search"]["repos_discovered"] = len(repos)
-    report["search"]["omitted_repositories"] = max(0, len({(r["owner"], r["repo"]) for g in groups for r in g}) - len(repos))
-    if not repos:
-        return [], STATUS_CANDIDATES_EXHAUSTED
-    log(f"[展开] 成功锁定 {len(repos)} 个仓库，正在展开并提取候选 SKILL.md...")
-    keywords = set(re.findall(r"[\w]+", report["topic"].lower()))
-    candidates, expansions = expand(repos, keywords=keywords, sleep=sleep, log=log)
-    report["search"].update(expansions=expansions, candidates_found=len(candidates))
-    log(f"[发现] 共展开提取出 {len(candidates)} 个候选技能，开始调度评估...")
-    report["coverage_incomplete"] |= any(not e.get("ok", False) or e.get("truncated") or e.get("omitted_files", 0) for e in expansions)
-    if expansions and all(not e.get("ok", False) for e in expansions):
-        return [], "expansion_failed"
-
-    # 过滤已收录项（必须在调度截断前完成，避免已收录项占满候选上限）
-    remaining_candidates = []
-    skipped_owned_cands = []
-    for c in candidates:
-        if is_skill_owned(c.skill_id, owned_ids):
-            skipped_owned_cands.append(c)
-        else:
-            remaining_candidates.append(c)
-
-    report["search"]["skipped_owned"] = len(skipped_owned_cands)
-    report["search"]["skipped_owned_ids"] = [c.skill_id for c in skipped_owned_cands]
-    for c in skipped_owned_cands:
-        report["search"]["skipped"].append({
-            "skill_id": c.skill_id,
-            "code": "owned",
-            "message": "已收录跳过",
-        })
-
-    if candidates and not remaining_candidates:
-        state.save()
-        return [], STATUS_ALL_CANDIDATES_OWNED
-
-    scheduled = schedule_candidates_fairly(remaining_candidates)
-    report["search"]["omitted_candidates"] = len(remaining_candidates) - len(scheduled)
-    report["coverage_incomplete"] |= bool(report["search"]["omitted_candidates"] or report["search"]["omitted_repositories"])
-    state.save()
-    return scheduled, None if scheduled else STATUS_CANDIDATES_EXHAUSTED
-
-
 def _evaluate_candidate(state, candidate, materials, cfg, api_key, transport, sleep):
     from src.shared.materials import MaterialBundle
     report = state.report
+    manifest = materials.manifest() if isinstance(materials, MaterialBundle) else {"identity_version": "primary-only-legacy"}
+    report["pending_evaluation"] = {"candidate": asdict(candidate), "materials": dict(materials), "manifest": manifest}
     system, user = build_evaluation_prompt(candidate, materials, report["plan"], report["topic"])
     result, unknown = state.call(transport, cfg, system, user, api_key=api_key, sleep=sleep, candidate_id=candidate.skill_id)
+    return _record_evaluation(state, candidate, materials, manifest, result), unknown
+
+
+def _record_evaluation(state, candidate, materials, manifest, result):
+    report = state.report
     successful = False
     try:
         if not result.ok or not result.content:
             raise ValueError(result.error or "model_failed")
+        if result.finish_reason == "length":
+            raise ValueError("模型输出被截断")
         parsed = parse_skill_evaluation(result.content, report["plan"]["criteria"])
         verified = verify_and_adjust_evaluation(parsed, materials, report["plan"]["criteria"])
         record = {"candidate": {"skill_id": candidate.skill_id, "name": candidate.name,
                   "repo_url": candidate.repo_url, "url": candidate.url, "author": candidate.owner,
                   "path": candidate.path, "content_fingerprint": candidate.content_fingerprint},
                   "evaluation": verified,
-                  "materials": materials.manifest() if isinstance(materials, MaterialBundle) else {"identity_version": "primary-only-legacy"}}
+                  "materials": manifest}
         report["evaluations"].append(record)
         report["evaluated_count"] = len(report["evaluations"])
         successful = True
     except (ValueError, TypeError, KeyError) as exc:
         report["errors"].append({"stage": "evaluation", "skill_id": candidate.skill_id,
                                  "code": "invalid_result", "message": str(exc)})
+    processed = report["search"].setdefault("processed_skill_ids", [])
+    if candidate.skill_id not in processed:
+        processed.append(candidate.skill_id)
+    report["search"]["consecutive_failures"] = 0 if successful else report["search"].get("consecutive_failures", 0) + 1
+    report.pop("pending_evaluation", None)
     state.save()
-    return successful, unknown
+    return successful
 
 
 def _evaluate_candidates(state, candidates, cfg, api_key, transport, fetch, sleep, log=print):
     already_evaluated_ids = {e["candidate"]["skill_id"] for e in state.report.get("evaluations", [])}
     if already_evaluated_ids:
         log(f"[断点续跑] 检测到已有 {len(already_evaluated_ids)} 个已完成评估的候选，自动跳过并从新候选继续...")
-    report, failures, readable = state.report, 0, 0
+    report, readable = state.report, 0
+    failures = report["search"].get("consecutive_failures", 0)
+    processed = report["search"].setdefault("processed_skill_ids", [])
+    already_evaluated_ids.update(processed)
+    reason = state.stop_reason()
+    if reason:
+        return reason
     for candidate in candidates:
         if candidate.skill_id in already_evaluated_ids:
             readable += 1
             continue
-        if report["evaluation_attempts"] >= report["parameters"]["max_evaluations"]:
-            log(f"[停止] 已达本次最大评估上限 ({report['parameters']['max_evaluations']} 个)。")
-            return STATUS_EVALUATION_LIMIT
-        if state.usage.total_tokens >= report["parameters"]["max_tokens"]:
-            log(f"[停止] Token 消耗已达到安全阈值 ({report['parameters']['max_tokens']:,})。")
-            return STATUS_TOKEN_LIMIT
-        if failures >= MAX_CONSECUTIVE_FAILURES:
-            log(f"[停止] 连续调用模型失败次数过多 ({failures} 次)。")
-            return STATUS_MODEL_FAILURES
+        reason = state.stop_reason()
+        if reason:
+            return reason
         attempt_num = report["evaluation_attempts"] + 1
         max_num = report["parameters"]["max_evaluations"]
         log(f"[评估 #{attempt_num}/{max_num}] {candidate.name} ({candidate.skill_id})...")
@@ -303,6 +287,8 @@ def _evaluate_candidates(state, candidates, cfg, api_key, transport, fetch, slee
         if not ok or not materials:
             report["coverage_incomplete"] = True
             report["search"]["skipped"].append({"skill_id": candidate.skill_id, "code": "material_failed", "message": error})
+            processed.append(candidate.skill_id)
+            already_evaluated_ids.add(candidate.skill_id)
             state.save()
             continue
         readable += 1
@@ -310,6 +296,7 @@ def _evaluate_candidates(state, candidates, cfg, api_key, transport, fetch, slee
             report["coverage_incomplete"] = True
         successful, unknown = _evaluate_candidate(state, candidate, materials, cfg, api_key, transport, sleep)
         failures = 0 if successful else failures + 1
+        already_evaluated_ids.add(candidate.skill_id)
         if unknown:
             log("  -> 接口成功响应但缺失用量数据，触发用量未知熔断。")
             return STATUS_USAGE_UNKNOWN
@@ -318,6 +305,9 @@ def _evaluate_candidates(state, candidates, cfg, api_key, transport, fetch, slee
             m = last_ev.get("match", "none")
             tokens = state.usage.total_tokens
             log(f"  -> 评估完成: match={m} (全库已完成: {len(report['evaluations'])}, 累计消耗: {tokens:,} Token)")
+            if _target_reached(state):
+                log(f"[目标达成] 短名单已集齐 {report['parameters']['limit']} 个，停止后续评估。")
+                return STATUS_TARGET_REACHED
         else:
             log("  -> 候选评估未通过格式校验或调用出错，已记录并继续下一个候选...")
     if not readable:
@@ -325,6 +315,12 @@ def _evaluate_candidates(state, candidates, cfg, api_key, transport, fetch, slee
     if failures >= MAX_CONSECUTIVE_FAILURES:
         return STATUS_MODEL_FAILURES
     return STATUS_TARGET_REACHED if len(rank_find_results(report["evaluations"], report["plan"], report["parameters"]["limit"])[0]) >= report["parameters"]["limit"] else STATUS_CANDIDATES_EXHAUSTED
+
+
+def _target_reached(state):
+    report = state.report
+    return len(rank_find_results(report["evaluations"], report.get("plan"),
+                                report["parameters"]["limit"])[0]) >= report["parameters"]["limit"]
 
 
 def _run_planning_phase(
@@ -362,7 +358,7 @@ def _run_planning_phase(
             system, user = build_clarification_question_prompt(
                 topic, history, turn=turn_idx, max_turns=max_turns
             )
-            result, unknown = state.call(transport, clarify_cfg, system, user, api_key=api_key, sleep=sleep)
+            result, unknown = state.call(transport, clarify_cfg, system, user, api_key=api_key, sleep=sleep, stage="clarification")
             if unknown:
                 return None, STATUS_USAGE_UNKNOWN
             if not result.ok or not result.content:
@@ -452,7 +448,7 @@ def _run_planning_phase(
         return None, "plan_failed"
 
 
-def execute_find_skill(topic="", *, limit=None, max_evaluations=None, max_tokens=None,
+def execute_find_skill(topic="", *, limit=None, max_evaluations=None, max_tokens=None, max_rounds=None,
                        root_dir=".", model_cfg=None, log=print, sleep=time.sleep,
                        call_model_fn=None, fetch_candidate_materials_fn=None,
                        expand_and_collect_candidates_fn=None, search_github_repos_fn=None,
@@ -478,6 +474,8 @@ def execute_find_skill(topic="", *, limit=None, max_evaluations=None, max_tokens
         if not report_file.exists():
             raise FileNotFoundError(f"续跑目录中未找到 report.json：{resume_dir}")
         prev_report = json.loads(report_file.read_text(encoding="utf-8"))
+        if topic and topic.strip() != prev_report.get("topic"):
+            raise ValueError("续跑不能更改原始需求；请为新需求启动新的查找。")
         topic = (topic or prev_report.get("topic") or "").strip()
         directory = resume_dir
         resumed = True
@@ -491,9 +489,9 @@ def execute_find_skill(topic="", *, limit=None, max_evaluations=None, max_tokens
 
     prev_params = prev_report.get("parameters", {}) if resumed else {}
     params = {k: _parse_int_val(explicit if explicit is not None else (prev_params.get(k) if resumed else run_cfg.get(k)), default, k)
-              for k, explicit, default in (("limit", limit, DEFAULT_LIMIT), ("max_evaluations", max_evaluations, DEFAULT_MAX_EVALUATIONS), ("max_tokens", max_tokens, DEFAULT_MAX_TOKENS))}
-    if params["limit"] < 1 or params["max_evaluations"] < params["limit"] or params["max_tokens"] < 1000:
-        raise ValueError("要求 limit >= 1、max_evaluations >= limit、max_tokens >= 1000")
+              for k, explicit, default in (("limit", limit, DEFAULT_LIMIT), ("max_evaluations", max_evaluations, DEFAULT_MAX_EVALUATIONS), ("max_tokens", max_tokens, DEFAULT_MAX_TOKENS), ("max_rounds", max_rounds, DEFAULT_MAX_ROUNDS))}
+    if params["limit"] < 1 or params["max_evaluations"] < params["limit"] or params["max_tokens"] < 1000 or params["max_rounds"] < 1:
+        raise ValueError("要求 limit >= 1、max_evaluations >= limit、max_tokens >= 1000、max_rounds >= 1")
 
     if max_clarification_turns is None:
         raw_turns = run_cfg.get("max_clarification_turns")
@@ -503,7 +501,7 @@ def execute_find_skill(topic="", *, limit=None, max_evaluations=None, max_tokens
             "max_clarification_turns",
         )
         # 若未mock输入且不在交互终端，安全不阻塞
-        if input_fn is input and not sys.stdin.isatty():
+        if input_fn is input and (not sys.stdin.isatty() or is_test_environment()):
             max_clarification_turns = 0
 
     cfg = deepcopy(model_cfg if model_cfg is not None else load_finder_model_config(root / "config"))
@@ -518,6 +516,17 @@ def execute_find_skill(topic="", *, limit=None, max_evaluations=None, max_tokens
     state = FinderRunState(topic.strip(), params, directory)
     if resumed:
         state.report = deepcopy(prev_report)
+        state.report.setdefault("calls", [])
+        state.report.setdefault("errors", [])
+        state.report.setdefault("coverage_incomplete", False)
+        state.report.setdefault("evaluation_attempts", max(len(state.report.get("evaluations", [])), sum(bool(c.get("skill_id")) for c in state.report["calls"])))
+        defaults = FinderRunState(topic, params).report["search"]
+        for key, value in defaults.items():
+            state.report.setdefault("search", {}).setdefault(key, value)
+        for call in state.report["calls"]:
+            if call.get("state") == "started":
+                call["state"] = "unknown"
+                state.report.setdefault("recovery_warning", "存在发送后未确认的请求，停止自动重试。")
         state.report["parameters"].update(params)
         state.report["status"] = "running"
         state.report["stop_reason"] = None
@@ -532,6 +541,9 @@ def execute_find_skill(topic="", *, limit=None, max_evaluations=None, max_tokens
             unknown_usage_requests=u.get("unknown_usage_requests") or 0,
             incomplete_breakdown_requests=u.get("incomplete_breakdown_requests") or 0,
         )
+        for call in prev_report.get("calls", []):
+            if call.get("state") == "started":
+                state.usage.record_unknown_request()
     else:
         state.report.update(run_id=run_id, started_at=started.isoformat(), model=cfg.get("model"),
                             report_paths={"json": str(directory / "report.json"), "md": str(directory / "report.md")})
@@ -541,6 +553,22 @@ def execute_find_skill(topic="", *, limit=None, max_evaluations=None, max_tokens
     transport = call_model_fn or call_model
     reason = "plan_failed"
     try:
+        if resumed:
+            pending = state.report.get("pending_evaluation")
+            last = state.report["calls"][-1] if state.report["calls"] else {}
+            if pending and last.get("response") and last.get("skill_id") == pending["candidate"]["skill_id"]:
+                from src.shared.models import Candidate
+                if not any(e["candidate"]["skill_id"] == pending["candidate"]["skill_id"] for e in state.report["evaluations"]):
+                    _record_evaluation(state, Candidate(**pending["candidate"]), pending["materials"],
+                                       pending["manifest"], SimpleNamespace(**last["response"]))
+                else:
+                    state.report.pop("pending_evaluation", None)
+            if not state.report.get("plan") and last.get("stage") == "planning" and last.get("response"):
+                result = last["response"]
+                if result.get("ok") and result.get("content"):
+                    state.report["plan"] = parse_query_plan(result["content"])
+        if state.stop_reason():
+            raise RunStopped(state.stop_reason())
         plan = state.report.get("plan")
         if resumed and plan:
             log(f"已恢复历史运行：{directory.name}")
@@ -562,12 +590,16 @@ def execute_find_skill(topic="", *, limit=None, max_evaluations=None, max_tokens
             reason = plan_error
         elif plan:
             state.report["plan"] = plan
-            candidates, reason = _find_candidates(state, search_github_repos_fn or search_github_repos_for_query,
-                expand_and_collect_candidates_fn or expand_and_collect_candidates, sleep, log, owned_ids=owned_ids)
+            reason = state.stop_reason()
             if reason is None:
                 cfg.setdefault("limits", {})["max_output_tokens"] = EVAL_MAX_OUTPUT_TOKENS
-                reason = _evaluate_candidates(state, candidates, cfg, api_key, transport,
-                    fetch_candidate_materials_fn or fetch_candidate_materials, sleep, log=log)
+                reason = run_rounds(state, cfg, api_key, transport,
+                    search_github_repos_fn or search_github_repos_for_query,
+                    expand_and_collect_candidates_fn or expand_and_collect_candidates,
+                    fetch_candidate_materials_fn or fetch_candidate_materials,
+                    _evaluate_candidates, owned_ids, sleep, log)
+    except RunStopped as exc:
+        reason = exc.reason
     except KeyboardInterrupt:
         reason = STATUS_INTERRUPTED
     except Exception as exc:
@@ -665,6 +697,8 @@ def main(argv: list[str] | None = None, *, root: Path | None = None) -> int:
         default=None,
         help=f"本次模型调用的 Token 消耗停止阈值（默认 {cfg_max_tokens:,}）",
     )
+    parser.add_argument("--max-rounds", type=lambda v: _parse_int_val(v, DEFAULT_MAX_ROUNDS, "max_rounds"),
+                        default=None, help="总检索轮数，包含首轮（默认 3）")
     parser.add_argument(
         "--turns",
         type=int,
@@ -689,7 +723,7 @@ def main(argv: list[str] | None = None, *, root: Path | None = None) -> int:
             print(f"续跑参数错误：{exc}", file=sys.stderr)
             return 2
 
-    topic = (args.topic or cfg_topic).strip()
+    topic = (args.topic or ("" if resume_path is not None else cfg_topic)).strip()
     if resume_path is None and not topic:
         if sys.stdin.isatty():
             try:
@@ -707,6 +741,7 @@ def main(argv: list[str] | None = None, *, root: Path | None = None) -> int:
             limit=args.limit,
             max_evaluations=args.max_evaluations,
             max_tokens=args.max_tokens,
+            max_rounds=args.max_rounds,
             root_dir=root_path,
             max_clarification_turns=args.turns,
             resume_dir=resume_path,
@@ -732,6 +767,7 @@ def main(argv: list[str] | None = None, *, root: Path | None = None) -> int:
         return 130
     if status == STATUS_STOPPED or stop_reason in (
         STATUS_TOKEN_LIMIT,
+        STATUS_ROUND_LIMIT,
         STATUS_EVALUATION_LIMIT,
         STATUS_USAGE_UNKNOWN,
         STATUS_MODEL_FAILURES,

@@ -165,7 +165,7 @@ class TestT08FinderCatalogDecoupling(unittest.TestCase):
         mock_expand.return_value = ([cand], [])
         mock_fetch.return_value = (True, {"SKILL.md": "支持 AI 开发"}, None)
 
-        report = execute_find_skill("AI 开发", root_dir=self.root)
+        report = execute_find_skill("AI 开发", root_dir=self.root, limit=1)
 
         # 断言结果正常产出，完全无视目录排除与黑名单规则
         self.assertEqual(report["status"], STATUS_COMPLETED)
