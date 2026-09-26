@@ -253,6 +253,26 @@ def parse_evaluation(
     return evaluation
 
 
+def validate_pending_evaluation(candidate, text, rules, taxonomy, pending_evaluation):
+    """在预留付费尝试前验证恢复快照；返回错误事实，不发出请求。"""
+    if pending_evaluation is None:
+        return None
+    try:
+        if (not isinstance(pending_evaluation, dict)
+                or pending_evaluation.get("source_fingerprint") != candidate.content_fingerprint
+                or pending_evaluation.get("rules_version") != rules.get("rules_version")):
+            raise ResumeStateError("待复核初评与当前材料或规则版本不一致")
+        parsed = parse_evaluation(json.dumps(pending_evaluation, ensure_ascii=False),
+                                  rules, candidate.content_fingerprint, taxonomy)
+        if enabled(rules):
+            check_quality(parsed, text, rules)
+    except (ValueError, TypeError) as exc:
+        return {"ok": False, "evaluation": None, "call": None, "calls": [],
+                "stage": "resume", "reason_code": REASON_RESUME_STATE_INVALID,
+                "error_kind": ERROR_KIND_RESUME_STATE_INVALID, "error": str(exc)}
+    return None
+
+
 def evaluate(
     candidate: Candidate,
     text: str,
@@ -275,22 +295,9 @@ def evaluate(
     call = None
 
     # 请求发出前先校验待复核数据，避免不合法的状态凭空发起调用或记录未知用量 (§3.2, §5.1)
-    if pending_evaluation is not None:
-        if (
-            not isinstance(pending_evaluation, dict)
-            or pending_evaluation.get("source_fingerprint") != candidate.content_fingerprint
-            or pending_evaluation.get("rules_version") != rules.get("rules_version")
-        ):
-            return {
-                "ok": False,
-                "evaluation": None,
-                "call": None,
-                "calls": calls,
-                "stage": "resume",
-                "reason_code": REASON_RESUME_STATE_INVALID,
-                "error_kind": ERROR_KIND_RESUME_STATE_INVALID,
-                "error": "待复核初评与当前材料或规则版本不一致",
-            }
+    resume_error = validate_pending_evaluation(candidate, text, rules, taxonomy, pending_evaluation)
+    if resume_error:
+        return resume_error
 
     system, user = build_prompt(candidate, text, rules, taxonomy)
     if pending_evaluation is None:

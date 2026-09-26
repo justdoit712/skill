@@ -39,7 +39,14 @@ from .entry_state import (
     review_state,
     update_entry,
 )
-from .evaluation import RETRYABLE_STATUS, build_prompt, evaluate, evaluation_id, resolve_api_key
+from .evaluation import (
+    RETRYABLE_STATUS,
+    build_prompt,
+    evaluate,
+    evaluation_id,
+    resolve_api_key,
+    validate_pending_evaluation,
+)
 from src.infra.http import fetch_text
 from src.infra.llm import REASON_LENGTH_EXCEEDED
 from src.shared.usage import UsageTotals
@@ -478,6 +485,14 @@ class LocalCollection:
         self.dirty = True
 
 def _evaluate_with_retries(state, candidate, text, eid, record):
+    resume_error = validate_pending_evaluation(candidate, text, state.cfg['rules'],
+                                               state.cfg['taxonomy'], record.get('pending_evaluation'))
+    if resume_error:
+        state.ledger.fail(eid, resume_error['reason_code'], resume_error['error'])
+        checkpoint = state.ledger.get(eid)
+        checkpoint.update(error_kind=resume_error['error_kind'], stage='resume', retryable=False)
+        state.ledger.save_record(eid, checkpoint)
+        return resume_error
     result = None
     attempt_limit = int(record.get('max_attempts') or state.max_attempts)
     initial_attempts = int(record.get('attempts') or 0)
@@ -574,7 +589,7 @@ def _evaluate_with_retries(state, candidate, text, eid, record):
         if result['ok']:
             break
         code = result.get('reason_code') or decision.reason_code or 'MODEL_ERROR'
-        diagnostic = state.active_call['diagnostics'] if state.active_call else {}
+        diagnostic = state.active_call.get('diagnostics', {}) if state.active_call else {}
         details = [code]
         if result.get('error_kind'):
             details.append(result['error_kind'])

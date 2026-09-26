@@ -204,6 +204,7 @@ class BudgetLedger:
             evaluation_id = entry["evaluation_id"]
             existing = self.get(evaluation_id) or {}
             record = {
+                **existing,
                 "skill_id": entry.get("skill_id"),
                 "content_fingerprint": entry.get("content_fingerprint"),
                 "rules_version": entry.get("rules_version"),
@@ -211,10 +212,11 @@ class BudgetLedger:
                 "week": self.week,
                 "status": STATUS_RESERVED,
                 "attempts": int(existing.get("attempts") or 0),
-                "max_attempts": self.max_attempts,
+                "max_attempts": (int(existing.get("max_attempts") or self.max_attempts)
+                                 if existing.get("resume_history") else self.max_attempts),
                 "reserved_at": existing.get("reserved_at") or stamp,
                 "outcome": existing.get("outcome"),
-                "error": None,
+                "error": existing.get("error") if existing.get("resume_history") else None,
             }
             self.save_record(evaluation_id, record, moment)
             self.reserved.append(evaluation_id)

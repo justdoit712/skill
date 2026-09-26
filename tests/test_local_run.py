@@ -856,6 +856,44 @@ class LocalRunTest(unittest.TestCase):
                          ['pending', 'length_exceeded', 'blocked'])
         self.assertEqual(reconcile_pool(self.root)['reconciled'], 0)
 
+    def test_invalid_resume_snapshot_never_counts_a_request_or_attempt(self):
+        from unittest.mock import patch
+        from src.catalog.evaluation import evaluate, evaluation_id
+        from src.catalog.dedupe import content_fingerprint
+        from src.catalog.budget import evaluation_filename
+        from src.catalog.pool import create_pool_from_candidates, save_pool
+        from src.infra.files import write_json_atomic
+        for index, kind in enumerate(('identity', 'schema')):
+            with self.subTest(kind=kind):
+                candidate = self.candidate(index)
+                candidate.content_fingerprint = content_fingerprint(self.fetch(candidate.url).text)
+                pending = {'source_fingerprint': candidate.content_fingerprint,
+                           'rules_version': self.cfg['rules']['rules_version']}
+                if kind == 'identity':
+                    pending['source_fingerprint'] = 'stale'
+                eid = evaluation_id(candidate, self.cfg['model'], self.cfg['rules'])
+                pool_file = self.root / 'data/local/pool.json'
+                save_pool(pool_file, create_pool_from_candidates([candidate]))
+                record_path = self.root / 'data/local/state/evaluations' / evaluation_filename(eid)
+                write_json_atomic(record_path, {'evaluation_id': eid, 'status': 'reserved',
+                    'attempts': 0, 'pending_evaluation': pending, 'requests': []})
+                self.settings['pool_watermark'] = 0
+                with patch('src.catalog.evaluation.call_model') as model:
+                    result = self.collect(candidates=[candidate], evaluate_fn=evaluate)
+                model.assert_not_called()
+                self.assertEqual(result['stop_reason'], 'resume_state_invalid')
+                self.assertNotIn('error_type', result)
+                self.assertEqual(result['usage']['requests'], 0)
+                self.assertEqual(result['usage']['unknown_usage_requests'], 0)
+                self.assertEqual(result['unknown_usage_reserved_tokens'], 0)
+                self.assertEqual(result['calls'], [])
+                record = json.loads(record_path.read_text(encoding='utf-8'))
+                self.assertEqual(record['attempts'], 0)
+                self.assertEqual(record['requests'], [])
+                self.assertEqual(record['error']['reason_code'], 'RESUME_STATE_INVALID')
+                pool = json.loads(pool_file.read_text(encoding='utf-8'))
+                self.assertEqual(pool['candidates'][0]['status'], 'blocked')
+
 
 if __name__ == "__main__":
     unittest.main()
