@@ -4,12 +4,12 @@
   "counts": {
     "recommended": 42,
     "candidate": 4,
-    "manual": 27,
+    "manual": 25,
     "pending": 0,
     "processing_failure": 0,
-    "total_evaluated": 73,
-    "owned": 3,
-    "owned_in_catalog": 3
+    "total_evaluated": 71,
+    "owned": 5,
+    "owned_in_catalog": 5
   },
   "categories": [
     {
@@ -26,7 +26,7 @@
     },
     {
       "id": "dev",
-      "count": 42
+      "count": 41
     },
     {
       "id": "docs",
@@ -34,7 +34,7 @@
     },
     {
       "id": "product",
-      "count": 3
+      "count": 2
     },
     {
       "id": "security",
@@ -181,55 +181,6 @@
       "limitations": "需要用户提供充分上下文；部分功能依赖可选的 Claude 集成（artifacts、子代理、连接器），在无这些环境时采用手动替代流程。",
       "first_seen": "2026-09-20T16:59:36+00:00",
       "last_checked": "2026-09-21T01:19:28.138168+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
-      "skill_id": "anthropics/skills:skills/frontend-design/SKILL.md",
-      "name": "frontend-design",
-      "url": "https://github.com/anthropics/skills/blob/HEAD/skills/frontend-design/SKILL.md",
-      "author": "anthropics",
-      "summary_zh": "为构建或改版前端 UI 提供有辨识度的视觉设计指导，涵盖配色、字体、布局、动效与文案；适用于需要避免模板化外观的界面设计场景。",
-      "quality_summary": null,
-      "skill_type": "guideline",
-      "example_requests": [
-        "“需要避免模板化外观的界面设计”"
-      ],
-      "key_features": [
-        "涵盖配色、字体、布局、动效与文案"
-      ],
-      "main_category": {
-        "id": "product",
-        "name": "产品与设计"
-      },
-      "tags": [
-        "前端设计",
-        "UI设计",
-        "视觉设计",
-        "CSS",
-        "排版",
-        "配色"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [],
-      "source_type": "official",
-      "status": "recommended",
-      "manual_pick": true,
-      "manual_note": {
-        "added_at": "2026-09-24",
-        "reason": "用户收藏",
-        "from": "recommended",
-        "auto_status": "recommended"
-      },
-      "snooze": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [],
-      "limitations": "仅提供设计原则与流程指导，未声明平台/框架兼容性与具体依赖；实际实现需自行适配。",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-21T01:21:36.753630+08:00",
       "content_changed_at": null,
       "upstream_status": "ok",
       "license": null
@@ -680,50 +631,6 @@
       "limitations": "仅提供规则索引，具体规则和代码示例需查阅配套规则文件；React 19 部分仅适用于 React 19+。",
       "first_seen": "2026-09-20T16:59:36+00:00",
       "last_checked": "2026-09-24T17:17:43.316611+08:00",
-      "content_changed_at": null,
-      "upstream_status": "ok",
-      "license": null
-    },
-    {
-      "skill_id": "vercel-labs/agent-skills:skills/react-best-practices/SKILL.md",
-      "name": "react-best-practices",
-      "url": "https://github.com/vercel-labs/agent-skills/blob/HEAD/skills/react-best-practices/SKILL.md",
-      "author": "vercel-labs",
-      "summary_zh": "提供 React 与 Next.js 性能优化最佳实践规则，用于编写、审查或重构前端代码时提升性能。",
-      "quality_summary": null,
-      "skill_type": null,
-      "example_requests": [],
-      "key_features": [],
-      "main_category": {
-        "id": "dev",
-        "name": "编程开发"
-      },
-      "tags": [
-        "React",
-        "Next.js",
-        "性能优化",
-        "代码审查",
-        "前端开发"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [],
-      "source_type": "official",
-      "status": "recommended",
-      "manual_pick": true,
-      "manual_note": {
-        "added_at": "2026-09-22",
-        "reason": "用户收藏",
-        "from": "recommended",
-        "auto_status": "recommended"
-      },
-      "snooze": null,
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "reason_codes": [],
-      "limitations": "仅提供规则索引和简要说明，详细规则内容需查看 rules/ 目录或 AGENTS.md；未提供依赖与平台声明。",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-24T17:17:44.155275+08:00",
       "content_changed_at": null,
       "upstream_status": "ok",
       "license": null
@@ -3879,6 +3786,56 @@
       "original_partition": "manual"
     },
     {
+      "skill_id": "anthropics/skills:skills/frontend-design/SKILL.md",
+      "name": "frontend-design",
+      "url": "https://github.com/anthropics/skills/blob/HEAD/skills/frontend-design/SKILL.md",
+      "author": "anthropics",
+      "summary_zh": "为构建或改版前端 UI 提供有辨识度的视觉设计指导，涵盖配色、字体、布局、动效与文案；适用于需要避免模板化外观的界面设计场景。",
+      "quality_summary": null,
+      "skill_type": "guideline",
+      "example_requests": [
+        "“需要避免模板化外观的界面设计”"
+      ],
+      "key_features": [
+        "涵盖配色、字体、布局、动效与文案"
+      ],
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "tags": [
+        "前端设计",
+        "UI设计",
+        "视觉设计",
+        "CSS",
+        "排版",
+        "配色"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "source_type": "official",
+      "status": "recommended",
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-24",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      },
+      "snooze": null,
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "reason_codes": [],
+      "limitations": "仅提供设计原则与流程指导，未声明平台/框架兼容性与具体依赖；实际实现需自行适配。",
+      "first_seen": "2026-09-20T16:59:36+00:00",
+      "last_checked": "2026-09-21T01:21:36.753630+08:00",
+      "content_changed_at": null,
+      "upstream_status": "ok",
+      "license": null,
+      "original_partition": "manual"
+    },
+    {
       "skill_id": "anthropics/skills:skills/pdf/SKILL.md",
       "name": "pdf",
       "url": "https://github.com/anthropics/skills/blob/HEAD/skills/pdf/SKILL.md",
@@ -3988,6 +3945,51 @@
       "limitations": "公式兼容性受 LibreOffice 限制（不支持 XLOOKUP、XMATCH、SORT、FILTER 等）；openpyxl 写入公式无缓存值需运行 recalc.py 重算；重新保存含外部链接的工作簿会丢失链接。",
       "first_seen": "2026-09-20T16:59:36+00:00",
       "last_checked": "2026-09-21T01:27:09.313514+08:00",
+      "content_changed_at": null,
+      "upstream_status": "ok",
+      "license": null,
+      "original_partition": "manual"
+    },
+    {
+      "skill_id": "vercel-labs/agent-skills:skills/react-best-practices/SKILL.md",
+      "name": "react-best-practices",
+      "url": "https://github.com/vercel-labs/agent-skills/blob/HEAD/skills/react-best-practices/SKILL.md",
+      "author": "vercel-labs",
+      "summary_zh": "提供 React 与 Next.js 性能优化最佳实践规则，用于编写、审查或重构前端代码时提升性能。",
+      "quality_summary": null,
+      "skill_type": null,
+      "example_requests": [],
+      "key_features": [],
+      "main_category": {
+        "id": "dev",
+        "name": "编程开发"
+      },
+      "tags": [
+        "React",
+        "Next.js",
+        "性能优化",
+        "代码审查",
+        "前端开发"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "source_type": "official",
+      "status": "recommended",
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-09-22",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      },
+      "snooze": null,
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "reason_codes": [],
+      "limitations": "仅提供规则索引和简要说明，详细规则内容需查看 rules/ 目录或 AGENTS.md；未提供依赖与平台声明。",
+      "first_seen": "2026-09-20T16:59:36+00:00",
+      "last_checked": "2026-09-24T17:17:44.155275+08:00",
       "content_changed_at": null,
       "upstream_status": "ok",
       "license": null,
@@ -4763,6 +4765,18 @@
         "name": "xlsx",
         "added_at": "2026-09-24",
         "source_url": "https://github.com/anthropics/skills/blob/HEAD/skills/xlsx/SKILL.md"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/frontend-design/SKILL.md",
+        "name": "frontend-design",
+        "added_at": "2026-09-26",
+        "source_url": "https://github.com/anthropics/skills/blob/HEAD/skills/frontend-design/SKILL.md"
+      },
+      {
+        "skill_id": "vercel-labs/agent-skills:skills/react-best-practices/SKILL.md",
+        "name": "react-best-practices",
+        "added_at": "2026-09-26",
+        "source_url": "https://github.com/vercel-labs/agent-skills/blob/HEAD/skills/react-best-practices/SKILL.md"
       }
     ]
   }
