@@ -17,7 +17,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: pages-config-sync
+  group: pages-deploy
   cancel-in-progress: false
 
 jobs:

@@ -47,7 +47,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: skills-sync
+  group: pages-deploy
   cancel-in-progress: false
 
 jobs:

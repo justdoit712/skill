@@ -75,7 +75,7 @@ class SyncWorkflowTest(unittest.TestCase):
 
     def test_concurrency_serialises_without_cancelling(self) -> None:
         conc = self.doc["concurrency"]
-        self.assertEqual(conc["group"], "skills-sync")
+        self.assertEqual(conc["group"], "pages-deploy")
         self.assertFalse(conc["cancel-in-progress"], "被中断会留下未对账的预留")
 
     def test_permissions_are_split(self) -> None:
@@ -201,6 +201,12 @@ class PublishWorkflowTest(unittest.TestCase):
         self.assertNotRegex(self.raw, r"run:\s*[^\n]*python", "发布入口不得运行采集/评估程序")
         self.assertIn("public/data/catalog.json", self.raw, "应校验页面数据存在")
 
+    def test_concurrency_shares_deploy_group(self) -> None:
+        conc = self.doc.get("concurrency")
+        self.assertIsNotNone(conc, "发布入口必须声明并发组")
+        self.assertEqual(conc["group"], "pages-deploy", "发布入口必须与顶层同步共用 pages-deploy 锁")
+        self.assertFalse(conc["cancel-in-progress"], "不得中途取消，应排队串行执行")
+
 
 class SyncConfigDeployWorkflowTest(unittest.TestCase):
     @classmethod
@@ -220,6 +226,12 @@ class SyncConfigDeployWorkflowTest(unittest.TestCase):
     def test_executes_offline_sync_and_reuses_deploy_pages(self) -> None:
         self.assertIn("python tools/run_local.py --sync-config", self.runs)
         self.assertIn("deploy-pages.yml", str(self.doc["jobs"]["deploy"]))
+
+    def test_concurrency_shares_deploy_group(self) -> None:
+        conc = self.doc.get("concurrency")
+        self.assertIsNotNone(conc, "配置同步入口必须声明并发组")
+        self.assertEqual(conc["group"], "pages-deploy", "配置同步入口必须与顶层同步共用 pages-deploy 锁")
+        self.assertFalse(conc["cancel-in-progress"], "不得中途取消，应排队串行执行")
 
 
 if __name__ == "__main__":
