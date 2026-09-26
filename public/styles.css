@@ -711,14 +711,14 @@ code {
 
 /* ---------- 已收录管理视图与组件样式 ---------- */
 .btn-action.btn-owned {
-  color: #059669;
-  border-color: #a7f3d0;
-  background: #ecfdf5;
+  color: var(--text-muted);
+  border-color: var(--border);
+  background: var(--surface);
 }
 .btn-action.btn-owned:hover {
-  background: #d1fae5;
-  border-color: #6ee7b7;
-  color: #047857;
+  background: #ecfdf5;
+  border-color: #a7f3d0;
+  color: #059669;
 }
 
 .btn-action.btn-unmark {

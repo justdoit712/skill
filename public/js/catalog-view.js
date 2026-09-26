@@ -167,7 +167,7 @@ export function renderCatalogList(container, entries, overridesState, currentTab
 
     const favBtnClass = picked ? "btn-action btn-fav is-active" : "btn-action btn-fav";
     const favBtnText = picked ? "★ 已收藏" : "★ 收藏";
-    const ownedBtn = '<button type="button" class="btn-action btn-owned" data-action="owned" data-id="' + escapeHtml(sid) + '" title="标记为已收录（从目录与查找中隐藏，0 Token 跳过）">✓ 已收录</button>';
+    const ownedBtn = '<button type="button" class="btn-action btn-owned" data-action="owned" data-id="' + escapeHtml(sid) + '" title="标记为已收录（从目录与查找中隐藏，0 Token 跳过）">标为已收录</button>';
 
     // 收藏区展示已收录、收藏与屏蔽；推荐与候选区展示已收录、收藏、暂不看、屏蔽
     let actionsHtml = "";
