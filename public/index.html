@@ -6,15 +6,25 @@
 <title>Skills 导航目录</title>
 <meta name="description" content="公开的 AI Agent Skills 导航目录：只收录技能的名称、原始链接、中文简述、分类与评估依据，不下载、不镜像、不安装、不执行任何技能包。">
 <link rel="canonical" href="https://justdoit712.github.io/skill/">
-<link rel="stylesheet" href="styles.css?v=20260927_4">
+<link rel="stylesheet" href="styles.css?v=20260927_5">
 </head>
 <body>
 
 <header class="site-header">
   <div class="wrap">
+    <div class="header-badge-row">
+      <span class="badge-status"><span class="badge-dot"></span>开源 AI Agent 技能索引</span>
+      <a href="https://github.com/justdoit712/skill" class="header-gh-link" target="_blank" rel="noopener noreferrer">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+        <span>GitHub 源码</span>
+      </a>
+    </div>
     <h1>Skills 导航目录</h1>
-    <p class="lede">公开的 AI Agent Skills 导航。只收录名称、原始链接、中文简述、分类与评估依据，点进去是上游原仓库。</p>
-    <p class="disclaimer">不下载、不镜像、不安装、不启用、不执行任何技能包。条目未经实测，被收录不等于功能可用或安全。</p>
+    <p class="lede">公开的 AI Agent Skills 导航。只收录名称、原始链接、中文简述、分类与评估依据，点进去直达上游原仓库。</p>
+    <div class="disclaimer-callout">
+      <span class="disclaimer-icon">🛡️</span>
+      <p class="disclaimer">纯静态中立索引：不下载、不镜像、不安装、不启用任何技能包代码。条目基于客观材料评估，未经功能实测，被收录不等于可用或绝对安全。</p>
+    </div>
   </div>
 </header>
 
@@ -43,21 +53,31 @@
 
   <section class="controls" aria-label="筛选">
     <div class="control control-search">
-      <label for="q">关键词</label>
-      <input id="q" type="search" placeholder="搜索名称、简述或作者…" autocomplete="off">
+      <div class="control-label-row">
+        <label for="q">关键词检索</label>
+        <span class="search-hint-key" title="快捷键：随时按 / 聚焦搜索"><kbd>/</kbd></span>
+      </div>
+      <div class="search-input-wrap">
+        <svg class="search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <input id="q" type="search" placeholder="搜索技能名称、简述、亮点或作者…" autocomplete="off">
+      </div>
     </div>
     <div class="control control-cat">
       <label for="category">主分类</label>
-      <select id="category"><option value="">全部分类</option></select>
+      <div class="select-wrap">
+        <select id="category"><option value="">全部分类</option></select>
+      </div>
     </div>
     <div class="control control-source">
-      <label for="source">来源</label>
-      <select id="source">
-        <option value="">全部来源</option>
-        <option value="official">官方仓库</option>
-        <option value="community_list">社区清单</option>
-        <option value="community">社区单技能</option>
-      </select>
+      <label for="source">来源渠道</label>
+      <div class="select-wrap">
+        <select id="source">
+          <option value="">全部来源</option>
+          <option value="official">官方仓库</option>
+          <option value="community_list">社区清单</option>
+          <option value="community">社区单技能</option>
+        </select>
+      </div>
     </div>
   </section>
 
@@ -73,32 +93,17 @@
     <p class="hint">详细规约与运行机制请参阅项目文档 <code>docs/运行说明.md</code>。</p>
   </section>
 
-  <section class="about">
-    <h2>分区与标记</h2>
-    <dl>
-      <dt>推荐区</dt>
-      <dd>六项检查全部通过，且证据可定位、领域专项检查通过。页面默认展示本区。</dd>
-      <dt>候选区</dt>
-      <dd>属于收录范围但存在 <code>unknown</code>、说明不完整或尚需核验，均注明原因。</dd>
-      <dt>收藏区</dt>
-      <dd>由用户手工指定并长期保留的条目。三区互斥，上游变化不自动重评或降级，程序不自动移出。</dd>
-      <dt>已收录标记</dt>
-      <dd>标记后从推荐、候选、收藏及定向查找中隐藏，不单独展示分区或数量。同步到仓库后，流水线扫描零 Token 消耗跳过。</dd>
-      <dt>内容已变化，待复核</dt>
-      <dd>已推荐技能的上游内容发生变化。保留推荐状态并醒目标记，同时展示原评估对应的版本；复核不通过则降级。</dd>
-    </dl>
-    <p class="hint">AI 辅助评估不等于功能测试或安全审计。平台兼容性以上游声明为准，本目录不做推测。</p>
-  </section>
 
 </main>
 
 <!-- 底部悬浮同步栏 -->
 <aside id="sync-bar" class="sync-bar" hidden>
   <div class="sync-bar-text">
-    <span>已暂存变更：</span>
+    <span class="sync-indicator-dot"></span>
+    <span>已暂存本地变更：</span>
     <span id="sync-summary" class="sync-badge">0 项</span>
   </div>
-  <div style="display: flex; gap: 8px;">
+  <div class="sync-bar-actions">
     <button id="btn-open-sync" class="sync-bar-btn primary">查看并同步到仓库</button>
     <button id="btn-clear-sync" class="sync-bar-btn ghost" title="放弃所有未保存的本地修改">清空</button>
   </div>
@@ -157,7 +162,7 @@
       <p id="confirm-modal-desc" style="font-size: 14px; color: var(--text); margin-bottom: 12px; line-height: 1.6;">
         确定将收藏区技能<strong>「<span id="confirm-modal-skill-name"></span>」</strong>标记为已收录吗？
       </p>
-      <div style="background: #fffbeb; border: 1px solid #fef3c7; border-radius: 6px; padding: 10px 12px; font-size: 12px; color: #92400e; line-height: 1.5; margin-bottom: 12px;">
+      <div class="confirm-warn-box">
         ⚠️ <strong>提示：</strong>标记为已收录后：
         <ul style="margin: 6px 0 0 16px; padding: 0;">
           <li>将从公开目录与定向查找中立即隐藏；</li>
@@ -183,7 +188,7 @@
   </div>
 </footer>
 
-<script type="module" src="js/app.js?v=20260927_3"></script>
+<script type="module" src="js/app.js?v=20260927_4"></script>
 
 </body>
 </html>

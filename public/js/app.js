@@ -248,6 +248,17 @@ export function fail(reason) {
 // 单页面内的“标记、清空、导出”形成完整闭环，不维护复杂的跨标签页 Storage 广播监听。
 
 
+// 全局键盘快捷键：随时按 '/' 聚焦搜索框；按 'Escape' 取消聚焦
+document.addEventListener("keydown", e => {
+  if (e.key === "/" && document.activeElement !== el.q && !["INPUT", "TEXTAREA", "SELECT"].includes(document.activeElement?.tagName)) {
+    e.preventDefault();
+    el.q?.focus();
+    el.q?.select();
+  } else if (e.key === "Escape" && document.activeElement === el.q) {
+    el.q?.blur();
+  }
+});
+
 // 事件监听与委托
 el.q.addEventListener("input", e => {
   state.q = e.target.value.trim();
