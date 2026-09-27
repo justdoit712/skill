@@ -154,13 +154,14 @@ def probes():
     with tempfile.TemporaryDirectory() as tmp:
         data, public = Path(tmp) / "catalog.json", Path(tmp) / "page.json"
         write_catalog(build_catalog([], context=CatalogContext(generated_at="old")), data_path=data, public_path=public)
-        original = index_module._write_json
+        import src.catalog.store as store_module
+        original = store_module.write_json_atomic
         def fail_page(path, payload):
-            if path == public:
+            if Path(path) == public:
                 raise OSError("injected page write failure")
             return original(path, payload)
         error = None
-        with patch.object(index_module, "_write_json", side_effect=fail_page):
+        with patch.object(store_module, "write_json_atomic", side_effect=fail_page):
             try:
                 write_catalog(build_catalog([], context=CatalogContext(generated_at="new")), data_path=data, public_path=public)
             except OSError as exc:
@@ -170,6 +171,7 @@ def probes():
             "page_generation": json.loads(public.read_text(encoding="utf-8"))["generated_at"]}
 
     # Exercise both real pipeline phases with isolated public config and fake external calls.
+    import shutil
     from src.pipeline import phase_reserve, phase_evaluate
     fixture = json.loads((ROOT / "tests/fixtures/evaluations.json").read_text(encoding="utf-8"))
     evaluation = next(deepcopy(c["evaluation"]) for c in fixture["cases"] if c["id"] == "in_scope_normal")
@@ -186,9 +188,7 @@ def probes():
     with tempfile.TemporaryDirectory() as tmp:
         base = Path(tmp)
         cfg = base / "config"
-        cfg.mkdir()
-        for name in ("model.example.json", "rules.json", "taxonomy.json", "sources.json", "searches.json", "overrides.json", "snoozed.json"):
-            (cfg / name).write_bytes((ROOT / "config" / name).read_bytes())
+        shutil.copytree(ROOT / "config", cfg)
         cand = candidate_from_repo("example", "demo", path="SKILL.md", name="代码审查",
                                    url="https://github.com/example/demo/blob/HEAD/SKILL.md")
         reserve = phase_reserve(config_dir=cfg, data_dir=base / "data", limit_evaluations=1,

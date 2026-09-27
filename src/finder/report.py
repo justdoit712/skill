@@ -370,7 +370,7 @@ def update_public_snapshot(report: dict[str, Any], public_data_dir: Path) -> boo
     projection = sanitize_report_for_public(report)
     target_file = public_data_dir / "find-report.json"
     with file_lock(public_data_dir / ".find-report.lock"):
-        write_json_atomic(target_file, projection)
+        write_json_atomic(target_file, projection, indent=None)
     return True
 
 

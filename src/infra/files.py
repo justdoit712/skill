@@ -14,11 +14,11 @@ from contextlib import contextmanager
 import time
 
 
-def write_json_atomic(path: Path | str, payload: Any, indent: int = 2) -> None:
+def write_json_atomic(path: Path | str, payload: Any, indent: int | None = 2) -> None:
     """原子写入 JSON 文件。
 
     1. 生成同目录下的唯一临时文件名（uuid4 避免多进程/多任务冲突）
-    2. 序列化写入临时文件
+    2. 序列化写入临时文件（支持 indent=None 紧凑压缩）
     3. 调用 os.replace 完成原子重命名替换
     4. 发生异常时确保清理临时文件
     """
@@ -26,7 +26,8 @@ def write_json_atomic(path: Path | str, payload: Any, indent: int = 2) -> None:
     target.parent.mkdir(parents=True, exist_ok=True)
     tmp_path = target.parent / f"{target.name}.{uuid4().hex[:8]}.tmp"
     try:
-        content = json.dumps(payload, ensure_ascii=False, indent=indent)
+        separators = (",", ":") if indent is None else None
+        content = json.dumps(payload, ensure_ascii=False, indent=indent, separators=separators)
         tmp_path.write_text(content, encoding="utf-8")
         os.replace(tmp_path, target)
     finally:

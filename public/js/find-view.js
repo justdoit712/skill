@@ -6,12 +6,78 @@
 import { escapeHtml } from "./utils.js";
 import { isOwned } from "./owned-state.js";
 
+// 会话级内存缓存 (In-Memory Cache)
+let _cachedFindReport = null;
+let _cachedReportPromise = null;
+
+export function getCachedFindReport() {
+  return _cachedFindReport;
+}
+
+export function setCachedFindReport(data) {
+  _cachedFindReport = data;
+}
+
+export function clearFindReportCache() {
+  _cachedFindReport = null;
+  _cachedReportPromise = null;
+}
+
+/**
+ * 读取定向查找报告（优先使用内存缓存）。
+ * @param {string} url 请求路径
+ * @param {Object} options { force: boolean } 为 true 时强制发起网络请求
+ */
+export async function fetchFindReport(url = "data/find-report.json", options = {}) {
+  const force = Boolean(options.force);
+  if (!force && _cachedFindReport) {
+    return _cachedFindReport;
+  }
+  if (!force && _cachedReportPromise) {
+    return _cachedReportPromise;
+  }
+  _cachedReportPromise = (async () => {
+    try {
+      const fetchOpts = force ? { cache: "no-store" } : {};
+      const res = await fetch(url, fetchOpts);
+      if (!res.ok) return null;
+      const data = await res.json();
+      _cachedFindReport = data;
+      return data;
+    } catch (e) {
+      return null;
+    } finally {
+      _cachedReportPromise = null;
+    }
+  })();
+  return _cachedReportPromise;
+}
+
 /**
  * 渲染定向查找报告。
  * 纯投影：不修改原 report 对象。已收录条目自动隐藏并显示统计。
  */
 export function renderFindView(container, report, ownedState = null) {
+  // 如果容器当前已渲染该 report 且 ownedState 状态未变，复用已有渲染树避免无谓的 DOM 销毁与重建
+  const currentOwnedVersion = ownedState
+    ? (ownedState.stagedAdds ? Object.keys(ownedState.stagedAdds).length : 0) +
+      (ownedState.stagedDeletes ? Object.keys(ownedState.stagedDeletes).length : 0)
+    : 0;
+  if (
+    container &&
+    container._lastRenderedReport === report &&
+    container._lastRenderedOwnedVersion === currentOwnedVersion &&
+    ((container.children && container.children.length > 0) || (container.innerHTML && container.innerHTML.length > 0))
+  ) {
+    return;
+  }
+
   container.innerHTML = "";
+  if (container) {
+    container._lastRenderedReport = report;
+    container._lastRenderedOwnedVersion = currentOwnedVersion;
+  }
+
   if (report?.schema_version && report.schema_version !== "1.0.0") {
     container.innerHTML = '<li class="find-overview-card"><h3>报告版本不兼容</h3><p>请升级页面后重新查看该报告。</p></li>';
     return;

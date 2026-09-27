@@ -56,7 +56,8 @@ def write_catalog(catalog, *, data_path, public_path):
         page = build_page_data(catalog)
         write_json_atomic(data, catalog)
         # If this fails, the committed source remains sufficient to rebuild.
-        write_json_atomic(public, page)
+        # public 页面面向 GitHub Pages 静态分发，采用 indent=None 紧凑压缩以减少传输开销
+        write_json_atomic(public, page, indent=None)
         return {"catalog_path": str(data), "page_path": str(public),
                 "catalog_digest": "sha256:" + hashlib.sha256(data.read_bytes()).hexdigest()[:32],
                 "page_digest": "sha256:" + hashlib.sha256(public.read_bytes()).hexdigest()[:32],

@@ -15,7 +15,7 @@ import {
   getEffectiveSnoozedList
 } from "./catalog-state.js";
 import { renderCatalogList } from "./catalog-view.js";
-import { renderFindView } from "./find-view.js";
+import { renderFindView, fetchFindReport } from "./find-view.js";
 import { updateSyncBar, initSyncModal, initSnoozedModal, initConfirmModal } from "./modals.js";
 import {
   createOwnedState,
@@ -99,7 +99,21 @@ export function apply() {
 
   if (state.tab === "find") {
     if (el.controls) el.controls.style.display = "none";
-    renderFindView(el.list, state.findReport, ownedState);
+    if (state.findReport) {
+      renderFindView(el.list, state.findReport, ownedState);
+    } else {
+      fetchFindReport().then(findData => {
+        if (findData) {
+          state.findReport = findData;
+          if (el.badgeFind) {
+            el.badgeFind.textContent = (findData.shortlist || []).length;
+          }
+          if (state.tab === "find") {
+            renderFindView(el.list, state.findReport, ownedState);
+          }
+        }
+      });
+    }
     el.meta.hidden = false;
     if (state.findReport && state.findReport.topic) {
       const slLen = (state.findReport.shortlist || []).length;
@@ -127,14 +141,32 @@ export function apply() {
       ? activeCandidates
       : activeManual;
 
-  const shown = renderCatalogList(el.list, currentList, overridesState, state.tab, {
-    q: state.q,
-    category: state.category,
-    source: state.source
-  });
+  const shown = renderCatalogList(
+    el.list,
+    currentList,
+    overridesState,
+    state.tab,
+    {
+      q: state.q,
+      category: state.category,
+      source: state.source
+    },
+    {
+      onBatchRendered: (rendered, total) => {
+        el.meta.hidden = false;
+        if (total > rendered) {
+          el.meta.textContent = "本区共 " + currentList.length + " 条，当前显示 " + rendered + " 条（共 " + total + " 条匹配，点击底部可加载更多）。";
+        } else {
+          el.meta.textContent = "本区共 " + currentList.length + " 条，当前显示 " + shown + " 条。";
+        }
+      }
+    }
+  );
 
   el.meta.hidden = false;
-  el.meta.textContent = "本区共 " + currentList.length + " 条，当前显示 " + shown + " 条。";
+  if (shown > 0 && shown <= 24) {
+    el.meta.textContent = "本区共 " + currentList.length + " 条，当前显示 " + shown + " 条。";
+  }
 
   const effectiveSnoozed = getEffectiveSnoozedList(overridesState);
   if (el.countSnoozedActive) {
@@ -183,9 +215,8 @@ export function boot(data) {
     el.category.appendChild(opt);
   });
 
-  // 尝试读取定向查找最新报告
-  fetch("data/find-report.json", { cache: "no-store" })
-    .then(r => (r.ok ? r.json() : null))
+  // 尝试读取定向查找最新报告（优先命中内存缓存）
+  fetchFindReport()
     .then(findData => {
       if (findData) {
         state.findReport = findData;

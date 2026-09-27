@@ -1,9 +1,12 @@
 /**
  * 技能目录卡片与冷冻列表视图渲染组件。
+ * 支持渐进式分页渲染（DOM Pagination），减少首屏超大长列表 DOM 节点开销。
  */
 
 import { escapeHtml, text, day, SKILL_TYPE_LABELS, shanghaiTodayStr } from "./utils.js";
 import { isPicked } from "./catalog-state.js";
+
+export const DEFAULT_PAGE_SIZE = 24;
 
 /**
  * 判断条目是否满足当前检索、分类与来源筛选条件。
@@ -73,9 +76,148 @@ export function qualityBlock(entry) {
 }
 
 /**
- * 渲染技能目录列表。
+ * 创建单张技能卡片 DOM 节点。
  */
-export function renderCatalogList(container, entries, overridesState, currentTab = "recommended", queryState = {}) {
+export function createSkillCard(entry, overridesState, currentTab = "recommended") {
+  const sid = entry.skill_id;
+  const picked = isPicked(overridesState, sid);
+  const li = document.createElement("li");
+  li.className = "card";
+
+  const cat = entry.main_category ? entry.main_category.name : "未分类";
+  const bits = ['<span class="tag tag-cat">' + escapeHtml(cat) + "</span>"];
+  if (entry.skill_type && SKILL_TYPE_LABELS[entry.skill_type]) {
+    bits.push('<span class="tag tag-type tag-type-' + escapeHtml(entry.skill_type) + '">' +
+      escapeHtml(SKILL_TYPE_LABELS[entry.skill_type]) + '</span>');
+  }
+  if (picked) {
+    bits.push('<span class="tag tag-manual">收藏</span>');
+  }
+  if (entry.needs_review) {
+    bits.push('<span class="tag tag-review">内容已变化，待复核' +
+      (entry.status === "recommended" ? "（推荐状态待复核）" : "（已降级）") + "</span>");
+  }
+  if (entry.status === "candidate" && !entry.needs_review && !picked) {
+    bits.push('<span class="tag tag-cand">候选</span>');
+  }
+  if (entry.source_type) {
+    bits.push('<span class="tag">' + escapeHtml(entry.source_type) + "</span>");
+  }
+  (entry.tags || []).forEach(t => {
+    bits.push('<span class="tag">' + escapeHtml(t) + "</span>");
+  });
+
+  const meta = [];
+  if (text(entry.platform_declared)) meta.push("平台：" + escapeHtml(entry.platform_declared));
+  if ((entry.dependencies_declared || []).length) {
+    meta.push("依赖：" + escapeHtml(entry.dependencies_declared.join("、")));
+  }
+  if (text(entry.limitations)) meta.push("限制：" + escapeHtml(entry.limitations));
+  if (text(entry.license)) meta.push("许可：" + escapeHtml(entry.license));
+
+  let examplesHtml = "";
+  if ((entry.example_requests || []).length) {
+    const reqItems = entry.example_requests.map(req => {
+      return '<span class="example-item">' + escapeHtml(req) + '</span>';
+    }).join("");
+    examplesHtml = '<div class="card-examples"><span class="example-label">示例请求：</span>' + reqItems + '</div>';
+  }
+
+  let featuresHtml = "";
+  if ((entry.key_features || []).length) {
+    const featItems = entry.key_features.map(feat => {
+      return '<span class="feature-item">' + escapeHtml(feat) + '</span>';
+    }).join("");
+    featuresHtml = '<div class="card-features"><span class="feature-label">亮点：</span>' + featItems + '</div>';
+  }
+
+  let manualHtml = "";
+  if (picked) {
+    const note = overridesState.stagedPicks[sid] || entry.manual_note || overridesState.baselinePicks[sid] || {};
+    manualHtml += '<p class="detail manual">收藏理由：' + escapeHtml(note.reason || "人工收藏") +
+      (note.added_at ? '（' + escapeHtml(note.added_at) + '）' : '') + '</p>';
+    if (entry.content_changed_at) {
+      manualHtml += '<p class="detail changed">上游内容已变化（' + escapeHtml(entry.content_changed_at.slice(0, 10)) + '），尚未复核；本条为人工收藏，程序不会自动重评。</p>';
+    }
+    const autoExcluded = entry.status === "excluded" || (note.auto_status === "excluded");
+    if (autoExcluded) {
+      const reasons = (entry.reason_codes || []).join("、");
+      manualHtml += '<p class="detail warning-box">程序判定为排除项' + (reasons ? '（' + escapeHtml(reasons) + '）' : '') + '，本条为人工收藏，请自行确认风险。</p>';
+    } else if (entry.status === "processing_failure") {
+      manualHtml += '<p class="detail warning-box">评估未完成。</p>';
+    }
+    if (entry.upstream_status && entry.upstream_status !== "ok") {
+      manualHtml += '<p class="detail warning-box">上游不可访问' + (entry.last_checked ? '（' + escapeHtml(entry.last_checked.slice(0, 10)) + '）' : '') + '。</p>';
+    }
+  }
+
+  const dates = [];
+  if (text(entry.first_seen)) dates.push("首次发现 " + escapeHtml(entry.first_seen.slice(0, 10)));
+  if (text(entry.last_checked)) dates.push("最近检查 " + escapeHtml(entry.last_checked.slice(0, 10)));
+  if (text(entry.content_changed_at)) dates.push("内容变更 " + escapeHtml(entry.content_changed_at.slice(0, 10)));
+  if (text(entry.upstream_status) && entry.upstream_status !== "ok") {
+    dates.push("上游状态 " + escapeHtml(entry.upstream_status));
+  }
+
+  const favBtnClass = picked ? "btn-action btn-fav is-active" : "btn-action btn-fav";
+  const favBtnText = picked ? "★ 已收藏" : "★ 收藏";
+  const ownedBtn = '<button type="button" class="btn-action btn-owned" data-action="owned" data-id="' + escapeHtml(sid) + '" title="标记为已收录（需二次确认，从目录与查找中隐藏，0 Token 跳过）">标为已收录</button>';
+
+  // 仅收藏区展示“标为已收录”（点击需二次确认）；推荐与候选区展示收藏、暂不看、屏蔽
+  let actionsHtml = "";
+  if (currentTab === "manual") {
+    actionsHtml =
+      ownedBtn +
+      '<button type="button" class="' + favBtnClass + '" data-action="fav" data-id="' + escapeHtml(sid) + '">' + favBtnText + '</button>' +
+      '<button type="button" class="btn-action btn-block" data-action="block" data-id="' + escapeHtml(sid) + '" title="屏蔽并移入黑名单">🚫 屏蔽</button>';
+  } else {
+    actionsHtml =
+      '<button type="button" class="' + favBtnClass + '" data-action="fav" data-id="' + escapeHtml(sid) + '">' + favBtnText + '</button>' +
+      '<button type="button" class="btn-action btn-snooze" data-action="snooze" data-id="' + escapeHtml(sid) + '" title="暂不关注（冷冻150天，到期自动恢复）">⏳ 暂不看</button>' +
+      '<button type="button" class="btn-action btn-block" data-action="block" data-id="' + escapeHtml(sid) + '" title="屏蔽并移入黑名单">🚫 屏蔽</button>';
+  }
+
+  li.innerHTML =
+    '<div class="card-head">' +
+      '<h3><a href="' + escapeHtml(entry.url || "#") + '" target="_blank" rel="noopener noreferrer">' +
+      escapeHtml(entry.name) + "</a></h3>" +
+      '<div class="card-actions">' + actionsHtml + '</div>' +
+    '</div>' +
+    '<p class="by">' + escapeHtml(entry.author || "") + "</p>" +
+    '<p class="sum">' + escapeHtml(text(entry.summary_zh) || "（暂无中文简述）") + "</p>" +
+    examplesHtml +
+    featuresHtml +
+    '<p class="tags">' + bits.join("") + "</p>" +
+    (meta.length ? '<p class="detail">' + meta.join(" · ") + "</p>" : "") +
+    manualHtml +
+    (entry.needs_review ? '<p class="detail review">待复核：' +
+      escapeHtml(entry.review_note || "上游内容已变化，等待复核。") + "</p>" : "") +
+    reviewBlock(entry) +
+    qualityBlock(entry) +
+    (dates.length ? '<p class="dates">' + dates.join(" · ") + "</p>" : "");
+
+  return li;
+}
+
+/**
+ * 渲染技能目录列表（支持渐进式分页分批渲染，降低超长列表 DOM 节点开销）。
+ *
+ * @param {HTMLElement} container 挂载容器
+ * @param {Array} entries 当前分区条目数组
+ * @param {Object} overridesState 收藏/排除/冷冻状态
+ * @param {string} currentTab 当前选中的 Tab ('recommended' | 'candidate' | 'manual')
+ * @param {Object} queryState 搜索关键词与分类过滤状态
+ * @param {Object} options 分页选项：{ pageSize: 24, all: false, onBatchRendered: (rendered, total) => void }
+ * @returns {number} 返回当前筛选下匹配的条目总数
+ */
+export function renderCatalogList(
+  container,
+  entries,
+  overridesState,
+  currentTab = "recommended",
+  queryState = {},
+  options = {}
+) {
   const visible = entries.filter(e => matches(e, queryState));
   container.innerHTML = "";
 
@@ -84,126 +226,55 @@ export function renderCatalogList(container, entries, overridesState, currentTab
     return 0;
   }
 
-  visible.forEach(entry => {
-    const sid = entry.skill_id;
-    const picked = isPicked(overridesState, sid);
-    const li = document.createElement("li");
-    li.className = "card";
+  const pageSize = options.pageSize || DEFAULT_PAGE_SIZE;
+  const initialLimit = options.all ? visible.length : Math.min(pageSize, visible.length);
 
-    const cat = entry.main_category ? entry.main_category.name : "未分类";
-    const bits = ['<span class="tag tag-cat">' + escapeHtml(cat) + "</span>"];
-    if (entry.skill_type && SKILL_TYPE_LABELS[entry.skill_type]) {
-      bits.push('<span class="tag tag-type tag-type-' + escapeHtml(entry.skill_type) + '">' +
-        escapeHtml(SKILL_TYPE_LABELS[entry.skill_type]) + '</span>');
-    }
-    if (picked) {
-      bits.push('<span class="tag tag-manual">收藏</span>');
-    }
-    if (entry.needs_review) {
-      bits.push('<span class="tag tag-review">内容已变化，待复核' +
-        (entry.status === "recommended" ? "（推荐状态待复核）" : "（已降级）") + "</span>");
-    }
-    if (entry.status === "candidate" && !entry.needs_review && !picked) {
-      bits.push('<span class="tag tag-cand">候选</span>');
-    }
-    if (entry.source_type) {
-      bits.push('<span class="tag">' + escapeHtml(entry.source_type) + "</span>");
-    }
-    (entry.tags || []).forEach(t => {
-      bits.push('<span class="tag">' + escapeHtml(t) + "</span>");
-    });
+  let renderedCount = 0;
+  let loadMoreLi = null;
 
-    const meta = [];
-    if (text(entry.platform_declared)) meta.push("平台：" + escapeHtml(entry.platform_declared));
-    if ((entry.dependencies_declared || []).length) {
-      meta.push("依赖：" + escapeHtml(entry.dependencies_declared.join("、")));
+  function removeLoadMore() {
+    if (!loadMoreLi) return;
+    if (typeof loadMoreLi.remove === "function") {
+      loadMoreLi.remove();
+    } else if (container.children && Array.isArray(container.children)) {
+      const idx = container.children.indexOf(loadMoreLi);
+      if (idx !== -1) container.children.splice(idx, 1);
     }
-    if (text(entry.limitations)) meta.push("限制：" + escapeHtml(entry.limitations));
-    if (text(entry.license)) meta.push("许可：" + escapeHtml(entry.license));
+    loadMoreLi = null;
+  }
 
-    let examplesHtml = "";
-    if ((entry.example_requests || []).length) {
-      const reqItems = entry.example_requests.map(req => {
-        return '<span class="example-item">' + escapeHtml(req) + '</span>';
-      }).join("");
-      examplesHtml = '<div class="card-examples"><span class="example-label">示例请求：</span>' + reqItems + '</div>';
+  function renderBatch(start, count) {
+    removeLoadMore();
+    const end = Math.min(start + count, visible.length);
+    for (let i = start; i < end; i++) {
+      const card = createSkillCard(visible[i], overridesState, currentTab);
+      container.appendChild(card);
+    }
+    renderedCount = end;
+
+    if (renderedCount < visible.length) {
+      const remaining = visible.length - renderedCount;
+      loadMoreLi = document.createElement("li");
+      loadMoreLi.className = "catalog-pagination";
+      const btnText = `加载更多条目（还剩 ${remaining} 条）`;
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "btn-load-more";
+      btn.textContent = btnText;
+      btn.innerHTML = escapeHtml(btnText);
+      btn.addEventListener("click", () => {
+        renderBatch(renderedCount, pageSize);
+      });
+      loadMoreLi.appendChild(btn);
+      container.appendChild(loadMoreLi);
     }
 
-    let featuresHtml = "";
-    if ((entry.key_features || []).length) {
-      const featItems = entry.key_features.map(feat => {
-        return '<span class="feature-item">' + escapeHtml(feat) + '</span>';
-      }).join("");
-      featuresHtml = '<div class="card-features"><span class="feature-label">亮点：</span>' + featItems + '</div>';
+    if (typeof options.onBatchRendered === "function") {
+      options.onBatchRendered(renderedCount, visible.length);
     }
+  }
 
-    let manualHtml = "";
-    if (picked) {
-      const note = overridesState.stagedPicks[sid] || entry.manual_note || overridesState.baselinePicks[sid] || {};
-      manualHtml += '<p class="detail manual">收藏理由：' + escapeHtml(note.reason || "人工收藏") +
-        (note.added_at ? '（' + escapeHtml(note.added_at) + '）' : '') + '</p>';
-      if (entry.content_changed_at) {
-        manualHtml += '<p class="detail changed">上游内容已变化（' + escapeHtml(entry.content_changed_at.slice(0, 10)) + '），尚未复核；本条为人工收藏，程序不会自动重评。</p>';
-      }
-      const autoExcluded = entry.status === "excluded" || (note.auto_status === "excluded");
-      if (autoExcluded) {
-        const reasons = (entry.reason_codes || []).join("、");
-        manualHtml += '<p class="detail warning-box">程序判定为排除项' + (reasons ? '（' + escapeHtml(reasons) + '）' : '') + '，本条为人工收藏，请自行确认风险。</p>';
-      } else if (entry.status === "processing_failure") {
-        manualHtml += '<p class="detail warning-box">评估未完成。</p>';
-      }
-      if (entry.upstream_status && entry.upstream_status !== "ok") {
-        manualHtml += '<p class="detail warning-box">上游不可访问' + (entry.last_checked ? '（' + escapeHtml(entry.last_checked.slice(0, 10)) + '）' : '') + '。</p>';
-      }
-    }
-
-    const dates = [];
-    if (text(entry.first_seen)) dates.push("首次发现 " + escapeHtml(entry.first_seen.slice(0, 10)));
-    if (text(entry.last_checked)) dates.push("最近检查 " + escapeHtml(entry.last_checked.slice(0, 10)));
-    if (text(entry.content_changed_at)) dates.push("内容变更 " + escapeHtml(entry.content_changed_at.slice(0, 10)));
-    if (text(entry.upstream_status) && entry.upstream_status !== "ok") {
-      dates.push("上游状态 " + escapeHtml(entry.upstream_status));
-    }
-
-    const favBtnClass = picked ? "btn-action btn-fav is-active" : "btn-action btn-fav";
-    const favBtnText = picked ? "★ 已收藏" : "★ 收藏";
-    const ownedBtn = '<button type="button" class="btn-action btn-owned" data-action="owned" data-id="' + escapeHtml(sid) + '" title="标记为已收录（需二次确认，从目录与查找中隐藏，0 Token 跳过）">标为已收录</button>';
-
-    // 仅收藏区展示“标为已收录”（点击需二次确认）；推荐与候选区展示收藏、暂不看、屏蔽
-    let actionsHtml = "";
-    if (currentTab === "manual") {
-      actionsHtml =
-        ownedBtn +
-        '<button type="button" class="' + favBtnClass + '" data-action="fav" data-id="' + escapeHtml(sid) + '">' + favBtnText + '</button>' +
-        '<button type="button" class="btn-action btn-block" data-action="block" data-id="' + escapeHtml(sid) + '" title="屏蔽并移入黑名单">🚫 屏蔽</button>';
-    } else {
-      actionsHtml =
-        '<button type="button" class="' + favBtnClass + '" data-action="fav" data-id="' + escapeHtml(sid) + '">' + favBtnText + '</button>' +
-        '<button type="button" class="btn-action btn-snooze" data-action="snooze" data-id="' + escapeHtml(sid) + '" title="暂不关注（冷冻150天，到期自动恢复）">⏳ 暂不看</button>' +
-        '<button type="button" class="btn-action btn-block" data-action="block" data-id="' + escapeHtml(sid) + '" title="屏蔽并移入黑名单">🚫 屏蔽</button>';
-    }
-
-    li.innerHTML =
-      '<div class="card-head">' +
-        '<h3><a href="' + escapeHtml(entry.url || "#") + '" target="_blank" rel="noopener noreferrer">' +
-        escapeHtml(entry.name) + "</a></h3>" +
-        '<div class="card-actions">' + actionsHtml + '</div>' +
-      '</div>' +
-      '<p class="by">' + escapeHtml(entry.author || "") + "</p>" +
-      '<p class="sum">' + escapeHtml(text(entry.summary_zh) || "（暂无中文简述）") + "</p>" +
-      examplesHtml +
-      featuresHtml +
-      '<p class="tags">' + bits.join("") + "</p>" +
-      (meta.length ? '<p class="detail">' + meta.join(" · ") + "</p>" : "") +
-      manualHtml +
-      (entry.needs_review ? '<p class="detail review">待复核：' +
-        escapeHtml(entry.review_note || "上游内容已变化，等待复核。") + "</p>" : "") +
-      reviewBlock(entry) +
-      qualityBlock(entry) +
-      (dates.length ? '<p class="dates">' + dates.join(" · ") + "</p>" : "");
-    container.appendChild(li);
-  });
-
+  renderBatch(0, initialLimit);
   return visible.length;
 }
 
@@ -240,6 +311,9 @@ export function renderSnoozedList(container, effectiveSnoozedList, allEntries, t
         '<div class="snoozed-row-dates">' +
           '冷冻于 ' + escapeHtml(item.snoozed_at) + ' · 到期恢复 ' + escapeHtml(item.expires_at) +
           '（还剩 ' + remainDays + ' 天）' +
+        '</div>' +
+        '<div class="snoozed-row-reason">' +
+          escapeHtml(item.reason || "用户暂不关注") +
         '</div>' +
       '</div>' +
       '<button type="button" class="btn-action" data-action="unsnooze" data-id="' + escapeHtml(item.skill_id) + '">恢复显示</button>';

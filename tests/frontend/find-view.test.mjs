@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { renderFindView } from "../../public/js/find-view.js";
+import { renderFindView, fetchFindReport, clearFindReportCache, getCachedFindReport } from "../../public/js/find-view.js";
 
 class Element {
   constructor() { this.children = []; this.html = ""; }
@@ -66,3 +66,36 @@ test("candidates exhausted explains that no strong match was found", () => {
   assert.match(render({ ...report, stop_reason: "candidates_exhausted" }), /全部评估完毕；未发现满足强匹配标准的条目/);
 });
 
+test("find-view: fetchFindReport uses memory cache and bypasses with force", async () => {
+  clearFindReportCache();
+  let fetchCount = 0;
+  const mockFetch = async () => {
+    fetchCount++;
+    return {
+      ok: true,
+      json: async () => ({ schema_version: "1.0.0", topic: "测试需求", shortlist: [] })
+    };
+  };
+
+  const prevFetch = globalThis.fetch;
+  globalThis.fetch = mockFetch;
+  try {
+    const first = await fetchFindReport();
+    assert.equal(fetchCount, 1);
+    assert.equal(first.topic, "测试需求");
+
+    // Second call hits cache (0 network fetch)
+    const second = await fetchFindReport();
+    assert.equal(fetchCount, 1);
+    assert.equal(second, first);
+    assert.equal(getCachedFindReport(), first);
+
+    // Force call bypasses cache
+    const forced = await fetchFindReport("data/find-report.json", { force: true });
+    assert.equal(fetchCount, 2);
+    assert.equal(forced.topic, "测试需求");
+  } finally {
+    globalThis.fetch = prevFetch;
+    clearFindReportCache();
+  }
+});

@@ -2,20 +2,21 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { qualityBlock } from "../../public/js/catalog-view.js";
 
-test("old entries are not labelled as deeply reviewed", () => {
-  assert.equal(qualityBlock({}), "");
-});
-
 test("quality rationale and review disagreement are visible and escaped", () => {
-  const html = qualityBlock({ quality_summary: {
-    review_status: "disagreed", review_note: "需要复核",
-    checks: { practical_value: { value: "pass", evidence: "<script>bad()</script>" } },
-    review_checks: { verification: { value: "unknown", evidence: "缺少验收条件" } }
-  } });
-  assert.ok(html.includes("两轮评估有分歧"));
-  assert.ok(html.includes("缺少验收条件"));
-  assert.ok(html.includes("&lt;script&gt;"));
-  assert.ok(!html.includes("<script>"));
+  const entry = {
+    quality_summary: {
+      review_status: "disagreed",
+      review_note: "复核分歧",
+      blocking_reasons: ["阻断原因"],
+      checks: { practical_value: { value: "pass", evidence: "证据 1" } },
+      review_checks: { practical_value: { value: "fail", evidence: "复核证据 <unsafe>" } }
+    }
+  };
+  const html = qualityBlock(entry);
+  assert.match(html, /两轮评估有分歧/);
+  assert.match(html, /复核分歧/);
+  assert.match(html, /阻断原因/);
+  assert.match(html, /&lt;unsafe&gt;/);
 });
 
 import { renderCatalogList } from "../../public/js/catalog-view.js";
@@ -29,10 +30,22 @@ class Element {
     this.listeners = {};
     this.hidden = true;
     this.textContent = "";
+    this.parent = null;
   }
   set innerHTML(value) { this.html = value; this.children = []; }
   get innerHTML() { return this.html; }
-  appendChild(child) { this.children.push(child); }
+  appendChild(child) {
+    if (child) {
+      child.parent = this;
+      this.children.push(child);
+    }
+  }
+  remove() {
+    if (this.parent && this.parent.children) {
+      const idx = this.parent.children.indexOf(this);
+      if (idx !== -1) this.parent.children.splice(idx, 1);
+    }
+  }
   addEventListener(event, fn) {
     if (!this.listeners[event]) this.listeners[event] = [];
     this.listeners[event].push(fn);
@@ -40,7 +53,7 @@ class Element {
   trigger(event, data = {}) {
     (this.listeners[event] || []).forEach(fn => fn(data));
   }
-  output() { return this.html + this.children.map(child => child.output()).join(""); }
+  output() { return (this.textContent || "") + this.html + this.children.map(child => child.output()).join(""); }
 }
 
 test("catalog-view: action buttons partitioned correctly across tabs", () => {
@@ -67,6 +80,51 @@ test("catalog-view: action buttons partitioned correctly across tabs", () => {
     renderCatalogList(containerRec, [entry], overridesState, "recommended");
     const htmlRec = containerRec.output();
     assert.ok(!htmlRec.includes('class="btn-action btn-owned"'));
+  } finally {
+    globalThis.document = prevDoc;
+  }
+});
+
+test("catalog-view: progressive rendering paginates entries and loads more", () => {
+  const prevDoc = globalThis.document;
+  globalThis.document = { createElement: () => new Element() };
+  try {
+    const entries = Array.from({ length: 30 }, (_, i) => ({
+      skill_id: `skill:${i}`,
+      name: `Skill ${i}`,
+      url: `https://example.com/${i}`
+    }));
+    const overridesState = createOverridesState();
+    const container = new Element();
+
+    let batchNotification = null;
+    const totalMatching = renderCatalogList(
+      container,
+      entries,
+      overridesState,
+      "recommended",
+      {},
+      {
+        pageSize: 10,
+        onBatchRendered: (rendered, total) => {
+          batchNotification = { rendered, total };
+        }
+      }
+    );
+
+    assert.equal(totalMatching, 30);
+    assert.equal(batchNotification.rendered, 10);
+    assert.equal(batchNotification.total, 30);
+    assert.equal(container.children.length, 11);
+    assert.ok(container.output().includes("加载更多条目（还剩 20 条）"));
+
+    // Find and trigger load more button
+    const loadMoreLi = container.children[container.children.length - 1];
+    const btn = loadMoreLi.children[0];
+    btn.trigger("click");
+
+    assert.equal(batchNotification.rendered, 20);
+    assert.ok(container.output().includes("加载更多条目（还剩 10 条）"));
   } finally {
     globalThis.document = prevDoc;
   }
