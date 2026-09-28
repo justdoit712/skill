@@ -250,7 +250,13 @@ def build_run_metrics(report: dict, *, kind: str) -> dict:
         "model": model,
         "cache": {"exact_hits": number(report.get("cached")),
                   "normalized_potential_hits": None, "actual_reused": None},
-        "prescreen": {"skipped_count": number(report.get("prescreen_excluded")),
-                      "sample_audit_count": None, "sample_audit_false_positives": None,
-                      "false_positive_ratio": calc_ratio(None, None).to_dict()},
+        "prescreen": {
+            "rules_version": (report.get("static_heuristics") or {}).get("version") or "1.0.0",
+            "signal_hits": (report.get("static_heuristics") or {}).get("signal_counts", {}),
+            "recommended_actions": (report.get("static_heuristics") or {}).get("suggested_actions", {}),
+            "skipped_count": number(report.get("prescreen_excluded")),
+            "sample_audit_count": None,
+            "sample_audit_false_positives": None,
+            "false_positive_ratio": calc_ratio(None, None).to_dict(),
+        },
     }

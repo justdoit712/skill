@@ -21,6 +21,7 @@ from uuid import uuid4
 
 from src.infra.files import write_json_atomic, write_text_atomic
 from src.shared.runtime import now_local
+from src.shared.versions import STATIC_HEURISTIC_VERSION
 from src.shared.materials import validate_document, primary_material_bundle
 from src.shared.owned import is_skill_owned
 from .store import catalog_task
@@ -151,6 +152,27 @@ def _unknown_usage_reserve(candidate, text, cfg) -> int:
         + 1024
         + int(cfg["model"].get("limits", {}).get("max_output_tokens", 4000))
     )
+
+
+
+def _record_static_observation(report: dict[str, Any], observation: dict[str, Any] | None) -> None:
+    """记录静态规则分级观察模式指标（纯统计，不改变排队与调用）。"""
+    if not observation:
+        return
+    sh = report.setdefault('static_heuristics', {
+        'version': STATIC_HEURISTIC_VERSION,
+        'observed_count': 0,
+        'tier_counts': {},
+        'signal_counts': {},
+        'suggested_actions': {},
+    })
+    sh['observed_count'] += 1
+    tier = observation.get('tier', 'unknown')
+    sh['tier_counts'][tier] = sh['tier_counts'].get(tier, 0) + 1
+    action = observation.get('suggested_action', 'unknown')
+    sh['suggested_actions'][action] = sh['suggested_actions'].get(action, 0) + 1
+    for sig in observation.get('signals', []):
+        sh['signal_counts'][sig] = sh['signal_counts'].get(sig, 0) + 1
 
 
 def prepare_pool(
@@ -691,6 +713,7 @@ def process_candidate(state, item):
         return True
     pres = prescreen(candidate, state.cfg['prescreen'], None)
     if pres.excluded:
+        _record_static_observation(state.report, pres.static_observation)
         state.report['prescreen_excluded'] += 1
         state.publish(candidate, pres)
         update_candidate_status(state.pool, seq, POOL_STATUS_EXCLUDED)
@@ -711,6 +734,7 @@ def process_candidate(state, item):
     text = fetched.text
     candidate.content_fingerprint = content_fingerprint(text)
     pres = prescreen(candidate, state.cfg['prescreen'], text)
+    _record_static_observation(state.report, pres.static_observation)
     if pres.excluded:
         state.report['prescreen_excluded'] += 1
         state.publish(candidate, pres)
@@ -965,6 +989,13 @@ def _collect(root, local, settings, cfg, discover_fn, fetch_fn, evaluate_fn, log
         'cached': 0,
         'fetch_failed': 0,
         'prescreen_excluded': 0,
+        'static_heuristics': {
+            'version': STATIC_HEURISTIC_VERSION,
+            'observed_count': 0,
+            'tier_counts': {},
+            'signal_counts': {},
+            'suggested_actions': {},
+        },
         'not_skill_files': 0,
         'blocked_records': 0,
         'blocked_new': 0,

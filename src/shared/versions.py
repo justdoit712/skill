@@ -15,6 +15,7 @@ LLM_OUTPUT_CONTRACT_VERSION = "1.0.0"
 TERMINOLOGY_VERSION = "1.0.0"
 EVIDENCE_VERIFIER_VERSION = "1.1.0"
 NORMALIZATION_VERSION = "1.0.0"
+STATIC_HEURISTIC_VERSION = "1.0.0"
 
 
 def parse_version_tuple(version_str: str | None) -> tuple[int, ...]:
@@ -81,6 +82,7 @@ __all__ = [
     "TERMINOLOGY_VERSION",
     "EVIDENCE_VERIFIER_VERSION",
     "NORMALIZATION_VERSION",
+    "STATIC_HEURISTIC_VERSION",
     "parse_version_tuple",
     "is_semver_compatible",
     "check_evaluation_record_compatibility",

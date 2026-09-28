@@ -35,6 +35,7 @@ class PrescreenResult:
     domains: list[str] = field(default_factory=list)
     matched_terms: list[str] = field(default_factory=list)
     notes: list[str] = field(default_factory=list)
+    static_observation: dict[str, Any] | None = None
 
     @property
     def excluded(self) -> bool:

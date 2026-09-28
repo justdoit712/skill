@@ -17,6 +17,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 from src.shared.identity import parse_github_url
+from src.shared.versions import STATIC_HEURISTIC_VERSION
 from .models import Candidate, PrescreenResult
 
 # DSH 插件：§1 与 §4.2 要求无论由哪条渠道发现均排除
@@ -48,6 +49,187 @@ SUSPECT_PATTERNS = {
 
 DECISION_EXCLUDED = "excluded"
 DECISION_QUEUED = "queued"
+
+# -------------------------------------------------------------
+# 静态规则分级观察模式常量与模式定义 (P3.1 / Unit 6)
+# -------------------------------------------------------------
+
+TIER_CLEAR_PLACEHOLDER = "tier_clear_placeholder"
+TIER_CONTENT_DEFECT = "tier_content_defect"
+TIER_SUSPECT = "tier_suspect"
+TIER_NORMAL = "tier_normal"
+TIER_PENDING = "tier_pending"
+
+ACTION_SUGGEST_SKIP = "suggest_skip"
+ACTION_SUGGEST_REVIEW = "suggest_review"
+ACTION_SUGGEST_EVALUATE = "suggest_evaluate"
+ACTION_SUGGEST_PENDING = "suggest_pending"
+
+# 明确的空壳占位行模式（全行主要为占位指示，不构成功能说明）
+PLACEHOLDER_LINE_PATTERNS = (
+    re.compile(r"(?i)^\s*(?:#+\s*)?(?:todo|fixme|tbd|placeholder)\b.*"),
+    re.compile(r"(?i)^\s*(?:#+\s*)?(?:write|add|implement)\s+(?:your\s+)?(?:skill|code|description|implementation)\s+(?:here|below).*"),
+    re.compile(r"(?i)^\s*(?:#+\s*)?your[-_\s]+skill[-_\s]+(?:here|name|implementation).*"),
+    re.compile(r"(?i)^\s*(?:#+\s*)?(?:example|sample|demo)\s+skill\s+template.*"),
+)
+
+# 路线图 TODO（未来版本的计划，通常带版本号或未来时态，不等于空壳）
+ROADMAP_TODO_PATTERNS = (
+    re.compile(r"(?i)\b(?:v\d+|version\s*\d+|roadmap|future|later|next\s+release|v2|v3)\b"),
+    re.compile(r"(?i)\b(?:add|support)\s+[\w-]+\s+(?:in|for)\s+(?:v\d+|next|future)\b"),
+)
+
+# 常见可执行命令与代码块指示（证明文档具备真实指引）
+COMMAND_INSTRUCTION_PATTERNS = (
+    re.compile(r"(?i)\b(?:python|node|npm|pnpm|bun|bash|sh|curl|docker|pip|go|cargo)\s+[\w.-]+"),
+    re.compile(r"(?i)\b(?:run|execute|start|install|usage|example)[:\s]"),
+    re.compile(r"```[\w]*\n[\s\S]+?```"),
+)
+
+
+def analyze_static_tier(
+    candidate: Candidate,
+    text: str | None = None,
+    *,
+    is_fetched: bool = True,
+    is_truncated: bool = False,
+    is_valid_doc: bool = True,
+    doc_reason: str = "",
+) -> dict[str, Any]:
+    """静态规则分级观察模式（纯函数）。
+
+    在不改变任何调用或排队行为的前提下，输出档位、版本、命中信号、建议动作与原因。
+    严格保证：
+    - 缺 Frontmatter、有效短文本或包含未来路线图 TODO 绝不作为淘汰或跳过依据；
+    - 仅明确无任何实质实现的纯占位（如只有 TODO: add description / write implementation）标记为建议跳过；
+    - 敏感合规词标记为建议重点复核；
+    - 未抓取内容保持待判断（suggest_pending）。
+    """
+    if text is None or not is_fetched:
+        return {
+            "heuristic_version": STATIC_HEURISTIC_VERSION,
+            "mode": "observation",
+            "applied": False,
+            "tier": TIER_PENDING,
+            "signals": ["UNFETCHED_MATERIAL"],
+            "suggested_action": ACTION_SUGGEST_PENDING,
+            "reason": "材料尚未抓取，保持待判断",
+        }
+
+    clean_text = text.strip()
+    if not clean_text:
+        return {
+            "heuristic_version": STATIC_HEURISTIC_VERSION,
+            "mode": "observation",
+            "applied": False,
+            "tier": TIER_CONTENT_DEFECT,
+            "signals": ["EMPTY_CONTENT"],
+            "suggested_action": ACTION_SUGGEST_SKIP,
+            "reason": "材料为空文件或纯空白",
+        }
+
+    if is_truncated:
+        return {
+            "heuristic_version": STATIC_HEURISTIC_VERSION,
+            "mode": "observation",
+            "applied": False,
+            "tier": TIER_CONTENT_DEFECT,
+            "signals": ["FETCH_TRUNCATED"],
+            "suggested_action": ACTION_SUGGEST_SKIP,
+            "reason": "材料抓取严重截断",
+        }
+
+    if not is_valid_doc:
+        sig = "HTML_ERROR_PAGE" if "html" in doc_reason.lower() else "INVALID_DOCUMENT_FORMAT"
+        return {
+            "heuristic_version": STATIC_HEURISTIC_VERSION,
+            "mode": "observation",
+            "applied": False,
+            "tier": TIER_CONTENT_DEFECT,
+            "signals": [sig],
+            "suggested_action": ACTION_SUGGEST_SKIP,
+            "reason": f"材料不是有效文档：{doc_reason}",
+        }
+
+    # 检查是否为明确的空壳占位（Explicit Boilerplate / Placeholder）
+    # 1. 分离 YAML frontmatter
+    body = clean_text
+    has_frontmatter = False
+    if clean_text.startswith("---"):
+        parts = clean_text.split("---", 2)
+        if len(parts) >= 3:
+            has_frontmatter = True
+            body = parts[2].strip()
+
+    # 检查是否有可执行命令或代码块
+    has_commands = any(p.search(clean_text) for p in COMMAND_INSTRUCTION_PATTERNS)
+
+    # 检查 body 中的非空非标题行
+    body_lines = [
+        line.strip()
+        for line in body.splitlines()
+        if line.strip() and not line.strip().startswith("#") and not line.strip().startswith("---")
+    ]
+
+    is_pure_placeholder = False
+    if not has_commands:
+        if not body_lines:
+            # 只有标题没有正文
+            is_pure_placeholder = True
+        else:
+            # 所有非标题行均匹配占位模式
+            all_match_placeholder = all(
+                any(p.match(line) for p in PLACEHOLDER_LINE_PATTERNS) for line in body_lines
+            )
+            if all_match_placeholder:
+                is_pure_placeholder = True
+
+    if is_pure_placeholder:
+        return {
+            "heuristic_version": STATIC_HEURISTIC_VERSION,
+            "mode": "observation",
+            "applied": False,
+            "tier": TIER_CLEAR_PLACEHOLDER,
+            "signals": ["EXPLICIT_BOILERPLATE", "TODO_PLACEHOLDER_ONLY"],
+            "suggested_action": ACTION_SUGGEST_SKIP,
+            "reason": "正文仅包含模板占位提示与 TODO，无实际功能实现或执行指引",
+        }
+
+    # 检查敏感高危合规词 (Suspect Patterns)
+    haystack = f"{candidate.name} {candidate.description} {candidate.path} {clean_text}"
+    matched_suspects = [
+        flag for flag, p in SUSPECT_PATTERNS.items() if p.search(haystack)
+    ]
+    if matched_suspects:
+        return {
+            "heuristic_version": STATIC_HEURISTIC_VERSION,
+            "mode": "observation",
+            "applied": False,
+            "tier": TIER_SUSPECT,
+            "signals": matched_suspects,
+            "suggested_action": ACTION_SUGGEST_REVIEW,
+            "reason": f"命中了需重点复核的领域敏感信号: {', '.join(matched_suspects)}",
+        }
+
+    # 正常候选（Normal Candidate）
+    signals = ["VALID_STRUCTURE"]
+    if not has_frontmatter:
+        signals.append("NO_FRONTMATTER_VALID")
+    if len(clean_text) < 200 or len(body_lines) <= 3:
+        signals.append("SHORT_VALID_DOCUMENT")
+    if re.search(r"(?i)\btodo\b", clean_text) and any(p.search(clean_text) for p in ROADMAP_TODO_PATTERNS):
+        signals.append("BODY_CONTAINS_ROADMAP_TODO")
+
+    return {
+        "heuristic_version": STATIC_HEURISTIC_VERSION,
+        "mode": "observation",
+        "applied": False,
+        "tier": TIER_NORMAL,
+        "signals": signals,
+        "suggested_action": ACTION_SUGGEST_EVALUATE,
+        "reason": "材料结构有效，具备功能说明或可执行指引",
+    }
+
 
 
 @dataclass
@@ -172,6 +354,7 @@ def prescreen(candidate: Candidate, cfg: PrescreenConfig, text: str | None = Non
     text 为可选的上游原文；预筛不依赖它也能给出结论。
     """
     result = _result(candidate, DECISION_QUEUED)
+    result.static_observation = analyze_static_tier(candidate, text)
 
     # 0. 人工排除黑名单（manual_exclusions）：最高优先级，直接跳过
     if candidate.skill_id in cfg.manual_exclusions:
@@ -229,6 +412,10 @@ def prescreen(candidate: Candidate, cfg: PrescreenConfig, text: str | None = Non
     if text is not None and len(text.strip()) < 200:
         result.flags.append("CONTENT_MAY_BE_EMPTY")
         result.notes.append("上游内容过短，可能为空模板")
+
+    # 7. 静态规则分级观察模式（纯观察，不改变 decision）
+    obs = analyze_static_tier(candidate, text)
+    result.static_observation = obs
 
     return result
 
