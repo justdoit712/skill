@@ -25,6 +25,8 @@ from src.infra.files import write_json_atomic
 from src.infra.llm import call_model, resolve_api_key
 from src.shared.runtime import is_test_environment, now_local
 from src.shared.usage import UsageTotals
+from src.shared.versions import FINDER_REPORT_SCHEMA_VERSION
+from src.shared.metrics import build_run_metrics
 
 from .config import (
     DEFAULT_LIMIT,
@@ -49,7 +51,7 @@ from .plan import (
     build_interactive_plan_prompt,
     build_plan_prompt,
     parse_clarification_question,
-    parse_query_plan,
+    parse_plan_with_observation,
 )
 from .report import (
     update_public_snapshot,
@@ -96,7 +98,7 @@ class FinderRunState:
         self.usage = UsageTotals()
         params = {"limit": DEFAULT_LIMIT, "max_evaluations": DEFAULT_MAX_EVALUATIONS,
                   "max_tokens": DEFAULT_MAX_TOKENS, "max_rounds": DEFAULT_MAX_ROUNDS, **params}
-        self.report = {"schema_version": "1.0.0", "topic": topic, "parameters": params,
+        self.report = {"schema_version": FINDER_REPORT_SCHEMA_VERSION, "topic": topic, "parameters": params,
             "status": "running", "stop_reason": None, "plan": None,
             "terminology_observation": None,
             "evaluation_attempts": 0, "evaluated_count": 0, "evaluations": [],
@@ -108,6 +110,7 @@ class FinderRunState:
 
     def save(self):
         self.report["usage"] = self.usage.snapshot()
+        self.report["metrics"] = build_run_metrics(self.report, kind="finder")
         self.report["updated_at"] = now_local().isoformat()
         # During execution only the authoritative JSON is updated.
         write_json_atomic(self.run_dir / "report.json", self.report)
@@ -169,7 +172,7 @@ def finalize_run(report, stop_reason, *, status=None, evaluated_items=None, plan
     history = report.get("search", {}).get("rounds_history", [])
     if history:
         history[-1]["evaluated"] = len(report.get("evaluations", [])) - history[-1].get("evaluation_start", 0)
-    report.update(schema_version="1.0.0", status=status, stop_reason=stop_reason,
+    report.update(schema_version=FINDER_REPORT_SCHEMA_VERSION, status=status, stop_reason=stop_reason,
                   updated_at=now_local().isoformat())
     items = evaluated_items if evaluated_items is not None else report.get("evaluations", [])
     report["evaluations"] = items
@@ -427,22 +430,7 @@ def _run_planning_phase(
         return None, "plan_failed"
 
     try:
-        plan = parse_query_plan(result.content, topic=topic)
-        from .terminology import build_terminology_observation
-        raw_queries: list[str] = []
-        try:
-            raw_data = json.loads(_strip_fence(result.content))
-            if isinstance(raw_data.get("queries"), list):
-                raw_queries = [str(q) for q in raw_data["queries"] if isinstance(q, str)]
-        except Exception:
-            raw_queries = list(plan.get("queries", []))
-
-        obs = build_terminology_observation(
-            topic=topic,
-            intent=plan.get("intent", ""),
-            queries=plan.get("queries", []),
-            raw_queries=raw_queries,
-        )
+        plan, obs = parse_plan_with_observation(result.content, topic=topic)
         state.report["terminology_observation"] = obs
         if obs and obs.get("gaps"):
             log(f"【术语观察模式】检测到 {len(obs['gaps'])} 处表述缺口，建议短语: {', '.join(obs.get('suggested_queries', []))} (观察模式未追加检索)")
@@ -589,7 +577,7 @@ def execute_find_skill(topic="", *, limit=None, max_evaluations=None, max_tokens
             if not state.report.get("plan") and last.get("stage") == "planning" and last.get("response"):
                 result = last["response"]
                 if result.get("ok") and result.get("content"):
-                    state.report["plan"] = parse_query_plan(result["content"], topic=topic)
+                    state.report["plan"], state.report["terminology_observation"] = parse_plan_with_observation(result["content"], topic=topic)
         if state.stop_reason():
             raise RunStopped(state.stop_reason())
         plan = state.report.get("plan")

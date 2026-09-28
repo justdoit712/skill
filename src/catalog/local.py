@@ -341,6 +341,8 @@ def save_and_render(
         if sid not in old_recommended and e.get("status") == STATUS_RECOMMENDED and not e.get("needs_review") and not e.get("manual_pick") and not is_skill_owned(sid, owned_set)
     ]
     report["new_recommended"] = len(report["recommendations"])
+    from src.shared.metrics import build_run_metrics
+    report["metrics"] = build_run_metrics(report, kind="catalog")
     if pool is not None:
         report["pool_stats"] = pool.stats()
     write_json_atomic(run_dir / "report.json", report)

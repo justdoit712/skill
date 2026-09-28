@@ -78,7 +78,7 @@ export function renderFindView(container, report, ownedState = null) {
     container._lastRenderedOwnedVersion = currentOwnedVersion;
   }
 
-  if (report?.schema_version && report.schema_version !== "1.0.0") {
+  if (report?.schema_version && !["1.0.0", "1.1.0"].includes(report.schema_version)) {
     container.innerHTML = '<li class="find-overview-card"><h3>报告版本不兼容</h3><p>请升级页面后重新查看该报告。</p></li>';
     return;
   }

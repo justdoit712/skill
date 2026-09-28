@@ -199,6 +199,7 @@ class StatisticalMetricsTest(unittest.TestCase):
             signal_hits={"empty_doc": 3},
             skipped_count=3,
             sample_audit_false_positives=0,
+            sample_audit_count=3,
         )
         fp_ratio = prescreen_facts.false_positive_ratio()
         self.assertEqual(fp_ratio.numerator, 0)

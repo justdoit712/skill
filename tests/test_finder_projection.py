@@ -252,7 +252,7 @@ class TestT11PublicProjectionSanitization(unittest.TestCase):
         self.assertNotIn("/home/", json_str)
 
         # 断言包含安全白名单结构
-        self.assertEqual(projection["schema_version"], "1.0.0")
+        self.assertEqual(projection["schema_version"], "1.1.0")
         self.assertEqual(projection["run_id"], "20260923-010203-abcdef")
         self.assertEqual(projection["shortlist_count"], 1)
         self.assertEqual(projection["alternatives_count"], 0)

@@ -23,6 +23,8 @@ from urllib.parse import urlsplit, quote
 
 from src.infra.files import write_json_atomic, write_text_atomic, file_lock, read_json
 from src.shared.runtime import now_local
+from src.shared.metrics import build_run_metrics
+from src.shared.versions import FINDER_REPORT_SCHEMA_VERSION
 
 STATUS_SUPPORTED = "supported"
 
@@ -69,6 +71,7 @@ def render_find_markdown_report(report: dict[str, Any]) -> str:
     usage = report.get("usage") or {}
     plan = report.get("plan") or {}
     search = report.get("search") or {}
+    metrics = build_run_metrics(report, kind="finder")
 
     skipped_str = f"，已收录跳过 {search['skipped_owned']} 个" if search.get("skipped_owned") else ""
     lines = [
@@ -84,6 +87,7 @@ def render_find_markdown_report(report: dict[str, Any]) -> str:
     ]
     if raw_coverage_incomplete:
         lines.append("- **检索覆盖**：本次检索覆盖不完整，部分来源读取失败或超出读取范围。")
+    lines.append(f"- **请求统计**：搜索 {_count(metrics['search']['http_requests'])} 次，重试 {_count(metrics['search']['retries'])} 次；模型 {_count(metrics['model']['requests'])} 次，未知用量 {_count(metrics['model']['unknown_usage_requests'])} 次。")
     for query, cursor in search.get("query_cursors", {}).items():
         if cursor.get("blocked") or cursor.get("page_attempts", 0):
             lines.append(f"- **未完成搜索页**：{query}，第 {cursor.get('next_page', 1)} 页，"
@@ -272,7 +276,8 @@ def sanitize_report_for_public(report: dict[str, Any]) -> dict[str, Any]:
     sanitized_alternatives = [_sanitize_card(item) for item in (report.get("alternatives") or [])]
 
     projection = {
-        "schema_version": "1.0.0",
+        "schema_version": FINDER_REPORT_SCHEMA_VERSION,
+        "metrics": build_run_metrics(report, kind="finder"),
         "run_id": str(report.get("run_id") or ""),
         "started_at": str(report.get("started_at") or ""),
         "updated_at": str(report.get("updated_at") or now_local().isoformat()),
@@ -372,6 +377,7 @@ def should_update_public_snapshot(report: dict[str, Any]) -> bool:
 def write_local_report(report: dict[str, Any], run_dir: Path) -> None:
     """原子写入本地事实报告 JSON 与 Markdown。"""
     run_dir.mkdir(parents=True, exist_ok=True)
+    report["metrics"] = build_run_metrics(report, kind="finder")
     write_json_atomic(run_dir / "report.json", report)
     md_text = render_find_markdown_report(report)
     write_text_atomic(run_dir / "report.md", md_text)
@@ -393,7 +399,7 @@ def update_public_snapshot(report: dict[str, Any], public_data_dir: Path) -> boo
 def rebuild_find_report(run_dir: Path, public_data_dir: Path | None = None) -> dict:
     """Rebuild derived reports from saved facts; never calls a model."""
     report = read_json(Path(run_dir) / "report.json")
-    if report.get("schema_version") not in (None, "1.0.0"):
+    if report.get("schema_version") not in (None, "1.0.0", FINDER_REPORT_SCHEMA_VERSION):
         raise ValueError("不支持的报告 schema_version")
     write_local_report(report, Path(run_dir))
     if public_data_dir is not None:

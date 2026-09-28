@@ -5,7 +5,7 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+import re
 from typing import Any
 
 
@@ -18,17 +18,10 @@ NORMALIZATION_VERSION = "1.0.0"
 
 
 def parse_version_tuple(version_str: str | None) -> tuple[int, ...]:
-    """将语义化版本字符串解析为整型元组，无法解析的部分静默忽略。"""
-    if not version_str or not isinstance(version_str, str):
+    """仅接受完整的 major.minor.patch；不猜测损坏或预发布版本。"""
+    if not isinstance(version_str, str) or not re.fullmatch(r"(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)", version_str):
         return ()
-    parts = []
-    for part in version_str.strip().split("."):
-        clean = "".join(ch for ch in part if ch.isdigit())
-        if clean:
-            parts.append(int(clean))
-        else:
-            break
-    return tuple(parts)
+    return tuple(int(part) for part in version_str.split("."))
 
 
 def is_semver_compatible(actual_version: str | None, expected_version: str | None) -> bool:
@@ -65,20 +58,19 @@ def check_evaluation_record_compatibility(
     if not isinstance(record, dict):
         return False, "记录格式非法，非字典结构"
 
-    rec_rules = record.get("rules_version")
-    if expected_rules_version and rec_rules != expected_rules_version:
-        # 若主版本不一致则直接拒绝
-        if not is_semver_compatible(str(rec_rules), str(expected_rules_version)):
-            return False, f"评估规则版本不兼容: 记录={rec_rules}, 当前={expected_rules_version}"
-
-    rec_model_v = record.get("model_config_version")
-    if expected_model_config_version and rec_model_v and rec_model_v != expected_model_config_version:
-        return False, f"模型配置版本不一致: 记录={rec_model_v}, 当前={expected_model_config_version}"
-
-    rec_contract = record.get("output_contract_version")
-    if expected_output_contract_version and rec_contract:
-        if not is_semver_compatible(str(rec_contract), str(expected_output_contract_version)):
-            return False, f"输出契约版本不兼容: 记录={rec_contract}, 当前={expected_output_contract_version}"
+    # Evaluation identity requires equality; semver alone cannot prove equal rules.
+    for key, expected, label in (
+        ("rules_version", expected_rules_version, "评估规则版本不兼容"),
+        ("model_config_version", expected_model_config_version, "模型配置版本不一致"),
+        ("output_contract_version", expected_output_contract_version, "输出契约版本不兼容"),
+    ):
+        if expected is None:
+            continue
+        actual = record.get(key)
+        if not isinstance(actual, str) or not actual:
+            return False, f"缺失版本字段: {key}"
+        if not isinstance(expected, str) or not expected or actual != expected:
+            return False, f"{label}: 记录={actual}, 当前={expected}"
 
     return True, "兼容"
 

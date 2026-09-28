@@ -22,6 +22,10 @@ function render(report) {
 
 const report = { schema_version: "1.0.0", topic: "需求", status: "completed", shortlist: [], alternatives: [] };
 
+test("current 1.1 report remains readable", () => {
+  assert.doesNotMatch(render({ ...report, schema_version: "1.1.0" }), /版本不兼容/);
+});
+
 test("unknown schema is rejected before interpreting result fields", () => {
   assert.match(render({ ...report, schema_version: "2.0" }), /报告版本不兼容/);
 });

@@ -107,7 +107,7 @@ class FinderAcceptanceTest(unittest.TestCase):
         with patch("src.finder.run.update_public_snapshot", side_effect=publish):
             report = self.run_case()
         self.assertEqual(states, ["completed"])
-        self.assertEqual(report["schema_version"], "1.0.0")
+        self.assertEqual(report["schema_version"], "1.1.0")
 
     def test_public_failure_is_diagnosed_and_rebuild_is_offline(self):
         with patch("src.finder.run.update_public_snapshot", side_effect=OSError("C:/private/report")):

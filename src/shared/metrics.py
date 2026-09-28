@@ -161,10 +161,11 @@ class PrescreenMetricFacts:
     recommended_actions: dict[str, int] = field(default_factory=dict)
     skipped_count: int = 0
     sample_audit_false_positives: int = 0
+    sample_audit_count: Optional[int] = None
 
     def false_positive_ratio(self) -> RatioMetric:
         """抽样误拦截率：误拦截数 / 抽样核查总跳过数"""
-        return calc_ratio(self.sample_audit_false_positives, self.skipped_count)
+        return calc_ratio(self.sample_audit_false_positives, self.sample_audit_count)
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -173,6 +174,7 @@ class PrescreenMetricFacts:
             "recommended_actions": dict(self.recommended_actions),
             "skipped_count": self.skipped_count,
             "sample_audit_false_positives": self.sample_audit_false_positives,
+            "sample_audit_count": self.sample_audit_count,
             "false_positive_ratio": self.false_positive_ratio().to_dict(),
         }
 
@@ -185,3 +187,70 @@ __all__ = [
     "CacheMetricFacts",
     "PrescreenMetricFacts",
 ]
+
+
+def build_run_metrics(report: dict, *, kind: str) -> dict:
+    """Recompute derived metrics from saved facts; absent facts remain unknown.
+
+    This function neither increments counters nor trusts a previous metrics object.
+    Only numeric fields and fixed stage names are emitted, including for public reports.
+    """
+    def number(value):
+        return value if type(value) is int and value >= 0 else None
+
+    usage = report.get("usage") or {}
+    calls = report.get("calls")
+    stages = None
+    if isinstance(calls, list):
+        stages = {}
+        for call in calls:
+            if call.get("state") == "not_sent":
+                continue
+            stage = call.get("stage")
+            if stage not in {"planning", "clarification", "reflection", "evaluation", "initial", "review"}:
+                stage = "unspecified"
+            count = number((call.get("usage") or {}).get("attempts"))
+            prior = stages.get(stage, 0)
+            stages[stage] = prior + count if prior is not None and count is not None else None
+    completed = number(report.get("evaluated_count")) if kind == "finder" else None
+    if kind == "catalog" and isinstance(calls, list):
+        # Only terminal outcomes carry a decision; an initial response is not a
+        # completed evaluation when an independent review is still pending.
+        completed = len({c.get("skill_id") for c in calls if c.get("decision") and c.get("skill_id")})
+    model = {
+        "requests": number(usage.get("requests")), "stage_requests": stages,
+        "evaluation_attempts": number(report.get("evaluation_attempts" if kind == "finder" else "evaluations")),
+        "completed_evaluations": completed,
+        "known_prompt_tokens": number(usage.get("prompt_tokens")),
+        "known_completion_tokens": number(usage.get("completion_tokens")),
+        "known_total_tokens": number(usage.get("total_tokens")),
+        "unknown_usage_requests": number(usage.get("unknown_usage_requests")),
+        "format_failures": number(report.get("skipped_output_format")),
+        "length_exceeded_count": number(report.get("skipped_length_exceeded")),
+    }
+    search = report.get("search") or {}
+    queries = search.get("queries_executed")
+    requests = retries = raw_repos = None
+    if isinstance(queries, list):
+        if all("attempt" in q and q.get("error") != "request_interrupted" for q in queries):
+            requests = len(queries)
+        if all(number(q.get("attempt")) is not None for q in queries):
+            retries = sum(q["attempt"] > 1 for q in queries)
+        if all(number(q.get("repos_returned")) is not None for q in queries):
+            raw_repos = sum(q["repos_returned"] for q in queries)
+    shortlist = number(report.get("shortlist_count"))
+    skills = number(search.get("candidates_found"))
+    return {
+        "metrics_version": "1.0.0",
+        "search": {"http_requests": requests, "retries": retries,
+                   "repos_discovered_raw": raw_repos,
+                   "repos_deduped": number(search.get("repos_discovered")),
+                   "skills_deduped": skills, "shortlist_count": shortlist,
+                   "conversion_ratio": calc_ratio(shortlist, skills).to_dict()},
+        "model": model,
+        "cache": {"exact_hits": number(report.get("cached")),
+                  "normalized_potential_hits": None, "actual_reused": None},
+        "prescreen": {"skipped_count": number(report.get("prescreen_excluded")),
+                      "sample_audit_count": None, "sample_audit_false_positives": None,
+                      "false_positive_ratio": calc_ratio(None, None).to_dict()},
+    }

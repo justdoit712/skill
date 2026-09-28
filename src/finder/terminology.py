@@ -136,7 +136,7 @@ def _term_is_covered(term: str, queries: list[str]) -> bool:
     term_cf = term.casefold()
     for q in queries:
         q_cf = q.casefold()
-        if term_cf in q_cf or q_cf in term_cf:
+        if term_cf in q_cf:
             return True
     return False
 
@@ -176,7 +176,7 @@ def detect_terminology_gaps(
                 missing.append(alias)
 
         # 若存在未覆盖的核心别名（例如只有中文没有英文，或有缩写没有全称）
-        if missing and covered:
+        if missing:
             gaps.append(
                 {
                     "concept_id": concept.id,

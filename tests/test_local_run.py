@@ -97,8 +97,12 @@ class LocalRunTest(unittest.TestCase):
         self.assertEqual(report["evaluations"], 55)
         self.assertEqual(report["new_recommended"], 50)
         self.assertEqual(report["usage"]["total_tokens"], 5500)
+        self.assertEqual(report["metrics"]["model"]["requests"], report["usage"]["requests"])
+        self.assertEqual(report["metrics"]["model"]["completed_evaluations"], 55)
+        self.assertEqual(report["metrics"]["cache"]["exact_hits"], report["cached"])
         self.assertFalse((self.root / "data/state/budget.json").exists())
         text = Path(report["report_path"]).read_text(encoding="utf-8")
+        self.assertEqual(json.loads(text)["metrics"], report["metrics"])
         self.assertNotIn("test-secret-never-print", text)
         self.assertTrue(all(u.startswith("https://raw.githubusercontent.com/") for u in self.urls))
 

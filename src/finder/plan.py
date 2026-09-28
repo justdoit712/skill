@@ -10,7 +10,6 @@ import re
 from typing import Any
 
 from .terminology import (
-    TERMINOLOGY_VERSION,
     build_terminology_observation,
     deduplicate_queries,
     has_search_operator,
@@ -197,6 +196,15 @@ def parse_reflection_queries(content, previous):
         if has_search_operator(query):
             raise ValueError("反思关键词不得包含搜索操作符")
     return deduplicate_queries(data["queries"], previous=previous)
+
+
+def parse_plan_with_observation(content: str, *, topic: str):
+    """Normal execution and checkpoint recovery share the same audit derivation."""
+    plan = parse_query_plan(content, topic=topic)
+    raw = json.loads(_strip_fence(content))
+    observation = build_terminology_observation(
+        topic, plan["intent"], plan["queries"], raw_queries=list(raw["queries"]))
+    return plan, observation
 
 
 def build_clarification_question_prompt(
