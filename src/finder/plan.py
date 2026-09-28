@@ -191,14 +191,16 @@ def build_reflection_prompt(topic, plan, queries, evaluations):
 
 def parse_reflection_queries(content, previous):
     data = json.loads(_strip_fence(content))
-    if (not isinstance(data, dict) or set(data) != {"queries"}
-            or not isinstance(data["queries"], list) or not 3 <= len(data["queries"]) <= 5
-            or any(not isinstance(q, str) or not q.strip() or len(q) > 200 for q in data["queries"])):
+    if not isinstance(data, dict) or set(data) != {"queries"}:
+        raise ValueError("反思输出必须且仅能包含 queries 检索短语数组")
+    raw_queries = data["queries"]
+    if (not isinstance(raw_queries, list) or not 3 <= len(raw_queries) <= 5
+            or any(not isinstance(q, str) or not q.strip() or len(q) > 200 for q in raw_queries)):
         raise ValueError("反思输出必须仅包含 3 到 5 个非空检索短语")
-    for query in data["queries"]:
+    for query in raw_queries:
         if has_search_operator(query):
             raise ValueError("反思关键词不得包含搜索操作符")
-    return deduplicate_queries(data["queries"], previous=previous)
+    return deduplicate_queries(raw_queries, previous=previous)
 
 
 def parse_plan_with_observation(

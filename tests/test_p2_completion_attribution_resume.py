@@ -347,6 +347,70 @@ class TestResumeContractAndReportRendering(unittest.TestCase):
             self.assertEqual(report["plan"]["queries"], ["saved query 1", "saved query 2"])
             self.assertEqual(report["plan"]["intent"], "固定已存计划")
 
+    def test_resume_planning_phase_preserves_enable_completion_flag(self) -> None:
+        """Issue 4 回归测试：中断恢复未落盘 plan 但有 planning response 时，严格传入 enable_terminology_completion。"""
+        with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as tmp_str:
+            tmp_dir = Path(tmp_str)
+            run_dir = tmp_dir / "data" / "local" / "find-skills" / "20260928-test-plan-resume"
+            run_dir.mkdir(parents=True)
+
+            planning_content = json.dumps({
+                "intent": "网页爬取与数据提取",
+                "queries": ["网页爬取", "数据提取"],
+                "criteria": [{"id": "c1", "kind": "required", "description": "支持 HTTP 爬取"}],
+            })
+
+            fake_report = {
+                "schema_version": "1.1.0",
+                "run_id": "20260928-test-plan-resume",
+                "topic": "网页爬取与数据提取",
+                "status": "interrupted",
+                "parameters": {
+                    "limit": 5,
+                    "max_rounds": 1,
+                    "enable_terminology_completion": True,
+                },
+                "plan": None,  # 计划尚未持久化
+                "calls": [
+                    {
+                        "stage": "planning",
+                        "response": {
+                            "ok": True,
+                            "content": planning_content,
+                        },
+                    }
+                ],
+                "search": {
+                    "round": 0,
+                    "queries_executed": [],
+                    "query_yield": {},
+                },
+                "evaluations": [],
+            }
+            (run_dir / "report.json").write_text(json.dumps(fake_report, ensure_ascii=False), encoding="utf-8")
+
+            report = execute_find_skill(
+                topic="网页爬取与数据提取",
+                root_dir=tmp_dir,
+                resume_dir=run_dir,
+                enable_terminology_completion=True,
+                model_cfg={
+                    "endpoint": "https://fake.invalid",
+                    "model": "fake",
+                    "auth": {"api_key": "fake"},
+                },
+                search_github_repos_fn=lambda *_, **__: (True, [], None),
+                expand_and_collect_candidates_fn=lambda *_, **__: ([], []),
+                fetch_candidate_materials_fn=lambda *_, **__: {},
+                owned_ids=set(),
+            )
+
+            # 恢复出的规划必须成功启用了术语补全，且补充了英文术语短语
+            self.assertIsNotNone(report.get("plan"))
+            self.assertTrue(report["plan"].get("terminology_completion_enabled"))
+            self.assertIn("web scraping", report["plan"]["queries"])
+            self.assertTrue(report.get("terminology_observation", {}).get("applied"))
+
     def test_report_and_projection_display_query_yield(self) -> None:
         report = {
             "schema_version": "1.1.0",

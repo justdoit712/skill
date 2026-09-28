@@ -599,7 +599,11 @@ def execute_find_skill(topic="", *, limit=None, max_evaluations=None, max_tokens
             if not state.report.get("plan") and last.get("stage") == "planning" and last.get("response"):
                 result = last["response"]
                 if result.get("ok") and result.get("content"):
-                    state.report["plan"], state.report["terminology_observation"] = parse_plan_with_observation(result["content"], topic=topic)
+                    state.report["plan"], state.report["terminology_observation"] = parse_plan_with_observation(
+                        result["content"],
+                        topic=topic,
+                        enable_completion=params["enable_terminology_completion"],
+                    )
         if state.stop_reason():
             raise RunStopped(state.stop_reason())
         plan = state.report.get("plan")
