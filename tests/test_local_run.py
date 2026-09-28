@@ -53,7 +53,9 @@ class LocalRunTest(unittest.TestCase):
         self.cfg = load_all_config(self.root / "config")
         self.cfg["model"].update(endpoint="https://fake.invalid/v1/chat/completions", model="test-model")
         self.cfg["model"]["auth"] = {"api_key": "test-secret-never-print", "api_key_env": "SKILL_TEST_UNUSED_KEY"}
-        self.settings = {"target_recommended": 2, "max_total_tokens": 100000000,
+        # Keep order-sensitive serial policy tests; fixed-two integration tests
+        # remove this override in test_catalog_parallel.py.
+        self.settings = {"parallel_evaluation": False, "target_recommended": 2, "max_total_tokens": 100000000,
                          "max_evaluations": None, "limit_queries": 0,
                          "expand_limit": None, "max_consecutive_failures": 3, "max_retries": 0}
         self.calls = []

@@ -26,6 +26,7 @@ from src.shared.materials import validate_document, primary_material_bundle
 from src.shared.owned import is_skill_owned
 from .store import catalog_task
 from .budget import BudgetLedger, evaluation_filename
+from .parallel import TwoCandidateScheduler
 from .config import load_all_config, precheck
 from .decide import decide
 from .dedupe import content_fingerprint, dedupe
@@ -635,6 +636,8 @@ def _evaluate_with_retries(state, candidate, text, eid, record):
     attempt_limit = int(record.get('max_attempts') or state.max_attempts)
     initial_attempts = int(record.get('attempts') or 0)
     for index in range(initial_attempts, attempt_limit):
+        if hasattr(state, 'wait_for_budget') and not state.wait_for_budget():
+            break
         if state.report['budget_tokens'] >= state.settings['max_total_tokens']:
             state.stop_causes.add(STOP_TOKEN_LIMIT)
             state.report['stop_reason'] = resolve_primary_stop_reason(state.stop_causes)
@@ -653,6 +656,8 @@ def _evaluate_with_retries(state, candidate, text, eid, record):
         def on_request(event, stage, request_call):
             if event == 'before':
                 if stage == 'review':
+                    if state.report.get('stop_reason'):
+                        return False
                     if state.report['budget_tokens'] >= state.settings['max_total_tokens']:
                         state.stop_causes.add(STOP_TOKEN_LIMIT)
                         state.report['stop_reason'] = resolve_primary_stop_reason(state.stop_causes)
@@ -967,6 +972,10 @@ def process_candidate(state, item):
         state.save()
         return True
     norm_fp = candidate.normalized_content_fingerprint or normalized_content_fingerprint(text)
+    if hasattr(state, 'wait_for_budget'):
+        state.unknown_reserve = _unknown_usage_reserve(candidate, text, state.cfg)
+        if not state.wait_for_budget():
+            return False
     state.ledger.reserve([{
         'evaluation_id': eid,
         'skill_id': candidate.skill_id,
@@ -1252,8 +1261,10 @@ def _collect(root, local, settings, cfg, discover_fn, fetch_fn, evaluate_fn, log
         owned_ids=owned_ids, skipped_owned_ids=skipped_owned_ids,
     )
     try:
+        state.report['evaluation_threads'] = 2 if settings.get('parallel_evaluation', True) else 1
         state.save()
         state.log(f"目标：新增 {state.settings['target_recommended']} 个推荐技能；上限 {state.settings['max_total_tokens']:,} Token。")
+        state.log(f"评估并发：{state.report['evaluation_threads']} 个候选；账本与结果串行写入。")
         state.pool = prepare_pool(state.root, state.local, state.cfg, state.settings, state.old_recommended, discover_fn=state.discover_fn, sleep=state.sleep, log=state.log, report=state.report)
         state.report['discovered'] = len(state.pool)
         state.report['blocked_total'] = state.pool.stats().get('blocked', 0)
@@ -1299,12 +1310,15 @@ def _collect(root, local, settings, cfg, discover_fn, fetch_fn, evaluate_fn, log
             else:
                 prioritized_chunk = chunk
 
-            stopped = False
-            for item in prioritized_chunk:
-                state.pending_items.append(item)
-                if not process_candidate(state, item):
-                    stopped = True
-                    break
+            if settings.get('parallel_evaluation', True):
+                stopped = not TwoCandidateScheduler(state, process_candidate).run(prioritized_chunk)
+            else:
+                stopped = False
+                for item in prioritized_chunk:
+                    state.pending_items.append(item)
+                    if not process_candidate(state, item):
+                        stopped = True
+                        break
             if stopped:
                 break
         if state.report['new_recommended'] >= state.settings['target_recommended']:
