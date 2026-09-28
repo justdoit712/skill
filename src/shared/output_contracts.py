@@ -21,76 +21,126 @@ STAGE_FINDER_CLARIFY = "finder_clarify"
 STAGE_FINDER_REFLECT = "finder_reflect"
 STAGE_FINDER_EVALUATION = "finder_evaluation"
 
+# 1. 目录基础与深度评估检查项模式
+_CATALOG_CHECK_ITEM_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "value": {
+            "type": "string",
+            "enum": ["pass", "fail", "unknown", "not_applicable"],
+            "description": "判定结果",
+        },
+        "evidence": {
+            "type": "string",
+            "description": "判定理由与事实依据",
+        },
+        "citations": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "start_line": {"type": "integer"},
+                    "end_line": {"type": "integer"},
+                    "quote": {"type": "string"},
+                },
+                "required": ["start_line", "end_line", "quote"],
+                "additionalProperties": False,
+            },
+            "description": "逐行核验原文引用",
+        },
+    },
+    "required": ["value", "evidence"],
+    "additionalProperties": False,
+}
+
+# 目录评估统一输出结构定义（初评与独立复核共用顶层结构）
+_CATALOG_EVALUATION_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "scope_match": _CATALOG_CHECK_ITEM_SCHEMA,
+        "purpose_clarity": _CATALOG_CHECK_ITEM_SCHEMA,
+        "instruction_completeness": _CATALOG_CHECK_ITEM_SCHEMA,
+        "evidence_traceability": _CATALOG_CHECK_ITEM_SCHEMA,
+        "dependency_transparency": _CATALOG_CHECK_ITEM_SCHEMA,
+        "risk_review": _CATALOG_CHECK_ITEM_SCHEMA,
+        "quality_checks": {
+            "type": "object",
+            "properties": {
+                "practical_value": _CATALOG_CHECK_ITEM_SCHEMA,
+                "actionability": _CATALOG_CHECK_ITEM_SCHEMA,
+                "verification": _CATALOG_CHECK_ITEM_SCHEMA,
+            },
+            "required": ["practical_value", "actionability", "verification"],
+            "additionalProperties": False,
+        },
+        "domain_checks": {
+            "type": "object",
+            "description": "领域专项检查",
+            "additionalProperties": True,
+        },
+        "summary_zh": {"type": "string", "description": "客观中文简述"},
+        "skill_type": {
+            "type": ["string", "null"],
+            "enum": ["tool_script", "guideline", "template", "reference", None],
+            "description": "技能实质形态",
+        },
+        "example_requests": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "用户示例请求（最多2条）",
+        },
+        "key_features": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "核心亮点（最多3条）",
+        },
+        "main_category": {"type": "string", "description": "主分类名称或ID"},
+        "tags": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "用途标签",
+        },
+        "platform_declared": {
+            "type": ["string", "null"],
+            "description": "声明的运行平台",
+        },
+        "dependencies_declared": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "声明的外部依赖",
+        },
+        "limitations": {
+            "type": ["string", "null"],
+            "description": "主要限制",
+        },
+        "reason_codes": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "命中原因码列表",
+        },
+    },
+    "required": [
+        "scope_match",
+        "purpose_clarity",
+        "instruction_completeness",
+        "evidence_traceability",
+        "dependency_transparency",
+        "risk_review",
+        "domain_checks",
+        "summary_zh",
+        "main_category",
+        "reason_codes",
+    ],
+    "additionalProperties": True,
+}
+
 # 1. 目录主评估契约 (Catalog Assessment)
 CATALOG_ASSESSMENT_CONTRACT = {
     "type": "json_schema",
     "json_schema": {
         "name": "catalog_assessment",
         "strict": True,
-        "schema": {
-            "type": "object",
-            "properties": {
-                "name": {"type": "string", "description": "技能名称"},
-                "summary_zh": {"type": "string", "description": "技能中文简述，客观事实陈述"},
-                "main_category": {"type": "string", "description": "主分类名称"},
-                "confidence": {"type": "number", "description": "模型自评估置信度 0.0-1.0"},
-                "reason_codes": {
-                    "type": "array",
-                    "items": {"type": "string"},
-                    "description": "命中原因码列表",
-                },
-                "risk_review": {
-                    "type": "object",
-                    "properties": {
-                        "verdict": {"type": "string", "enum": ["pass", "fail", "unknown"]},
-                        "explanation": {"type": "string"},
-                    },
-                    "required": ["verdict", "explanation"],
-                    "additionalProperties": False,
-                },
-                "checks": {
-                    "type": "object",
-                    "description": "各维度检查项判定及证据",
-                    "additionalProperties": {
-                        "type": "object",
-                        "properties": {
-                            "verdict": {"type": "string", "enum": ["pass", "fail", "unknown"]},
-                            "evidence": {
-                                "type": "object",
-                                "properties": {
-                                    "source_path": {"type": "string"},
-                                    "start_line": {"type": "integer"},
-                                    "end_line": {"type": "integer"},
-                                    "quote": {"type": "string"},
-                                },
-                                "required": ["source_path", "start_line", "end_line", "quote"],
-                                "additionalProperties": False,
-                            },
-                        },
-                        "required": ["verdict", "evidence"],
-                        "additionalProperties": False,
-                    },
-                },
-                "skill_type": {"type": "string", "description": "技能形态"},
-                "example_requests": {
-                    "type": "array",
-                    "items": {"type": "string"},
-                    "description": "示例请求列表",
-                },
-                "key_features": {
-                    "type": "array",
-                    "items": {"type": "string"},
-                    "description": "核心亮点列表",
-                },
-                "limitations": {
-                    "type": "array",
-                    "items": {"type": "string"},
-                    "description": "限制列表",
-                },
-            },
-            "required": ["name", "summary_zh", "main_category", "checks", "risk_review"],
-            "additionalProperties": True,
-        },
+        "schema": _CATALOG_EVALUATION_SCHEMA,
     },
 }
 
@@ -100,29 +150,7 @@ CATALOG_REVIEW_CONTRACT = {
     "json_schema": {
         "name": "catalog_review",
         "strict": True,
-        "schema": {
-            "type": "object",
-            "properties": {
-                "reviewer_verdict": {
-                    "type": "string",
-                    "enum": ["agree", "disagree"],
-                    "description": "复核意见",
-                },
-                "disagreements": {
-                    "type": "array",
-                    "items": {"type": "string"},
-                    "description": "存在分歧的检查项标识",
-                },
-                "review_notes": {"type": "string", "description": "复核理由与证据核查说明"},
-                "risk_findings": {
-                    "type": "array",
-                    "items": {"type": "string"},
-                    "description": "额外发现的风险点",
-                },
-            },
-            "required": ["reviewer_verdict", "disagreements", "review_notes"],
-            "additionalProperties": False,
-        },
+        "schema": _CATALOG_EVALUATION_SCHEMA,
     },
 }
 
@@ -171,24 +199,16 @@ FINDER_CLARIFY_CONTRACT = {
         "schema": {
             "type": "object",
             "properties": {
-                "need_clarification": {"type": "boolean", "description": "是否需要澄清"},
-                "clarification_brief": {"type": "string", "description": "澄清理由与上下文"},
-                "questions": {
+                "focus": {"type": "string", "description": "本次提问聚焦的维度"},
+                "question": {"type": "string", "description": "面向用户的定向提问"},
+                "options": {
                     "type": "array",
-                    "items": {
-                        "type": "object",
-                        "properties": {
-                            "question": {"type": "string"},
-                            "options": {"type": "array", "items": {"type": "string"}},
-                            "default_assumption": {"type": "string"},
-                        },
-                        "required": ["question", "options"],
-                        "additionalProperties": False,
-                    },
-                    "description": "澄清问题列表",
+                    "items": {"type": "string"},
+                    "description": "建议的选项列表",
                 },
+                "summary": {"type": "string", "description": "已明确信息的简要概括"},
             },
-            "required": ["need_clarification"],
+            "required": ["focus", "question", "options"],
             "additionalProperties": True,
         },
     },
@@ -203,15 +223,15 @@ FINDER_REFLECT_CONTRACT = {
         "schema": {
             "type": "object",
             "properties": {
-                "analysis": {"type": "string", "description": "本轮检索质量与覆盖分析"},
-                "stop": {"type": "boolean", "description": "是否应当停止检索"},
-                "adjusted_queries": {
+                "queries": {
                     "type": "array",
                     "items": {"type": "string"},
-                    "description": "调整后的补充检索短语",
+                    "minItems": 3,
+                    "maxItems": 5,
+                    "description": "3 到 5 个反思调整后的检索短语",
                 },
             },
-            "required": ["analysis", "stop", "adjusted_queries"],
+            "required": ["queries"],
             "additionalProperties": False,
         },
     },

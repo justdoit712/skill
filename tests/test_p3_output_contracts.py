@@ -26,7 +26,9 @@ from src.shared.output_contracts import (
     resolve_response_format,
 )
 from src.catalog.evaluation import parse_evaluation, OutputSchemaError, OutputJsonError
-from src.finder.plan import parse_query_plan
+from src.catalog.quality import check_quality
+from src.finder.plan import parse_query_plan, parse_reflection_queries, parse_clarification_question
+from src.finder.evaluation import parse_skill_evaluation
 
 
 class TestOutputContracts(unittest.TestCase):
@@ -210,6 +212,139 @@ class TestOutputContracts(unittest.TestCase):
         invalid_plan_json = json.dumps({"intent": "test", "queries": ["q1"]})
         with self.assertRaises(ValueError):
             parse_query_plan(invalid_plan_json)
+
+    def test_catalog_assessment_and_review_conforming_payload(self):
+        """测试符合 CATALOG_ASSESSMENT_CONTRACT 与 CATALOG_REVIEW_CONTRACT 的载荷能被真实解析器成功解析与核验。"""
+        text = "# Sample Skill\nProvides code generation."
+        rules = {
+            "rules_version": "1.0.0",
+            "checks": [
+                {"id": "scope_match"},
+                {"id": "purpose_clarity"},
+                {"id": "instruction_completeness"},
+                {"id": "evidence_traceability"},
+                {"id": "dependency_transparency"},
+                {"id": "risk_review"},
+            ],
+            "quality_review": {"enabled": True},
+        }
+        taxonomy = {"main_categories": [{"id": "dev", "name": "编程开发"}]}
+
+        payload = {
+            "scope_match": {"value": "pass", "evidence": "属于编程开发收录范围", "citations": [{"start_line": 1, "end_line": 1, "quote": "# Sample Skill"}]},
+            "purpose_clarity": {"value": "pass", "evidence": "用途明确", "citations": [{"start_line": 1, "end_line": 1, "quote": "# Sample Skill"}]},
+            "instruction_completeness": {"value": "pass", "evidence": "包含说明", "citations": [{"start_line": 2, "end_line": 2, "quote": "Provides code generation."}]},
+            "evidence_traceability": {"value": "pass", "evidence": "内容一致", "citations": [{"start_line": 1, "end_line": 1, "quote": "# Sample Skill"}]},
+            "dependency_transparency": {"value": "pass", "evidence": "无特殊依赖", "citations": [{"start_line": 1, "end_line": 1, "quote": "# Sample Skill"}]},
+            "risk_review": {"value": "pass", "evidence": "未见明显风险", "citations": [{"start_line": 1, "end_line": 1, "quote": "# Sample Skill"}]},
+            "domain_checks": {},
+            "quality_checks": {
+                "practical_value": {"value": "pass", "evidence": "实际价值清晰", "citations": [{"start_line": 1, "end_line": 1, "quote": "# Sample Skill"}]},
+                "actionability": {"value": "pass", "evidence": "可直接执行", "citations": [{"start_line": 2, "end_line": 2, "quote": "Provides code generation."}]},
+                "verification": {"value": "pass", "evidence": "提供输出验证", "citations": [{"start_line": 2, "end_line": 2, "quote": "Provides code generation."}]},
+            },
+            "summary_zh": "这是一个用于代码生成的实用技能示例。",
+            "main_category": "编程开发",
+            "skill_type": "tool_script",
+            "example_requests": ["生成一个快速排序脚本"],
+            "key_features": ["自动化代码生成"],
+            "tags": ["python", "codegen"],
+            "reason_codes": [],
+        }
+
+        # 1. 模拟主评估阶段解析
+        parsed = parse_evaluation(json.dumps(payload), rules, "fp_test", taxonomy)
+        self.assertEqual(parsed["main_category"], "dev")
+        self.assertEqual(parsed["summary_zh"], "这是一个用于代码生成的实用技能示例。")
+        self.assertEqual(parsed["skill_type"], "tool_script")
+
+        # 2. 模拟质量核验
+        verified = check_quality(parsed, text, rules)
+        self.assertEqual(verified["quality_audit"]["review_status"], "not_required")
+        self.assertEqual(len(verified["quality_audit"]["invalid_citations"]), 0)
+
+        # 3. 模拟独立复核阶段解析（生产中走相同的 parse_evaluation + check_quality 链路）
+        review_parsed = parse_evaluation(json.dumps(payload), rules, "fp_test", taxonomy)
+        review_verified = check_quality(review_parsed, text, rules)
+        self.assertEqual(review_verified["scope_match"]["value"], "pass")
+
+    def test_finder_reflect_conforming_payload(self):
+        """测试符合 FINDER_REFLECT_CONTRACT 的载荷被 parse_reflection_queries 正确解析。"""
+        payload = {
+            "queries": [
+                "python ast refactoring tool",
+                "code analysis assistant",
+                "automated test generator",
+            ]
+        }
+        res = parse_reflection_queries(json.dumps(payload), previous=["initial query"])
+        self.assertEqual(len(res), 3)
+        self.assertIn("python ast refactoring tool", res)
+
+    def test_finder_clarify_conforming_payload(self):
+        """测试符合 FINDER_CLARIFY_CONTRACT 的载荷被 parse_clarification_question 正确解析。"""
+        payload = {
+            "focus": "技术栈与目标语言",
+            "question": "请问您期望该技能支持哪种编程语言？",
+            "options": ["Python", "TypeScript", "Go / Rust", "通用不限"],
+            "summary": "已明确需要代码分析与重构工具",
+        }
+        res = parse_clarification_question(json.dumps(payload))
+        self.assertEqual(res["focus"], "技术栈与目标语言")
+        self.assertEqual(res["question"], "请问您期望该技能支持哪种编程语言？")
+        self.assertEqual(len(res["options"]), 4)
+        self.assertEqual(res["summary"], "已明确需要代码分析与重构工具")
+
+    def test_finder_plan_and_evaluation_conforming_payloads(self):
+        """测试符合 FINDER_PLAN_CONTRACT 与 FINDER_EVALUATION_CONTRACT 的载荷被真实解析器成功解析。"""
+        # 1. Plan 契约
+        plan_payload = {
+            "intent": "查找代码重构与质量分析技能",
+            "queries": ["code refactor tool", "ast refactoring python", "clean code analysis"],
+            "criteria": [
+                {"id": "ast_support", "kind": "required", "description": "支持基于 AST 的语法树分析与转换"},
+                {"id": "type_check", "kind": "quality_signal", "description": "具备类型检查辅助能力"},
+            ],
+        }
+        plan_res = parse_query_plan(json.dumps(plan_payload), topic="代码重构")
+        self.assertEqual(plan_res["intent"], "查找代码重构与质量分析技能")
+        self.assertEqual(len(plan_res["criteria"]), 2)
+
+        # 2. Evaluation 契约
+        eval_payload = {
+            "match": "strong",
+            "summary_zh": "功能强大的 AST 重构与代码清理技能",
+            "criteria_results": [
+                {
+                    "criterion_id": "ast_support",
+                    "status": "supported",
+                    "explanation": "明确支持 AST 分析",
+                    "evidence": [
+                        {
+                            "source_path": "SKILL.md",
+                            "start_line": 1,
+                            "end_line": 2,
+                            "quote": "Supports AST refactoring for python projects.",
+                        }
+                    ],
+                },
+                {
+                    "criterion_id": "type_check",
+                    "status": "supported",
+                    "explanation": "集成 mypy 检查",
+                    "evidence": [],
+                },
+            ],
+            "documentation": "clear",
+            "usage_zh": "运行 python -m refactor 进行批量清理",
+            "dependencies": ["mypy", "libcst"],
+            "limitations": ["目前仅支持 Python 3.10+"],
+            "why_consider": "直接利用 AST 避免正则替换的副作用",
+        }
+        eval_res = parse_skill_evaluation(json.dumps(eval_payload), plan_res["criteria"])
+        self.assertEqual(eval_res["match"], "strong")
+        self.assertEqual(eval_res["documentation"], "clear")
+        self.assertEqual(len(eval_res["criteria_results"]), 2)
 
 
 if __name__ == "__main__":
