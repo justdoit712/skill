@@ -214,6 +214,13 @@ def _sanitize_card(item: dict[str, Any]) -> dict[str, Any]:
                     "end_line": e.get("end_line"),
                     "quote": str(e.get("quote") or ""),
                 }
+                if e.get("original_start_line") is not None:
+                    ev_obj["original_start_line"] = e.get("original_start_line")
+                    ev_obj["original_end_line"] = e.get("original_end_line")
+                if e.get("match_method"):
+                    ev_obj["match_method"] = str(e["match_method"])
+                if e.get("verifier_version"):
+                    ev_obj["verifier_version"] = str(e["verifier_version"])
                 ev_items.append(ev_obj)
                 if c_status == STATUS_SUPPORTED and ev_obj["quote"]:
                     verified_evidence.append(ev_obj)

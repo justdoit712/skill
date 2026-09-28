@@ -15,7 +15,11 @@ import re
 from typing import Any
 
 from src.shared.schema import normalize_string_list
-from .evidence import verify_evidence_snippet
+from .evidence import (
+    DEFAULT_MAX_DRIFT_LINES,
+    verify_evidence_snippet,
+    verify_single_evidence,
+)
 from .plan import (
     KIND_QUALITY_SIGNAL,
     KIND_REQUIRED,
@@ -218,13 +222,17 @@ def verify_and_adjust_evaluation(
     evaluation: dict[str, Any],
     materials: dict[str, str],
     plan_criteria: list[dict[str, Any]],
+    *,
+    allow_drift: bool = True,
+    max_drift: int = DEFAULT_MAX_DRIFT_LINES,
 ) -> dict[str, Any]:
     """对单技能评估结果执行严格的客观证据核对与匹配度判定调整。
 
     约束（产品规范 §12.3）：
     1. supported 必须有通过核验的真实证据。未通过证据核验的强制降为 unknown；
-    2. 所有 required 准则必须全部通过且有有效证据，才允许判定为 strong；
-    3. 只要有任何 required 准则为 unsupported 或降为 unknown，强制降为 partial（或 none）。
+    2. 支持合法行号在同文件有限邻近范围内（+-max_drift 行）进行精确引文修复，记录实际位置与修复方式；
+    3. 所有 required 准则必须全部通过且有有效证据，才允许判定为 strong；
+    4. 只要有任何 required 准则为 unsupported 或降为 unknown，强制降为 partial（或 none）。
     """
     res = copy.deepcopy(evaluation)
     criteria_map = {c["id"]: c for c in plan_criteria}
@@ -235,25 +243,37 @@ def verify_and_adjust_evaluation(
         status = cr["status"]
         evidence_list = cr.get("evidence", [])
         verified_ev: list[dict[str, Any]] = []
+        failure_reasons: list[str] = []
 
         if status == STATUS_SUPPORTED:
             for ev in evidence_list:
-                ok, reason = verify_evidence_snippet(
-                    ev.get("source_path", ""),
-                    ev.get("start_line", 0),
-                    ev.get("end_line", 0),
-                    ev.get("quote", ""),
+                v_res = verify_single_evidence(
+                    ev,
                     materials,
+                    allow_drift=allow_drift,
+                    max_drift=max_drift,
                 )
-                if ok:
-                    verified_ev.append(ev)
+                if v_res.is_valid:
+                    ev_item = dict(ev)
+                    ev_item["start_line"] = v_res.start_line
+                    ev_item["end_line"] = v_res.end_line
+                    ev_item["original_start_line"] = v_res.original_start_line
+                    ev_item["original_end_line"] = v_res.original_end_line
+                    ev_item["original_quote"] = v_res.original_quote
+                    ev_item["match_method"] = v_res.match_method
+                    ev_item["verifier_version"] = v_res.verifier_version
+                    verified_ev.append(ev_item)
+                else:
+                    if v_res.failure_reason:
+                        failure_reasons.append(v_res.failure_reason)
 
             # 没有一条有效证据，强制降级为 unknown
             if not verified_ev:
                 status = STATUS_UNKNOWN
                 expl = cr.get("explanation", "")
+                reason_detail = f"：{failure_reasons[0]}" if failure_reasons else "：提供的行号或原文引文与实际抓取材料不符"
                 cr["explanation"] = (
-                    f"{expl} [证据核验未通过：提供的行号或原文引文与实际抓取材料不符，降级为 unknown]"
+                    f"{expl} [证据核验未通过{reason_detail}，降级为 unknown]"
                 ).strip()
 
         adjusted_cr = dict(cr)
