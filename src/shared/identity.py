@@ -10,6 +10,7 @@ import re
 from urllib.parse import urlparse
 
 from .models import CandidateIdentity
+from .normalization import normalized_content_fingerprint
 
 _GITHUB_HOSTS = {"github.com", "www.github.com"}
 _BLOB_KINDS = {"blob", "tree", "raw"}
@@ -91,6 +92,9 @@ def dedupe_identities(identities: list[CandidateIdentity]) -> list[CandidateIden
         kept.url = kept.url or item.url
         kept.repo_url = kept.repo_url or item.repo_url
         kept.content_fingerprint = kept.content_fingerprint or item.content_fingerprint
+        kept.normalized_content_fingerprint = (
+            kept.normalized_content_fingerprint or item.normalized_content_fingerprint
+        )
         if not kept.discovered_at or (item.discovered_at and item.discovered_at < kept.discovered_at):
             kept.discovered_at = item.discovered_at or kept.discovered_at
 
@@ -111,6 +115,7 @@ def candidate_from_repo(
     search_term: str = "",
     discovered_at: str = "",
     content_fingerprint: str | None = None,
+    normalized_content_fingerprint: str | None = None,
 ) -> CandidateIdentity:
     """由仓库信息构造中性候选身份，稳定 ID 与基本属性一并填好。"""
     return CandidateIdentity(
@@ -124,6 +129,7 @@ def candidate_from_repo(
         description=description,
         discovered_at=discovered_at,
         content_fingerprint=content_fingerprint,
+        normalized_content_fingerprint=normalized_content_fingerprint,
     )
 
 
@@ -131,6 +137,7 @@ __all__ = [
     "parse_github_url",
     "make_skill_id",
     "content_fingerprint",
+    "normalized_content_fingerprint",
     "dedupe_identities",
     "candidate_from_repo",
 ]

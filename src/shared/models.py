@@ -22,6 +22,7 @@ class CandidateIdentity:
     description: str = ""
     discovered_at: str = ""
     content_fingerprint: str | None = None
+    normalized_content_fingerprint: str | None = None
 
 
 # 中性候选别名，兼容只需要基础身份字段的非目录模块

@@ -50,6 +50,12 @@ from .evaluation import (
 )
 from src.infra.http import fetch_text
 from src.infra.llm import REASON_LENGTH_EXCEEDED
+from src.shared.normalization import (
+    NORMALIZATION_VERSION,
+    create_reuse_audit,
+    inspect_record_for_normalized_reuse,
+    normalized_content_fingerprint,
+)
 from src.shared.runtime import is_test_environment
 from src.shared.usage import UsageTotals
 from .index import CatalogContext, build_catalog, build_entry, index_by_id
@@ -175,6 +181,77 @@ def _record_static_observation(report: dict[str, Any], observation: dict[str, An
     sh['suggested_actions'][action] = sh['suggested_actions'].get(action, 0) + 1
     for sig in observation.get('signals', []):
         sh['signal_counts'][sig] = sh['signal_counts'].get(sig, 0) + 1
+
+
+def find_normalized_candidate_record(
+    state: Any,
+    candidate: Any,
+    text: str,
+) -> tuple[dict | None, str | None]:
+    """在账本与历史评估中查找符合受限规范化复用条件的候选记录。
+
+    严格遵循 P4 契约：
+    1. 首版仅支持换行编码等价（CRLF / CR -> LF）；
+    2. 无可信辅助指纹时不反推历史辅助指纹；
+    3. 严格核对规则版本、模型配置版本、完成态及无未知用量；
+    4. 重新核验初评与复核中引用的全部原文证据。
+    """
+    current_norm_fp = getattr(candidate, "normalized_content_fingerprint", None) or normalized_content_fingerprint(text)
+    if not current_norm_fp:
+        return None, "no_current_fingerprint"
+
+    # 构建/获取账本及历史评估索引
+    if not hasattr(state, "_skill_eval_records_index") or state._skill_eval_records_index is None:
+        index: dict[str, list[dict]] = {}
+        eval_dirs = []
+        if hasattr(state, "ledger") and hasattr(state.ledger, "evaluations_dir"):
+            eval_dirs.append(state.ledger.evaluations_dir)
+        root_eval_dir = state.root / "data" / "state" / "evaluations"
+        if root_eval_dir.exists() and root_eval_dir not in eval_dirs:
+            eval_dirs.append(root_eval_dir)
+        for ed in eval_dirs:
+            if ed.exists():
+                for p in ed.glob("*.json"):
+                    try:
+                        rec = json.loads(p.read_text(encoding="utf-8"))
+                        sid = rec.get("skill_id")
+                        if sid:
+                            index.setdefault(sid, []).append(rec)
+                    except Exception:
+                        continue
+        state._skill_eval_records_index = index
+
+    candidate_records = list(state._skill_eval_records_index.get(candidate.skill_id, []))
+    if not candidate_records:
+        return None, "no_history_records"
+
+    expected_rules_v = str(state.cfg.get("rules", {}).get("rules_version") or "")
+    expected_model_cfg_v = str(state.cfg.get("model", {}).get("model_config_version") or "")
+
+    last_rejection_reason = "no_matching_candidate"
+    for rec in candidate_records:
+        rec_norm_fp = rec.get("normalized_content_fingerprint")
+        if not rec_norm_fp:
+            docs = (rec.get("outcome") or {}).get("materials", {}).get("documents") or []
+            if docs and isinstance(docs, list) and isinstance(docs[0], dict):
+                rec_norm_fp = docs[0].get("normalized_fingerprint")
+
+        # 核心保证：不反推旧记录辅助指纹，无辅助指纹则不命中
+        if not rec_norm_fp or rec_norm_fp != current_norm_fp:
+            continue
+
+        ok, reason = inspect_record_for_normalized_reuse(
+            rec,
+            text,
+            expected_rules_version=expected_rules_v,
+            expected_model_config_version=expected_model_cfg_v,
+        )
+        if ok:
+            return rec, None
+        else:
+            last_rejection_reason = reason
+
+    return None, last_rejection_reason
 
 
 def prepare_pool(
@@ -390,6 +467,14 @@ def save_and_render(
     lines.extend([
         f"- 本次新增推荐：{report['new_recommended']} / {settings['target_recommended']}",
         f"- 评估次数：{report['evaluations']}；复用已有评估：{report['cached']}",
+    ])
+    if report.get("cache_observation"):
+        c_obs = report["cache_observation"]
+        status_text = "已启用" if c_obs.get("enabled") else "观察模式"
+        lines.append(
+            f"- 规范化缓存：潜在命中 {c_obs.get('potential_hits', 0)} 条，实际复用 {c_obs.get('actual_reused', 0)} 条（{status_text}）"
+        )
+    lines.extend([
         f"- 请求次数（含重试）：{usage.requests}；失败请求：{report['failed_requests']}",
         f"- 已知输入 Token：{usage.prompt_tokens:,}",
         f"- 已知输出 Token：{usage.completion_tokens:,}",
@@ -503,6 +588,7 @@ class LocalCollection:
     format_failures: int = 0
     max_format_failures: int = 10
     stop_causes: set = field(default_factory=set)
+    _skill_eval_records_index: Any = None
 
     def save(self):
         save_and_render(self.run_dir, self.local, self.report, self.pool, self.usage,
@@ -735,6 +821,7 @@ def process_candidate(state, item):
         return True
     text = fetched.text
     candidate.content_fingerprint = content_fingerprint(text)
+    candidate.normalized_content_fingerprint = normalized_content_fingerprint(text)
     pres = prescreen(candidate, state.cfg['prescreen'], text)
     _record_static_observation(state.report, pres.static_observation)
     if pres.excluded:
@@ -773,6 +860,60 @@ def process_candidate(state, item):
         save_pool(state.pool_path, state.pool)
         state.save()
         return True
+
+    # 受限规范化缓存复用与观察检查 (Unit 9 / P4)
+    cache_obs = state.report.setdefault("cache_observation", {
+        "version": NORMALIZATION_VERSION,
+        "enabled": False,
+        "observed_count": 0,
+        "potential_hits": 0,
+        "actual_reused": 0,
+        "rejection_reasons": {},
+    })
+    enable_norm_cache = bool(
+        state.settings.get("enable_normalized_cache", False)
+        or state.cfg.get("rules", {}).get("cache", {}).get("enable_normalized_reuse", False)
+    )
+    cache_obs["enabled"] = enable_norm_cache
+
+    norm_record, norm_rejection = find_normalized_candidate_record(state, candidate, text)
+    if norm_record is not None:
+        cache_obs["observed_count"] += 1
+        cache_obs["potential_hits"] += 1
+        if enable_norm_cache:
+            cache_obs["actual_reused"] += 1
+            state.report["cached"] += 1
+            reuse_audit = create_reuse_audit(norm_record, text, exact_match=False)
+            reused_outcome = dict(norm_record["outcome"]) if isinstance(norm_record["outcome"], dict) else {}
+            reused_outcome["cached"] = True
+            reused_outcome["reuse_audit"] = reuse_audit
+            state.publish(candidate, pres, reused_outcome)
+            update_candidate_status(state.pool, seq, STATUS_DONE)
+            save_pool(state.pool_path, state.pool)
+            state.ledger.reserve([{
+                "evaluation_id": eid,
+                "skill_id": candidate.skill_id,
+                "content_fingerprint": candidate.content_fingerprint,
+                "normalized_content_fingerprint": candidate.normalized_content_fingerprint,
+                "normalization_version": NORMALIZATION_VERSION,
+                "rules_version": state.cfg["rules"]["rules_version"],
+                "model_config_version": state.cfg["model"].get("model_config_version"),
+            }])
+            state.ledger.complete(eid, reused_outcome)
+            state.log(
+                f"[受限规范化复用] #{seq} {candidate.skill_id}：成功复用历史评估（来源：{norm_record.get('evaluation_id')}，版本：{NORMALIZATION_VERSION}），0 Token 消耗。"
+            )
+            state.save()
+            return True
+        else:
+            state.log(
+                f"[受限规范化观察] #{seq} {candidate.skill_id}：检测到潜在复用记录（来源：{norm_record.get('evaluation_id')}），观察模式下不阻断模型评估。"
+            )
+    elif norm_rejection and norm_rejection not in ("no_matching_candidate", "no_history_records", "no_current_fingerprint"):
+        cache_obs["observed_count"] += 1
+        reason_key = norm_rejection.split(":")[0]
+        cache_obs["rejection_reasons"][reason_key] = cache_obs["rejection_reasons"].get(reason_key, 0) + 1
+
     if (record.get('error') or {}).get('reason_code') == REASON_LENGTH_EXCEEDED:
         # 账本已落盘而候选池写入前中断时，补齐终态，不再付费重试。
         update_candidate_status(state.pool, seq, STATUS_LENGTH_EXCEEDED)
@@ -805,8 +946,17 @@ def process_candidate(state, item):
         state.log(f"[阻止] #{seq} {candidate.skill_id}：存在不可重试评估记录（{reason}），已持久化为 blocked，本次未调用模型。")
         state.save()
         return True
-    state.ledger.reserve([{'evaluation_id': eid, 'skill_id': candidate.skill_id, 'content_fingerprint': candidate.content_fingerprint, 'rules_version': state.cfg['rules']['rules_version'], 'model_config_version': state.cfg['model'].get('model_config_version')}])
-    record = state.ledger.get(eid)
+    norm_fp = candidate.normalized_content_fingerprint or normalized_content_fingerprint(text)
+    state.ledger.reserve([{
+        'evaluation_id': eid,
+        'skill_id': candidate.skill_id,
+        'content_fingerprint': candidate.content_fingerprint,
+        'normalized_content_fingerprint': norm_fp,
+        'normalization_version': NORMALIZATION_VERSION,
+        'rules_version': state.cfg['rules']['rules_version'],
+        'model_config_version': state.cfg['model'].get('model_config_version'),
+    }])
+    record = state.ledger.get(eid) or {}
     record['max_attempts'] = (int(record.get('max_attempts') or effective_attempt_limit)
                              if record.get('resume_history')
                              else state.max_attempts + int(bool(record.get('pending_evaluation'))))
@@ -821,12 +971,27 @@ def process_candidate(state, item):
     decision = classify_result(result)
     if result['ok']:
         evaluation = result['evaluation']
-        outcome = {**decide(evaluation, state.cfg['rules']), 'evaluation': evaluation, 'materials': primary_material_bundle(candidate, text, now_local().isoformat()).manifest(), 'main_category': evaluation.get('main_category'), 'usage': state.active_call['usage'] if state.active_call else None}
+        outcome = {
+            **decide(evaluation, state.cfg['rules']),
+            'evaluation': evaluation,
+            'materials': primary_material_bundle(candidate, text, now_local().isoformat()).manifest(),
+            'main_category': evaluation.get('main_category'),
+            'usage': state.active_call['usage'] if state.active_call else None,
+            'normalized_content_fingerprint': candidate.normalized_content_fingerprint,
+            'normalization_version': NORMALIZATION_VERSION,
+        }
         outcome['candidate'] = asdict(candidate)
         outcome['request_usage'] = (state.ledger.get(eid) or {}).get('requests', [])
         outcome['prescreen'] = asdict(pres)
         outcome['evaluated_at'] = now_local().isoformat()
         state.ledger.complete(eid, outcome)
+        ledger_rec = state.ledger.get(eid)
+        if ledger_rec:
+            ledger_rec['normalized_content_fingerprint'] = candidate.normalized_content_fingerprint
+            ledger_rec['normalization_version'] = NORMALIZATION_VERSION
+            state.ledger.save_record(eid, ledger_rec)
+            if hasattr(state, '_skill_eval_records_index') and state._skill_eval_records_index is not None:
+                state._skill_eval_records_index.setdefault(candidate.skill_id, []).append(ledger_rec)
         if state.active_call:
             state.active_call['decision'] = outcome['decision']
         state.publish(candidate, pres, outcome)
@@ -1010,6 +1175,14 @@ def _collect(root, local, settings, cfg, discover_fn, fetch_fn, evaluate_fn, log
             'signal_counts': {},
             'suggested_actions': {},
         },
+        'cache_observation': {
+            'version': NORMALIZATION_VERSION,
+            'enabled': bool(settings.get('enable_normalized_cache', False) or (cfg.get('rules', {}).get('cache', {}).get('enable_normalized_reuse', False))),
+            'observed_count': 0,
+            'potential_hits': 0,
+            'actual_reused': 0,
+            'rejection_reasons': {},
+        },
         'not_skill_files': 0,
         'blocked_records': 0,
         'blocked_new': 0,
@@ -1131,6 +1304,7 @@ def main(argv=None, *, root: Path | None = None) -> int:
     parser.add_argument("--enrich-catalog", action="store_true", help="离线结构化增强：从现有数据中提取形态、示例请求与亮点，不修改原中文简述")
     parser.add_argument("--refresh-pool", action="store_true", help="重新搜索并重建候选池，保留超长跳过标记")
     parser.add_argument("--enable-static-skip", action="store_true", help="启用静态规则明确空壳占位跳过（避免调用模型）")
+    parser.add_argument("--enable-normalized-cache", action="store_true", help="启用受限规范化缓存复用（仅在明确验证换行等价且证据完全核验时复用）")
     parser.add_argument("--pool-watermark", type=int, help="候选池待处理数量低于此水位线时自动增量补水，默认 20")
     args = parser.parse_args(argv)
     log = lambda message: print(message, flush=True)
@@ -1197,6 +1371,8 @@ def main(argv=None, *, root: Path | None = None) -> int:
             settings["refresh_pool"] = True
         if args.enable_static_skip:
             settings["enable_static_skip"] = True
+        if args.enable_normalized_cache:
+            settings["enable_normalized_cache"] = True
         _valid_settings(settings)
         cfg = load_all_config(root / "config")
         problems = precheck(cfg)

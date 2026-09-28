@@ -25,6 +25,7 @@ class DocumentSnapshot:
     source_url: str                     # 原始下载链接
     resolved_ref: Optional[str] = None  # 确认的 Git Commit SHA（若无法解析则为 None）
     truncated: bool = False             # 是否超过单文件大小上限被截断
+    normalized_fingerprint: Optional[str] = None  # 受限规范化辅助指纹（sha256:norm:v1:...）
 
 
 @dataclass(frozen=True)
@@ -62,9 +63,15 @@ class MaterialBundle(Mapping[str, str]):
 
     def manifest(self) -> dict:
         docs = [self.primary_doc, *self.referenced_docs]
+        doc_entries = []
+        for d in docs:
+            entry = {k: getattr(d, k) for k in ("path", "fingerprint", "fetched_at", "source_url", "resolved_ref")}
+            if getattr(d, "normalized_fingerprint", None):
+                entry["normalized_fingerprint"] = d.normalized_fingerprint
+            doc_entries.append(entry)
         return {"identity_version": "bundle-v1", "bundle_fingerprint": self.bundle_fingerprint,
                 "revision_consistent": bool(docs[0].resolved_ref) and all(d.resolved_ref == docs[0].resolved_ref for d in docs),
-                "documents": [{k: getattr(d, k) for k in ("path", "fingerprint", "fetched_at", "source_url", "resolved_ref")} for d in docs],
+                "documents": doc_entries,
                 "fetch_errors": dict(self.fetch_errors)}
 
 
@@ -88,10 +95,20 @@ def validate_document(path: str, text: str, max_bytes: int = 0) -> tuple[bool, s
 def primary_material_bundle(candidate, text, fetched_at):
     """Catalog currently evaluates the primary file only; do not invent references."""
     from .identity import content_fingerprint
+    from .normalization import normalized_content_fingerprint
     source = candidate.url or candidate.repo_url
     revision = None
     if "/blob/" in source:
         part = source.split("/blob/", 1)[1].split("/", 1)[0]
         revision = part if re.fullmatch(r"[0-9a-fA-F]{40}", part) else None
-    doc = DocumentSnapshot(candidate.path or "SKILL.md", text, content_fingerprint(text), fetched_at, source, revision)
+    norm_fp = getattr(candidate, "normalized_content_fingerprint", None) or normalized_content_fingerprint(text)
+    doc = DocumentSnapshot(
+        candidate.path or "SKILL.md",
+        text,
+        content_fingerprint(text),
+        fetched_at,
+        source,
+        revision,
+        normalized_fingerprint=norm_fp,
+    )
     return MaterialBundle(candidate.skill_id, doc)

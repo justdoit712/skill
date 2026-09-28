@@ -240,6 +240,15 @@ def build_run_metrics(report: dict, *, kind: str) -> dict:
             raw_repos = sum(q["repos_returned"] for q in queries)
     shortlist = number(report.get("shortlist_count"))
     skills = number(search.get("candidates_found"))
+    cache_obs = report.get("cache_observation") or {}
+    cache_data = {
+        "exact_hits": number(report.get("cached")),
+        "normalized_potential_hits": number(cache_obs.get("potential_hits")) if "potential_hits" in cache_obs else None,
+        "actual_reused": number(cache_obs.get("actual_reused")) if "actual_reused" in cache_obs else None,
+    }
+    if "rejection_reasons" in cache_obs:
+        cache_data["rejection_reasons"] = dict(cache_obs["rejection_reasons"])
+
     return {
         "metrics_version": "1.0.0",
         "search": {"http_requests": requests, "retries": retries,
@@ -248,8 +257,7 @@ def build_run_metrics(report: dict, *, kind: str) -> dict:
                    "skills_deduped": skills, "shortlist_count": shortlist,
                    "conversion_ratio": calc_ratio(shortlist, skills).to_dict()},
         "model": model,
-        "cache": {"exact_hits": number(report.get("cached")),
-                  "normalized_potential_hits": None, "actual_reused": None},
+        "cache": cache_data,
         "prescreen": {
             "rules_version": (report.get("static_heuristics") or {}).get("version") or "1.0.0",
             "signal_hits": (report.get("static_heuristics") or {}).get("signal_counts", {}),
