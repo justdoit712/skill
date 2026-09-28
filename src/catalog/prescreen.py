@@ -59,6 +59,7 @@ TIER_CONTENT_DEFECT = "tier_content_defect"
 TIER_SUSPECT = "tier_suspect"
 TIER_NORMAL = "tier_normal"
 TIER_PENDING = "tier_pending"
+TIER_UNASSESSED = "tier_unassessed"
 
 ACTION_SUGGEST_SKIP = "suggest_skip"
 ACTION_SUGGEST_REVIEW = "suggest_review"
@@ -84,6 +85,13 @@ COMMAND_INSTRUCTION_PATTERNS = (
     re.compile(r"(?i)\b(?:python|node|npm|pnpm|bun|bash|sh|curl|docker|pip|go|cargo)\s+[\w.-]+"),
     re.compile(r"(?i)\b(?:run|execute|start|install|usage|example)[:\s]"),
     re.compile(r"```[\w]*\n[\s\S]+?```"),
+)
+
+# 引用入口与相对参考模式（指向未读取的外部或相对参考入口，保留为待判断，严禁直接判为空壳）
+REFERENCE_ENTRY_PATTERNS = (
+    re.compile(r"\[([^\]]+)\]\(([^)]+)\)"),
+    re.compile(r"<a\s+[^>]*href=[\"'][^\"']+[\"']", re.IGNORECASE),
+    re.compile(r"(?i)(?:see|refer(?:ence)?|docs?|guide|manual)\s*[:：]\s*\S+"),
 )
 
 
@@ -163,6 +171,8 @@ def analyze_static_tier(
 
     # 检查是否有可执行命令或代码块
     has_commands = any(p.search(clean_text) for p in COMMAND_INSTRUCTION_PATTERNS)
+    # 检查是否包含尚未读取的外部/相对参考入口（例如 # [Instructions](references/guide.md)）
+    has_reference_entry = any(p.search(clean_text) for p in REFERENCE_ENTRY_PATTERNS)
 
     # 检查 body 中的非空非标题行
     body_lines = [
@@ -171,10 +181,22 @@ def analyze_static_tier(
         if line.strip() and not line.strip().startswith("#") and not line.strip().startswith("---")
     ]
 
+    # 若没有任何实质正文行但包含参考入口，必须保留为待判断，严禁判定为空壳
+    if not body_lines and has_reference_entry:
+        return {
+            "heuristic_version": STATIC_HEURISTIC_VERSION,
+            "mode": "observation",
+            "applied": False,
+            "tier": TIER_UNASSESSED,
+            "signals": ["HAS_REFERENCE_ENTRY"],
+            "suggested_action": ACTION_SUGGEST_EVALUATE,
+            "reason": "材料仅包含外部/相对参考入口且正文尚未展开，保留为待判断",
+        }
+
     is_pure_placeholder = False
-    if not has_commands:
+    if not has_commands and not has_reference_entry:
         if not body_lines:
-            # 只有标题没有正文
+            # 只有标题没有正文且无任何参考入口
             is_pure_placeholder = True
         else:
             # 所有非标题行均匹配占位模式

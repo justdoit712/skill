@@ -301,24 +301,39 @@ def prioritize_pending_batch(
     *,
     batch_size: int = 20,
     manual_picks: set[str] | None = None,
-    enabled: bool = True,
+    tier_map: dict[str, str] | None = None,
+    enabled: bool = False,
+    anti_starvation_ratio: float = 0.2,
 ) -> list[PoolItem]:
     """对待处理候选分批并在批内进行优先级排序（兼顾公平性与高优项响应）。
 
-    按小批次（默认 20 条）切分，在批次内部调整处理顺序：
-    - Rank 0: 手工挑选（manual_picks）或敏感合规信号（优先复核）
-    - Rank 1: 结构正常完整（普通技能）
-    - 批内同级保持原始 seq 顺序（FIFO），跨批次保持严格窗口隔离，绝不因后批高优项导致前批候选无限饥饿。
+    严格安全保证：
+    - enabled=False 时（默认），严格保持原始 seq FIFO 顺序，默认不改行为；
+    - 批内排序依据准备好的正文静态分级（tier_map），结合人工挑选与高危合规优先复核；
+    - 批内保证至少 20% 防饥饿配额分配给未被提权项（按原始 seq 顺序保留）；
+    - 跨批次保持严格窗口隔离，绝不因后批高优项导致前批候选无限饥饿。
     """
     if not enabled or not pending_items:
         return list(pending_items)
 
     manual_picks = manual_picks or set()
+    tier_map = tier_map or {}
 
     def item_rank(item: PoolItem) -> int:
         cand = item.candidate
         if cand.skill_id in manual_picks:
             return 0
+        tier = tier_map.get(cand.skill_id)
+        if tier == "tier_suspect":
+            return 0
+        if tier == "tier_normal":
+            return 1
+        if tier == "tier_unassessed":
+            return 2
+        if tier == "tier_clear_placeholder":
+            return 4
+
+        # 若无正文分级，后备元数据敏感词识别
         haystack = f"{cand.name} {cand.description} {cand.path}"
         for pattern in (
             r"(?i)实盘|自动下单|下单执行|交易执行|券商接口|auto[-_ ]?trad|place[-_ ]?order|order[-_ ]?execution|live[-_ ]?trad|broker[-_ ]?api",
@@ -327,11 +342,35 @@ def prioritize_pending_batch(
         ):
             if re.search(pattern, haystack):
                 return 0
-        return 1
+        return 2
 
     result: list[PoolItem] = []
     for i in range(0, len(pending_items), batch_size):
         chunk = pending_items[i : i + batch_size]
-        sorted_chunk = sorted(chunk, key=lambda it: (item_rank(it), it.seq))
-        result.extend(sorted_chunk)
+        n = len(chunk)
+        if n <= 1:
+            result.extend(chunk)
+            continue
+
+        boosted = [it for it in chunk if item_rank(it) <= 1]
+        regular = [it for it in chunk if item_rank(it) > 1]
+
+        # 计算防饥饿配额（批内至少保留 20% 配额分配给未提权项）
+        quota = max(1, round(n * anti_starvation_ratio)) if (n >= 5 and regular) else 0
+
+        if not boosted or not regular or quota == 0:
+            sorted_chunk = sorted(chunk, key=lambda it: (item_rank(it), it.seq))
+            result.extend(sorted_chunk)
+        else:
+            max_boosted = max(1, n - quota)
+            sorted_boosted = sorted(boosted, key=lambda it: (item_rank(it), it.seq))
+            sorted_regular = sorted(regular, key=lambda it: it.seq)
+
+            top_boosted = sorted_boosted[:max_boosted]
+            reserved_regular = sorted_regular[:quota]
+            remaining = sorted_boosted[max_boosted:] + sorted_regular[quota:]
+            remaining_sorted = sorted(remaining, key=lambda it: (item_rank(it), it.seq))
+
+            result.extend(top_boosted + reserved_regular + remaining_sorted)
+
     return result

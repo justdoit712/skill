@@ -241,10 +241,16 @@ def build_run_metrics(report: dict, *, kind: str) -> dict:
     shortlist = number(report.get("shortlist_count"))
     skills = number(search.get("candidates_found"))
     cache_obs = report.get("cache_observation") or {}
+    total_cached = number(report.get("cached"))
+    actual_reused = number(cache_obs.get("actual_reused")) if "actual_reused" in cache_obs else None
+    exact_hits = total_cached
+    if total_cached is not None and actual_reused is not None:
+        exact_hits = max(0, total_cached - actual_reused)
+
     cache_data = {
-        "exact_hits": number(report.get("cached")),
+        "exact_hits": exact_hits,
         "normalized_potential_hits": number(cache_obs.get("potential_hits")) if "potential_hits" in cache_obs else None,
-        "actual_reused": number(cache_obs.get("actual_reused")) if "actual_reused" in cache_obs else None,
+        "actual_reused": actual_reused,
     }
     if "rejection_reasons" in cache_obs:
         cache_data["rejection_reasons"] = dict(cache_obs["rejection_reasons"])

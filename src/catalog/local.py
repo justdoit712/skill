@@ -21,7 +21,7 @@ from uuid import uuid4
 
 from src.infra.files import write_json_atomic, write_text_atomic
 from src.shared.runtime import now_local
-from src.shared.versions import STATIC_HEURISTIC_VERSION
+from src.shared.versions import LLM_OUTPUT_CONTRACT_VERSION, STATIC_HEURISTIC_VERSION
 from src.shared.materials import validate_document, primary_material_bundle
 from src.shared.owned import is_skill_owned
 from .store import catalog_task
@@ -80,7 +80,7 @@ from .pool import (
     save_pool,
     update_candidate_status,
 )
-from .prescreen import prescreen, should_static_skip
+from .prescreen import analyze_static_tier, prescreen, should_static_skip
 from .report import build_report, write_report
 from .failure_policy import (
     ACTION_BLOCKED,
@@ -811,8 +811,11 @@ def process_candidate(state, item):
     state.log(f"检查 #{seq}（本轮进度 {state.report['checked']}/{len(state.pending_items)}，全池 {len(state.pool)}）：{candidate.skill_id}")
     if '/blob/' not in candidate.url:
         candidate.url = f'https://github.com/{candidate.owner}/{candidate.repo}/blob/HEAD/{candidate.path}'
-    url = candidate.url.replace('https://github.com/', 'https://raw.githubusercontent.com/', 1).replace('/blob/', '/', 1)
-    fetched = state.fetch_fn(url, sleep=state.sleep, max_bytes=int(state.cfg['model'].get('limits', {}).get('max_input_bytes') or 262144))
+    if hasattr(state, 'batch_materials') and candidate.skill_id in state.batch_materials:
+        fetched = state.batch_materials[candidate.skill_id]
+    else:
+        url = candidate.url.replace('https://github.com/', 'https://raw.githubusercontent.com/', 1).replace('/blob/', '/', 1)
+        fetched = state.fetch_fn(url, sleep=state.sleep, max_bytes=int(state.cfg['model'].get('limits', {}).get('max_input_bytes') or 262144))
     if not fetched.ok or not fetched.text or fetched.truncated or (not validate_document(candidate.path, fetched.text)[0]):
         state.report['fetch_failed'] += 1
         update_candidate_status(state.pool, seq, STATUS_FETCH_FAILED)
@@ -884,22 +887,39 @@ def process_candidate(state, item):
             cache_obs["actual_reused"] += 1
             state.report["cached"] += 1
             reuse_audit = create_reuse_audit(norm_record, text, exact_match=False)
-            reused_outcome = dict(norm_record["outcome"]) if isinstance(norm_record["outcome"], dict) else {}
+            reused_outcome = deepcopy(norm_record["outcome"]) if isinstance(norm_record["outcome"], dict) else {}
             reused_outcome["cached"] = True
             reused_outcome["reuse_audit"] = reuse_audit
-            state.publish(candidate, pres, reused_outcome)
-            update_candidate_status(state.pool, seq, STATUS_DONE)
-            save_pool(state.pool_path, state.pool)
+            reused_outcome["candidate"] = asdict(candidate)
+            reused_outcome["materials"] = primary_material_bundle(candidate, text, now_local().isoformat()).manifest()
+            if isinstance(reused_outcome.get("evaluation"), dict):
+                reused_outcome["evaluation"]["source_fingerprint"] = candidate.content_fingerprint
+            reused_outcome["normalized_content_fingerprint"] = candidate.normalized_content_fingerprint
+            reused_outcome["normalization_version"] = NORMALIZATION_VERSION
+            reused_outcome["output_contract_version"] = LLM_OUTPUT_CONTRACT_VERSION
+            reused_outcome["evaluated_at"] = now_local().isoformat()
             state.ledger.reserve([{
                 "evaluation_id": eid,
                 "skill_id": candidate.skill_id,
                 "content_fingerprint": candidate.content_fingerprint,
                 "normalized_content_fingerprint": candidate.normalized_content_fingerprint,
                 "normalization_version": NORMALIZATION_VERSION,
+                "output_contract_version": LLM_OUTPUT_CONTRACT_VERSION,
                 "rules_version": state.cfg["rules"]["rules_version"],
                 "model_config_version": state.cfg["model"].get("model_config_version"),
             }])
             state.ledger.complete(eid, reused_outcome)
+            ledger_rec = state.ledger.get(eid)
+            if ledger_rec:
+                ledger_rec['normalized_content_fingerprint'] = candidate.normalized_content_fingerprint
+                ledger_rec['normalization_version'] = NORMALIZATION_VERSION
+                ledger_rec['output_contract_version'] = LLM_OUTPUT_CONTRACT_VERSION
+                state.ledger.save_record(eid, ledger_rec)
+                if hasattr(state, '_skill_eval_records_index') and state._skill_eval_records_index is not None:
+                    state._skill_eval_records_index.setdefault(candidate.skill_id, []).append(ledger_rec)
+            state.publish(candidate, pres, reused_outcome)
+            update_candidate_status(state.pool, seq, STATUS_DONE)
+            save_pool(state.pool_path, state.pool)
             state.log(
                 f"[受限规范化复用] #{seq} {candidate.skill_id}：成功复用历史评估（来源：{norm_record.get('evaluation_id')}，版本：{NORMALIZATION_VERSION}），0 Token 消耗。"
             )
@@ -979,6 +999,7 @@ def process_candidate(state, item):
             'usage': state.active_call['usage'] if state.active_call else None,
             'normalized_content_fingerprint': candidate.normalized_content_fingerprint,
             'normalization_version': NORMALIZATION_VERSION,
+            'output_contract_version': LLM_OUTPUT_CONTRACT_VERSION,
         }
         outcome['candidate'] = asdict(candidate)
         outcome['request_usage'] = (state.ledger.get(eid) or {}).get('requests', [])
@@ -989,6 +1010,7 @@ def process_candidate(state, item):
         if ledger_rec:
             ledger_rec['normalized_content_fingerprint'] = candidate.normalized_content_fingerprint
             ledger_rec['normalization_version'] = NORMALIZATION_VERSION
+            ledger_rec['output_contract_version'] = LLM_OUTPUT_CONTRACT_VERSION
             state.ledger.save_record(eid, ledger_rec)
             if hasattr(state, '_skill_eval_records_index') and state._skill_eval_records_index is not None:
                 state._skill_eval_records_index.setdefault(candidate.skill_id, []).append(ledger_rec)
@@ -1238,16 +1260,52 @@ def _collect(root, local, settings, cfg, discover_fn, fetch_fn, evaluate_fn, log
         state.ledger.cap = state.ledger.reserved_count + max(1, len(state.pool))
         state.ledger.save()
         state.save()
-        enable_batch_prioritization = state.settings.get('enable_batch_prioritization', True)
-        batch_size = int(state.settings.get('batch_size', 20) or 20)
-        state.pending_items = prioritize_pending_batch(
-            get_pending_candidates(state.pool),
-            batch_size=batch_size,
-            manual_picks=state.manual_picks,
-            enabled=enable_batch_prioritization,
+        enable_batch_prioritization = bool(
+            state.settings.get('enable_batch_prioritization', False)
+            or state.settings.get('enable_static_skip', False)
         )
-        for item in state.pending_items:
-            if not process_candidate(state, item):
+        batch_size = int(state.settings.get('batch_size', 20) or 20)
+        pending_candidates = get_pending_candidates(state.pool)
+
+        state.batch_materials = {}
+        tier_map: dict[str, str] = {}
+        state.pending_items = []
+
+        # 按小批次切分处理，确保后续每个批次均经过正文材料分级与批内排序
+        for chunk_start in range(0, len(pending_candidates), batch_size):
+            chunk = pending_candidates[chunk_start : chunk_start + batch_size]
+            if enable_batch_prioritization:
+                for it in chunk:
+                    cand = it.candidate
+                    if cand.skill_id not in state.batch_materials and cand.path.split('/')[-1] == 'SKILL.md':
+                        if '/blob/' not in cand.url:
+                            cand.url = f'https://github.com/{cand.owner}/{cand.repo}/blob/HEAD/{cand.path}'
+                        u = cand.url.replace('https://github.com/', 'https://raw.githubusercontent.com/', 1).replace('/blob/', '/', 1)
+                        try:
+                            fetched = state.fetch_fn(u, sleep=state.sleep, max_bytes=int(state.cfg['model'].get('limits', {}).get('max_input_bytes') or 262144))
+                            state.batch_materials[cand.skill_id] = fetched
+                            if fetched.ok and fetched.text and not fetched.truncated:
+                                obs = analyze_static_tier(cand, fetched.text)
+                                tier_map[cand.skill_id] = obs.get("tier")
+                        except (IOError, OSError, TimeoutError, ValueError):
+                            pass
+                prioritized_chunk = prioritize_pending_batch(
+                    chunk,
+                    batch_size=batch_size,
+                    manual_picks=state.manual_picks,
+                    tier_map=tier_map,
+                    enabled=True,
+                )
+            else:
+                prioritized_chunk = chunk
+
+            stopped = False
+            for item in prioritized_chunk:
+                state.pending_items.append(item)
+                if not process_candidate(state, item):
+                    stopped = True
+                    break
+            if stopped:
                 break
         if state.report['new_recommended'] >= state.settings['target_recommended']:
             state.stop_causes.add(STOP_TARGET_REACHED)
@@ -1305,6 +1363,7 @@ def main(argv=None, *, root: Path | None = None) -> int:
     parser.add_argument("--refresh-pool", action="store_true", help="重新搜索并重建候选池，保留超长跳过标记")
     parser.add_argument("--enable-static-skip", action="store_true", help="启用静态规则明确空壳占位跳过（避免调用模型）")
     parser.add_argument("--enable-normalized-cache", action="store_true", help="启用受限规范化缓存复用（仅在明确验证换行等价且证据完全核验时复用）")
+    parser.add_argument("--enable-batch-prioritization", action="store_true", help="启用小批次材料准备与正文分级排序（含 20% 防饥饿配额）")
     parser.add_argument("--pool-watermark", type=int, help="候选池待处理数量低于此水位线时自动增量补水，默认 20")
     args = parser.parse_args(argv)
     log = lambda message: print(message, flush=True)
@@ -1373,6 +1432,8 @@ def main(argv=None, *, root: Path | None = None) -> int:
             settings["enable_static_skip"] = True
         if args.enable_normalized_cache:
             settings["enable_normalized_cache"] = True
+        if args.enable_batch_prioritization:
+            settings["enable_batch_prioritization"] = True
         _valid_settings(settings)
         cfg = load_all_config(root / "config")
         problems = precheck(cfg)
