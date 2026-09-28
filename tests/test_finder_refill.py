@@ -422,6 +422,7 @@ class RefillTest(unittest.TestCase):
 class SearchAdapterTest(unittest.TestCase):
     def test_single_http_attempt_returns_retry_headers_without_sleeping(self):
         session = Mock()
+        session.headers = {}
         session.get.return_value.status_code = 429
         session.get.return_value.headers = {"Retry-After": "12", "X-RateLimit-Remaining": "0",
                                             "X-RateLimit-Reset": "125"}
@@ -444,6 +445,7 @@ class SearchAdapterTest(unittest.TestCase):
 
     def test_page_reaches_http_request(self):
         session = Mock()
+        session.headers = {}
         session.get.return_value.status_code = 200
         session.get.return_value.json.return_value = {"items": [], "total_count": 0}
         search_repositories("q", page=3, session=session)

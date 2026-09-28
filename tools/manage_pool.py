@@ -39,6 +39,7 @@ def main(argv=None) -> int:
     res_parser.add_argument("--evaluation-id", required=True, help="要恢复的完整评估 ID")
     res_parser.add_argument("--reason", required=True, help="本次恢复的操作原因与说明")
     res_parser.add_argument("--extra-attempts", type=int, default=1, help="额外授予的尝试额度，默认 1")
+    res_parser.add_argument("--event-id", help="稳定恢复事件 ID；重放同一授权时沿用，不重复增加额度")
     res_group = res_parser.add_mutually_exclusive_group()
     res_group.add_argument("--dry-run", action="store_true", default=True, help="仅预览恢复操作（默认）")
     res_group.add_argument("--apply", action="store_true", help="应用恢复并在账本中追加记录")
@@ -78,14 +79,19 @@ def main(argv=None) -> int:
                 evaluation_id=args.evaluation_id,
                 reason=args.reason,
                 extra_attempts=args.extra_attempts,
+                event_id=args.event_id,
                 apply=apply_mode,
             )
             mode_desc = "应用模式 (--apply)" if apply_mode else "预览模式 (--dry-run)"
             print(f"[{mode_desc}] 候选恢复操作：")
             print(f"  评估 ID: {result['evaluation_id']}")
+            print(f"  恢复事件 ID: {result['event_id']}")
             print(f"  技能 ID: {result['skill_id']} (序号 #{result['seq']})")
             print(f"  恢复原因: {result['reason']}")
-            print(f"  尝试上限: {result.get('current_max_attempts', result.get('new_max_attempts') - result['extra_attempts'])} -> {result['new_max_attempts']} (+{result['extra_attempts']})")
+            if result.get("idempotent"):
+                print(f"  同一授权重放，尝试上限保持 {result['new_max_attempts']}，未增加额度")
+            else:
+                print(f"  尝试上限: {result.get('current_max_attempts', result.get('new_max_attempts') - result['extra_attempts'])} -> {result['new_max_attempts']} (+{result['extra_attempts']})")
             print(f"  目标状态: pending（允许在下一次运行中重试）")
             if result.get("backup_path"):
                 print(f"  候选池备份: {result['backup_path']}")

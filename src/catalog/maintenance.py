@@ -107,6 +107,37 @@ def recover_completed_results(root_dir: str | Path = ".") -> dict:
             evaluated_at=outcome.get("evaluated_at"), rules_version=record.get("rules_version"))
         entries[candidate.skill_id] = update_entry(previous, candidate, event, context)
         restored += 1
+    # Only align an exact current evaluation, never an older result for the same skill.
+    pool_file = root / "data" / "local" / "pool.json"
+    pool = None
+    pool_dirty = False
+    if pool_file.exists():
+        from .pool import load_pool, save_pool, STATUS_PENDING, STATUS_DONE
+        from .config import load_all_config
+        from .evaluation import evaluation_id
+        from .budget import evaluation_filename
+
+        cfg = load_all_config(root / "config")
+        pool = load_pool(pool_file)
+        for item in pool.items:
+            candidate = item.candidate
+            if item.status != STATUS_PENDING or not candidate.content_fingerprint:
+                continue
+            eid = evaluation_id(candidate, cfg["model"], cfg["rules"])
+            # Local records take precedence, including incomplete local records.
+            name = evaluation_filename(eid)
+            local_record = data / "local" / "state" / "evaluations" / name
+            record = read_json(local_record if local_record.exists()
+                               else data / "state" / "evaluations" / name, default={})
+            if (record.get("evaluation_id") == eid
+                    and record.get("skill_id") == candidate.skill_id
+                    and record.get("content_fingerprint") == candidate.content_fingerprint
+                    and record.get("status") == "completed"
+                    and (record.get("outcome") or {}).get("evaluation")
+                    and (entries.get(candidate.skill_id) or {}).get("last_evaluation_id") == eid):
+                item.status = STATUS_DONE
+                pool_dirty = True
+
     # Preserve the already committed manual policy; config synchronization is separate.
     values = list(entries.values())
     apply_manual_overrides(values, catalog.get("overrides") or {})
@@ -116,6 +147,9 @@ def recover_completed_results(root_dir: str | Path = ".") -> dict:
         write_catalog(updated, data_path=data / "catalog.json", public_path=root / "public" / "data" / "catalog.json")
     else:
         recover_catalog_projections(root)
+    # Publish first. Any pool failure remains visible and the operation can be replayed.
+    if pool_dirty:
+        save_pool(pool_file, pool)
     return {"restored": restored, "skipped": skipped, "model_calls": 0}
 
 
@@ -311,12 +345,13 @@ def enrich_catalog(root: Path | str) -> dict[str, Any]:
 
 @catalog_task
 def reconcile_pool(root_dir: str | Path = ".", *, apply: bool = False) -> dict[str, Any]:
-    """离线对账：精确比对本地候选池与账本记录，对齐 length_exceeded 与 blocked 状态 (§7.1)。
+    """离线对账：精确比对本地候选池与账本记录，对齐异常及已授权恢复状态。
 
     不联网、不调用模型、不修改用量或删除账本。
-    默认只预览 (--dry-run)；应用时持有目录任务锁并生成迁移前备份。
+    默认只预览 (--dry-run)；应用时持有目录任务锁，按“迁移清单 -> 备份池 -> 写入池 -> 完成清单”推进。
     """
     import shutil
+    from uuid import uuid4
     from .pool import (
         load_pool,
         save_pool,
@@ -328,6 +363,7 @@ def reconcile_pool(root_dir: str | Path = ".", *, apply: bool = False) -> dict[s
     from .budget import evaluation_filename
     from .config import load_all_config
     from .evaluation import evaluation_id
+    from src.infra.files import write_json_atomic
     from src.shared.runtime import now_local
 
     root = Path(root_dir).resolve()
@@ -363,85 +399,197 @@ def reconcile_pool(root_dir: str | Path = ".", *, apply: bool = False) -> dict[s
     unverified: list[dict] = []
 
     for item in pool.items:
-        if item.status != STATUS_PENDING:
-            continue
         candidate = item.candidate
         fp = candidate.content_fingerprint
-        if not fp:
-            unverified.append({
-                "seq": item.seq,
-                "skill_id": candidate.skill_id,
-                "reason": "missing_fingerprint",
-            })
-            continue
-
         rules_v = str(cfg["rules"].get("rules_version") or "")
         model_v = str(cfg["model"].get("model_config_version") or "")
-        eid = evaluation_id(candidate, cfg["model"], cfg["rules"])
-        record = records_by_eid.get(eid) or records_by_identity.get((candidate.skill_id, fp, rules_v, model_v))
-        if not record:
-            continue
+        eid = evaluation_id(candidate, cfg["model"], cfg["rules"]) if fp else None
+        record = (records_by_eid.get(eid) or records_by_identity.get((candidate.skill_id, fp, rules_v, model_v))) if (eid and fp) else None
 
-        error = record.get("error") or {}
-        reason_code = error.get("reason_code") or record.get("reason_code")
-        requests_list = record.get("requests") or []
-        has_length = (
-            reason_code == "LENGTH_EXCEEDED"
-            or any(r.get("reason_code") == "LENGTH_EXCEEDED" or r.get("status") == "length_exceeded" for r in requests_list)
-        )
+        if item.status == STATUS_PENDING:
+            if not fp:
+                unverified.append({
+                    "seq": item.seq,
+                    "skill_id": candidate.skill_id,
+                    "reason": "missing_fingerprint",
+                })
+                continue
 
-        if has_length:
-            changes.append({
-                "seq": item.seq,
-                "skill_id": candidate.skill_id,
-                "evaluation_id": eid,
-                "target_status": STATUS_LENGTH_EXCEEDED,
-                "reason": "LENGTH_EXCEEDED",
-            })
-            if apply:
-                update_candidate_status(pool, item.seq, STATUS_LENGTH_EXCEEDED)
-        elif record.get("status") in ("failed", "needs_recovery"):
-            retryable = error.get("retryable") or record.get("retryable")
-            attempts = int(record.get("attempts") or 0)
-            max_attempts = int(record.get("max_attempts") or 2)
-            if not retryable or attempts >= max_attempts:
-                block_info = {
-                    "evaluation_id": eid,
-                    "reason": "RECONCILED_FAILURE",
-                    "reason_code": reason_code,
-                    "error_kind": error.get("error_kind") or record.get("error_kind") or (
-                        "LEGACY_PARSE_UNKNOWN" if reason_code == "PARSE_ERROR" else None
-                    ),
-                    "stage": record.get("stage"),
-                    "http_status": error.get("http_status"),
-                    "blocked_at": now_local().isoformat(),
-                    "source": "reconcile",
-                    "model": record.get("model") or cfg["model"].get("model"),
-                    "model_config_version": model_v,
-                }
-                changes.append({
+            if not record:
+                continue
+
+            # 身份冲突检查：记录所属 skill_id 与当前候选不一致
+            if record.get("skill_id") and record.get("skill_id") != candidate.skill_id:
+                unverified.append({
                     "seq": item.seq,
                     "skill_id": candidate.skill_id,
                     "evaluation_id": eid,
-                    "target_status": STATUS_BLOCKED,
-                    "block_info": block_info,
-                    "reason": reason_code or "NON_RETRYABLE_FAILURE",
+                    "reason": "identity_conflict",
+                })
+                continue
+
+            # 材料冲突检查：记录内容指纹与候选当前指纹不一致
+            if record.get("content_fingerprint") and record.get("content_fingerprint") != fp:
+                unverified.append({
+                    "seq": item.seq,
+                    "skill_id": candidate.skill_id,
+                    "evaluation_id": eid,
+                    "reason": "material_conflict",
+                })
+                continue
+
+            error = record.get("error") or {}
+            reason_code = error.get("reason_code") or record.get("reason_code")
+            requests_list = record.get("requests") or []
+            has_length = (
+                reason_code == "LENGTH_EXCEEDED"
+                or any(r.get("reason_code") == "LENGTH_EXCEEDED" or r.get("status") == "length_exceeded" for r in requests_list)
+            )
+
+            if has_length:
+                changes.append({
+                    "seq": item.seq,
+                    "skill_id": candidate.skill_id,
+                    "content_fingerprint": fp,
+                    "evaluation_id": eid,
+                    "previous_status": item.status,
+                    "target_status": STATUS_LENGTH_EXCEEDED,
+                    "reason": "LENGTH_EXCEEDED",
                 })
                 if apply:
-                    item.block_info = block_info
-                    update_candidate_status(pool, item.seq, STATUS_BLOCKED)
+                    update_candidate_status(pool, item.seq, STATUS_LENGTH_EXCEEDED)
+            elif record.get("status") in ("failed", "needs_recovery"):
+                retryable = error.get("retryable") or record.get("retryable")
+                attempts = int(record.get("attempts") or 0)
+                max_attempts = int(record.get("max_attempts") or 2)
+                if not retryable or attempts >= max_attempts or record.get("status") == "needs_recovery":
+                    block_info = {
+                        "evaluation_id": eid,
+                        "reason": "RECONCILED_FAILURE",
+                        "reason_code": reason_code,
+                        "error_kind": error.get("error_kind") or record.get("error_kind") or (
+                            "LEGACY_PARSE_UNKNOWN" if reason_code == "PARSE_ERROR" else None
+                        ),
+                        "stage": record.get("stage"),
+                        "http_status": error.get("http_status"),
+                        "blocked_at": now_local().isoformat(),
+                        "source": "reconcile",
+                        "model": record.get("model") or cfg["model"].get("model"),
+                        "model_config_version": model_v,
+                    }
+                    changes.append({
+                        "seq": item.seq,
+                        "skill_id": candidate.skill_id,
+                        "content_fingerprint": fp,
+                        "evaluation_id": eid,
+                        "previous_status": item.status,
+                        "target_status": STATUS_BLOCKED,
+                        "block_info": block_info,
+                        "reason": reason_code or "NON_RETRYABLE_FAILURE",
+                    })
+                    if apply:
+                        item.block_info = block_info
+                        update_candidate_status(pool, item.seq, STATUS_BLOCKED)
+            else:
+                unverified.append({
+                    "seq": item.seq,
+                    "skill_id": candidate.skill_id,
+                    "evaluation_id": eid,
+                    "reason": "missing_reason",
+                })
+
+        elif item.status == STATUS_BLOCKED:
+            # 若条目在池中为 blocked，但账本中已被显式授予恢复且 attempts < max_attempts，则对齐为 pending
+            if record and record.get("resume_history") and record.get("retryable"):
+                attempts = int(record.get("attempts") or 0)
+                max_attempts = int(record.get("max_attempts") or 2)
+                if attempts < max_attempts:
+                    changes.append({
+                        "seq": item.seq,
+                        "skill_id": candidate.skill_id,
+                        "content_fingerprint": fp,
+                        "evaluation_id": eid,
+                        "previous_status": item.status,
+                        "target_status": STATUS_PENDING,
+                        "reason": "RESUMED_LEDGER_RECORD",
+                    })
+                    if apply:
+                        item.block_info = None
+                        update_candidate_status(pool, item.seq, STATUS_PENDING)
 
     backup_path = None
+    manifest_id = None
+    manifest_path = None
+    manifest_dir = root / "data" / "local" / "state" / "migrations"
+    unfinished = []
+    for path in sorted(manifest_dir.glob("reconcile_*.json")):
+        manifest = read_json(path)
+        if manifest.get("status") != "in_progress":
+            continue
+        # The pool above contains either the committed target or a newly validated
+        # transition from the current ledger. Do not replay stale saved decisions.
+        for change in manifest.get("changes", []):
+            matches = [item for item in pool.items
+                       if item.candidate.skill_id == change.get("skill_id")]
+            if (len(matches) != 1
+                    or matches[0].candidate.content_fingerprint != change.get("content_fingerprint")
+                    or evaluation_id(matches[0].candidate, cfg["model"], cfg["rules"]) != change.get("evaluation_id")
+                    or matches[0].status != change.get("target_status")):
+                if apply:
+                    raise ValueError(f"未完成迁移与当前状态冲突，需核实：{path.name}")
+                break
+        else:
+            unfinished.append((path, manifest))
+
     if apply and changes:
-        backup_path = pool_path.parent / f"pool.backup.{now_local().strftime('%Y%m%d_%H%M%S')}.json"
+        timestamp_str = now_local().strftime('%Y%m%d_%H%M%S')
+        manifest_id = f"reconcile_{timestamp_str}_{uuid4().hex[:8]}"
+        manifest_dir = root / "data" / "local" / "state" / "migrations"
+        manifest_dir.mkdir(parents=True, exist_ok=True)
+        manifest_file = manifest_dir / f"{manifest_id}.json"
+
+        backup_path = pool_path.parent / f"pool.backup.{manifest_id}.json"
         shutil.copyfile(pool_path, backup_path)
+
+        # 阶段 1：持久化操作记录（in_progress）
+        manifest_data = {
+            "manifest_version": "1.0.0",
+            "manifest_id": manifest_id,
+            "operation": "reconcile_pool",
+            "created_at": now_local().isoformat(),
+            "completed_at": None,
+            "status": "in_progress",
+            "apply": True,
+            "backup_path": str(backup_path),
+            "pool_path": str(pool_path),
+            "changes": changes,
+            "unverified": unverified,
+        }
+        write_json_atomic(manifest_file, manifest_data)
+        manifest_path = str(manifest_file)
+
+        # 阶段 2：写入业务状态（候选池）
         save_pool(pool_path, pool)
+
+        # 阶段 3：标记迁移完成
+        manifest_data["status"] = "completed"
+        manifest_data["completed_at"] = now_local().isoformat()
+        write_json_atomic(manifest_file, manifest_data)
+
+    if apply:
+        for path, manifest in unfinished:
+            manifest["status"] = "completed"
+            manifest["completed_at"] = now_local().isoformat()
+            write_json_atomic(path, manifest)
 
     return {
         "status": "ok",
         "reconciled": len(changes),
         "apply": apply,
         "backup_path": str(backup_path) if backup_path else None,
+        "manifest_id": manifest_id,
+        "manifest_path": manifest_path,
+        "recovered_manifests": [str(path) for path, _ in unfinished] if apply else [],
         "changes": changes,
         "unverified": unverified,
     }
@@ -454,13 +602,16 @@ def resume_candidate(
     evaluation_id: str,
     reason: str,
     extra_attempts: int = 1,
+    event_id: str | None = None,
     apply: bool = False,
 ) -> dict[str, Any]:
     """显式恢复接口：解除特定条目的 blocked 状态并授予额外尝试额度 (§7.2)。
 
     恢复事件追加到本地账本，保留历史请求、用量与 attempts，绝不将尝试清零。
+    支持稳定 event_id 保证中断重放幂等，独立记录迁移清单。
     """
     import shutil
+    from uuid import uuid4
     from .pool import load_pool, save_pool, STATUS_PENDING, STATUS_BLOCKED
     from .budget import evaluation_filename
     from src.infra.files import write_json_atomic
@@ -472,6 +623,10 @@ def resume_candidate(
         raise ValueError("必须指定恢复原因 --reason")
     if extra_attempts < 1:
         raise ValueError("额外尝试次数必须 >= 1")
+    if event_id:
+        import re
+        if not re.match(r"^[a-zA-Z0-9_-]{1,128}$", event_id):
+            raise ValueError("事件 ID 仅允许字母、数字、下划线和连字符，且最长 128 字符")
 
     root = Path(root_dir).resolve()
     pool_path = root / "data" / "local" / "pool.json"
@@ -486,34 +641,117 @@ def resume_candidate(
             matched_item = item
             break
 
-    if matched_item is None:
-        raise ValueError(f"候选池中未找到与评估 ID 匹配的 blocked 条目：{evaluation_id}")
-    if matched_item.status != STATUS_BLOCKED:
-        raise ValueError(f"候选 #{matched_item.seq} 当前状态为 {matched_item.status}，非 blocked")
-
     hash_fn = evaluation_filename(evaluation_id)
     local_rec_path = root / "data" / "local" / "state" / "evaluations" / hash_fn
     actions_rec_path = root / "data" / "state" / "evaluations" / hash_fn
+    is_from_actions = not local_rec_path.exists() and actions_rec_path.exists()
     rec_path = local_rec_path if local_rec_path.exists() else actions_rec_path if actions_rec_path.exists() else None
     if not rec_path:
         raise FileNotFoundError(f"未找到评估记录文件：{hash_fn}")
 
     record = read_json(rec_path)
-    current_max_attempts = int(record.get("max_attempts") or 2)
-    new_max_attempts = current_max_attempts + extra_attempts
+    if record.get("evaluation_id") != evaluation_id:
+        raise ValueError("身份冲突：账本评估 ID 与请求不一致")
+    if matched_item is None:
+        matches = [item for item in pool.items
+                   if item.candidate.skill_id == record.get("skill_id")
+                   and item.candidate.content_fingerprint == record.get("content_fingerprint")]
+        if len(matches) != 1:
+            raise ValueError("候选身份缺失或存在歧义，无法恢复")
+        matched_item = matches[0]
+
+    # 来源审计约束：Actions 来源必须具备可信身份与材料指纹
+    if is_from_actions:
+        if not record.get("skill_id") or not record.get("content_fingerprint"):
+            raise ValueError("缺少可信依据：Actions 来源记录缺少必要身份或材料指纹，拒绝恢复")
+
+    # 身份冲突检查
+    if record.get("skill_id") and record.get("skill_id") != matched_item.candidate.skill_id:
+        raise ValueError(f"身份冲突：记录 skill_id ({record.get('skill_id')}) 与候选 ({matched_item.candidate.skill_id}) 不一致")
+
+    # 材料冲突检查
+    if record.get("content_fingerprint") and matched_item.candidate.content_fingerprint:
+        if record.get("content_fingerprint") != matched_item.candidate.content_fingerprint:
+            raise ValueError(f"材料冲突：候选材料指纹 ({matched_item.candidate.content_fingerprint}) 与记录指纹 ({record.get('content_fingerprint')}) 不一致")
+
+    # 结果状态约束：已完成条目禁止恢复
+    if record.get("status") == "completed":
+        raise ValueError("条目评估已完成 (completed)，无需且不可恢复")
+
+    # 幂等性与事件 ID 处理
+    manifest_dir = root / "data" / "local" / "state" / "migrations"
+    in_progress_event_id = None
+    if manifest_dir.exists():
+        for mf in manifest_dir.glob("resume_*.json"):
+            try:
+                mdata = read_json(mf)
+                if mdata and mdata.get("status") == "in_progress" and mdata.get("evaluation_id") == evaluation_id:
+                    in_progress_event_id = mdata.get("event_id")
+                    break
+            except Exception:
+                continue
+
+    target_event_id = event_id or in_progress_event_id or f"evt_{now_local().strftime('%Y%m%d_%H%M%S')}_{uuid4().hex[:8]}"
+    import re
+    if not re.fullmatch(r"[A-Za-z0-9_-]{1,128}", target_event_id):
+        raise ValueError("event_id 只能包含字母、数字、下划线和连字符，最长 128 字符")
+    manifest_file = manifest_dir / f"resume_{target_event_id}.json"
+    previous_manifest = read_json(manifest_file, default={})
+    if previous_manifest and previous_manifest.get("evaluation_id") != evaluation_id:
+        raise ValueError("event_id 已关联其他评估")
+    existing_event = next((e for e in record.get("resume_history", []) if e.get("event_id") == target_event_id), None)
+    is_idempotent_replay = existing_event is not None
+    authorized = existing_event or previous_manifest
+    if authorized and (authorized.get("reason") != reason.strip()
+                       or authorized.get("extra_attempts") != extra_attempts):
+        raise ValueError("同一 event_id 的原因和额外尝试次数必须与原授权一致")
+    if matched_item.status not in (STATUS_BLOCKED, STATUS_PENDING):
+        raise ValueError("候选状态已变化，不能重放旧恢复事件")
+
+    if is_idempotent_replay:
+        # 重放此前已授权的事件：不重复增加额度
+        current_max_attempts = int(existing_event.get("previous_max_attempts") or record.get("max_attempts") or 2)
+        new_max_attempts = int(record.get("max_attempts") or existing_event.get("new_max_attempts"))
+    else:
+        if matched_item.status != STATUS_BLOCKED:
+            raise ValueError(f"候选 #{matched_item.seq} 当前状态为 {matched_item.status}，非 blocked")
+        current_max_attempts = int(record.get("max_attempts") or 2)
+        new_max_attempts = current_max_attempts + extra_attempts
+
+    if is_idempotent_replay and matched_item.status == STATUS_PENDING:
+        # 已经完整恢复过的幂等重放
+        if apply and previous_manifest.get("status") == "in_progress":
+            previous_manifest["status"] = "completed"
+            previous_manifest["completed_at"] = now_local().isoformat()
+            write_json_atomic(manifest_file, previous_manifest)
+        return {
+            "dry_run": not apply,
+            "idempotent": True,
+            "event_id": target_event_id,
+            "evaluation_id": evaluation_id,
+            "seq": matched_item.seq,
+            "skill_id": matched_item.candidate.skill_id,
+            "status": STATUS_PENDING,
+            "reason": reason.strip(),
+            "extra_attempts": extra_attempts,
+            "new_max_attempts": new_max_attempts,
+        }
 
     resume_event = {
+        "event_id": target_event_id,
         "resumed_at": now_local().isoformat(),
         "reason": reason.strip(),
         "extra_attempts": extra_attempts,
         "previous_attempts": record.get("attempts", 0),
         "previous_max_attempts": current_max_attempts,
         "new_max_attempts": new_max_attempts,
+        "source_ledger": "actions" if is_from_actions else "local",
     }
 
     if not apply:
         return {
             "dry_run": True,
+            "event_id": target_event_id,
             "evaluation_id": evaluation_id,
             "seq": matched_item.seq,
             "skill_id": matched_item.candidate.skill_id,
@@ -525,10 +763,44 @@ def resume_candidate(
             "new_max_attempts": new_max_attempts,
         }
 
-    backup_path = pool_path.parent / f"pool.backup.{now_local().strftime('%Y%m%d_%H%M%S')}.json"
-    shutil.copyfile(pool_path, backup_path)
+    # 阶段 1：持久化操作清单（in_progress）
+    manifest_dir.mkdir(parents=True, exist_ok=True)
+    manifest_id = f"resume_{target_event_id}"
+    manifest_file = manifest_dir / f"{manifest_id}.json"
 
-    record.setdefault("resume_history", []).append(resume_event)
+    backup_path = pool_path.parent / f"pool.backup.{manifest_id}.json"
+    if not previous_manifest:
+        shutil.copyfile(pool_path, backup_path)
+
+    manifest_data = {
+        "manifest_version": "1.0.0",
+        "manifest_id": manifest_id,
+        "event_id": target_event_id,
+        "operation": "resume_candidate",
+        "created_at": now_local().isoformat(),
+        "completed_at": None,
+        "status": "in_progress",
+        "apply": True,
+        "evaluation_id": evaluation_id,
+        "skill_id": matched_item.candidate.skill_id,
+        "content_fingerprint": matched_item.candidate.content_fingerprint,
+        "source_ledger": "actions" if is_from_actions else "local",
+        "previous_status": matched_item.status,
+        "target_status": STATUS_PENDING,
+        "previous_max_attempts": current_max_attempts,
+        "new_max_attempts": new_max_attempts,
+        "extra_attempts": extra_attempts,
+        "reason": reason.strip(),
+        "backup_path": str(backup_path),
+    }
+    if previous_manifest:
+        manifest_data = previous_manifest
+    else:
+        write_json_atomic(manifest_file, manifest_data)
+
+    # 阶段 2：写入业务状态（账本记录，若来源于 Actions 则落盘至本地账本，绝不篡改 Actions 原件）
+    if not is_idempotent_replay:
+        record.setdefault("resume_history", []).append(resume_event)
     record["max_attempts"] = new_max_attempts
     record["retryable"] = True
     record["status"] = "failed"
@@ -536,12 +808,22 @@ def resume_candidate(
     local_rec_path.parent.mkdir(parents=True, exist_ok=True)
     write_json_atomic(local_rec_path, record)
 
+    # 阶段 3：更新候选池状态
     matched_item.status = STATUS_PENDING
     matched_item.block_info = None
     save_pool(pool_path, pool)
 
+    # 阶段 4：标记操作清单完成
+    manifest_data["status"] = "completed"
+    manifest_data["completed_at"] = now_local().isoformat()
+    write_json_atomic(manifest_file, manifest_data)
+
     return {
         "dry_run": False,
+        "idempotent": is_idempotent_replay,
+        "manifest_id": manifest_id,
+        "manifest_path": str(manifest_file),
+        "event_id": target_event_id,
         "evaluation_id": evaluation_id,
         "seq": matched_item.seq,
         "skill_id": matched_item.candidate.skill_id,
