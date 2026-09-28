@@ -7,6 +7,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+import hashlib
 import re
 from typing import Any, Iterable
 
@@ -36,6 +37,29 @@ def strip_search_operators(query: str) -> str:
         return ""
     cleaned = re.sub(SEARCH_OPERATOR_PATTERN, "", query, flags=re.IGNORECASE)
     return normalize_query(cleaned)
+
+
+def generate_query_identity(query: str) -> str:
+    """生成稳定的查询短语唯一标识（由规范化小写内容哈希派生）。"""
+    clean = normalize_query(query).casefold()
+    return hashlib.sha256(clean.encode("utf-8")).hexdigest()[:12]
+
+
+def extract_negative_constraints(text: str) -> list[str]:
+    """从需求文本中提取显式负向约束词（例如：不需要 selenium、不用 requests、without headless）。"""
+    if not isinstance(text, str):
+        return []
+    patterns = [
+        r"(?:不需要|不用|不要|免去|无需|排斥)\s*([a-zA-Z0-9_\u4e00-\u9fa5]+)",
+        r"(?:without|no|not)\s+([a-zA-Z0-9_-]+)",
+    ]
+    tokens: list[str] = []
+    for pat in patterns:
+        for m in re.finditer(pat, text, re.IGNORECASE):
+            token = normalize_query(m.group(1)).casefold()
+            if token and token not in tokens:
+                tokens.append(token)
+    return tokens
 
 
 def deduplicate_queries(
@@ -195,21 +219,103 @@ def generate_suggested_queries(
     gaps: list[dict[str, Any]],
     existing_queries: list[str],
     max_suggestions: int = 3,
+    negative_tokens: list[str] | None = None,
 ) -> list[str]:
-    """根据缺口生成拟补充查询建议（去除已存在项，受最大建议数约束）。"""
+    """根据缺口生成拟补充查询建议（去除已存在项，过滤负向约束词，受最大建议数约束）。"""
     existing_cf = {normalize_query(q).casefold() for q in existing_queries if q}
+    neg_cf = {t.casefold() for t in (negative_tokens or []) if t}
     suggestions: list[str] = []
 
     for gap in gaps:
         for term in gap.get("missing_terms", []):
             clean_term = normalize_query(term)
-            if clean_term and clean_term.casefold() not in existing_cf:
-                existing_cf.add(clean_term.casefold())
-                suggestions.append(clean_term)
-                if len(suggestions) >= max_suggestions:
-                    return suggestions
+            if not clean_term:
+                continue
+            term_cf = clean_term.casefold()
+            if term_cf in existing_cf:
+                continue
+            # 严格避开用户明确提出的负向约束词
+            if any(neg in term_cf for neg in neg_cf):
+                continue
+            existing_cf.add(term_cf)
+            suggestions.append(clean_term)
+            if len(suggestions) >= max_suggestions:
+                return suggestions
 
     return suggestions
+
+
+def apply_terminology_completion(
+    topic: str,
+    intent: str,
+    queries: list[str],
+    *,
+    max_total_queries: int = 8,
+    raw_queries: list[str] | None = None,
+) -> tuple[list[str], dict[str, Any]]:
+    """有界术语补全（纯函数）：
+    在不突破最大查询上限（max_total_queries）的前提下，将概念缺口建议词合并入最终查询。
+    绝不改变 intent、required 或 quality_signal。
+    """
+    clean_queries = deduplicate_queries(queries)
+    available_slots = max(0, max_total_queries - len(clean_queries))
+    gaps = detect_terminology_gaps(topic, intent, clean_queries)
+    neg_tokens = extract_negative_constraints(topic)
+    suggested = generate_suggested_queries(
+        gaps, clean_queries, max_suggestions=available_slots, negative_tokens=neg_tokens
+    )
+
+    final_queries = list(clean_queries)
+    added_queries: list[str] = []
+    for s in suggested:
+        if len(final_queries) >= max_total_queries:
+            break
+        s_norm = normalize_query(s)
+        if s_norm and s_norm.casefold() not in {q.casefold() for q in final_queries}:
+            final_queries.append(s_norm)
+            added_queries.append(s_norm)
+
+    # 构造每条查询的稳定身份与来源归因
+    attributions: list[dict[str, Any]] = []
+    for q in final_queries:
+        qid = generate_query_identity(q)
+        if q in clean_queries:
+            attributions.append({
+                "query": q,
+                "query_id": qid,
+                "source": "model",
+            })
+        else:
+            # 找到来源概念
+            matched_concept_id = None
+            matched_concept_name = None
+            for gap in gaps:
+                if any(normalize_query(term).casefold() == q.casefold() for term in gap.get("missing_terms", [])):
+                    matched_concept_id = gap.get("concept_id")
+                    matched_concept_name = gap.get("concept_name")
+                    break
+            attributions.append({
+                "query": q,
+                "query_id": qid,
+                "source": "terminology",
+                "concept_id": matched_concept_id,
+                "concept_name": matched_concept_name,
+            })
+
+    metadata = {
+        "version": TERMINOLOGY_VERSION,
+        "mode": "completion",
+        "applied": True,
+        "raw_queries": raw_queries if raw_queries is not None else list(clean_queries),
+        "original_queries": list(clean_queries),
+        "final_queries": list(final_queries),
+        "added_queries": added_queries,
+        "max_total_queries": max_total_queries,
+        "gaps_count": len(gaps),
+        "gaps": gaps,
+        "query_attributions": attributions,
+    }
+    return final_queries, metadata
 
 
 def build_terminology_observation(
@@ -221,15 +327,32 @@ def build_terminology_observation(
     max_suggestions: int = 3,
 ) -> dict[str, Any]:
     """构建术语观察模式事实对象（严格声明 applied=False，不增加真实请求）。"""
-    gaps = detect_terminology_gaps(topic, intent, queries)
-    suggestions = generate_suggested_queries(gaps, queries, max_suggestions=max_suggestions)
+    clean_queries = deduplicate_queries(queries)
+    gaps = detect_terminology_gaps(topic, intent, clean_queries)
+    neg_tokens = extract_negative_constraints(topic)
+    suggestions = generate_suggested_queries(
+        gaps, clean_queries, max_suggestions=max_suggestions, negative_tokens=neg_tokens
+    )
+
+    attributions = [
+        {
+            "query": q,
+            "query_id": generate_query_identity(q),
+            "source": "model",
+        }
+        for q in clean_queries
+    ]
 
     return {
         "version": TERMINOLOGY_VERSION,
         "mode": "observation",
         "applied": False,
-        "raw_queries": raw_queries if raw_queries is not None else list(queries),
-        "queries": list(queries),
+        "raw_queries": raw_queries if raw_queries is not None else list(clean_queries),
+        "queries": list(clean_queries),
+        "original_queries": list(clean_queries),
+        "final_queries": list(clean_queries),
+        "added_queries": [],
+        "query_attributions": attributions,
         "gaps_count": len(gaps),
         "gaps": gaps,
         "suggested_queries": suggestions,
@@ -243,9 +366,12 @@ __all__ = [
     "has_search_operator",
     "strip_search_operators",
     "deduplicate_queries",
+    "generate_query_identity",
+    "extract_negative_constraints",
     "TerminologyConcept",
     "TERMINOLOGY_TABLE",
     "detect_terminology_gaps",
     "generate_suggested_queries",
+    "apply_terminology_completion",
     "build_terminology_observation",
 ]

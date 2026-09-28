@@ -10,8 +10,11 @@ import re
 from typing import Any
 
 from .terminology import (
+    TERMINOLOGY_VERSION,
+    apply_terminology_completion,
     build_terminology_observation,
     deduplicate_queries,
+    generate_query_identity,
     has_search_operator,
     normalize_query,
     strip_search_operators,
@@ -198,12 +201,39 @@ def parse_reflection_queries(content, previous):
     return deduplicate_queries(data["queries"], previous=previous)
 
 
-def parse_plan_with_observation(content: str, *, topic: str):
+def parse_plan_with_observation(
+    content: str,
+    *,
+    topic: str,
+    enable_completion: bool = False,
+    max_total_queries: int = MAX_PLAN_QUERIES,
+) -> tuple[dict[str, Any], dict[str, Any]]:
     """Normal execution and checkpoint recovery share the same audit derivation."""
     plan = parse_query_plan(content, topic=topic)
     raw = json.loads(_strip_fence(content))
+    raw_queries = list(raw.get("queries", [])) if isinstance(raw, dict) else list(plan["queries"])
+
+    if enable_completion:
+        final_queries, metadata = apply_terminology_completion(
+            topic,
+            plan["intent"],
+            plan["queries"],
+            max_total_queries=max_total_queries,
+            raw_queries=raw_queries,
+        )
+        plan["original_queries"] = list(plan["queries"])
+        plan["queries"] = final_queries
+        plan["terminology_completion_enabled"] = True
+        plan["terminology_version"] = metadata.get("version", TERMINOLOGY_VERSION)
+        plan["query_attributions"] = metadata.get("query_attributions", [])
+        return plan, metadata
+
     observation = build_terminology_observation(
-        topic, plan["intent"], plan["queries"], raw_queries=list(raw["queries"]))
+        topic,
+        plan["intent"],
+        plan["queries"],
+        raw_queries=raw_queries,
+    )
     return plan, observation
 
 
@@ -370,6 +400,7 @@ __all__ = [
     "_strip_fence",
     "_normalize_space",
     "build_plan_prompt",
+    "parse_plan_with_observation",
     "parse_query_plan",
     "build_clarification_question_prompt",
     "parse_clarification_question",

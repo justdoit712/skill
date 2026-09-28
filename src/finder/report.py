@@ -100,11 +100,24 @@ def render_find_markdown_report(report: dict[str, Any]) -> str:
         lines.append(f"- 第 {round_info.get('round')} 轮：{round_info.get('strategy')}，新增仓库 {round_info.get('new_repos', 0)} 个，"
                      f"新增候选 {round_info.get('candidates', 0)} 个，已评估 {round_info.get('evaluated', 0)} 个。")
     obs = report.get("terminology_observation") or plan.get("terminology_observation")
-    if isinstance(obs, dict) and obs.get("gaps"):
+    if plan.get("terminology_completion_enabled"):
+        added = plan.get("added_queries", [])
+        lines.append(f"- **术语补全检索**：已启用有界补全（版本 {plan.get('terminology_version', '1.0.0')}），合并补充 {len(added)} 条术语短语（上限 {plan.get('max_total_queries', 8)} 条）")
+    elif isinstance(obs, dict) and obs.get("gaps"):
         gaps_count = len(obs["gaps"])
         sug = obs.get("suggested_queries", [])
         sug_str = f"，拟补充短语：{', '.join(sug)}" if sug else ""
         lines.append(f"- **术语覆盖观察**：检测到 {gaps_count} 处概念缺口{sug_str}（当前为观察模式，未追加请求）")
+
+    query_yield = search.get("query_yield")
+    if isinstance(query_yield, dict) and query_yield:
+        lines.append("- **查询收益与边际新增**（边际新增计数受执行顺序影响）：")
+        for q_text, stats in query_yield.items():
+            t_repos = stats.get("total_repos", 0)
+            m_repos = stats.get("marginal_repos", 0)
+            t_skills = stats.get("total_skills", 0)
+            m_skills = stats.get("marginal_skills", 0)
+            lines.append(f"  - `{q_text}`：返回仓库 {t_repos} 个（边际新增 {m_repos}），展开技能 {t_skills} 个（边际新增 {m_skills}）")
     lines.extend([
         "",
         "---",
@@ -303,6 +316,7 @@ def sanitize_report_for_public(report: dict[str, Any]) -> dict[str, Any]:
         "plan": {
             "intent": str(plan.get("intent") or ""),
             "criteria": plan.get("criteria") or [],
+            "terminology_completion_enabled": bool(plan.get("terminology_completion_enabled", False)),
         },
         "terminology_observation": (
             {
@@ -323,6 +337,15 @@ def sanitize_report_for_public(report: dict[str, Any]) -> dict[str, Any]:
             "rounds_history": [{"round": r.get("round"), "strategy": r.get("strategy"),
                                 "repos": r.get("new_repos", 0), "candidates": r.get("candidates", 0),
                                 "evaluated": r.get("evaluated", 0)} for r in search.get("rounds_history", [])],
+            "query_yield": {
+                str(q): {
+                    "total_repos": int(v.get("total_repos", 0)),
+                    "marginal_repos": int(v.get("marginal_repos", 0)),
+                    "total_skills": int(v.get("total_skills", 0)),
+                    "marginal_skills": int(v.get("marginal_skills", 0)),
+                }
+                for q, v in (search.get("query_yield") or {}).items()
+            } if isinstance(search.get("query_yield"), dict) else {},
         },
         "evaluation_attempts": report.get("evaluation_attempts"),
         "evaluated_count": report.get("evaluated_count"),

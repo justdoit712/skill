@@ -113,7 +113,8 @@ class FinderRunState:
         self.report["metrics"] = build_run_metrics(self.report, kind="finder")
         self.report["updated_at"] = now_local().isoformat()
         # During execution only the authoritative JSON is updated.
-        write_json_atomic(self.run_dir / "report.json", self.report)
+        if self.run_dir is not None:
+            write_json_atomic(self.run_dir / "report.json", self.report)
 
     def stop_reason(self):
         if self.usage.unknown_usage_requests or any(c.get("state") in ("started", "unknown") for c in self.report["calls"]):
@@ -338,6 +339,7 @@ def _run_planning_phase(
     max_turns: int = DEFAULT_MAX_CLARIFICATION_TURNS,
     input_fn: Any = input,
     log: Any = print,
+    enable_terminology_completion: bool = False,
 ) -> tuple[dict[str, Any] | None, str | None]:
     """执行阶段一需求理解与规划：
     执行最多 max_turns 轮人机交互澄清轮询；
@@ -430,9 +432,15 @@ def _run_planning_phase(
         return None, "plan_failed"
 
     try:
-        plan, obs = parse_plan_with_observation(result.content, topic=topic)
+        plan, obs = parse_plan_with_observation(
+            result.content,
+            topic=topic,
+            enable_completion=enable_terminology_completion,
+        )
         state.report["terminology_observation"] = obs
-        if obs and obs.get("gaps"):
+        if enable_terminology_completion and obs.get("applied"):
+            log(f"【术语补全】已合并补充 {len(obs.get('added_queries', []))} 条术语短语至搜索规划: {', '.join(obs.get('added_queries', []))}")
+        elif obs and obs.get("gaps"):
             log(f"【术语观察模式】检测到 {len(obs['gaps'])} 处表述缺口，建议短语: {', '.join(obs.get('suggested_queries', []))} (观察模式未追加检索)")
         if history:
             plan["clarification_history"] = history
@@ -460,7 +468,8 @@ def execute_find_skill(topic="", *, limit=None, max_evaluations=None, max_tokens
                        call_model_fn=None, fetch_candidate_materials_fn=None,
                        expand_and_collect_candidates_fn=None, search_github_repos_fn=None,
                        owned_ids=None, max_clarification_turns=None,
-                       input_fn=input, resume_dir=None, retry_failed_searches=False):
+                       input_fn=input, resume_dir=None, retry_failed_searches=False,
+                       enable_terminology_completion=None):
     from src.infra.llm import validate_model_config
     from src.infra.owned import load_owned_ids
     if retry_failed_searches and resume_dir is None:
@@ -501,6 +510,14 @@ def execute_find_skill(topic="", *, limit=None, max_evaluations=None, max_tokens
               for k, explicit, default in (("limit", limit, DEFAULT_LIMIT), ("max_evaluations", max_evaluations, DEFAULT_MAX_EVALUATIONS), ("max_tokens", max_tokens, DEFAULT_MAX_TOKENS), ("max_rounds", max_rounds, DEFAULT_MAX_ROUNDS))}
     if params["limit"] < 1 or params["max_evaluations"] < params["limit"] or params["max_tokens"] < 1000 or params["max_rounds"] < 1:
         raise ValueError("要求 limit >= 1、max_evaluations >= limit、max_tokens >= 1000、max_rounds >= 1")
+
+    if enable_terminology_completion is None:
+        enable_terminology_completion = bool(
+            prev_params.get("enable_terminology_completion", False)
+            if resumed
+            else run_cfg.get("enable_terminology_completion", False)
+        )
+    params["enable_terminology_completion"] = bool(enable_terminology_completion)
 
     if max_clarification_turns is None:
         raw_turns = run_cfg.get("max_clarification_turns")
@@ -596,6 +613,7 @@ def execute_find_skill(topic="", *, limit=None, max_evaluations=None, max_tokens
                 max_turns=max_clarification_turns,
                 input_fn=input_fn,
                 log=log,
+                enable_terminology_completion=params["enable_terminology_completion"],
             )
         if plan_error:
             reason = plan_error
@@ -718,6 +736,11 @@ def main(argv: list[str] | None = None, *, root: Path | None = None) -> int:
         default=None,
         help="阶段一人机澄清轮数（默认 3 轮）",
     )
+    parser.add_argument(
+        "--enable-terminology-completion",
+        action="store_true",
+        help="启用技术术语有界补全（在现有查询预算内合并术语别名）",
+    )
 
     try:
         args = parser.parse_args(argv)
@@ -759,6 +782,7 @@ def main(argv: list[str] | None = None, *, root: Path | None = None) -> int:
             max_clarification_turns=args.turns,
             resume_dir=resume_path,
             retry_failed_searches=args.retry_failed_searches,
+            enable_terminology_completion=args.enable_terminology_completion if args.enable_terminology_completion else None,
         )
     except KeyboardInterrupt:
         return 130

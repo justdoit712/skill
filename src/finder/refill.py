@@ -19,7 +19,8 @@ def initialize_search(state):
     search = report["search"]
     defaults = {"current_round": 0, "rounds_history": [], "query_cursors": {},
                 "repository_queue": [], "discovered_repo_urls": [], "candidate_queue": [],
-                "discovered_skill_ids": [], "processed_skill_ids": [], "consecutive_failures": 0}
+                "discovered_skill_ids": [], "processed_skill_ids": [], "consecutive_failures": 0,
+                "query_yield": {}, "skill_discovery_sources": {}}
     for key, value in defaults.items():
         search.setdefault(key, value)
     completed = {e["candidate"]["skill_id"] for e in report["evaluations"]}
@@ -180,6 +181,16 @@ def _search_pages(state, current, queries, search_fn, sleep, log):
         if cursor.get("last_error") is None:
             if len(repos) >= 20:
                 state.report["coverage_incomplete"] = True
+            qy = search.setdefault("query_yield", {}).setdefault(query, {
+                "query": query,
+                "total_repos": 0,
+                "marginal_repos": 0,
+                "total_skills": 0,
+                "marginal_skills": 0,
+                "note": "边际新增计数受执行顺序影响",
+            })
+            qy["total_repos"] += len(repos)
+
             # Persist every discovered repository, including those outside the next expansion batch.
             new = []
             for repo in repos:
@@ -187,7 +198,16 @@ def _search_pages(state, current, queries, search_fn, sleep, log):
                 if key not in seen:
                     seen.add(key)
                     new.append(dict(repo, url=repo.get("url") or f"https://github.com/{key}",
-                                    key=key, state="pending", query=query, round=current["round"]))
+                                    key=key, state="pending", query=query, round=current["round"],
+                                    first_discovered_by=query, discovery_queries=[query]))
+                    qy["marginal_repos"] += 1
+                else:
+                    for existing_r in search["repository_queue"]:
+                        if existing_r.get("key") == key:
+                            d_queries = existing_r.setdefault("discovery_queries", [existing_r.get("query", "")])
+                            if query not in d_queries:
+                                d_queries.append(query)
+                            break
             search["repository_queue"].extend(new)
             search["discovered_repo_urls"] = [r["url"] for r in search["repository_queue"]]
             search["repos_discovered"] = len(search["repository_queue"])
@@ -218,11 +238,47 @@ def _expand_pending(state, current, expand, owned_ids, sleep, log):
         repo["state"] = "failed" if failed else "expanded"
         search["expansions"].extend(expansions)
         state.report["coverage_incomplete"] |= any(not e.get("ok", False) or e.get("truncated") for e in expansions)
+        repo_first_query = repo.get("first_discovered_by") or repo.get("query", "")
+        repo_discovery_queries = list(repo.get("discovery_queries") or ([repo_first_query] if repo_first_query else []))
+
+        for dq in repo_discovery_queries:
+            if dq:
+                search.setdefault("query_yield", {}).setdefault(dq, {
+                    "query": dq,
+                    "total_repos": 0,
+                    "marginal_repos": 0,
+                    "total_skills": 0,
+                    "marginal_skills": 0,
+                    "note": "边际新增计数受执行顺序影响",
+                })["total_skills"] += len(candidates)
+
         for candidate in candidates:
             if candidate.skill_id in seen:
+                existing_src = search.setdefault("skill_discovery_sources", {}).get(candidate.skill_id)
+                if existing_src:
+                    for dq in repo_discovery_queries:
+                        if dq and dq not in existing_src.setdefault("discovery_queries", []):
+                            existing_src["discovery_queries"].append(dq)
                 continue
             seen.add(candidate.skill_id)
             current["candidates"] += 1
+
+            search.setdefault("skill_discovery_sources", {})[candidate.skill_id] = {
+                "skill_id": candidate.skill_id,
+                "first_discovered_by": repo_first_query,
+                "discovery_queries": repo_discovery_queries,
+                "repo_url": repo.get("url") or f"https://github.com/{repo.get('owner')}/{repo.get('repo')}",
+            }
+            if repo_first_query:
+                search.setdefault("query_yield", {}).setdefault(repo_first_query, {
+                    "query": repo_first_query,
+                    "total_repos": 0,
+                    "marginal_repos": 0,
+                    "total_skills": 0,
+                    "marginal_skills": 0,
+                    "note": "边际新增计数受执行顺序影响",
+                })["marginal_skills"] += 1
+
             if is_skill_owned(candidate.skill_id, owned_ids):
                 search["skipped_owned_ids"].append(candidate.skill_id)
                 search["skipped"].append({"skill_id": candidate.skill_id, "code": "owned"})
