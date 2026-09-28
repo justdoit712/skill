@@ -64,15 +64,17 @@ from .pool import (
     STATUS_LENGTH_EXCEEDED,
     STATUS_BLOCKED,
     STATUS_PENDING as POOL_STATUS_PENDING,
+    STATUS_STATIC_SKIPPED,
     append_new_candidates,
     create_pool_from_candidates,
     get_pending_candidates,
     is_pool_expired,
+    prioritize_pending_batch,
     load_pool,
     save_pool,
     update_candidate_status,
 )
-from .prescreen import prescreen
+from .prescreen import prescreen, should_static_skip
 from .report import build_report, write_report
 from .failure_policy import (
     ACTION_BLOCKED,
@@ -742,6 +744,16 @@ def process_candidate(state, item):
         save_pool(state.pool_path, state.pool)
         state.save()
         return True
+    enable_static_skip = state.settings.get('enable_static_skip', False) or (state.cfg.get('rules', {}).get('static_heuristics', {}).get('enable_skip', False))
+    if should_static_skip(pres.static_observation, enable_static_skip):
+        state.report['static_skipped'] += 1
+        state.report.setdefault('static_heuristics', {}).setdefault('skipped_count', 0)
+        state.report['static_heuristics']['skipped_count'] += 1
+        state.log(f"跳过 #{seq}（静态规则明确空壳占位，不调用模型）：{candidate.skill_id}")
+        update_candidate_status(state.pool, seq, STATUS_STATIC_SKIPPED)
+        save_pool(state.pool_path, state.pool)
+        state.save()
+        return True
     eid = evaluation_id(candidate, state.cfg['model'], state.cfg['rules'])
     local_record = state.ledger.get(eid)
     record = local_record or _read(state.root / 'data' / 'state' / 'evaluations' / evaluation_filename(eid), {})
@@ -989,9 +1001,11 @@ def _collect(root, local, settings, cfg, discover_fn, fetch_fn, evaluate_fn, log
         'cached': 0,
         'fetch_failed': 0,
         'prescreen_excluded': 0,
+        'static_skipped': 0,
         'static_heuristics': {
             'version': STATIC_HEURISTIC_VERSION,
             'observed_count': 0,
+            'skipped_count': 0,
             'tier_counts': {},
             'signal_counts': {},
             'suggested_actions': {},
@@ -1051,7 +1065,14 @@ def _collect(root, local, settings, cfg, discover_fn, fetch_fn, evaluate_fn, log
         state.ledger.cap = state.ledger.reserved_count + max(1, len(state.pool))
         state.ledger.save()
         state.save()
-        state.pending_items = get_pending_candidates(state.pool)
+        enable_batch_prioritization = state.settings.get('enable_batch_prioritization', True)
+        batch_size = int(state.settings.get('batch_size', 20) or 20)
+        state.pending_items = prioritize_pending_batch(
+            get_pending_candidates(state.pool),
+            batch_size=batch_size,
+            manual_picks=state.manual_picks,
+            enabled=enable_batch_prioritization,
+        )
         for item in state.pending_items:
             if not process_candidate(state, item):
                 break
@@ -1109,6 +1130,7 @@ def main(argv=None, *, root: Path | None = None) -> int:
     parser.add_argument("--sync-config", action="store_true", help="纯离线重建：无需模型凭据与网络，将 config/*.json 同步到 data 与 public/data")
     parser.add_argument("--enrich-catalog", action="store_true", help="离线结构化增强：从现有数据中提取形态、示例请求与亮点，不修改原中文简述")
     parser.add_argument("--refresh-pool", action="store_true", help="重新搜索并重建候选池，保留超长跳过标记")
+    parser.add_argument("--enable-static-skip", action="store_true", help="启用静态规则明确空壳占位跳过（避免调用模型）")
     parser.add_argument("--pool-watermark", type=int, help="候选池待处理数量低于此水位线时自动增量补水，默认 20")
     args = parser.parse_args(argv)
     log = lambda message: print(message, flush=True)
@@ -1173,6 +1195,8 @@ def main(argv=None, *, root: Path | None = None) -> int:
                 settings[key] = getattr(args, argument)
         if args.refresh_pool:
             settings["refresh_pool"] = True
+        if args.enable_static_skip:
+            settings["enable_static_skip"] = True
         _valid_settings(settings)
         cfg = load_all_config(root / "config")
         problems = precheck(cfg)

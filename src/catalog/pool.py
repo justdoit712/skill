@@ -16,6 +16,7 @@ from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 import json
 from pathlib import Path
+import re
 from typing import Any
 from src.infra.files import write_json_atomic
 from src.shared.runtime import now_local
@@ -29,6 +30,7 @@ STATUS_FETCH_FAILED = "fetch_failed"
 STATUS_NOT_SKILL = "not_skill"
 STATUS_LENGTH_EXCEEDED = "length_exceeded"
 STATUS_BLOCKED = "blocked"
+STATUS_STATIC_SKIPPED = "static_skipped"
 
 VALID_STATUSES = {
     STATUS_PENDING,
@@ -38,6 +40,7 @@ VALID_STATUSES = {
     STATUS_NOT_SKILL,
     STATUS_LENGTH_EXCEEDED,
     STATUS_BLOCKED,
+    STATUS_STATIC_SKIPPED,
 }
 
 
@@ -71,6 +74,7 @@ class CandidatePool:
             "not_skill": 0,
             "length_exceeded": 0,
             "blocked": 0,
+            "static_skipped": 0,
         }
         for item in self.items:
             counts[item.status] = counts.get(item.status, 0) + 1
@@ -290,3 +294,44 @@ def update_candidate_status(
     item.status = status
     item.checked_at = checked_at or now_local().isoformat()
     pool.updated_at = now_local().isoformat()
+
+
+def prioritize_pending_batch(
+    pending_items: list[PoolItem],
+    *,
+    batch_size: int = 20,
+    manual_picks: set[str] | None = None,
+    enabled: bool = True,
+) -> list[PoolItem]:
+    """对待处理候选分批并在批内进行优先级排序（兼顾公平性与高优项响应）。
+
+    按小批次（默认 20 条）切分，在批次内部调整处理顺序：
+    - Rank 0: 手工挑选（manual_picks）或敏感合规信号（优先复核）
+    - Rank 1: 结构正常完整（普通技能）
+    - 批内同级保持原始 seq 顺序（FIFO），跨批次保持严格窗口隔离，绝不因后批高优项导致前批候选无限饥饿。
+    """
+    if not enabled or not pending_items:
+        return list(pending_items)
+
+    manual_picks = manual_picks or set()
+
+    def item_rank(item: PoolItem) -> int:
+        cand = item.candidate
+        if cand.skill_id in manual_picks:
+            return 0
+        haystack = f"{cand.name} {cand.description} {cand.path}"
+        for pattern in (
+            r"(?i)实盘|自动下单|下单执行|交易执行|券商接口|auto[-_ ]?trad|place[-_ ]?order|order[-_ ]?execution|live[-_ ]?trad|broker[-_ ]?api",
+            r"(?i)临床诊断|治疗决策|开处方|clinical[-_ ]?(decision|diagnos)|treatment[-_ ]?decision|prescription[-_ ]?engine",
+            r"(?i)凭据外传|窃取密钥|exfiltrat|steal[-_ ]?credential|harvest[-_ ]?credential",
+        ):
+            if re.search(pattern, haystack):
+                return 0
+        return 1
+
+    result: list[PoolItem] = []
+    for i in range(0, len(pending_items), batch_size):
+        chunk = pending_items[i : i + batch_size]
+        sorted_chunk = sorted(chunk, key=lambda it: (item_rank(it), it.seq))
+        result.extend(sorted_chunk)
+    return result

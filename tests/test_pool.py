@@ -92,6 +92,7 @@ class PoolTest(unittest.TestCase):
                 "not_skill": 0,
                 "length_exceeded": 0,
                 "blocked": 0,
+                "static_skipped": 0,
             },
         )
 
@@ -136,6 +137,7 @@ class PoolTest(unittest.TestCase):
                 "not_skill": 1,
                 "length_exceeded": 0,
                 "blocked": 0,
+                "static_skipped": 0,
             },
         )
 
@@ -251,6 +253,7 @@ class PoolTest(unittest.TestCase):
                 "not_skill": 0,
                 "length_exceeded": 0,
                 "blocked": 1,
+                "static_skipped": 0,
             },
         )
 

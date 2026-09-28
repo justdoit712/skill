@@ -231,6 +231,25 @@ def analyze_static_tier(
     }
 
 
+def should_static_skip(
+    observation: dict[str, Any] | None,
+    enabled: bool = False,
+) -> bool:
+    """判断是否应当静态跳过候选（明确空壳占位且开启跳过）。
+
+    严格保证：
+    - 仅在 enabled 为 True 且 tier == TIER_CLEAR_PLACEHOLDER 且 suggested_action == ACTION_SUGGEST_SKIP 时返回 True；
+    - 有效短文本、缺 Frontmatter、未来路线图 TODO、敏感信号或未抓取内容绝不跳过；
+    - 纯观察模式下（enabled=False）一律返回 False。
+    """
+    if not enabled or not observation:
+        return False
+    tier = observation.get("tier")
+    action = observation.get("suggested_action")
+    return tier == TIER_CLEAR_PLACEHOLDER and action == ACTION_SUGGEST_SKIP
+
+
+
 
 @dataclass
 class PrescreenConfig:

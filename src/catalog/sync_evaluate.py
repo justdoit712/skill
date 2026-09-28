@@ -17,6 +17,7 @@ from src.shared.usage import UsageTotals
 from .store import catalog_task
 from .budget import BudgetLedger
 from .decide import decide
+from .prescreen import should_static_skip
 from .evaluation import evaluate, evaluation_id
 from .models import Candidate, PrescreenResult
 from .overrides import apply_manual_overrides, get_manual_exclusions, get_manual_picks
@@ -95,6 +96,16 @@ def _evaluate_queue(queue, cfg, ledger, staged, started, token_cap,
 
         if candidate.skill_id in active_snoozed_set:
             results[candidate.skill_id] = {"status": "skipped", "note": "临时冷冻条目直接跳过"}
+            skipped += 1
+            continue
+
+        enable_static_skip = bool(
+            (cfg.get("rules", {}).get("static_heuristics") or {}).get("enable_skip")
+            or cfg.get("enable_static_skip")
+        )
+        pres_obs = (item.get("prescreen") or {}).get("static_observation")
+        if should_static_skip(pres_obs, enable_static_skip):
+            results[candidate.skill_id] = {"status": "skipped", "note": "静态规则明确空壳占位，跳过评估"}
             skipped += 1
             continue
 

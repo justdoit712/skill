@@ -121,7 +121,16 @@ def ordered_pending(
         skill = skill_of(item)
         if item.get("manual_pick") or (skill and skill in manual_picks):
             return 1
-        return 2
+        pres = item.get("prescreen") or {}
+        obs = pres.get("static_observation") or {}
+        tier = obs.get("tier")
+        if tier == "tier_suspect":
+            return 1  # 敏感信号优先复核
+        if tier == "tier_normal":
+            return 2  # 结构完整的正常技能
+        if tier == "tier_clear_placeholder":
+            return 4  # 纯占位候选若未跳过排在最后
+        return 3
 
     ordered: list[dict] = []
     seen: set[str] = set()

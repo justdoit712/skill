@@ -22,7 +22,7 @@ from .discovery import discover
 from .evaluation import evaluation_id
 from .models import Candidate, PrescreenResult
 from .overrides import get_manual_picks
-from .prescreen import DECISION_QUEUED, prescreen
+from .prescreen import DECISION_QUEUED, prescreen, should_static_skip
 from .snooze import get_active_snoozed
 from src.shared.owned import is_skill_owned
 
@@ -322,11 +322,24 @@ def prepare(
     active_snoozed_set = set(active_snoozed_dict.keys())
     queued = [(c, p, f) for c, p, f in enriched if p.decision == DECISION_QUEUED]
     excluded = [(c, p, f) for c, p, f in enriched if p.decision != DECISION_QUEUED]
-    batch = [
+    enable_static_skip = bool(
+        (cfg.get("rules", {}).get("static_heuristics") or {}).get("enable_skip")
+        or cfg.get("enable_static_skip")
+    )
+    raw_batch = [
         (c, p, f)
         for c, p, f in queued
         if c.content_fingerprint and c.skill_id not in active_snoozed_set and not is_skill_owned(c.skill_id, owned_ids)
     ]
+    if enable_static_skip:
+        batch = []
+        for c, p, f in raw_batch:
+            if should_static_skip(getattr(p, "static_observation", None), True):
+                excluded.append((c, p, {"ok": False, "bytes": 0, "reason_code": "STATIC_PLACEHOLDER_SKIPPED", "skipped": "明确空壳占位"}))
+            else:
+                batch.append((c, p, f))
+    else:
+        batch = raw_batch
 
     return {
         "outcomes": outcomes,
