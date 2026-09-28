@@ -9,6 +9,15 @@ import json
 import re
 from typing import Any
 
+from .terminology import (
+    TERMINOLOGY_VERSION,
+    build_terminology_observation,
+    deduplicate_queries,
+    has_search_operator,
+    normalize_query,
+    strip_search_operators,
+)
+
 MAX_PLAN_QUERIES = 8
 MAX_CRITERIA_COUNT = 6
 PLAN_MAX_OUTPUT_TOKENS = 4000
@@ -34,7 +43,7 @@ CLARIFICATION_MAX_OUTPUT_TOKENS = 1500
 
 
 def _normalize_space(s: str) -> str:
-    return re.sub(r"\s+", " ", s.strip())
+    return normalize_query(s)
 
 
 def build_plan_prompt(topic: str) -> tuple[str, str]:
@@ -78,7 +87,7 @@ def build_plan_prompt(topic: str) -> tuple[str, str]:
     return system, user
 
 
-def parse_query_plan(content: str) -> dict[str, Any]:
+def parse_query_plan(content: str, *, topic: str = "") -> dict[str, Any]:
     """解析模型输出的规划结果，并进行严格的强类型校验。"""
     cleaned = _strip_fence(content)
     try:
@@ -102,18 +111,13 @@ def parse_query_plan(content: str) -> dict[str, Any]:
 
     if len(raw_queries) > MAX_PLAN_QUERIES or any(not isinstance(q, str) for q in raw_queries):
         raise ValueError("queries 类型错误或超过查询上限")
-    queries: list[str] = []
-    for q in raw_queries:
-        if isinstance(q, str):
-            clean_q = _normalize_space(q)
-            # 过滤包含明显搜索操作符的短语，保证纯净
-            clean_q = re.sub(r"\b(in|repo|org|user|language|stars|forks):[^\s]+", "", clean_q).strip()
-            if clean_q and clean_q not in queries:
-                queries.append(clean_q)
+
+    valid_raw_strings = [q for q in raw_queries if isinstance(q, str)]
+    cleaned_candidates = [strip_search_operators(q) for q in valid_raw_strings]
+    queries = deduplicate_queries(cleaned_candidates)[:MAX_PLAN_QUERIES]
 
     if not queries:
         raise ValueError("未能提取出有效的搜索短语")
-    queries = queries[:MAX_PLAN_QUERIES]
 
     # 校验 criteria
     raw_criteria = data.get("criteria")
@@ -189,16 +193,10 @@ def parse_reflection_queries(content, previous):
             or not isinstance(data["queries"], list) or not 3 <= len(data["queries"]) <= 5
             or any(not isinstance(q, str) or not q.strip() or len(q) > 200 for q in data["queries"])):
         raise ValueError("反思输出必须仅包含 3 到 5 个非空检索短语")
-    seen = {_normalize_space(q).casefold() for q in previous}
-    queries = []
     for query in data["queries"]:
-        query = _normalize_space(query)
-        if re.search(r"\b(?:in|repo|org|user|language|stars|forks|site):", query):
+        if has_search_operator(query):
             raise ValueError("反思关键词不得包含搜索操作符")
-        if query.casefold() not in seen:
-            seen.add(query.casefold())
-            queries.append(query)
-    return queries
+    return deduplicate_queries(data["queries"], previous=previous)
 
 
 def build_clarification_question_prompt(

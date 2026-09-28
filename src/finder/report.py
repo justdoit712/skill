@@ -95,6 +95,12 @@ def render_find_markdown_report(report: dict[str, Any]) -> str:
     for round_info in search.get("rounds_history", []):
         lines.append(f"- 第 {round_info.get('round')} 轮：{round_info.get('strategy')}，新增仓库 {round_info.get('new_repos', 0)} 个，"
                      f"新增候选 {round_info.get('candidates', 0)} 个，已评估 {round_info.get('evaluated', 0)} 个。")
+    obs = report.get("terminology_observation") or plan.get("terminology_observation")
+    if isinstance(obs, dict) and obs.get("gaps"):
+        gaps_count = len(obs["gaps"])
+        sug = obs.get("suggested_queries", [])
+        sug_str = f"，拟补充短语：{', '.join(sug)}" if sug else ""
+        lines.append(f"- **术语覆盖观察**：检测到 {gaps_count} 处概念缺口{sug_str}（当前为观察模式，未追加请求）")
     lines.extend([
         "",
         "---",
@@ -286,6 +292,16 @@ def sanitize_report_for_public(report: dict[str, Any]) -> dict[str, Any]:
             "intent": str(plan.get("intent") or ""),
             "criteria": plan.get("criteria") or [],
         },
+        "terminology_observation": (
+            {
+                "version": obs.get("version"),
+                "mode": obs.get("mode", "observation"),
+                "applied": bool(obs.get("applied", False)),
+                "gaps_count": len(obs.get("gaps", [])),
+            }
+            if isinstance(obs := (report.get("terminology_observation") or plan.get("terminology_observation")), dict)
+            else None
+        ),
         "search": {
             "queries_executed": sanitized_queries,
             "repos_discovered": int(search.get("repos_discovered") or 0),

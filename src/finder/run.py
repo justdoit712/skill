@@ -98,6 +98,7 @@ class FinderRunState:
                   "max_tokens": DEFAULT_MAX_TOKENS, "max_rounds": DEFAULT_MAX_ROUNDS, **params}
         self.report = {"schema_version": "1.0.0", "topic": topic, "parameters": params,
             "status": "running", "stop_reason": None, "plan": None,
+            "terminology_observation": None,
             "evaluation_attempts": 0, "evaluated_count": 0, "evaluations": [],
             "shortlist": [], "alternatives": [], "calls": [], "errors": [],
             "coverage_incomplete": False,
@@ -426,7 +427,25 @@ def _run_planning_phase(
         return None, "plan_failed"
 
     try:
-        plan = parse_query_plan(result.content)
+        plan = parse_query_plan(result.content, topic=topic)
+        from .terminology import build_terminology_observation
+        raw_queries: list[str] = []
+        try:
+            raw_data = json.loads(_strip_fence(result.content))
+            if isinstance(raw_data.get("queries"), list):
+                raw_queries = [str(q) for q in raw_data["queries"] if isinstance(q, str)]
+        except Exception:
+            raw_queries = list(plan.get("queries", []))
+
+        obs = build_terminology_observation(
+            topic=topic,
+            intent=plan.get("intent", ""),
+            queries=plan.get("queries", []),
+            raw_queries=raw_queries,
+        )
+        state.report["terminology_observation"] = obs
+        if obs and obs.get("gaps"):
+            log(f"【术语观察模式】检测到 {len(obs['gaps'])} 处表述缺口，建议短语: {', '.join(obs.get('suggested_queries', []))} (观察模式未追加检索)")
         if history:
             plan["clarification_history"] = history
             plan["clarification_turns"] = len(history)
@@ -570,7 +589,7 @@ def execute_find_skill(topic="", *, limit=None, max_evaluations=None, max_tokens
             if not state.report.get("plan") and last.get("stage") == "planning" and last.get("response"):
                 result = last["response"]
                 if result.get("ok") and result.get("content"):
-                    state.report["plan"] = parse_query_plan(result["content"])
+                    state.report["plan"] = parse_query_plan(result["content"], topic=topic)
         if state.stop_reason():
             raise RunStopped(state.stop_reason())
         plan = state.report.get("plan")
