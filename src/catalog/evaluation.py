@@ -34,6 +34,7 @@ from src.infra.llm import (
 )
 from src.shared.schema import normalize_skill_type, normalize_string_list
 from src.shared.usage import UsageTotals
+from src.shared.output_contracts import resolve_response_format, STAGE_CATALOG_ASSESSMENT, STAGE_CATALOG_REVIEW
 from .decide import NON_BLOCKING_DOMAIN_VALUES, decide
 from .quality import QUALITY_CHECKS, enabled, prompt_instructions, check_quality, hold_for_review
 from .models import Candidate
@@ -307,7 +308,8 @@ def evaluate(
     if pending_evaluation is None:
         if on_request is not None:
             on_request("before", "assessment", None)
-        call = call_model(model_cfg, system, user, api_key=api_key, session=session, sleep=sleep)
+        fmt = resolve_response_format(model_cfg, STAGE_CATALOG_ASSESSMENT)
+        call = call_model(model_cfg, system, user, api_key=api_key, response_format=fmt, session=session, sleep=sleep)
         calls.append(call)
         if on_request is not None:
             on_request("after", "assessment", call)
@@ -395,7 +397,8 @@ def evaluate(
             }
         else:
             reviewer_system = system + "\n\n你是独立复核员。重新从原文判断，重点寻找泛泛建议、缺失步骤、无法验证的承诺和依赖缺口。不得为了凑数推荐，也不得因篇幅短机械否定。"
-            review_call = call_model(model_cfg, reviewer_system, user, api_key=api_key, session=session, sleep=sleep)
+            rev_fmt = resolve_response_format(model_cfg, STAGE_CATALOG_REVIEW)
+            review_call = call_model(model_cfg, reviewer_system, user, api_key=api_key, response_format=rev_fmt, session=session, sleep=sleep)
             calls.append(review_call)
             if on_request is not None:
                 on_request("after", "review", review_call)

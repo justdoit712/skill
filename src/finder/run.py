@@ -23,6 +23,7 @@ from uuid import uuid4
 
 from src.infra.files import write_json_atomic
 from src.infra.llm import call_model, resolve_api_key
+from src.shared.output_contracts import resolve_response_format
 from src.shared.runtime import is_test_environment, now_local
 from src.shared.usage import UsageTotals
 from src.shared.versions import FINDER_REPORT_SCHEMA_VERSION
@@ -146,7 +147,11 @@ class FinderRunState:
                 self.report["evaluation_attempts"] -= 1
             raise
         try:
-            result = transport(cfg, system, user, api_key=api_key, sleep=sleep)
+            fmt = resolve_response_format(cfg, stage or ("evaluation" if candidate_id else "planning"))
+            try:
+                result = transport(cfg, system, user, api_key=api_key, response_format=fmt, sleep=sleep)
+            except TypeError:
+                result = transport(cfg, system, user, api_key=api_key, sleep=sleep)
         except BaseException:
             call["state"] = "unknown"
             self.usage.record_unknown_request()

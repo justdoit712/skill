@@ -33,6 +33,33 @@ RETRYABLE_STATUS = frozenset({408, 429, 500, 502, 503, 504})
 REASON_MODEL_ERROR = "MODEL_ERROR"
 REASON_NETWORK_ERROR = "NETWORK_ERROR"
 REASON_LENGTH_EXCEEDED = "LENGTH_EXCEEDED"
+REASON_RESPONSE_FORMAT_UNSUPPORTED = "RESPONSE_FORMAT_UNSUPPORTED"
+
+
+def validate_response_format(fmt: Any) -> list[str]:
+    """校验 response_format 格式对象的合法性。"""
+    if fmt is None:
+        return []
+    if isinstance(fmt, str):
+        if fmt not in ("json_object", "text", "json_schema"):
+            return [f"未知字符串 response_format 类型：{fmt}"]
+        return []
+    if not isinstance(fmt, dict):
+        return ["response_format 必须是字符串或对象"]
+    fmt_type = fmt.get("type")
+    if not fmt_type:
+        return ["response_format 对象缺少 type 字段"]
+    if fmt_type == "json_schema":
+        js = fmt.get("json_schema")
+        if not isinstance(js, dict):
+            return ["json_schema 类型必须包含 json_schema 配置对象"]
+        if not js.get("name") or not isinstance(js.get("name"), str):
+            return ["json_schema 必须提供非空的 name"]
+        if "schema" not in js or not isinstance(js["schema"], dict):
+            return ["json_schema 必须提供有效的 schema 对象"]
+    elif fmt_type not in ("json_object", "text"):
+        return [f"不支持的 response_format type: {fmt_type}"]
+    return []
 
 
 @dataclass
@@ -96,6 +123,7 @@ def call_model(
     user: str,
     *,
     api_key: str | None = None,
+    response_format: Any = None,
     session: requests.Session | None = None,
     sleep=time.sleep,
 ) -> ModelCallResult:
@@ -130,9 +158,19 @@ def call_model(
         "temperature": float(request_cfg.get("temperature", 0)),
         "max_tokens": max_output_tokens,
     }
-    response_format = request_cfg.get("response_format")
-    if response_format:
-        payload["response_format"] = {"type": response_format}
+    fmt = response_format if response_format is not None else request_cfg.get("response_format")
+    if fmt:
+        val_errs = validate_response_format(fmt)
+        if val_errs:
+            return ModelCallResult(
+                ok=False,
+                reason_code=REASON_MODEL_ERROR,
+                error="response_format 校验失败：" + "; ".join(val_errs),
+            )
+        if isinstance(fmt, str):
+            payload["response_format"] = {"type": fmt}
+        elif isinstance(fmt, dict):
+            payload["response_format"] = fmt
 
     headers = {
         "Authorization": f"Bearer {key}",
@@ -174,6 +212,10 @@ def call_model(
                 if status >= 400:
                     body = response.text[:300]
                     result.error = f"HTTP {status}: {body}"
+                    if status == 400 and any(keyword in body.lower() for keyword in ("response_format", "json_schema")):
+                        result.latency_ms = int((time.monotonic() - started) * 1000)
+                        result.reason_code = REASON_RESPONSE_FORMAT_UNSUPPORTED
+                        return result
                     if status in RETRYABLE_STATUS and attempt < max_attempts:
                         response.close()
                         sleep(min(2.0 ** (attempt - 1), 8.0))
