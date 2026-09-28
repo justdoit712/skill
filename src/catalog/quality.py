@@ -124,24 +124,14 @@ def check_quality(evaluation, text, rules):
     return out
 
 
-def hold_for_review(evaluation, status, explanation):
-    out = deepcopy(evaluation)
-    out["evidence_traceability"] = {"value": "unknown", "evidence": explanation, "citations": []}
-    out["quality_audit"]["review_status"] = status
-    out["quality_audit"]["review_note"] = explanation
-    if "NEEDS_VERIFICATION" not in out["reason_codes"]:
-        out["reason_codes"].append("NEEDS_VERIFICATION")
-    return out
-
-
 def quality_summary(evaluation):
-    """仅发布质量理由和复核状态，完整两轮记录留在评估账本。"""
+    """发布质量理由与评估状态，兼容历史两轮记录。"""
     audit = evaluation.get("quality_audit") or {}
     if not audit:
         return None
     review = audit.get("review") or {}
     reasons = []
-    for label, source in (("初评", evaluation), ("复核", review)):
+    for label, source in (("评估" if audit.get("review_status") == "single_pass" else "初评", evaluation), ("复核", review)):
         for key in ("scope_match", "purpose_clarity", "instruction_completeness",
                     "evidence_traceability", "dependency_transparency", "risk_review"):
             item = source.get(key) or {}

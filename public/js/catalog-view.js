@@ -72,7 +72,8 @@ export function qualityBlock(entry) {
   }
   if (quality.review_note) rows.push("<p>" + escapeHtml(quality.review_note) + "</p>");
   for (const reason of quality.blocking_reasons || []) rows.push("<p>" + escapeHtml(reason) + "</p>");
-  return '<details class="review-box"><summary>筛选依据 · ' + escapeHtml(states[quality.review_status] || "待核实") + '</summary>' + rows.join("") + '<p>基于所提供材料评估，未经功能实测。</p></details>';
+  const status = quality.review_status === "single_pass" ? "" : " · " + (states[quality.review_status] || "待核实");
+  return '<details class="review-box"><summary>筛选依据' + escapeHtml(status) + '</summary>' + rows.join("") + '<p>基于所提供材料评估，未经功能实测。</p></details>';
 }
 
 /**

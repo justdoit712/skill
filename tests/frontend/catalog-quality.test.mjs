@@ -176,3 +176,9 @@ test("modals: initConfirmModal handles open, cancel, and confirm flow", () => {
     globalThis.document = prevDoc;
   }
 });
+
+test("single-pass quality does not display legacy review claims", () => {
+  const html = qualityBlock({ quality_summary: { review_status: "single_pass", checks: {} } });
+  assert.match(html, /<summary>筛选依据<\/summary>/);
+  assert.doesNotMatch(html, /单轮评估|两轮|初评未达到|待完成复核/);
+});

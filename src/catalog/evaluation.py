@@ -33,10 +33,9 @@ from src.infra.llm import (
     resolve_api_key,
 )
 from src.shared.schema import normalize_skill_type, normalize_string_list
-from src.shared.usage import UsageTotals
-from src.shared.output_contracts import resolve_response_format, STAGE_CATALOG_ASSESSMENT, STAGE_CATALOG_REVIEW
-from .decide import NON_BLOCKING_DOMAIN_VALUES, decide
-from .quality import QUALITY_CHECKS, enabled, prompt_instructions, check_quality, hold_for_review
+from src.shared.output_contracts import resolve_response_format, STAGE_CATALOG_ASSESSMENT
+from .decide import NON_BLOCKING_DOMAIN_VALUES
+from .quality import QUALITY_CHECKS, enabled, prompt_instructions, check_quality
 from .models import Candidate
 
 REASON_PARSE_ERROR = "PARSE_ERROR"
@@ -291,7 +290,7 @@ def evaluate(
     on_request=None,
     pending_evaluation=None,
 ) -> dict:
-    """对单个候选评估；开启深度质量规则时，拟推荐项再独立复核。
+    """对单个候选进行单轮评估，保留质量检查与程序引用核验。
 
     call 为最后一次响应，calls 包含所有响应；on_request 在各请求前后供编排落账。
     任何失败都返回明确的处理失败，不生成中文简介或结论。
@@ -366,106 +365,14 @@ def evaluate(
             "error": str(exc),
         }
 
-    if enabled(rules) and decide(evaluation, rules)["decision"] == "recommended":
-        usage = UsageTotals()
-        if call is not None:
-            usage.add(call)
-        # 用量未知时停止，不把缺失统计当成免费的复核。
-        if usage.unknown_usage_requests:
-            return {
-                "ok": False,
-                "evaluation": None,
-                "pending_evaluation": evaluation,
-                "call": call,
-                "calls": calls,
-                "stage": "assessment",
-                "reason_code": "REVIEW_PENDING",
-                "error_kind": "REVIEW_PENDING",
-                "error": "初评用量不明，本轮停止；已保存初评，下次只继续复核。",
-            }
-        elif on_request is not None and on_request("before", "review", None) is False:
-            return {
-                "ok": False,
-                "evaluation": None,
-                "pending_evaluation": evaluation,
-                "call": call,
-                "calls": calls,
-                "stage": "assessment",
-                "reason_code": "REVIEW_PENDING",
-                "error_kind": "REVIEW_PENDING",
-                "error": "预算已达上限；已保存初评，下次只继续复核。",
-            }
-        else:
-            reviewer_system = system + "\n\n你是独立复核员。重新从原文判断，重点寻找泛泛建议、缺失步骤、无法验证的承诺和依赖缺口。不得为了凑数推荐，也不得因篇幅短机械否定。"
-            rev_fmt = resolve_response_format(model_cfg, STAGE_CATALOG_REVIEW)
-            review_call = call_model(model_cfg, reviewer_system, user, api_key=api_key, response_format=rev_fmt, session=session, sleep=sleep)
-            calls.append(review_call)
-            if on_request is not None:
-                on_request("after", "review", review_call)
-            if not review_call.ok:
-                # 技术失败不伪装为质量不合格；已有推荐由状态机保留。
-                return {
-                    "ok": False,
-                    "evaluation": None,
-                    "call": review_call,
-                    "calls": calls,
-                    "stage": "review",
-                    "reason_code": review_call.reason_code or REASON_MODEL_ERROR,
-                    "error_kind": getattr(review_call, "reason_code", None) or REASON_MODEL_ERROR,
-                    "error": "独立复核调用失败",
-                }
-            if not (review_call.content or "").strip() and review_call.finish_reason != "length":
-                return {
-                    "ok": False,
-                    "evaluation": None,
-                    "call": review_call,
-                    "calls": calls,
-                    "stage": "review",
-                    "reason_code": REASON_MODEL_ERROR,
-                    "error_kind": ERROR_KIND_RESPONSE_EMPTY,
-                    "error": "独立复核正常结束但未提供有效正文",
-                }
-            try:
-                review = check_quality(
-                    parse_evaluation(
-                        review_call.content or "", rules, candidate.content_fingerprint, taxonomy
-                    ),
-                    text,
-                    rules,
-                )
-            except OutputJsonError as exc:
-                return {
-                    "ok": False,
-                    "evaluation": None,
-                    "call": review_call,
-                    "calls": calls,
-                    "stage": "review",
-                    "reason_code": REASON_PARSE_ERROR,
-                    "error_kind": ERROR_KIND_OUTPUT_JSON_INVALID,
-                    "error": f"独立复核输出不是合法 JSON：{exc}",
-                }
-            except (OutputSchemaError, ValueError) as exc:
-                return {
-                    "ok": False,
-                    "evaluation": None,
-                    "call": review_call,
-                    "calls": calls,
-                    "stage": "review",
-                    "reason_code": REASON_PARSE_ERROR,
-                    "error_kind": getattr(exc, "error_kind", ERROR_KIND_OUTPUT_SCHEMA_INVALID),
-                    "error": f"独立复核输出无效：{exc}",
-                }
-            if decide(review, rules)["decision"] != "recommended" or review.get("main_category") != evaluation.get("main_category"):
-                evaluation = hold_for_review(evaluation, "disagreed", "两轮独立评估存在分歧，留在候选区等待核实。")
-            else:
-                evaluation["quality_audit"]["review_status"] = "passed"
-            evaluation["quality_audit"]["review"] = review
+    if enabled(rules):
+        evaluation["quality_audit"]["review_status"] = "single_pass"
     return {
         "ok": True,
         "evaluation": evaluation,
         "call": calls[-1] if calls else None,
         "calls": calls,
-        "stage": "review" if len(calls) > 1 or pending_evaluation is not None else "assessment",
+        "stage": "assessment",
         "reason_code": None,
         "error_kind": None,
         "error": None,

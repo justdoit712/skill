@@ -1,4 +1,4 @@
-"""生产评估器的两轮筛选、证据检查和用量边界；模型响应全部离线替换。"""
+"""生产评估器的单轮筛选、证据检查和用量边界；模型响应全部离线替换。"""
 
 from copy import deepcopy
 import json
@@ -49,16 +49,15 @@ class QualityTest(unittest.TestCase):
             result = evaluate(self.candidate, TEXT, model_cfg={}, rules=self.rules, taxonomy=self.taxonomy, **kwargs)
         return result, model
 
-    def test_only_two_independent_passes_recommend(self):
-        result, model = self.run_evaluation([response(self.raw), response(self.raw, 160)])
+    def test_single_pass_recommends_with_one_request(self):
+        result, model = self.run_evaluation([response(self.raw)])
         self.assertEqual(decide(result["evaluation"], self.rules)["decision"], "recommended")
-        self.assertEqual(result["evaluation"]["quality_audit"]["review_status"], "passed")
-        self.assertEqual(sum(c.total_tokens for c in result["calls"]), 260)
-        self.assertEqual(model.call_count, 2)
-        # 复核只接收相同原文，未接收初评结论。
-        self.assertEqual(model.call_args_list[0].args[2], model.call_args_list[1].args[2])
+        self.assertEqual(result["evaluation"]["quality_audit"]["review_status"], "single_pass")
+        self.assertEqual(sum(c.total_tokens for c in result["calls"]), 100)
+        self.assertEqual(model.call_count, 1)
+        self.assertEqual(result["stage"], "assessment")
 
-    def test_fabricated_quote_never_reaches_review(self):
+    def test_fabricated_quote_stays_candidate(self):
         self.raw["purpose_clarity"]["citations"][0]["quote"] = "并不存在的原文"
         result, model = self.run_evaluation([response(self.raw)])
         self.assertEqual(decide(result["evaluation"], self.rules)["decision"], "candidate")
@@ -72,33 +71,35 @@ class QualityTest(unittest.TestCase):
         self.assertEqual(decide(result["evaluation"], self.rules)["decision"], "candidate")
         self.assertEqual(model.call_count, 1)
 
-    def test_disagreement_holds_candidate(self):
-        review = deepcopy(self.raw)
-        review["quality_checks"]["verification"].update(value="unknown", evidence="缺少验收条件")
-        result, _ = self.run_evaluation([response(self.raw), response(review)])
+    def test_verification_gap_still_holds_candidate(self):
+        self.raw["quality_checks"]["verification"].update(value="unknown", evidence="缺少验收条件")
+        result, model = self.run_evaluation([response(self.raw)])
         self.assertEqual(decide(result["evaluation"], self.rules)["decision"], "candidate")
-        self.assertEqual(result["evaluation"]["quality_audit"]["review_status"], "disagreed")
+        self.assertEqual(model.call_count, 1)
 
-    def test_unknown_usage_stops_before_review(self):
+    def test_unknown_usage_preserves_completed_assessment(self):
         result, model = self.run_evaluation([response(self.raw, usage=False)])
         self.assertEqual(model.call_count, 1)
-        self.assertFalse(result["ok"])
-        self.assertEqual(result["reason_code"], "REVIEW_PENDING")
-        self.assertIsNotNone(result["pending_evaluation"])
+        self.assertTrue(result["ok"])
+        self.assertNotIn("pending_evaluation", result)
+        self.assertEqual(decide(result["evaluation"], self.rules)["decision"], "recommended")
 
-    def test_budget_can_stop_between_rounds(self):
+    def test_only_assessment_callbacks_are_emitted(self):
+        events = []
         result, model = self.run_evaluation([response(self.raw)],
-            on_request=lambda event, stage, call: not (event == "before" and stage == "review"))
+            on_request=lambda event, stage, call: events.append((event, stage)))
+        self.assertTrue(result["ok"])
         self.assertEqual(model.call_count, 1)
-        self.assertFalse(result["ok"])
-        self.assertEqual(result["reason_code"], "REVIEW_PENDING")
+        self.assertEqual(events, [("before", "assessment"), ("after", "assessment")])
 
-    def test_review_transport_failure_is_not_quality_failure(self):
-        failed = ModelCallResult(ok=False, attempts=1, reason_code="NETWORK_ERROR")
-        result, _ = self.run_evaluation([response(self.raw), failed])
-        self.assertFalse(result["ok"])
-        self.assertIsNone(result["evaluation"])
-        self.assertEqual(len(result["calls"]), 2)
+    def test_valid_pending_assessment_finishes_without_another_request(self):
+        pending = parse_evaluation(json.dumps(self.raw), self.rules,
+                                   self.candidate.content_fingerprint, self.taxonomy)
+        result, model = self.run_evaluation([], pending_evaluation=pending)
+        self.assertTrue(result["ok"])
+        self.assertEqual(model.call_count, 0)
+        self.assertEqual(result["calls"], [])
+        self.assertEqual(decide(result["evaluation"], self.rules)["decision"], "recommended")
 
     def test_malformed_quality_is_processing_failure(self):
         self.raw["quality_checks"] = []
@@ -200,26 +201,29 @@ class LocalQualityIntegrationTest(unittest.TestCase):
                 fetch_fn=lambda url, **kw: FetchResult(url=url, ok=True, text=TEXT))
         return report, model
 
-    def test_both_requests_count_once_and_quality_reaches_public_catalog(self):
-        report, model = self.collect([response(self.raw), response(self.raw, 160)])
+    def test_one_request_and_quality_reaches_public_catalog(self):
+        report, model = self.collect([response(self.raw)])
+        self.assertEqual(model.call_count, 1)
         self.assertEqual(report["new_recommended"], 1)
-        self.assertEqual(report["usage"]["requests"], 2)
-        self.assertEqual(report["usage"]["total_tokens"], 260)
-        self.assertEqual([c["stage"] for c in report["calls"]], ["assessment", "review"])
+        self.assertEqual(report["usage"]["requests"], 1)
+        self.assertEqual(report["usage"]["total_tokens"], 100)
+        self.assertEqual([c["stage"] for c in report["calls"]], ["assessment"])
         self.assertEqual(report["stop_reason"], "target_reached")
         catalog = json.loads((self.harness.root / "public/data/catalog.json").read_text(encoding="utf-8"))
-        self.assertEqual(catalog["recommended"][0]["quality_summary"]["review_status"], "passed")
+        self.assertEqual(catalog["recommended"][0]["quality_summary"]["review_status"], "single_pass")
 
-    def test_budget_stops_review_and_other_candidates(self):
+    def test_budget_keeps_completed_result_and_stops_other_candidates(self):
+        self.harness.settings["target_recommended"] = 2
         self.harness.settings["max_total_tokens"] = 100
         report, model = self.collect([response(self.raw)])
         self.assertEqual(model.call_count, 1)
         self.assertEqual(report["stop_reason"], "token_limit")
-        self.assertEqual(report["new_recommended"], 0)
+        self.assertEqual(report["new_recommended"], 1)
         self.assertEqual(report["usage"]["total_tokens"], 100)
         self.assertEqual(report["failed_evaluations"], 0)
 
-    def test_next_run_resumes_review_without_repeating_assessment(self):
+    def test_next_run_processes_next_candidate_without_review(self):
+        self.harness.settings["target_recommended"] = 2
         self.harness.settings["max_total_tokens"] = 100
         first, _ = self.collect([response(self.raw)])
         self.assertEqual(first["stop_reason"], "token_limit")
@@ -228,7 +232,8 @@ class LocalQualityIntegrationTest(unittest.TestCase):
         self.assertEqual(model.call_count, 1)
         self.assertEqual(resumed["new_recommended"], 1)
         self.assertEqual(resumed["usage"]["total_tokens"], 160)
-        self.assertEqual([c["stage"] for c in resumed["calls"]], ["review"])
+        self.assertEqual([c["stage"] for c in resumed["calls"]], ["assessment"])
+        self.assertNotEqual(first["calls"][0]["skill_id"], resumed["calls"][0]["skill_id"])
 
     def test_missing_usage_does_not_spend_more(self):
         report, model = self.collect([response(self.raw, usage=False)])
@@ -237,11 +242,11 @@ class LocalQualityIntegrationTest(unittest.TestCase):
         self.assertEqual(report["usage"]["unknown_usage_requests"], 1)
         self.assertGreater(report["unknown_usage_reserved_tokens"], 0)
 
-    def test_interrupted_review_keeps_known_first_usage_and_marks_unknown_second(self):
-        report, model = self.collect([response(self.raw), KeyboardInterrupt()])
+    def test_interrupted_assessment_marks_unknown_usage(self):
+        report, model = self.collect([KeyboardInterrupt()])
         self.assertEqual(report["stop_reason"], "interrupted")
-        self.assertEqual(report["usage"]["requests"], 2)
-        self.assertEqual(report["usage"]["total_tokens"], 100)
+        self.assertEqual(report["usage"]["requests"], 1)
+        self.assertEqual(report["usage"]["total_tokens"], 0)
         self.assertEqual(report["usage"]["unknown_usage_requests"], 1)
         self.assertEqual(report["calls"][-1]["status"], "unknown")
 
@@ -264,26 +269,24 @@ class ActionsQualityIntegrationTest(unittest.TestCase):
                 evaluate_fn=evaluate, fetch_fn=pipeline_tests.fake_fetch(TEXT))
         return result, model
 
-    def test_budget_checkpoint_resumes_and_keeps_both_request_records(self):
+    def test_one_request_completes_at_budget_limit(self):
         first, model = self.run_phase([response(self.raw)])
         self.assertEqual(first["tokens_used"], 100)
         self.assertEqual(model.call_count, 1)
-        self.assertEqual(first["evaluated"], 0)
-        self.assertEqual(first["queue_pending"], 1)
-        second, model = self.run_phase([response(self.raw, 150)])
-        self.assertEqual(model.call_count, 1)
-        self.assertEqual(second["tokens_used"], 150)
-        self.assertEqual(second["evaluated"], 1)
-        self.assertEqual(second["queue_pending"], 0)
+        self.assertEqual(first["evaluated"], 1)
+        self.assertEqual(first["queue_pending"], 0)
+        second, model = self.run_phase([])
+        self.assertEqual(model.call_count, 0)
+        self.assertEqual(second["tokens_used"], 0)
         records = [json.loads(p.read_text(encoding="utf-8")) for p in (self.harness.state / "evaluations").glob("*.json")]
-        self.assertEqual([r["stage"] for r in records[0]["requests"]], ["assessment", "review"])
+        self.assertEqual([r["stage"] for r in records[0]["requests"]], ["assessment"])
 
-    def test_unknown_usage_stops_without_recommending(self):
+    def test_unknown_usage_stops_after_preserving_completed_result(self):
         result, model = self.run_phase([response(self.raw, usage=False)])
         self.assertEqual(model.call_count, 1)
         self.assertTrue(result["usage_unknown"])
-        self.assertEqual(result["evaluated"], 0)
-        self.assertEqual(result["queue_pending"], 1)
+        self.assertEqual(result["evaluated"], 1)
+        self.assertEqual(result["queue_pending"], 0)
 
 
 if __name__ == "__main__":

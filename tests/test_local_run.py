@@ -185,7 +185,7 @@ class LocalRunTest(unittest.TestCase):
         self.assertEqual(report['skipped_length_exceeded'], 1)
         self.assertEqual(report['failed_evaluations'], 5)
 
-    def test_review_length_counts_both_calls_and_continues(self):
+    def test_assessment_length_counts_request_and_continues(self):
         from unittest.mock import patch
         from src.catalog.evaluation import evaluate
         from tests.test_catalog_quality import TEXT, assessment, response
@@ -193,21 +193,21 @@ class LocalRunTest(unittest.TestCase):
         raw = assessment(self.cfg['rules'])
         def fetch(url, **kwargs):
             return FetchResult(url=url, ok=True, text=TEXT)
-        responses = [response(raw), self.length_result()['call'], response(raw), response(raw)]
+        responses = [self.length_result()['call'], response(raw)]
         with patch('src.catalog.evaluation.call_model', side_effect=responses) as model:
             report = self.collect(count=2, evaluate_fn=evaluate, fetch_fn=fetch)
-        self.assertEqual(model.call_count, 4)
+        self.assertEqual(model.call_count, 2)
         self.assertEqual(report['stop_reason'], 'target_reached')
         self.assertEqual(report['skipped_length_exceeded'], 1)
-        self.assertEqual(report['usage']['total_tokens'], 400)
-        self.assertEqual(report['usage']['requests'], 4)
-        self.assertEqual(report['calls'][1]['stage'], 'review')
-        self.assertEqual(report['calls'][1]['status'], 'length_exceeded')
+        self.assertEqual(report['usage']['total_tokens'], 200)
+        self.assertEqual(report['usage']['requests'], 2)
+        self.assertEqual(report['calls'][0]['stage'], 'assessment')
+        self.assertEqual(report['calls'][0]['status'], 'length_exceeded')
         records = [json.loads(p.read_text(encoding='utf-8'))
                    for p in (self.root / 'data/local/state/evaluations').glob('*.json')]
         failed = next(r for r in records if r['status'] == 'failed')
-        self.assertEqual(len(failed['requests']), 2)
-        self.assertEqual(failed['requests'][1]['reason_code'], 'LENGTH_EXCEEDED')
+        self.assertEqual(len(failed['requests']), 1)
+        self.assertEqual(failed['requests'][0]['reason_code'], 'LENGTH_EXCEEDED')
         self.assertFalse(failed['retryable'])
 
     def test_token_limit_stops_following_request(self):
@@ -973,18 +973,18 @@ class LocalRunTest(unittest.TestCase):
         self.settings.update(max_retries=5, target_recommended=1)
         result, calls = self.collect_with_real_evaluator(
             [self.timeout_response() for _ in range(5)] + self.valid_responses())
-        self.assertEqual(calls, 7)
+        self.assertEqual(calls, 6)
         self.assertEqual(result['stop_reason'], 'target_reached')
-        self.assertEqual(result['usage']['requests'], 7)
+        self.assertEqual(result['usage']['requests'], 6)
         self.assertEqual(result['usage']['unknown_usage_requests'], 5)
-        self.assertEqual(result['usage']['total_tokens'], 200)
-        self.assertEqual(result['budget_tokens'], 200 + result['unknown_usage_reserved_tokens'])
+        self.assertEqual(result['usage']['total_tokens'], 100)
+        self.assertEqual(result['budget_tokens'], 100 + result['unknown_usage_reserved_tokens'])
         self.assertGreater(result['unknown_usage_reserved_tokens'], 0)
-        self.assertEqual([c['attempt'] for c in result['calls']], [1, 2, 3, 4, 5, 6, 6])
+        self.assertEqual([c['attempt'] for c in result['calls']], [1, 2, 3, 4, 5, 6])
         self.assertIn('重连 5/5', '\n'.join(self.logs))
         self.assertNotIn('usage_unknown', result['stop_causes'])
         record = json.loads(next((self.root / 'data/local/state/evaluations').glob('*.json')).read_text(encoding='utf-8'))
-        self.assertEqual(len(record['requests']), 7)
+        self.assertEqual(len(record['requests']), 6)
         self.assertEqual(sum(c['unknown_usage_reserved_tokens'] for c in record['requests']),
                          result['unknown_usage_reserved_tokens'])
 
@@ -993,7 +993,7 @@ class LocalRunTest(unittest.TestCase):
         responses = [ModelCallResult(ok=False, reason_code='MODEL_ERROR', http_status=status, attempts=1)
                      for status in (429, 500, 503)]
         result, calls = self.collect_with_real_evaluator(responses + self.valid_responses())
-        self.assertEqual(calls, 5)
+        self.assertEqual(calls, 4)
         self.assertEqual(result['stop_reason'], 'target_reached')
         self.assertEqual(result['usage']['unknown_usage_requests'], 3)
 
@@ -1014,7 +1014,7 @@ class LocalRunTest(unittest.TestCase):
         self.assertEqual(result['stop_causes'], ['token_limit'])
         self.assertGreaterEqual(result['unknown_usage_reserved_tokens'], 150)
 
-    def test_production_success_without_usage_stops_before_review(self):
+    def test_production_success_without_usage_stops_following_requests(self):
         self.settings['max_retries'] = 5
         responses = self.valid_responses()
         responses[0].usage = {}
@@ -1031,16 +1031,15 @@ class LocalRunTest(unittest.TestCase):
         self.assertEqual(result['stop_reason'], 'usage_unknown')
         self.assertNotIn('retry_exhausted', result['stop_causes'])
 
-    def test_production_review_timeout_retains_both_rounds_usage(self):
+    def test_production_single_pass_never_sends_review_request(self):
         self.settings.update(max_retries=5, target_recommended=1)
         result, calls = self.collect_with_real_evaluator(
-            [self.valid_responses()[0], self.timeout_response()] + self.valid_responses())
-        self.assertEqual(calls, 4)
+            [self.valid_responses()[0], AssertionError("unexpected second request")])
+        self.assertEqual(calls, 1)
         self.assertEqual(result['stop_reason'], 'target_reached')
-        self.assertEqual(result['usage']['total_tokens'], 300)
-        self.assertEqual(result['usage']['unknown_usage_requests'], 1)
-        self.assertEqual([c['stage'] for c in result['calls']],
-                         ['assessment', 'review', 'assessment', 'review'])
+        self.assertEqual(result['usage']['total_tokens'], 100)
+        self.assertEqual(result['usage']['unknown_usage_requests'], 0)
+        self.assertEqual([c['stage'] for c in result['calls']], ['assessment'])
 
 
 if __name__ == "__main__":
