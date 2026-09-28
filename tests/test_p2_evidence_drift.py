@@ -170,6 +170,154 @@ class TestEvidenceVerificationDriftTolerance(unittest.TestCase):
         )
         self.assertFalse(res.is_valid)
 
+    def test_modified_code_string_whitespace_rejected(self) -> None:
+        """Issue 5 回归测试：严禁折叠代码或字符串内部空白。
+        原文为 x = "a  b"，模型引文被篡改为 x = "a b"，位置发生漂移后必须坚决拒绝。
+        """
+        code_doc = '```python\n# test module\nx = "a  b"\ny = 10\n```'
+        materials = {"SKILL.md": code_doc}
+
+        # 原文 x = "a  b" 位于第 3 行，声称位于第 1 行（漂移 2 行）
+        # 引文被修改为 x = "a b"（双空格缩减为单空格）
+        res = verify_single_evidence(
+            {
+                "source_path": "SKILL.md",
+                "start_line": 1,
+                "end_line": 1,
+                "quote": 'x = "a b"',
+            },
+            materials,
+            allow_drift=True,
+            max_drift=3,
+        )
+        self.assertFalse(res.is_valid)
+        self.assertEqual(res.failure_code, "nearby_not_found")
+
+    def test_code_indentation_change_rejected(self) -> None:
+        """Issue 2 回归测试：代码匹配必须严格保留缩进。
+        将 cleanup() 从条件块内移到块外（缩进改变）必须被拒绝。
+        """
+        code_doc = "```python\nif condition:\n    cleanup()\n```"
+        materials = {"SKILL.md": code_doc}
+
+        # 1. 精确行号下，缩进被消除（例如模型引用 'cleanup()'，无缩进）
+        res_exact = verify_single_evidence(
+            {
+                "source_path": "SKILL.md",
+                "start_line": 2,
+                "end_line": 3,
+                "quote": "if condition:\ncleanup()",
+            },
+            materials,
+            allow_drift=False,
+        )
+        self.assertFalse(res_exact.is_valid)
+        self.assertEqual(res_exact.failure_code, "text_mismatch")
+
+        # 2. 漂移容错下，缩进被消除同样必须被拒绝
+        res_drift = verify_single_evidence(
+            {
+                "source_path": "SKILL.md",
+                "start_line": 1,
+                "end_line": 2,
+                "quote": "if condition:\ncleanup()",
+            },
+            materials,
+            allow_drift=True,
+            max_drift=3,
+        )
+        self.assertFalse(res_drift.is_valid)
+        self.assertEqual(res_drift.failure_code, "nearby_not_found")
+
+    def test_code_empty_line_deletion_rejected(self) -> None:
+        """Issue 2 回归测试：代码匹配必须严格保留代码块内部的空行。
+        删除代码中间的空行必须被拒绝。
+        """
+        code_doc = "```python\ndef run():\n    step1()\n\n    step2()\n```"
+        materials = {"SKILL.md": code_doc}
+
+        # 删除了 step1() 与 step2() 之间的空行
+        res = verify_single_evidence(
+            {
+                "source_path": "SKILL.md",
+                "start_line": 2,
+                "end_line": 5,
+                "quote": "def run():\n    step1()\n    step2()",
+            },
+            materials,
+            allow_drift=True,
+            max_drift=3,
+        )
+        self.assertFalse(res.is_valid)
+
+    def test_code_exact_indentation_and_blank_lines_accepted(self) -> None:
+        """Issue 2 回归测试：保持代码正确缩进与空行的引文能够成功核验。"""
+        code_doc = "```python\ndef run():\n    step1()\n\n    step2()\n```"
+        materials = {"SKILL.md": code_doc}
+
+        res = verify_single_evidence(
+            {
+                "source_path": "SKILL.md",
+                "start_line": 3,
+                "end_line": 5,
+                "quote": "    step1()\n\n    step2()",
+            },
+            materials,
+            allow_drift=True,
+            max_drift=2,
+        )
+        self.assertTrue(res.is_valid)
+
+    def test_multiline_code_collapsed_to_single_line_rejected(self) -> None:
+        """Issue 1 回归测试：多行代码 if ok:\n    run() 被改写为单行 if ok: run() 必须被拒绝。"""
+        code_doc = "```python\nif ok:\n    run()\n```"
+        materials = {"SKILL.md": code_doc}
+
+        # 1. 精确匹配下拒绝
+        res_exact = verify_single_evidence(
+            {
+                "source_path": "SKILL.md",
+                "start_line": 2,
+                "end_line": 3,
+                "quote": "if ok: run()",
+            },
+            materials,
+            allow_drift=False,
+        )
+        self.assertFalse(res_exact.is_valid)
+
+        # 2. 漂移容错下同样坚决拒绝
+        res_drift = verify_single_evidence(
+            {
+                "source_path": "SKILL.md",
+                "start_line": 1,
+                "end_line": 2,
+                "quote": "if ok: run()",
+            },
+            materials,
+            allow_drift=True,
+            max_drift=3,
+        )
+        self.assertFalse(res_drift.is_valid)
+
+    def test_tilde_code_block_indentation_change_rejected(self) -> None:
+        """Issue 1 回归测试：~~~ 围栏代码块必须被正确识别，缩进删改必须被坚决拒绝。"""
+        code_doc = "~~~python\nif ok:\n    run()\n~~~"
+        materials = {"SKILL.md": code_doc}
+
+        res = verify_single_evidence(
+            {
+                "source_path": "SKILL.md",
+                "start_line": 2,
+                "end_line": 3,
+                "quote": "if ok:\nrun()",
+            },
+            materials,
+            allow_drift=True,
+            max_drift=3,
+        )
+        self.assertFalse(res.is_valid)
+
     def test_cross_file_spliced_fabricated_rejected(self) -> None:
         sample = EVIDENCE_BENCHMARK_SAMPLES["cross_file_spliced_fabricated"]
         # 拼接跳过了中间行

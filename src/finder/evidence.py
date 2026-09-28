@@ -52,6 +52,66 @@ def _extract_material_text(materials: dict[str, Any], path: str) -> str | None:
     return None
 
 
+def _is_sublist(sub: list[str], full: list[str]) -> bool:
+    """检查 sub 是否作为连续子列表完整出现在 full 中。"""
+    if not sub or len(sub) > len(full):
+        return False
+    for i in range(len(full) - len(sub) + 1):
+        if full[i : i + len(sub)] == sub:
+            return True
+    return False
+
+
+def _span_matches(cand_lines: list[str], quote: str, is_code: bool) -> bool:
+    """核验候选行区间与引文是否完全匹配。
+
+    严格安全保证：
+    - 若候选区间处于代码块内，必须严格保留代码缩进（前导空白）和内部空行，严禁 strip() 前导空格或删除空行；
+      仅允许规范化行尾空白（rstrip）与换行符；
+    - 若不在代码块内（普通文本/说明），允许去除行首尾空白并按换行或单空格连结，但行内多个空格依然不得随意折叠。
+    """
+    quote_raw_lines = quote.replace("\r\n", "\n").replace("\r", "\n").splitlines()
+    if not quote_raw_lines:
+        return False
+
+    if is_code:
+        # 代码块匹配：严格保留每行的缩进（前导空格/制表符）与内部空行，仅去除行尾空白
+        cand_norm = [l.rstrip() for l in cand_lines]
+        quote_norm = [l.rstrip() for l in quote_raw_lines]
+        # 去除引文开头和结尾的纯空行（大模型摘录时常在代码块首尾多加换行），但内部空行与缩进必须严格保留
+        while quote_norm and not quote_norm[0]:
+            quote_norm.pop(0)
+        while quote_norm and not quote_norm[-1]:
+            quote_norm.pop()
+        while cand_norm and not cand_norm[0]:
+            cand_norm.pop(0)
+        while cand_norm and not cand_norm[-1]:
+            cand_norm.pop()
+
+        if not quote_norm or not cand_norm:
+            return False
+
+        # 连续行子列表匹配：每行字符与缩进必须 100% 绝对一致（保留空行与缩进，绝不折叠为单行）
+        return _is_sublist(quote_norm, cand_norm)
+
+    # 非代码文本（普通叙述）：允许行两端首尾空白去除，但保留行内字符与空格
+    cand_stripped = [l.strip() for l in cand_lines if l.strip()]
+    quote_stripped = [l.strip() for l in quote_raw_lines if l.strip()]
+    if not cand_stripped or not quote_stripped:
+        return False
+
+    # 1. 换行连接比对（连续行匹配）
+    if _is_sublist(quote_stripped, cand_stripped):
+        return True
+    # 2. Markdown 排版软换行：允许段落内折行（单空格连接）
+    cand_prose = " ".join(cand_stripped)
+    quote_prose = " ".join(quote_stripped)
+    if quote_prose and quote_prose in cand_prose:
+        return True
+
+    return False
+
+
 def verify_single_evidence(
     quote_claim: dict[str, Any],
     materials: dict[str, Any],
@@ -120,8 +180,7 @@ def verify_single_evidence(
             failure_code="invalid_line_type",
         )
 
-    clean_quote = quote.strip()
-    if not clean_quote:
+    if not quote or not quote.strip():
         return EvidenceVerificationResult(
             is_valid=False,
             verified_file="",
@@ -136,8 +195,34 @@ def verify_single_evidence(
             failure_code="quote_empty",
         )
 
+    clean_quote = quote.strip("\r\n")
+
     lines = text.splitlines()
     total_lines = len(lines)
+
+    # 预计算代码块区间，防止对代码块应用排版折行连接（支持 ``` 与 ~~~ 围栏代码块）
+    in_code_block = [False] * total_lines
+    fence_char = None
+    fence_len = 0
+    for idx, line in enumerate(lines):
+        sline_text = line.strip()
+        if fence_char is None:
+            if sline_text.startswith("```"):
+                fence_char = "`"
+                fence_len = len(sline_text) - len(sline_text.lstrip("`"))
+                in_code_block[idx] = True
+            elif sline_text.startswith("~~~"):
+                fence_char = "~"
+                fence_len = len(sline_text) - len(sline_text.lstrip("~"))
+                in_code_block[idx] = True
+            else:
+                in_code_block[idx] = False
+        else:
+            in_code_block[idx] = True
+            if fence_char == "`" and sline_text.startswith("`" * fence_len):
+                fence_char = None
+            elif fence_char == "~" and sline_text.startswith("~" * fence_len):
+                fence_char = None
 
     if not (1 <= sline <= eline <= total_lines):
         return EvidenceVerificationResult(
@@ -155,11 +240,8 @@ def verify_single_evidence(
         )
 
     # 第一层：指定行号区间内的实际文本精确比对
-    target_block = " ".join(lines[sline - 1 : eline])
-    normalized_block = re.sub(r"\s+", " ", target_block)
-    normalized_quote = re.sub(r"\s+", " ", clean_quote)
-
-    if normalized_quote in normalized_block:
+    in_code_exact = any(in_code_block[i] for i in range(sline - 1, eline))
+    if _span_matches(lines[sline - 1 : eline], clean_quote, in_code_exact):
         return EvidenceVerificationResult(
             is_valid=True,
             verified_file=spath,
@@ -198,17 +280,16 @@ def verify_single_evidence(
     minimal_matches: list[tuple[int, int]] = []
     for cand_s in range(w_start, w_end + 1):
         for cand_e in range(cand_s, w_end + 1):
-            cand_slice = " ".join(lines[cand_s - 1 : cand_e])
-            norm_cand = re.sub(r"\s+", " ", cand_slice)
-            if normalized_quote in norm_cand:
+            is_code = any(in_code_block[i] for i in range(cand_s - 1, cand_e))
+            if _span_matches(lines[cand_s - 1 : cand_e], clean_quote, is_code):
                 # 检查极小性：去除首行或尾行后是否仍包含完整引文
                 is_minimal = True
                 if cand_s < cand_e:
-                    slice_no_head = " ".join(lines[cand_s : cand_e])
-                    if normalized_quote in re.sub(r"\s+", " ", slice_no_head):
+                    code_no_head = any(in_code_block[i] for i in range(cand_s, cand_e))
+                    if _span_matches(lines[cand_s : cand_e], clean_quote, code_no_head):
                         is_minimal = False
-                    slice_no_tail = " ".join(lines[cand_s - 1 : cand_e - 1])
-                    if normalized_quote in re.sub(r"\s+", " ", slice_no_tail):
+                    code_no_tail = any(in_code_block[i] for i in range(cand_s - 1, cand_e - 1))
+                    if _span_matches(lines[cand_s - 1 : cand_e - 1], clean_quote, code_no_tail):
                         is_minimal = False
                 if is_minimal:
                     minimal_matches.append((cand_s, cand_e))

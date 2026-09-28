@@ -152,7 +152,7 @@ EVIDENCE_BENCHMARK_SAMPLES = {
         "source_path": "SKILL.md",
         "start_line": 17,
         "end_line": 19,
-        "quote": "def scrape_url(url: str, timeout: float = 10.0): response = httpx.get(url, timeout=timeout) return response.text",
+        "quote": "def scrape_url(url: str, timeout: float = 10.0):\n    response = httpx.get(url, timeout=timeout)\n    return response.text",
         "expected_exact_valid": True,
         "is_counterexample": False,
     },
