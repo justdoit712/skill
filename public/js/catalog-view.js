@@ -60,16 +60,17 @@ export function reviewBlock(entry) {
 export function qualityBlock(entry) {
   const quality = entry.quality_summary;
   if (!quality) return "";
-  const names = { practical_value: "实际价值", actionability: "可执行性", verification: "结果验证" };
+  const names = { scope_match: "范围匹配", purpose_clarity: "用途与价值", instruction_completeness: "说明与做法", evidence_traceability: "内容依据", dependency_transparency: "依赖与适用条件", risk_review: "明显风险", practical_value: "实际价值", actionability: "可执行性", verification: "结果验证" };
   const values = { pass: "通过", fail: "未通过", unknown: "待核实" };
   const states = { passed: "两轮评估通过", disagreed: "两轮评估有分歧", not_required: "初评未达到推荐门槛", budget_stopped: "待完成复核", usage_unknown: "待完成复核" };
   const rows = [];
   for (const [key, label] of Object.entries(names)) {
     const check = (quality.checks || {})[key];
-    if (check) rows.push("<p>" + label + "：" + escapeHtml(values[check.value] || "待核实") + " — " + escapeHtml(check.evidence || "") + "</p>");
+    if (check) rows.push("<p>" + label + "：" + escapeHtml(check.informational ? "提示" : (values[check.value] || "待核实")) + " — " + escapeHtml(check.evidence || "") + "</p>");
     const review = (quality.review_checks || {})[key];
     if (review && review.value !== "pass") rows.push("<p>复核意见（" + label + "）：" + escapeHtml(review.evidence || "") + "</p>");
   }
+  if (quality.verification_note) rows.push("<p>验证说明：" + escapeHtml(quality.verification_note) + "</p>");
   if (quality.review_note) rows.push("<p>" + escapeHtml(quality.review_note) + "</p>");
   for (const reason of quality.blocking_reasons || []) rows.push("<p>" + escapeHtml(reason) + "</p>");
   const status = quality.review_status === "single_pass" ? "" : " · " + (states[quality.review_status] || "待核实");

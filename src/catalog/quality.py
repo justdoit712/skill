@@ -3,10 +3,12 @@
 from copy import deepcopy
 
 
-QUALITY_CHECKS = {
-    "practical_value": "实际价值：指出具体任务、交付物和相对泛泛提示词的增量；宣传语、角色扮演和常识堆砌不足以通过。",
-    "actionability": "可执行性：步骤、判断条件或可直接使用的模板/参考内容足够具体；按技能形态判断，不强求纯文本技能附带代码。",
-    "verification": "结果验证：提供可检查的输出要求、示例、检查清单、测试或失败处理；简单任务可用清晰验收条件，不强求复杂测试框架。",
+from .decide import informational_unknown
+
+BASE_CHECK_NAMES = {
+    "scope_match": "范围匹配", "purpose_clarity": "用途与价值",
+    "instruction_completeness": "说明与做法", "evidence_traceability": "内容依据",
+    "dependency_transparency": "依赖与适用条件", "risk_review": "明显风险",
 }
 
 MAX_CITATION_LINES = 60
@@ -18,17 +20,19 @@ def enabled(rules):
 
 def prompt_instructions():
     return "\n".join([
-        "深度质量评估：先识别技能形态和实际任务，再检查可执行步骤、产出及验证方式。",
+        "本项目提供技能发现与比较，判断材料是否支持值得进一步了解；不做功能实测或可用性认证。",
+        "保留六项基础检查：实际价值并入 purpose_clarity，可操作性并入 instruction_completeness，不再输出三项 quality_checks。",
         "不要按篇幅、Star、作者知名度或术语数量打分；短而具体的技能可以通过。",
-        "材料引用的文件未提供时，不得假设已读取或证明其功能；证据不足用 unknown。",
-        "quality_checks 必须包含以下三个对象，各含 value（pass/fail/unknown）、evidence（判定理由）、citations：",
-        *[f"- {key}: {description}" for key, description in QUALITY_CHECKS.items()],
-        "所有基础检查、领域检查和质量检查都增加 citations 数组。",
-        '每条引用格式：{"start_line": 1, "end_line": 2, "quote": "两行完整原文"}。',
-        "行号来自下方 SKILL.md 的编号；quote 不包含编号，必须逐字复制完整连续行，每条最多 60 行，最多 3 条。优先引用最短的充分证据，避免重复长段落。",
-        "pass 必须有至少一条支持该判定的引用；fail/unknown 可用空数组，并解释缺少什么。",
-        "risk_review 的 pass 仅指所提供材料未见明显风险，不代表完整安全审计。",
-        "依赖的缺席不证明无依赖；仅有免责声明不证明功能可靠。",
+        "材料足以理解做法与价值即可；缺完整教程、代码、验收清单不单独阻止推荐。只有宣传或空泛角色设定不能通过。",
+        "材料引用的关键文件未提供时不得假设已读取；影响判断核心能力时用 unknown。",
+        "六项均给简短判定理由，核心功能的引用集中在 evidence_traceability.citations，其他基础项无需重复引用。",
+        '引用格式：{"start_line": 1, "end_line": 2, "quote": "两行完整原文"}。',
+        "使用 SKILL.md 编号；quote 不包含编号，逐字复制连续完整行，每条最多60行，最多3条，选择最短充分证据。",
+        "evidence_traceability 的 pass 必须有支持核心描述的引用；程序只验证引文存在，介绍与内容是否一致仍需你判断。",
+        "领域专项仅在适用时检查，通过项仍提供 citations；不适用的条件不得当作失败。不得因本次放宽取消金融或健康专项要求。",
+        "dependency_transparency 增加 blocking 布尔值：非关键信息缺口为 unknown、false；关键条件不清楚为 unknown、true；缺必要依赖为 fail、true。未声明依赖不等于无依赖，不能推断平台兼容性。",
+        "risk_review 的 pass 仅指所读材料未见明显风险，无需为风险不存在寻找引文；具体疑点仍须说明。",
+        "verification_note 简述材料提供的示例、验收或验证方法；未提供时如实说明。仅作优点或限制展示，不作为额外门槛。",
     ])
 
 
@@ -76,50 +80,43 @@ def verified_citations(citations, text):
 
 
 def check_quality(evaluation, text, rules):
-    """复制评估，降级没有真实引用的通过项，并把质量缺口映射到基础门槛。"""
+    """核验核心引用与适用领域证据；文档验证说明仅供展示。"""
     out = deepcopy(evaluation)
-    quality = out.setdefault("quality_checks", {})
-    if not isinstance(quality, dict) or set(quality) - set(QUALITY_CHECKS):
-        raise ValueError("quality_checks 结构无效或含未知质量标准")
-    missing = [key for key in QUALITY_CHECKS if key not in quality]
-    for key in missing:
-        quality[key] = {"value": "unknown", "evidence": "模型未提供该质量项，等待补充评估。", "citations": []}
-    groups = [(out, [c["id"] for c in rules.get("checks", [])]),
-              (out.get("domain_checks") or {}, list((out.get("domain_checks") or {}).keys())),
-              (quality, list(QUALITY_CHECKS))]
-    invalid = []
-    locations = {}
-    for group, keys in groups:
+    # 历史三项不再参与新规则的判定或展示；完整旧记录仍由历史摘要兼容。
+    out.pop("quality_checks", None)
+    note = out.get("verification_note")
+    if note is not None and not isinstance(note, str):
+        raise ValueError("verification_note 必须是文本")
+    out["verification_note"] = (note or "").strip() or "验证方法尚未确认。"
+    required = set((rules.get("quality_review") or {}).get(
+        "citation_required_checks", ["evidence_traceability"]))
+    groups = [(out, [c["id"] for c in rules.get("checks", [])], False),
+              (out.get("domain_checks") or {}, list((out.get("domain_checks") or {}).keys()), True)]
+    invalid, locations = [], {}
+    for group, keys, domain in groups:
         for key in keys:
             item = group.get(key)
             if not isinstance(item, dict) or item.get("value") not in ("pass", "fail", "unknown", "not_applicable"):
                 raise ValueError(f"{key} 检查结构无效")
             if not isinstance(item.get("evidence"), str) or not item["evidence"].strip():
                 raise ValueError(f"{key} 缺少判定理由")
-            if key in QUALITY_CHECKS and item["value"] == "not_applicable":
-                raise ValueError(f"{key} 不允许跳过质量判断")
-            verified = locate_citations(item.get("citations"), text)
+            citations = item.get("citations")
+            verified = locate_citations(citations, text)
             if verified is not None:
                 locations[key] = verified
-            if item["value"] in ("pass", "not_applicable") and verified is None:
-                item["value"] = "unknown"
+            needs_citation = item["value"] == "pass" and (domain or key in required)
+            if verified is None and (needs_citation or citations):
+                if item["value"] in ("pass", "not_applicable"):
+                    item["value"] = "unknown"
                 item["evidence"] += "；程序未能核实所引原文与行号。"
                 invalid.append(key)
-    blockers = [key for key, item in quality.items() if item["value"] != "pass"]
-    if blockers:
-        # Preserve an existing negative finding and its evidence; quality gaps
-        # remain independently inspectable in quality_checks / quality_audit.
-        if out["instruction_completeness"]["value"] != "fail":
-            out["instruction_completeness"] = {
-                "value": "unknown", "evidence": "质量门槛未通过：" + "；".join(
-                    f"{key}: {quality[key]['evidence']}" for key in blockers), "citations": [],
-            }
-        if "QUALITY_BELOW_BAR" not in out["reason_codes"]:
-            out["reason_codes"].append("QUALITY_BELOW_BAR")
     if invalid and "INSUFFICIENT_EVIDENCE" not in out["reason_codes"]:
         out["reason_codes"].append("INSUFFICIENT_EVIDENCE")
-    out["quality_audit"] = {"version": "2", "invalid_citations": invalid,
-                            "verified_citations": locations, "missing_quality_checks": missing,
+    notices = [key for key in BASE_CHECK_NAMES if informational_unknown(key, out.get(key), rules)]
+    blockers = [key for key in BASE_CHECK_NAMES
+                if key in out and out[key]["value"] != "pass" and key not in notices]
+    out["quality_audit"] = {"version": "3", "invalid_citations": invalid,
+                            "verified_citations": locations, "informational_checks": notices,
                             "blocking_checks": blockers, "review_status": "not_required"}
     return out
 
@@ -129,6 +126,18 @@ def quality_summary(evaluation):
     audit = evaluation.get("quality_audit") or {}
     if not audit:
         return None
+    if audit.get("version") == "3":
+        informational = set(audit.get("informational_checks", []))
+        return {
+            "review_status": audit.get("review_status"),
+            "checks": {key: {"value": evaluation[key]["value"], "evidence": evaluation[key]["evidence"],
+                             "informational": key in informational}
+                       for key in BASE_CHECK_NAMES if key in evaluation},
+            "verification_note": evaluation.get("verification_note"),
+            "blocking_reasons": [f"领域检查：{item.get('evidence', '')}"
+                                 for item in (evaluation.get("domain_checks") or {}).values()
+                                 if item.get("value") in ("fail", "unknown")],
+        }
     review = audit.get("review") or {}
     reasons = []
     for label, source in (("评估" if audit.get("review_status") == "single_pass" else "初评", evaluation), ("复核", review)):

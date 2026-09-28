@@ -35,7 +35,7 @@ from src.infra.llm import (
 from src.shared.schema import normalize_skill_type, normalize_string_list
 from src.shared.output_contracts import resolve_response_format, STAGE_CATALOG_ASSESSMENT
 from .decide import NON_BLOCKING_DOMAIN_VALUES
-from .quality import QUALITY_CHECKS, enabled, prompt_instructions, check_quality
+from .quality import enabled, prompt_instructions, check_quality
 from .models import Candidate
 
 REASON_PARSE_ERROR = "PARSE_ERROR"
@@ -98,7 +98,7 @@ def build_prompt(candidate: Candidate, text: str, rules: dict, taxonomy: dict) -
             "硬性规则：",
             "1. " + UNTRUSTED_NOTICE,
             "2. 每项检查必须给出 " + " / ".join(CHECK_VALUE_DOMAIN) + " 之一，并附可定位证据"
-            "（文件位置或原文片段）。",
+            "（简短事实依据即可，核心功能另附原文引用）。",
             "3. 不得用你的置信度替代证据。材料不足以判断时用 unknown，不要猜。",
             "4. 只输出一个 JSON 对象，不要输出解释文字或代码块标记。",
             "5. 上游未声明的平台兼容性、依赖与变更时间不得推测；没有就留空或 null。",
@@ -142,10 +142,10 @@ def build_prompt(candidate: Candidate, text: str, rules: dict, taxonomy: dict) -
             json.dumps(
                 {
                     **{c["id"]: {"value": "unknown", "evidence": "判定理由",
-                       **({"citations": []} if enabled(rules) else {})} for c in checks},
+                       **({"citations": []} if enabled(rules) and c["id"] == "evidence_traceability" else {}),
+                       **({"blocking": True} if c.get("allow_informational_unknown") else {})} for c in checks},
                     "domain_checks": {},
-                    **({"quality_checks": {key: {"value": "unknown", "evidence": "缺少哪些证据",
-                       "citations": []} for key in QUALITY_CHECKS}} if enabled(rules) else {}),
+                    **({"verification_note": "材料提供的验证方法或缺少验证说明，仅作提示"} if enabled(rules) else {}),
                     "summary_zh": "一至两句中文简述，说明做什么及典型使用场景",
                     "skill_type": "tool_script|guideline|template|reference|null",
                     "example_requests": ["用户典型请求示例1", "用户典型请求示例2"],
@@ -229,6 +229,12 @@ def parse_evaluation(
     ]
     if invalid:
         raise OutputSchemaError("以下检查项缺失或取值非法：" + "、".join(invalid))
+
+    for cid in check_ids:
+        if "blocking" in raw[cid] and type(raw[cid]["blocking"]) is not bool:
+            raise OutputSchemaError(f"{cid}.blocking 必须是布尔值")
+    if "verification_note" in raw and not isinstance(raw["verification_note"], str):
+        raise OutputSchemaError("verification_note 必须是文本")
 
     evaluation = dict(raw)
     if not isinstance(raw.get("domain_checks", {}), dict):

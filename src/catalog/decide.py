@@ -32,6 +32,14 @@ def _evidence_of(entry) -> str:
     return ""
 
 
+def informational_unknown(check_id: str, item, rules: dict) -> bool:
+    """仅显式标注的非关键缺口可作为提示；缺标记、fail 均不能放行。"""
+    configured = any(c.get("id") == check_id and c.get("allow_informational_unknown") is True
+                     for c in rules.get("checks", []))
+    return (configured and isinstance(item, dict) and item.get("value") == "unknown"
+            and item.get("blocking") is False and bool(_evidence_of(item)))
+
+
 def domain_check_key(domain_id: str) -> str:
     """领域 id 到专项检查键的映射。心理健康与身体健康共用 health。"""
     return "health" if str(domain_id).endswith("health") else str(domain_id)
@@ -89,7 +97,8 @@ def decide(evaluation: dict, rules: dict) -> dict:
     values = {cid: _value_of(evaluation.get(cid)) for cid in checks}
     out["values"] = values
 
-    not_pass = [cid for cid, value in values.items() if value != "pass"]
+    not_pass = [cid for cid, value in values.items()
+                if value != "pass" and not informational_unknown(cid, evaluation.get(cid), rules)]
     if not_pass:
         out["decision"] = DECISION_CANDIDATE
         out["blocking_checks"] = not_pass

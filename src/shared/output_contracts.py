@@ -12,7 +12,7 @@ from __future__ import annotations
 
 from typing import Any
 
-CONTRACT_VERSION = "1.0.0"
+CONTRACT_VERSION = "1.1.0"
 
 STAGE_CATALOG_ASSESSMENT = "catalog_assessment"
 STAGE_CATALOG_REVIEW = "catalog_review"
@@ -61,18 +61,13 @@ _CATALOG_EVALUATION_SCHEMA = {
         "purpose_clarity": _CATALOG_CHECK_ITEM_SCHEMA,
         "instruction_completeness": _CATALOG_CHECK_ITEM_SCHEMA,
         "evidence_traceability": _CATALOG_CHECK_ITEM_SCHEMA,
-        "dependency_transparency": _CATALOG_CHECK_ITEM_SCHEMA,
-        "risk_review": _CATALOG_CHECK_ITEM_SCHEMA,
-        "quality_checks": {
-            "type": "object",
-            "properties": {
-                "practical_value": _CATALOG_CHECK_ITEM_SCHEMA,
-                "actionability": _CATALOG_CHECK_ITEM_SCHEMA,
-                "verification": _CATALOG_CHECK_ITEM_SCHEMA,
-            },
-            "required": ["practical_value", "actionability", "verification"],
-            "additionalProperties": False,
+        "dependency_transparency": {
+            **_CATALOG_CHECK_ITEM_SCHEMA,
+            "properties": {**_CATALOG_CHECK_ITEM_SCHEMA["properties"],
+                           "blocking": {"type": "boolean", "description": "缺口是否影响判断核心价值或必要运行条件"}},
         },
+        "risk_review": _CATALOG_CHECK_ITEM_SCHEMA,
+        "verification_note": {"type": "string", "description": "验证方法或文档缺口，仅作提示"},
         "domain_checks": {
             "type": "object",
             "description": "领域专项检查",

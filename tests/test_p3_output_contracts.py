@@ -36,7 +36,7 @@ class TestOutputContracts(unittest.TestCase):
 
     def test_output_contract_schemas_and_version(self):
         """测试各业务阶段 Schema 契约完备性与版本定义。"""
-        self.assertEqual(CONTRACT_VERSION, "1.0.0")
+        self.assertEqual(CONTRACT_VERSION, "1.1.0")
 
         all_contracts = [
             CATALOG_ASSESSMENT_CONTRACT,
@@ -213,7 +213,7 @@ class TestOutputContracts(unittest.TestCase):
         with self.assertRaises(ValueError):
             parse_query_plan(invalid_plan_json)
 
-    def test_catalog_assessment_and_review_conforming_payload(self):
+    def test_catalog_navigation_assessment_conforming_payload(self):
         """测试符合 CATALOG_ASSESSMENT_CONTRACT 与 CATALOG_REVIEW_CONTRACT 的载荷能被真实解析器成功解析与核验。"""
         text = "# Sample Skill\nProvides code generation."
         rules = {
@@ -238,11 +238,7 @@ class TestOutputContracts(unittest.TestCase):
             "dependency_transparency": {"value": "pass", "evidence": "无特殊依赖", "citations": [{"start_line": 1, "end_line": 1, "quote": "# Sample Skill"}]},
             "risk_review": {"value": "pass", "evidence": "未见明显风险", "citations": [{"start_line": 1, "end_line": 1, "quote": "# Sample Skill"}]},
             "domain_checks": {},
-            "quality_checks": {
-                "practical_value": {"value": "pass", "evidence": "实际价值清晰", "citations": [{"start_line": 1, "end_line": 1, "quote": "# Sample Skill"}]},
-                "actionability": {"value": "pass", "evidence": "可直接执行", "citations": [{"start_line": 2, "end_line": 2, "quote": "Provides code generation."}]},
-                "verification": {"value": "pass", "evidence": "提供输出验证", "citations": [{"start_line": 2, "end_line": 2, "quote": "Provides code generation."}]},
-            },
+            "verification_note": "材料未提供验证示例",
             "summary_zh": "这是一个用于代码生成的实用技能示例。",
             "main_category": "编程开发",
             "skill_type": "tool_script",
@@ -263,10 +259,12 @@ class TestOutputContracts(unittest.TestCase):
         self.assertEqual(verified["quality_audit"]["review_status"], "not_required")
         self.assertEqual(len(verified["quality_audit"]["invalid_citations"]), 0)
 
-        # 3. 模拟独立复核阶段解析（生产中走相同的 parse_evaluation + check_quality 链路）
-        review_parsed = parse_evaluation(json.dumps(payload), rules, "fp_test", taxonomy)
-        review_verified = check_quality(review_parsed, text, rules)
-        self.assertEqual(review_verified["scope_match"]["value"], "pass")
+        # 新契约仅保留六项基础检查和提示说明，不再请求三项质量门槛。
+        schema = CATALOG_ASSESSMENT_CONTRACT["json_schema"]["schema"]
+        self.assertNotIn("quality_checks", schema["properties"])
+        self.assertIn("verification_note", schema["properties"])
+        self.assertIn("blocking", schema["properties"]["dependency_transparency"]["properties"])
+        self.assertEqual(verified["verification_note"], "材料未提供验证示例")
 
     def test_finder_reflect_conforming_payload(self):
         """测试符合 FINDER_REFLECT_CONTRACT 的载荷被 parse_reflection_queries 正确解析。"""

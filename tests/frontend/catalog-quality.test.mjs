@@ -182,3 +182,18 @@ test("single-pass quality does not display legacy review claims", () => {
   assert.match(html, /<summary>筛选依据<\/summary>/);
   assert.doesNotMatch(html, /单轮评估|两轮|初评未达到|待完成复核/);
 });
+
+test("navigation rationale shows six checks and informational gaps without extra quality gates", () => {
+  const html = qualityBlock({ quality_summary: {
+    review_status: "single_pass",
+    checks: {
+      purpose_clarity: { value: "pass", evidence: "提供具体的改稿方法" },
+      dependency_transparency: { value: "unknown", informational: true, evidence: "未声明特殊依赖" }
+    },
+    verification_note: "未提供验收清单 <untrusted>"
+  } });
+  assert.match(html, /用途与价值/);
+  assert.match(html, /依赖与适用条件：提示/);
+  assert.match(html, /验证说明：未提供验收清单 &lt;untrusted&gt;/);
+  assert.doesNotMatch(html, /单轮评估|三项质量|结果验证：未通过/);
+});
