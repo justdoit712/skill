@@ -202,7 +202,7 @@ function setupMockEnv() {
   };
 }
 
-test("modals: 8.2.1 默认增量、切换完整、关闭再打开复位；仅 owned 变化、混合变化、零变化均正常", () => {
+test("modals: 8.2.1 仅展示待同步变更且无完整配置选项；仅 owned 变化、混合变化、零变化均正常", () => {
   const env = setupMockEnv();
   const overridesState = createOverridesState();
   const ownedState = createOwnedState();
@@ -211,28 +211,23 @@ test("modals: 8.2.1 默认增量、切换完整、关闭再打开复位；仅 ow
 
   const modal = initSyncModal(env.elements, overridesState, null, ownedState);
 
-  // 1. 打开弹窗：默认增量视图，overrides 页签
+  // 1. 打开弹窗：仅展示待同步变更，overrides 页签，隐藏多余视图切换
   modal.openSyncModal();
   assert.equal(env.elements.syncModal.hidden, false);
   assert.equal(modal.getCurrentTab(), "overrides");
   assert.equal(modal.getCurrentViewMode(), "incremental");
-  assert.ok(env.elements.modalTitle.textContent.includes("待同步变更"));
-  assert.equal(env.elements.btnViewIncremental.getAttribute("aria-pressed"), "true");
-  assert.equal(env.elements.btnViewFull.getAttribute("aria-pressed"), "false");
+  assert.equal(env.elements.modalTitle.textContent, "同步人工干预配置 (overrides.json)");
+  assert.ok(env.elements.modalDesc.textContent.includes("待同步变更记录"));
+  assert.equal(env.elements.jsonViewToggles.hidden, true);
+  assert.equal(env.elements.btnGotoGithub.hidden, true);
 
-  // 2. 切换为完整配置
-  env.elements.btnViewFull.click();
-  assert.equal(modal.getCurrentViewMode(), "full");
-  assert.ok(env.elements.modalTitle.textContent.includes("完整配置"));
-  assert.equal(env.elements.btnViewFull.getAttribute("aria-pressed"), "true");
-
-  // 3. 关闭弹窗后再打开，应重置为增量视图
+  // 2. 关闭弹窗后再打开，依然稳定为待同步变更
   modal.closeSyncModal();
   assert.equal(env.elements.syncModal.hidden, true);
   modal.openSyncModal();
   assert.equal(modal.getCurrentViewMode(), "incremental");
 
-  // 4. 仅 owned 变化时打开弹窗，自动选择 owned 页签，且隐藏双视图按钮
+  // 3. 仅 owned 变化时打开弹窗，自动选择 owned 页签，且展示本地合并命令按钮
   const overridesEmpty = createOverridesState();
   const ownedOnly = createOwnedState();
   markOwned(ownedOnly, { skill_id: "owned/skill", name: "已收录" });
@@ -240,9 +235,10 @@ test("modals: 8.2.1 默认增量、切换完整、关闭再打开复位；仅 ow
   const modalOwned = initSyncModal(env.elements, overridesEmpty, null, ownedOnly);
   modalOwned.openSyncModal();
   assert.equal(modalOwned.getCurrentTab(), "owned");
-  assert.equal(env.elements.jsonViewToggles.style.display, "none");
+  assert.equal(env.elements.btnGotoGithub.hidden, false);
+  assert.equal(env.elements.btnGotoGithub.textContent, "📋 复制本地合并命令");
 
-  // 5. 零变化时打开弹窗：默认 overrides，显示无待同步变更提示
+  // 4. 零变化时打开弹窗：默认 overrides，显示无待同步变更提示
   const allEmptyOverrides = createOverridesState();
   const allEmptyOwned = createOwnedState();
   const modalEmpty = initSyncModal(env.elements, allEmptyOverrides, null, allEmptyOwned);
@@ -251,7 +247,7 @@ test("modals: 8.2.1 默认增量、切换完整、关闭再打开复位；仅 ow
   assert.ok(env.elements.modalDesc.textContent.includes("当前文件没有待同步变更"));
 });
 
-test("modals: 8.2.2 复制/下载内容与当前预览逐字一致，增量文件名有 changes-preview 标识", async () => {
+test("modals: 8.2.2 复制/下载内容与当前待同步预览逐字一致，文件名匹配各配置变更包", async () => {
   const env = setupMockEnv();
   const overridesState = createOverridesState();
   togglePick(overridesState, "my/skill", "recommended", "2026-09-29");
@@ -259,50 +255,53 @@ test("modals: 8.2.2 复制/下载内容与当前预览逐字一致，增量文�
   const modal = initSyncModal(env.elements, overridesState, null, null);
   modal.openSyncModal();
 
-  // 1. 增量视图下载
+  // 1. overrides 待同步变更下载
   env.elements.btnDownloadJson.click();
   assert.equal(env.downloads.length, 1);
-  assert.equal(env.downloads[0].download, "overrides-changes-preview.json");
+  assert.equal(env.downloads[0].download, "overrides-changes.json");
 
-  // 2. 增量视图复制：内容与 preview 逐字一致
+  // 2. 复制变更：内容与 preview 逐字一致
   env.elements.btnCopyJson.click();
   await new Promise(r => setTimeout(r, 10));
   assert.equal(env.getClipboard(), env.elements.jsonPreview.textContent);
   assert.ok(env.elements.copyStatus.textContent.includes("已成功复制"));
 
-  // 3. 切换完整配置后下载与复制
-  env.elements.btnViewFull.click();
+  // 3. 切换 snoozed 页签后下载文件名匹配 snoozed-changes.json
+  env.elements.tabModalSnoozed.click();
   env.elements.btnDownloadJson.click();
-  assert.equal(env.downloads[1].download, "overrides.json");
+  assert.equal(env.downloads[1].download, "snoozed-changes.json");
 
   env.elements.btnCopyJson.click();
   await new Promise(r => setTimeout(r, 10));
   assert.equal(env.getClipboard(), env.elements.jsonPreview.textContent);
 });
 
-test("modals: 8.2.3 增量视图的同步按钮只切完整视图；完整视图复制成功后才尝试打开对应文件编辑页", async () => {
+test("modals: 8.2.3 overrides/snoozed 页签隐藏合并/跳转按钮，仅 owned 页签支持复制本地合并命令", async () => {
   const env = setupMockEnv();
   const overridesState = createOverridesState();
-  togglePick(overridesState, "tool/abc", "recommended", "2026-09-29");
+  const ownedState = createOwnedState();
+  markOwned(ownedState, { skill_id: "tool/abc", name: "已收录" });
 
-  const modal = initSyncModal(env.elements, overridesState, null, null);
+  const modal = initSyncModal(env.elements, overridesState, null, ownedState);
   modal.openSyncModal();
-  assert.equal(modal.getCurrentViewMode(), "incremental");
+  env.elements.tabModalOverrides.click();
+  assert.equal(env.elements.btnGotoGithub.hidden, true);
 
-  // 点击增量模式下的主按钮 -> 只切完整视图，不打开网页
+  // 在 overrides 页签下即便触发点击也不产生窗口跳转
   env.elements.btnGotoGithub.click();
-  assert.equal(modal.getCurrentViewMode(), "full");
   assert.equal(env.openedWindows.length, 0);
 
-  // 在完整视图下点击主按钮 -> 复制并尝试打开编辑页
+  // 切换至 owned 页签，按钮显现为本地合并命令，点击复制命令且不打开网页
+  env.elements.tabModalOwned.click();
+  assert.equal(env.elements.btnGotoGithub.hidden, false);
+  assert.equal(env.elements.btnGotoGithub.textContent, "📋 复制本地合并命令");
   env.elements.btnGotoGithub.click();
   await new Promise(r => setTimeout(r, 10));
-  assert.equal(env.openedWindows.length, 1);
-  assert.ok(env.openedWindows[0].url.includes("config/governance/overrides.json"));
-  assert.equal(env.getClipboard(), env.elements.jsonPreview.textContent);
+  assert.equal(env.openedWindows.length, 0);
+  assert.ok(env.getClipboard().includes("tools/manage_owned.py --apply-changes owned-patch.json"));
 });
 
-test("modals: 8.2.4 覆盖剪贴板不存在、Promise 拒绝、弹窗拦截、复制中换页签，不能出现虚假成功提示", async () => {
+test("modals: 8.2.4 覆盖剪贴板不存在、Promise 拒绝，不能出现虚假成功提示", async () => {
   const env = setupMockEnv();
   const overridesState = createOverridesState();
   togglePick(overridesState, "tool/err", "recommended", "2026-09-29");
@@ -325,15 +324,6 @@ test("modals: 8.2.4 覆盖剪贴板不存在、Promise 拒绝、弹窗拦截、�
   assert.ok(env.elements.copyStatus.classList.contains("is-error"));
   assert.ok(env.elements.copyStatus.textContent.includes("不支持自动复制"));
   globalThis.navigator.clipboard = origClipboard;
-
-  // 3. 弹窗拦截（window.open 返回 null 或 closed）
-  env.setClipboardFail(false);
-  env.elements.btnViewFull.click();
-  globalThis.window.open = () => null; // 模拟被拦截
-  env.elements.btnGotoGithub.click();
-  await new Promise(r => setTimeout(r, 10));
-  assert.ok(env.elements.copyStatus.innerHTML.includes("GitHub 在线编辑页"));
-  assert.ok(env.elements.copyStatus.innerHTML.includes("拦截了自动弹出窗口"));
 });
 
 test("modals: 8.2.5 owned 原协议及前置条件不变，下载仍为 owned-patch.json，合并命令正确", async () => {
@@ -387,13 +377,15 @@ test("modals: 8.2.6 所有预览/导出动作不清空暂存；明确放弃后�
 test("modals: 关闭或重新打开后，延迟复制成功/失败均不能更新提示或打开网页", async () => {
   for (const reopen of [false, true]) {
     for (const reject of [false, true]) {
-      for (const action of ["btnCopyJson", "btnGotoGithub"]) {
+      for (const [action, isOwned] of [["btnCopyJson", false], ["btnGotoGithub", true]]) {
         const env = setupMockEnv();
         const state = createOverridesState();
         togglePick(state, "test/pending", "recommended", "2026-09-29");
-        const modal = initSyncModal(env.elements, state, null);
+        const ownedState = isOwned ? createOwnedState() : null;
+        if (isOwned) markOwned(ownedState, { skill_id: "test/pending", name: "待办" });
+        const modal = initSyncModal(env.elements, state, null, ownedState);
         modal.openSyncModal();
-        env.elements.btnViewFull.click();
+        if (isOwned) env.elements.tabModalOwned.click();
         let resolveCopy, rejectCopy;
         navigator.clipboard.writeText = () => new Promise((resolve, fail) => {
           resolveCopy = resolve;
@@ -421,10 +413,9 @@ test("modals: 状态刷新后旧复制回调不能覆盖冲突警告或打开网
   togglePick(state, "test/conflict", "recommended", "2026-09-29");
   const modal = initSyncModal(env.elements, state, null);
   modal.openSyncModal();
-  env.elements.btnViewFull.click();
   let finish;
   navigator.clipboard.writeText = () => new Promise(resolve => { finish = resolve; });
-  env.elements.btnGotoGithub.click();
+  env.elements.btnCopyJson.click();
   state.stagedExclusions["test/conflict"] = { skill_id: "test/conflict" };
   modal.updateModalContent();
   const warning = env.elements.copyStatus.textContent;

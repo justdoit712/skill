@@ -123,17 +123,11 @@
         <button id="tab-modal-owned" class="modal-tab-btn" type="button" role="tab" aria-selected="false" aria-controls="sync-modal-tabpanel">owned-skills.json (已收录变更包)</button>
       </div>
       <div id="sync-modal-tabpanel" role="tabpanel" aria-labelledby="tab-modal-overrides">
-        <p id="modal-desc">本站部署于 GitHub Pages 静态环境。请将以下生成的配置同步保存至仓库中。点击下方绿色按钮将<strong>自动复制配置到剪贴板并直达 GitHub 网页在线编辑页</strong>，粘贴后提交即可生效！</p>
+        <p id="modal-desc">本站部署于 GitHub Pages 静态环境。请将以下生成的待同步变更记录合入仓库中。</p>
         <p id="modal-cross-warning" class="modal-cross-warning" hidden></p>
         <div class="json-preview-container">
           <div class="json-preview-toolbar">
-            <span id="json-view-mode-label">待同步变更（仅供核对）</span>
-            <div id="json-view-toggles" role="group" aria-label="预览内容">
-              <button type="button" id="btn-view-incremental" class="btn-toggle is-active"
-                      aria-pressed="true" aria-controls="json-preview">待同步变更</button>
-              <button type="button" id="btn-view-full" class="btn-toggle"
-                      aria-pressed="false" aria-controls="json-preview">完整配置</button>
-            </div>
+            <span id="json-view-mode-label">待同步变更</span>
           </div>
           <pre id="json-preview" class="json-preview" tabindex="0"
                aria-label="待同步变更 JSON 预览"></pre>
@@ -142,9 +136,9 @@
       </div>
     </div>
     <div class="modal-actions">
-      <button id="btn-download-json" class="btn-secondary" type="button">💾 下载 JSON</button>
-      <button id="btn-copy-json" class="btn-secondary" type="button">📋 仅复制</button>
-      <button id="btn-goto-github" class="btn-gh" type="button">🚀 复制并去 GitHub 保存</button>
+      <button id="btn-download-json" class="btn-secondary" type="button">💾 下载变更 JSON</button>
+      <button id="btn-copy-json" class="btn-secondary" type="button">📋 仅复制变更</button>
+      <button id="btn-goto-github" class="btn-secondary" type="button" hidden>📋 复制本地合并命令</button>
     </div>
   </div>
 </div>
