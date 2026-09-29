@@ -1,10 +1,10 @@
 {
   "catalog_version": "1.0.0",
   "rules_version": "1.1.1",
-  "generated_at": "2026-09-28T19:58:17.993692+08:00",
+  "generated_at": "2026-09-28T20:06:57.405399+08:00",
   "counts": {
-    "excluded": 59,
-    "candidate": 109,
+    "excluded": 60,
+    "candidate": 110,
     "recommended": 64
   },
   "entries": [
@@ -16288,6 +16288,165 @@
       },
       "last_evaluation_id": "skillmedev/skills:skills/github-actions/SKILL.md|sha256:93de9a8190ba6ece2f304fd6f309056f|1.1.1|1.0.0",
       "evaluated_at": "2026-09-28T19:58:17.991212+08:00"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/grant-proposal-writer/SKILL.md",
+      "name": "grant-proposal-writer",
+      "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/grant-proposal-writer/SKILL.md",
+      "repo_url": "https://github.com/skillmedev/skills",
+      "author": "skillmedev",
+      "summary_zh": "指导为非营利组织撰写完整的基金会资助申请书，涵盖本地化需求陈述、逻辑模型、SMART 目标、与组织能力匹配的评估计划、逐行对应活动的预算叙述及可持续性说明。适用于收到基金会邀请后撰写正式提案的场景，不含 LOI 与政府合规申请。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "帮我们写完整的基金会资助申请书",
+        "为我们的项目构建逻辑模型和评估计划"
+      ],
+      "key_features": [
+        "8 步依赖顺序写作流程，确保各章节数字一致",
+        "预算每行对应逻辑模型中的具体活动",
+        "附完整逻辑模型样例与质量检查清单"
+      ],
+      "main_category": {
+        "id": "docs",
+        "name": "文档办公"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "资助申请书",
+        "非营利组织",
+        "逻辑模型",
+        "预算叙述",
+        "提案写作"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "limitations": "仅覆盖私人基金会申请，不适用于含联邦合规要求（间接成本率协议、单一审计）的政府申请；不构成法律或会计建议；不含 LOI 撰写（需配合 grant-loi-writer）。",
+      "license": null,
+      "status": "candidate",
+      "reason_codes": [
+        "QUALITY_BELOW_BAR",
+        "INSUFFICIENT_EVIDENCE"
+      ],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-28T20:05:48.640955+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:00e978458c353cc875927a83d379423a",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.1.1",
+      "quality_summary": {
+        "review_status": "not_required",
+        "review_note": null,
+        "blocking_reasons": [
+          "初评：该技能为非营利组织撰写基金会资助申请书（grant proposal），属于文档撰写类工作，最接近主分类「文档办公」的文书写作范畴；未命中硬性排除项，非实盘交易、非临床诊断、非凭据外传。；程序未能核实所引原文与行号。",
+          "初评：description 明确说明任务（撰写完整基金会资助申请书）与典型触发场景（\"write the full grant proposal\"、\"build our logic model\" 等），并明确排除 LOI 与企业销售提案两种误用场景。；程序未能核实所引原文与行号。",
+          "初评：质量门槛未通过：practical_value: 针对具体任务（受邀后撰写完整基金会申请书）给出可交付物与相对泛泛提示词的增量：依赖顺序写作法、本地化数据规则、产出与结果的区分、预算行与活动逐条对应、与 LOI 数字一致性检查等具体专业判断，非常识堆砌。；程序未能核实所引原文与行号。；actionability: 作为指南类技能，8 个步骤均含可执行规则、判断条件与具体示例（如 Bright Futures 的预算分配、SMART 目标措辞、逻辑模型完整样例），可直接照用。；程序未能核实所引原文与行号。",
+          "初评：纯文本指南类技能，无代码、无外部工具调用；文中提及的 grant-loi-writer、impact-report-builder 等为同仓库技能管线引用而非运行依赖，材料未声明任何特殊工具或运行环境依赖，按纯文本技能处理。；程序未能核实所引原文与行号。",
+          "初评：材料未见可疑行为：无凭据收集、无外部数据传输、无命令执行要求；明确声明仅覆盖私人基金会申请、不构成法律或会计建议，并建议政府合规申请转交专业人士，边界清晰。；程序未能核实所引原文与行号。"
+        ],
+        "checks": {
+          "practical_value": {
+            "value": "unknown",
+            "evidence": "针对具体任务（受邀后撰写完整基金会申请书）给出可交付物与相对泛泛提示词的增量：依赖顺序写作法、本地化数据规则、产出与结果的区分、预算行与活动逐条对应、与 LOI 数字一致性检查等具体专业判断，非常识堆砌。；程序未能核实所引原文与行号。"
+          },
+          "actionability": {
+            "value": "unknown",
+            "evidence": "作为指南类技能，8 个步骤均含可执行规则、判断条件与具体示例（如 Bright Futures 的预算分配、SMART 目标措辞、逻辑模型完整样例），可直接照用。；程序未能核实所引原文与行号。"
+          },
+          "verification": {
+            "value": "pass",
+            "evidence": "提供明确的质量检查清单（Quality bar 五条可核对标准）与一致性核对步骤（Step 8 cross-check），以及 Do NOT 负面清单作为验收条件。"
+          }
+        },
+        "review_checks": {}
+      },
+      "last_evaluation_id": "skillmedev/skills:skills/grant-proposal-writer/SKILL.md|sha256:00e978458c353cc875927a83d379423a|1.1.1|1.0.0",
+      "evaluated_at": "2026-09-28T20:05:48.640955+08:00"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/grant-prospect-researcher/SKILL.md",
+      "name": "grant-prospect-researcher",
+      "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/grant-prospect-researcher/SKILL.md",
+      "repo_url": "https://github.com/skillmedev/skills",
+      "author": "skillmedev",
+      "summary_zh": "为非营利组织筛选和评估基金会资助方的调研指南：通过阅读 990 申报表识别资助方真实偏好与中位资助额，按五项标准打分并按 4-5 倍年度目标配置申请管线。适用于小型非营利机构在撰写申请书之前筛选高契合度资助方。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "帮我们找可能资助我们的基金会",
+        "这个资助方值得我们申请吗，它的 990 表能告诉我们什么"
+      ],
+      "key_features": [
+        "五项标准 0-3 分打分与明确阈值（11-15 争取/8-10 观察/7 以下淘汰）",
+        "990-PF Part XV 阅读程序，用中位资助额而非均值判断规模契合",
+        "按 20-30% 胜率以 4-5 倍年度目标测算申请管线规模"
+      ],
+      "main_category": {
+        "id": "finance",
+        "name": "金融与投资"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "非营利筹款",
+        "基金会调研",
+        "资助申请",
+        "990表分析"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "limitations": "仅覆盖私人基金会调研，不含政府资助（联邦 RFP、单一审计门槛等合规场景需另请资助专业人士）；依赖美国 990 公开申报数据，仅适用于美国非营利语境；20-30% 胜率为经验法则而非保证。",
+      "license": null,
+      "status": "excluded",
+      "reason_codes": [
+        "OUT_OF_SCOPE",
+        "QUALITY_BELOW_BAR",
+        "INSUFFICIENT_EVIDENCE"
+      ],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-28T20:06:57.405399+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:4de741e89d8f7ff78848534d9f6269c7",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.1.1",
+      "quality_summary": {
+        "review_status": "not_required",
+        "review_note": null,
+        "blocking_reasons": [
+          "初评：该技能面向非营利组织的基金会资助方调研与筛选（grant prospect research），属于公益筹款/资助申请领域。主分类列表（编程开发、文档办公、内容创作、产品与设计、自动化、云服务与运维、安全、金融与投资、心理健康、身体健康）中无任何一类涵盖非营利筹款或基金会调研；金融与投资分类的范围明确限定为'宏观、股票、期货、大宗商品及研究和策略辅助'，不包括资助金申请。因此命中 OUT_OF_SCOPE。",
+          "初评：用途与典型场景表述清晰：为非营利组织筛选值得申请的基金会资助方，并明确列出触发语（如 'find foundations that would fund us'）及不适用场景（B2B 销售名单、初创投资人调研）。；程序未能核实所引原文与行号。",
+          "初评：质量门槛未通过：actionability: 作为指南型技能，步骤具体可执行：六步流程、五项 0-3 分打分标准与明确阈值（11-15 争取 / 8-10 观察 / 7 以下淘汰）、自动淘汰条件、输入清单与默认产能参数，并附完整示例打分表可直接套用。；程序未能核实所引原文与行号。",
+          "初评：SKILL.md 描述（按使命契合、资助规模、地域、受赠方相似度打分，阅读 990 表，按 4-5 倍目标配置管线）与正文实际内容（Step 1-6、打分标准、990 阅读程序）完全一致，介绍与实际内容相符。；程序未能核实所引原文与行号。",
+          "初评：纯文本指南型技能，无代码或工具依赖；明确声明数据来源为免费公开的 ProPublica Nonprofit Explorer 及 990 公开申报文件，并声明适用边界为私人基金会调研（政府资助需另请专业人士）。未声明特定平台或运行环境，按纯文本技能处理。；程序未能核实所引原文与行号。",
+          "初评：所提供材料未见凭据外传、命令执行、实盘交易或其他可疑行为；内容为合法的公益筹款调研方法论，未发现与收录范围冲突的功能（其被排除仅因领域不在目录收录范围内）。；程序未能核实所引原文与行号。"
+        ],
+        "checks": {
+          "practical_value": {
+            "value": "pass",
+            "evidence": "针对具体任务（基金会资助方筛选）提供可量化交付物：打分表、管线覆盖率测算、淘汰理由清单与提交日历；相对泛泛提示词有明确增量，如 990-PF Part XV 阅读顺序、中位数而非均值的资助规模计算、5% 资产支出估算、20-30% 胜率与 4-5 倍管线经验法则。"
+          },
+          "actionability": {
+            "value": "unknown",
+            "evidence": "作为指南型技能，步骤具体可执行：六步流程、五项 0-3 分打分标准与明确阈值（11-15 争取 / 8-10 观察 / 7 以下淘汰）、自动淘汰条件、输入清单与默认产能参数，并附完整示例打分表可直接套用。；程序未能核实所引原文与行号。"
+          },
+          "verification": {
+            "value": "pass",
+            "evidence": "提供明确的质量门槛作为验收条件：每个争取级对象须有 990 验证的中位资助额与至少一个具名相似受赠方、管线覆盖率须计算并展示且处于 4-5 倍目标、每个被淘汰对象须有一行理由、提交日历须符合人力产能。"
+          }
+        },
+        "review_checks": {}
+      },
+      "last_evaluation_id": "skillmedev/skills:skills/grant-prospect-researcher/SKILL.md|sha256:4de741e89d8f7ff78848534d9f6269c7|1.1.1|1.0.0",
+      "evaluated_at": "2026-09-28T20:06:57.400228+08:00"
     }
   ],
   "overrides": {
