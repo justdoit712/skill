@@ -27,7 +27,7 @@ def validate_model_config(config: dict) -> list[str]:
         return ["模型 endpoint 必须是有效的 HTTP(S) 地址"]
     return []
 
-DEFAULT_TIMEOUT_SECONDS = 180.0
+DEFAULT_TIMEOUT_SECONDS = 600.0
 DEFAULT_MAX_ATTEMPTS = 2
 RETRYABLE_STATUS = frozenset({408, 429, 500, 502, 503, 504})
 REASON_MODEL_ERROR = "MODEL_ERROR"
