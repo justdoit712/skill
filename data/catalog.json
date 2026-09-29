@@ -1,11 +1,11 @@
 {
   "catalog_version": "1.0.0",
   "rules_version": "1.3.0",
-  "generated_at": "2026-09-29T16:44:43.835604+08:00",
+  "generated_at": "2026-09-29T16:46:57.024604+08:00",
   "counts": {
     "excluded": 63,
     "candidate": 129,
-    "recommended": 136,
+    "recommended": 138,
     "pending": 2
   },
   "entries": [
@@ -26001,6 +26001,182 @@
       },
       "last_evaluation_id": "skillmedev/skills:skills/index-advisor/SKILL.md|sha256:19a4049059f58588afc67ab04c1216e4|1.3.0|1.0.0",
       "evaluated_at": "2026-09-29T16:44:43.832455+08:00"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/injury-prehab/SKILL.md",
+      "name": "injury-prehab",
+      "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/injury-prehab/SKILL.md",
+      "repo_url": "https://github.com/skillmedev/skills",
+      "author": "skillmedev",
+      "summary_zh": "为举重、跑步等训练者生成肩、膝、下背和髋部的损伤预防预康复周计划，包含动作、组次、每周安排与进阶规则。适用于已有训练计划但想降低常见训练伤风险的用户。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "我的肩膀做卧推后很疲劳，帮我安排预防性肩部预康复",
+        "我要开始跑步训练，帮我制定膝盖防伤的每周预康复计划"
+      ],
+      "key_features": [
+        "覆盖肩、膝、下背、髋四个常见训练损伤区域",
+        "给出组次、每周放置位、进阶和4周复评规则",
+        "设置疼痛红旗筛查与停止转介边界"
+      ],
+      "main_category": {
+        "id": "physical_health",
+        "name": "身体健康"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "损伤预防",
+        "预康复",
+        "训练计划",
+        "运动健康"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "弹力带等轻负荷训练器材（材料称可覆盖多数预康复动作）"
+      ],
+      "limitations": "仅用于损伤预防，不处理现有疼痛或损伤；未提供外部医学证据来源，且依赖用户已有训练计划信息。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-29T16:46:32.068467+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:56ceff4185daf4bb332fadaf59acbf67",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "材料围绕训练损伤预防的肩、膝、下背、髋部预康复安排，属于身体健康中的运动与训练健康信息理解；未命中硬性排除项。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "明确说明用于为举重者/跑者设计损伤预防性预康复安排，并给出典型触发场景，如肩部受压、膝盖防伤、硬拉下背保护等。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "包含输入收集、筛查、分区动作菜单、每周放置、进阶、4周复评、交付物与质量门槛，足以理解其做法与价值。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "pass",
+            "evidence": "上游描述与正文一致：均为针对常见训练失败区域设计预防性预康复，并明确不是医疗建议或物理治疗。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "unknown",
+            "evidence": "材料提到弹力带可覆盖多数预康复动作，但未声明运行环境、外部工具或数据依赖；不影响理解核心用途。",
+            "informational": true
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "未见凭据外传、实盘交易、临床决策或可疑指令；明确将现有疼痛和红旗症状转介物理治疗师。",
+            "informational": false
+          }
+        },
+        "verification_note": "材料提供示例周计划、质量门槛和4周复评方法；未提供外部证据来源或实测验证。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "skillmedev/skills:skills/injury-prehab/SKILL.md|sha256:56ceff4185daf4bb332fadaf59acbf67|1.3.0|1.0.0",
+      "evaluated_at": "2026-09-29T16:46:32.065467+08:00"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/instagram-post-builder/SKILL.md",
+      "name": "instagram-post-builder",
+      "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/instagram-post-builder/SKILL.md",
+      "repo_url": "https://github.com/skillmedev/skills",
+      "author": "skillmedev",
+      "summary_zh": "通过一次一个问题的访谈，生成包含钩子、正文、CTA、标签、替代文本和视觉方向的完整 Instagram 帖子包。适合产品发布、Reel 或 carousel 内容的快速创作与整理。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "write an Instagram post for my launch",
+        "build the full post package for this reel"
+      ],
+      "key_features": [
+        "一次一问的引导式访谈",
+        "生成3个不同模式钩子",
+        "输出15-20个分层标签"
+      ],
+      "main_category": {
+        "id": "content",
+        "name": "内容创作"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "instagram",
+        "social-media",
+        "copywriting",
+        "captions",
+        "hashtags",
+        "content-creation"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "limitations": "未声明运行环境或工具依赖；未提供实际示例输出；与 trend-educator 等上游技能的衔接依赖材料描述，未验证。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-29T16:46:57.024604+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:8a85d074b658a6cba22443f35e526e6f",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "技能用于生成 Instagram 帖子包，属于内容创作中的社交媒体文案创作，未命中硬性排除。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "明确说明用于交互式构建完整可复制的 Instagram 帖子包，适用于发布、Reel、carousel 等场景，并给出典型触发语。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "提供输入字段、逐轮问答工作流、输出结构、交付格式、错误处理和质量标准，足以理解做法与价值。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "pass",
+            "evidence": "上游描述与 SKILL.md 正文一致，均指向交互式生成钩子、正文、CTA、标签、替代文本和视觉方向的完整帖子包。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "unknown",
+            "evidence": "材料说明可独立运行，也可接收 trend-educator 的 educator_brief，但未声明运行环境、工具或外部服务依赖；未声明不等于无依赖。",
+            "informational": true
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "所读材料为内容创作工作流说明，未见凭据外传、实盘交易、临床决策、恶意命令或排除领域行为。",
+            "informational": false
+          }
+        },
+        "verification_note": "材料提供质量标准与输出格式要求，如三个不同钩子模式、15-20 个标签、可复制块等，但未提供实际示例输出或验收测试。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "skillmedev/skills:skills/instagram-post-builder/SKILL.md|sha256:8a85d074b658a6cba22443f35e526e6f|1.3.0|1.0.0",
+      "evaluated_at": "2026-09-29T16:46:57.020366+08:00"
     }
   ],
   "overrides": {
