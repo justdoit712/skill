@@ -1,11 +1,11 @@
 {
   "catalog_version": "1.0.0",
   "rules_version": "1.3.0",
-  "generated_at": "2026-09-29T16:01:23.390647+08:00",
+  "generated_at": "2026-09-29T16:12:20.076434+08:00",
   "counts": {
     "excluded": 63,
-    "candidate": 121,
-    "recommended": 123,
+    "candidate": 122,
+    "recommended": 127,
     "pending": 2
   },
   "entries": [
@@ -24150,6 +24150,441 @@
       },
       "last_evaluation_id": "skillmedev/skills:skills/government-open-data/SKILL.md|sha256:1b6d3feaeb617c7e513e1f7010b23093|1.3.0|1.0.0",
       "evaluated_at": "2026-09-29T16:01:23.387276+08:00"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/grand-slam-offer-builder/SKILL.md",
+      "name": "grand-slam-offer-builder",
+      "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/grand-slam-offer-builder/SKILL.md",
+      "repo_url": "https://github.com/skillmedev/skills",
+      "author": "skillmedev",
+      "summary_zh": "用于帮助健身房构建或优化核心报价的技能，通过价值方程评分、问题-方案堆叠、放大器和 MAGIC 命名，产出一页报价画布。适用于设计挑战活动或会员产品报价的场景。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "帮我设计一个健身房减脂挑战的报价",
+        "我的会员转化率低，帮我优化现有报价"
+      ],
+      "key_features": [
+        "基于价值方程的四杠杆评分与优先修复",
+        "问题驱动的报价堆叠方法",
+        "MAGIC 命名公式与 15 个健身房示例"
+      ],
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "报价设计",
+        "健身房营销",
+        "价值主张",
+        "产品打包"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "limitations": "未说明除 Node 脚本外是否需要其他工具支持画布交付；价格与保证条款明确交由另一技能处理，本技能不覆盖定价决策。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-29T16:03:21.431693+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:d25549610eceb02fac230bb543cdc70e",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "该技能围绕健身房/健身业务的核心报价构建与优化，属于内容创作与产品设计的交叉场景；材料中未命中硬性排除项（如实盘下单、临床决策、凭据外传等），且非纯科研或通用数据分析。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "明确说明用于“构建或打磨健身房的核心报价”，产出物为“一页报价画布”，并列出典型触发语句（如“build my offer”、“my offer isn't converting”），场景具体、有实操价值。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "提供五步工作流、质量门槛、禁止事项、可运行的 Node 评分脚本、一页画布模板、三个参考章节（价值方程、报价构造、命名 MAGIC）及多个健身房实例，足以理解其方法与交付物。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "pass",
+            "evidence": "上游描述与 SKILL.md 内容高度一致：均强调价值方程评分、问题到方案的堆叠、稀缺/紧迫/赠品放大器、MAGIC 命名及一页画布交付。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "unknown",
+            "evidence": "材料声明评分脚本为“Self-contained Node script... No dependencies”，但未说明运行该技能整体是否需要其他工具（如画布渲染、设计软件等）；未声明特殊依赖不等于无依赖。",
+            "informational": true
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "所读材料为营销/报价构建指南，未见可疑行为、凭据处理、实盘交易、临床决策或与收录范围冲突的功能；明确禁止虚假稀缺/紧迫与不安全速度承诺。",
+            "informational": false
+          }
+        },
+        "verification_note": "材料提供 Node 脚本的示例输入与预期输出，以及画布模板和命名示例，可作为验证参考；未提供端到端验收清单或实测案例。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "skillmedev/skills:skills/grand-slam-offer-builder/SKILL.md|sha256:d25549610eceb02fac230bb543cdc70e|1.3.0|1.0.0",
+      "evaluated_at": "2026-09-29T16:03:21.429289+08:00"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/grant-loi-writer/SKILL.md",
+      "name": "grant-loi-writer",
+      "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/grant-loi-writer/SKILL.md",
+      "repo_url": "https://github.com/skillmedev/skills",
+      "author": "skillmedev",
+      "summary_zh": "为非营利组织撰写一页资助询问信（LOI），采用需求、方法、匹配、请求四段结构并镜像资助方语言。适用于向基金会或资助方初步介绍项目、争取提交完整提案邀请。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "写一封给基金会的一页资助询问信",
+        "把项目摘要改成资助方要求的 LOI 一页纸"
+      ],
+      "key_features": [
+        "need→approach→fit→ask 一页结构",
+        "提供可填充 LOI 骨架模板",
+        "明确金额、期限与资金用途的具体请求规则"
+      ],
+      "main_category": {
+        "id": "docs",
+        "name": "文档办公"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "资助申请",
+        "非营利组织",
+        "信函写作",
+        "文档模板"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "limitations": "依赖资助方资料、组织数据和前期适配评分等输入；不覆盖完整提案或个人捐赠信，也未说明具体运行工具。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-29T16:03:38.841965+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:0875940b7f8a86a5ac63ebe0ffe48b5e",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "材料描述的是为非营利组织撰写一页资助方询问信（LOI）的操作规程与模板，属于文档写作/办公文档场景，未命中硬性排除项。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "明确说明用于帮助非营利组织获得提交完整提案邀请，适用场景包括“write a letter of inquiry”“this funder wants an LOI first”等，并给出具体结构与排除事项。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "包含五步流程、输入清单、LOI骨架模板、好坏示例、交付物、禁忌项和质量标准，足以理解其做法与价值。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "pass",
+            "evidence": "上游名称与描述称其写一页 LOI，正文也提供 need→approach→fit→ask 结构、模板与质量要求，介绍与实际内容一致。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "unknown",
+            "evidence": "材料提到需要来自 grant-prospect-researcher 的 prospect table、组织规模数据、资助方格式要求等输入，但未说明运行环境、工具或外部服务依赖；这些缺口不阻断理解其写作方法。",
+            "informational": true
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "所读材料为写作指南与模板，未见凭据外传、实盘交易、临床决策、恶意命令或排除领域内容；还明确声明不是法律建议。",
+            "informational": false
+          }
+        },
+        "verification_note": "材料提供示例组织、LOI骨架、好坏 ask 对比、质量标准和发送前核对项，但未提供实际资助方反馈或验收结果。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "skillmedev/skills:skills/grant-loi-writer/SKILL.md|sha256:0875940b7f8a86a5ac63ebe0ffe48b5e|1.3.0|1.0.0",
+      "evaluated_at": "2026-09-29T16:03:38.838960+08:00"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/grant-proposal-writer/SKILL.md",
+      "name": "grant-proposal-writer",
+      "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/grant-proposal-writer/SKILL.md",
+      "repo_url": "https://github.com/skillmedev/skills",
+      "author": "skillmedev",
+      "summary_zh": "为非营利组织撰写完整基金会资助申请书，按需求陈述、逻辑模型、SMART 目标、评估计划、预算叙述和可持续性等步骤生成并保持数字一致。适用于已获邀提交完整提案、需要构建逻辑模型或预算叙述的场景。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "write the full grant proposal",
+        "build our logic model"
+      ],
+      "key_features": [
+        "按逻辑模型、目标、评估、预算的依赖顺序撰写",
+        "要求本地数据支撑需求陈述并区分产出与成果",
+        "预算逐行追踪到活动并与 LOI 数字一致"
+      ],
+      "main_category": {
+        "id": "content",
+        "name": "内容创作"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "grant-proposal",
+        "nonprofit",
+        "logic-model",
+        "budget-narrative",
+        "writing-workflow"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "limitations": "明确不适用于初始 LOI 和企业销售提案；仅覆盖私人基金会提案，不处理政府合规、法律或会计问题；未说明运行环境及与其他技能是否强依赖。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-29T16:04:52.931374+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:00e978458c353cc875927a83d379423a",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "材料描述为非营利组织撰写完整基金会资助申请书的写作流程与规范，属于内容创作中的文档/提案写作；未命中硬性排除，也不是仅属科研、通用数据分析或 AI 开发。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "明确说明用于非营利组织在获邀后撰写完整 grant proposal，覆盖需求陈述、逻辑模型、SMART 目标、评估计划、预算叙述和可持续性回答，并列出典型触发语句与不适用场景。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "提供 8 步操作顺序、每步规则、示例组织、逻辑模型工件、交付物、禁止事项和质量标准，足以理解其做法与价值；不要求完整教程或验收清单。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "pass",
+            "evidence": "上游描述与 SKILL.md 内容一致：描述中的完整资助申请、逻辑模型、SMART 目标、评估计划、预算叙述和可持续性回答均在正文中有对应步骤和示例。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "unknown",
+            "evidence": "材料提到与 grant-loi-writer、grant-prospect-researcher、impact-report-builder、nonprofit-board-pack 等技能协作，但未说明运行环境、工具或必需依赖；这些缺口不影响理解核心写作流程，但无法确认是否必须依赖其他技能。",
+            "informational": true
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "所读材料为写作指南和示例，未见凭据外传、实盘交易、临床决策、恶意命令或排除领域内容；还明确声明不覆盖政府合规并建议咨询专业人士。",
+            "informational": false
+          }
+        },
+        "verification_note": "材料提供示例组织 Bright Futures Tutoring、完整逻辑模型工件、质量标准和一致性检查，但未提供外部验收方法或实测结果。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "skillmedev/skills:skills/grant-proposal-writer/SKILL.md|sha256:00e978458c353cc875927a83d379423a|1.3.0|1.0.0",
+      "evaluated_at": "2026-09-29T16:04:52.927829+08:00"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/graphql-schema/SKILL.md",
+      "name": "graphql-schema",
+      "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/graphql-schema/SKILL.md",
+      "repo_url": "https://github.com/skillmedev/skills",
+      "author": "skillmedev",
+      "summary_zh": "该技能提供 GraphQL schema 与 resolver 设计指南，覆盖领域建模、Relay 分页、DataLoader 批处理、查询成本限制、演进与联邦拆分。适用于设计或评审 GraphQL API 结构时参考。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "如何设计一个可扩展的 GraphQL 订单类型和分页接口？",
+        "我的 GraphQL resolver 造成数据库 N+1 查询，应该怎么优化？"
+      ],
+      "key_features": [
+        "按领域名词建模 GraphQL 类型而非数据库表",
+        "要求所有可增长列表使用带上限的 Relay 分页",
+        "用 per-request DataLoader 批处理关系 resolver"
+      ],
+      "main_category": {
+        "id": "dev",
+        "name": "编程开发"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "GraphQL",
+        "Schema设计",
+        "Resolver",
+        "API设计",
+        "性能优化"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "limitations": "未声明具体 GraphQL 实现、运行环境或依赖；示例代码偏 JS/DataLoader，但未说明必需工具链。",
+      "license": null,
+      "status": "candidate",
+      "reason_codes": [
+        "INSUFFICIENT_EVIDENCE"
+      ],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-29T16:07:15.260424+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:156383ef417dcf5c1386183ba7354d10",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "材料围绕 GraphQL schema 与 resolver 设计，属于编程开发中的后端/接口结构设计，不命中硬性排除。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "明确说明用于设计可扩展的 GraphQL schema、避免 N+1、分页、限流、演进与联邦拆分，并列出适用与不适用场景。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "提供了输入收集、建模、分页、DataLoader、成本限制、演进/联邦、加固、交付物、禁忌和质量标准等完整操作规范，足以理解做法与价值。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "unknown",
+            "evidence": "上游描述与正文一致：正文覆盖 domain-modeled types、Relay pagination、DataLoader batching、typed user errors、depth/complexity limits 等。；程序未能核实所引原文与行号。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "unknown",
+            "evidence": "材料未声明具体运行环境、GraphQL 实现或依赖包；示例使用 JS/DataLoader 概念但未说明必需依赖。该缺口不阻断理解其作为设计规范的适用性。",
+            "informational": true
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "所读材料为设计指南，未见凭据外传、恶意命令、实盘交易或临床决策等风险内容。",
+            "informational": false
+          }
+        },
+        "verification_note": "材料提供验证建议，如查询日志应显示批量加载、对深层嵌套查询测试深度/复杂度限制，并给出 bad vs good schema 示例。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "skillmedev/skills:skills/graphql-schema/SKILL.md|sha256:156383ef417dcf5c1386183ba7354d10|1.3.0|1.0.0",
+      "evaluated_at": "2026-09-29T16:07:15.257792+08:00"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/growth-accounting/SKILL.md",
+      "name": "growth-accounting",
+      "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/growth-accounting/SKILL.md",
+      "repo_url": "https://github.com/skillmedev/skills",
+      "author": "skillmedev",
+      "summary_zh": "用于将活跃用户或收入增长分解为新增、留存、复活、扩展、收缩和流失，并通过恒等式校验与 quick ratio 诊断增长问题。适用于分析 MAU 变化、构建 MRR bridge、判断增长是获客、留存还是复活驱动。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "为什么我们的 MAU 这个月下降了？",
+        "帮我做一个 MRR bridge 并计算 quick ratio。"
+      ],
+      "key_features": [
+        "分解新增、留存、复活、扩展、收缩与流失",
+        "要求恒等式精确对账后再解读",
+        "用 quick ratio 诊断获客/留存问题"
+      ],
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "增长分析",
+        "用户留存",
+        "MRR",
+        "指标诊断",
+        "产品分析"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "limitations": "未声明具体数据库或运行环境；明确不用于增长预测、通用事件埋点或流失干预本身。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-29T16:12:20.076434+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:e3290a6e034bef4d6c6904ed71f93908",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "内容为增长核算/用户或收入增长分解与诊断，属于产品增长分析工作流，直接服务产品与设计主分类；未命中硬性排除。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "明确说明用于回答 MAU 为何变化、增长是否由获客/留存/复活驱动、构建 MRR bridge 和读取 quick ratio，并给出典型使用语句与禁用场景。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "提供输入收集、用户流计算、收入流计算、quick ratio 解读、诊断分段、交付物和质量标准，并附参考 SQL 与示例表，足以理解做法与价值。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "pass",
+            "evidence": "上游描述中的分解流、恒等式校验、quick ratio 诊断与正文一致；正文包含对应定义、公式、SQL、示例和交付物。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "unknown",
+            "evidence": "材料给出参考 SQL 和事件表输入，但未声明具体数据库、运行环境或工具依赖；未声明不等于无依赖。",
+            "informational": true
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "所读材料为分析方法和报告规范，未见凭据外传、实盘下单、临床决策、越权命令或与收录范围冲突的内容。",
+            "informational": false
+          }
+        },
+        "verification_note": "材料提供恒等式校验、示例 MRR bridge 表及核对算式，并列出质量标准；未提供自动化测试或外部数据验证方法。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "skillmedev/skills:skills/growth-accounting/SKILL.md|sha256:e3290a6e034bef4d6c6904ed71f93908|1.3.0|1.0.0",
+      "evaluated_at": "2026-09-29T16:12:20.073436+08:00"
     }
   ],
   "overrides": {
