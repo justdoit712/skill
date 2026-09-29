@@ -16,6 +16,7 @@ export function createOverridesState() {
   return {
     baselinePicks: {},
     baselineExclusions: {},
+    baselineKeywordExclusions: [],
     stagedPicks: {},
     removedPicks: new Set(),
     stagedExclusions: {},
@@ -507,6 +508,7 @@ export function generateOverridesJson(overridesState, today = null) {
 
   const payload = {
     overrides_version: "1.0.0",
+    keyword_exclusions: [...(overridesState.baselineKeywordExclusions || [])],
     source: "docs/运行说明.md §9",
     note: "人工干预名单（overrides）：由用户手工维护。manual_picks 长期保留在收藏区；manual_exclusions 为人工排除黑名单，流水线扫描到直接跳过（0 模型调用）。",
     manual_picks: Object.keys(picks).sort().map(k => cleanValue(picks[k])),
@@ -541,6 +543,8 @@ export function generateSnoozedJson(overridesState, today = null) {
  */
 export function populateBaseline(overridesState, data, today = null) {
   const curToday = today || shanghaiTodayStr();
+  // 关键词由仓库配置维护；网页仅保留并随完整配置导出。
+  overridesState.baselineKeywordExclusions = [...(data.overrides?.keyword_exclusions || [])];
   (data.manual || []).forEach(e => {
     overridesState.baselinePicks[e.skill_id] = {
       skill_id: e.skill_id,

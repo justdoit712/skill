@@ -13,8 +13,8 @@ import {
   populateBaseline,
   partitionEntries,
   getEffectiveSnoozedList
-} from "./catalog-state.js?v=20260929_sync_2";
-import { renderCatalogList } from "./catalog-view.js?v=20260929_sync_2";
+} from "./catalog-state.js?v=20260929_keywords_1";
+import { renderCatalogList } from "./catalog-view.js?v=20260929_keywords_1";
 import { renderFindView, fetchFindReport } from "./find-view.js?v=20260929_sync_2";
 import { updateSyncBar, initSyncModal, initSnoozedModal, initConfirmModal } from "./modals.js?v=20260929_sync_2";
 import {

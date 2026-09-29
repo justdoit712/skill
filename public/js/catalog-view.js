@@ -4,7 +4,7 @@
  */
 
 import { escapeHtml, text, day, SKILL_TYPE_LABELS, shanghaiTodayStr } from "./utils.js?v=20260929_sync_2";
-import { isPicked } from "./catalog-state.js?v=20260929_sync_2";
+import { isPicked } from "./catalog-state.js?v=20260929_keywords_1";
 
 export const DEFAULT_PAGE_SIZE = 24;
 

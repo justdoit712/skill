@@ -152,6 +152,39 @@ test("catalog-state: generateOverridesJson and generateSnoozedJson", () => {
   assert.equal(snoozedObj.snoozed[0].skill_id, "my/snooze");
 });
 
+test("catalog-state: keyword exclusions survive edits, reload, and full export", () => {
+  const data = { overrides: {
+    keyword_exclusions: ["expo", "Crypto"], manual_picks: [], manual_exclusions: []
+  } };
+  const state = createOverridesState();
+  populateBaseline(state, data, "2026-09-29");
+  assert.equal(calculateChangesCount(state), 0);
+  togglePick(state, "owner/pick", "recommended", "2026-09-29");
+  blockSkill(state, "owner/block", "2026-09-29");
+  assert.equal(calculateChangesCount(state), 2);
+  const exported = JSON.parse(generateOverridesJson(state, "2026-09-29"));
+  assert.deepEqual(exported.keyword_exclusions, ["expo", "Crypto"]);
+  assert.equal(exported.manual_picks.length, 1);
+  assert.equal(exported.manual_exclusions.length, 1);
+  assert.deepEqual(data.overrides.keyword_exclusions, ["expo", "Crypto"]);
+
+  const reloaded = createOverridesState();
+  populateBaseline(reloaded, { overrides: exported }, "2026-09-29");
+  clearStorage(reloaded);
+  assert.deepEqual(JSON.parse(generateOverridesJson(reloaded)).keyword_exclusions, ["expo", "Crypto"]);
+  assert.equal(calculateChangesCount(reloaded), 0);
+});
+
+test("catalog-state: legacy or cleared keyword configuration exports an empty list", () => {
+  const state = createOverridesState();
+  populateBaseline(state, { overrides: { keyword_exclusions: ["expo"] } });
+  populateBaseline(state, { overrides: { manual_picks: [], manual_exclusions: [] } });
+  assert.deepEqual(JSON.parse(generateOverridesJson(state)).keyword_exclusions, []);
+  populateBaseline(state, { overrides: { keyword_exclusions: [] } });
+  assert.deepEqual(JSON.parse(generateOverridesJson(state)).keyword_exclusions, []);
+  assert.deepEqual(JSON.parse(generateOverridesJson(createOverridesState())).keyword_exclusions, []);
+});
+
 test("catalog-state: mock storage save, load, and clear", () => {
   const store = {};
   const mockStorage = {
