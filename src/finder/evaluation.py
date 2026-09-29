@@ -110,6 +110,8 @@ def build_evaluation_prompt(
             "仅提及能力、只列外部文章链接或否定该能力不构成支持；必须解释实际步骤如何满足用户需求。",
             "每个标准最多 3 条证据；quote 最多 1200 字符、explanation 最多 800 字符；不得添加用户未要求的平台或模型限制。",
             "5. summary_zh 必须是客观事实陈述（一到两句话），严禁使用夸大用词。",
+            "6. dependencies 与 limitations 数组最多 5 项，每项不超过 100 字符；quote 最多 1200 字符。",
+            "7. 【极简不相关输出约束】：当候选技能明显不相关（match 判定为 'none'）时，严禁输出冗余的使用说明或繁琐分析；summary_zh 仅需一两句话说明为何不匹配，usage_zh/dependencies/limitations/why_consider 保持为空或空列表，每个准则的 evidence 保持为空列表，大幅精简输出 Token。",
             "",
             "JSON 输出结构：",
             json.dumps(
@@ -180,11 +182,18 @@ def parse_skill_evaluation(content: str, plan_criteria: list[dict[str, Any]]) ->
     result = {"match": data["match"], "documentation": data["documentation"]}
     for field, limit in (("summary_zh", 1200), ("usage_zh", 1600), ("why_consider", 800)):
         result[field] = _text(data.get(field, ""), field, limit)
-    for field, limit in (("dependencies", 80), ("limitations", 100)):
+    for field, limit in (("dependencies", 100), ("limitations", 100)):
         values = data.get(field, [])
-        if not isinstance(values, list) or len(values) > 5:
-            raise ValueError(f"{field} 必须为最多 5 项的数组")
-        result[field] = [_text(v, field, limit) for v in values]
+        if not isinstance(values, list):
+            raise ValueError(f"{field} 必须为数组")
+        # 兼容与优雅降级：最多截取 5 项，每项不超过 limit 字符
+        clipped = values[:5]
+        cleaned_list = []
+        for v in clipped:
+            if not isinstance(v, str):
+                raise ValueError(f"{field} 元素必须为文本")
+            cleaned_list.append(_normalize_space(v[:limit]))
+        result[field] = cleaned_list
     raw = data.get("criteria_results")
     expected = {c["id"] for c in plan_criteria}
     if not isinstance(raw, list) or len(raw) != len(expected):
@@ -199,18 +208,21 @@ def parse_skill_evaluation(content: str, plan_criteria: list[dict[str, Any]]) ->
         if item.get("status") not in VALID_STATUS_VALUES:
             raise ValueError("无效的准则 status")
         evidence = item.get("evidence", [])
-        if not isinstance(evidence, list) or len(evidence) > 3:
-            raise ValueError("每个准则最多 3 条证据")
+        if not isinstance(evidence, list):
+            raise ValueError("每个准则的 evidence 必须为数组")
         clean = []
-        for ev in evidence:
+        for ev in evidence[:3]:
             if not isinstance(ev, dict):
                 raise ValueError("证据必须为对象")
             start, end = ev.get("start_line"), ev.get("end_line")
             if type(start) is not int or type(end) is not int:
                 raise ValueError("证据行号必须为整数，不能为布尔值或小数")
+            quote_val = ev.get("quote")
+            if not isinstance(quote_val, str):
+                raise ValueError("quote 必须为文本")
             clean.append({"source_path": _text(ev.get("source_path"), "source_path", 4096),
                           "start_line": start, "end_line": end,
-                          "quote": _text(ev.get("quote"), "quote", 1200)})
+                          "quote": _text(quote_val[:1200], "quote", 1200)})
         by_id[cid] = {"criterion_id": cid, "status": item["status"],
                       "explanation": _text(item.get("explanation", ""), "explanation", 800),
                       "evidence": clean}
