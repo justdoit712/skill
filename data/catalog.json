@@ -1,11 +1,11 @@
 {
   "catalog_version": "1.0.0",
   "rules_version": "1.3.0",
-  "generated_at": "2026-09-29T16:18:54.023218+08:00",
+  "generated_at": "2026-09-29T16:44:43.835604+08:00",
   "counts": {
     "excluded": 63,
-    "candidate": 124,
-    "recommended": 127,
+    "candidate": 129,
+    "recommended": 136,
     "pending": 2
   },
   "entries": [
@@ -24765,6 +24765,1242 @@
       },
       "last_evaluation_id": "skillmedev/skills:skills/gym-meta-ads-funnel/SKILL.md|sha256:0506b9b5874dc5465a8de5888109742e|1.3.0|1.0.0",
       "evaluated_at": "2026-09-29T16:18:54.020137+08:00"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/gym-pricing-and-guarantees/SKILL.md",
+      "name": "gym-pricing-and-guarantees",
+      "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/gym-pricing-and-guarantees/SKILL.md",
+      "repo_url": "https://github.com/skillmedev/skills",
+      "author": "skillmedev",
+      "summary_zh": "帮助单店健身房设定三档价格并设计可承受的风险逆转保证，包含利润边际计算脚本和保证文案模板。适用于会籍或挑战项目定价、提价与退款保证设计场景。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "给我的健身房挑战项目定一个价格并判断退款保证是否安全",
+        "帮我写一个有条件的健身房效果保证文案"
+      ],
+      "key_features": [
+        "三档健身房价格架构模板",
+        "保证类型与风险选择指南",
+        "退款盈亏平衡 Node 计算脚本"
+      ],
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "定价",
+        "保证设计",
+        "健身房经营",
+        "风险逆转",
+        "利润测算"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "Node.js"
+      ],
+      "limitations": "主要覆盖交付成本层面的保证可承受性，明确不处理完整 offer 构建或广告获客自证模型；价格区间为经验性参考，未提供市场数据来源。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-29T16:22:09.387945+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:647f2ab29d625808cf0686f321bd556e",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "内容面向单店健身房定价与保证策略，属于商业经营/产品定价类工作流，可归入产品与设计或内容创作之外的产品策略场景；未命中硬性排除。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "明确解决健身房会籍/挑战定价、保证类型选择、退款风险与保证文案问题，并给出适用与不适用场景。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "提供五步工作流、三档价格架构模板、保证语言模板、保证类型参考和 Node 计算脚本，足以理解做法与价值。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "pass",
+            "evidence": "上游描述与正文一致：正文围绕定价、保证、利润边际计算和模板展开，并包含可运行脚本示例。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "pass",
+            "evidence": "明确说明计算脚本为自包含 Node 脚本，无依赖；运行方式也给出。",
+            "informational": false
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "未见凭据外传、实盘交易、临床决策或提示注入等风险；内容为商业定价与保证策略指导。",
+            "informational": false
+          }
+        },
+        "verification_note": "提供 margin_check.js 示例输入与输出，可作为脚本计算结果的验证示例；未提供真实市场数据验证。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "skillmedev/skills:skills/gym-pricing-and-guarantees/SKILL.md|sha256:647f2ab29d625808cf0686f321bd556e|1.3.0|1.0.0",
+      "evaluated_at": "2026-09-29T16:22:09.385980+08:00"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/gym-transformation-challenge/SKILL.md",
+      "name": "gym-transformation-challenge",
+      "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/gym-transformation-challenge/SKILL.md",
+      "repo_url": "https://github.com/skillmedev/skills",
+      "author": "skillmedev",
+      "summary_zh": "该技能用于帮助健身房设计 6 周转型挑战活动，涵盖前端获客、每周执行、会员转化和盈亏测算。适用于健身房经营者规划短期挑战并将其转化为持续会员。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "帮我设计一个健身房 6 周转型挑战活动",
+        "规划如何把挑战活动参与者转化为健身房会员"
+      ],
+      "key_features": [
+        "提供 6 周挑战活动结构与每周执行流程",
+        "包含会员转化时机、话术模板与运营清单",
+        "内置 Node 盈亏与后端会员价值测算脚本"
+      ],
+      "main_category": {
+        "id": "physical_health",
+        "name": "身体健康"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "健身房运营",
+        "会员转化",
+        "挑战活动设计",
+        "健身业务增长"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "Node.js"
+      ],
+      "limitations": "未提供广告投放、受众或表单功能；经济测算依赖用户自行输入假设参数，未验证真实经营效果。",
+      "license": null,
+      "status": "candidate",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-29T16:24:47.441214+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:6dacaf82ee9edb59f5d0e044f185b622",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "材料围绕健身房 6 周转型挑战的运营、转化与经营模型，属于健身房/健身业务运营场景，可归入身体健康领域下的健身业务支持，不命中硬性排除项。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "明确说明用于帮助健身房设计 6 周转型挑战、前端获客、收支平衡并将挑战者转化为持续会员，场景具体且有实际经营价值。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "提供了挑战结构、会员转化设计、每周执行流程、经济测算脚本、质量门槛、模板与参考蓝图，足以理解其做法与价值。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "pass",
+            "evidence": "上游描述与实际内容一致：描述称设计 6 周挑战、前端获客与会员转化，正文也提供对应流程、模板和经济测算。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "pass",
+            "evidence": "明确说明计算器为自包含 Node 脚本，运行命令为 node challenge_pnl.js，且声明 No dependencies；未声明其他特殊依赖。",
+            "informational": false
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "所读材料为健身业务运营指南和测算脚本，未见凭据外传、实盘交易、临床决策或其他明显可疑行为。",
+            "informational": false
+          }
+        },
+        "verification_note": "材料提供了 Node 计算脚本、示例输入与输出，以及质量门槛和每周执行清单，可作为理解与验证依据；未提供真实健身房经营结果验证。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "skillmedev/skills:skills/gym-transformation-challenge/SKILL.md|sha256:6dacaf82ee9edb59f5d0e044f185b622|1.3.0|1.0.0",
+      "evaluated_at": "2026-09-29T16:24:47.437214+08:00"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/habit-builder/SKILL.md",
+      "name": "habit-builder",
+      "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/habit-builder/SKILL.md",
+      "repo_url": "https://github.com/skillmedev/skills",
+      "author": "skillmedev",
+      "summary_zh": "将“想多运动”等模糊意图转化为一页可执行习惯计划，包含执行意图、习惯叠加、环境设计、追踪和每周复盘。适合个人建立新习惯或减少坏习惯。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "帮我建立一个每天运动的习惯",
+        "我总是坚持不下来，帮我分析习惯为什么失败"
+      ],
+      "key_features": [
+        "生成一页习惯计划",
+        "使用执行意图与习惯叠加句式",
+        "提供线索-渴望-例行-奖励回路映射"
+      ],
+      "main_category": {
+        "id": "physical_health",
+        "name": "身体健康"
+      },
+      "candidate_domains": [
+        "physical_health"
+      ],
+      "tags": [
+        "习惯建立",
+        "行为改变",
+        "自我提升",
+        "每周复盘"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "limitations": "未声明运行平台或依赖；不适用于需要问责结构的目标设定或完整训练计划。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-29T16:25:15.370518+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:07c2e3a83a60005198ba62aad90943b5",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "材料围绕把模糊意图转化为具体习惯计划、追踪与复盘，属于身体健康/自我提升中的习惯建立；未命中硬性排除项。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "明确用于帮助建立新习惯或减少坏习惯，适用场景包括“help me build a habit”“I want to exercise more but can't stick with it”等，并给出具体产出物一页习惯计划。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "提供8个步骤：定义目标行为、映射习惯回路、写执行意图、习惯叠加、环境设计、追踪、每周复盘、逐步扩展，并规定最终输出内容，足以理解做法与价值。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "pass",
+            "evidence": "上游描述中的一页习惯计划、执行意图、习惯叠加、线索-渴望-例行-奖励、环境设计、追踪与周回顾均能在正文对应章节找到。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "unknown",
+            "evidence": "未声明特殊工具、运行环境或依赖；仅提到可用日历或习惯应用追踪，但未说明是否必需。",
+            "informational": true
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "材料为一般自我提升教育，包含非专业医疗/心理建议声明，未见凭据外传、实盘下单、临床决策或其他明显可疑行为。",
+            "informational": false
+          }
+        },
+        "verification_note": "材料提供示例请求、示例句子、每周复盘问题和最终一页计划输出，但未提供实测结果或验收清单。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "skillmedev/skills:skills/habit-builder/SKILL.md|sha256:07c2e3a83a60005198ba62aad90943b5|1.3.0|1.0.0",
+      "evaluated_at": "2026-09-29T16:25:15.368396+08:00"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/hashtag-strategist/SKILL.md",
+      "name": "hashtag-strategist",
+      "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/hashtag-strategist/SKILL.md",
+      "repo_url": "https://github.com/skillmedev/skills",
+      "author": "skillmedev",
+      "summary_zh": "为 Instagram、TikTok、LinkedIn、X、YouTube 等社交平台构建按账号规模与平台限制匹配的分层标签和关键词策略，适用于需要标签组合、标签审计或按内容支柱建立轮换标签集的场景。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "为这条 Instagram 帖子生成一组适合小账号的标签",
+        "审计我现有标签块，去掉可能被限流或垃圾化的标签"
+      ],
+      "key_features": [
+        "按账号规模分配 broad、niche、branded 三层标签",
+        "按平台给出标签数量上限与使用规则",
+        "审查被封禁、垃圾化或互粉风险标签"
+      ],
+      "main_category": {
+        "id": "content",
+        "name": "内容创作"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "社交媒体",
+        "标签策略",
+        "内容分发",
+        "关键词优化"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "limitations": "未提供标签量级或封禁状态的自动数据来源，需人工或外部工具检查标签页；不写正文文案，也不做主题聚类 SEO 关键词架构。",
+      "license": null,
+      "status": "candidate",
+      "reason_codes": [
+        "INSUFFICIENT_EVIDENCE"
+      ],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-29T16:27:25.834453+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:223eecf498725dab16d3a76cb7b1f26a",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "技能为社交平台标签策略构建，属于内容创作中社交媒体文案/标签优化，未命中硬性排除项。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "明确解决“小账号滥用大流量标签、标签被限流”问题，提供按账号规模和平台限制构建分层标签集的方法，具有实际使用价值。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "包含输入收集、三层标签比例、平台数量规则、标签审查、轮换集交付和质量标准，足以理解其做法与价值。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "unknown",
+            "evidence": "上游描述与 SKILL.md 内容一致：构建按账号规模和平台限制的分层标签集，并筛除被封禁或垃圾标签。；程序未能核实所引原文与行号。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "unknown",
+            "evidence": "未声明需要外部工具或 API；但标签审查依赖人工查看平台标签页，未说明自动化能力或数据来源。",
+            "informational": true
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "材料为提示词/操作规范，未见凭据外传、自动下单、临床决策或其他明显可疑行为；且明确提示不要承诺标签拯救帖子。",
+            "informational": false
+          }
+        },
+        "verification_note": "提供了一个 Instagram Reel 的完整示例，包括标签分层、关键词、排除标签和反例；另有质量标准，但未提供可自动验证的方法。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "skillmedev/skills:skills/hashtag-strategist/SKILL.md|sha256:223eecf498725dab16d3a76cb7b1f26a|1.3.0|1.0.0",
+      "evaluated_at": "2026-09-29T16:27:25.831386+08:00"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/help-documentation/SKILL.md",
+      "name": "help-documentation",
+      "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/help-documentation/SKILL.md",
+      "repo_url": "https://github.com/skillmedev/skills",
+      "author": "skillmedev",
+      "summary_zh": "用于撰写面向用户的帮助中心文章，提供 how-to、故障排查和 FAQ 的写作流程、标题规则、步骤模板与质量检查。适合为产品功能编写或重写用户自助文档。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "写一篇帮助用户重置密码的帮助中心文章",
+        "把支持工单整理成故障排查页面"
+      ],
+      "key_features": [
+        "动词开头标题与单一任务结构",
+        "要求使用准确 UI 标签与成功结果声明",
+        "提供 how-to 文章骨架与质量检查清单"
+      ],
+      "main_category": {
+        "id": "docs",
+        "name": "文档办公"
+      },
+      "candidate_domains": [
+        "docs"
+      ],
+      "tags": [
+        "帮助文档",
+        "用户指南",
+        "故障排查",
+        "FAQ",
+        "文档模板"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "limitations": "未声明运行工具或环境；需要实际产品界面、UI 标签或截图才能完成高质量验证与写作。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-29T16:27:59.037611+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:fc9845b3af14ed2c04a50e7456fbc934",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "材料是面向用户帮助中心文章的写作流程与模板，属于文档办公/内容创作中的文档写作规范，不命中硬性排除项。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "明确说明用于撰写用户帮助文档，包括 how-to、troubleshooting、FAQ，并给出典型触发语句与不适用场景。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "提供六步操作流程、文章类型选择、标题规则、骨架模板、正反示例、交付物与质量标准，足以理解其做法与价值。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "pass",
+            "evidence": "上游描述与 SKILL.md 内容一致：均强调动词开头标题、单一任务、准确 UI 标签、成功结果声明，以及帮助文章写作流程。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "unknown",
+            "evidence": "材料未声明运行环境、工具或外部依赖；但流程要求获取准确 UI 标签、截图或实际产品验证，未说明这些输入如何获取可能影响适用判断。",
+            "informational": true
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "所读材料为文档写作规范与模板，未见凭据外传、实盘交易、临床决策、恶意命令或与收录范围冲突的内容。",
+            "informational": false
+          }
+        },
+        "verification_note": "材料提供“stuck-user test”验证方法：按步骤对照实际 UI 检查，任何需要读者推断或未说明选项的步骤需重写。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "skillmedev/skills:skills/help-documentation/SKILL.md|sha256:fc9845b3af14ed2c04a50e7456fbc934|1.3.0|1.0.0",
+      "evaluated_at": "2026-09-29T16:27:59.032386+08:00"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/hiring-scorecard/SKILL.md",
+      "name": "hiring-scorecard",
+      "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/hiring-scorecard/SKILL.md",
+      "repo_url": "https://github.com/skillmedev/skills",
+      "author": "skillmedev",
+      "summary_zh": "用于构建结构化招聘面试评分卡，帮助团队在新岗位或面试流程审计中定义可观察信号、评分规则和校准复盘流程。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "为一个新岗位建立面试评分卡",
+        "审计现有面试流程并统一评分标准"
+      ],
+      "key_features": [
+        "基于 30/60/90 天结果定义 4-6 个可观察信号",
+        "要求每个评分附候选人证据引用",
+        "提供独立评分与分歧复盘协议"
+      ],
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "招聘",
+        "面试评分",
+        "流程设计",
+        "评估校准"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "limitations": "未提供具体岗位示例、表单模板文件或自动化实现，仅描述流程与规则。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-29T16:33:55.023433+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:5ac6a205d708096020d93cbd6b629dab",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "材料是招聘面试评分卡构建流程，属于产品与设计中的需求分析/评估流程相关工作流，未命中硬性排除项。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "明确说明用于新岗位开启或现有面试流程审计，通过结构化评分卡减少偏见并提升校准，场景具体。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "提供五步流程、评分规则、例外处理、交付物与禁止事项，足以理解其做法与价值。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "pass",
+            "evidence": "上游描述与实际内容一致，均围绕构建角色相关信号的结构化面试评分卡。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "unknown",
+            "evidence": "未声明特殊工具、运行环境或依赖；未说明的信息不影响理解其作为流程指南的价值，但不能推断无依赖或全平台兼容。",
+            "informational": true
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "所读材料为招聘面试流程指南，未见凭据外传、实盘下单、临床决策或其他明显风险。",
+            "informational": false
+          }
+        },
+        "verification_note": "材料提供质量标准和交付物清单，如信号可追溯至 30/60/90 天结果、评分必须附证据引用、复盘只讨论 2 分以上分歧；未提供实际示例文件或验收案例。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "skillmedev/skills:skills/hiring-scorecard/SKILL.md|sha256:5ac6a205d708096020d93cbd6b629dab|1.3.0|1.0.0",
+      "evaluated_at": "2026-09-29T16:33:55.020948+08:00"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/icon-system/SKILL.md",
+      "name": "icon-system",
+      "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/icon-system/SKILL.md",
+      "repo_url": "https://github.com/skillmedev/skills",
+      "author": "skillmedev",
+      "summary_zh": "用于设计或审计图标系统，统一网格、描边、圆角、命名和 SVG 导出规则，并产出可供工程实现的图标规范。适用于图标集不一致、建立图标网格、命名规范或准备 SVG 交付的场景。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "我们的图标看起来不一致，帮我审计现有图标集",
+        "为产品建立 24px 图标网格、命名规则和 SVG 导出规范"
+      ],
+      "key_features": [
+        "提供 24x24 网格、关键线和 2px 描边规范",
+        "包含可复制填写的图标系统规范模板",
+        "提供图标一致性审计清单与交付物定义"
+      ],
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "图标系统",
+        "设计规范",
+        "UI设计",
+        "SVG导出",
+        "设计审计"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "SVGO 或等效 SVG 优化工具"
+      ],
+      "limitations": "未说明具体设计工具、运行环境或平台资产管线的完整依赖；规范主要面向图标集，不适用于单个 logo 标志。",
+      "license": null,
+      "status": "candidate",
+      "reason_codes": [
+        "INSUFFICIENT_EVIDENCE"
+      ],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-29T16:35:37.312571+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:8c5a340dd38ebeff1a323b4a683e7ce3",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "内容围绕图标系统的设计与审计规范，属于产品与设计中的界面设计/设计规范范畴，未命中硬性排除项。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "明确说明用于解决图标集不一致问题，适用场景包括建立图标网格、命名规范、审计现有图标集、准备 SVG 交付等。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "提供七步操作流程、可复制填写的图标规范模板、审计清单、交付物定义和禁止事项，足以理解其做法与价值。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "unknown",
+            "evidence": "上游描述称其设计或审计图标系统并输出工程可用的图标规范，正文包含网格、描边、命名、导出、审计清单等内容，与描述一致。；程序未能核实所引原文与行号。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "unknown",
+            "evidence": "提到 SVG 导出和 SVGO 或等效优化工具，以及 web currentColor、iOS/Android 资产管线等平台约束，但未说明具体运行环境或必要工具版本；缺口不影响理解核心方法。",
+            "informational": true
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "所读材料为设计规范和审计清单，未见可疑行为、凭据收集、外传或与收录范围冲突的功能。",
+            "informational": false
+          }
+        },
+        "verification_note": "材料提供了一致性审计清单和质量标准，例如所有关键形状在最小尺寸下视觉等大、文件通过优化器、颜色可通过 CSS 变更；未提供实际项目验收案例。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "skillmedev/skills:skills/icon-system/SKILL.md|sha256:8c5a340dd38ebeff1a323b4a683e7ce3|1.3.0|1.0.0",
+      "evaluated_at": "2026-09-29T16:35:37.308569+08:00"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/hiring-pipeline/SKILL.md",
+      "name": "hiring-pipeline",
+      "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/hiring-pipeline/SKILL.md",
+      "repo_url": "https://github.com/skillmedev/skills",
+      "author": "skillmedev",
+      "summary_zh": "该技能用于设计端到端招聘流程，覆盖职位需求、漏斗规划、筛选、面试、复盘和offer关闭，适合需要诊断招聘漏斗流失或缩短招聘周期的场景。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "设计我们的招聘流程",
+        "要招到一个人需要多少候选人进入漏斗"
+      ],
+      "key_features": [
+        "提供各阶段招聘转化率基准",
+        "包含反向漏斗容量规划",
+        "给出复盘与offer关闭规则"
+      ],
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "招聘流程",
+        "漏斗分析",
+        "人才获取",
+        "流程设计"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "limitations": "未声明配套工具、数据来源或外部依赖；部分能力依赖其他技能如 interview-guide-builder、hiring-scorecard 等。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-29T16:36:07.074337+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:56018e1c2d6240472e8c655a85185040",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "内容为招聘流程设计，属于产品与设计/文档办公相关的工作流指南；未命中硬性排除项，也非仅科研/通用数据分析。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "明确说明用于设计从职位需求到录用的端到端招聘流程，解决候选人漏斗流失、offer被拒、招聘周期过长等问题，并列出适用与不适用场景。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "提供7步操作流程、阶段转化率基准、反向漏斗容量规划、面试环节设计、复盘规则、offer关闭时限、示例转化表和质量标准，足以理解其做法与价值。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "pass",
+            "evidence": "上游描述与实际内容一致：描述中的端到端招聘流程、阶段转化基准、反向漏斗和时间目标在正文均有对应展开。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "unknown",
+            "evidence": "材料未声明运行环境、工具或外部依赖；提到可配合 interview-guide-builder、candidate-outreach-personalizer、hiring-scorecard、job-description-writer 等技能，但未说明这些是否为必需依赖。",
+            "informational": true
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "所读材料为招聘流程指南，未见凭据外传、实盘交易、临床决策、DSH插件或明显可疑行为；也未要求改变评估规则。",
+            "informational": false
+          }
+        },
+        "verification_note": "材料提供一个高级后端岗位的漏斗复盘示例和明确的质量标准，但未提供可执行验证脚本或外部数据来源说明。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "skillmedev/skills:skills/hiring-pipeline/SKILL.md|sha256:56018e1c2d6240472e8c655a85185040|1.3.0|1.0.0",
+      "evaluated_at": "2026-09-29T16:36:07.071643+08:00"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/idempotency-enforcer/SKILL.md",
+      "name": "idempotency-enforcer",
+      "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/idempotency-enforcer/SKILL.md",
+      "repo_url": "https://github.com/skillmedev/skills",
+      "author": "skillmedev",
+      "summary_zh": "该技能指导为具有不可逆副作用的 POST 接口设计客户端幂等键、去重存储和重放规则，适用于防止重试、队列重投或双击造成重复扣款、发货、发邮件等场景。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "如何防止客户端重试导致重复扣款？",
+        "给这个不安全 POST 端点添加 Idempotency-Key 头并设计重放逻辑。"
+      ],
+      "key_features": [
+        "规定 Idempotency-Key 作用域为租户、端点和键值组合",
+        "给出关系表、唯一约束、TTL 与清理监控设计",
+        "提供状态重放表与 Express 中间件草图"
+      ],
+      "main_category": {
+        "id": "dev",
+        "name": "编程开发"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "幂等性",
+        "API设计",
+        "重试去重",
+        "后端可靠性"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "limitations": "示例为设计草图而非完整库；未声明具体框架、数据库驱动、哈希函数来源与测试环境；明确不适用于第三方 webhook 事件去重和客户端重试/退避策略本身。",
+      "license": null,
+      "status": "candidate",
+      "reason_codes": [
+        "INSUFFICIENT_EVIDENCE"
+      ],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-29T16:38:28.215101+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:5c1b94df347a1f9eb5ccd2c106f1d0d1",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "材料围绕为不安全 POST 端点设计幂等键、去重存储与重放语义，防止重试导致重复扣款/发货，属于后端接口设计与可靠性实现，落在“编程开发”范围。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "明确解决 at-least-once 投递、客户端重试、队列重投导致重复副作用的问题，并给出典型触发场景，如“how do I stop duplicate charges on retry”“add an Idempotency-Key header to this endpoint”。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "提供 7 步操作流程：收集输入、键作用域、存储与 TTL、请求体哈希绑定、原子持久化、状态重放表、清理与监控，并附 SQL 表结构与 Express 中间件草图，足以理解做法与价值。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "unknown",
+            "evidence": "上游描述与实际内容一致：描述中的幂等键、去重存储、重放语义在正文均有对应步骤、表格、SQL/JS 示例和禁止项。；程序未能核实所引原文与行号。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "unknown",
+            "evidence": "材料提到关系型数据库唯一约束、Redis SET NX、Express 风格中间件、sha256、rawBody、db.tryInsertKey 等，但未声明具体运行环境、库依赖或必需组件；这些缺口不阻断理解设计方法。",
+            "informational": true
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "所读材料为后端幂等设计指南，未见凭据外传、实盘交易、临床决策、恶意指令或越权要求；对 webhook 和客户端重试策略有明确边界。",
+            "informational": false
+          }
+        },
+        "verification_note": "提供 Quality bar 与验证思路，例如用并发双请求测试证明重复请求不会执行两次；未提供可直接运行的完整实现或测试脚本。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "skillmedev/skills:skills/idempotency-enforcer/SKILL.md|sha256:5c1b94df347a1f9eb5ccd2c106f1d0d1|1.3.0|1.0.0",
+      "evaluated_at": "2026-09-29T16:38:28.213375+08:00"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/icp-persona-builder/SKILL.md",
+      "name": "icp-persona-builder",
+      "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/icp-persona-builder/SKILL.md",
+      "repo_url": "https://github.com/skillmedev/skills",
+      "author": "skillmedev",
+      "summary_zh": "该技能用于把模糊目标客户转化为可过滤、可评分的 ICP 记分卡，并构建采购委员会画像与 A/B/C 账户分层。适用于启动外呼销售、筛选目标账户和评估线索匹配度。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "帮我根据已成交和流失客户建立可过滤的 ICP 记分卡",
+        "用加权条件给一个目标账户评分并判断 A/B/C 层级"
+      ],
+      "key_features": [
+        "将 ICP 转为 Apollo/Sales Navigator 可输入过滤条件",
+        "覆盖经济买家、冠军、技术用户和阻碍者角色",
+        "提供加权评分脚本与 A/B/C 分层模板"
+      ],
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "ICP",
+        "买家画像",
+        "销售线索评分",
+        "B2B销售",
+        "目标客户定义"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "Node.js（用于运行 score-account.mjs）",
+        "可选外部工具：Apollo、Sales Navigator、Clay、CRM"
+      ],
+      "limitations": "材料明确不用于实际拉取潜客名单、生成一句话定位或终端用户研究画像；ICP 质量依赖闭单/流失证据数据。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-29T16:39:32.825535+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:6bc189b341fc691f125a86959a7a79a7",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "材料围绕 ICP 定义、客户画像、销售线索评分与分层，属于产品与市场/销售策略辅助，不命中硬性排除；虽非金融/健康，但可归入产品与设计或自动化工作流辅助。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "明确解决“谁是我们 ICP、Apollo/Sales Navigator 应设哪些过滤条件、如何给账户评分分层”的问题，并给出适用与不适用场景。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "提供七步工作流、ICP 记分卡模板、示例、失败模式和可运行评分脚本，足以理解做法与价值。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "pass",
+            "evidence": "上游描述与实际内容一致：均强调将模糊目标客户转化为可过滤、可评分的 ICP 记分卡，并包含采购委员会角色、硬性排除条件和 A/B/C 分层。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "pass",
+            "evidence": "脚本部分声明保存为 score-account.mjs 并用 node 运行，且写明 No dependencies；工作流提及 Apollo/Sales Navigator/Clay 等外部工具作为使用场景，但未将其作为脚本运行必需依赖。",
+            "informational": false
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "所读材料为销售/ICP 方法论与本地评分脚本示例，未见凭据外传、实盘交易、临床决策、恶意命令或排除领域内容。",
+            "informational": false
+          }
+        },
+        "verification_note": "材料提供 worked example、ICP 记分卡模板和可运行 Node 脚本示例，可用示例账户验证评分逻辑；未提供外部数据验收或实测结果。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "skillmedev/skills:skills/icp-persona-builder/SKILL.md|sha256:6bc189b341fc691f125a86959a7a79a7|1.3.0|1.0.0",
+      "evaluated_at": "2026-09-29T16:39:32.823535+08:00"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/image-license-rights/SKILL.md",
+      "name": "image-license-rights",
+      "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/image-license-rights/SKILL.md",
+      "repo_url": "https://github.com/skillmedev/skills",
+      "author": "skillmedev",
+      "summary_zh": "用于判断特定图片在商用、编辑用途、商品化等场景下是否被许可，并检查署名、肖像/财产授权和 AI 图片条款。适合发布、广告或销售包含库存图片的内容前做合规把关。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "这张 Unsplash 图片能不能用于付费广告？",
+        "库存图片印在 T 恤上销售需要什么许可？"
+      ],
+      "key_features": [
+        "覆盖 CC、Unsplash、Pexels、Pixabay、Adobe、Getty、Shutterstock 等许可",
+        "区分商用/编辑用途、规模、转售与扩展许可",
+        "提供每图许可记录模板与拒绝/替代建议"
+      ],
+      "main_category": {
+        "id": "content",
+        "name": "内容创作"
+      },
+      "candidate_domains": [
+        "content"
+      ],
+      "tags": [
+        "图片版权",
+        "许可合规",
+        "商用判断",
+        "署名要求",
+        "肖像权/财产授权"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "limitations": "不是法律建议；需要人工访问来源许可页核实，未声明运行环境或自动抓取能力。",
+      "license": null,
+      "status": "candidate",
+      "reason_codes": [
+        "INSUFFICIENT_EVIDENCE"
+      ],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-29T16:40:44.389647+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:a765c85ab9adf1de37e0405e912ae023",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "材料围绕图片版权/许可判断，属于内容创作中的图片使用合规判断，未命中硬性排除。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "说明用于判断特定图片使用是否合法、许可义务、是否需要肖像权/财产授权，并给出典型问题如是否可商用、是否需署名、是否可做商品。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "提供七步操作流程：收集输入、用途分类、许可类型映射、授权检查、署名/再分发、AI 图片门槛、记录结论，并附许可记录模板。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "unknown",
+            "evidence": "上游描述与正文一致：正文说明判断图片使用许可、CC/Unsplash/Pexels/Pixabay/Adobe/Getty/Shutterstock 等条款、model/property release、AI 图片注意事项，并输出每图许可记录。；程序未能核实所引原文与行号。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "unknown",
+            "evidence": "未声明运行环境、工具或外部依赖；流程要求访问图片来源许可页面，但未说明具体工具或平台限制。",
+            "informational": true
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "所读材料为图片许可合规判断指南，未见凭据外传、恶意命令、实盘下单或临床决策等风险；并声明不是法律建议且高风险情形需咨询律师。",
+            "informational": false
+          }
+        },
+        "verification_note": "材料提供示例结论行、许可记录模板和质量标准，如每张图片需完整记录、模糊时采用更严格解释；未提供自动化验证方法。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "skillmedev/skills:skills/image-license-rights/SKILL.md|sha256:a765c85ab9adf1de37e0405e912ae023|1.3.0|1.0.0",
+      "evaluated_at": "2026-09-29T16:40:44.386646+08:00"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/impact-report-builder/SKILL.md",
+      "name": "impact-report-builder",
+      "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/impact-report-builder/SKILL.md",
+      "repo_url": "https://github.com/skillmedev/skills",
+      "author": "skillmedev",
+      "summary_zh": "用于帮助非营利组织撰写年度或项目影响力报告，强调成果优先、数字与故事配对、诚实披露不足、财务透明和单位成果成本计算。适合资助方报告、捐赠人沟通和项目复盘场景。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "写一份非营利组织年度影响力报告",
+        "为资助方整理项目成果、财务透明和单位成果成本"
+      ],
+      "key_features": [
+        "成果优先于活动的报告规则",
+        "数字与受益人故事配对模板",
+        "财务透明与单位成果成本计算"
+      ],
+      "main_category": {
+        "id": "content",
+        "name": "内容创作"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "影响力报告",
+        "非营利组织",
+        "报告写作",
+        "财务透明",
+        "资助方沟通"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "limitations": "依赖组织提供可溯源的成果、财务和故事素材；不替代会计或审计专业意见，也未声明具体运行环境。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-29T16:42:22.019601+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:e43ee37d96f00fa0896f12f2a4adf549",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "材料面向非营利组织年度/项目影响力报告的撰写流程与模板，属于内容创作中的报告写作；未命中硬性排除项。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "明确解决非营利组织影响力报告如何以成果而非活动呈现、如何配对数字与故事、如何披露不足与计算单位成果成本等问题，适用场景具体。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "提供七步操作流程、输入清单、报告骨架模板、禁忌项、质量标准与示例组织，足以理解做法与价值。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "pass",
+            "evidence": "描述中的核心能力在正文中有对应步骤、模板与示例，介绍与内容一致。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "unknown",
+            "evidence": "材料未声明运行环境或外部工具依赖；提到需要财务数据、成果数据、故事授权等输入，并建议财务报表来自会计/簿记员，但未说明技术依赖。",
+            "informational": true
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "所读材料为报告写作指南与模板，未见凭据外传、实盘交易、临床决策或其他明显可疑行为；也未要求改变评估规则。",
+            "informational": false
+          }
+        },
+        "verification_note": "材料提供 Bright Futures Tutoring 示例、报告骨架、Good/bad contrast、Quality bar 与 Do NOT 清单，可作为验收或自检依据；未提供实际运行验证。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "skillmedev/skills:skills/impact-report-builder/SKILL.md|sha256:e43ee37d96f00fa0896f12f2a4adf549|1.3.0|1.0.0",
+      "evaluated_at": "2026-09-29T16:42:22.016271+08:00"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/inbox-zero/SKILL.md",
+      "name": "inbox-zero",
+      "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/inbox-zero/SKILL.md",
+      "repo_url": "https://github.com/skillmedev/skills",
+      "author": "skillmedev",
+      "summary_zh": "该技能提供基于 4Ds 的收件箱清零工作流，适用于处理大量未读邮件并维持邮箱整洁。它通过批量归档、每封邮件只触碰一次、固定处理窗口、退订、过滤和最小文件夹结构来减少邮件积压。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "我有 5,000 封未读邮件，帮我清理到 inbox zero",
+        "邮件占用了我一整天，帮我建立固定的邮件处理流程"
+      ],
+      "key_features": [
+        "用 Delete、Delegate、Defer、Do 四决策处理每封邮件",
+        "提供批量归档积压邮件和按发件人/主题分批处理步骤",
+        "给出固定处理窗口、退订、过滤和最小归档文件夹策略"
+      ],
+      "main_category": {
+        "id": "docs",
+        "name": "文档办公"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "邮件管理",
+        "收件箱清零",
+        "工作流",
+        "效率方法"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "limitations": "未声明适用的具体邮件客户端或平台；不适用于起草回复邮件、持续支持队列优先级或围绕邮件窗口保护专注时间的规划。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-29T16:43:18.807930+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:372502dd7bc5d6ffe4578fb2cc1ec635",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "材料提供的是邮件积压清理与维持收件箱清零的工作流方法，属于文档办公中的邮件处理场景；未命中硬性排除项。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "明确说明用于处理大量未读邮件、达到 inbox zero，并列出适用语句如“我有 5,000 封未读邮件”；方法包括 4Ds、批量归档、过滤和固定处理窗口，具有实际价值。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "给出 4Ds 决策规则、积压处理步骤、维持清零策略、最小文件夹结构和日常例行窗口，足以理解做法；未要求具体邮件客户端操作步骤也不影响理解核心方法。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "pass",
+            "evidence": "上游描述中的 4Ds、mass-archive、batched processing、unsubscribing、filters、minimal folder setup 均能在正文对应段落找到一致内容。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "unknown",
+            "evidence": "材料未声明具体邮件客户端、平台或工具；方法可泛化到支持归档、过滤、标签的邮件系统，但未说明适用边界。该缺口不影响理解方法本身。",
+            "informational": true
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "所读材料为邮件管理方法指南，未见凭据外传、自动执行、实盘交易、临床决策或排除领域内容；批量归档建议有一定误删风险但属于普通操作建议，不构成明显可疑行为。",
+            "informational": false
+          }
+        },
+        "verification_note": "材料提供了适用触发语句、处理步骤、日常例行和反模式，但未提供验收清单、示例邮箱前后状态或可执行验证方法。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "skillmedev/skills:skills/inbox-zero/SKILL.md|sha256:372502dd7bc5d6ffe4578fb2cc1ec635|1.3.0|1.0.0",
+      "evaluated_at": "2026-09-29T16:43:18.804582+08:00"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/index-advisor/SKILL.md",
+      "name": "index-advisor",
+      "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/index-advisor/SKILL.md",
+      "repo_url": "https://github.com/skillmedev/skills",
+      "author": "skillmedev",
+      "summary_zh": "用于数据库索引设计的操作指南，帮助在慢查询或索引审计时推荐、排序、裁剪索引并验证效果。适合已有执行计划、需要优化 Postgres 或 MySQL 索引的场景。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "这条查询出现 Seq Scan，帮我设计合适的复合索引",
+        "审计一张表的索引，找出未使用和重复索引"
+      ],
+      "key_features": [
+        "基于 EXPLAIN 计划给出索引建议",
+        "提供等值优先、范围/排序次后的复合索引列序规则",
+        "包含部分索引、覆盖索引与未使用索引清理"
+      ],
+      "main_category": {
+        "id": "dev",
+        "name": "编程开发"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "数据库优化",
+        "索引设计",
+        "查询性能",
+        "Postgres",
+        "MySQL"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "Postgres 或 MySQL 的执行计划与索引统计信息"
+      ],
+      "limitations": "未声明数据库版本、权限或运行环境要求；不适用于未知慢查询的从零诊断、查询重写或分区规划。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-29T16:44:43.835604+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:19a4049059f58588afc67ab04c1216e4",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "内容围绕数据库索引设计、查询计划与索引清理，属于编程开发中的调试/优化场景，不命中硬性排除。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "明确说明用于在慢查询出现 Seq Scan/Sort 时推荐、排序和裁剪索引，并给出适用与不适用边界。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "提供输入收集、工作流、选择率规则、复合索引列序、部分/覆盖索引、清理与验证步骤，并有示例和交付物要求。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "pass",
+            "evidence": "上游描述与正文一致，正文包含索引推荐、列序规则、部分/覆盖索引、重复/未使用清理和写放大权衡。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "unknown",
+            "evidence": "材料提到 Postgres 与 MySQL 的 EXPLAIN、索引列表和统计视图，但未明确最低版本、权限或运行环境要求；不影响理解核心方法。",
+            "informational": true
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "所读材料为数据库索引优化指南，未见凭据外传、恶意命令、实盘交易或临床决策等风险。",
+            "informational": false
+          }
+        },
+        "verification_note": "材料要求用 EXPLAIN/EXPLAIN ANALYZE 前后对比验证索引是否被使用且实际更快，并提供 worked example。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "skillmedev/skills:skills/index-advisor/SKILL.md|sha256:19a4049059f58588afc67ab04c1216e4|1.3.0|1.0.0",
+      "evaluated_at": "2026-09-29T16:44:43.832455+08:00"
     }
   ],
   "overrides": {
