@@ -213,7 +213,7 @@ export function renderFindView(container, report, ownedState = null) {
           return '<div class="find-evidence-item"><strong>✔ ' + escapeHtml(cr.criterion_id) + '</strong>：' + escapeHtml(cr.explanation || "支持该需求") + quotes + '</div>';
         }).join("");
         evidenceHtml =
-          '<details class="find-evidence-box" open>' +
+          '<details class="find-evidence-box">' +
             '<summary>已核验代码证据（' + supportedResults.length + ' 项通过原文比对）</summary>' +
             evItems +
           '</details>';

@@ -103,3 +103,20 @@ test("find-view: fetchFindReport uses memory cache and bypasses with force", asy
     clearFindReportCache();
   }
 });
+
+test("find-view: evidence details box is closed by default", () => {
+  const html = render({
+    ...report,
+    shortlist: [{
+      candidate: { name: "mindmirror-skill", url: "https://example.com" },
+      evaluation: {
+        match: "strong",
+        criteria_results: [
+          { status: "supported", criterion_id: "empathy", explanation: "支持该需求", evidence: [] }
+        ]
+      }
+    }]
+  });
+  assert.match(html, /<details class="find-evidence-box">/);
+  assert.doesNotMatch(html, /<details class="find-evidence-box" open>/);
+});
