@@ -1,11 +1,11 @@
 {
   "catalog_version": "1.0.0",
   "rules_version": "1.3.0",
-  "generated_at": "2026-09-29T19:27:32.888640+08:00",
+  "generated_at": "2026-09-29T19:33:45.888790+08:00",
   "counts": {
     "excluded": 79,
     "candidate": 128,
-    "recommended": 193,
+    "recommended": 196,
     "pending": 2
   },
   "entries": [
@@ -32410,6 +32410,263 @@
       },
       "last_evaluation_id": "skillmedev/skills:skills/notion-database/SKILL.md|sha256:f0863fcd489d597be4302e85dc8b21cf|1.3.0|1.0.0",
       "evaluated_at": "2026-09-29T19:27:32.886544+08:00"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/offer-rejection-writer/SKILL.md",
+      "name": "offer-rejection-writer",
+      "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/offer-rejection-writer/SKILL.md",
+      "repo_url": "https://github.com/skillmedev/skills",
+      "author": "skillmedev",
+      "summary_zh": "为招聘场景起草清晰、合法谨慎的候选人 offer 信与拒绝信草稿，标注 DRAFT 供招聘人员或用人经理审核后发送；适合需要措辞得体、避免法律风险的候选人沟通。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "帮我起草一封候选人 offer 邮件，包含职级、薪酬和回复截止日期",
+        "写一封给终面候选人的拒绝信，语气尊重且不留法律风险"
+      ],
+      "key_features": [
+        "区分 offer 与拒绝信的固定要素顺序与分阶段策略",
+        "薪酬等缺失输入以占位符标注，禁止编造数字",
+        "输出标注 DRAFT 供人工审核，附占位符与签署项清单"
+      ],
+      "main_category": {
+        "id": "content",
+        "name": "内容创作"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "招聘沟通",
+        "信函起草",
+        "商务写作"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "limitations": "仅产出草稿供人工审核发送，不代发；薪酬等关键数据须由外部提供，缺失时以占位符标注；不适用于在职员工绩效反馈（材料指向 feedback-writer）；法律合规仍需人工复核。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-29T19:31:20.875279+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:57f5394fbd9a3d8bae74c586b24662be",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "属于书面内容起草技能（候选人 offer 信与拒绝信的措辞与结构指导），落入内容创作范畴；为独立技能而非仓库/合集/插件容器，未命中任何硬性排除项。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "明确解决招聘沟通中 offer 与拒绝信措辞不清、法律风险问题；给出适用场景（起草/润色 offer 信或拒绝信）与不适用场景（在职员工绩效反馈），并定义交付物形态，有实际价值。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "提供7步工作流、offer 与拒绝信各自的要素顺序、按候选人阶段匹配语气与时效的规则、质量标准、交付格式（占位符+审核清单+建议发送日期）及禁止事项清单，足以理解其做法与价值。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "pass",
+            "evidence": "frontmatter 描述（起草供人工审核的 offer 信与拒绝信）与正文工作流、交付物定义完全一致，无夸大或名不符实。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "unknown",
+            "evidence": "材料未声明特殊工具、运行环境或依赖；技能为纯文本起草指导，看似仅需助手环境即可执行，但未声明不等于无依赖或全平台兼容。",
+            "informational": true
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "所读材料未见可疑行为：无凭据外传、无命令执行、无注入指令；且明确要求人工审核后发送、禁止编造薪酬数字、禁止涉及受保护特征的拒绝理由。",
+            "informational": false
+          }
+        },
+        "verification_note": "材料未提供示例输出或验收测试；但定义了质量标准与交付格式（占位符清单、需法务/薪酬签署项、建议发送日期）作为产出自查依据。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "skillmedev/skills:skills/offer-rejection-writer/SKILL.md|sha256:57f5394fbd9a3d8bae74c586b24662be|1.3.0|1.0.0",
+      "evaluated_at": "2026-09-29T19:31:20.871175+08:00"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/onboarding-copy/SKILL.md",
+      "name": "onboarding-copy",
+      "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/onboarding-copy/SKILL.md",
+      "repo_url": "https://github.com/skillmedev/skills",
+      "author": "skillmedev",
+      "summary_zh": "围绕激活里程碑撰写产品新用户引导微文案（欢迎邮件、空状态、提示、进度清单、成功消息），适用于改进注册到首次价值之间的引导流程与流失问题。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "帮我们写一封新用户欢迎邮件",
+        "这个空状态页面应该显示什么文案？"
+      ],
+      "key_features": [
+        "以激活里程碑为导向规划引导文案",
+        "覆盖欢迎邮件、空状态、提示、清单、成功消息五类触点",
+        "输出时标注高流失风险步骤便于变体测试"
+      ],
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "产品微文案",
+        "用户引导",
+        "UX写作",
+        "激活优化"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "limitations": "未提供完整文案样例或品牌语调适配示例；实际效果依赖使用者提供激活里程碑与触点上下文；未声明适用平台与依赖信息。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-29T19:33:40.845432+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:ab6f23ad0dc980d845872cba86592b9c",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "产品新用户引导微文案技能，直接服务产品与设计领域（界面文案、引导流程与激活优化）；未命中任何硬性排除项，description 还明确划定了用途边界（不用于员工入职计划、营销落地页）。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "明确解决新用户从注册到首次感知产品价值（aha moment）之间的摩擦与流失问题，给出具体触发场景（写欢迎邮件、空状态文案、改进引导流程、汇报注册后流失），并配套流程、规则与输出格式，具有实际参考价值。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "提供三步流程、五类触点（欢迎邮件/空状态/提示/进度清单/成功消息）的具体写法、六条写作规则、语气要求、反模式清单与明确输出结构，足以理解其做法与价值。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "pass",
+            "evidence": "frontmatter 描述的激活导向微文案、五类触点与激活里程碑映射在正文中均有对应章节、流程与输出要求支撑，介绍与内容一致。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "unknown",
+            "evidence": "材料未声明任何特殊工具、运行环境或依赖；从内容看为纯文本写作指南，未见影响价值判断的关键运行条件，但未声明不等于无依赖或全平台兼容。",
+            "informational": true
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "所读材料为产品文案写作指南，未见凭据外传、实盘交易、临床决策等风险行为，也未包含试图改变评估规则或执行命令的指令。",
+            "informational": false
+          }
+        },
+        "verification_note": "材料建议将文案与激活指标挂钩，并在高流失步骤标注变体测试位置（Measuring success 一节），但未提供实际文案样例输出或验证方法。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "skillmedev/skills:skills/onboarding-copy/SKILL.md|sha256:ab6f23ad0dc980d845872cba86592b9c|1.3.0|1.0.0",
+      "evaluated_at": "2026-09-29T19:33:40.843424+08:00"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/okr-builder/SKILL.md",
+      "name": "okr-builder",
+      "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/okr-builder/SKILL.md",
+      "repo_url": "https://github.com/skillmedev/skills",
+      "author": "skillmedev",
+      "summary_zh": "帮助团队起草季度 OKR：最多 3 个定性目标，每个配 3-5 条含基线、目标值与唯一负责人的可衡量关键结果，并设定每周信心检查与季度末 0.0-1.0 评分节奏。适用于产品/团队季度目标规划与关键结果质量评估场景。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "帮我把团队目标转化成下季度的 OKR",
+        "这些关键结果写得好不好？帮我们按 0.0-1.0 给 OKR 打分"
+      ],
+      "key_features": [
+        "KR 三重过滤：结果而非活动、两人测试、基线与目标值",
+        "每条 KR 标注基线、目标、唯一负责人及 aspirational/committed 类型",
+        "内置每周信心检查与季度末 0.0-1.0 评分节奏及填写模板"
+      ],
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "OKR",
+        "目标管理",
+        "季度规划",
+        "团队协作"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "limitations": "纯方法论文档，无代码或自动化验收；效果依赖用户提供公司优先级、指标基线与负责人等信息（无基线时材料建议先花两周埋点）；引用的同仓库技能 annual-plan、goals-accountability 内容未随本材料提供；未声明平台与依赖信息。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-29T19:33:45.888790+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:6b9d2b4644b6ff5006f96666fab577e7",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "属团队/产品季度目标规划技能：起草 OKR（定性目标+可衡量关键结果）并设定检查与评分节奏，示例均为产品指标（周留存、激活、NPS），直接服务产品与设计范畴的目标规划工作；未命中任何硬性排除项，也非仅属科研/通用数据分析/AI 开发方向。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "描述明确指出解决的具体问题（关键结果沦为变相待办清单、团队'完成一切却毫无进展'），给出适用场景（起草季度 OKR、评估 KR 质量、设定评分节奏），正文提供完整方法论、模板与对照示例，具有实际价值。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "包含五步操作流程（收集输入→起草目标→起草 KR→校准雄心→设定节奏）、KR 三重过滤规则、bad/good 对照示例、可填写模板、交付物定义与 Quality bar 自检清单，足以理解其做法与价值。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "pass",
+            "evidence": "frontmatter 描述（3-5 条含基线/目标/负责人的可衡量 KR、每周信心检查、季度末评分节奏）与正文 Step 3、Step 5、Deliverable、Template 各节内容一致，未见夸大或介绍与内容不符之处。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "unknown",
+            "evidence": "材料未声明任何特殊工具、运行环境或依赖；内容为纯方法论文档（无代码、无外部工具调用），未见影响理解与适用判断的关键运行条件缺口，但这不等于无依赖或全平台兼容。文中提及的 annual-plan、goals-accountability 为同仓库兄弟技能，仅作使用范围路由提示。",
+            "informational": true
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "所读材料为纯 OKR 起草方法论，无命令执行、凭据读取或外传、数据传输等行为，也无试图改变评估规则或忽略指令的内容，未见明显风险。",
+            "informational": false
+          }
+        },
+        "verification_note": "材料提供 bad/good 对照示例（第 46-70 行）与 Quality bar 自检清单（第 100-105 行，如两人测试、基线/目标/负责人齐全、目标数≤3、KR 数 3-5）可用于输出质量自检；无自动化验收或实测说明。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "skillmedev/skills:skills/okr-builder/SKILL.md|sha256:6b9d2b4644b6ff5006f96666fab577e7|1.3.0|1.0.0",
+      "evaluated_at": "2026-09-29T19:33:45.885791+08:00"
     }
   ],
   "overrides": {
