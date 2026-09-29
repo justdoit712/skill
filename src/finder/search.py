@@ -192,8 +192,19 @@ def expand_and_collect_candidates(
 
 
 def schedule_candidates_fairly(candidates: list[Candidate], *, max_total: int | None = MAX_TOTAL_FILES_TO_FETCH,
-                               max_per_repo: int | None = MAX_FILES_PER_REPO) -> list[Candidate]:
-    """跨仓库公平轮转排序，避免首个大型合集垄断读取配额。"""
+                               max_per_repo: int | None = MAX_FILES_PER_REPO,
+                               term_weights: dict[str, float] | None = None) -> list[Candidate]:
+    """跨仓库公平轮转排序，支持结合领域相关性评分的 80/20 混合调度。"""
+    if term_weights:
+        from .relevance import schedule_candidates_by_relevance_and_fairness
+        return schedule_candidates_by_relevance_and_fairness(
+            candidates,
+            term_weights,
+            relevance_ratio=0.8,
+            max_total=max_total,
+            max_per_repo=max_per_repo,
+        )
+
     by_repo: dict[str, list[Candidate]] = {}
     for c in candidates:
         r_key = f"{c.owner}/{c.repo}"

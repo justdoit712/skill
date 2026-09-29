@@ -436,7 +436,12 @@ def _evaluate_candidates(state, candidates, cfg, api_key, transport, fetch, slee
     reason = state.stop_reason()
     if reason:
         return reason
-    for candidate in candidates:
+
+    from .relevance import extract_relevance_terms, schedule_candidates_by_relevance_and_fairness
+    terms = extract_relevance_terms(state.report.get("topic", ""), state.report.get("plan"))
+    ordered_candidates = schedule_candidates_by_relevance_and_fairness(candidates, terms)
+
+    for candidate in ordered_candidates:
         if candidate.skill_id in already_evaluated_ids:
             readable += 1
             continue

@@ -222,13 +222,15 @@ def _search_pages(state, current, queries, search_fn, sleep, log):
 
 def _expand_pending(state, current, expand, owned_ids, sleep, log):
     search = state.report["search"]
-    groups = {}
-    for repo in search["repository_queue"]:
-        if repo["state"] == "pending":
-            groups.setdefault(repo.get("query", ""), []).append(repo)
-    pending = _round_robin_merge_repos(list(groups.values()), max_repos=20)
+    pending_repos = [r for r in search["repository_queue"] if r["state"] == "pending"]
+    if not pending_repos:
+        return None
+
+    from .relevance import extract_relevance_terms, rank_pending_repositories, score_candidate_relevance
+    terms = extract_relevance_terms(state.report.get("topic", ""), state.report.get("plan"))
+    pending = rank_pending_repositories(pending_repos, terms, max_repos=20)
     seen = set(search["discovered_skill_ids"])
-    keywords = set(re.findall(r"[\w]+", state.report["topic"].lower()))
+    keywords = set(terms.keys()) | set(re.findall(r"[\w]+", state.report.get("topic", "").lower()))
     for repo in pending:
         reason = state.stop_reason()
         if reason:
@@ -283,7 +285,11 @@ def _expand_pending(state, current, expand, owned_ids, sleep, log):
                 search["skipped_owned_ids"].append(candidate.skill_id)
                 search["skipped"].append({"skill_id": candidate.skill_id, "code": "owned"})
             else:
-                search["candidate_queue"].append(asdict(candidate))
+                cand_dict = asdict(candidate)
+                rel_info = score_candidate_relevance(candidate, terms)
+                cand_dict["relevance_score"] = rel_info["score"]
+                cand_dict["matched_terms"] = rel_info["matched_terms"]
+                search["candidate_queue"].append(cand_dict)
         search["discovered_skill_ids"] = sorted(seen)
         search["candidates_found"] = len(seen)
         search["skipped_owned"] = len(search["skipped_owned_ids"])
@@ -351,9 +357,14 @@ def run_rounds(state, cfg, api_key, transport, search_fn, expand, fetch, evaluat
             if reason:
                 return reason
             done = set(search["processed_skill_ids"])
-            queue = [Candidate(**c) for c in search["candidate_queue"] if c["skill_id"] not in done]
+            from src.shared.models import Candidate
+            valid_keys = set(Candidate.__dataclass_fields__.keys())
+            queue = [Candidate(**{k: v for k, v in c.items() if k in valid_keys})
+                     for c in search["candidate_queue"] if c["skill_id"] not in done]
             if queue:
-                queue = schedule_candidates_fairly(queue, max_total=None, max_per_repo=None)
+                from .relevance import extract_relevance_terms
+                terms = extract_relevance_terms(state.report.get("topic", ""), state.report.get("plan"))
+                queue = schedule_candidates_fairly(queue, max_total=None, max_per_repo=None, term_weights=terms)
                 reason = evaluate(state, queue, cfg, api_key, transport, fetch, sleep, log=log)
                 if reason not in ("candidates_exhausted", "material_failed"):
                     return reason
