@@ -379,7 +379,13 @@ def build_interactive_plan_prompt(topic: str, history: list[dict[str, str]]) -> 
         t = h.get("turn", "")
         q = h.get("question", "")
         a = h.get("answer", "")
-        history_lines.append(f"- 第 {t} 轮提问：{q}\n  用户确认：{a}")
+        selected = h.get("selected_texts") or []
+        if selected and len(selected) > 1:
+            history_lines.append(f"- 第 {t} 轮提问：{q}\n  用户确认（多选）：{'；'.join(selected)}")
+        elif selected:
+            history_lines.append(f"- 第 {t} 轮提问：{q}\n  用户确认：{selected[0]}")
+        else:
+            history_lines.append(f"- 第 {t} 轮提问：{q}\n  用户确认：{a}")
 
     history_str = "\n".join(history_lines)
 

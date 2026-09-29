@@ -303,10 +303,12 @@ def verify_and_adjust_evaluation(
                 any_required_unsupported = True
 
     original_match = res.get("match")
+    downgrade_reason = None
 
     if original_match == MATCH_STRONG:
         if not all_required_supported:
             res["match"] = MATCH_NONE if (any_required_unsupported or supported_count == 0) else MATCH_PARTIAL
+            downgrade_reason = "必需能力存在不支持项或无任何支持证据" if res["match"] == MATCH_NONE else "部分必需能力在材料中缺少直接可核验的文字依据"
             if res.get("limitations") is not None and isinstance(res["limitations"], list):
                 note = "部分必需能力在材料中缺少直接可核验的文字依据"
                 if note not in res["limitations"]:
@@ -314,8 +316,14 @@ def verify_and_adjust_evaluation(
     elif original_match == MATCH_PARTIAL:
         if supported_count == 0:
             res["match"] = MATCH_NONE
+            downgrade_reason = "所有准则均无有效核验支持证据"
     elif original_match == MATCH_NONE:
         pass
+
+    res["raw_match"] = original_match
+    res["verified_match"] = res["match"]
+    if downgrade_reason:
+        res["downgrade_reason"] = downgrade_reason
 
     return res
 

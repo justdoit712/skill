@@ -17,6 +17,8 @@ import json
 from pathlib import Path
 import sys
 import time
+import inspect
+import re
 from typing import Any
 from types import SimpleNamespace
 from uuid import uuid4
@@ -25,8 +27,13 @@ from src.infra.files import write_json_atomic
 from src.infra.llm import call_model, resolve_api_key
 from src.shared.output_contracts import resolve_response_format
 from src.shared.runtime import is_test_environment, now_local
-from src.shared.usage import UsageTotals
-from src.shared.versions import FINDER_REPORT_SCHEMA_VERSION
+from src.shared.usage import UsageTotals, audit_usage_reconciliation
+from src.shared.versions import (
+    FINDER_REPORT_SCHEMA_VERSION,
+    LLM_OUTPUT_CONTRACT_VERSION,
+    build_config_fingerprint,
+    get_git_commit_hash,
+)
 from src.shared.metrics import build_run_metrics
 
 from .config import (
@@ -80,9 +87,118 @@ STATUS_INTERRUPTED = "interrupted"
 STATUS_ERROR = "error"
 STATUS_STOPPED = "stopped"
 STATUS_INVALID_CONFIG = "invalid_config"
+STATUS_QUOTA_EXHAUSTED = "quota_exhausted"
 
 
 MAX_CONSECUTIVE_FAILURES = 20
+
+
+def _supports_kwarg(fn, kwarg_name: str) -> bool:
+    """检查可调用对象是否支持指定的关键字参数。"""
+    try:
+        sig = inspect.signature(fn)
+        for param in sig.parameters.values():
+            if param.kind == inspect.Parameter.VAR_KEYWORD or param.name == kwarg_name:
+                return True
+        return False
+    except (ValueError, TypeError):
+        return True
+
+
+def parse_clarification_choice(user_reply: str, options: list[str]) -> dict[str, Any]:
+    """解析用户的澄清回答。
+
+    支持格式：
+    1. 单选/多选数字（支持逗号、顿号、空格、分号等分隔符，如 "1,3"、"1 2 4"、"1、2、3"、"1，2，3；4"）
+    2. 自由文本（如 "需要专门针对金融领域的分析"）
+    3. 混合或超出范围输入：校验编号合法性，若无法全部识别为有效数字索引，则保留原始输入为 answer，不盲目推测。
+    """
+    raw = (user_reply or "").strip()
+    opt_list = list(options) if options else []
+    if not raw:
+        return {
+            "answer_raw": raw,
+            "options": opt_list,
+            "selected_indices": [],
+            "selected_texts": [],
+            "answer": "",
+            "input_type": "empty",
+        }
+
+    if opt_list:
+        # 分隔符：中文逗号，英文逗号，中文顿号，空格，中英文分号
+        tokens = [t.strip() for t in re.split(r"[,，、\s;；]+", raw) if t.strip()]
+        if tokens and all(t.isdigit() for t in tokens):
+            valid_indices = []
+            selected = []
+            for t in tokens:
+                idx = int(t)  # 1-indexed
+                if 1 <= idx <= len(opt_list) and idx not in valid_indices:
+                    valid_indices.append(idx)
+                    selected.append(opt_list[idx - 1])
+            if selected:
+                formatted = "；".join(selected) if len(selected) > 1 else selected[0]
+                return {
+                    "answer_raw": raw,
+                    "options": opt_list,
+                    "selected_indices": valid_indices,
+                    "selected_texts": selected,
+                    "answer": formatted,
+                    "input_type": "multiple_choice" if len(selected) > 1 else "single_choice",
+                }
+
+    return {
+        "answer_raw": raw,
+        "options": opt_list,
+        "selected_indices": [],
+        "selected_texts": [],
+        "answer": raw,
+        "input_type": "free_text",
+    }
+
+
+def classify_evaluation_error(result, exc: BaseException | None = None) -> tuple[str, str]:
+    """细化评估错误类型。
+
+    分类包括：
+    - 'quota_exhausted': 免费额度耗尽或账户欠费 (HTTP 403 / FreeTierOnly / Quota)
+    - 'auth_error': API Key 无效或未授权 (HTTP 401)
+    - 'network_timeout': 网络读取或连接超时 (ReadTimeout / ConnectTimeout)
+    - 'network_error': 其他底层网络故障
+    - 'length_exceeded': 模型输出达到 token 限制导致截断
+    - 'format_error': 模型输出未能通过 JSON 解析、字段类型、数组长度限制等格式校验
+    - 'model_error': 服务端 5xx 或其它模型通道异常
+    - 'invalid_result': 默认通用错误
+    """
+    msg = str(exc) if exc is not None else (getattr(result, "error", "") or "未知评估错误")
+
+    # 1. 额度耗尽与认证
+    http_status = getattr(result, "http_status", None)
+    err_lower = msg.lower()
+    if http_status == 403 or "free quota exhausted" in err_lower or "allocationquota" in err_lower or ("quota" in err_lower and "exhausted" in err_lower):
+        return "quota_exhausted", msg
+    if http_status == 401 or "unauthorized" in err_lower or ("api key" in err_lower and ("invalid" in err_lower or "missing" in err_lower)):
+        return "auth_error", msg
+
+    # 2. 输出截断
+    if getattr(result, "finish_reason", None) == "length" or "截断" in msg or getattr(result, "reason_code", None) == "LENGTH_EXCEEDED":
+        return "length_exceeded", msg
+
+    # 3. 网络超时与故障
+    if "timeout" in err_lower or "timed out" in err_lower or getattr(result, "error_type", "") in ("ReadTimeout", "ConnectTimeout"):
+        return "network_timeout", msg
+    if getattr(result, "reason_code", None) == "NETWORK_ERROR" or "connection" in err_lower or "requests.exceptions" in err_lower:
+        return "network_error", msg
+
+    # 4. 格式与契约校验失败 (此时 result.ok 为 True 但解析/验证抛出异常)
+    if getattr(result, "ok", False) and exc is not None:
+        return "format_error", msg
+
+    # 5. 模型服务端错误
+    if getattr(result, "reason_code", None) == "MODEL_ERROR" or (http_status and http_status >= 500):
+        return "model_error", msg
+
+    return "invalid_result", msg
 
 
 class RunStopped(Exception):
@@ -94,11 +210,12 @@ class RunStopped(Exception):
 class FinderRunState:
     """Per-run facts; no catalog state or global execution context."""
 
-    def __init__(self, topic, params, run_dir=None):
+    def __init__(self, topic, params, run_dir=None, cfg=None):
         self.run_dir = run_dir
         self.usage = UsageTotals()
         params = {"limit": DEFAULT_LIMIT, "max_evaluations": DEFAULT_MAX_EVALUATIONS,
                   "max_tokens": DEFAULT_MAX_TOKENS, "max_rounds": DEFAULT_MAX_ROUNDS, **params}
+        root_dir = run_dir.parents[3] if run_dir and len(run_dir.parents) >= 4 else None
         self.report = {"schema_version": FINDER_REPORT_SCHEMA_VERSION, "topic": topic, "parameters": params,
             "status": "running", "stop_reason": None, "plan": None,
             "terminology_observation": None,
@@ -107,12 +224,21 @@ class FinderRunState:
             "coverage_incomplete": False,
             "search": {"queries_executed": [], "repos_discovered": 0,
                        "candidates_found": 0, "expansions": [], "skipped": [],
-                       "skipped_owned": 0, "skipped_owned_ids": []}}
+                       "skipped_owned": 0, "skipped_owned_ids": []},
+            "environment": {
+                "schema_version": FINDER_REPORT_SCHEMA_VERSION,
+                "output_contract_version": LLM_OUTPUT_CONTRACT_VERSION,
+                "git_commit": get_git_commit_hash(root_dir),
+                "config_fingerprint": build_config_fingerprint(cfg),
+            }}
 
     def save(self):
         self.report["usage"] = self.usage.snapshot()
         self.report["metrics"] = build_run_metrics(self.report, kind="finder")
         self.report["updated_at"] = now_local().isoformat()
+        audit = audit_usage_reconciliation(self.report.get("calls", []), self.report.get("usage"))
+        if audit and audit.get("status") == "discrepancy_detected":
+            self.report["usage_audit"] = audit
         # During execution only the authoritative JSON is updated.
         if self.run_dir is not None:
             write_json_atomic(self.run_dir / "report.json", self.report)
@@ -148,9 +274,9 @@ class FinderRunState:
             raise
         try:
             fmt = resolve_response_format(cfg, stage or ("evaluation" if candidate_id else "planning"))
-            try:
+            if _supports_kwarg(transport, "response_format"):
                 result = transport(cfg, system, user, api_key=api_key, response_format=fmt, sleep=sleep)
-            except TypeError:
+            else:
                 result = transport(cfg, system, user, api_key=api_key, sleep=sleep)
         except BaseException:
             call["state"] = "unknown"
@@ -173,7 +299,7 @@ def finalize_run(report, stop_reason, *, status=None, evaluated_items=None, plan
                  evaluation_attempts=None, evaluated_count=None, log=print):
     if status is None:
         status = (STATUS_INTERRUPTED if stop_reason == STATUS_INTERRUPTED else
-                  STATUS_STOPPED if stop_reason in (STATUS_TOKEN_LIMIT, STATUS_EVALUATION_LIMIT, STATUS_USAGE_UNKNOWN, STATUS_MODEL_FAILURES, STATUS_ROUND_LIMIT) else
+                  STATUS_STOPPED if stop_reason in (STATUS_TOKEN_LIMIT, STATUS_EVALUATION_LIMIT, STATUS_USAGE_UNKNOWN, STATUS_MODEL_FAILURES, STATUS_ROUND_LIMIT, STATUS_QUOTA_EXHAUSTED) else
                   STATUS_COMPLETED if stop_reason in (STATUS_TARGET_REACHED, STATUS_CANDIDATES_EXHAUSTED, STATUS_ALL_CANDIDATES_OWNED, STATUS_COMPLETED) else STATUS_ERROR)
     history = report.get("search", {}).get("rounds_history", [])
     if history:
@@ -252,17 +378,44 @@ def _record_evaluation(state, candidate, materials, manifest, result):
             raise ValueError("模型输出被截断")
         parsed = parse_skill_evaluation(result.content, report["plan"]["criteria"])
         verified = verify_and_adjust_evaluation(parsed, materials, report["plan"]["criteria"])
-        record = {"candidate": {"skill_id": candidate.skill_id, "name": candidate.name,
-                  "repo_url": candidate.repo_url, "url": candidate.url, "author": candidate.owner,
-                  "path": candidate.path, "content_fingerprint": candidate.content_fingerprint},
-                  "evaluation": verified,
-                  "materials": manifest}
+        downgrade_reason = verified.get("downgrade_reason")
+        if parsed.get("match") != verified.get("match") and not downgrade_reason:
+            downgrade_reason = "准则支持证据不充分或缺少必需能力"
+
+        record = {
+            "candidate": {
+                "skill_id": candidate.skill_id,
+                "name": candidate.name,
+                "repo_url": candidate.repo_url,
+                "url": candidate.url,
+                "author": candidate.owner,
+                "path": candidate.path,
+                "content_fingerprint": candidate.content_fingerprint,
+            },
+            "raw_match": parsed.get("match"),
+            "verified_match": verified.get("match"),
+            "downgrade_reason": downgrade_reason,
+            "evaluation": verified,
+            "materials": manifest,
+        }
         report["evaluations"].append(record)
         report["evaluated_count"] = len(report["evaluations"])
         successful = True
     except (ValueError, TypeError, KeyError) as exc:
-        report["errors"].append({"stage": "evaluation", "skill_id": candidate.skill_id,
-                                 "code": "invalid_result", "message": str(exc)})
+        code, err_msg = classify_evaluation_error(result, exc)
+        err_entry = {
+            "stage": "evaluation",
+            "skill_id": candidate.skill_id,
+            "code": code,
+            "message": err_msg,
+        }
+        if code == "format_error":
+            exc_str = str(exc)
+            for f in ("dependencies", "limitations", "quote", "criteria_results", "summary_zh", "usage_zh", "why_consider"):
+                if f in exc_str:
+                    err_entry["field"] = f
+                    break
+        report["errors"].append(err_entry)
     processed = report["search"].setdefault("processed_skill_ids", [])
     if candidate.skill_id not in processed:
         processed.append(candidate.skill_id)
@@ -308,7 +461,16 @@ def _evaluate_candidates(state, candidates, cfg, api_key, transport, fetch, slee
         failures = 0 if successful else failures + 1
         already_evaluated_ids.add(candidate.skill_id)
         if unknown:
-            log("  -> 接口成功响应但缺失用量数据，触发用量未知熔断。")
+            last_call = state.report["calls"][-1] if state.report.get("calls") else {}
+            last_resp = last_call.get("response") or {}
+            last_err = (last_resp.get("error") or "").lower()
+            if "allocationquota" in last_err or "free quota exhausted" in last_err or last_resp.get("http_status") == 403:
+                log(f"  -> 模型免费额度已耗尽 (HTTP 403: {last_resp.get('error')})，立即终止后续尝试。")
+                return STATUS_QUOTA_EXHAUSTED
+            elif not last_resp.get("ok", False):
+                log(f"  -> 请求失败并缺失用量（{last_resp.get('reason_code') or '网络/服务端异常'}：{last_resp.get('error')}），触发未知用量熔断。")
+            else:
+                log("  -> 接口成功响应但缺失用量数据，触发用量未知熔断。")
             return STATUS_USAGE_UNKNOWN
         if successful:
             last_ev = report["evaluations"][-1]["evaluation"]
@@ -404,17 +566,22 @@ def _run_planning_phase(
                 log("[提示] 用户确认直接进入搜索阶段。")
                 break
 
-            if user_reply.isdigit() and options:
-                choice_idx = int(user_reply) - 1
-                if 0 <= choice_idx < len(options):
-                    user_reply = options[choice_idx]
-                    log(f"已选择：{user_reply}")
+            parsed_reply = parse_clarification_choice(user_reply, options)
+            if parsed_reply["selected_texts"]:
+                log(f"已选择：{parsed_reply['answer']}")
+            else:
+                log(f"已记录补充说明：{user_reply}")
 
             history.append({
                 "turn": str(turn_idx),
                 "focus": focus,
                 "question": question,
-                "answer": user_reply,
+                "answer_raw": parsed_reply["answer_raw"],
+                "options": parsed_reply["options"],
+                "selected_indices": parsed_reply["selected_indices"],
+                "selected_texts": parsed_reply["selected_texts"],
+                "answer": parsed_reply["answer"],
+                "input_type": parsed_reply["input_type"],
             })
 
     # 最终收敛为 QueryPlan
@@ -544,14 +711,20 @@ def execute_find_skill(topic="", *, limit=None, max_evaluations=None, max_tokens
         raise ValueError("缺少模型 API Key")
     cfg.setdefault("request", {})["max_attempts"] = 1
 
-    state = FinderRunState(topic.strip(), params, directory)
+    state = FinderRunState(topic.strip(), params, directory, cfg=cfg)
     if resumed:
         state.report = deepcopy(prev_report)
         state.report.setdefault("calls", [])
         state.report.setdefault("errors", [])
         state.report.setdefault("coverage_incomplete", False)
         state.report.setdefault("evaluation_attempts", max(len(state.report.get("evaluations", [])), sum(bool(c.get("skill_id")) for c in state.report["calls"])))
-        defaults = FinderRunState(topic, params).report["search"]
+        state.report.setdefault("environment", {}).update({
+            "schema_version": FINDER_REPORT_SCHEMA_VERSION,
+            "output_contract_version": LLM_OUTPUT_CONTRACT_VERSION,
+            "git_commit": get_git_commit_hash(root),
+            "config_fingerprint": build_config_fingerprint(cfg),
+        })
+        defaults = FinderRunState(topic, params, cfg=cfg).report["search"]
         for key, value in defaults.items():
             state.report.setdefault("search", {}).setdefault(key, value)
         for call in state.report["calls"]:
@@ -818,6 +991,7 @@ def main(argv: list[str] | None = None, *, root: Path | None = None) -> int:
         STATUS_EVALUATION_LIMIT,
         STATUS_USAGE_UNKNOWN,
         STATUS_MODEL_FAILURES,
+        STATUS_QUOTA_EXHAUSTED,
     ):
         return 2
     if status == STATUS_ERROR or stop_reason in ("search_failed", "plan_failed"):
