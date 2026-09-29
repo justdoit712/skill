@@ -500,17 +500,62 @@
     {
       "added_at": "2026-09-29",
       "reason": "用户屏蔽/删除",
-      "skill_id": "google-labs-code/stitch-skills:plugins/stitch-design/skills/code-to-design/SKILL.md"
-    },
-    {
-      "added_at": "2026-09-29",
-      "reason": "用户屏蔽/删除",
       "skill_id": "trailofbits/skills:plugins/writing-lean-proofs/skills/writing-lean-proofs/SKILL.md"
     },
     {
       "added_at": "2026-09-29",
       "reason": "用户屏蔽/删除",
       "skill_id": "trailofbits/skills:plugins/yara-authoring/skills/yara-rule-authoring/SKILL.md"
+    },
+    {
+      "added_at": "2026-09-29",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "expo/skills:plugins/expo/skills/eas-hosting/SKILL.md"
+    },
+    {
+      "added_at": "2026-09-29",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "expo/skills:plugins/expo/skills/expo-animation/SKILL.md"
+    },
+    {
+      "added_at": "2026-09-29",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "expo/skills:plugins/expo/skills/expo-app-clip/SKILL.md"
+    },
+    {
+      "added_at": "2026-09-29",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "expo/skills:plugins/expo/skills/expo-design-system/SKILL.md"
+    },
+    {
+      "added_at": "2026-09-29",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "expo/skills:plugins/expo/skills/expo-dom/SKILL.md"
+    },
+    {
+      "added_at": "2026-09-29",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "expo/skills:plugins/expo/skills/expo-examples/SKILL.md"
+    },
+    {
+      "added_at": "2026-09-29",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "expo/skills:plugins/expo/skills/expo-module/SKILL.md"
+    },
+    {
+      "added_at": "2026-09-29",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "expo/skills:plugins/expo/skills/expo-overview/SKILL.md"
+    },
+    {
+      "added_at": "2026-09-29",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "expo/skills:plugins/expo/skills/expo-router/SKILL.md"
+    },
+    {
+      "added_at": "2026-09-29",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "expo/skills:plugins/expo/skills/expo-ui/SKILL.md"
     }
   ]
 }

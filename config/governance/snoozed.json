@@ -645,62 +645,6 @@
       "days": 150,
       "expires_at": "2027-02-26",
       "reason": "用户暂不关注",
-      "skill_id": "expo/skills:plugins/expo/skills/eas-hosting/SKILL.md",
-      "snoozed_at": "2026-09-29"
-    },
-    {
-      "days": 150,
-      "expires_at": "2027-02-26",
-      "reason": "用户暂不关注",
-      "skill_id": "expo/skills:plugins/expo/skills/expo-animation/SKILL.md",
-      "snoozed_at": "2026-09-29"
-    },
-    {
-      "days": 150,
-      "expires_at": "2027-02-26",
-      "reason": "用户暂不关注",
-      "skill_id": "expo/skills:plugins/expo/skills/expo-app-clip/SKILL.md",
-      "snoozed_at": "2026-09-29"
-    },
-    {
-      "days": 150,
-      "expires_at": "2027-02-26",
-      "reason": "用户暂不关注",
-      "skill_id": "expo/skills:plugins/expo/skills/expo-design-system/SKILL.md",
-      "snoozed_at": "2026-09-29"
-    },
-    {
-      "days": 150,
-      "expires_at": "2027-02-26",
-      "reason": "用户暂不关注",
-      "skill_id": "expo/skills:plugins/expo/skills/expo-dom/SKILL.md",
-      "snoozed_at": "2026-09-29"
-    },
-    {
-      "days": 150,
-      "expires_at": "2027-02-26",
-      "reason": "用户暂不关注",
-      "skill_id": "expo/skills:plugins/expo/skills/expo-examples/SKILL.md",
-      "snoozed_at": "2026-09-29"
-    },
-    {
-      "days": 150,
-      "expires_at": "2027-02-26",
-      "reason": "用户暂不关注",
-      "skill_id": "expo/skills:plugins/expo/skills/expo-module/SKILL.md",
-      "snoozed_at": "2026-09-29"
-    },
-    {
-      "days": 150,
-      "expires_at": "2027-02-26",
-      "reason": "用户暂不关注",
-      "skill_id": "expo/skills:plugins/expo/skills/expo-overview/SKILL.md",
-      "snoozed_at": "2026-09-29"
-    },
-    {
-      "days": 150,
-      "expires_at": "2027-02-26",
-      "reason": "用户暂不关注",
       "skill_id": "google-labs-code/stitch-skills:plugins/stitch-build/skills/remotion/SKILL.md",
       "snoozed_at": "2026-09-29"
     },
@@ -758,6 +702,20 @@
       "expires_at": "2027-02-26",
       "reason": "用户暂不关注",
       "skill_id": "trailofbits/skills:plugins/zeroize-audit/skills/zeroize-audit/SKILL.md",
+      "snoozed_at": "2026-09-29"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-02-26",
+      "reason": "用户暂不关注",
+      "skill_id": "getsentry/skills:skills/create-branch/SKILL.md",
+      "snoozed_at": "2026-09-29"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-02-26",
+      "reason": "用户暂不关注",
+      "skill_id": "google-labs-code/stitch-skills:plugins/stitch-design/skills/code-to-design/SKILL.md",
       "snoozed_at": "2026-09-29"
     }
   ]
