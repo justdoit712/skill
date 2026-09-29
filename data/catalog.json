@@ -1,10 +1,10 @@
 {
   "catalog_version": "1.0.0",
   "rules_version": "1.3.0",
-  "generated_at": "2026-09-29T16:12:20.076434+08:00",
+  "generated_at": "2026-09-29T16:18:54.023218+08:00",
   "counts": {
     "excluded": 63,
-    "candidate": 122,
+    "candidate": 124,
     "recommended": 127,
     "pending": 2
   },
@@ -24585,6 +24585,186 @@
       },
       "last_evaluation_id": "skillmedev/skills:skills/growth-accounting/SKILL.md|sha256:e3290a6e034bef4d6c6904ed71f93908|1.3.0|1.0.0",
       "evaluated_at": "2026-09-29T16:12:20.073436+08:00"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/gtd-system/SKILL.md",
+      "name": "gtd-system",
+      "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/gtd-system/SKILL.md",
+      "repo_url": "https://github.com/skillmedev/skills",
+      "author": "skillmedev",
+      "summary_zh": "该技能指导用户搭建完整 Getting Things Done 任务管理系统，适用于任务积压、清单混乱或需要建立可信待办与周回顾流程的场景。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "帮我做一次脑内清空并整理成 GTD 清单",
+        "我的待办清单很乱，帮我搭建 GTD 系统"
+      ],
+      "key_features": [
+        "覆盖收集、澄清、组织、回顾、执行五步",
+        "要求每个项目有完成态和下一步行动",
+        "提供周回顾清单与质量标准"
+      ],
+      "main_category": {
+        "id": "automation",
+        "name": "自动化"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "GTD",
+        "任务管理",
+        "工作流",
+        "周回顾",
+        "待办整理"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "limitations": "未声明具体工具、平台或运行环境；材料明确不用于单独执行周回顾或清理邮件积压。",
+      "license": null,
+      "status": "candidate",
+      "reason_codes": [
+        "INSUFFICIENT_EVIDENCE"
+      ],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-29T16:17:12.224347+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:a3cb4ab77399d36d4ab6e8dbb97b0107",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "内容围绕 GTD 任务管理与工作流搭建，属于自动化/工作流范畴，未命中硬性排除项。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "明确说明用于建立完整 GTD 系统，解决任务遗漏、清单混乱和脑内积压问题，并给出典型触发语句。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "提供五步流程、输入收集、列表结构、下一步行动写法规则、周回顾清单、交付物和质量标准，足以理解做法与价值。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "unknown",
+            "evidence": "上游描述与正文一致：描述称运行完整 GTD 循环，正文逐步给出 capture、clarify、organize、reflect、engage。；程序未能核实所引原文与行号。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "unknown",
+            "evidence": "材料称 GTD 工具无关并默认保留用户现有工具，但未声明具体运行环境、工具或平台；不影响理解核心方法。",
+            "informational": true
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "所读材料为任务管理流程指南，未见凭据外传、实盘交易、临床决策、插件容器或排除领域等风险。",
+            "informational": false
+          }
+        },
+        "verification_note": "材料提供已填写的周回顾清单示例和质量标准，如收件箱清零、每个项目有下一步行动、日历仅保留硬性时间承诺。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "skillmedev/skills:skills/gtd-system/SKILL.md|sha256:a3cb4ab77399d36d4ab6e8dbb97b0107|1.3.0|1.0.0",
+      "evaluated_at": "2026-09-29T16:17:12.223033+08:00"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/gym-meta-ads-funnel/SKILL.md",
+      "name": "gym-meta-ads-funnel",
+      "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/gym-meta-ads-funnel/SKILL.md",
+      "repo_url": "https://github.com/skillmedev/skills",
+      "author": "skillmedev",
+      "summary_zh": "面向健身房业主的 Meta 广告获客技能，指导撰写挑战活动广告、搭建线索到预约咨询的漏斗、设置预算并按盈亏成本评估投放效果。适合需要降低 Facebook/Instagram 获客成本或扩展本地健身房挑战活动的场景。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "帮健身房写一组 Facebook/Instagram 挑战活动广告",
+        "计算本月要招满 20 名挑战会员需要多少广告预算"
+      ],
+      "key_features": [
+        "提供广告到预约咨询的漏斗工作流",
+        "包含预算盈亏计算 Node 脚本",
+        "提供多类人群广告脚本与落地页模板"
+      ],
+      "main_category": {
+        "id": "content",
+        "name": "内容创作"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "Meta广告",
+        "健身房营销",
+        "广告文案",
+        "获客漏斗",
+        "预算规划"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "Node.js（用于运行 ad_budget_planner.js）"
+      ],
+      "limitations": "未提供 Meta 广告账户操作细节、实际投放效果验证或外部引用来源；部分引用文件如 gym-transformation-challenge 未包含在材料中。",
+      "license": null,
+      "status": "candidate",
+      "reason_codes": [
+        "INSUFFICIENT_EVIDENCE"
+      ],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-29T16:18:54.023218+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:0506b9b5874dc5465a8de5888109742e",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "内容围绕健身房 Meta（Facebook/Instagram）广告创意、漏斗结构、预算与成本评估，属于营销内容创作与自动化工作流结合，可归入内容创作或自动化；未命中硬性排除。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "明确说明用于健身房业主写 Meta 广告、降低获客成本、设置预算并构建从线索到预约咨询的漏斗，场景具体。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "提供 7 步工作流、质量标准、禁忌项、预算计算脚本、广告脚本模板、落地页模板、案例文案与漏斗指标说明，足以理解做法与价值。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "unknown",
+            "evidence": "描述中的写广告、构建漏斗、设预算、读漏斗成本均与正文工作流、脚本和模板一致。；程序未能核实所引原文与行号。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "pass",
+            "evidence": "明确计算器为自包含 Node 脚本，运行方式为 node ad_budget_planner.js，且声明 No dependencies；未声明 Meta 广告账户等外部服务，但不影响理解核心材料。",
+            "informational": false
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "所读材料为营销工作流、模板和简单计算脚本，未见凭据外传、实盘交易、临床决策或其他明显可疑行为。",
+            "informational": false
+          }
+        },
+        "verification_note": "材料提供脚本示例输出、广告文案示例、漏斗指标和预算基准，可作为理解和验证方法；未提供实测广告效果验证。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "skillmedev/skills:skills/gym-meta-ads-funnel/SKILL.md|sha256:0506b9b5874dc5465a8de5888109742e|1.3.0|1.0.0",
+      "evaluated_at": "2026-09-29T16:18:54.020137+08:00"
     }
   ],
   "overrides": {
