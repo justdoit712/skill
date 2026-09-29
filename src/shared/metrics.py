@@ -217,6 +217,13 @@ def build_run_metrics(report: dict, *, kind: str) -> dict:
         # Only terminal outcomes carry a decision; an initial response is not a
         # completed evaluation when an independent review is still pending.
         completed = len({c.get("skill_id") for c in calls if c.get("decision") and c.get("skill_id")})
+    format_failures = number(report.get("skipped_output_format"))
+    if format_failures is None and isinstance(report.get("errors"), list):
+        format_failures = sum(1 for e in report["errors"] if isinstance(e, dict) and e.get("code") in ("format_error", "schema_violation"))
+    length_exceeded_count = number(report.get("skipped_length_exceeded"))
+    if length_exceeded_count is None and isinstance(report.get("errors"), list):
+        length_exceeded_count = sum(1 for e in report["errors"] if isinstance(e, dict) and e.get("code") == "length_exceeded")
+
     model = {
         "requests": number(usage.get("requests")), "stage_requests": stages,
         "evaluation_attempts": number(report.get("evaluation_attempts" if kind == "finder" else "evaluations")),
@@ -225,8 +232,8 @@ def build_run_metrics(report: dict, *, kind: str) -> dict:
         "known_completion_tokens": number(usage.get("completion_tokens")),
         "known_total_tokens": number(usage.get("total_tokens")),
         "unknown_usage_requests": number(usage.get("unknown_usage_requests")),
-        "format_failures": number(report.get("skipped_output_format")),
-        "length_exceeded_count": number(report.get("skipped_length_exceeded")),
+        "format_failures": format_failures,
+        "length_exceeded_count": length_exceeded_count,
     }
     search = report.get("search") or {}
     queries = search.get("queries_executed")

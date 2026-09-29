@@ -76,6 +76,43 @@ def check_evaluation_record_compatibility(
     return True, "兼容"
 
 
+def get_git_commit_hash(root_dir: Any = None) -> str | None:
+    """获取当前代码仓库的短 commit hash；如果不在 git 仓库或执行失败则返回 None。"""
+    import subprocess
+    try:
+        cmd = ["git", "rev-parse", "--short", "HEAD"]
+        cwd = str(root_dir) if root_dir is not None else None
+        res = subprocess.run(cmd, capture_output=True, text=True, cwd=cwd, timeout=2)
+        if res.returncode == 0:
+            val = res.stdout.strip()
+            return val or None
+    except Exception:
+        pass
+    return None
+
+
+def build_config_fingerprint(cfg: dict | None) -> str:
+    """生成脱敏的模型与运行配置指纹 (sha256 截断前 16 位)。
+    
+    严禁包含 api_key、token 等敏感凭据。
+    """
+    import hashlib
+    import json
+    if not isinstance(cfg, dict):
+        return "sha256:empty"
+    safe = {
+        "model": cfg.get("model"),
+        "endpoint": cfg.get("endpoint"),
+        "limits": cfg.get("limits"),
+        "request": {
+            k: v for k, v in (cfg.get("request") or {}).items()
+            if "key" not in k.lower() and "token" not in k.lower() and "auth" not in k.lower() and "secret" not in k.lower()
+        },
+    }
+    raw = json.dumps(safe, sort_keys=True, ensure_ascii=False)
+    return "sha256:" + hashlib.sha256(raw.encode("utf-8")).hexdigest()[:16]
+
+
 __all__ = [
     "FINDER_REPORT_SCHEMA_VERSION",
     "LLM_OUTPUT_CONTRACT_VERSION",
@@ -86,4 +123,6 @@ __all__ = [
     "parse_version_tuple",
     "is_semver_compatible",
     "check_evaluation_record_compatibility",
+    "get_git_commit_hash",
+    "build_config_fingerprint",
 ]

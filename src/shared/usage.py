@@ -62,3 +62,75 @@ class UsageTotals:
         self.requests += 1
         self.unknown_usage_requests += 1
         self.incomplete_breakdown_requests += 1
+
+
+def recompute_usage_from_calls(calls: list[dict]) -> UsageTotals:
+    """从调用明细严格复算 UsageTotals。"""
+    totals = UsageTotals()
+    if not isinstance(calls, list):
+        return totals
+    for c in calls:
+        if not isinstance(c, dict):
+            continue
+        u = c.get("usage") or {}
+        resp = c.get("response") or {}
+        prompt = _number(u.get("prompt_tokens"))
+        completion = _number(u.get("completion_tokens"))
+        total = _number(u.get("total_tokens"))
+        if total is None and prompt is not None and completion is not None:
+            total = prompt + completion
+        reasoning = _number(u.get("reasoning_tokens"))
+        attempts = max(0, int(u.get("attempts", 1)))
+        if attempts == 0 and (resp.get("ok") or u or resp.get("content")):
+            attempts = 1
+        if attempts == 0:
+            continue
+        totals.requests += attempts
+        totals.unknown_usage_requests += attempts - 1 + int(total is None)
+        totals.incomplete_breakdown_requests += int(prompt is None or completion is None)
+        totals.prompt_tokens += prompt or 0
+        totals.completion_tokens += completion or 0
+        totals.reasoning_tokens += reasoning or 0
+        totals.total_tokens += total or 0
+    return totals
+
+
+def audit_usage_reconciliation(calls: list[dict], recorded_usage: dict | None) -> dict[str, Any] | None:
+    """核查 calls 明细复算与持久化 recorded_usage 之间的差异。"""
+    if not isinstance(calls, list) or not recorded_usage:
+        return None
+    recomputed = recompute_usage_from_calls(calls).snapshot()
+    discrepancies = {}
+    for k in (
+        "total_tokens",
+        "prompt_tokens",
+        "completion_tokens",
+        "reasoning_tokens",
+        "requests",
+        "unknown_usage_requests",
+        "incomplete_breakdown_requests",
+    ):
+        rec_val = recorded_usage.get(k)
+        recomp_val = recomputed.get(k)
+        if rec_val != recomp_val:
+            discrepancies[k] = {"recorded": rec_val, "recomputed": recomp_val}
+    if discrepancies:
+        return {
+            "status": "discrepancy_detected",
+            "discrepancies": discrepancies,
+            "recomputed": recomputed,
+            "recorded": recorded_usage,
+        }
+    return {
+        "status": "matched",
+        "recomputed": recomputed,
+        "recorded": recorded_usage,
+    }
+
+
+__all__ = [
+    "UsageTotals",
+    "_number",
+    "recompute_usage_from_calls",
+    "audit_usage_reconciliation",
+]
