@@ -6,6 +6,7 @@
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass
+from typing import Any
 
 
 def _number(value):
@@ -72,6 +73,10 @@ def recompute_usage_from_calls(calls: list[dict]) -> UsageTotals:
     for c in calls:
         if not isinstance(c, dict):
             continue
+        # Live requests are not settled usage. Recovery changes abandoned
+        # started requests to unknown before reconciling them.
+        if c.get("state") in ("started", "not_sent"):
+            continue
         u = c.get("usage") or {}
         resp = c.get("response") or {}
         prompt = _number(u.get("prompt_tokens"))
@@ -81,7 +86,7 @@ def recompute_usage_from_calls(calls: list[dict]) -> UsageTotals:
             total = prompt + completion
         reasoning = _number(u.get("reasoning_tokens"))
         attempts = max(0, int(u.get("attempts", 1)))
-        if attempts == 0 and (resp.get("ok") or u or resp.get("content")):
+        if attempts == 0 and (resp.get("ok") or total is not None or resp.get("content")):
             attempts = 1
         if attempts == 0:
             continue

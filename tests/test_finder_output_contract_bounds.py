@@ -64,7 +64,7 @@ class TestFinderOutputContractBounds(unittest.TestCase):
         self.assertIn("quote 最多 1200 字符", system)
         self.assertIn("极简不相关输出约束", system)
 
-    def test_parser_graceful_truncation_for_dependencies_limitations_and_evidence(self):
+    def test_parser_rejects_overlong_quote_before_any_verification(self):
         """测试解析器对超出的数组项数和字符长度执行优雅截断，避免抛出硬异常。"""
         long_quote = "A" * 1500
         long_dep = "B" * 150
@@ -93,23 +93,19 @@ class TestFinderOutputContractBounds(unittest.TestCase):
             ],
         }
 
-        res = parse_skill_evaluation(json.dumps(raw_payload), PLAN_CRITERIA)
+        with self.assertRaisesRegex(ValueError, "quote"):
+            parse_skill_evaluation(json.dumps(raw_payload), PLAN_CRITERIA)
 
-        # dependencies 截断至最多 5 项，首项截断至 100 字符
-        self.assertEqual(len(res["dependencies"]), 5)
-        self.assertEqual(len(res["dependencies"][0]), 100)
-        self.assertEqual(res["dependencies"][0], "B" * 100)
-
-        # limitations 截断至最多 5 项，首项截断至 100 字符
-        self.assertEqual(len(res["limitations"]), 5)
-        self.assertEqual(len(res["limitations"][0]), 100)
-        self.assertEqual(res["limitations"][0], "C" * 100)
-
-        # evidence 截断至最多 3 项，首项 quote 截断至 1200 字符
-        ev_list = res["criteria_results"][0]["evidence"]
-        self.assertEqual(len(ev_list), 3)
-        self.assertEqual(len(ev_list[0]["quote"]), 1200)
-        self.assertEqual(ev_list[0]["quote"], "A" * 1200)
+    def test_fabricated_tail_is_not_removed_to_manufacture_valid_evidence(self):
+        payload = {
+            "match": "strong", "documentation": "clear",
+            "criteria_results": [{"criterion_id": "support", "status": "supported",
+                "evidence": [{"source_path": "SKILL.md", "start_line": 1, "end_line": 1,
+                              "quote": "A" * 1200 + " FABRICATED_END"}]}],
+        }
+        with self.assertRaisesRegex(ValueError, "quote"):
+            parse_skill_evaluation(json.dumps(payload), PLAN_CRITERIA)
+        self.assertTrue(payload["criteria_results"][0]["evidence"][0]["quote"].endswith("FABRICATED_END"))
 
     def test_parser_preserves_strict_type_checks(self):
         """测试解析器对根本性类型错误（非数组、非文本、行号非整型）仍严格拦截。"""

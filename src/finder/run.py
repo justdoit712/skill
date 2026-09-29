@@ -96,6 +96,21 @@ STATUS_QUOTA_EXHAUSTED = "quota_exhausted"
 MAX_CONSECUTIVE_FAILURES = 20
 
 
+def estimate_request_token_bound(cfg, system, user, response_format=None):
+    """Conservative local bound, not measured usage or a billing claim.
+
+    Reserve one token per UTF-8 byte of the messages and response schema,
+    256 tokens for message framing, plus the complete output allowance.
+    This intentionally overestimates ordinary byte-based LLM tokenizers.
+    """
+    schema = json.dumps(response_format, ensure_ascii=False) if response_format else ""
+    input_bound = sum(len(text.encode("utf-8")) for text in (system, user, schema)) + 256
+    output_bound = int((cfg.get("limits") or {}).get("max_output_tokens", 4000))
+    if output_bound <= 0:
+        raise ValueError("max_output_tokens 必须大于 0")
+    return input_bound + output_bound
+
+
 def _supports_kwarg(fn, kwarg_name: str) -> bool:
     """检查可调用对象是否支持指定的关键字参数。"""
     try:
@@ -218,8 +233,7 @@ class FinderRunState:
         self.usage = UsageTotals()
         self._lock = threading.RLock()
         self._active_call_ids: set[int] = set()
-        self.reserved_tokens = 0
-        self.reserved_attempts = 0
+        self._budget_changed = threading.Condition(self._lock)
         params = {"limit": DEFAULT_LIMIT, "max_evaluations": DEFAULT_MAX_EVALUATIONS,
                   "max_tokens": DEFAULT_MAX_TOKENS, "max_rounds": DEFAULT_MAX_ROUNDS,
                   "concurrency": 1, **params}
@@ -247,7 +261,7 @@ class FinderRunState:
             self.report["metrics"] = build_run_metrics(self.report, kind="finder")
             self.report["updated_at"] = now_local().isoformat()
             audit = audit_usage_reconciliation(self.report.get("calls", []), self.report.get("usage"))
-            if audit and audit.get("status") == "discrepancy_detected":
+            if audit is not None:
                 self.report["usage_audit"] = audit
             # During execution only the authoritative JSON is updated.
             if self.run_dir is not None:
@@ -263,83 +277,90 @@ class FinderRunState:
                 return STATUS_USAGE_UNKNOWN
             if _target_reached(self):
                 return STATUS_TARGET_REACHED
-            if (self.usage.total_tokens + self.reserved_tokens) >= self.report["parameters"]["max_tokens"]:
+            if self.usage.total_tokens >= self.report["parameters"]["max_tokens"]:
                 return STATUS_TOKEN_LIMIT
-            if (self.report["evaluation_attempts"] + self.reserved_attempts) >= self.report["parameters"]["max_evaluations"]:
+            if self.report["evaluation_attempts"] >= self.report["parameters"]["max_evaluations"]:
                 return STATUS_EVALUATION_LIMIT
             if self.report["search"].get("consecutive_failures", 0) >= MAX_CONSECUTIVE_FAILURES:
                 return STATUS_MODEL_FAILURES
             return None
 
-    def check_and_reserve_budget(self, candidate_id: str, tokens: int = 8000) -> bool:
-        with self._lock:
-            reason = self.stop_reason()
-            if reason:
-                return False
-            max_tokens = self.report["parameters"]["max_tokens"]
-            max_evals = self.report["parameters"]["max_evaluations"]
-
-            if (self.report["evaluation_attempts"] + self.reserved_attempts + 1) > max_evals:
-                return False
-
-            if (self.usage.total_tokens + self.reserved_tokens + tokens) > max_tokens:
-                return False
-
-            self.reserved_tokens += tokens
-            self.reserved_attempts += 1
-            return True
-
-    def release_reserved_budget(self, tokens: int = 8000):
-        with self._lock:
-            self.reserved_tokens = max(0, self.reserved_tokens - tokens)
-            self.reserved_attempts = max(0, self.reserved_attempts - 1)
+    @property
+    def reserved_tokens(self):
+        # Reservation facts survive interruption alongside each request.
+        return sum(c.get("reserved_tokens", 0) for c in self.report["calls"]
+                   if c.get("reservation_state") in ("active", "unknown"))
 
     def call(self, transport, cfg, system, user, *, api_key, sleep, candidate_id=None, stage=None):
-        with self._lock:
-            reason = self.stop_reason()
-            if reason:
-                raise RunStopped(reason)
-            call = {"stage": stage or ("evaluation" if candidate_id else "planning"), "skill_id": candidate_id,
-                    "state": "started", "usage": None}
+        stage = stage or ("evaluation" if candidate_id else "planning")
+        fmt = resolve_response_format(cfg, stage)
+        reserve = estimate_request_token_bound(cfg, system, user, fmt)
+        with self._budget_changed:
+            while True:
+                reason = self.stop_reason()
+                if reason:
+                    raise RunStopped(reason)
+                if self.usage.total_tokens + self.reserved_tokens + reserve <= self.report["parameters"]["max_tokens"]:
+                    break
+                # An active request may return unused budget. Wait for its
+                # settlement rather than treating temporary occupancy as final.
+                if not self._active_call_ids:
+                    raise RunStopped(STATUS_TOKEN_LIMIT)
+                self._budget_changed.wait()
+            request_id = uuid4().hex
+            call = {"request_id": request_id, "stage": stage, "skill_id": candidate_id,
+                    "state": "started", "usage": None, "reserved_tokens": reserve,
+                    "reservation_state": "active", "reservation_method": "utf8-bound-v1"}
             self.report["calls"].append(call)
             if candidate_id:
                 self.report["evaluation_attempts"] += 1
-                if self.reserved_attempts > 0:
-                    self.reserved_attempts -= 1
-            try:
-                self.save()  # a failed write prevents the paid request
-            except BaseException:
-                call["state"] = "not_sent"
-                if candidate_id:
-                    self.report["evaluation_attempts"] -= 1
-                raise
+                checkpoint = self.report.get("pending_evaluations", {}).get(candidate_id)
+                if checkpoint is not None:
+                    checkpoint["request_id"] = request_id
             call_id = id(call)
             self._active_call_ids.add(call_id)
+            try:
+                self.save()  # Persist request, reservation and checkpoint before sending.
+            except BaseException:
+                self._active_call_ids.discard(call_id)
+                call.update(state="not_sent", reservation_state="released")
+                if candidate_id:
+                    self.report["evaluation_attempts"] -= 1
+                self._budget_changed.notify_all()
+                raise
 
         try:
-            fmt = resolve_response_format(cfg, stage or ("evaluation" if candidate_id else "planning"))
             if _supports_kwarg(transport, "response_format"):
                 result = transport(cfg, system, user, api_key=api_key, response_format=fmt, sleep=sleep)
             else:
                 result = transport(cfg, system, user, api_key=api_key, sleep=sleep)
         except BaseException:
-            with self._lock:
+            with self._budget_changed:
                 self._active_call_ids.discard(call_id)
-                call["state"] = "unknown"
+                call.update(state="unknown", reservation_state="unknown")
                 self.usage.record_unknown_request()
-                self.save()
+                try:
+                    self.save()
+                finally:
+                    self._budget_changed.notify_all()
             raise
 
-        with self._lock:
+        with self._budget_changed:
             self._active_call_ids.discard(call_id)
             call["usage"] = self.usage.add(result)
             call["response"] = {key: getattr(result, key, None) for key in
-                                ("ok", "content", "error", "reason_code", "finish_reason")}
+                                ("ok", "content", "error", "reason_code", "finish_reason", "http_status")}
             if not getattr(result, "ok", False):
                 call["state"] = "not_sent" if call["usage"]["attempts"] == 0 else "error"
             else:
                 call["state"] = "unknown" if call["usage"]["total_tokens"] is None else "received"
-            self.save()
+            call["reservation_state"] = (
+                "unknown" if call["usage"]["attempts"] > 0 and call["usage"]["total_tokens"] is None else "settled"
+            )
+            try:
+                self.save()
+            finally:
+                self._budget_changed.notify_all()
             return result, bool(self.usage.unknown_usage_requests)
 
 
@@ -490,7 +511,8 @@ def _record_evaluation(state, candidate, materials, manifest, result):
         if candidate.skill_id not in processed:
             processed.append(candidate.skill_id)
         report["search"]["consecutive_failures"] = 0 if successful else report["search"].get("consecutive_failures", 0) + 1
-        report.pop("pending_evaluation", None)
+        if (report.get("pending_evaluation") or {}).get("candidate", {}).get("skill_id") == candidate.skill_id:
+            report.pop("pending_evaluation", None)
         if "pending_evaluations" in report:
             report["pending_evaluations"].pop(candidate.skill_id, None)
         state.save()
@@ -500,6 +522,35 @@ def _record_evaluation(state, candidate, materials, manifest, result):
             except OSError:
                 pass
         return successful
+
+
+def _recover_pending_evaluations(state):
+    """Replay saved responses locally before marking attempted skills processed."""
+    from src.shared.models import Candidate
+
+    report = state.report
+    checkpoints = report.setdefault("pending_evaluations", {})
+    legacy = report.get("pending_evaluation")
+    if legacy:
+        checkpoints.setdefault(legacy["candidate"]["skill_id"], legacy)
+    for skill_id, checkpoint in list(checkpoints.items()):
+        request_id = checkpoint.get("request_id")
+        calls = [c for c in report["calls"] if c.get("skill_id") == skill_id
+                 and c.get("stage") == "evaluation" and c.get("state") != "not_sent"
+                 and (not request_id or c.get("request_id") == request_id)]
+        if len(calls) > 1:
+            raise ValueError(f"恢复请求身份不唯一：{skill_id}")
+        if not calls or not calls[0].get("response"):
+            # Unsent material may be retried; an unknown request stays blocked.
+            continue
+        if not any(e["candidate"]["skill_id"] == skill_id for e in report["evaluations"]):
+            _record_evaluation(state, Candidate(**checkpoint["candidate"]), checkpoint["materials"],
+                               checkpoint["manifest"], SimpleNamespace(**calls[0]["response"]))
+        else:
+            checkpoints.pop(skill_id, None)
+            if (report.get("pending_evaluation") or {}).get("candidate", {}).get("skill_id") == skill_id:
+                report.pop("pending_evaluation", None)
+            state.save()
 
 
 def _evaluate_candidates_concurrent(
@@ -536,13 +587,6 @@ def _evaluate_candidates_concurrent(
             stop_event.set()
             return None
 
-        # 1. 预算预留 (8,000 Tokens 安全缓冲 + 1 次尝试)
-        reserved = state.check_and_reserve_budget(candidate.skill_id, tokens=8000)
-        if not reserved:
-            stop_reason_holder[0] = state.stop_reason() or STATUS_TOKEN_LIMIT
-            stop_event.set()
-            return None
-
         try:
             attempt_num = report["evaluation_attempts"] + 1
             max_num = report["parameters"]["max_evaluations"]
@@ -564,11 +608,13 @@ def _evaluate_candidates_concurrent(
                     report["coverage_incomplete"] = True
 
             # 3. 评估候选（在 state.call 与 _record_evaluation 内部加锁互斥）
+            if stop_event.is_set():
+                return None
             successful, unknown = _evaluate_candidate(state, candidate, materials, cfg, api_key, transport, sleep)
 
             with state._lock:
                 if unknown:
-                    last_call = state.report["calls"][-1] if state.report.get("calls") else {}
+                    last_call = next((c for c in reversed(state.report["calls"]) if c.get("skill_id") == candidate.skill_id), {})
                     last_resp = last_call.get("response") or {}
                     last_err = (last_resp.get("error") or "").lower()
                     if "allocationquota" in last_err or "free quota exhausted" in last_err or last_resp.get("http_status") == 403:
@@ -585,7 +631,7 @@ def _evaluate_candidates_concurrent(
 
                 if successful:
                     failures_counter[0] = 0
-                    last_ev = report["evaluations"][-1]["evaluation"]
+                    last_ev = next(e["evaluation"] for e in reversed(report["evaluations"]) if e["candidate"]["skill_id"] == candidate.skill_id)
                     m = last_ev.get("match", "none")
                     tokens = state.usage.total_tokens
                     log(f"  -> 评估完成: match={m} (全库已完成: {len(report['evaluations'])}, 累计消耗: {tokens:,} Token)")
@@ -601,8 +647,13 @@ def _evaluate_candidates_concurrent(
                         stop_event.set()
                     log("  -> 候选评估未通过格式校验或调用出错，已记录并继续下一个候选...")
                 return successful
-        finally:
-            state.release_reserved_budget(tokens=8000)
+        except RunStopped as exc:
+            stop_reason_holder[0] = exc.reason
+            stop_event.set()
+            return False
+        except BaseException:
+            stop_event.set()
+            raise
 
     try:
         with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers, thread_name_prefix="finder-eval") as executor:
@@ -620,10 +671,11 @@ def _evaluate_candidates_concurrent(
                     if exc is not None:
                         if isinstance(exc, KeyboardInterrupt):
                             raise exc
-                        log(f"并发工作线程异常: {exc}")
+                        stop_event.set()
+                        raise exc
 
                 if stop_event.is_set():
-                    break
+                    continue  # Drain and inspect every already submitted request.
 
                 for _ in range(len(done)):
                     c = next(cand_iter, None)
@@ -632,6 +684,13 @@ def _evaluate_candidates_concurrent(
     except KeyboardInterrupt:
         return STATUS_INTERRUPTED
 
+    final_reason = state.stop_reason()
+    if final_reason == STATUS_USAGE_UNKNOWN and any(
+        e.get("code") == STATUS_QUOTA_EXHAUSTED for e in report.get("errors", [])
+    ):
+        return STATUS_QUOTA_EXHAUSTED
+    if final_reason:
+        return final_reason
     if stop_reason_holder[0]:
         return stop_reason_holder[0]
     if not readable_counter[0]:
@@ -688,7 +747,7 @@ def _evaluate_candidates(state, candidates, cfg, api_key, transport, fetch, slee
         failures = 0 if successful else failures + 1
         already_evaluated_ids.add(candidate.skill_id)
         if unknown:
-            last_call = state.report["calls"][-1] if state.report.get("calls") else {}
+            last_call = next((c for c in reversed(state.report["calls"]) if c.get("skill_id") == candidate.skill_id), {})
             last_resp = last_call.get("response") or {}
             last_err = (last_resp.get("error") or "").lower()
             if "allocationquota" in last_err or "free quota exhausted" in last_err or last_resp.get("http_status") == 403:
@@ -700,7 +759,7 @@ def _evaluate_candidates(state, candidates, cfg, api_key, transport, fetch, slee
                 log("  -> 接口成功响应但缺失用量数据，触发用量未知熔断。")
             return STATUS_USAGE_UNKNOWN
         if successful:
-            last_ev = report["evaluations"][-1]["evaluation"]
+            last_ev = next(e["evaluation"] for e in reversed(report["evaluations"]) if e["candidate"]["skill_id"] == candidate.skill_id)
             m = last_ev.get("match", "none")
             tokens = state.usage.total_tokens
             log(f"  -> 评估完成: match={m} (全库已完成: {len(report['evaluations'])}, 累计消耗: {tokens:,} Token)")
@@ -971,6 +1030,8 @@ def execute_find_skill(topic="", *, limit=None, max_evaluations=None, max_tokens
         for call in state.report["calls"]:
             if call.get("state") == "started":
                 call["state"] = "unknown"
+                if call.get("reservation_state") == "active":
+                    call["reservation_state"] = "unknown"
                 state.report.setdefault("recovery_warning", "存在发送后未确认的请求，停止自动重试。")
         state.report["parameters"].update(params)
         state.report["status"] = "running"
@@ -1001,15 +1062,8 @@ def execute_find_skill(topic="", *, limit=None, max_evaluations=None, max_tokens
         if retry_failed_searches:
             reset_failed_searches(state)
         if resumed:
-            pending = state.report.get("pending_evaluation")
+            _recover_pending_evaluations(state)
             last = state.report["calls"][-1] if state.report["calls"] else {}
-            if pending and last.get("response") and last.get("skill_id") == pending["candidate"]["skill_id"]:
-                from src.shared.models import Candidate
-                if not any(e["candidate"]["skill_id"] == pending["candidate"]["skill_id"] for e in state.report["evaluations"]):
-                    _record_evaluation(state, Candidate(**pending["candidate"]), pending["materials"],
-                                       pending["manifest"], SimpleNamespace(**last["response"]))
-                else:
-                    state.report.pop("pending_evaluation", None)
             if not state.report.get("plan") and last.get("stage") == "planning" and last.get("response"):
                 result = last["response"]
                 if result.get("ok") and result.get("content"):
@@ -1063,6 +1117,7 @@ def execute_find_skill(topic="", *, limit=None, max_evaluations=None, max_tokens
         code = "plan_failed" if state.report.get("plan") is None else "execution_error"
         state.report["errors"].append({"stage": stage, "code": code, "message": str(exc)})
         reason = code
+    state.report["usage_audit"] = audit_usage_reconciliation(state.report["calls"], state.usage.snapshot())
     return finalize_run(state.report, reason, limit=params["limit"], run_dir=directory,
                         root_dir=root, usage=state.usage, log=log)
 

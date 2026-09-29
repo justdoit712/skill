@@ -101,7 +101,7 @@ def score_candidate_relevance(
     repo_counts: dict[str, int] | None = None,
 ) -> dict[str, Any]:
     """对单个候选技能计算相关性打分。
-    
+
     打分维度：
     - 技能名称与目录路径匹配 (权重 0.70)：直接领域匹配强信号；
     - 上游仓库描述与仓库名语义匹配 (权重 0.30)：辅助信号，设定上限防单仓库穿透；
@@ -221,7 +221,7 @@ def schedule_candidates_by_relevance_and_fairness(
     max_per_repo: int | None = None,
 ) -> list[Any]:
     """混合相关性优先与跨仓库轮转探索的确定性调度器。
-    
+
     规则：
     1. 计算每个候选的相关性得分；
     2. 按分数高低构建高相关优先队列；

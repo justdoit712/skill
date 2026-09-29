@@ -4,7 +4,7 @@
 1. partial 必须至少有一项 required 准则具备有效证据支持；
 2. 若仅满足 quality_signal（加分/质量项），强制保持或降级为 none，坚决不进入备选池；
 3. 模型原判为 none 时，即便核验发现存在支持项，坚决维持 none 并记录 audit_conflict，杜绝擅自批量升级；
-4. 存在明确 unsupported 必需能力项时，强制为 none；
+4. 一项核心能力有有效证据、另一项 unsupported 时，保留 partial；
 5. documentation == "insufficient" 时剥夺 strong 资格，降级为 partial 进入备选；
 6. limitations 明确列出缺失的核心能力，且总数受限不超过 5 项；
 7. none 判定时清空 why_consider。
@@ -163,8 +163,8 @@ class TestFinderAlternativeThresholds(unittest.TestCase):
         self.assertEqual(len(alternatives), 1)
         self.assertEqual(alternatives[0]["candidate"]["skill_id"], "demo/cand2:SKILL.md")
 
-    def test_unsupported_required_criterion_downgrades_to_none(self) -> None:
-        """存在明确不支持的 required 项时，即使另一项 required 支持，也强制降级为 none。"""
+    def test_unsupported_required_criterion_retains_partial(self) -> None:
+        """存在明确不支持的 required 项，但另一项有有效证据时保留备选。"""
         raw_eval = {
             "match": MATCH_PARTIAL,
             "documentation": DOC_CLEAR,
@@ -192,9 +192,17 @@ class TestFinderAlternativeThresholds(unittest.TestCase):
             "limitations": [],
         }
 
-        adjusted = verify_and_adjust_evaluation(raw_eval, self.materials, self.plan_criteria)
-        self.assertEqual(adjusted["match"], MATCH_NONE)
-        self.assertIn("不支持", adjusted.get("downgrade_reason", ""))
+        for original in (MATCH_PARTIAL, MATCH_STRONG):
+            with self.subTest(original=original):
+                raw_eval["match"] = original
+                adjusted = verify_and_adjust_evaluation(raw_eval, self.materials, self.plan_criteria)
+                self.assertEqual(adjusted["match"], MATCH_PARTIAL)
+                self.assertIn("主动倾听", " ".join(adjusted["limitations"]))
+                shortlist, alternatives = rank_find_results(
+                    [{"candidate": {"skill_id": "partial"}, "evaluation": adjusted}],
+                    plan={"criteria": self.plan_criteria})
+                self.assertEqual(len(shortlist), 0)
+                self.assertEqual(len(alternatives), 1)
 
     def test_strong_downgraded_to_partial_when_documentation_insufficient(self) -> None:
         """所有必需准则全部满足，但 documentation 为 insufficient 时，剥夺 strong 降级为 partial。"""

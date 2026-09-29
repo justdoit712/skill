@@ -61,7 +61,9 @@ class RefillTest(unittest.TestCase):
     def test_target_stops_before_next_fetch_and_wins_known_budget_tie(self):
         self.search.return_value = True, [repo(0), repo(1)], None
         self.model.side_effect = [response(PLAN, 900), evaluated("strong", tokens=100)]
-        r = self.run_find(max_tokens=1000, max_evaluations=1)
+        # Isolate stop-priority behavior with explicit simulated reservation bounds.
+        with patch("src.finder.run.estimate_request_token_bound", side_effect=[900, 100]):
+            r = self.run_find(max_tokens=1000, max_evaluations=1)
         self.assertEqual(r["stop_reason"], "target_reached")
         self.assertEqual(self.fetch.call_count, 1)
         self.assertEqual(r["evaluation_attempts"], 1)
@@ -110,13 +112,15 @@ class RefillTest(unittest.TestCase):
 
     def test_budget_after_planning_prevents_search(self):
         self.model.side_effect = [response(PLAN, 1000)]
-        r = self.run_find(max_tokens=1000)
+        with patch("src.finder.run.estimate_request_token_bound", return_value=200):
+            r = self.run_find(max_tokens=1000)
         self.assertEqual(r["stop_reason"], "token_limit")
         self.search.assert_not_called()
 
     def test_budget_after_reflection_prevents_new_search(self):
         self.model.side_effect = [response(PLAN, 400), evaluated(tokens=400), response({"queries": ["a", "b", "c"]}, 200)]
-        r = self.run_find(max_tokens=1000)
+        with patch("src.finder.run.estimate_request_token_bound", return_value=200):
+            r = self.run_find(max_tokens=1000)
         self.assertEqual(r["stop_reason"], "token_limit")
         self.assertEqual(self.search.call_count, 1)
 

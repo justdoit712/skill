@@ -2,7 +2,7 @@
 
 涵盖验收场景：
 1. 本地实时投影：每评估完成 1 个候选，立即向 report.json 与 report.md 投影最新 shortlist/alternatives 与消耗进度；
-2. 预算预留机制：发起模型请求前预留 8,000 Token 与 1 次尝试配额，预算不足时安全熔断，防止瞬间击穿阈值；
+2. 预算预留机制：发起模型请求前按输入及输出上限预留 Token 与 1 次尝试配额，预算不足时安全熔断，防止瞬间击穿阈值；
 3. 在途检查点映射：pending_evaluations 精准跟踪在途请求；
 4. 受控双并发执行：concurrency=2 时由 ThreadPoolExecutor(max_workers=2) 受控并发执行，线程安全账本零竞态；
 5. 目标达成即停：并发场景下一个线程命中目标后立即设置 stop_event，阻断后续候选浪费调用。
@@ -144,31 +144,17 @@ class TestFinderProgressiveAndConcurrency(unittest.TestCase):
                         f"未能观察到实时的中间短名单投影: {observed_projections}")
 
     def test_budget_reservation_prevents_threshold_overshoot(self) -> None:
-        """测试预算预留机制：当剩余 Token 预算不足以承受安全缓冲 (8,000 Token) 时，预留失败并停止。"""
-        state = FinderRunState("test", {"max_tokens": 10000, "max_evaluations": 5})
-        state.usage.total_tokens = 5000
-
-        # 1. 第一次预留 8,000 Token: 5000 + 0 + 8000 = 13000 > 10000 -> 预留被拦截
-        ok = state.check_and_reserve_budget("cand1", tokens=8000)
-        self.assertFalse(ok)
+        from src.finder.run import RunStopped
+        state = FinderRunState("test", {"max_tokens": 9000, "max_evaluations": 5})
+        transport = MagicMock()
+        with self.assertRaises(RunStopped) as stopped:
+            state.call(transport, {"limits": {"max_output_tokens": 10000}},
+                       "system", "material", api_key="fake", sleep=lambda _: None,
+                       candidate_id="cand1")
+        self.assertEqual(stopped.exception.reason, "token_limit")
+        transport.assert_not_called()
         self.assertEqual(state.reserved_tokens, 0)
-        self.assertEqual(state.reserved_attempts, 0)
-
-        # 2. 如果 max_tokens 足够 (如 20,000)
-        state.report["parameters"]["max_tokens"] = 20000
-        ok2 = state.check_and_reserve_budget("cand1", tokens=8000)
-        self.assertTrue(ok2)
-        self.assertEqual(state.reserved_tokens, 8000)
-        self.assertEqual(state.reserved_attempts, 1)
-
-        # 3. 再次预留 8,000: 5000 + 8000 + 8000 = 21000 > 20000 -> 再次拦截
-        ok3 = state.check_and_reserve_budget("cand2", tokens=8000)
-        self.assertFalse(ok3)
-
-        # 4. 释放后又可正常预留
-        state.release_reserved_budget(tokens=8000)
-        self.assertEqual(state.reserved_tokens, 0)
-        self.assertEqual(state.reserved_attempts, 0)
+        self.assertEqual(state.report["evaluation_attempts"], 0)
 
     def test_controlled_dual_concurrency_execution(self) -> None:
         """测试 concurrency=2 时的双并发调度，账本与用量无竞态且准确对账。"""

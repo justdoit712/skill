@@ -222,7 +222,7 @@ def parse_skill_evaluation(content: str, plan_criteria: list[dict[str, Any]]) ->
                 raise ValueError("quote 必须为文本")
             clean.append({"source_path": _text(ev.get("source_path"), "source_path", 4096),
                           "start_line": start, "end_line": end,
-                          "quote": _text(quote_val[:1200], "quote", 1200)})
+                          "quote": _text(quote_val, "quote", 1200)})
         by_id[cid] = {"criterion_id": cid, "status": item["status"],
                       "explanation": _text(item.get("explanation", ""), "explanation", 800),
                       "evidence": clean}
@@ -302,15 +302,9 @@ def verify_and_adjust_evaluation(
     supported_ids = {
         cr["criterion_id"] for cr in adjusted_results if cr.get("status") == STATUS_SUPPORTED
     }
-    unsupported_ids = {
-        cr["criterion_id"] for cr in adjusted_results if cr.get("status") == STATUS_UNSUPPORTED
-    }
-
     supported_count = len(supported_ids)
     supported_required_ids = supported_ids & required_ids
-    unsupported_required_ids = unsupported_ids & required_ids
     supported_required_count = len(supported_required_ids)
-    any_required_unsupported = len(unsupported_required_ids) > 0
 
     # 所有 required 准则都必须在 adjusted_results 中且状态为 supported
     all_required_supported = (
@@ -328,10 +322,7 @@ def verify_and_adjust_evaluation(
 
     if original_match == MATCH_STRONG:
         if not all_required_supported:
-            if any_required_unsupported:
-                res["match"] = MATCH_NONE
-                downgrade_reason = "存在明确不支持的必需能力项"
-            elif required_criteria and supported_required_count == 0:
+            if required_criteria and supported_required_count == 0:
                 res["match"] = MATCH_NONE
                 downgrade_reason = "缺少必需能力的核心支持证据（仅满足质量准则或无核心证据）"
             elif supported_count == 0:
@@ -345,10 +336,7 @@ def verify_and_adjust_evaluation(
             res["match"] = MATCH_PARTIAL
             downgrade_reason = "文档材料严重不足 (insufficient)，无法列为强推荐"
     elif original_match == MATCH_PARTIAL:
-        if any_required_unsupported:
-            res["match"] = MATCH_NONE
-            downgrade_reason = "存在明确不支持的必需能力项"
-        elif required_criteria and supported_required_count == 0:
+        if required_criteria and supported_required_count == 0:
             res["match"] = MATCH_NONE
             downgrade_reason = "缺少必需能力的有效核验支持证据（仅满足质量准则无法作为备选）"
         elif supported_count == 0:

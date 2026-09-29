@@ -93,7 +93,7 @@ def get_git_commit_hash(root_dir: Any = None) -> str | None:
 
 def build_config_fingerprint(cfg: dict | None) -> str:
     """生成脱敏的模型与运行配置指纹 (sha256 截断前 16 位)。
-    
+
     严禁包含 api_key、token 等敏感凭据。
     """
     import hashlib
