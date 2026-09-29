@@ -11,11 +11,14 @@
 from __future__ import annotations
 
 import argparse
+import concurrent.futures
+from contextvars import copy_context
 from copy import deepcopy
 from dataclasses import asdict
 import json
 from pathlib import Path
 import sys
+import threading
 import time
 import inspect
 import re
@@ -213,8 +216,13 @@ class FinderRunState:
     def __init__(self, topic, params, run_dir=None, cfg=None):
         self.run_dir = run_dir
         self.usage = UsageTotals()
+        self._lock = threading.RLock()
+        self._active_call_ids: set[int] = set()
+        self.reserved_tokens = 0
+        self.reserved_attempts = 0
         params = {"limit": DEFAULT_LIMIT, "max_evaluations": DEFAULT_MAX_EVALUATIONS,
-                  "max_tokens": DEFAULT_MAX_TOKENS, "max_rounds": DEFAULT_MAX_ROUNDS, **params}
+                  "max_tokens": DEFAULT_MAX_TOKENS, "max_rounds": DEFAULT_MAX_ROUNDS,
+                  "concurrency": 1, **params}
         root_dir = run_dir.parents[3] if run_dir and len(run_dir.parents) >= 4 else None
         self.report = {"schema_version": FINDER_REPORT_SCHEMA_VERSION, "topic": topic, "parameters": params,
             "status": "running", "stop_reason": None, "plan": None,
@@ -222,6 +230,7 @@ class FinderRunState:
             "evaluation_attempts": 0, "evaluated_count": 0, "evaluations": [],
             "shortlist": [], "alternatives": [], "calls": [], "errors": [],
             "coverage_incomplete": False,
+            "pending_evaluations": {},
             "search": {"queries_executed": [], "repos_discovered": 0,
                        "candidates_found": 0, "expansions": [], "skipped": [],
                        "skipped_owned": 0, "skipped_owned_ids": []},
@@ -233,45 +242,80 @@ class FinderRunState:
             }}
 
     def save(self):
-        self.report["usage"] = self.usage.snapshot()
-        self.report["metrics"] = build_run_metrics(self.report, kind="finder")
-        self.report["updated_at"] = now_local().isoformat()
-        audit = audit_usage_reconciliation(self.report.get("calls", []), self.report.get("usage"))
-        if audit and audit.get("status") == "discrepancy_detected":
-            self.report["usage_audit"] = audit
-        # During execution only the authoritative JSON is updated.
-        if self.run_dir is not None:
-            write_json_atomic(self.run_dir / "report.json", self.report)
+        with self._lock:
+            self.report["usage"] = self.usage.snapshot()
+            self.report["metrics"] = build_run_metrics(self.report, kind="finder")
+            self.report["updated_at"] = now_local().isoformat()
+            audit = audit_usage_reconciliation(self.report.get("calls", []), self.report.get("usage"))
+            if audit and audit.get("status") == "discrepancy_detected":
+                self.report["usage_audit"] = audit
+            # During execution only the authoritative JSON is updated.
+            if self.run_dir is not None:
+                write_json_atomic(self.run_dir / "report.json", self.report)
 
     def stop_reason(self):
-        if self.usage.unknown_usage_requests or any(c.get("state") in ("started", "unknown") for c in self.report["calls"]):
-            return STATUS_USAGE_UNKNOWN
-        if _target_reached(self):
-            return STATUS_TARGET_REACHED
-        if self.usage.total_tokens >= self.report["parameters"]["max_tokens"]:
-            return STATUS_TOKEN_LIMIT
-        if self.report["evaluation_attempts"] >= self.report["parameters"]["max_evaluations"]:
-            return STATUS_EVALUATION_LIMIT
-        if self.report["search"].get("consecutive_failures", 0) >= MAX_CONSECUTIVE_FAILURES:
-            return STATUS_MODEL_FAILURES
-        return None
+        with self._lock:
+            abandoned_started = any(
+                c.get("state") == "started" and id(c) not in self._active_call_ids
+                for c in self.report["calls"]
+            )
+            if self.usage.unknown_usage_requests or abandoned_started or any(c.get("state") == "unknown" for c in self.report["calls"]):
+                return STATUS_USAGE_UNKNOWN
+            if _target_reached(self):
+                return STATUS_TARGET_REACHED
+            if (self.usage.total_tokens + self.reserved_tokens) >= self.report["parameters"]["max_tokens"]:
+                return STATUS_TOKEN_LIMIT
+            if (self.report["evaluation_attempts"] + self.reserved_attempts) >= self.report["parameters"]["max_evaluations"]:
+                return STATUS_EVALUATION_LIMIT
+            if self.report["search"].get("consecutive_failures", 0) >= MAX_CONSECUTIVE_FAILURES:
+                return STATUS_MODEL_FAILURES
+            return None
+
+    def check_and_reserve_budget(self, candidate_id: str, tokens: int = 8000) -> bool:
+        with self._lock:
+            reason = self.stop_reason()
+            if reason:
+                return False
+            max_tokens = self.report["parameters"]["max_tokens"]
+            max_evals = self.report["parameters"]["max_evaluations"]
+
+            if (self.report["evaluation_attempts"] + self.reserved_attempts + 1) > max_evals:
+                return False
+
+            if (self.usage.total_tokens + self.reserved_tokens + tokens) > max_tokens:
+                return False
+
+            self.reserved_tokens += tokens
+            self.reserved_attempts += 1
+            return True
+
+    def release_reserved_budget(self, tokens: int = 8000):
+        with self._lock:
+            self.reserved_tokens = max(0, self.reserved_tokens - tokens)
+            self.reserved_attempts = max(0, self.reserved_attempts - 1)
 
     def call(self, transport, cfg, system, user, *, api_key, sleep, candidate_id=None, stage=None):
-        reason = self.stop_reason()
-        if reason:
-            raise RunStopped(reason)
-        call = {"stage": stage or ("evaluation" if candidate_id else "planning"), "skill_id": candidate_id,
-                "state": "started", "usage": None}
-        self.report["calls"].append(call)
-        if candidate_id:
-            self.report["evaluation_attempts"] += 1
-        try:
-            self.save()  # a failed write prevents the paid request
-        except BaseException:
-            call["state"] = "not_sent"
+        with self._lock:
+            reason = self.stop_reason()
+            if reason:
+                raise RunStopped(reason)
+            call = {"stage": stage or ("evaluation" if candidate_id else "planning"), "skill_id": candidate_id,
+                    "state": "started", "usage": None}
+            self.report["calls"].append(call)
             if candidate_id:
-                self.report["evaluation_attempts"] -= 1
-            raise
+                self.report["evaluation_attempts"] += 1
+                if self.reserved_attempts > 0:
+                    self.reserved_attempts -= 1
+            try:
+                self.save()  # a failed write prevents the paid request
+            except BaseException:
+                call["state"] = "not_sent"
+                if candidate_id:
+                    self.report["evaluation_attempts"] -= 1
+                raise
+            call_id = id(call)
+            self._active_call_ids.add(call_id)
+
         try:
             fmt = resolve_response_format(cfg, stage or ("evaluation" if candidate_id else "planning"))
             if _supports_kwarg(transport, "response_format"):
@@ -279,19 +323,24 @@ class FinderRunState:
             else:
                 result = transport(cfg, system, user, api_key=api_key, sleep=sleep)
         except BaseException:
-            call["state"] = "unknown"
-            self.usage.record_unknown_request()
-            self.save()
+            with self._lock:
+                self._active_call_ids.discard(call_id)
+                call["state"] = "unknown"
+                self.usage.record_unknown_request()
+                self.save()
             raise
-        call["usage"] = self.usage.add(result)
-        call["response"] = {key: getattr(result, key, None) for key in
-                            ("ok", "content", "error", "reason_code", "finish_reason")}
-        if not getattr(result, "ok", False):
-            call["state"] = "not_sent" if call["usage"]["attempts"] == 0 else "error"
-        else:
-            call["state"] = "unknown" if call["usage"]["total_tokens"] is None else "received"
-        self.save()
-        return result, bool(self.usage.unknown_usage_requests)
+
+        with self._lock:
+            self._active_call_ids.discard(call_id)
+            call["usage"] = self.usage.add(result)
+            call["response"] = {key: getattr(result, key, None) for key in
+                                ("ok", "content", "error", "reason_code", "finish_reason")}
+            if not getattr(result, "ok", False):
+                call["state"] = "not_sent" if call["usage"]["attempts"] == 0 else "error"
+            else:
+                call["state"] = "unknown" if call["usage"]["total_tokens"] is None else "received"
+            self.save()
+            return result, bool(self.usage.unknown_usage_requests)
 
 
 def finalize_run(report, stop_reason, *, status=None, evaluated_items=None, plan=None,
@@ -360,69 +409,236 @@ def finalize_run(report, stop_reason, *, status=None, evaluated_items=None, plan
 
 def _evaluate_candidate(state, candidate, materials, cfg, api_key, transport, sleep):
     from src.shared.materials import MaterialBundle
-    report = state.report
     manifest = materials.manifest() if isinstance(materials, MaterialBundle) else {"identity_version": "primary-only-legacy"}
-    report["pending_evaluation"] = {"candidate": asdict(candidate), "materials": dict(materials), "manifest": manifest}
+    with state._lock:
+        report = state.report
+        checkpoint = {
+            "candidate": asdict(candidate),
+            "materials": dict(materials),
+            "manifest": manifest,
+            "started_at": now_local().isoformat(),
+        }
+        report["pending_evaluation"] = checkpoint
+        report.setdefault("pending_evaluations", {})[candidate.skill_id] = checkpoint
+        state.save()
+
     system, user = build_evaluation_prompt(candidate, materials, report["plan"], report["topic"])
     result, unknown = state.call(transport, cfg, system, user, api_key=api_key, sleep=sleep, candidate_id=candidate.skill_id)
     return _record_evaluation(state, candidate, materials, manifest, result), unknown
 
 
 def _record_evaluation(state, candidate, materials, manifest, result):
-    report = state.report
-    successful = False
-    try:
-        if not result.ok or not result.content:
-            raise ValueError(result.error or "model_failed")
-        if result.finish_reason == "length":
-            raise ValueError("模型输出被截断")
-        parsed = parse_skill_evaluation(result.content, report["plan"]["criteria"])
-        verified = verify_and_adjust_evaluation(parsed, materials, report["plan"]["criteria"])
-        downgrade_reason = verified.get("downgrade_reason")
-        if parsed.get("match") != verified.get("match") and not downgrade_reason:
-            downgrade_reason = "准则支持证据不充分或缺少必需能力"
+    with state._lock:
+        report = state.report
+        successful = False
+        try:
+            if not result.ok or not result.content:
+                raise ValueError(result.error or "model_failed")
+            if result.finish_reason == "length":
+                raise ValueError("模型输出被截断")
+            parsed = parse_skill_evaluation(result.content, report["plan"]["criteria"])
+            verified = verify_and_adjust_evaluation(parsed, materials, report["plan"]["criteria"])
+            downgrade_reason = verified.get("downgrade_reason")
+            if parsed.get("match") != verified.get("match") and not downgrade_reason:
+                downgrade_reason = "准则支持证据不充分或缺少必需能力"
 
-        record = {
-            "candidate": {
+            record = {
+                "candidate": {
+                    "skill_id": candidate.skill_id,
+                    "name": candidate.name,
+                    "repo_url": candidate.repo_url,
+                    "url": candidate.url,
+                    "author": candidate.owner,
+                    "path": candidate.path,
+                    "content_fingerprint": candidate.content_fingerprint,
+                },
+                "raw_match": parsed.get("match"),
+                "verified_match": verified.get("match"),
+                "downgrade_reason": downgrade_reason,
+                "evaluation": verified,
+                "materials": manifest,
+            }
+            report["evaluations"].append(record)
+            report["evaluated_count"] = len(report["evaluations"])
+            # 本地实时投影：每完成 1 个候选的评估，即刻在内存重算并向 report 投影当前的最新短名单与备选名单
+            shortlist, alternatives = rank_find_results(
+                report["evaluations"],
+                report.get("plan"),
+                report.get("parameters", {}).get("limit", DEFAULT_LIMIT),
+            )
+            report["shortlist"] = shortlist
+            report["alternatives"] = alternatives
+            report["shortlist_count"] = len(shortlist)
+            report["alternatives_count"] = len(alternatives)
+            successful = True
+        except (ValueError, TypeError, KeyError) as exc:
+            code, err_msg = classify_evaluation_error(result, exc)
+            err_entry = {
+                "stage": "evaluation",
                 "skill_id": candidate.skill_id,
-                "name": candidate.name,
-                "repo_url": candidate.repo_url,
-                "url": candidate.url,
-                "author": candidate.owner,
-                "path": candidate.path,
-                "content_fingerprint": candidate.content_fingerprint,
-            },
-            "raw_match": parsed.get("match"),
-            "verified_match": verified.get("match"),
-            "downgrade_reason": downgrade_reason,
-            "evaluation": verified,
-            "materials": manifest,
-        }
-        report["evaluations"].append(record)
-        report["evaluated_count"] = len(report["evaluations"])
-        successful = True
-    except (ValueError, TypeError, KeyError) as exc:
-        code, err_msg = classify_evaluation_error(result, exc)
-        err_entry = {
-            "stage": "evaluation",
-            "skill_id": candidate.skill_id,
-            "code": code,
-            "message": err_msg,
-        }
-        if code == "format_error":
-            exc_str = str(exc)
-            for f in ("dependencies", "limitations", "quote", "criteria_results", "summary_zh", "usage_zh", "why_consider"):
-                if f in exc_str:
-                    err_entry["field"] = f
-                    break
-        report["errors"].append(err_entry)
+                "code": code,
+                "message": err_msg,
+            }
+            if code == "format_error":
+                exc_str = str(exc)
+                for f in ("dependencies", "limitations", "quote", "criteria_results", "summary_zh", "usage_zh", "why_consider"):
+                    if f in exc_str:
+                        err_entry["field"] = f
+                        break
+            report["errors"].append(err_entry)
+        processed = report["search"].setdefault("processed_skill_ids", [])
+        if candidate.skill_id not in processed:
+            processed.append(candidate.skill_id)
+        report["search"]["consecutive_failures"] = 0 if successful else report["search"].get("consecutive_failures", 0) + 1
+        report.pop("pending_evaluation", None)
+        if "pending_evaluations" in report:
+            report["pending_evaluations"].pop(candidate.skill_id, None)
+        state.save()
+        if state.run_dir is not None:
+            try:
+                write_local_report(report, state.run_dir)
+            except OSError:
+                pass
+        return successful
+
+
+def _evaluate_candidates_concurrent(
+    state,
+    ordered_candidates,
+    cfg,
+    api_key,
+    transport,
+    fetch,
+    sleep,
+    log=print,
+    max_workers: int = 2,
+):
+    report = state.report
     processed = report["search"].setdefault("processed_skill_ids", [])
-    if candidate.skill_id not in processed:
-        processed.append(candidate.skill_id)
-    report["search"]["consecutive_failures"] = 0 if successful else report["search"].get("consecutive_failures", 0) + 1
-    report.pop("pending_evaluation", None)
-    state.save()
-    return successful
+    already_evaluated_ids = {e["candidate"]["skill_id"] for e in report.get("evaluations", [])}
+    already_evaluated_ids.update(processed)
+
+    to_eval = [c for c in ordered_candidates if c.skill_id not in already_evaluated_ids]
+    if not to_eval:
+        return state.stop_reason() or (STATUS_TARGET_REACHED if _target_reached(state) else STATUS_CANDIDATES_EXHAUSTED)
+
+    stop_event = threading.Event()
+    stop_reason_holder = [None]
+    readable_counter = [0]
+    failures_counter = [report["search"].get("consecutive_failures", 0)]
+
+    def _worker_task(candidate):
+        if stop_event.is_set():
+            return None
+        reason = state.stop_reason()
+        if reason:
+            stop_reason_holder[0] = reason
+            stop_event.set()
+            return None
+
+        # 1. 预算预留 (8,000 Tokens 安全缓冲 + 1 次尝试)
+        reserved = state.check_and_reserve_budget(candidate.skill_id, tokens=8000)
+        if not reserved:
+            stop_reason_holder[0] = state.stop_reason() or STATUS_TOKEN_LIMIT
+            stop_event.set()
+            return None
+
+        try:
+            attempt_num = report["evaluation_attempts"] + 1
+            max_num = report["parameters"]["max_evaluations"]
+            log(f"[评估 #{attempt_num}/{max_num}] {candidate.name} ({candidate.skill_id})...")
+
+            # 2. 拉取材料（锁外执行）
+            ok, materials, error = fetch(candidate, sleep=sleep)
+            if not ok or not materials:
+                with state._lock:
+                    report["coverage_incomplete"] = True
+                    report["search"]["skipped"].append({"skill_id": candidate.skill_id, "code": "material_failed", "message": error})
+                    processed.append(candidate.skill_id)
+                    state.save()
+                return False
+
+            with state._lock:
+                readable_counter[0] += 1
+                if getattr(materials, "fetch_errors", None):
+                    report["coverage_incomplete"] = True
+
+            # 3. 评估候选（在 state.call 与 _record_evaluation 内部加锁互斥）
+            successful, unknown = _evaluate_candidate(state, candidate, materials, cfg, api_key, transport, sleep)
+
+            with state._lock:
+                if unknown:
+                    last_call = state.report["calls"][-1] if state.report.get("calls") else {}
+                    last_resp = last_call.get("response") or {}
+                    last_err = (last_resp.get("error") or "").lower()
+                    if "allocationquota" in last_err or "free quota exhausted" in last_err or last_resp.get("http_status") == 403:
+                        log(f"  -> 模型免费额度已耗尽 (HTTP 403: {last_resp.get('error')})，立即终止后续尝试。")
+                        stop_reason_holder[0] = STATUS_QUOTA_EXHAUSTED
+                    elif not last_resp.get("ok", False):
+                        log(f"  -> 请求失败并缺失用量（{last_resp.get('reason_code') or '网络/服务端异常'}：{last_resp.get('error')}），触发未知用量熔断。")
+                        stop_reason_holder[0] = STATUS_USAGE_UNKNOWN
+                    else:
+                        log("  -> 接口成功响应但缺失用量数据，触发用量未知熔断。")
+                        stop_reason_holder[0] = STATUS_USAGE_UNKNOWN
+                    stop_event.set()
+                    return False
+
+                if successful:
+                    failures_counter[0] = 0
+                    last_ev = report["evaluations"][-1]["evaluation"]
+                    m = last_ev.get("match", "none")
+                    tokens = state.usage.total_tokens
+                    log(f"  -> 评估完成: match={m} (全库已完成: {len(report['evaluations'])}, 累计消耗: {tokens:,} Token)")
+                    if _target_reached(state):
+                        log(f"[目标达成] 短名单已集齐 {report['parameters']['limit']} 个，停止后续评估。")
+                        stop_reason_holder[0] = STATUS_TARGET_REACHED
+                        stop_event.set()
+                        return True
+                else:
+                    failures_counter[0] += 1
+                    if failures_counter[0] >= MAX_CONSECUTIVE_FAILURES:
+                        stop_reason_holder[0] = STATUS_MODEL_FAILURES
+                        stop_event.set()
+                    log("  -> 候选评估未通过格式校验或调用出错，已记录并继续下一个候选...")
+                return successful
+        finally:
+            state.release_reserved_budget(tokens=8000)
+
+    try:
+        with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers, thread_name_prefix="finder-eval") as executor:
+            futures = set()
+            cand_iter = iter(to_eval)
+            for _ in range(max_workers):
+                c = next(cand_iter, None)
+                if c is not None:
+                    futures.add(executor.submit(copy_context().run, _worker_task, c))
+
+            while futures:
+                done, futures = concurrent.futures.wait(futures, timeout=0.1, return_when=concurrent.futures.FIRST_COMPLETED)
+                for f in done:
+                    exc = f.exception()
+                    if exc is not None:
+                        if isinstance(exc, KeyboardInterrupt):
+                            raise exc
+                        log(f"并发工作线程异常: {exc}")
+
+                if stop_event.is_set():
+                    break
+
+                for _ in range(len(done)):
+                    c = next(cand_iter, None)
+                    if c is not None and not stop_event.is_set():
+                        futures.add(executor.submit(copy_context().run, _worker_task, c))
+    except KeyboardInterrupt:
+        return STATUS_INTERRUPTED
+
+    if stop_reason_holder[0]:
+        return stop_reason_holder[0]
+    if not readable_counter[0]:
+        return "material_failed"
+    if failures_counter[0] >= MAX_CONSECUTIVE_FAILURES:
+        return STATUS_MODEL_FAILURES
+    return STATUS_TARGET_REACHED if _target_reached(state) else STATUS_CANDIDATES_EXHAUSTED
 
 
 def _evaluate_candidates(state, candidates, cfg, api_key, transport, fetch, sleep, log=print):
@@ -440,6 +656,12 @@ def _evaluate_candidates(state, candidates, cfg, api_key, transport, fetch, slee
     from .relevance import extract_relevance_terms, schedule_candidates_by_relevance_and_fairness
     terms = extract_relevance_terms(state.report.get("topic", ""), state.report.get("plan"))
     ordered_candidates = schedule_candidates_by_relevance_and_fairness(candidates, terms)
+
+    concurrency = int(report.get("parameters", {}).get("concurrency", 1) or 1)
+    if concurrency > 1:
+        return _evaluate_candidates_concurrent(
+            state, ordered_candidates, cfg, api_key, transport, fetch, sleep, log=log, max_workers=min(2, concurrency)
+        )
 
     for candidate in ordered_candidates:
         if candidate.skill_id in already_evaluated_ids:
@@ -641,6 +863,7 @@ def _run_planning_phase(
 
 
 def execute_find_skill(topic="", *, limit=None, max_evaluations=None, max_tokens=None, max_rounds=None,
+                       concurrency=None,
                        root_dir=".", model_cfg=None, log=print, sleep=time.sleep,
                        call_model_fn=None, fetch_candidate_materials_fn=None,
                        expand_and_collect_candidates_fn=None, search_github_repos_fn=None,
@@ -688,6 +911,10 @@ def execute_find_skill(topic="", *, limit=None, max_evaluations=None, max_tokens
               for k, explicit, default in (("limit", limit, DEFAULT_LIMIT), ("max_evaluations", max_evaluations, DEFAULT_MAX_EVALUATIONS), ("max_tokens", max_tokens, DEFAULT_MAX_TOKENS), ("max_rounds", max_rounds, DEFAULT_MAX_ROUNDS))}
     if params["limit"] < 1 or params["max_evaluations"] < params["limit"] or params["max_tokens"] < 1000 or params["max_rounds"] < 1:
         raise ValueError("要求 limit >= 1、max_evaluations >= limit、max_tokens >= 1000、max_rounds >= 1")
+
+    raw_concurrency = concurrency if concurrency is not None else (prev_params.get("concurrency") if resumed else run_cfg.get("concurrency"))
+    params["concurrency"] = _parse_int_val(raw_concurrency, 1, "concurrency") if raw_concurrency is not None else 1
+    params["concurrency"] = max(1, min(2, params["concurrency"]))
 
     if enable_terminology_completion is None:
         enable_terminology_completion = bool(
@@ -946,6 +1173,12 @@ def main(argv: list[str] | None = None, *, root: Path | None = None) -> int:
         action="store_true",
         help="启用基于评估滑动窗口的主动反思（连续批次无合格技能时主动拓词检索）",
     )
+    parser.add_argument(
+        "--concurrency",
+        type=int,
+        default=None,
+        help="评估最大并发度（支持 1 或 2，默认 1）",
+    )
 
     try:
         args = parser.parse_args(argv)
@@ -983,6 +1216,7 @@ def main(argv: list[str] | None = None, *, root: Path | None = None) -> int:
             max_evaluations=args.max_evaluations,
             max_tokens=args.max_tokens,
             max_rounds=args.max_rounds,
+            concurrency=args.concurrency,
             root_dir=root_path,
             max_clarification_turns=args.turns,
             resume_dir=resume_path,
