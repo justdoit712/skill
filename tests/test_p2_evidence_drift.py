@@ -374,7 +374,7 @@ class TestEndToEndEvaluationAndShortlistRecovery(unittest.TestCase):
             },
             {
                 "id": "proxy_support",
-                "kind": KIND_QUALITY_SIGNAL,
+                "kind": KIND_REQUIRED,
                 "description": "支持代理轮换与会话持久化",
             },
         ]

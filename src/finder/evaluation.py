@@ -295,47 +295,90 @@ def verify_and_adjust_evaluation(
 
     res["criteria_results"] = adjusted_results
 
-    # 重新计算 match 资格
-    present_ids = {cr["criterion_id"] for cr in adjusted_results}
-    all_required_supported = all(c["id"] in present_ids for c in plan_criteria if c.get("kind") == KIND_REQUIRED)
-    any_required_unsupported = False
-    supported_count = 0
+    # 重新计算 match 资格与准则支持情况
+    required_criteria = [c for c in plan_criteria if c.get("kind") == KIND_REQUIRED]
+    required_ids = {c["id"] for c in required_criteria}
 
-    for cr in adjusted_results:
-        cid = cr["criterion_id"]
-        meta = criteria_map.get(cid, {})
-        is_req = meta.get("kind") == KIND_REQUIRED
-        st = cr["status"]
+    supported_ids = {
+        cr["criterion_id"] for cr in adjusted_results if cr.get("status") == STATUS_SUPPORTED
+    }
+    unsupported_ids = {
+        cr["criterion_id"] for cr in adjusted_results if cr.get("status") == STATUS_UNSUPPORTED
+    }
 
-        if st == STATUS_SUPPORTED:
-            supported_count += 1
-        elif is_req:
-            all_required_supported = False
-            if st == STATUS_UNSUPPORTED:
-                any_required_unsupported = True
+    supported_count = len(supported_ids)
+    supported_required_ids = supported_ids & required_ids
+    unsupported_required_ids = unsupported_ids & required_ids
+    supported_required_count = len(supported_required_ids)
+    any_required_unsupported = len(unsupported_required_ids) > 0
+
+    # 所有 required 准则都必须在 adjusted_results 中且状态为 supported
+    all_required_supported = (
+        len(required_criteria) > 0 and supported_required_count == len(required_criteria)
+    ) if required_criteria else (supported_count > 0)
+
+    # 缺失或未完全支持的 required 准则
+    missing_required_criteria = [
+        c for c in required_criteria if c["id"] not in supported_required_ids
+    ]
 
     original_match = res.get("match")
     downgrade_reason = None
+    audit_conflict = None
 
     if original_match == MATCH_STRONG:
         if not all_required_supported:
-            res["match"] = MATCH_NONE if (any_required_unsupported or supported_count == 0) else MATCH_PARTIAL
-            downgrade_reason = "必需能力存在不支持项或无任何支持证据" if res["match"] == MATCH_NONE else "部分必需能力在材料中缺少直接可核验的文字依据"
-            if res.get("limitations") is not None and isinstance(res["limitations"], list):
-                note = "部分必需能力在材料中缺少直接可核验的文字依据"
-                if note not in res["limitations"]:
-                    res["limitations"].append(note)
+            if any_required_unsupported:
+                res["match"] = MATCH_NONE
+                downgrade_reason = "存在明确不支持的必需能力项"
+            elif required_criteria and supported_required_count == 0:
+                res["match"] = MATCH_NONE
+                downgrade_reason = "缺少必需能力的核心支持证据（仅满足质量准则或无核心证据）"
+            elif supported_count == 0:
+                res["match"] = MATCH_NONE
+                downgrade_reason = "所有准则均无有效核验支持证据"
+            else:
+                res["match"] = MATCH_PARTIAL
+                downgrade_reason = "部分必需能力在材料中缺少直接可核验的文字依据"
+        elif res.get("documentation") == DOC_INSUFFICIENT:
+            # 即使准则满足，若文档严重不足，剥夺 strong 资格降为 partial
+            res["match"] = MATCH_PARTIAL
+            downgrade_reason = "文档材料严重不足 (insufficient)，无法列为强推荐"
     elif original_match == MATCH_PARTIAL:
-        if supported_count == 0:
+        if any_required_unsupported:
+            res["match"] = MATCH_NONE
+            downgrade_reason = "存在明确不支持的必需能力项"
+        elif required_criteria and supported_required_count == 0:
+            res["match"] = MATCH_NONE
+            downgrade_reason = "缺少必需能力的有效核验支持证据（仅满足质量准则无法作为备选）"
+        elif supported_count == 0:
             res["match"] = MATCH_NONE
             downgrade_reason = "所有准则均无有效核验支持证据"
     elif original_match == MATCH_NONE:
-        pass
+        if supported_count > 0:
+            # 模型原判为 none，核验阶段发现支持了准则：记录审计冲突，不擅自批量升级
+            audit_conflict = "模型原判为 none，核验阶段发现部分准则存在引文，按规则维持原判 none 不擅自升级"
+
+    # limitations 明确补充缺失的核心能力说明
+    if res.get("match") in (MATCH_PARTIAL, MATCH_NONE):
+        if res.get("limitations") is None or not isinstance(res.get("limitations"), list):
+            res["limitations"] = []
+        for mc in missing_required_criteria:
+            desc = mc.get("description") or mc["id"]
+            note = f"缺少必需能力支持: {desc}"
+            if note not in res["limitations"] and len(res["limitations"]) < 5:
+                res["limitations"].append(note)
+
+    # 当最终判定为 none 时，清空 why_consider 避免推荐非相关技能
+    if res.get("match") == MATCH_NONE:
+        res["why_consider"] = ""
 
     res["raw_match"] = original_match
     res["verified_match"] = res["match"]
     if downgrade_reason:
         res["downgrade_reason"] = downgrade_reason
+    if audit_conflict:
+        res["audit_conflict"] = audit_conflict
 
     return res
 
