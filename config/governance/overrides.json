@@ -160,25 +160,7 @@
       "from": "recommended"
     },
     {
-      "skill_id": "skillmedev/skills:skills/1on1-agenda/SKILL.md",
-      "reason": "用户收藏",
-      "added_at": "2026-09-29",
-      "from": "recommended"
-    },
-    {
       "skill_id": "thousandcents/futures-research:SKILL.md",
-      "reason": "用户收藏",
-      "added_at": "2026-09-29",
-      "from": "recommended"
-    },
-    {
-      "skill_id": "skillmedev/skills:skills/dead-code-eliminator/SKILL.md",
-      "reason": "用户收藏",
-      "added_at": "2026-09-29",
-      "from": "recommended"
-    },
-    {
-      "skill_id": "skillmedev/skills:skills/debt-payoff-planner/SKILL.md",
       "reason": "用户收藏",
       "added_at": "2026-09-29",
       "from": "recommended"
@@ -436,52 +418,67 @@
       "added_at": "2026-09-26"
     },
     {
-      "skill_id": "skillmedev/skills:skills/app-store-copy/SKILL.md",
+      "skill_id": "expo/skills:plugins/expo/skills/eas-simulator/SKILL.md",
       "reason": "用户屏蔽/删除",
       "added_at": "2026-09-29"
     },
     {
-      "skill_id": "skillmedev/skills:skills/app-store-release-prep/SKILL.md",
+      "skill_id": "expo/skills:plugins/expo/skills/eas-update/SKILL.md",
       "reason": "用户屏蔽/删除",
       "added_at": "2026-09-29"
     },
     {
-      "skill_id": "skillmedev/skills:skills/audience-targeting/SKILL.md",
+      "skill_id": "expo/skills:plugins/expo/skills/expo-data-fetching/SKILL.md",
       "reason": "用户屏蔽/删除",
       "added_at": "2026-09-29"
     },
     {
-      "skill_id": "skillmedev/skills:skills/buying-signal-tracker/SKILL.md",
+      "skill_id": "expo/skills:plugins/expo/skills/expo-project-structure/SKILL.md",
       "reason": "用户屏蔽/删除",
       "added_at": "2026-09-29"
     },
     {
-      "skill_id": "skillmedev/skills:skills/cold-email-craft/SKILL.md",
+      "skill_id": "expo/skills:plugins/expo/skills/expo-upgrade/SKILL.md",
       "reason": "用户屏蔽/删除",
       "added_at": "2026-09-29"
     },
     {
-      "skill_id": "skillmedev/skills:skills/community-engagement-playbook/SKILL.md",
+      "skill_id": "getsentry/skills:skills/triage-frontend-issues/SKILL.md",
       "reason": "用户屏蔽/删除",
       "added_at": "2026-09-29"
     },
     {
-      "skill_id": "skillmedev/skills:skills/discovery-call-prep/SKILL.md",
+      "skill_id": "skillmedev/skills:skills/ab-test-analyzer/SKILL.md",
       "reason": "用户屏蔽/删除",
       "added_at": "2026-09-29"
     },
     {
-      "skill_id": "skillmedev/skills:skills/donor-communications/SKILL.md",
+      "skill_id": "skillmedev/skills:skills/academic-essay/SKILL.md",
       "reason": "用户屏蔽/删除",
       "added_at": "2026-09-29"
     },
     {
-      "skill_id": "skillmedev/skills:skills/decision-making/SKILL.md",
+      "skill_id": "skillmedev/skills:skills/accessibility-audit/SKILL.md",
       "reason": "用户屏蔽/删除",
       "added_at": "2026-09-29"
     },
     {
-      "skill_id": "skillmedev/skills:skills/data-room-builder/SKILL.md",
+      "skill_id": "skillmedev/skills:skills/ad-creative-testing/SKILL.md",
+      "reason": "用户屏蔽/删除",
+      "added_at": "2026-09-29"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/alert-tuning/SKILL.md",
+      "reason": "用户屏蔽/删除",
+      "added_at": "2026-09-29"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/amazon-listing-optimizer/SKILL.md",
+      "reason": "用户屏蔽/删除",
+      "added_at": "2026-09-29"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/api-client-generator/SKILL.md",
       "reason": "用户屏蔽/删除",
       "added_at": "2026-09-29"
     }
