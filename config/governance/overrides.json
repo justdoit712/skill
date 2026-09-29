@@ -481,6 +481,36 @@
       "skill_id": "skillmedev/skills:skills/api-client-generator/SKILL.md",
       "reason": "用户屏蔽/删除",
       "added_at": "2026-09-29"
+    },
+    {
+      "added_at": "2026-09-29",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "expo/skills:.claude/skills/expo-skill-eval/SKILL.md"
+    },
+    {
+      "added_at": "2026-09-29",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "expo/skills:plugins/expo/skills/eas-observe/SKILL.md"
+    },
+    {
+      "added_at": "2026-09-29",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "expo/skills:plugins/expo/skills/eas-update-insights/SKILL.md"
+    },
+    {
+      "added_at": "2026-09-29",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "google-labs-code/stitch-skills:plugins/stitch-design/skills/code-to-design/SKILL.md"
+    },
+    {
+      "added_at": "2026-09-29",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "trailofbits/skills:plugins/writing-lean-proofs/skills/writing-lean-proofs/SKILL.md"
+    },
+    {
+      "added_at": "2026-09-29",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "trailofbits/skills:plugins/yara-authoring/skills/yara-rule-authoring/SKILL.md"
     }
   ]
 }
