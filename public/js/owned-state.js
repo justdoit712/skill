@@ -4,7 +4,7 @@
  * 不依赖 DOM，完全可测试。
  */
 
-import { shanghaiTodayStr } from "./utils.js";
+import { shanghaiTodayStr } from "./utils.js?v=20260929_sync_2";
 
 export const OWNED_SCHEMA_VERSION = "1.0.0";
 export const STORAGE_KEY_OWNED_STAGED = "skills_catalog_owned_staged_v1";

@@ -3,7 +3,7 @@
  * 遵循 GitHub Pages 纯静态展示定位，仅保留轻量操作反馈（Toast & Undo）。
  */
 
-import { escapeHtml } from "./utils.js";
+import { escapeHtml } from "./utils.js?v=20260929_sync_2";
 
 const PARTITION_LABELS = {
   recommended: "推荐区",

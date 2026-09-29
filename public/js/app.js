@@ -13,10 +13,10 @@ import {
   populateBaseline,
   partitionEntries,
   getEffectiveSnoozedList
-} from "./catalog-state.js";
-import { renderCatalogList } from "./catalog-view.js";
-import { renderFindView, fetchFindReport } from "./find-view.js";
-import { updateSyncBar, initSyncModal, initSnoozedModal, initConfirmModal } from "./modals.js";
+} from "./catalog-state.js?v=20260929_sync_2";
+import { renderCatalogList } from "./catalog-view.js?v=20260929_sync_2";
+import { renderFindView, fetchFindReport } from "./find-view.js?v=20260929_sync_2";
+import { updateSyncBar, initSyncModal, initSnoozedModal, initConfirmModal } from "./modals.js?v=20260929_sync_2";
 import {
   createOwnedState,
   loadOwnedStagedStorage,
@@ -26,8 +26,8 @@ import {
   reconcileOwnedStaged,
   markOwned,
   unmarkOwned
-} from "./owned-state.js";
-import { showToast } from "./owned-view.js";
+} from "./owned-state.js?v=20260929_sync_2";
+import { showToast } from "./owned-view.js?v=20260929_sync_2";
 
 // 全局应用运行时状态
 const state = {
@@ -74,6 +74,11 @@ const el = {
   tabModalSnoozed: document.getElementById("tab-modal-snoozed"),
   tabModalOwned: document.getElementById("tab-modal-owned"),
   jsonPreview: document.getElementById("json-preview"),
+  jsonViewModeLabel: document.getElementById("json-view-mode-label"),
+  jsonViewToggles: document.getElementById("json-view-toggles"),
+  btnViewIncremental: document.getElementById("btn-view-incremental"),
+  btnViewFull: document.getElementById("btn-view-full"),
+  modalCrossWarning: document.getElementById("modal-cross-warning"),
   copyStatus: document.getElementById("copy-status"),
   btnCopyJson: document.getElementById("btn-copy-json"),
   btnDownloadJson: document.getElementById("btn-download-json"),

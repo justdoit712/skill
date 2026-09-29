@@ -3,8 +3,8 @@
  * 支持渐进式分页渲染（DOM Pagination），减少首屏超大长列表 DOM 节点开销。
  */
 
-import { escapeHtml, text, day, SKILL_TYPE_LABELS, shanghaiTodayStr } from "./utils.js";
-import { isPicked } from "./catalog-state.js";
+import { escapeHtml, text, day, SKILL_TYPE_LABELS, shanghaiTodayStr } from "./utils.js?v=20260929_sync_2";
+import { isPicked } from "./catalog-state.js?v=20260929_sync_2";
 
 export const DEFAULT_PAGE_SIZE = 24;
 

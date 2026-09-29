@@ -6,7 +6,7 @@
 <title>Skills 导航目录</title>
 <meta name="description" content="公开的 AI Agent Skills 导航目录：只收录技能的名称、原始链接、中文简述、分类与评估依据，不下载、不镜像、不安装、不执行任何技能包。">
 <link rel="canonical" href="https://justdoit712.github.io/skill/">
-<link rel="stylesheet" href="styles.css?v=20260927_5">
+<link rel="stylesheet" href="styles.css?v=20260929_sync_2">
 </head>
 <body>
 
@@ -117,19 +117,34 @@
       <button id="btn-close-modal" class="modal-close" aria-label="关闭">&times;</button>
     </div>
     <div class="modal-body">
-      <div class="modal-tab-bar" role="tablist">
-        <button id="tab-modal-overrides" class="modal-tab-btn is-active" type="button">overrides.json (收藏/屏蔽)</button>
-        <button id="tab-modal-snoozed" class="modal-tab-btn" type="button">snoozed.json (暂不看 150天)</button>
-        <button id="tab-modal-owned" class="modal-tab-btn" type="button">owned-skills.json (已收录变更包)</button>
+      <div class="modal-tab-bar" role="tablist" aria-label="配置文件页签">
+        <button id="tab-modal-overrides" class="modal-tab-btn is-active" type="button" role="tab" aria-selected="true" aria-controls="sync-modal-tabpanel">overrides.json (收藏/屏蔽)</button>
+        <button id="tab-modal-snoozed" class="modal-tab-btn" type="button" role="tab" aria-selected="false" aria-controls="sync-modal-tabpanel">snoozed.json (暂不看 150天)</button>
+        <button id="tab-modal-owned" class="modal-tab-btn" type="button" role="tab" aria-selected="false" aria-controls="sync-modal-tabpanel">owned-skills.json (已收录变更包)</button>
       </div>
-      <p id="modal-desc">本站部署于 GitHub Pages 静态环境。请将以下生成的配置同步保存至仓库中。点击下方绿色按钮将<strong>自动复制配置到剪贴板并直达 GitHub 网页在线编辑页</strong>，粘贴后提交即可生效！</p>
-      <pre><code id="json-preview" class="json-preview"></code></pre>
-      <p id="copy-status" style="font-size: 12px; color: #16a34a; font-weight: 600; min-height: 18px; margin: 0;"></p>
+      <div id="sync-modal-tabpanel" role="tabpanel" aria-labelledby="tab-modal-overrides">
+        <p id="modal-desc">本站部署于 GitHub Pages 静态环境。请将以下生成的配置同步保存至仓库中。点击下方绿色按钮将<strong>自动复制配置到剪贴板并直达 GitHub 网页在线编辑页</strong>，粘贴后提交即可生效！</p>
+        <p id="modal-cross-warning" class="modal-cross-warning" hidden></p>
+        <div class="json-preview-container">
+          <div class="json-preview-toolbar">
+            <span id="json-view-mode-label">待同步变更（仅供核对）</span>
+            <div id="json-view-toggles" role="group" aria-label="预览内容">
+              <button type="button" id="btn-view-incremental" class="btn-toggle is-active"
+                      aria-pressed="true" aria-controls="json-preview">待同步变更</button>
+              <button type="button" id="btn-view-full" class="btn-toggle"
+                      aria-pressed="false" aria-controls="json-preview">完整配置</button>
+            </div>
+          </div>
+          <pre id="json-preview" class="json-preview" tabindex="0"
+               aria-label="待同步变更 JSON 预览"></pre>
+        </div>
+        <p id="copy-status" class="sync-modal-status" role="status" aria-live="polite"></p>
+      </div>
     </div>
     <div class="modal-actions">
-      <button id="btn-download-json" class="btn-secondary">💾 下载 JSON</button>
-      <button id="btn-copy-json" class="btn-secondary">📋 仅复制</button>
-      <button id="btn-goto-github" class="btn-gh">🚀 复制并去 GitHub 保存</button>
+      <button id="btn-download-json" class="btn-secondary" type="button">💾 下载 JSON</button>
+      <button id="btn-copy-json" class="btn-secondary" type="button">📋 仅复制</button>
+      <button id="btn-goto-github" class="btn-gh" type="button">🚀 复制并去 GitHub 保存</button>
     </div>
   </div>
 </div>
@@ -188,7 +203,7 @@
   </div>
 </footer>
 
-<script type="module" src="js/app.js?v=20260927_4"></script>
+<script type="module" src="js/app.js?v=20260929_sync_2"></script>
 
 </body>
 </html>

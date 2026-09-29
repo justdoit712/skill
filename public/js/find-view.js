@@ -3,8 +3,8 @@
  * 遵循《已收录 Skill 管理：详细实施方案》§6.3。
  */
 
-import { escapeHtml } from "./utils.js";
-import { isOwned } from "./owned-state.js";
+import { escapeHtml } from "./utils.js?v=20260929_sync_2";
+import { isOwned } from "./owned-state.js?v=20260929_sync_2";
 
 // 会话级内存缓存 (In-Memory Cache)
 let _cachedFindReport = null;
