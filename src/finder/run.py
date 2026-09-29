@@ -1027,6 +1027,10 @@ def execute_find_skill(topic="", *, limit=None, max_evaluations=None, max_tokens
         defaults = FinderRunState(topic, params, cfg=cfg).report["search"]
         for key, value in defaults.items():
             state.report.setdefault("search", {}).setdefault(key, value)
+        has_unconfirmed_inflight = any(
+            c.get("state") in ("started", "unknown") and not c.get("response")
+            for c in state.report["calls"]
+        )
         for call in state.report["calls"]:
             if call.get("state") == "started":
                 call["state"] = "unknown"
@@ -1038,18 +1042,22 @@ def execute_find_skill(topic="", *, limit=None, max_evaluations=None, max_tokens
         state.report["stop_reason"] = None
         state.report["updated_at"] = now_local().isoformat()
         u = prev_report.get("usage", {})
+        initial_unknown_usage = u.get("unknown_usage_requests") or 0 if has_unconfirmed_inflight else 0
         state.usage = UsageTotals(
             prompt_tokens=u.get("prompt_tokens") or 0,
             completion_tokens=u.get("completion_tokens") or 0,
             reasoning_tokens=u.get("reasoning_tokens") or 0,
             total_tokens=u.get("total_tokens") or 0,
             requests=u.get("requests") or 0,
-            unknown_usage_requests=u.get("unknown_usage_requests") or 0,
+            unknown_usage_requests=initial_unknown_usage,
             incomplete_breakdown_requests=u.get("incomplete_breakdown_requests") or 0,
         )
-        for call in prev_report.get("calls", []):
-            if call.get("state") == "started":
-                state.usage.record_unknown_request()
+        if has_unconfirmed_inflight:
+            for call in prev_report.get("calls", []):
+                if call.get("state") == "started":
+                    state.usage.record_unknown_request()
+        else:
+            state.report.setdefault("search", {})["consecutive_failures"] = 0
     else:
         state.report.update(run_id=run_id, started_at=started.isoformat(), model=cfg.get("model"),
                             report_paths={"json": str(directory / "report.json"), "md": str(directory / "report.md")})
@@ -1072,8 +1080,15 @@ def execute_find_skill(topic="", *, limit=None, max_evaluations=None, max_tokens
                         topic=topic,
                         enable_completion=params["enable_terminology_completion"],
                     )
-        if state.stop_reason():
-            raise RunStopped(state.stop_reason())
+        initial_stop = state.stop_reason()
+        if initial_stop:
+            if initial_stop == STATUS_TOKEN_LIMIT:
+                cur_tokens = state.usage.total_tokens
+                max_tokens = state.report["parameters"]["max_tokens"]
+                log(f"\n[提示] 历史任务已消耗 Token ({cur_tokens:,}) 达到设定的上限 ({max_tokens:,})，运行停止。")
+                log(f"若需继续评估更多候选，请通过命令行参数增加上限，例如：")
+                log(f"  .\\.venv\\Scripts\\python.exe tools/find_skill.py --resume --max-tokens {cur_tokens + 5000000:,}")
+            raise RunStopped(initial_stop)
         plan = state.report.get("plan")
         if resumed and plan:
             log(f"已恢复历史运行：{directory.name}")

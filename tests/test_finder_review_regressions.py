@@ -221,6 +221,50 @@ class FinderMultiRequestRecoveryTest(unittest.TestCase):
                 self.assertEqual(report["usage_audit"]["status"], "matched")
             forbidden.assert_not_called()
 
+    def test_resume_after_settled_error_or_unknown_usage_does_not_lock_out(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            run_dir = root / "data" / "local" / "find-skills" / "saved_timeout"
+            run_dir.mkdir(parents=True)
+            state = FinderRunState("comfort", {"limit": 1, "max_tokens": 100000,
+                                               "max_evaluations": 2, "concurrency": 1}, run_dir)
+            state.report.update(plan=deepcopy(PLAN), run_id="saved_timeout",
+                                report_paths={"json": str(run_dir / "report.json")})
+            # 候选 1 发生了网络超时报错 (已结算但无用量数据，曾导致未知用量熔断)
+            cand1 = candidate(1)
+            err_resp = ModelCallResult(ok=False, attempts=1, error="Read timed out")
+            state.report["calls"].append({
+                "request_id": "req-timeout", "stage": "evaluation", "skill_id": cand1.skill_id,
+                "state": "error", "usage": state.usage.add(err_resp),
+                "response": {"ok": False, "error": "Read timed out", "reason_code": "NETWORK_ERROR"},
+                "reserved_tokens": 10000, "reservation_state": "settled",
+            })
+            state.report["search"]["processed_skill_ids"] = [cand1.skill_id]
+            state.report["status"] = "stopped"
+            state.report["stop_reason"] = "usage_unknown"
+            state.save()
+            self.assertEqual(state.usage.unknown_usage_requests, 1)
+
+            # 续跑时，不应在开局被上一轮已终态的报错锁死，应能正常调度候选 2
+            cand2 = candidate(2)
+            model_mock = Mock(return_value=result())
+            search_mock = Mock(return_value=(True, [{"owner": "owner", "repo": "repo2", "url": "https://github.com/owner/repo2"}], None))
+            expand_mock = Mock(return_value=([cand2], []))
+            fetch_mock = Mock(return_value=(True, {"SKILL.md": "comfort"}, None))
+
+            report = execute_find_skill(
+                root_dir=root, resume_dir=run_dir, model_cfg=CFG, owned_ids=set(),
+                max_clarification_turns=0, call_model_fn=model_mock,
+                search_github_repos_fn=search_mock, expand_and_collect_candidates_fn=expand_mock,
+                fetch_candidate_materials_fn=fetch_mock, log=lambda *a: None,
+                enable_active_reflection=False)
+            
+            self.assertEqual(report["stop_reason"], "target_reached")
+            self.assertEqual(report["evaluated_count"], 1)
+            self.assertEqual(len(report["shortlist"]), 1)
+            self.assertEqual(model_mock.call_count, 1)
+
+
 
 if __name__ == "__main__":
     unittest.main()
