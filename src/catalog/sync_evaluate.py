@@ -70,7 +70,7 @@ def _evaluate_queue(queue, cfg, ledger, staged, started, token_cap,
     manual_picks_dict = get_manual_picks((cfg or {}).get("overrides") or {})
     manual_picks_set = set(manual_picks_dict.keys())
     manual_exclusions_dict = get_manual_exclusions((cfg or {}).get("overrides") or {})
-    manual_exclusions_set = set(manual_exclusions_dict.keys())
+    manual_exclusions_set = manual_exclusions_dict
     active_snoozed_dict = get_active_snoozed((cfg or {}).get("snoozed") or {})
     active_snoozed_set = set(active_snoozed_dict.keys())
     owned_cfg = (cfg or {}).get("owned") or {}

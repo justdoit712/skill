@@ -1,5 +1,6 @@
 {
   "overrides_version": "1.0.0",
+  "keyword_exclusions": ["expo"],
   "source": "docs/运行说明.md §9",
   "note": "人工干预名单（overrides）：由用户手工维护。manual_picks 长期保留在收藏区；manual_exclusions 为人工排除黑名单，流水线扫描到直接跳过（0 模型调用）。",
   "manual_picks": [

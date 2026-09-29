@@ -322,7 +322,7 @@ def load_config(config_dir: str | Path = "config") -> PrescreenConfig:
         try:
             from .overrides import load_overrides, get_manual_exclusions
             overrides = load_overrides(overrides_file)
-            manual_exclusions = set(get_manual_exclusions(overrides).keys())
+            manual_exclusions = get_manual_exclusions(overrides)
         except Exception:
             pass
 

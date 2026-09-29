@@ -483,6 +483,91 @@ class ManualExclusionsTest(unittest.TestCase):
         self.assertTrue(result.excluded)
         self.assertIn("MANUAL_EXCLUDED", result.reason_codes)
 
+    def test_valid_keyword_exclusions_pass(self):
+        data = {
+            "overrides_version": "1.0.0",
+            "manual_picks": [],
+            "manual_exclusions": [],
+            "keyword_exclusions": ["expo", "crypto"],
+        }
+        errors = validate_overrides(data)
+        self.assertEqual(errors, [])
+
+    def test_invalid_keyword_exclusions_format(self):
+        data = {
+            "overrides_version": "1.0.0",
+            "manual_picks": [],
+            "manual_exclusions": [],
+            "keyword_exclusions": ["expo", "", "  "],
+        }
+        errors = validate_overrides(data)
+        self.assertTrue(any("keyword_exclusions" in e for e in errors))
+
+        data["keyword_exclusions"] = "expo"
+        errors = validate_overrides(data)
+        self.assertTrue(any("keyword_exclusions" in e for e in errors))
+
+    def test_matches_exclusion_keyword(self):
+        from src.catalog.overrides import matches_exclusion_keyword
+        keywords = ["expo"]
+        self.assertTrue(matches_exclusion_keyword("expo/skills:skills/demo/SKILL.md", keywords))
+        self.assertTrue(matches_exclusion_keyword("owner/expo-router:SKILL.md", keywords))
+        self.assertTrue(matches_exclusion_keyword("owner/skills:plugins/expo/SKILL.md", keywords))
+        self.assertTrue(matches_exclusion_keyword("EXPO/skills:SKILL.md", keywords))
+        # 边界与不误伤：export 不应该命中 expo
+        self.assertFalse(matches_exclusion_keyword("owner/export-tool:SKILL.md", keywords))
+        self.assertFalse(matches_exclusion_keyword("owner/skills:plugins/exporter/SKILL.md", keywords))
+
+    def test_manual_exclusions_class_behavior(self):
+        from src.catalog.overrides import get_manual_exclusions, ManualExclusions
+        data = {
+            "manual_exclusions": [
+                {"skill_id": "exact/skill:SKILL.md", "reason": "精确屏蔽", "added_at": "2026-09-29"}
+            ],
+            "keyword_exclusions": ["expo"],
+        }
+        exclusions = get_manual_exclusions(data)
+        self.assertIsInstance(exclusions, ManualExclusions)
+        self.assertTrue(bool(exclusions))
+        # 精确匹配
+        self.assertIn("exact/skill:SKILL.md", exclusions)
+        self.assertEqual(exclusions.get("exact/skill:SKILL.md")["reason"], "精确屏蔽")
+        # 关键词匹配
+        self.assertIn("expo/skills:demo/SKILL.md", exclusions)
+        self.assertIsNotNone(exclusions.get("expo/skills:demo/SKILL.md"))
+        # 未匹配
+        self.assertNotIn("other/skill:SKILL.md", exclusions)
+        self.assertIsNone(exclusions.get("other/skill:SKILL.md"))
+        # keys() 只包含精确 ID
+        self.assertEqual(list(exclusions.keys()), ["exact/skill:SKILL.md"])
+
+    def test_apply_manual_overrides_with_keyword_exclusions(self):
+        from src.catalog.overrides import apply_manual_overrides
+        data = {
+            "manual_picks": [],
+            "manual_exclusions": [],
+            "keyword_exclusions": ["expo"],
+        }
+        e1 = {
+            "skill_id": "expo/skills:skills/test/SKILL.md",
+            "name": "test",
+            "status": STATUS_RECOMMENDED,
+            "manual_pick": False,
+            "reason_codes": [],
+        }
+        e2 = {
+            "skill_id": "normal/skills:skills/test/SKILL.md",
+            "name": "test2",
+            "status": STATUS_RECOMMENDED,
+            "manual_pick": False,
+            "reason_codes": [],
+        }
+        apply_manual_overrides([e1, e2], data)
+
+        self.assertEqual(e1["status"], STATUS_EXCLUDED)
+        self.assertIn("MANUAL_EXCLUDED", e1["reason_codes"])
+        self.assertEqual(e2["status"], STATUS_RECOMMENDED)
+
 
 if __name__ == "__main__":
     unittest.main()

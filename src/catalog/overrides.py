@@ -14,6 +14,35 @@ DEFAULT_OVERRIDES_PATH = "config/governance/overrides.json"
 SKILL_ID_PATTERN = re.compile(r"^[^/\s]+/[^/\s]+(:[^\s]+)?$")
 
 
+def matches_exclusion_keyword(skill_id: str, keywords: list[str]) -> bool:
+    """按技能 ID 的词边界匹配，expo 不匹配 export；不扫描说明正文。"""
+    return any(re.search(r"(?<![a-z0-9])" + re.escape(word) + r"(?![a-z0-9])",
+                         skill_id, re.IGNORECASE) for word in keywords)
+
+
+class ManualExclusions(dict):
+    """精确 ID 映射；成员检查同时支持关键词，keys() 仍仅返回精确 ID。"""
+
+    def __init__(self, keywords=()):
+        super().__init__()
+        self.keywords = list(keywords)
+
+    def __contains__(self, skill_id):
+        return super().__contains__(skill_id) or (
+            isinstance(skill_id, str) and matches_exclusion_keyword(skill_id, self.keywords))
+
+    def get(self, skill_id, default=None):
+        val = super().get(skill_id)
+        if val is not None:
+            return val
+        if isinstance(skill_id, str) and matches_exclusion_keyword(skill_id, self.keywords):
+            return {"skill_id": skill_id, "reason": "匹配关键词黑名单", "keyword": True}
+        return default
+
+    def __bool__(self):
+        return len(self) > 0 or bool(self.keywords)
+
+
 def load_overrides(path: str | Path = DEFAULT_OVERRIDES_PATH) -> dict:
     """加载 overrides.json，不存在时返回默认结构。"""
     file_path = Path(path)
@@ -44,6 +73,13 @@ def validate_overrides(data: dict, known_skill_ids: set[str] | None = None) -> l
     errors: list[str] = []
     if not isinstance(data, dict):
         return ["overrides 根结构必须是 JSON 对象"]
+
+    keywords = data.get("keyword_exclusions", [])
+    if not isinstance(keywords, list) or any(
+        not isinstance(word, str) or not word.strip() or word != word.strip()
+        for word in keywords
+    ):
+        errors.append("keyword_exclusions 必须是非空关键词字符串组成的数组")
 
     version = data.get("overrides_version")
     if not version:
@@ -189,7 +225,7 @@ def get_manual_exclusions(data: dict) -> dict[str, dict]:
     if not isinstance(data, dict):
         return {}
     exclusions = data.get("manual_exclusions") or []
-    result: dict[str, dict] = {}
+    result = ManualExclusions(data.get("keyword_exclusions", []))
     for item in exclusions:
         if isinstance(item, dict):
             sid = item.get("skill_id")
