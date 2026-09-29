@@ -336,7 +336,9 @@ def sanitize_report_for_public(report: dict[str, Any]) -> dict[str, Any]:
             "current_round": int(search.get("current_round") or 0),
             "rounds_history": [{"round": r.get("round"), "strategy": r.get("strategy"),
                                 "repos": r.get("new_repos", 0), "candidates": r.get("candidates", 0),
-                                "evaluated": r.get("evaluated", 0)} for r in search.get("rounds_history", [])],
+                                "evaluated": r.get("evaluated", 0),
+                                "batch_index": r.get("batch_index", 0),
+                                "consecutive_zero_batches": r.get("consecutive_zero_batches", 0)} for r in search.get("rounds_history", [])],
             "query_yield": {
                 str(q): {
                     "total_repos": int(v.get("total_repos", 0)),

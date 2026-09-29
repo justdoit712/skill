@@ -646,7 +646,8 @@ def execute_find_skill(topic="", *, limit=None, max_evaluations=None, max_tokens
                        expand_and_collect_candidates_fn=None, search_github_repos_fn=None,
                        owned_ids=None, max_clarification_turns=None,
                        input_fn=input, resume_dir=None, retry_failed_searches=False,
-                       enable_terminology_completion=None):
+                       enable_terminology_completion=None,
+                       enable_active_reflection=None):
     from src.infra.llm import validate_model_config
     from src.infra.owned import load_owned_ids
     if retry_failed_searches and resume_dir is None:
@@ -695,6 +696,14 @@ def execute_find_skill(topic="", *, limit=None, max_evaluations=None, max_tokens
             else run_cfg.get("enable_terminology_completion", False)
         )
     params["enable_terminology_completion"] = bool(enable_terminology_completion)
+
+    if enable_active_reflection is None:
+        enable_active_reflection = bool(
+            prev_params.get("enable_active_reflection", False)
+            if resumed
+            else run_cfg.get("enable_active_reflection", False)
+        )
+    params["enable_active_reflection"] = bool(enable_active_reflection)
 
     if max_clarification_turns is None:
         raw_turns = run_cfg.get("max_clarification_turns")
@@ -809,11 +818,15 @@ def execute_find_skill(topic="", *, limit=None, max_evaluations=None, max_tokens
             reason = state.stop_reason()
             if reason is None:
                 cfg.setdefault("limits", {})["max_output_tokens"] = EVAL_MAX_OUTPUT_TOKENS
+                run_rounds_kwargs = {}
+                if _supports_kwarg(run_rounds, "enable_active_reflection"):
+                    run_rounds_kwargs["enable_active_reflection"] = params["enable_active_reflection"]
                 reason = run_rounds(state, cfg, api_key, transport,
                     search_github_repos_fn or search_github_repos_for_query,
                     expand_and_collect_candidates_fn or expand_and_collect_candidates,
                     fetch_candidate_materials_fn or fetch_candidate_materials,
-                    _evaluate_candidates, owned_ids, sleep, log)
+                    _evaluate_candidates, owned_ids, sleep, log,
+                    **run_rounds_kwargs)
     except RunStopped as exc:
         reason = exc.reason
     except KeyboardInterrupt:
@@ -928,6 +941,11 @@ def main(argv: list[str] | None = None, *, root: Path | None = None) -> int:
         action="store_true",
         help="启用技术术语有界补全（在现有查询预算内合并术语别名）",
     )
+    parser.add_argument(
+        "--enable-active-reflection",
+        action="store_true",
+        help="启用基于评估滑动窗口的主动反思（连续批次无合格技能时主动拓词检索）",
+    )
 
     try:
         args = parser.parse_args(argv)
@@ -970,6 +988,7 @@ def main(argv: list[str] | None = None, *, root: Path | None = None) -> int:
             resume_dir=resume_path,
             retry_failed_searches=args.retry_failed_searches,
             enable_terminology_completion=args.enable_terminology_completion if args.enable_terminology_completion else None,
+            enable_active_reflection=args.enable_active_reflection if args.enable_active_reflection else None,
         )
     except KeyboardInterrupt:
         return 130

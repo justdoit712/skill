@@ -5,5 +5,6 @@
   "max_rounds": 3,
   "max_tokens": "20 000 000",
   "max_clarification_turns": 3,
+  "enable_active_reflection": true,
   "note": "limit 为达标即停的短名单目标；max_rounds 为总检索轮数（包含首轮）；max_evaluations 为累计评估尝试上限；max_tokens 包含规划、评估和反思，用量达到阈值后不再发起请求；max_clarification_turns 为人机澄清轮数。续跑继承累计预算，可用命令行覆盖。"
 }
