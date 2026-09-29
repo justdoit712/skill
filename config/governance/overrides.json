@@ -146,6 +146,42 @@
       "reason": "用户收藏",
       "added_at": "2026-09-27",
       "from": "candidate"
+    },
+    {
+      "skill_id": "gauss314/skills:skills/data912/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-29",
+      "from": "recommended"
+    },
+    {
+      "skill_id": "gauss314/skills:skills/sec-data/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-29",
+      "from": "recommended"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/1on1-agenda/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-29",
+      "from": "recommended"
+    },
+    {
+      "skill_id": "thousandcents/futures-research:SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-29",
+      "from": "recommended"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/dead-code-eliminator/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-29",
+      "from": "recommended"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/debt-payoff-planner/SKILL.md",
+      "reason": "用户收藏",
+      "added_at": "2026-09-29",
+      "from": "recommended"
     }
   ],
   "manual_exclusions": [
@@ -398,6 +434,56 @@
       "skill_id": "expo/skills:plugins/expo/skills/eas-app-stores/SKILL.md",
       "reason": "用户屏蔽/删除",
       "added_at": "2026-09-26"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/app-store-copy/SKILL.md",
+      "reason": "用户屏蔽/删除",
+      "added_at": "2026-09-29"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/app-store-release-prep/SKILL.md",
+      "reason": "用户屏蔽/删除",
+      "added_at": "2026-09-29"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/audience-targeting/SKILL.md",
+      "reason": "用户屏蔽/删除",
+      "added_at": "2026-09-29"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/buying-signal-tracker/SKILL.md",
+      "reason": "用户屏蔽/删除",
+      "added_at": "2026-09-29"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/cold-email-craft/SKILL.md",
+      "reason": "用户屏蔽/删除",
+      "added_at": "2026-09-29"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/community-engagement-playbook/SKILL.md",
+      "reason": "用户屏蔽/删除",
+      "added_at": "2026-09-29"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/discovery-call-prep/SKILL.md",
+      "reason": "用户屏蔽/删除",
+      "added_at": "2026-09-29"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/donor-communications/SKILL.md",
+      "reason": "用户屏蔽/删除",
+      "added_at": "2026-09-29"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/decision-making/SKILL.md",
+      "reason": "用户屏蔽/删除",
+      "added_at": "2026-09-29"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/data-room-builder/SKILL.md",
+      "reason": "用户屏蔽/删除",
+      "added_at": "2026-09-29"
     }
   ]
 }

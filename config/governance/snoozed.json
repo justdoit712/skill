@@ -598,6 +598,181 @@
       "expires_at": "2027-02-23",
       "days": 150,
       "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "expo/skills:plugins/expo/skills/eas-simulator/SKILL.md",
+      "snoozed_at": "2026-09-29",
+      "expires_at": "2027-02-26",
+      "days": 150,
+      "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "expo/skills:plugins/expo/skills/eas-update/SKILL.md",
+      "snoozed_at": "2026-09-29",
+      "expires_at": "2027-02-26",
+      "days": 150,
+      "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "expo/skills:plugins/expo/skills/expo-data-fetching/SKILL.md",
+      "snoozed_at": "2026-09-29",
+      "expires_at": "2027-02-26",
+      "days": 150,
+      "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "expo/skills:plugins/expo/skills/expo-project-structure/SKILL.md",
+      "snoozed_at": "2026-09-29",
+      "expires_at": "2027-02-26",
+      "days": 150,
+      "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "expo/skills:plugins/expo/skills/expo-upgrade/SKILL.md",
+      "snoozed_at": "2026-09-29",
+      "expires_at": "2027-02-26",
+      "days": 150,
+      "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "getsentry/skills:skills/iterate-pr/SKILL.md",
+      "snoozed_at": "2026-09-29",
+      "expires_at": "2027-02-26",
+      "days": 150,
+      "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "getsentry/skills:skills/triage-frontend-issues/SKILL.md",
+      "snoozed_at": "2026-09-29",
+      "expires_at": "2027-02-26",
+      "days": 150,
+      "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "better-auth/skills:better-auth/best-practices/SKILL.md",
+      "snoozed_at": "2026-09-29",
+      "expires_at": "2027-02-26",
+      "days": 150,
+      "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "better-auth/skills:better-auth/emailAndPassword/SKILL.md",
+      "snoozed_at": "2026-09-29",
+      "expires_at": "2027-02-26",
+      "days": 150,
+      "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/ab-test-analyzer/SKILL.md",
+      "snoozed_at": "2026-09-29",
+      "expires_at": "2027-02-26",
+      "days": 150,
+      "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/academic-essay/SKILL.md",
+      "snoozed_at": "2026-09-29",
+      "expires_at": "2027-02-26",
+      "days": 150,
+      "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/accessibility-audit/SKILL.md",
+      "snoozed_at": "2026-09-29",
+      "expires_at": "2027-02-26",
+      "days": 150,
+      "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/ad-creative-testing/SKILL.md",
+      "snoozed_at": "2026-09-29",
+      "expires_at": "2027-02-26",
+      "days": 150,
+      "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/agency-monthly-report/SKILL.md",
+      "snoozed_at": "2026-09-29",
+      "expires_at": "2027-02-26",
+      "days": 150,
+      "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/agency-qbr-upsell/SKILL.md",
+      "snoozed_at": "2026-09-29",
+      "expires_at": "2027-02-26",
+      "days": 150,
+      "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/alert-tuning/SKILL.md",
+      "snoozed_at": "2026-09-29",
+      "expires_at": "2027-02-26",
+      "days": 150,
+      "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/amazon-listing-optimizer/SKILL.md",
+      "snoozed_at": "2026-09-29",
+      "expires_at": "2027-02-26",
+      "days": 150,
+      "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/api-client-generator/SKILL.md",
+      "snoozed_at": "2026-09-29",
+      "expires_at": "2027-02-26",
+      "days": 150,
+      "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/annual-plan/SKILL.md",
+      "snoozed_at": "2026-09-29",
+      "expires_at": "2027-02-26",
+      "days": 150,
+      "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/api-versioning-strategist/SKILL.md",
+      "snoozed_at": "2026-09-29",
+      "expires_at": "2027-02-26",
+      "days": 150,
+      "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/connection-pool-tuner/SKILL.md",
+      "snoozed_at": "2026-09-29",
+      "expires_at": "2027-02-26",
+      "days": 150,
+      "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/design-qa-checklist/SKILL.md",
+      "snoozed_at": "2026-09-29",
+      "expires_at": "2027-02-26",
+      "days": 150,
+      "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/data-story/SKILL.md",
+      "snoozed_at": "2026-09-29",
+      "expires_at": "2027-02-26",
+      "days": 150,
+      "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/data-quality/SKILL.md",
+      "snoozed_at": "2026-09-29",
+      "expires_at": "2027-02-26",
+      "days": 150,
+      "reason": "用户暂不关注"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/creator-content-calendar/SKILL.md",
+      "snoozed_at": "2026-09-29",
+      "expires_at": "2027-02-26",
+      "days": 150,
+      "reason": "用户暂不关注"
     }
   ]
 }
