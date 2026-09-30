@@ -70,6 +70,7 @@ const el = {
   btnCloseModal: document.getElementById("btn-close-modal"),
   modalTitle: document.getElementById("modal-title"),
   modalDesc: document.getElementById("modal-desc"),
+  tabModalFavorites: document.getElementById("tab-modal-favorites"),
   tabModalOverrides: document.getElementById("tab-modal-overrides"),
   tabModalSnoozed: document.getElementById("tab-modal-snoozed"),
   tabModalOwned: document.getElementById("tab-modal-owned"),

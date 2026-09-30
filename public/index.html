@@ -118,11 +118,12 @@
     </div>
     <div class="modal-body">
       <div class="modal-tab-bar" role="tablist" aria-label="配置文件页签">
-        <button id="tab-modal-overrides" class="modal-tab-btn is-active" type="button" role="tab" aria-selected="true" aria-controls="sync-modal-tabpanel">overrides.json (收藏/屏蔽)</button>
+        <button id="tab-modal-favorites" class="modal-tab-btn is-active" type="button" role="tab" aria-selected="true" aria-controls="sync-modal-tabpanel">favorites.json (人工收藏)</button>
+        <button id="tab-modal-overrides" class="modal-tab-btn" type="button" role="tab" aria-selected="false" aria-controls="sync-modal-tabpanel">overrides.json (人工屏蔽)</button>
         <button id="tab-modal-snoozed" class="modal-tab-btn" type="button" role="tab" aria-selected="false" aria-controls="sync-modal-tabpanel">snoozed.json (暂不看 150天)</button>
         <button id="tab-modal-owned" class="modal-tab-btn" type="button" role="tab" aria-selected="false" aria-controls="sync-modal-tabpanel">owned-skills.json (已收录变更包)</button>
       </div>
-      <div id="sync-modal-tabpanel" role="tabpanel" aria-labelledby="tab-modal-overrides">
+      <div id="sync-modal-tabpanel" role="tabpanel" aria-labelledby="tab-modal-favorites">
         <p id="modal-desc">本站部署于 GitHub Pages 静态环境。请将以下生成的待同步变更记录合入仓库中。</p>
         <p id="modal-cross-warning" class="modal-cross-warning" hidden></p>
         <div class="json-preview-container">

@@ -63,6 +63,7 @@ from src.shared.versions import build_config_fingerprint
 from src.shared.model_config import material_fetch_limit
 from .index import CatalogContext, build_catalog, build_entry, index_by_id
 from .store import mutate_catalog
+from .filter_rules import filter_discovered_candidates, filter_new_evaluation, successful_evaluation_skill_ids
 from .overrides import apply_manual_overrides_to_entry, get_manual_exclusions, get_manual_picks
 from .snooze import apply_snooze_overrides, get_active_snoozed, load_snooze
 from .pool import (
@@ -286,6 +287,13 @@ def prepare_pool(
                     if it.status == STATUS_LENGTH_EXCEEDED} if previous_pool else {}
     blocked_skips = {it.candidate.skill_id: it for it in previous_pool.items
                      if it.status == STATUS_BLOCKED} if previous_pool else {}
+    existing_ids = set(index_by_id((_read(root / "data" / "catalog.json", {}) or {}).get("entries") or [])) | set(old_recommended)
+    if previous_pool:
+        existing_ids.update(it.candidate.skill_id for it in previous_pool.items if it.candidate.skill_id)
+    existing_ids.update(get_manual_picks(cfg.get("favorites") or {}).keys())
+    existing_ids.update(manual_exclusions)
+    existing_ids.update(active_snoozed)
+    existing_ids.update(owned_ids)
 
     def count_actionable(p) -> int:
         return sum(
@@ -320,8 +328,12 @@ def prepare_pool(
         )
         if report is not None:
             report["discovery_failures"] = sum(not item.ok for item in outcomes)
+        filter_rules = cfg.get("filter_rules")
+        filtered_candidates = filter_discovered_candidates(
+            candidates, existing_ids, filter_rules, log=log, report=report
+        )
         pool = create_pool_from_candidates(
-            list(candidates) + [it.candidate for it in length_skips.values()]
+            list(filtered_candidates) + [it.candidate for it in length_skips.values()]
             + [it.candidate for it in blocked_skips.values()],
             old_recommended, cfg["source_types"])
         for item in pool.items:
@@ -354,7 +366,11 @@ def prepare_pool(
             )
             if report is not None:
                 report["discovery_failures"] = sum(not item.ok for item in outcomes)
-            added = append_new_candidates(pool, candidates, old_recommended, cfg["source_types"])
+            filter_rules = cfg.get("filter_rules")
+            filtered_candidates = filter_discovered_candidates(
+                candidates, existing_ids, filter_rules, log=log, report=report
+            )
+            added = append_new_candidates(pool, filtered_candidates, old_recommended, cfg["source_types"])
             save_pool(pool_path, pool)
             actionable_count = count_actionable(pool)
             log(f"增量补水完成，新增 {added} 条候选入池，当前池总量 {len(pool)} 条，可处理候选 {actionable_count} 条。")
@@ -415,7 +431,7 @@ def apply_result(
     apply_snooze_overrides([entry], active_snoozed)
     entries[candidate.skill_id] = entry
 
-    mutate_catalog(root, lambda current: build_catalog(list(entries.values()), context=context, overrides=cfg.get("overrides"), snoozed=cfg.get("snoozed"), owned=cfg.get("owned")))
+    mutate_catalog(root, lambda current: build_catalog(list(entries.values()), context=context, favorites=cfg.get("favorites"), overrides=cfg.get("overrides"), snoozed=cfg.get("snoozed"), owned=cfg.get("owned")))
     return entry
 
 
@@ -597,6 +613,7 @@ class LocalCollection:
     max_format_failures: int = 10
     stop_causes: set = field(default_factory=set)
     _skill_eval_records_index: Any = None
+    evaluated_skill_ids: set[str] = field(default_factory=set)
 
     def save(self):
         save_and_render(self.run_dir, self.local, self.report, self.pool, self.usage,
@@ -1121,8 +1138,13 @@ def process_candidate(state, item):
         return False
     if result['ok']:
         evaluation = result['evaluation']
+        filtered_decision = filter_new_evaluation(
+            decide(evaluation, state.cfg['rules']), evaluation, state.cfg.get("filter_rules"),
+            state.entries.get(candidate.skill_id),
+            previously_evaluated=candidate.skill_id in state.evaluated_skill_ids,
+        )
         outcome = {
-            **decide(evaluation, state.cfg['rules']),
+            **filtered_decision,
             'evaluation': evaluation,
             'model': getattr(result.get('call'), 'requested_model', None),
             'model_config_fingerprint': getattr(result.get('call'), 'model_config_fingerprint', None),
@@ -1133,11 +1155,15 @@ def process_candidate(state, item):
             'normalization_version': NORMALIZATION_VERSION,
             'output_contract_version': LLM_OUTPUT_CONTRACT_VERSION,
         }
+        if outcome.get("tag_filtered"):
+            state.log(f"[阶段过滤] #{seq} {candidate.skill_id}：命中标签过滤规则 '{outcome['blocked_tag']}'，结论置为 excluded，不进入推荐或候选。")
+            state.report["tag_filtered"] = state.report.get("tag_filtered", 0) + 1
         outcome['candidate'] = asdict(candidate)
         outcome['request_usage'] = (state.ledger.get(eid) or {}).get('requests', [])
         outcome['prescreen'] = asdict(pres)
         outcome['evaluated_at'] = now_local().isoformat()
         state.ledger.complete(eid, outcome)
+        state.evaluated_skill_ids.add(candidate.skill_id)
         ledger_rec = state.ledger.get(eid)
         if ledger_rec:
             ledger_rec['normalized_content_fingerprint'] = candidate.normalized_content_fingerprint
@@ -1302,7 +1328,7 @@ def _collect(root, local, settings, cfg, discover_fn, fetch_fn, evaluate_fn, log
     max_retries = settings.get('max_retries', 5)
     max_attempts = max_retries + 1
     max_format_failures = settings.get('max_format_failures_without_valid_result', 10)
-    manual_picks = get_manual_picks(cfg.get('overrides') or {})
+    manual_picks = get_manual_picks(cfg.get('favorites') or cfg.get('overrides') or {})
     manual_exclusions = get_manual_exclusions(cfg.get('overrides') or {})
     baseline = _read(root / 'data' / 'catalog.json', {'entries': []})
     entries = index_by_id(baseline.get('entries') or [])
@@ -1394,6 +1420,10 @@ def _collect(root, local, settings, cfg, discover_fn, fetch_fn, evaluate_fn, log
         max_attempts=max_attempts, max_retries=max_retries, pending_items=[],
         owned_ids=owned_ids, skipped_owned_ids=skipped_owned_ids,
     )
+    if cfg.get("filter_rules") and cfg["filter_rules"].has_evaluation_rules:
+        state.evaluated_skill_ids = successful_evaluation_skill_ids(
+            ledger.evaluations_dir, root / "data" / "state" / "evaluations",
+        )
     try:
         from src.infra.model_pool import ModelPool, PoolStopped
         state.model_pool = None

@@ -19,6 +19,7 @@ from .budget import BudgetLedger
 from .decide import decide
 from .prescreen import should_static_skip
 from .evaluation import evaluate, evaluation_id
+from .filter_rules import filter_new_evaluation, successful_evaluation_skill_ids
 from .models import Candidate, PrescreenResult
 from .overrides import apply_manual_overrides, get_manual_exclusions, get_manual_picks
 from .report import build_report, write_report
@@ -57,7 +58,8 @@ def _previous_entries(data_dir: Path) -> list[dict]:
 
 
 def _evaluate_queue(queue, cfg, ledger, staged, started, token_cap,
-                    fetch_fn, evaluate_fn, api_key, sleep, model_pool_root=None):
+                    fetch_fn, evaluate_fn, api_key, sleep, model_pool_root=None,
+                    previous_entries=None):
     from src.infra.model_pool import ModelPool, PoolStopped, PoolReselect
     pool = None
     pool_stop = None
@@ -77,7 +79,7 @@ def _evaluate_queue(queue, cfg, ledger, staged, started, token_cap,
     settled_items: list[str] = []
     usage_unknown = False
 
-    manual_picks_dict = get_manual_picks((cfg or {}).get("overrides") or {})
+    manual_picks_dict = get_manual_picks((cfg or {}).get("favorites") or (cfg or {}).get("overrides") or {})
     manual_picks_set = set(manual_picks_dict.keys())
     manual_exclusions_dict = get_manual_exclusions((cfg or {}).get("overrides") or {})
     manual_exclusions_set = manual_exclusions_dict
@@ -85,6 +87,14 @@ def _evaluate_queue(queue, cfg, ledger, staged, started, token_cap,
     active_snoozed_set = set(active_snoozed_dict.keys())
     owned_cfg = (cfg or {}).get("owned") or {}
     owned_ids = {it["skill_id"] for it in owned_cfg.get("items", [])}
+    previous_by_id = index_by_id(previous_entries or [])
+    evaluated_skill_ids = set()
+    filter_rules = cfg.get("filter_rules")
+    if filter_rules and filter_rules.has_evaluation_rules:
+        directories = [ledger.evaluations_dir]
+        if model_pool_root is not None:
+            directories.append(Path(model_pool_root) / "data" / "local" / "state" / "evaluations")
+        evaluated_skill_ids = successful_evaluation_skill_ids(*directories)
 
     for item in queue.get("pending", []):
         candidate = candidate_from_payload(item["candidate"])
@@ -236,12 +246,15 @@ def _evaluate_queue(queue, cfg, ledger, staged, started, token_cap,
             continue
 
         evaluation = outcome["evaluation"]
-        decision = decide(evaluation, cfg["rules"])
+        decision = filter_new_evaluation(
+            decide(evaluation, cfg["rules"]), evaluation, filter_rules,
+            previous_by_id.get(candidate.skill_id),
+            previously_evaluated=candidate.skill_id in evaluated_skill_ids,
+        )
         ledger.complete(
             eid,
             {
-                "decision": decision["decision"],
-                "reason_codes": decision["reason_codes"],
+                **decision,
                 "main_category": evaluation.get("main_category"),
                 "evaluation": evaluation,
                 "model": getattr(call, "requested_model", None),
@@ -255,13 +268,14 @@ def _evaluate_queue(queue, cfg, ledger, staged, started, token_cap,
             started,
         )
         results[candidate.skill_id] = {"status": "completed", "decision": decision["decision"]}
+        evaluated_skill_ids.add(candidate.skill_id)
         evaluated += 1
 
     return {"results": results, "evaluated": evaluated, "skipped": skipped, "settled_items": settled_items, "tokens_used": tokens_used, "token_stopped": token_stopped, "usage_unknown": usage_unknown, "stop_reason": pool_stop}
 
 
 def _build_evaluated_catalog(previous_entries, queue, cfg, ledger, context):
-    manual_picks_dict = get_manual_picks(cfg.get("overrides") or {})
+    manual_picks_dict = get_manual_picks((cfg or {}).get("favorites") or (cfg or {}).get("overrides") or {})
     manual_exclusions_dict = get_manual_exclusions(cfg.get("overrides") or {})
     active_snoozed_set = set(get_active_snoozed(cfg.get("snoozed") or {}))
     owned_cfg = (cfg or {}).get("owned") or {}
@@ -285,6 +299,9 @@ def _build_evaluated_catalog(previous_entries, queue, cfg, ledger, context):
             else None
         )
         previous = previous_by_id.get(cand.skill_id)
+        if evaluation is None and previous and cand.skill_id in manual_picks_dict:
+            # 收藏跳过评估时，保留已提交的条目，不能用无结果事件改成 pending。
+            continue
         event_kind = "cached_evaluation" if evaluation is not None else "no_evaluation"
         upstream_status = UPSTREAM_GONE if fetch_note.get("upstream_gone") else UPSTREAM_OK
 
@@ -326,6 +343,7 @@ def _build_evaluated_catalog(previous_entries, queue, cfg, ledger, context):
     catalog = build_catalog(
         merged,
         context=context,
+        favorites=(cfg or {}).get("favorites"),
         overrides=(cfg or {}).get("overrides"),
         snoozed=(cfg or {}).get("snoozed"),
         owned=(cfg or {}).get("owned"),
@@ -372,7 +390,8 @@ def phase_evaluate(
 
     batch = _evaluate_queue(queue, cfg, ledger, staged, started, token_cap,
                             fetch_fn, evaluate_fn, api_key, sleep,
-                            model_pool_root=Path(config_dir).resolve().parent)
+                            model_pool_root=Path(config_dir).resolve().parent,
+                            previous_entries=previous_entries)
     results, evaluated, skipped = batch["results"], batch["evaluated"], batch["skipped"]
     settled_items = batch["settled_items"]
     tokens_used, token_stopped = batch["tokens_used"], batch["token_stopped"]

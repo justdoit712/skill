@@ -140,10 +140,11 @@ def recover_completed_results(root_dir: str | Path = ".") -> dict:
 
     # Preserve the already committed manual policy; config synchronization is separate.
     values = list(entries.values())
-    apply_manual_overrides(values, catalog.get("overrides") or {})
+    apply_manual_overrides(values, catalog.get("favorites") or catalog.get("overrides") or {},
+                           catalog.get("overrides") or {})
     apply_snooze_overrides(values, catalog.get("snoozed"))
     if restored:
-        updated = build_catalog(values, context=context, overrides=catalog.get("overrides"), snoozed=catalog.get("snoozed"), owned=catalog.get("owned"))
+        updated = build_catalog(values, context=context, favorites=catalog.get("favorites"), overrides=catalog.get("overrides"), snoozed=catalog.get("snoozed"), owned=catalog.get("owned"))
         write_catalog(updated, data_path=data / "catalog.json", public_path=root / "public" / "data" / "catalog.json")
     else:
         recover_catalog_projections(root)
@@ -193,11 +194,12 @@ def sync_config_to_catalog(
     root_dir: str | Path = ".",
     catalog_path: str | Path | None = None,
     public_catalog_path: str | Path | None = None,
+    favorites_path: str | Path | None = None,
     overrides_path: str | Path | None = None,
     snoozed_path: str | Path | None = None,
     owned_path: str | Path | None = None,
 ) -> dict:
-    """仅同步 overrides.json 和 snoozed.json 到已有的 catalog.json。
+    """仅同步 favorites.json, overrides.json 和 snoozed.json 到已有的 catalog.json。
 
     严格遵循设计原则：
     - 不联网、0 模型调用、不消耗 Token、不写账本；
@@ -205,7 +207,8 @@ def sync_config_to_catalog(
     - 绝不修改条目的原评估内容（中文简述、分类、评估证据等）和原检查时间；
     - 自动剔除过期或已撤销条目上的残留 snooze 标记。
     """
-    from .overrides import apply_manual_overrides, get_manual_exclusions, get_manual_picks, load_overrides, validate_overrides
+    from .favorites import get_manual_picks, load_favorites, validate_favorites
+    from .overrides import apply_manual_overrides, get_manual_exclusions, load_overrides, validate_overrides
     from .snooze import apply_snooze_overrides, get_active_snoozed, load_snooze, validate_snooze
     from src.infra.owned import load_owned_config
 
@@ -224,6 +227,7 @@ def sync_config_to_catalog(
             return flat_p
         return sub_p
 
+    favorites_file = Path(favorites_path) if favorites_path else _res("favorites.json", "governance")
     overrides_file = Path(overrides_path) if overrides_path else _res("overrides.json", "governance")
     snooze_file = Path(snoozed_path) if snoozed_path else _res("snoozed.json", "governance")
     owned_file = Path(owned_path) if owned_path else _res("owned-skills.json", "governance")
@@ -234,14 +238,35 @@ def sync_config_to_catalog(
     catalog = json.loads(data_file.read_text(encoding="utf-8"))
     entries = catalog.get("entries") or []
     known_skill_ids = {e.get("skill_id") for e in entries if e.get("skill_id")}
+    # 已收录技能可能已从主索引隐藏，仍是可信的收藏身份，拆分配置不能丢掉它们。
+    owned_cfg = load_owned_config(owned_file)
+    known_skill_ids.update(item["skill_id"] for item in owned_cfg.get("items", []))
+    # 历史人工策略可能指向已不在主索引中的技能；认可已提交的身份，不放行新拼写错误。
+    for saved_config, collection in (
+        (catalog.get("favorites") or {}, "manual_picks"),
+        (catalog.get("overrides") or {}, "manual_picks"),
+        (catalog.get("overrides") or {}, "manual_exclusions"),
+        (catalog.get("snoozed") or {}, "snoozed"),
+    ):
+        items = saved_config if isinstance(saved_config, list) else saved_config.get(collection, [])
+        known_skill_ids.update(item["skill_id"] for item in items if item.get("skill_id"))
+
+    favorites = load_favorites(favorites_file)
+    fav_errors = validate_favorites(favorites, known_skill_ids)
+    if fav_errors:
+        raise ValueError("favorites.json 校验失败：" + "；".join(fav_errors))
 
     overrides = load_overrides(overrides_file)
     override_errors = validate_overrides(overrides, known_skill_ids)
     if override_errors:
         raise ValueError("overrides.json 校验失败：" + "；".join(override_errors))
 
-    active_picks = get_manual_picks(overrides)
+    active_picks = get_manual_picks(favorites)
     active_exclusions = get_manual_exclusions(overrides)
+
+    conflict_ids = set(active_picks.keys()).intersection(set(active_exclusions.keys()))
+    if conflict_ids:
+        raise ValueError("跨文件互斥校验失败：skill_id 同时存在于收藏区与排除区：" + "；".join(sorted(conflict_ids)))
 
     snooze_cfg = load_snooze(snooze_file)
     snooze_errors = validate_snooze(
@@ -254,13 +279,13 @@ def sync_config_to_catalog(
         raise ValueError("snoozed.json 校验失败：" + "；".join(snooze_errors))
 
     # 应用人工收藏与黑名单
-    apply_manual_overrides(entries, overrides)
+    apply_manual_overrides(entries, favorites, active_exclusions)
     # 应用活跃冷冻（自动清理非活跃的残留 snooze）
     apply_snooze_overrides(entries, snooze_cfg)
 
+    catalog["favorites"] = favorites
     catalog["overrides"] = overrides
     catalog["snoozed"] = snooze_cfg
-    owned_cfg = load_owned_config(owned_file)
     catalog["owned"] = owned_cfg
 
     # 重新计算各分类统计
@@ -325,6 +350,7 @@ def enrich_catalog(root: Path | str) -> dict[str, Any]:
     new_catalog = build_catalog(
         enriched_entries,
         context=ctx,
+        favorites=catalog.get("favorites"),
         overrides=catalog.get("overrides"),
         snoozed=catalog.get("snoozed"),
         owned=catalog.get("owned"),

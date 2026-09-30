@@ -1,0 +1,14 @@
+{
+  "filter_rules_version": "1.0.0",
+  "discovery": {
+    "blocked_keywords": [
+      "expo",
+      "App Store"
+    ]
+  },
+  "evaluation": {
+    "blocked_tags": [
+      "营销规划"
+    ]
+  }
+}

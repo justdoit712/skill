@@ -14,7 +14,9 @@ from src.infra.model_config import load_model_config
 from src.infra.llm import validate_model_config
 from src.infra.owned import load_owned_config
 from src.shared.owned import validate_owned_config
-from .overrides import get_manual_exclusions, get_manual_picks, load_overrides, validate_overrides
+from .favorites import get_manual_picks, load_favorites, validate_favorites
+from .filter_rules import FilterRules, load_filter_rules, validate_filter_rules
+from .overrides import get_manual_exclusions, load_overrides, validate_overrides
 from .prescreen import load_config
 from .snooze import load_snooze, validate_snooze
 
@@ -76,7 +78,15 @@ def load_all_config(config_dir: str | Path = "config") -> dict:
     except FileNotFoundError:
         model_cfg = {}
 
-    overrides_cfg = load_overrides(_resolve_config_file(base, "overrides.json", "governance"))
+    favorites_file = _resolve_config_file(base, "favorites.json", "governance")
+    favorites_cfg = load_favorites(favorites_file)
+
+    overrides_file = _resolve_config_file(base, "overrides.json", "governance")
+    overrides_cfg = load_overrides(overrides_file)
+
+    filter_rules_file = _resolve_config_file(base, "filter-rules.json", "governance")
+    filter_rules_cfg = load_filter_rules(filter_rules_file)
+
     snooze_cfg = load_snooze(_resolve_config_file(base, "snoozed.json", "governance"))
     sources_file = _resolve_config_file(base, "sources.json", "discovery")
     sources_cfg = _load_json(sources_file) if sources_file.exists() else {}
@@ -89,7 +99,9 @@ def load_all_config(config_dir: str | Path = "config") -> dict:
         "searches": load_searches(str(base)),
         "sources": sources_cfg,
         "model": model_cfg,
+        "favorites": favorites_cfg,
         "overrides": overrides_cfg,
+        "filter_rules": filter_rules_cfg,
         "snoozed": snooze_cfg,
         "owned": owned_cfg,
         "automation": load_automation(base),
@@ -112,11 +124,26 @@ def precheck(cfg: dict) -> list[str]:
     if not cfg["searches"].get("per_domain"):
         problems.append("searches.json 未定义任何领域的查询词")
     problems.extend(validate_model_config(cfg["model"]))
+    if "favorites" in cfg:
+        problems.extend(validate_favorites(cfg["favorites"]))
     if "overrides" in cfg:
         problems.extend(validate_overrides(cfg["overrides"]))
+    if "filter_rules" in cfg:
+        fr = cfg["filter_rules"]
+        if isinstance(fr, FilterRules):
+            pass
+        elif isinstance(fr, dict):
+            problems.extend(validate_filter_rules(fr))
+
+    # 跨文件互斥校验：同一个 skill_id 不能同时在 active picks 与 active exclusions 中
+    fav_source = cfg.get("favorites") or cfg.get("overrides") or {}
+    active_picks = set(get_manual_picks(fav_source).keys())
+    active_excl = set(get_manual_exclusions((cfg or {}).get("overrides") or {}).keys())
+    conflict_ids = active_picks.intersection(active_excl)
+    for cid in sorted(conflict_ids):
+        problems.append(f"skill_id 同时存在于收藏区与排除区：{cid}")
+
     if "snoozed" in cfg:
-        active_picks = set(get_manual_picks((cfg or {}).get("overrides") or {}).keys())
-        active_excl = set(get_manual_exclusions((cfg or {}).get("overrides") or {}).keys())
         problems.extend(
             validate_snooze(cfg["snoozed"], active_pick_ids=active_picks, active_exclusion_ids=active_excl)
         )
@@ -138,8 +165,8 @@ def precheck(cfg: dict) -> list[str]:
 
 __all__ = [
     "AUTOMATION_FILENAME",
-    "load_all_config",
     "load_automation",
-    "precheck",
     "load_searches",
+    "load_all_config",
+    "precheck",
 ]

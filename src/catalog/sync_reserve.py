@@ -21,6 +21,7 @@ from .dedupe import dedupe
 from .discovery import discover
 from .evaluation import evaluation_id
 from .models import Candidate, PrescreenResult
+from .filter_rules import filter_discovered_candidates
 from .overrides import get_manual_picks
 from .prescreen import DECISION_QUEUED, prescreen, should_static_skip
 from .snooze import get_active_snoozed
@@ -99,7 +100,7 @@ def _accumulate_plan(
             and _settled_for(ledger, skill_id, fingerprint, cfg or {})
         )
 
-    manual_picks_dict = get_manual_picks((cfg or {}).get("overrides") or {})
+    manual_picks_dict = get_manual_picks((cfg or {}).get("favorites") or (cfg or {}).get("overrides") or {})
     manual_picks_set = set(manual_picks_dict.keys())
     max_manual_checks = int(((cfg or {}).get("rules") or {}).get("run_limits", {}).get("max_manual_checks_per_run", 10) or 10)
 
@@ -201,8 +202,6 @@ def prepare(
         sleep=sleep,
     )
     merged = dedupe(candidates)
-    first_pass = [(candidate, prescreen(candidate, cfg["prescreen"], None)) for candidate in merged]
-
     source_types = cfg.get("source_types") or {}
     cat_entries = _catalogued_entries(Path(data_dir)) if data_dir else {}
     catalogued = {skill_id: entry.get("content_fingerprint") for skill_id, entry in cat_entries.items()}
@@ -212,6 +211,11 @@ def prepare(
         skill = _skill_of(item)
         if skill and item.get("content_fingerprint"):
             catalogued.setdefault(skill, item["content_fingerprint"])
+
+    existing_ids = set(cat_entries.keys()) | {_skill_of(it) for it in (pending or []) if _skill_of(it)}
+    filter_rules = cfg.get("filter_rules")
+    filtered_merged = filter_discovered_candidates(merged, existing_ids, filter_rules)
+    first_pass = [(candidate, prescreen(candidate, cfg["prescreen"], None)) for candidate in filtered_merged]
 
     owned_cfg = (cfg or {}).get("owned") or {}
     owned_items = owned_cfg.get("items", [])

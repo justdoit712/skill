@@ -17,6 +17,11 @@ import {
   snoozeSkill,
   unsnoozeSkill,
   calculateChangesCount,
+  computeFavoritesDiff,
+  computeOverridesDiff,
+  generateIncrementalFavoritesJson,
+  generateIncrementalOverridesJson,
+  generateFavoritesJson,
   generateOverridesJson,
   generateSnoozedJson,
   populateBaseline,
@@ -121,19 +126,25 @@ test("catalog-state: partitionEntries partitions entries correctly", () => {
   assert.equal(effectiveSnoozed[0].skill_id, "cand/tool4");
 });
 
-test("catalog-state: generateOverridesJson and generateSnoozedJson", () => {
+test("catalog-state: generateFavoritesJson, generateOverridesJson and generateSnoozedJson", () => {
   const state = createOverridesState();
   togglePick(state, "my/pick", "recommended", "2026-09-23");
   blockSkill(state, "my/block", "2026-09-23");
   snoozeSkill(state, "my/snooze", "2026-09-23", 150);
 
+  const favoritesJson = generateFavoritesJson(state);
+  const favoritesObj = JSON.parse(favoritesJson);
+  assert.equal(favoritesObj.favorites_version, "1.0.0");
+  assert.equal(favoritesObj.manual_picks.length, 1);
+  assert.equal(favoritesObj.manual_picks[0].skill_id, "my/pick");
+
   const overridesJson = generateOverridesJson(state);
   const overridesObj = JSON.parse(overridesJson);
   assert.equal(overridesObj.overrides_version, "1.0.0");
-  assert.equal(overridesObj.manual_picks.length, 1);
-  assert.equal(overridesObj.manual_picks[0].skill_id, "my/pick");
   assert.equal(overridesObj.manual_exclusions.length, 1);
   assert.equal(overridesObj.manual_exclusions[0].skill_id, "my/block");
+  assert.equal(overridesObj.manual_picks, undefined, "overrides 不应再包含 manual_picks");
+  assert.equal(overridesObj.keyword_exclusions, undefined, "overrides 不应再包含 keyword_exclusions");
 
   const snoozedJson = generateSnoozedJson(state);
   const snoozedObj = JSON.parse(snoozedJson);
@@ -142,37 +153,45 @@ test("catalog-state: generateOverridesJson and generateSnoozedJson", () => {
   assert.equal(snoozedObj.snoozed[0].skill_id, "my/snooze");
 });
 
-test("catalog-state: keyword exclusions survive edits, reload, and full export", () => {
-  const data = { overrides: {
-    keyword_exclusions: ["expo", "Crypto"], manual_picks: [], manual_exclusions: []
-  } };
+test("catalog-state: favorites and overrides incremental diff and baseline population", () => {
+  const data = {
+    favorites: {
+      manual_picks: [{ skill_id: "fav/1", reason: "测试收藏" }]
+    },
+    overrides: {
+      manual_exclusions: [{ skill_id: "excl/1", reason: "测试屏蔽" }]
+    }
+  };
   const state = createOverridesState();
   populateBaseline(state, data, "2026-09-29");
   assert.equal(calculateChangesCount(state), 0);
-  togglePick(state, "owner/pick", "recommended", "2026-09-29");
-  blockSkill(state, "owner/block", "2026-09-29");
-  assert.equal(calculateChangesCount(state), 2);
-  const exported = JSON.parse(generateOverridesJson(state, "2026-09-29"));
-  assert.deepEqual(exported.keyword_exclusions, ["expo", "Crypto"]);
-  assert.equal(exported.manual_picks.length, 1);
-  assert.equal(exported.manual_exclusions.length, 1);
-  assert.deepEqual(data.overrides.keyword_exclusions, ["expo", "Crypto"]);
+  assert.equal(isPicked(state, "fav/1"), true);
+  assert.equal(isExcluded(state, "excl/1"), true);
 
-  const reloaded = createOverridesState();
-  populateBaseline(reloaded, { overrides: exported }, "2026-09-29");
-  clearStorage(reloaded);
-  assert.deepEqual(JSON.parse(generateOverridesJson(reloaded)).keyword_exclusions, ["expo", "Crypto"]);
-  assert.equal(calculateChangesCount(reloaded), 0);
-});
+  // 收藏新条目与屏蔽已收藏条目
+  togglePick(state, "fav/new", "recommended", "2026-09-29");
+  blockSkill(state, "fav/1", "2026-09-29");
 
-test("catalog-state: legacy or cleared keyword configuration exports an empty list", () => {
-  const state = createOverridesState();
-  populateBaseline(state, { overrides: { keyword_exclusions: ["expo"] } });
-  populateBaseline(state, { overrides: { manual_picks: [], manual_exclusions: [] } });
-  assert.deepEqual(JSON.parse(generateOverridesJson(state)).keyword_exclusions, []);
-  populateBaseline(state, { overrides: { keyword_exclusions: [] } });
-  assert.deepEqual(JSON.parse(generateOverridesJson(state)).keyword_exclusions, []);
-  assert.deepEqual(JSON.parse(generateOverridesJson(createOverridesState())).keyword_exclusions, []);
+  // fav/1 被屏蔽，应从收藏移除并加入排除
+  assert.equal(isPicked(state, "fav/1"), false);
+  assert.equal(isExcluded(state, "fav/1"), true);
+
+  const fDiff = computeFavoritesDiff(state);
+  assert.equal(fDiff.summary.changed_records, 2); // 1 added (fav/new), 1 removed (fav/1)
+  assert.equal(fDiff.target_file, "config/governance/favorites.json");
+
+  const oDiff = computeOverridesDiff(state);
+  assert.equal(oDiff.summary.changed_records, 1); // 1 added (fav/1)
+  assert.equal(oDiff.target_file, "config/governance/overrides.json");
+
+  assert.equal(calculateChangesCount(state), 3);
+
+  const fInc = JSON.parse(generateIncrementalFavoritesJson(state));
+  assert.equal(fInc.changes.manual_picks.added.length, 1);
+  assert.equal(fInc.changes.manual_picks.removed.length, 1);
+
+  const oInc = JSON.parse(generateIncrementalOverridesJson(state));
+  assert.equal(oInc.changes.manual_exclusions.added.length, 1);
 });
 
 test("catalog-state: mock storage save, load, and clear", () => {

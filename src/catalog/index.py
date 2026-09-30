@@ -201,6 +201,7 @@ def build_catalog(
     entries: list[dict],
     *,
     context: CatalogContext,
+    favorites: dict | None = None,
     overrides: dict | None = None,
     snoozed: dict | None = None,
     owned: dict | None = None,
@@ -217,6 +218,8 @@ def build_catalog(
         "counts": counts,
         "entries": entries,
     }
+    if favorites:
+        res["favorites"] = favorites
     if overrides:
         res["overrides"] = overrides
     if snoozed:
@@ -224,6 +227,7 @@ def build_catalog(
     if owned:
         res["owned"] = owned
     return res
+
 
 
 def build_page_data(catalog: dict) -> dict:
@@ -299,6 +303,8 @@ def build_page_data(catalog: dict) -> dict:
         "candidates": candidates,
         "owned_entries": owned_entries,
     }
+    if catalog.get("favorites"):
+        res["favorites"] = catalog["favorites"]
     if catalog.get("overrides"):
         res["overrides"] = catalog["overrides"]
     if catalog.get("snoozed"):

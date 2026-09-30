@@ -1,6 +1,8 @@
 import {
+  generateIncrementalFavoritesJson,
   generateIncrementalOverridesJson,
   generateIncrementalSnoozedJson,
+  computeFavoritesDiff,
   computeOverridesDiff,
   computeSnoozedDiff,
   detectConflicts,
@@ -22,12 +24,13 @@ import { escapeHtml } from "./utils.js?v=20260929_sync_3";
  */
 export function updateSyncBar(syncBarEl, syncSummaryEl, overridesState, ownedState = null) {
   if (!syncBarEl || !syncSummaryEl) return;
+  const fDiff = computeFavoritesDiff(overridesState);
   const oDiff = computeOverridesDiff(overridesState);
   const sDiff = computeSnoozedDiff(overridesState);
   const pCount =
-    oDiff.changes.manual_picks.added.length +
-    oDiff.changes.manual_picks.updated.length +
-    oDiff.changes.manual_picks.removed.length;
+    fDiff.changes.manual_picks.added.length +
+    fDiff.changes.manual_picks.updated.length +
+    fDiff.changes.manual_picks.removed.length;
   const eCount =
     oDiff.changes.manual_exclusions.added.length +
     oDiff.changes.manual_exclusions.updated.length +
@@ -56,7 +59,7 @@ export function updateSyncBar(syncBarEl, syncSummaryEl, overridesState, ownedSta
  * 初始化同步配置弹窗事件绑定与交互。
  */
 export function initSyncModal(elements, overridesState, onClearSync, ownedState = null) {
-  let currentModalTab = "overrides";
+  let currentModalTab = "favorites";
   let opSeq = 0;
   let lastActiveElement = null;
 
@@ -69,16 +72,25 @@ export function initSyncModal(elements, overridesState, onClearSync, ownedState 
     opSeq++;
     elements.copyStatus.textContent = "";
     elements.copyStatus.classList.remove("is-error");
+    const fDiff = computeFavoritesDiff(overridesState);
     const oDiff = computeOverridesDiff(overridesState);
     const sDiff = computeSnoozedDiff(overridesState);
     const oCount = ownedState ? calculateOwnedChangesCount(ownedState) : 0;
     const conflicts = detectConflicts(overridesState);
 
     // 更新 Tab 按钮状态与可访问性属性
-    elements.tabModalOverrides.classList.toggle("is-active", currentModalTab === "overrides");
-    elements.tabModalOverrides.setAttribute("aria-selected", currentModalTab === "overrides" ? "true" : "false");
-    elements.tabModalSnoozed.classList.toggle("is-active", currentModalTab === "snoozed");
-    elements.tabModalSnoozed.setAttribute("aria-selected", currentModalTab === "snoozed" ? "true" : "false");
+    if (elements.tabModalFavorites) {
+      elements.tabModalFavorites.classList.toggle("is-active", currentModalTab === "favorites");
+      elements.tabModalFavorites.setAttribute("aria-selected", currentModalTab === "favorites" ? "true" : "false");
+    }
+    if (elements.tabModalOverrides) {
+      elements.tabModalOverrides.classList.toggle("is-active", currentModalTab === "overrides");
+      elements.tabModalOverrides.setAttribute("aria-selected", currentModalTab === "overrides" ? "true" : "false");
+    }
+    if (elements.tabModalSnoozed) {
+      elements.tabModalSnoozed.classList.toggle("is-active", currentModalTab === "snoozed");
+      elements.tabModalSnoozed.setAttribute("aria-selected", currentModalTab === "snoozed" ? "true" : "false");
+    }
     if (elements.tabModalOwned) {
       elements.tabModalOwned.classList.toggle("is-active", currentModalTab === "owned");
       elements.tabModalOwned.setAttribute("aria-selected", currentModalTab === "owned" ? "true" : "false");
@@ -87,7 +99,9 @@ export function initSyncModal(elements, overridesState, onClearSync, ownedState 
     const tabpanel = document.getElementById("sync-modal-tabpanel");
     if (tabpanel) {
       const activeTabId =
-        currentModalTab === "overrides"
+        currentModalTab === "favorites"
+          ? "tab-modal-favorites"
+          : currentModalTab === "overrides"
           ? "tab-modal-overrides"
           : currentModalTab === "snoozed"
           ? "tab-modal-snoozed"
@@ -121,18 +135,23 @@ export function initSyncModal(elements, overridesState, onClearSync, ownedState 
 
     // 跨集合关联修改提示
     if (modalCrossWarning) {
-      if (currentModalTab === "overrides" && sDiff.summary.changed_records > 0) {
+      const otherParts = [];
+      if (currentModalTab !== "favorites" && fDiff.summary.changed_records > 0) {
+        otherParts.push(`favorites.json 尚有 ${fDiff.summary.changed_records} 项待同步`);
+      }
+      if (currentModalTab !== "overrides" && oDiff.summary.changed_records > 0) {
+        otherParts.push(`overrides.json 尚有 ${oDiff.summary.changed_records} 项待同步`);
+      }
+      if (currentModalTab !== "snoozed" && sDiff.summary.changed_records > 0) {
+        otherParts.push(`snoozed.json 尚有 ${sDiff.summary.changed_records} 项待同步`);
+      }
+      if (currentModalTab !== "owned" && oCount > 0) {
+        otherParts.push(`owned-patch.json 尚有 ${oCount} 项待同步`);
+      }
+      if (otherParts.length > 0) {
         modalCrossWarning.hidden = false;
         modalCrossWarning.textContent =
-          "💡 提示：本次修改同时涉及冷冻配置（snoozed.json 尚有 " +
-          sDiff.summary.changed_records +
-          " 项待同步），请记得切换至对应页签完成同步。";
-      } else if (currentModalTab === "snoozed" && oDiff.summary.changed_records > 0) {
-        modalCrossWarning.hidden = false;
-        modalCrossWarning.textContent =
-          "💡 提示：本次修改同时涉及收藏/屏蔽配置（overrides.json 尚有 " +
-          oDiff.summary.changed_records +
-          " 项待同步），请记得切换至对应页签完成同步。";
+          "💡 提示：本次修改同时涉及其它配置文件（" + otherParts.join("，") + "），请记得切换至对应页签完成同步。";
       } else {
         modalCrossWarning.hidden = true;
         modalCrossWarning.textContent = "";
@@ -152,8 +171,20 @@ export function initSyncModal(elements, overridesState, onClearSync, ownedState 
     }
 
     // 内容渲染与按钮文案
-    if (currentModalTab === "overrides") {
-      elements.modalTitle.textContent = "同步人工干预配置 (overrides.json)";
+    if (currentModalTab === "favorites") {
+      elements.modalTitle.textContent = "同步人工收藏配置 (favorites.json)";
+      elements.modalDesc.innerHTML =
+        "以下为本次操作产生的待同步变更记录。可复制或下载变更 JSON，并合入仓库 <code>config/governance/favorites.json</code>。" +
+        (fDiff.summary.changed_records === 0 ? " 当前文件没有待同步变更。" : "");
+      elements.jsonPreview.textContent = generateIncrementalFavoritesJson(overridesState);
+      elements.jsonPreview.setAttribute("aria-label", "favorites 待同步变更 JSON 预览");
+      elements.btnDownloadJson.textContent = "💾 下载变更 JSON";
+      elements.btnCopyJson.textContent = "📋 仅复制变更";
+      if (elements.btnGotoGithub) {
+        elements.btnGotoGithub.hidden = true;
+      }
+    } else if (currentModalTab === "overrides") {
+      elements.modalTitle.textContent = "同步人工屏蔽配置 (overrides.json)";
       elements.modalDesc.innerHTML =
         "以下为本次操作产生的待同步变更记录。可复制或下载变更 JSON，并合入仓库 <code>config/governance/overrides.json</code>。" +
         (oDiff.summary.changed_records === 0 ? " 当前文件没有待同步变更。" : "");
@@ -196,22 +227,26 @@ export function initSyncModal(elements, overridesState, onClearSync, ownedState 
     opSeq++;
     lastActiveElement = document.activeElement;
 
+    const fDiff = computeFavoritesDiff(overridesState);
     const oDiff = computeOverridesDiff(overridesState);
     const sDiff = computeSnoozedDiff(overridesState);
-    const pAndECount = oDiff.summary.changed_records;
+    const fCount = fDiff.summary.changed_records;
+    const eCount = oDiff.summary.changed_records;
     const sCount = sDiff.summary.changed_records;
     const oCount = ownedState ? calculateOwnedChangesCount(ownedState) : 0;
 
-    if (oCount > 0 && pAndECount === 0 && sCount === 0) {
+    if (oCount > 0 && fCount === 0 && eCount === 0 && sCount === 0) {
       currentModalTab = "owned";
-    } else if (pAndECount > 0) {
+    } else if (fCount > 0) {
+      currentModalTab = "favorites";
+    } else if (eCount > 0) {
       currentModalTab = "overrides";
     } else if (sCount > 0) {
       currentModalTab = "snoozed";
     } else if (oCount > 0) {
       currentModalTab = "owned";
     } else {
-      currentModalTab = "overrides";
+      currentModalTab = "favorites";
     }
 
     elements.copyStatus.textContent = "";
@@ -258,7 +293,7 @@ export function initSyncModal(elements, overridesState, onClearSync, ownedState 
   });
 
   // 页签箭头键导航
-  const tabButtons = [elements.tabModalOverrides, elements.tabModalSnoozed, elements.tabModalOwned].filter(Boolean);
+  const tabButtons = [elements.tabModalFavorites, elements.tabModalOverrides, elements.tabModalSnoozed, elements.tabModalOwned].filter(Boolean);
   tabButtons.forEach((tabBtn, idx) => {
     tabBtn.addEventListener("keydown", e => {
       let targetIdx = -1;
@@ -279,21 +314,35 @@ export function initSyncModal(elements, overridesState, onClearSync, ownedState 
     });
   });
 
-  elements.tabModalOverrides.addEventListener("click", () => {
-    currentModalTab = "overrides";
-    opSeq++;
-    elements.copyStatus.textContent = "";
-    elements.copyStatus.classList.remove("is-error");
-    updateModalContent();
-  });
+  if (elements.tabModalFavorites) {
+    elements.tabModalFavorites.addEventListener("click", () => {
+      currentModalTab = "favorites";
+      opSeq++;
+      elements.copyStatus.textContent = "";
+      elements.copyStatus.classList.remove("is-error");
+      updateModalContent();
+    });
+  }
 
-  elements.tabModalSnoozed.addEventListener("click", () => {
-    currentModalTab = "snoozed";
-    opSeq++;
-    elements.copyStatus.textContent = "";
-    elements.copyStatus.classList.remove("is-error");
-    updateModalContent();
-  });
+  if (elements.tabModalOverrides) {
+    elements.tabModalOverrides.addEventListener("click", () => {
+      currentModalTab = "overrides";
+      opSeq++;
+      elements.copyStatus.textContent = "";
+      elements.copyStatus.classList.remove("is-error");
+      updateModalContent();
+    });
+  }
+
+  if (elements.tabModalSnoozed) {
+    elements.tabModalSnoozed.addEventListener("click", () => {
+      currentModalTab = "snoozed";
+      opSeq++;
+      elements.copyStatus.textContent = "";
+      elements.copyStatus.classList.remove("is-error");
+      updateModalContent();
+    });
+  }
 
   if (elements.tabModalOwned) {
     elements.tabModalOwned.addEventListener("click", () => {
@@ -345,6 +394,8 @@ export function initSyncModal(elements, overridesState, onClearSync, ownedState 
     let fileName;
     if (currentModalTab === "owned") {
       fileName = "owned-patch.json";
+    } else if (currentModalTab === "favorites") {
+      fileName = "favorites-changes.json";
     } else if (currentModalTab === "overrides") {
       fileName = "overrides-changes.json";
     } else {

@@ -193,25 +193,48 @@ export function diffCollection(baselineMap, effectiveMap) {
 }
 
 /**
- * 计算 overrides.json 相对基线的结构化净差异。
+ * 计算 favorites.json 相对基线的结构化净差异。
  */
-export function computeOverridesDiff(overridesState) {
+export function computeFavoritesDiff(overridesState) {
   const effPicks = computeEffectivePicks(overridesState);
-  const effExcl = computeEffectiveExclusions(overridesState);
-
   const picksDiff = diffCollection(overridesState.baselinePicks, effPicks);
-  const exclDiff = diffCollection(overridesState.baselineExclusions, effExcl);
 
   const changedRecords =
     picksDiff.added.length +
     picksDiff.updated.length +
-    picksDiff.removed.length +
+    picksDiff.removed.length;
+
+  const affectedSkills = new Set();
+  [...picksDiff.added, ...picksDiff.updated, ...picksDiff.removed].forEach(item => affectedSkills.add(item.skill_id));
+
+  return {
+    preview_version: "1.0.0",
+    kind: "change_preview",
+    target_file: "config/governance/favorites.json",
+    notice: "仅供核对，不能覆盖配置文件，也不能直接导入",
+    summary: {
+      changed_records: changedRecords,
+      affected_skills: affectedSkills.size
+    },
+    changes: {
+      manual_picks: picksDiff
+    }
+  };
+}
+
+/**
+ * 计算 overrides.json 相对基线的结构化净差异。
+ */
+export function computeOverridesDiff(overridesState) {
+  const effExcl = computeEffectiveExclusions(overridesState);
+  const exclDiff = diffCollection(overridesState.baselineExclusions, effExcl);
+
+  const changedRecords =
     exclDiff.added.length +
     exclDiff.updated.length +
     exclDiff.removed.length;
 
   const affectedSkills = new Set();
-  [...picksDiff.added, ...picksDiff.updated, ...picksDiff.removed].forEach(item => affectedSkills.add(item.skill_id));
   [...exclDiff.added, ...exclDiff.updated, ...exclDiff.removed].forEach(item => affectedSkills.add(item.skill_id));
 
   return {
@@ -224,7 +247,6 @@ export function computeOverridesDiff(overridesState) {
       affected_skills: affectedSkills.size
     },
     changes: {
-      manual_picks: picksDiff,
       manual_exclusions: exclDiff
     }
   };
@@ -258,6 +280,14 @@ export function computeSnoozedDiff(overridesState) {
       snoozed: snoozedDiff
     }
   };
+}
+
+/**
+ * 序列化输出待同步 favorites.json 增量只读核对 JSON。
+ */
+export function generateIncrementalFavoritesJson(overridesState) {
+  const diff = computeFavoritesDiff(overridesState);
+  return JSON.stringify(diff, null, 2);
 }
 
 /**
@@ -489,9 +519,30 @@ export function unsnoozeSkill(overridesState, sid) {
  * 计算未同步至仓库的修改条数（基于与基线的净差异记录数）。
  */
 export function calculateChangesCount(overridesState) {
+  const fDiff = computeFavoritesDiff(overridesState);
   const oDiff = computeOverridesDiff(overridesState);
   const sDiff = computeSnoozedDiff(overridesState);
-  return oDiff.summary.changed_records + sDiff.summary.changed_records;
+  return fDiff.summary.changed_records + oDiff.summary.changed_records + sDiff.summary.changed_records;
+}
+
+/**
+ * 生成待同步的 favorites.json 文本。
+ */
+export function generateFavoritesJson(overridesState, today = null) {
+  const conflicts = detectConflicts(overridesState, today);
+  if (conflicts.length > 0) {
+    const list = conflicts.map(c => `${c.skill_id} (${c.collections.join(" + ")})`).join(", ");
+    throw new Error(`检测到跨集合状态冲突：${list}，已阻止导出 favorites.json`);
+  }
+  const picks = computeEffectivePicks(overridesState);
+
+  const payload = {
+    favorites_version: "1.0.0",
+    source: "docs/运行说明.md §9",
+    note: "人工收藏名单（favorites）：由用户手工维护。manual_picks 长期保留在收藏区并优先展示。",
+    manual_picks: Object.keys(picks).sort().map(k => cleanValue(picks[k]))
+  };
+  return JSON.stringify(payload, null, 2);
 }
 
 /**
@@ -503,15 +554,12 @@ export function generateOverridesJson(overridesState, today = null) {
     const list = conflicts.map(c => `${c.skill_id} (${c.collections.join(" + ")})`).join(", ");
     throw new Error(`检测到跨集合状态冲突：${list}，已阻止导出 overrides.json`);
   }
-  const picks = computeEffectivePicks(overridesState);
   const exclusions = computeEffectiveExclusions(overridesState);
 
   const payload = {
     overrides_version: "1.0.0",
-    keyword_exclusions: [...(overridesState.baselineKeywordExclusions || [])],
     source: "docs/运行说明.md §9",
-    note: "人工干预名单（overrides）：由用户手工维护。manual_picks 长期保留在收藏区；manual_exclusions 为人工排除黑名单，流水线扫描到直接跳过（0 模型调用）。",
-    manual_picks: Object.keys(picks).sort().map(k => cleanValue(picks[k])),
+    note: "人工干预名单（overrides）：由用户手工维护。manual_exclusions 为人工排除黑名单，流水线扫描到直接跳过（0 模型调用）。",
     manual_exclusions: Object.keys(exclusions).sort().map(k => cleanValue(exclusions[k]))
   };
   return JSON.stringify(payload, null, 2);
@@ -543,7 +591,6 @@ export function generateSnoozedJson(overridesState, today = null) {
  */
 export function populateBaseline(overridesState, data, today = null) {
   const curToday = today || shanghaiTodayStr();
-  // 关键词由仓库配置维护；网页仅保留并随完整配置导出。
   overridesState.baselineKeywordExclusions = [...(data.overrides?.keyword_exclusions || [])];
   (data.manual || []).forEach(e => {
     overridesState.baselinePicks[e.skill_id] = {
@@ -554,10 +601,18 @@ export function populateBaseline(overridesState, data, today = null) {
     };
   });
 
-  if (data.overrides) {
+  if (data.favorites) {
+    const fList = Array.isArray(data.favorites) ? data.favorites : (data.favorites.manual_picks || []);
+    fList.forEach(p => {
+      if (p && p.skill_id) overridesState.baselinePicks[p.skill_id] = p;
+    });
+  } else if (data.overrides && data.overrides.manual_picks) {
     (data.overrides.manual_picks || []).forEach(p => {
       if (p && p.skill_id) overridesState.baselinePicks[p.skill_id] = p;
     });
+  }
+
+  if (data.overrides) {
     (data.overrides.manual_exclusions || []).forEach(ex => {
       if (ex && ex.skill_id) overridesState.baselineExclusions[ex.skill_id] = ex;
     });
