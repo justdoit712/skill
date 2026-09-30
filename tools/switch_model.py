@@ -428,12 +428,10 @@ def interactive_select(catalog: dict) -> None:
                     for sidx, smid in enumerate(sub_keys, 1):
                         sinfo = avail[smid]
                         scat = sinfo.get("category", "") if isinstance(sinfo, dict) else ""
-                        sbal = sinfo.get("balance", "") if isinstance(sinfo, dict) else ""
                         if scat and scat != current_cat:
                             current_cat = scat
                             print(f"\n  --- {current_cat} ---")
-                        bal_str = f" [{sbal}]" if sbal else ""
-                        print(f"  [{sidx:<3}] {smid:<34}{bal_str}")
+                        print(f"  [{sidx:<3}] {smid:<34}")
 
                     sub_choice = input(f"\n请输入子模型序号 (1-{len(sub_keys)})、模型名或直接回车使用默认 ({pcfg.get('model')}): ").strip()
                     if not sub_choice:
