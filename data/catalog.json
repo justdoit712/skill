@@ -1,12 +1,12 @@
 {
   "catalog_version": "1.0.0",
   "rules_version": "1.3.0",
-  "generated_at": "2026-10-01T01:48:26.427597+08:00",
+  "generated_at": "2026-10-01T05:39:50.647426+08:00",
   "counts": {
-    "recommended": 276,
-    "candidate": 143,
-    "manual": 23,
-    "excluded": 81
+    "excluded": 81,
+    "candidate": 174,
+    "recommended": 299,
+    "pending": 2
   },
   "entries": [
     {
@@ -10098,16 +10098,16 @@
       "url": "https://github.com/expo/skills/blob/HEAD/plugins/expo/skills/expo-web-to-native/SKILL.md",
       "repo_url": "https://github.com/expo/skills",
       "author": "expo",
-      "summary_zh": "一个用于指导将现有 Web React 应用逐步迁移到原生 iOS/Android 应用的框架性技能。",
+      "summary_zh": "该技能提供将现有 Web React 应用迁移到 Expo iOS/Android 原生应用的分阶段工作流，适合把网站或 Next.js/Vite/CRA 项目逐步转为原生应用的场景。",
       "skill_type": "guideline",
       "example_requests": [
-        "如何将 Next.js 应用迁移到 Expo 原生应用？",
-        "Web DOM 组件如何映射到原生 UI 组件？"
+        "把我的 Next.js 网站迁移成 Expo 原生应用",
+        "解释 React Web 中的 localStorage、React Router 如何映射到 React Native"
       ],
       "key_features": [
-        "提供分步迁移工作流而非重写",
-        "强调使用 @expo/ui 实现原生外观",
-        "集成 agent-browser 和 argent 进行自动化验证"
+        "按屏幕优先级逐步原生化迁移",
+        "先用 DOM 组件壳运行完整 Web UI",
+        "提供 Web 到 Native 验证与参考映射"
       ],
       "main_category": {
         "id": "dev",
@@ -10115,23 +10115,29 @@
       },
       "candidate_domains": [],
       "tags": [
-        "Expo",
         "React Native",
+        "Expo",
         "Web迁移",
-        "前端"
+        "移动应用",
+        "工作流"
       ],
       "platform_declared": null,
-      "dependencies_declared": [],
-      "limitations": "作为 DSH 插件存在；依赖多个未声明版本的外部技能和工具；需要用户具备 React 和 Expo 基础。",
-      "license": null,
-      "status": "excluded",
-      "reason_codes": [
-        "DSH_PLUGIN",
-        "INSUFFICIENT_EVIDENCE",
-        "MANUAL_EXCLUDED"
+      "dependencies_declared": [
+        "Expo",
+        "Expo Router",
+        "@expo/ui",
+        "expo-dom",
+        "expo-data-fetching",
+        "eas-app-stores",
+        "agent-browser",
+        "argent"
       ],
+      "limitations": "引用的 references/*.md 未提供，部分细节映射和验证步骤需进一步查看；依赖与版本环境未完整声明。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
       "first_seen": "2026-09-24T09:09:16+00:00",
-      "last_checked": "2026-09-29T10:47:31.432013+08:00",
+      "last_checked": "2026-10-01T04:52:42.454875+08:00",
       "content_changed_at": null,
       "content_fingerprint": "sha256:ce3cb7aa92228fa4743d34aa94ae4e8f",
       "source_type": "official",
@@ -10147,40 +10153,40 @@
         "checks": {
           "scope_match": {
             "value": "pass",
-            "evidence": "材料明确为 Expo 技能插件（DSH Plugin），属于编程开发领域的迁移指南。",
+            "evidence": "材料描述将现有 Web React 应用迁移到 iOS/Android 原生应用，属于编程开发中的迁移与工程实践，不命中硬性排除项。",
             "informational": false
           },
           "purpose_clarity": {
             "value": "pass",
-            "evidence": "解决将 Web React 应用迁移到原生 iOS/Android 应用的具体问题，提供分步工作流。",
+            "evidence": "明确解决把 Web React/Next.js/Vite/CRA 代码库迁移为 Expo 原生应用的场景，给出分阶段迁移策略与适用条件。",
             "informational": false
           },
           "instruction_completeness": {
             "value": "pass",
-            "evidence": "提供了从评估、脚手架搭建、DOM组件壳、逐步原生化到发布的完整步骤和原则。",
+            "evidence": "提供评估、脚手架、DOM 壳、逐屏原生化、数据层与发布六步流程，并说明验证方式和引用参考文件，足以理解做法与价值。",
             "informational": false
           },
           "evidence_traceability": {
-            "value": "unknown",
-            "evidence": "内容与描述一致，引用了具体的参考文件和工具。；程序未能核实所引原文与行号。",
+            "value": "pass",
+            "evidence": "上游描述与 SKILL.md 内容一致：均为 Web 到 Native 的端到端迁移指南，并明确 DOM 组件机制交由 expo-dom。",
             "informational": false
           },
           "dependency_transparency": {
             "value": "unknown",
-            "evidence": "依赖多个外部技能（如 expo-dom, expo-router）和特定工具（agent-browser, argent），但未声明其版本或安装方式。",
-            "informational": false
+            "evidence": "材料提及 Expo、Expo Router、@expo/ui、expo-dom、expo-data-fetching、eas-app-stores、agent-browser、argent 等工具，但未提供完整依赖清单、版本要求或运行环境说明；不影响理解核心价值，但影响适用条件判断。",
+            "informational": true
           },
           "risk_review": {
-            "value": "fail",
-            "evidence": "该技能是 DSH 插件（位于 plugins/expo/skills/...），根据硬性排除标准 DSH_PLUGIN 应被拒绝。",
+            "value": "pass",
+            "evidence": "所读材料为迁移流程指南，未见凭据外传、实盘交易、临床决策、恶意命令或排除领域内容；反馈命令为可选提交反馈，不构成明显风险。",
             "informational": false
           }
         },
-        "verification_note": "材料提供了通过 agent-browser 和 argent 进行设备端验证的方法。",
+        "verification_note": "材料提供“Verify by running, not compiling”的验证方法：用 agent-browser 捕获 Web 原始路由，用 argent 驱动模拟器比较内容与行为，并引用 verify-on-device.md。",
         "blocking_reasons": []
       },
-      "last_evaluation_id": "expo/skills:plugins/expo/skills/expo-web-to-native/SKILL.md|sha256:ce3cb7aa92228fa4743d34aa94ae4e8f|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-29T10:47:31.428014+08:00"
+      "last_evaluation_id": "expo/skills:plugins/expo/skills/expo-web-to-native/SKILL.md|sha256:ce3cb7aa92228fa4743d34aa94ae4e8f|1.3.0|pool-business-v1",
+      "evaluated_at": "2026-10-01T04:52:42.442212+08:00"
     },
     {
       "skill_id": "getsentry/skills:skills/commit/SKILL.md",
@@ -11783,16 +11789,16 @@
       "url": "https://github.com/gauss314/skills/blob/HEAD/skills/bcra-macro/SKILL.md",
       "repo_url": "https://github.com/gauss314/skills",
       "author": "gauss314",
-      "summary_zh": "该技能封装了阿根廷央行（BCRA）宏观经济统计API，提供汇率、利率、货币供应量等638项指标的查询与历史数据获取功能，适用于金融研究与数据分析场景。",
-      "skill_type": "tool_script",
+      "summary_zh": "该技能提供阿根廷央行 BCRA 货币统计 API 的查询参考，覆盖储备、汇率、利率、货币供应和通胀等宏观序列，适合金融研究、宏观数据抓取与 API 集成场景。",
+      "skill_type": "reference",
       "example_requests": [
-        "查询阿根廷当前美元兑比索汇率",
-        "获取过去一年的M2货币供应量历史数据"
+        "查询阿根廷央行的国际储备历史数据",
+        "获取阿根廷比索兑美元汇率和利率序列"
       ],
       "key_features": [
-        "覆盖638项阿根廷国家宏观经济指标",
-        "提供Python代码示例处理分页限制",
-        "支持按日期范围、类别、币种过滤查询"
+        "覆盖 638 个阿根廷国家级宏观序列",
+        "提供端点、过滤参数与分页策略",
+        "列出储备、汇率、利率、M1/M2/M3、通胀等常用变量"
       ],
       "main_category": {
         "id": "finance",
@@ -11802,21 +11808,23 @@
         "finance"
       ],
       "tags": [
-        "宏观经济",
-        "API集成",
-        "金融数据",
-        "阿根廷经济"
+        "宏观数据",
+        "API查询",
+        "央行统计",
+        "金融研究",
+        "阿根廷"
       ],
       "platform_declared": null,
-      "dependencies_declared": [],
-      "limitations": "仅包含阿根廷国家层面数据（不含省级/市级），API响应可能受网络影响且无正式SLA保障。",
+      "dependencies_declared": [
+        "requests",
+        "pandas"
+      ],
+      "limitations": "材料未正式声明运行环境或依赖版本；引用的 VARIABLES.md 未提供，无法核验完整 638 个变量清单；API 为 best-effort，无正式 SLA。",
       "license": null,
       "status": "candidate",
-      "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
-      ],
+      "reason_codes": [],
       "first_seen": "2026-09-24T09:09:16+00:00",
-      "last_checked": "2026-09-29T10:59:40.872832+08:00",
+      "last_checked": "2026-10-01T04:56:26.077481+08:00",
       "content_changed_at": null,
       "content_fingerprint": "sha256:7fbbcbb8ecf6a841b82cb4d1786ae256",
       "source_type": "community_list",
@@ -11832,42 +11840,40 @@
         "checks": {
           "scope_match": {
             "value": "pass",
-            "evidence": "材料明确属于金融与投资领域，提供宏观经济学数据查询功能。",
+            "evidence": "条目是阿根廷央行宏观统计 API 的查询参考与用法说明，属于金融与投资领域的宏观数据获取与研究辅助；未命中硬性排除项。",
             "informational": false
           },
           "purpose_clarity": {
             "value": "pass",
-            "evidence": "旨在通过API获取阿根廷央行（BCRA）的638个宏观经济指标（如汇率、利率、M1/M2/M3等），适合需要实时或历史宏观数据进行研究或分析的场景。",
+            "evidence": "明确说明用于查询 BCRA 货币统计 API 的宏观变量，包括储备、汇率、利率、M1/M2/M3、通胀、CER、UVA 等，并给出典型使用场景与示例代码。",
             "informational": false
           },
           "instruction_completeness": {
             "value": "pass",
-            "evidence": "提供了完整的API端点说明、参数列表、Python代码示例以及处理分页限制的具体策略（Offset和Chunking）。",
+            "evidence": "提供端点、参数、分页限制、三种分页策略、常用变量 ID、类别与货币代码，以及技术注意事项，足以理解如何使用该 API。",
             "informational": false
           },
           "evidence_traceability": {
-            "value": "unknown",
-            "evidence": "内容详细列出了API地址、具体变量ID及描述，与官方文档链接一致。；程序未能核实所引原文与行号。",
+            "value": "pass",
+            "evidence": "上游介绍称覆盖 638 个宏观序列并给出 API 用法；正文与之一致，列出 Base URL、端点、参数、分页策略和常用变量。",
             "informational": false
           },
           "dependency_transparency": {
             "value": "unknown",
-            "evidence": "未声明运行环境依赖（如Python版本、requests/pandas库版本），但提供了明确的代码示例，不影响核心判断。",
+            "evidence": "材料说明无需认证、CORS 开放、API 地址与分页限制，并给出 Python 示例；但未正式声明运行环境或依赖包版本，示例隐含 requests/pandas。",
             "informational": true
           },
           "risk_review": {
             "value": "pass",
-            "evidence": "无风险行为，仅为公开数据接口封装。",
+            "evidence": "所读材料为公开官方 API 查询说明，未见凭据外传、实盘下单、临床决策或排除领域内容；也未发现改变评估规则的可疑指令。",
             "informational": false
           }
         },
-        "verification_note": "材料提供了Python代码示例用于验证API调用和数据获取。",
-        "blocking_reasons": [
-          "领域检查：数据来源为BCRA官方API，包含具体变量ID和描述；未承诺收益，不涉及回测或实盘交易。；程序未能核实所引原文与行号。"
-        ]
+        "verification_note": "材料提供 Python 示例、端点参数表、分页策略与常用变量 ID；未提供自动化测试或验收清单。",
+        "blocking_reasons": []
       },
-      "last_evaluation_id": "gauss314/skills:skills/bcra-macro/SKILL.md|sha256:7fbbcbb8ecf6a841b82cb4d1786ae256|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-29T10:59:40.869492+08:00"
+      "last_evaluation_id": "gauss314/skills:skills/bcra-macro/SKILL.md|sha256:7fbbcbb8ecf6a841b82cb4d1786ae256|1.3.0|pool-business-v1",
+      "evaluated_at": "2026-10-01T04:56:26.062519+08:00"
     },
     {
       "skill_id": "gauss314/skills:skills/data912/SKILL.md",
@@ -11906,7 +11912,7 @@
       "status": "recommended",
       "reason_codes": [],
       "first_seen": "2026-09-24T09:09:16+00:00",
-      "last_checked": "2026-09-29T11:02:06.474748+08:00",
+      "last_checked": "2026-10-01T05:01:23.447547+08:00",
       "content_changed_at": null,
       "content_fingerprint": "sha256:3ae933791d363b3979bf85e5f273015f",
       "source_type": "community_list",
@@ -11968,16 +11974,16 @@
       "url": "https://github.com/gauss314/skills/blob/HEAD/skills/finviz/SKILL.md",
       "repo_url": "https://github.com/gauss314/skills",
       "author": "gauss314",
-      "summary_zh": "一个用于抓取美股Finviz网站数据的Python脚本，可提取基本面、技术指标、内幕交易和新闻信息，适用于金融数据分析场景。",
+      "summary_zh": "该技能通过抓取 Finviz 公开网页获取美股基本面、技术面、内幕交易、新闻等数据，适用于投研数据收集与筛选辅助。",
       "skill_type": "tool_script",
       "example_requests": [
-        "查询AAPL股票的基本面和关键技术指标",
-        "获取NVDA股票的最新新闻标题"
+        "获取 AAPL 的基本面和技术指标数据",
+        "把 MSFT 的 Finviz 数据保存为 JSON"
       ],
       "key_features": [
-        "无需官方API即可抓取Finviz数据",
-        "支持基本面、技术面、内幕交易等多维度数据",
-        "提供命令行接口支持批量查询和JSON输出"
+        "抓取 Finviz 美股基本面与技术指标",
+        "支持多 ticker 与 JSON 输出",
+        "明确提示无官方 API 与限速要求"
       ],
       "main_category": {
         "id": "finance",
@@ -11986,22 +11992,22 @@
       "candidate_domains": [],
       "tags": [
         "美股数据",
-        "爬虫",
-        "金融分析"
+        "网页抓取",
+        "基本面",
+        "技术面",
+        "投研辅助"
       ],
       "platform_declared": null,
       "dependencies_declared": [
         "requests",
         "beautifulsoup4"
       ],
-      "limitations": "依赖Finviz网站HTML结构，若网站变更可能导致失效；需手动遵守速率限制和服务条款。",
+      "limitations": "未提供脚本源码与 screener 具体实现；数据时间、更新频率和字段稳定性未说明；依赖 Finviz 网页结构，可能因站点变化失效；商业使用需自行核对服务条款。",
       "license": null,
       "status": "candidate",
-      "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
-      ],
+      "reason_codes": [],
       "first_seen": "2026-09-24T09:09:16+00:00",
-      "last_checked": "2026-09-29T11:04:26.914094+08:00",
+      "last_checked": "2026-10-01T05:09:57.547170+08:00",
       "content_changed_at": null,
       "content_fingerprint": "sha256:57a687921223a32ce8fa377dfa4b4730",
       "source_type": "community_list",
@@ -12017,42 +12023,40 @@
         "checks": {
           "scope_match": {
             "value": "pass",
-            "evidence": "技能名称为finviz，描述为提取美股数据（fundamentales, técnicos, insider trading等），属于金融与投资领域的研究和策略辅助。",
+            "evidence": "材料描述为抓取美股基本面、技术面、内幕交易、新闻与筛选器数据的工具，直接服务金融与投资领域，未命中硬性排除项。",
             "informational": false
           },
           "purpose_clarity": {
             "value": "pass",
-            "evidence": "明确说明解决从Finviz抓取美股基本面、技术面、内幕交易和新闻数据的问题，适合需要获取非API官方数据的场景。",
+            "evidence": "说明用于从 Finviz 获取美股数据，覆盖基本面、技术面、insider trading、news 与 screener，并给出典型命令，用途具体。",
             "informational": false
           },
           "instruction_completeness": {
             "value": "pass",
-            "evidence": "提供了依赖安装命令（pip install requests beautifulsoup4）和具体的命令行使用示例（如python scripts/fetch_quote.py --ticker AAPL），足以理解其做法。",
+            "evidence": "提供依赖安装命令、脚本路径、命令行参数示例、字段列表和目录结构，足以理解其做法与价值；未提供脚本源码细节可作为限制。",
             "informational": false
           },
           "evidence_traceability": {
             "value": "pass",
-            "evidence": "SKILL.md中描述的脚本功能与提供的命令行参数及字段列表一致。",
+            "evidence": "上游介绍与 SKILL.md 内容一致：均说明无官方 API、通过 requests+BeautifulSoup 抓取 Finviz 页面，并列出可提取字段与使用方式。",
             "informational": false
           },
           "dependency_transparency": {
             "value": "pass",
-            "evidence": "明确声明了依赖库：requests 和 beautifulsoup4。",
+            "evidence": "明确声明需要 Python 依赖 requests 与 beautifulsoup4，并提示无官方 API、需限速、页面结构可能变化；这些足以判断运行条件与适用风险。",
             "informational": false
           },
           "risk_review": {
-            "value": "pass",
-            "evidence": "材料中包含法律免责声明，提醒用户尊重服务条款、实施速率限制（rate limiting），未包含实盘下单或临床诊断功能。",
+            "value": "unknown",
+            "evidence": "材料明确提示无官方 API、需遵守 Finviz 服务条款与限速，且网页结构变化可能破坏脚本；未见凭据外传或实盘下单，但抓取第三方网站的合规性仍需用户自行确认。",
             "informational": false
           }
         },
-        "verification_note": "材料提供了具体的命令行调用示例用于验证功能。",
-        "blocking_reasons": [
-          "领域检查：提供的是历史/当前市场数据抓取工具，不涉及回测功能，无收益承诺，数据来源明确为Finviz公开页面。；程序未能核实所引原文与行号。"
-        ]
+        "verification_note": "材料提供命令行使用示例，如按 ticker 获取完整数据、仅获取基本面、输出 JSON、批量 ticker 与新闻条数；未提供验收标准或测试数据。",
+        "blocking_reasons": []
       },
-      "last_evaluation_id": "gauss314/skills:skills/finviz/SKILL.md|sha256:57a687921223a32ce8fa377dfa4b4730|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-29T11:04:26.910886+08:00"
+      "last_evaluation_id": "gauss314/skills:skills/finviz/SKILL.md|sha256:57a687921223a32ce8fa377dfa4b4730|1.3.0|pool-business-v1",
+      "evaluated_at": "2026-10-01T05:09:57.533493+08:00"
     },
     {
       "skill_id": "gauss314/skills:skills/sec-data/SKILL.md",
@@ -12097,7 +12101,7 @@
       "status": "recommended",
       "reason_codes": [],
       "first_seen": "2026-09-24T09:09:16+00:00",
-      "last_checked": "2026-09-29T11:25:12.100813+08:00",
+      "last_checked": "2026-10-01T05:23:17.798910+08:00",
       "content_changed_at": null,
       "content_fingerprint": "sha256:e5d6d3a5dedcc7b703d62e058850f011",
       "source_type": "community_list",
@@ -12293,7 +12297,7 @@
       "status": "recommended",
       "reason_codes": [],
       "first_seen": "2026-09-24T09:09:16+00:00",
-      "last_checked": "2026-09-29T11:36:56.220947+08:00",
+      "last_checked": "2026-10-01T05:25:43.702626+08:00",
       "content_changed_at": null,
       "content_fingerprint": "sha256:6bcebb00789398de73a02644c3bf013b",
       "source_type": "community",
@@ -12444,38 +12448,35 @@
       "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/abandoned-cart-sequence/SKILL.md",
       "repo_url": "https://github.com/skillmedev/skills",
       "author": "skillmedev",
-      "summary_zh": "用于起草三封邮件的弃购挽回序列，按提醒、处理异议、最后激励的顺序恢复未完成结账，同时控制折扣和保护利润。适合电商弃购邮件、Shopify/Klaviyo 等购物车恢复流程的文案与策略设计。",
+      "summary_zh": "为电商平台设计三封购物车恢复邮件序列，通过提醒、信任建立和有限激励挽回未完成结账的顾客，同时保护利润",
       "skill_type": "guideline",
       "example_requests": [
-        "为未完成的电商结账起草三封弃购挽回邮件，避免一开始就给折扣。",
-        "在 Shopify 或 Klaviyo 中设计保护利润的购物车恢复邮件流程。"
+        "为Shopify店铺设计一套购物车恢复邮件序列",
+        "为高客单价产品制定三封放弃购物车邮件"
       ],
       "key_features": [
-        "三封邮件结构：提醒、处理异议、最后激励",
-        "强调利润底线，折扣只作为最后触达",
-        "禁止虚假库存、虚假涨价和重复优惠券"
+        "利润保护：折扣仅在第三封邮件考虑，且不突破利润底线",
+        "真实声明：禁止虚假库存威胁，所有数据可验证",
+        "三阶段设计：提醒→解疑→激励（可选），每封邮件有明确发送时机和功能"
       ],
       "main_category": {
-        "id": "content",
-        "name": "内容创作"
+        "id": "docs",
+        "name": "文档办公"
       },
       "candidate_domains": [],
       "tags": [
-        "邮件营销",
-        "电商转化",
-        "购物车挽回",
-        "文案工作流"
+        "邮件模板",
+        "电子商务",
+        "购物车恢复"
       ],
       "platform_declared": null,
       "dependencies_declared": [],
-      "limitations": "未提供具体邮件模板示例、品牌语气示例或与 Shopify/Klaviyo 的实际集成步骤；需要用户提供品牌声音、AOV、利润底线等输入。",
+      "limitations": "仅针对购物车恢复场景，不适用于常规邮件营销",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
-      ],
+      "status": "recommended",
+      "reason_codes": [],
       "first_seen": "2026-09-24T09:09:16+00:00",
-      "last_checked": "2026-09-29T11:38:49.561040+08:00",
+      "last_checked": "2026-10-01T05:27:29.229133+08:00",
       "content_changed_at": null,
       "content_fingerprint": "sha256:ee4136a040cb5c9dae5c49d8ea1e09dd",
       "source_type": "community_list",
@@ -12491,40 +12492,40 @@
         "checks": {
           "scope_match": {
             "value": "pass",
-            "evidence": "该技能用于起草弃购挽回三封邮件序列，属于营销内容创作/工作流，未命中硬性排除，也不属于仅科研/通用数据分析/AI开发。",
+            "evidence": "材料属于文档办公领域的邮件模板和工作流指南，针对电子商务场景的购物车恢复序列，未命中排除项",
             "informational": false
           },
           "purpose_clarity": {
             "value": "pass",
-            "evidence": "明确解决结账开始但未完成时的购物车挽回邮件问题，适用于 Shopify、Klaviyo 等弃购流程，并强调保护利润、避免过度折扣。",
+            "evidence": "材料明确说明用途：为电商平台（如Shopify、Klaviyo）设计三封邮件序列，用于恢复未完成结账的购物车，保护利润，避免过度折扣",
             "informational": false
           },
           "instruction_completeness": {
             "value": "pass",
-            "evidence": "提供输入收集、三封邮件发送时机、每封邮件任务、折扣/激励逻辑、质量标准和禁止事项，足以理解做法与价值。",
+            "evidence": "提供完整的三封邮件工作流、输入要求、邮件内容设计规则及激励逻辑，核心能力清晰可执行",
             "informational": false
           },
           "evidence_traceability": {
-            "value": "unknown",
-            "evidence": "上游描述与 SKILL.md 内容一致：均为三封邮件弃购挽回序列，先提醒、再处理异议、最后才激励。；程序未能核实所引原文与行号。",
+            "value": "pass",
+            "evidence": "SKILL.md描述与工作流一致，强调三阶段邮件、利润保护机制和避免折扣滥用",
             "informational": false
           },
           "dependency_transparency": {
-            "value": "unknown",
-            "evidence": "材料提到可用于 Shopify、Klaviyo 或类似流程，但未声明必需工具、运行环境或集成依赖；未说明的信息不影响理解其作为写作/工作流指南的价值。",
-            "informational": true
+            "value": "pass",
+            "evidence": "未声明特殊依赖，但明确要求电商平台背景（如Shopify、Klaviyo），用户可自行判断适用性，故无阻断性缺口",
+            "informational": false
           },
           "risk_review": {
             "value": "pass",
-            "evidence": "所读材料未见凭据外传、虚假宣传、违规自动化或实盘交易等风险；反而明确禁止虚假库存、虚假涨价和重置倒计时。",
+            "evidence": "材料未见凭据外传、实盘交易或临床决策等风险，合规强调真实声明和退订机制",
             "informational": false
           }
         },
-        "verification_note": "材料提供质量标准与禁止事项，如三封邮件、第三封才允许折扣、所有紧迫性/库存/社会证明声明必须真实可验证；未提供实际示例输出或验收测试。",
+        "verification_note": "材料通过质量栏（Quality bar）条款规定验收标准，包括邮件数量、折扣规则和真实性要求",
         "blocking_reasons": []
       },
-      "last_evaluation_id": "skillmedev/skills:skills/abandoned-cart-sequence/SKILL.md|sha256:ee4136a040cb5c9dae5c49d8ea1e09dd|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-29T11:38:49.559039+08:00"
+      "last_evaluation_id": "skillmedev/skills:skills/abandoned-cart-sequence/SKILL.md|sha256:ee4136a040cb5c9dae5c49d8ea1e09dd|1.3.0|pool-business-v1",
+      "evaluated_at": "2026-10-01T05:27:29.214662+08:00"
     },
     {
       "skill_id": "skillmedev/skills:skills/academic-essay/SKILL.md",
@@ -12805,16 +12806,16 @@
       "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/aeo-answer-blockifier/SKILL.md",
       "repo_url": "https://github.com/skillmedev/skills",
       "author": "skillmedev",
-      "summary_zh": "将博客、FAQ、文档或落地页内容重构为问题引导、答案前置的自包含答案块，便于搜索摘要和 AI 答案引擎引用。适用于优化已有页面结构，不适用于关键词研究、全文起草或技术性 SEO。",
+      "summary_zh": "重构博客、FAQ或文档页面为引擎可直接引用的问答区块，提升被AI摘要或搜索引擎引用的概率",
       "skill_type": "guideline",
       "example_requests": [
-        "把这篇博客段落改写成能被搜索摘要直接引用的答案块",
-        "将 FAQ 页面重构成问题标题加首句直接回答的格式"
+        "将博客文章改写成问答区块以便被Perplexity引用",
+        "优化FAQ页面结构以获得精选摘要"
       ],
       "key_features": [
-        "按用户问题设置 H2/H3 标题",
-        "首句直接给出可被引用的答案",
-        "提供逐块修改日志便于复核"
+        "问答区块优先格式匹配用户语言",
+        "可信度验证与来源标注",
+        "简洁自足的独立引用能力"
       ],
       "main_category": {
         "id": "content",
@@ -12823,21 +12824,18 @@
       "candidate_domains": [],
       "tags": [
         "内容优化",
-        "SEO写作",
-        "FAQ重构",
-        "AI摘要",
-        "答案块"
+        "搜索引擎优化"
       ],
       "platform_declared": null,
       "dependencies_declared": [],
-      "limitations": "未声明运行环境或工具依赖；不处理关键词研究、全文起草和技术/可抓取性 SEO，也不保证摘要或引用结果。",
+      "limitations": "不适用于关键词研究或完整文章草稿",
       "license": null,
       "status": "candidate",
       "reason_codes": [
         "INSUFFICIENT_EVIDENCE"
       ],
       "first_seen": "2026-09-24T09:09:16+00:00",
-      "last_checked": "2026-09-29T11:43:06.988504+08:00",
+      "last_checked": "2026-10-01T05:27:00.987330+08:00",
       "content_changed_at": null,
       "content_fingerprint": "sha256:e71a73cdafb1140e5e4464f821684bed",
       "source_type": "community_list",
@@ -12852,41 +12850,41 @@
         "review_status": "single_pass",
         "checks": {
           "scope_match": {
-            "value": "pass",
-            "evidence": "材料描述将现有内容重构为可被 AI 答案引擎和搜索摘要引用的答案块，适用于博客、FAQ、文档页和落地页，属于内容创作中的文案/页面内容优化，不命中硬性排除。",
+            "value": "fail",
+            "evidence": "属于内容创作，但作为指南而非完整文档模板",
             "informational": false
           },
           "purpose_clarity": {
             "value": "pass",
-            "evidence": "明确解决“答案被埋没、无法被摘要或 AI 引擎直接引用”的问题，给出适用场景（博客、FAQ、文档、落地页）与不适用场景（关键词研究、全文起草、技术/可抓取性 SEO）。",
+            "evidence": "明确说明用于优化内容结构以提升引擎引用率",
             "informational": false
           },
           "instruction_completeness": {
             "value": "pass",
-            "evidence": "提供 8 步工作流、交付物结构、质量门槛和禁止事项，包含标题问法、首句给答案、格式选择、字数/列表规模、信任信号等具体规则，足以理解其做法与价值。",
+            "evidence": "提供详细工作流和质量标准",
             "informational": false
           },
           "evidence_traceability": {
             "value": "unknown",
-            "evidence": "上游名称与描述称用于重写内容为自包含答案块，SKILL.md 正文也围绕提取问题、答案前置、格式匹配、质量检查展开，介绍与实际内容一致。；程序未能核实所引原文与行号。",
+            "evidence": "内容匹配名称和描述；程序未能核实所引原文与行号。",
             "informational": false
           },
           "dependency_transparency": {
             "value": "unknown",
-            "evidence": "材料未声明特殊工具、运行环境或外部依赖；该技能看似为写作/改写规范，但未说明是否依赖特定编辑器或平台。未声明不等于无依赖或全平台兼容。",
+            "evidence": "未声明特殊工具或运行环境",
             "informational": true
           },
           "risk_review": {
             "value": "pass",
-            "evidence": "所读材料为内容结构优化指南，明确禁止伪造统计、日期或来源，并提醒不保证摘要或引用结果，未见凭据外传、实盘下单、临床决策或其他明显可疑行为。",
+            "evidence": "未见可疑行为或冲突",
             "informational": false
           }
         },
-        "verification_note": "材料提供质量门槛和交付物中的逐块 change log，可作为作者复核方式；未提供自动化验证或示例输出。",
+        "verification_note": "明确步骤和验收标准",
         "blocking_reasons": []
       },
-      "last_evaluation_id": "skillmedev/skills:skills/aeo-answer-blockifier/SKILL.md|sha256:e71a73cdafb1140e5e4464f821684bed|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-29T11:43:06.987504+08:00"
+      "last_evaluation_id": "skillmedev/skills:skills/aeo-answer-blockifier/SKILL.md|sha256:e71a73cdafb1140e5e4464f821684bed|1.3.0|pool-business-v1",
+      "evaluated_at": "2026-10-01T05:27:00.975908+08:00"
     },
     {
       "skill_id": "skillmedev/skills:skills/agency-monthly-report/SKILL.md",
@@ -13083,16 +13081,16 @@
       "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/agent-orchestration/SKILL.md",
       "repo_url": "https://github.com/skillmedev/skills",
       "author": "skillmedev",
-      "summary_zh": "该技能提供多智能体 LLM 系统的编排设计方法，适用于判断是否拆分 agent、选择拓扑、定义交接契约、设置预算与失败处理。",
+      "summary_zh": "设计可靠的LLM多代理系统协调层，适用于解决代理拓扑选择、握手合同编写和预算设置",
       "skill_type": "guideline",
       "example_requests": [
-        "判断一个任务是否应该拆分成多个 agent 协作",
-        "为多 agent 工作流设计交接契约、预算和失败处理"
+        "如何设计多代理拓扑以防止无限循环",
+        "如何为代理间传递设置上下文预算"
       ],
       "key_features": [
-        "提供多智能体拓扑选择规则",
-        "定义 agent 间交接契约字段",
-        "包含预算、重试与失败处理规范"
+        "明确代理拆分条件",
+        "提供完整握手合同模板",
+        "设置全局故障处理预算"
       ],
       "main_category": {
         "id": "automation",
@@ -13100,22 +13098,19 @@
       },
       "candidate_domains": [],
       "tags": [
-        "agent orchestration",
-        "workflow design",
-        "LLM systems",
-        "handoff contract",
-        "failure handling"
+        "多代理协作",
+        "系统设计"
       ],
       "platform_declared": null,
       "dependencies_declared": [],
-      "limitations": "未声明具体运行环境、工具链或平台兼容性；主要为设计指南，不包含可直接执行的编排实现。",
+      "limitations": "仅限于LLM代理系统设计",
       "license": null,
       "status": "candidate",
       "reason_codes": [
         "INSUFFICIENT_EVIDENCE"
       ],
       "first_seen": "2026-09-24T09:09:16+00:00",
-      "last_checked": "2026-09-29T11:48:51.721768+08:00",
+      "last_checked": "2026-10-01T05:28:17.497955+08:00",
       "content_changed_at": null,
       "content_fingerprint": "sha256:27330cde2d28bb98dfdba9b398a3c43b",
       "source_type": "community_list",
@@ -13131,40 +13126,40 @@
         "checks": {
           "scope_match": {
             "value": "pass",
-            "evidence": "内容为多智能体 LLM 系统的编排设计方法，属于工作流与工具集成层面的自动化设计，未命中硬性排除项。",
+            "evidence": "属于自动化中的工作流指南，涉及多代理系统设计",
             "informational": false
           },
           "purpose_clarity": {
             "value": "pass",
-            "evidence": "明确说明用于决定是否拆分多个 agent、选择拓扑、编写交接契约、设置预算与失败处理，适用场景具体。",
+            "evidence": "描述解决多代理协调问题，提供步骤指导",
             "informational": false
           },
           "instruction_completeness": {
             "value": "pass",
-            "evidence": "提供 7 步操作流程、拓扑选择、并行/串行规则、契约字段、预算与失败处理，以及交付物和质量标准，足以理解做法。",
+            "evidence": "步骤1至7及样例合同完整",
             "informational": false
           },
           "evidence_traceability": {
             "value": "unknown",
-            "evidence": "描述中的多智能体编排、交接契约、预算与失败处理在正文均有对应内容，介绍与实际一致。；程序未能核实所引原文与行号。",
+            "evidence": "SKILL.md内容一致；程序未能核实所引原文与行号。",
             "informational": false
           },
           "dependency_transparency": {
             "value": "unknown",
-            "evidence": "未声明具体运行环境、工具或依赖；内容为设计指南，不依赖特定平台即可理解，但未说明实施所需工具链。",
+            "evidence": "未声明特殊工具依赖",
             "informational": true
           },
           "risk_review": {
             "value": "pass",
-            "evidence": "所读材料为设计规范和操作指南，未见凭据外传、实盘交易、临床决策或其他明显可疑行为。",
+            "evidence": "未见违规行为",
             "informational": false
           }
         },
-        "verification_note": "材料提供质量标准与失败演练要求，如 dry run 覆盖 worker timeout、invalid output、conflicting outputs 和 budget exhaustion，但未提供可执行验证脚本或外部数据。",
+        "verification_note": "提供设计模板和示例合同",
         "blocking_reasons": []
       },
-      "last_evaluation_id": "skillmedev/skills:skills/agent-orchestration/SKILL.md|sha256:27330cde2d28bb98dfdba9b398a3c43b|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-29T11:48:51.720396+08:00"
+      "last_evaluation_id": "skillmedev/skills:skills/agent-orchestration/SKILL.md|sha256:27330cde2d28bb98dfdba9b398a3c43b|1.3.0|pool-business-v1",
+      "evaluated_at": "2026-10-01T05:28:17.474437+08:00"
     },
     {
       "skill_id": "skillmedev/skills:skills/agency-qbr-upsell/SKILL.md",
@@ -13620,38 +13615,34 @@
       "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/api-design/SKILL.md",
       "repo_url": "https://github.com/skillmedev/skills",
       "author": "skillmedev",
-      "summary_zh": "用于设计 REST API 接口规范，覆盖资源命名、HTTP 方法、状态码、错误格式、分页与过滤等决策。适合在接口对外发布前评审或回答 API 设计问题。",
+      "summary_zh": "提供 REST API 接口设计规范，适用于资源命名、HTTP 方法、状态码语义等设计场景，确保外部消费者可基于规范直接开发客户端",
       "skill_type": "guideline",
       "example_requests": [
-        "这个接口应该用 PUT 还是 PATCH？",
-        "如何为订单列表设计分页和过滤参数？"
+        "如何命名用户订单相关API端点？",
+        "分页查询接口应该返回哪些字段？"
       ],
       "key_features": [
-        "规定资源命名、嵌套与 HTTP 方法语义",
-        "统一错误格式、分页契约和过滤规则",
-        "给出延迟、负载预算与交付物清单"
+        "资源命名规范（复数名词、两层嵌套限制）",
+        "统一错误合约与分页机制",
+        "明确的HTTP方法与状态码映射"
       ],
       "main_category": {
-        "id": "dev",
-        "name": "编程开发"
+        "id": "docs",
+        "name": "文档办公"
       },
       "candidate_domains": [],
       "tags": [
         "API设计",
-        "REST",
-        "接口规范",
-        "开发实践"
+        "规范指南"
       ],
       "platform_declared": null,
       "dependencies_declared": [],
-      "limitations": "未声明运行环境或工具依赖；明确不适用于破坏性变更规划、GraphQL 设计、客户端 SDK 生成和 webhook 端点设计。",
+      "limitations": "不适用于GraphQL设计、客户端SDK生成或Webhook安全加固",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
-      ],
+      "status": "recommended",
+      "reason_codes": [],
       "first_seen": "2026-09-24T09:09:16+00:00",
-      "last_checked": "2026-09-29T13:38:45.902656+08:00",
+      "last_checked": "2026-10-01T05:29:54.586691+08:00",
       "content_changed_at": null,
       "content_fingerprint": "sha256:221e583e98a541a98a06531ccb838064",
       "source_type": "community_list",
@@ -13667,40 +13658,40 @@
         "checks": {
           "scope_match": {
             "value": "pass",
-            "evidence": "材料内容为 REST API 设计规范，属于编程开发中的接口设计/开发实践，未命中硬性排除。",
+            "evidence": "该技能属于 config/taxonomy.json 的收录领域，明确服务于文档办公（API设计属于接口文档规范）",
             "informational": false
           },
           "purpose_clarity": {
             "value": "pass",
-            "evidence": "明确说明用于设计 REST API 表面，包括资源命名、HTTP 方法、状态码、错误格式、分页与过滤，并给出典型问题场景。",
+            "evidence": "SKILL.md 具体说明解决 REST API 设计问题，包括资源命名、HTTP 方法、状态码语义等，适合设计外部消费者可用的 API 场景",
             "informational": false
           },
           "instruction_completeness": {
             "value": "pass",
-            "evidence": "提供六步操作流程、具体规则、错误契约、分页过滤规范、性能预算、反例对比、交付物和质量标准，足以理解做法与价值。",
+            "evidence": "提供6步操作流程（如资源命名、错误合约），含具体规则与示例，足以理解核心做法",
             "informational": false
           },
           "evidence_traceability": {
-            "value": "unknown",
-            "evidence": "上游名称与描述为 REST API Design，实际内容也围绕 REST API 设计流程、命名、状态码、错误格式、分页、过滤和交付规范展开，介绍与内容一致。；程序未能核实所引原文与行号。",
+            "value": "pass",
+            "evidence": "介绍与内容一致：步骤2-6实际覆盖命名、方法、错误等设计要素",
             "informational": false
           },
           "dependency_transparency": {
             "value": "unknown",
-            "evidence": "材料未声明特殊工具、运行环境或依赖；该缺口不影响理解其作为设计规范的价值，但未声明不等于无依赖或全平台兼容。",
+            "evidence": "未声明特殊依赖或平台，但依赖透明性不受影响",
             "informational": true
           },
           "risk_review": {
             "value": "pass",
-            "evidence": "所读材料为设计指南，未见凭据外传、实盘下单、临床决策、恶意命令或与收录范围冲突的内容。",
+            "evidence": "未发现违规行为或收录冲突",
             "informational": false
           }
         },
-        "verification_note": "材料提供 worked contrast 与 Quality bar 作为质量判断方式，但未提供可执行验证、测试或验收流程。",
+        "verification_note": "通过对比错误与正确示例（行69-86）说明验收标准",
         "blocking_reasons": []
       },
-      "last_evaluation_id": "skillmedev/skills:skills/api-design/SKILL.md|sha256:221e583e98a541a98a06531ccb838064|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-29T13:38:45.899638+08:00"
+      "last_evaluation_id": "skillmedev/skills:skills/api-design/SKILL.md|sha256:221e583e98a541a98a06531ccb838064|1.3.0|pool-business-v1",
+      "evaluated_at": "2026-10-01T05:29:54.565873+08:00"
     },
     {
       "skill_id": "skillmedev/skills:skills/api-versioning-strategist/SKILL.md",
@@ -13882,16 +13873,16 @@
       "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/apollo-prospecting/SKILL.md",
       "repo_url": "https://github.com/skillmedev/skills",
       "author": "skillmedev",
-      "summary_zh": "该技能指导在 Apollo.io 中执行 B2B 获客流程，包括将 ICP 转为搜索过滤、分层列表、邮箱验证、购买信号提醒和多步骤序列。适用于已有获客策略、需要在 Apollo 中落地外呼/外联工作流的销售或增长团队。",
+      "summary_zh": "指导用户在Apollo.io平台执行B2B潜在客户开发操作，包括将ICP转化为搜索筛选器、构建分级名单、验证邮箱等功能",
       "skill_type": "guideline",
       "example_requests": [
-        "帮我把现有 ICP 转成 Apollo.io 的搜索过滤器和保存搜索",
-        "设计一个 Apollo Sequence，包含邮件、LinkedIn 和电话任务"
+        "如何在Apollo中为金融科技公司设置筛选器？",
+        "如何在Apollo Sequences中配置邮件发送流程？"
       ],
       "key_features": [
-        "提供 ICP 到 Apollo 过滤器的分层配方",
-        "强调列表抑制、邮箱验证和信用额度纪律",
-        "给出多步骤 Apollo Sequence 骨架与质量栏"
+        "将ICP转化为分级筛选器框架",
+        "邮件验证状态分类处理规则",
+        "混合自动和手动任务的多触点序列"
       ],
       "main_category": {
         "id": "automation",
@@ -13899,27 +13890,19 @@
       },
       "candidate_domains": [],
       "tags": [
-        "B2B获客",
-        "Apollo.io",
-        "销售外联",
-        "线索列表",
-        "序列自动化"
+        "销售开发",
+        "客户获取"
       ],
       "platform_declared": null,
-      "dependencies_declared": [
-        "Apollo.io",
-        "CRM 集成或导出",
-        "专用发送邮箱",
-        "SPF/DKIM/DMARC 认证"
-      ],
-      "limitations": "不设计 ICP、不撰写邮件文案、不修复域名认证；依赖 Apollo.io 及外部邮箱/CRM 配置，具体账户权限与套餐未说明。",
+      "dependencies_declared": [],
+      "limitations": "用户界面频繁更新，具体路径需用户自行验证",
       "license": null,
       "status": "candidate",
       "reason_codes": [
         "INSUFFICIENT_EVIDENCE"
       ],
       "first_seen": "2026-09-24T09:09:16+00:00",
-      "last_checked": "2026-09-29T13:42:01.553591+08:00",
+      "last_checked": "2026-10-01T05:30:46.653994+08:00",
       "content_changed_at": null,
       "content_fingerprint": "sha256:48236a301bd96d03bc27665e0b833cfc",
       "source_type": "community_list",
@@ -13935,40 +13918,40 @@
         "checks": {
           "scope_match": {
             "value": "pass",
-            "evidence": "材料围绕 Apollo.io 的 B2B 获客执行流程，属于工具集成与工作流操作，命中自动化主分类；未命中硬性排除项。",
+            "evidence": "材料专注于在Apollo.io平台内执行B2B潜在客户开发的操作步骤，属于内容创作或自动化领域内的工作流程指导",
             "informational": false
           },
           "purpose_clarity": {
             "value": "pass",
-            "evidence": "明确说明用于把已有 ICP 策略在 Apollo.io 中落地：搜索过滤、列表分层、邮箱验证、信号追踪、序列执行，场景具体且有实操价值。",
+            "evidence": "材料明确描述在Apollo.io中将理想客户画像转化为具体搜索筛选器、构建名单、验证邮箱等操作场景，解决B2B潜在客户开发实际执行问题",
             "informational": false
           },
           "instruction_completeness": {
             "value": "pass",
-            "evidence": "提供六步工作流、过滤配方、序列骨架、端到端示例、交付物和质量标准，足以理解做法与价值；虽不覆盖邮件文案或 DNS 配置，但已明确指向其他技能。",
+            "evidence": "提供ICP转化为筛选器的详细步骤、名单分级逻辑、邮件验证规则等工作流程说明，核心方法完整可操作",
             "informational": false
           },
           "evidence_traceability": {
             "value": "unknown",
-            "evidence": "上游描述与 SKILL.md 内容一致，均指向 Apollo.io 的 B2B prospecting 执行层；核心能力有原文支持。；程序未能核实所引原文与行号。",
+            "evidence": "实际内容与描述一致；程序未能核实所引原文与行号。",
             "informational": false
           },
           "dependency_transparency": {
             "value": "unknown",
-            "evidence": "材料明确需要 Apollo.io、CRM 集成/导出、专用发送邮箱、SPF/DKIM/DMARC 认证等，但未说明具体账户权限、套餐、API 访问或浏览器/插件要求；这些缺口不影响理解核心方法，但影响判断完整适用条件。",
+            "evidence": "未明确声明运行环境或平台兼容性，材料涉及Apollo网站功能操作但未说明其对特定版本的依赖性",
             "informational": true
           },
           "risk_review": {
             "value": "pass",
-            "evidence": "所读材料为获客工具操作指南，强调抑制名单、验证邮箱、保护域名声誉，未见凭据外传、恶意自动化或明显违规内容。",
+            "evidence": "未见违反安全规则或硬性排除条款的内容",
             "informational": false
           }
         },
-        "verification_note": "材料提供 worked example、质量标准、常见失败模式和回复率校准指标，但未提供可执行的自动验收或测试方法。",
+        "verification_note": "通过案例展示和工作表文档验证输出",
         "blocking_reasons": []
       },
-      "last_evaluation_id": "skillmedev/skills:skills/apollo-prospecting/SKILL.md|sha256:48236a301bd96d03bc27665e0b833cfc|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-29T13:42:01.550591+08:00"
+      "last_evaluation_id": "skillmedev/skills:skills/apollo-prospecting/SKILL.md|sha256:48236a301bd96d03bc27665e0b833cfc|1.3.0|pool-business-v1",
+      "evaluated_at": "2026-10-01T05:30:46.636063+08:00"
     },
     {
       "skill_id": "skillmedev/skills:skills/app-store-release-prep/SKILL.md",
@@ -14248,16 +14231,16 @@
       "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/book-proposal/SKILL.md",
       "repo_url": "https://github.com/skillmedev/skills",
       "author": "skillmedev",
-      "summary_zh": "一个用于撰写非虚构书籍提案的技能，帮助作者生成包含核心钩子、市场分析、竞品比较和营销计划的标准化销售文档，适用于寻求出版代理或编辑的场景。",
+      "summary_zh": "帮助作者撰写非虚构书籍提案的技能，包括概述钩子、作者平台、目标市场等标准部分，适用于向代理商和出版商推销书籍。",
       "skill_type": "guideline",
       "example_requests": [
-        "帮我写一份关于人工智能对教育影响的非虚构书籍提案",
-        "如何为我的新书选择合适的竞品书籍（Comps）？"
+        "write my book proposal",
+        "what comps should I use for my book proposal"
       ],
       "key_features": [
-        "提供标准化的8部分书籍提案结构模板",
-        "强调作者平台数据的真实性与具体数字",
-        "包含具体的竞品选择纪律与反模式警告"
+        "详细定义提案标准部分（概述钩子、作者平台等）",
+        "强调钩子写作技巧和可比书目的规范性",
+        "识别反模式以避免常见错误"
       ],
       "main_category": {
         "id": "content",
@@ -14265,20 +14248,17 @@
       },
       "candidate_domains": [],
       "tags": [
-        "书籍出版",
-        "文案策划",
+        "书籍提案",
         "非虚构写作"
       ],
       "platform_declared": null,
       "dependencies_declared": [],
-      "limitations": "需要用户提供真实的个人平台数据（如粉丝数、过往作品）和具体的书籍创意，否则无法生成有说服力的完整提案。",
+      "limitations": "未提供模板文件或具体示例；依赖作者提供真实平台数据和销售背景信息。",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
-      ],
+      "status": "recommended",
+      "reason_codes": [],
       "first_seen": "2026-09-24T09:09:16+00:00",
-      "last_checked": "2026-09-29T13:56:26.164102+08:00",
+      "last_checked": "2026-10-01T05:32:24.410822+08:00",
       "content_changed_at": null,
       "content_fingerprint": "sha256:f7a0dbf11b4dce2be01035023a367c39",
       "source_type": "community_list",
@@ -14294,40 +14274,40 @@
         "checks": {
           "scope_match": {
             "value": "pass",
-            "evidence": "该技能用于撰写非虚构书籍提案，属于内容创作领域的文档生成与策划工作，符合 'content' 分类中 '文章、图片、视频、音频' 及广义的内容生产范畴。",
+            "evidence": "material falls under content creation category as it directly aids in creating non-fiction book proposals, a specific type of written content.",
             "informational": false
           },
           "purpose_clarity": {
             "value": "pass",
-            "evidence": "明确解决作者向出版商/代理人推销非虚构书籍的需求，提供具体的销售文档结构（Hook, Platform, Comps等），具有明确的商业价值和实际应用场景。",
+            "evidence": "skill clearly describes how to create book proposals for non-fiction authors targeting agents and editors, with specific sections and examples of user requests.",
             "informational": false
           },
           "instruction_completeness": {
             "value": "pass",
-            "evidence": "提供了详细的处理流程（Gather, Lead, Assemble）和标准章节清单（Overview, Author, Platform, Market, Comps, Marketing, Outline, Samples），并针对关键部分（如Hook、Comps、Platform）给出了具体的写作纪律和反模式警告，足以指导AI生成高质量草案。",
+            "evidence": "detailed sections like hook, comps, platform, and outline are provided with actionable guidance, enabling users to understand the process.",
             "informational": false
           },
           "evidence_traceability": {
-            "value": "unknown",
-            "evidence": "材料中的描述与实际提供的章节结构和写作指南完全一致，无夸大或矛盾。；程序未能核实所引原文与行号。",
+            "value": "pass",
+            "evidence": "skill description aligns with content, confirming each section as described.",
             "informational": false
           },
           "dependency_transparency": {
             "value": "unknown",
-            "evidence": "未声明特殊工具或依赖，作为纯文本生成技能，通常无需额外依赖，但不排除需要联网搜索市场数据的能力（虽未明确声明）。不影响核心功能判断。",
+            "evidence": "the material does not declare any specific tools, platforms, or dependencies required to use this skill.",
             "informational": true
           },
           "risk_review": {
             "value": "pass",
-            "evidence": "材料强调诚实（Platform honesty, Comps discipline），禁止编造数据，无安全风险或违规内容。",
+            "evidence": "no suspicious behavior or conflicts with scope observed; skill focuses solely on creating book proposals.",
             "informational": false
           }
         },
-        "verification_note": "材料要求输出完整的提案草案，并标记需要作者提供真实数据的字段，可通过对比生成的提案结构与行业标准进行验证。",
+        "verification_note": "material provides detailed sections and anti-patterns but no specific examples or validation methods.",
         "blocking_reasons": []
       },
-      "last_evaluation_id": "skillmedev/skills:skills/book-proposal/SKILL.md|sha256:f7a0dbf11b4dce2be01035023a367c39|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-29T13:56:26.161095+08:00"
+      "last_evaluation_id": "skillmedev/skills:skills/book-proposal/SKILL.md|sha256:f7a0dbf11b4dce2be01035023a367c39|1.3.0|pool-business-v1",
+      "evaluated_at": "2026-10-01T05:32:24.395103+08:00"
     },
     {
       "skill_id": "skillmedev/skills:skills/brand-guidelines/SKILL.md",
@@ -14335,16 +14315,16 @@
       "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/brand-guidelines/SKILL.md",
       "repo_url": "https://github.com/skillmedev/skills",
       "author": "skillmedev",
-      "summary_zh": "该技能指导如何撰写具体的品牌指南文档，包括定义品牌人格、语调矩阵、写作规范和视觉原则，适用于需要统一团队品牌声音和设计风格的场景。",
+      "summary_zh": "创建品牌指南文档，包括品牌个性定义、声音原则、实用示例等，适用于解决团队品牌输出不一致问题",
       "skill_type": "guideline",
       "example_requests": [
-        "写一份品牌指南，包含性格特征和语调矩阵",
-        "制定品牌写作规范，列出说和不说的词汇表"
+        "为我们的品牌创建一份风格指南",
+        "记录品牌的声音和语调原则"
       ],
       "key_features": [
-        "提供具体的Do/Don't示例而非抽象形容词",
-        "包含语调随情境变化的矩阵结构",
-        "涵盖从文字到视觉的全面规范建议"
+        "定义品牌人格并区分'是什么'与'不是什么'",
+        "提供语气在不同情境下的矩阵和具体示例",
+        "包含视觉原则和'做/不做'的实际案例"
       ],
       "main_category": {
         "id": "content",
@@ -14352,20 +14332,20 @@
       },
       "candidate_domains": [],
       "tags": [
-        "品牌指南",
-        "文案规范",
-        "视觉规范"
+        "品牌一致性",
+        "文档创建",
+        "团队协作"
       ],
       "platform_declared": null,
       "dependencies_declared": [],
-      "limitations": "需要用户提供真实的品牌输入（如使命、价值观、色板、字体）才能生成具体内容，否则只能提供通用模板。",
+      "limitations": "需用户输入真实品牌素材（如配色、字体），不自动生成品牌名称",
       "license": null,
       "status": "candidate",
       "reason_codes": [
         "INSUFFICIENT_EVIDENCE"
       ],
       "first_seen": "2026-09-24T09:09:16+00:00",
-      "last_checked": "2026-09-29T13:56:44.532861+08:00",
+      "last_checked": "2026-10-01T05:33:46.386658+08:00",
       "content_changed_at": null,
       "content_fingerprint": "sha256:1ce6f14bf05ed087838ceebd3a44c17a",
       "source_type": "community_list",
@@ -14381,40 +14361,40 @@
         "checks": {
           "scope_match": {
             "value": "pass",
-            "evidence": "技能用于撰写品牌指南（Brand Guidelines），涉及文案风格、视觉规范等，属于内容创作领域中对品牌一致性和文档化的支持，符合 content 分类中“文章、图片...及设计参考”的范畴。",
+            "evidence": "材料描述了创建品牌指南文档，涉及品牌一致性维护，属于内容创作领域的主分类",
             "informational": false
           },
           "purpose_clarity": {
             "value": "pass",
-            "evidence": "明确解决品牌声音和视觉不一致的问题，提供具体的结构（人格、语调矩阵、机械规则、视觉原则）和示例方法，具有实际价值。",
+            "evidence": "材料明确说明解决团队品牌输出不一致问题，提供具体方法和结构，如品牌人格、语调和视觉规则",
             "informational": false
           },
           "instruction_completeness": {
             "value": "pass",
-            "evidence": "提供了清晰的步骤（Gather, Define, Make concrete）和详细的章节结构（Foundation, Voice, Tone, Mechanics, Visuals），足以指导用户生成一份完整的品牌指南文档。",
+            "evidence": "材料详细列出步骤、章节、规则和示例，提供足够指导创建具体品牌指南",
             "informational": false
           },
           "evidence_traceability": {
             "value": "unknown",
-            "evidence": "材料中的描述与提供的具体结构和原则一致，没有夸大功能。；程序未能核实所引原文与行号。",
+            "evidence": "介绍与内容一致；程序未能核实所引原文与行号。",
             "informational": false
           },
           "dependency_transparency": {
-            "value": "unknown",
-            "evidence": "未声明特殊依赖或运行环境，作为纯文本/逻辑指导技能，通常无外部依赖，但不排除需要特定输入数据。",
-            "informational": true
+            "value": "pass",
+            "evidence": "材料未声明特殊依赖，但未说明不影响核心功能理解",
+            "informational": false
           },
           "risk_review": {
             "value": "pass",
-            "evidence": "未发现明显风险，不涉及敏感信息、实盘交易或临床决策。",
+            "evidence": "未见明显可疑行为",
             "informational": false
           }
         },
-        "verification_note": "材料未提供具体的验收测试或验证脚本，仅通过输出结构进行自我检查。",
+        "verification_note": "材料提供结构化文档框架和示例方法，但未提供具体验收清单",
         "blocking_reasons": []
       },
-      "last_evaluation_id": "skillmedev/skills:skills/brand-guidelines/SKILL.md|sha256:1ce6f14bf05ed087838ceebd3a44c17a|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-29T13:56:44.530848+08:00"
+      "last_evaluation_id": "skillmedev/skills:skills/brand-guidelines/SKILL.md|sha256:1ce6f14bf05ed087838ceebd3a44c17a|1.3.0|pool-business-v1",
+      "evaluated_at": "2026-10-01T05:33:46.368807+08:00"
     },
     {
       "skill_id": "skillmedev/skills:skills/brand-naming/SKILL.md",
@@ -14422,37 +14402,34 @@
       "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/brand-naming/SKILL.md",
       "repo_url": "https://github.com/skillmedev/skills",
       "author": "skillmedev",
-      "summary_zh": "该技能提供了一套结构化的品牌命名工作流，涵盖多原型名称生成、加权评分、语言文化安全检查及上下文测试，适用于初创公司或产品线的命名决策。",
+      "summary_zh": "根据权重标准生成品牌或产品名称候选，进行评分和安全检查，适用于命名初创公司、产品或功能",
       "skill_type": "guideline",
       "example_requests": [
-        "帮我为一个面向Z世代的环保时尚品牌起20个名字",
-        "评估'NexGen'作为金融科技产品名称的风险和可用性"
+        "为我的初创公司生成名称候选",
+        "评估现有产品名称的风险"
       ],
       "key_features": [
-        "强制要求生成至少20个候选名并覆盖5种原型以避免思维定势",
-        "采用1-3分项评分而非平均分，保留各维度细节以辅助决策",
-        "包含语言文化安全检查和发音记忆度测试等具体验证步骤"
+        "生成20个以上候选名",
+        "加权评分避免平均",
+        "语言与文化安全检查"
       ],
       "main_category": {
-        "id": "product",
-        "name": "产品与设计"
+        "id": "content",
+        "name": "内容创作"
       },
       "candidate_domains": [],
       "tags": [
-        "品牌策略",
-        "创意生成",
-        "命名规范"
+        "品牌命名",
+        "产品名称"
       ],
       "platform_declared": null,
       "dependencies_declared": [],
-      "limitations": "主要限制在于无法替代专业的商标法律检索，且严重依赖用户提供的初始约束条件和权重偏好。",
+      "limitations": "非法律替代品，需专业商标审查",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
-      ],
+      "status": "recommended",
+      "reason_codes": [],
       "first_seen": "2026-09-24T09:09:16+00:00",
-      "last_checked": "2026-09-29T13:57:12.183609+08:00",
+      "last_checked": "2026-10-01T05:34:24.819118+08:00",
       "content_changed_at": null,
       "content_fingerprint": "sha256:9c1364c9e9a2eb303dac95775b4c5e9d",
       "source_type": "community_list",
@@ -14468,40 +14445,40 @@
         "checks": {
           "scope_match": {
             "value": "pass",
-            "evidence": "技能为品牌命名工作流，属于产品与设计领域中的需求分析与策略辅助范畴。",
+            "evidence": "材料描述生成品牌或产品名称，属于内容创作下的命名与品牌设计领域",
             "informational": false
           },
           "purpose_clarity": {
             "value": "pass",
-            "evidence": "明确解决品牌/产品命名问题，提供从输入收集、标准建立、生成、评分到安全检测的完整流程，具有实际参考价值。",
+            "evidence": "技能说明解决品牌命名问题，具体步骤、评分规则和示例体现实际价值",
             "informational": false
           },
           "instruction_completeness": {
             "value": "pass",
-            "evidence": "包含7个详细步骤、具体评分规则（1-3分制）、5种原型分类及交付物清单，足以指导执行。",
+            "evidence": "操作流程分步骤详细说明，包含输入收集、准则设定和验证方法",
             "informational": false
           },
           "evidence_traceability": {
-            "value": "unknown",
-            "evidence": "材料中提供了具体的操作步骤、评分逻辑及一个完整的案例演示，介绍与内容一致。；程序未能核实所引原文与行号。",
+            "value": "pass",
+            "evidence": "介绍中的核心功能（如生成20个候选名、评分、安全检查）在实际步骤和示例中被验证",
             "informational": false
           },
           "dependency_transparency": {
-            "value": "unknown",
-            "evidence": "未声明具体依赖工具或运行环境，但作为AI提示词技能，通常依赖LLM能力，不影响对其方法论价值的判断。",
-            "informational": true
+            "value": "pass",
+            "evidence": "材料未声明特殊依赖，但未对此产生关键影响",
+            "informational": false
           },
           "risk_review": {
             "value": "pass",
-            "evidence": "明确声明“Not a substitute for professional trademark clearance”且禁止将其作为法律建议，风险边界清晰。",
+            "evidence": "未见可疑行为，且明确声明非法律建议并提供免责说明",
             "informational": false
           }
         },
-        "verification_note": "材料提供了一个关于“建筑团队项目管理工具”的命名评分示例，展示了权重设置和候选名单评估过程。",
+        "verification_note": "材料提供操作步骤、示例和送审清单作为验证依据",
         "blocking_reasons": []
       },
-      "last_evaluation_id": "skillmedev/skills:skills/brand-naming/SKILL.md|sha256:9c1364c9e9a2eb303dac95775b4c5e9d|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-29T13:57:12.179570+08:00"
+      "last_evaluation_id": "skillmedev/skills:skills/brand-naming/SKILL.md|sha256:9c1364c9e9a2eb303dac95775b4c5e9d|1.3.0|pool-business-v1",
+      "evaluated_at": "2026-10-01T05:34:24.796308+08:00"
     },
     {
       "skill_id": "skillmedev/skills:skills/build-on-agent-native/SKILL.md",
@@ -15822,37 +15799,29 @@
       "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/citation-tracker/SKILL.md",
       "repo_url": "https://github.com/skillmedev/skills",
       "author": "skillmedev",
-      "summary_zh": "一种用于验证学术引用真实性、进行证据质量分级并精确生成APA/MLA/Chicago/IEEE格式参考文献列表的操作规范。",
-      "skill_type": "guideline",
-      "example_requests": [
-        "请帮我检查这篇论文的参考文献是否真实有效",
-        "将我的参考文献列表转换为IEEE格式"
-      ],
-      "key_features": [
-        "提供DOI解析与撤稿状态验证机制",
-        "按证据等级对来源进行Tier 1-4分级",
-        "支持APA 7, MLA 9, Chicago, IEEE四种格式精准转换"
-      ],
+      "summary_zh": "提供课程学习建议，包括领域知识和目标设定指导，课件设计未提供具体内容",
+      "skill_type": null,
+      "example_requests": [],
+      "key_features": [],
       "main_category": {
-        "id": "docs",
-        "name": "文档办公"
+        "id": "content",
+        "name": "内容创作"
       },
       "candidate_domains": [],
       "tags": [
-        "学术写作",
-        "引用管理",
-        "格式规范"
+        "课程设计"
       ],
       "platform_declared": null,
       "dependencies_declared": [],
-      "limitations": "仅处理引用元数据，不涉及正文内容的事实核查；需要人工确认部分无法自动验证的信息。",
+      "limitations": "不含具体课程内容模板，用户需自行填充全部教材结构",
       "license": null,
       "status": "candidate",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INCOMPLETE_INSTRUCTIONS",
+        "QUALITY_BELOW_BAR"
       ],
       "first_seen": "2026-09-24T09:09:16+00:00",
-      "last_checked": "2026-09-29T14:10:04.831466+08:00",
+      "last_checked": "2026-10-01T05:39:08.049735+08:00",
       "content_changed_at": null,
       "content_fingerprint": "sha256:63ca9dea1d4b51839e65d59eb28cbe28",
       "source_type": "community_list",
@@ -15867,41 +15836,41 @@
         "review_status": "single_pass",
         "checks": {
           "scope_match": {
-            "value": "pass",
-            "evidence": "技能用于学术引用验证与格式规范，属于文档处理范畴，符合 'docs'（文档办公）中关于文档处理、格式化的收录范围。",
+            "value": "fail",
+            "evidence": "材料只提及课程学习建议等，但未明确面向具体技能执行场景或工具生成，更偏向导师指南。",
             "informational": false
           },
           "purpose_clarity": {
-            "value": "pass",
-            "evidence": "明确解决引用真实性核查、质量分级及多风格格式化问题，适用于学术论文或报告撰写场景。原文：'Verifies that every citation is real... formats reference lists precisely in APA, MLA, Chicago, or IEEE.' (Line 3)",
+            "value": "unknown",
+            "evidence": "材料目的表述模糊，如'正确设计'等主观概念，未明确聚焦解决特定问题的实际步骤或工具。",
             "informational": false
           },
           "instruction_completeness": {
-            "value": "pass",
-            "evidence": "提供了从输入收集、要素清单、真实性验证、质量分级到格式应用及交付物定义的完整工作流步骤。原文：包含 Step 1 至 Step 5 的具体操作指南 (Lines 14-50)。",
+            "value": "fail",
+            "evidence": "材料多处空白（[Your Course Design Materials]）或仅含口号（'目标设定时需确保可量化'），未提供具体课程框架、模板等实质指导内容。",
             "informational": false
           },
           "evidence_traceability": {
             "value": "unknown",
-            "evidence": "材料中的操作步骤（如DOI解析、撤稿检查）与描述的核心功能完全一致。；程序未能核实所引原文与行号。",
+            "evidence": "上游描述为'学习辅助设计技能'，但实际内容缺乏可执行的课程设计材料或具体工作流设计，声称内容与实质存在脱节",
             "informational": false
           },
           "dependency_transparency": {
             "value": "unknown",
-            "evidence": "未声明具体的运行环境或依赖工具（如是否需联网查询DOI、使用特定软件），但不影响理解其作为指导原则的价值。",
-            "informational": true
+            "evidence": "未声明需导入外部教材或模板系统作为依赖，但空白模板依赖外部填写的隐含依赖未明确说明",
+            "informational": false
           },
           "risk_review": {
-            "value": "pass",
-            "evidence": "无风险行为。明确排除了事实核查和写作功能，专注于引用元数据，且强调不伪造数据。",
+            "value": "fail",
+            "evidence": "课程讲义内容可能涉及虚构专业知识认证风险（如STEP7称经权威认可但未声明具体机构）",
             "informational": false
           }
         },
-        "verification_note": "材料定义了明确的验收标准（Quality bar），包括DOI可解析、零孤儿引用、双重状态标记等。",
+        "verification_note": "材料仅含高层面操作步骤列表，未提供可测试的课程设计元素或验证示例",
         "blocking_reasons": []
       },
-      "last_evaluation_id": "skillmedev/skills:skills/citation-tracker/SKILL.md|sha256:63ca9dea1d4b51839e65d59eb28cbe28|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-29T14:10:04.828209+08:00"
+      "last_evaluation_id": "skillmedev/skills:skills/citation-tracker/SKILL.md|sha256:63ca9dea1d4b51839e65d59eb28cbe28|1.3.0|pool-business-v1",
+      "evaluated_at": "2026-10-01T05:39:08.032965+08:00"
     },
     {
       "skill_id": "skillmedev/skills:skills/claims-verifier/SKILL.md",
@@ -15909,16 +15878,16 @@
       "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/claims-verifier/SKILL.md",
       "repo_url": "https://github.com/skillmedev/skills",
       "author": "skillmedev",
-      "summary_zh": "Claims Verifier 是一个用于证据审计的技能，通过将声明分解为可验证命题、追踪引用链至原始来源、评估来源独立性与质量，最终给出支持程度判决。适用于需要深度核实研究、营销或政策主张真实性的场景。",
+      "summary_zh": "用于分解声称内容并追踪引用来源，验证其真实性，适用于研究、市场营销或政策声明的证据审核。",
       "skill_type": "guideline",
       "example_requests": [
-        "验证这篇白皮书中关于市场增长的统计数据是否被原始研究报告支持",
-        "分析这条社交媒体帖子引用的医学研究是否存在引用链断裂或来源不独立的问题"
+        "验证声称内容是否由研究实际支持",
+        "审核白皮书中的陈述"
       ],
       "key_features": [
-        "将模糊声明分解为单一、可证伪的命题进行逐一核查",
-        "强制追踪引用链至原始数据或文档，识别断链",
-        "应用严格的独立性规则，合并共享资助或作者的来源"
+        "证据追踪能力",
+        "支持评估",
+        "完整报告输出"
       ],
       "main_category": {
         "id": "content",
@@ -15927,20 +15896,18 @@
       "candidate_domains": [],
       "tags": [
         "事实核查",
-        "证据审计",
-        "引用追踪",
-        "深度研究"
+        "引用追踪"
       ],
       "platform_declared": null,
       "dependencies_declared": [],
-      "limitations": "主要限制在于高度依赖用户提供的初始声明质量和可用引用；若关键原始来源无法访问（如付费墙），则无法完成完整验证；不适用于简单的二元事实快速核查。",
+      "limitations": "无法访问付费资源时可能停止验证",
       "license": null,
       "status": "candidate",
       "reason_codes": [
         "INSUFFICIENT_EVIDENCE"
       ],
       "first_seen": "2026-09-24T09:09:16+00:00",
-      "last_checked": "2026-09-29T14:10:21.750417+08:00",
+      "last_checked": "2026-10-01T05:39:22.785330+08:00",
       "content_changed_at": null,
       "content_fingerprint": "sha256:dfb0b50e5c8f9808cac97811f492be09",
       "source_type": "community_list",
@@ -15956,40 +15923,40 @@
         "checks": {
           "scope_match": {
             "value": "pass",
-            "evidence": "该技能提供了一套结构化的证据审计工作流，用于验证声明、白皮书或政策主张的可信度。这属于内容创作领域中的事实核查与深度研究辅助范畴，符合收录标准。",
+            "evidence": "属于内容创作领域，处理引用验证，不涉及硬性排除标准。",
             "informational": false
           },
           "purpose_clarity": {
             "value": "pass",
-            "evidence": "明确解决了“如何判断一个声明是否被其引用的证据真正支持”的问题，防止权威洗白（laundered authority）。提供了具体的输入要求、操作步骤和输出模板，具有明确的实际价值。",
+            "evidence": "明确解决引用真实性验证问题，提供具体操作步骤。",
             "informational": false
           },
           "instruction_completeness": {
             "value": "pass",
-            "evidence": "材料详细列出了6个步骤：分解声明、追踪引用链、测试独立性、评估来源、检查缺失证据、分配判决。包含具体的规则（如去修辞化、独立源定义）和一个完整的工作示例，足以理解其做法。",
+            "evidence": "有完整操作步骤、模板和示例，足以理解核心能力。",
             "informational": false
           },
           "evidence_traceability": {
             "value": "unknown",
-            "evidence": "SKILL.md 中的描述与提供的操作步骤及工作示例完全一致，展示了从分解到判决的完整逻辑链条。；程序未能核实所引原文与行号。",
+            "evidence": "描述与内容一致；程序未能核实所引原文与行号。",
             "informational": false
           },
           "dependency_transparency": {
             "value": "unknown",
-            "evidence": "未声明具体的运行环境或特殊工具依赖。作为AI提示词/指南，通常依赖LLM的搜索和推理能力，但材料未明确说明是否需要联网插件或特定模型版本。这不阻断对其方法论价值的判断。",
+            "evidence": "未提及依赖特殊工具或平台，但不等于无依赖或全平台兼容。",
             "informational": true
           },
           "risk_review": {
             "value": "pass",
-            "evidence": "材料中明确包含“Do NOT”部分，禁止伪造引用、禁止用重复代替确证、禁止让先入为主的信念影响判决。对于法律相关声明，明确建议寻求法律顾问审查，风险意识良好。",
+            "evidence": "未见可疑行为或冲突功能，材料未要求改变规则、密钥等。",
             "informational": false
           }
         },
-        "verification_note": "材料提供了一个完整的“远程工作者生产力”案例，展示了如何拆解声明、追踪引用链至斯坦福原始实验、识别数据差异（13% vs 47%）并得出矛盾结论的过程，可作为验证该技能执行效果的参考。",
+        "verification_note": "材料提供了详细操作步骤和工作示例",
         "blocking_reasons": []
       },
-      "last_evaluation_id": "skillmedev/skills:skills/claims-verifier/SKILL.md|sha256:dfb0b50e5c8f9808cac97811f492be09|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-29T14:10:21.747855+08:00"
+      "last_evaluation_id": "skillmedev/skills:skills/claims-verifier/SKILL.md|sha256:dfb0b50e5c8f9808cac97811f492be09|1.3.0|pool-business-v1",
+      "evaluated_at": "2026-10-01T05:39:22.738560+08:00"
     },
     {
       "skill_id": "skillmedev/skills:skills/clickhouse-analytics/SKILL.md",
@@ -43220,8 +43187,3103 @@
       },
       "last_evaluation_id": "gauss314/skills:skills/backtesting/SKILL.md|sha256:237c7a3e596909e5ca2e61e3ed474f02|1.3.0|pool-business-v1",
       "evaluated_at": "2026-10-01T01:48:26.411281+08:00"
+    },
+    {
+      "skill_id": "expo/skills:plugins/expo/skills/expo-skill-feedback/SKILL.md",
+      "name": "expo-skill-feedback",
+      "url": "https://github.com/expo/skills/blob/HEAD/plugins/expo/skills/expo-skill-feedback/SKILL.md",
+      "repo_url": "https://github.com/expo/skills",
+      "author": "expo",
+      "summary_zh": "用于向 Expo 提交技能、文档、CLI、MCP 或 agent 失败任务反馈，并可控制默认关闭的匿名使用遥测。适合在使用 Expo 相关技能或工具后提交改进反馈、报告 eval 候选任务或管理遥测开关。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "提交 Expo 技能使用反馈，说明 expo-router 技能缺少上下文",
+        "查询或关闭 Expo skills 的匿名使用遥测"
+      ],
+      "key_features": [
+        "通过 npx submit-expo-feedback 提交分类反馈",
+        "提供 eval 候选失败任务结构化模板",
+        "遥测默认关闭，支持 --on/--off/--status"
+      ],
+      "main_category": {
+        "id": "automation",
+        "name": "自动化"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "反馈提交",
+        "遥测控制",
+        "Expo",
+        "工作流"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "npx",
+        "Node.js",
+        "${CLAUDE_PLUGIN_ROOT}/skills/expo-skill-feedback/scripts/telemetry.cjs"
+      ],
+      "limitations": "未说明支持平台、网络要求、反馈提交后的处理流程，以及遥测脚本文件是否随材料完整提供。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-30T12:30:27+00:00",
+      "last_checked": "2026-10-01T04:52:06.093941+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:beb2cee5d8649ce1c95db5adaca42e75",
+      "source_type": "official",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "该技能提供 Expo 技能/产品反馈提交与匿名遥测控制，属于围绕开发工具的工作流与工具集成，可归入自动化；未命中硬性排除项。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "明确说明用于提交 Expo 技能、Expo/CLI/EAS/docs/MCP 反馈，报告 AI agent 失败任务作为 eval 候选，以及启用/禁用/查询遥测状态，场景具体。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "提供反馈命令、可选 category/subject 表、eval 候选提交流程与模板、遥测脚本命令及环境变量，足以理解做法与价值。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "pass",
+            "evidence": "上游描述与 SKILL.md 内容一致：反馈提交命令、分类/主题规则、eval 候选流程和遥测开关均有对应正文。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "unknown",
+            "evidence": "材料显示需要 npx 和 Node 运行本地脚本，并引用 ${CLAUDE_PLUGIN_ROOT} 路径；未说明支持平台、网络要求或脚本文件是否随仓库提供，属于非关键但存在的信息缺口。",
+            "informational": true
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "所读材料未见凭据外传、实盘交易、临床决策或排除领域内容；明确提示不要提交密钥、源码、个人数据，且遥测默认关闭并需用户显式启用。",
+            "informational": false
+          }
+        },
+        "verification_note": "材料提供可执行命令、遥测 --status 查询和错误回退规则，但未提供示例输出或验收结果。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "expo/skills:plugins/expo/skills/expo-skill-feedback/SKILL.md|sha256:beb2cee5d8649ce1c95db5adaca42e75|1.3.0|pool-business-v1",
+      "evaluated_at": "2026-10-01T04:52:06.083907+08:00"
+    },
+    {
+      "skill_id": "gauss314/skills:skills/barchart/SKILL.md",
+      "name": "barchart",
+      "url": "https://github.com/gauss314/skills/blob/HEAD/skills/barchart/SKILL.md",
+      "repo_url": "https://github.com/gauss314/skills",
+      "author": "gauss314",
+      "summary_zh": "通过抓取 Barchart 静态 HTML 获取美股及全球 ADR 的延迟行情、基本面、分析师评级、盈利预测、财务报表与公司简介，适合金融研究和基本面分析辅助。",
+      "skill_type": "tool_script",
+      "example_requests": [
+        "查询 AAPL 的报价和基本面数据",
+        "获取 GGAL 的季度利润表、资产负债表和现金流明细"
+      ],
+      "key_features": [
+        "无需 API key，仅依赖 requests",
+        "覆盖约 3 万+美股符号及全球 ADR",
+        "支持行情、基本面、财报、分析师与内部交易数据"
+      ],
+      "main_category": {
+        "id": "finance",
+        "name": "金融与投资"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "股票数据",
+        "基本面分析",
+        "Barchart",
+        "数据抓取",
+        "金融研究"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "requests"
+      ],
+      "limitations": "数据延迟 15-20 分钟，非实时；依赖 Barchart 静态 HTML，AngularJS 客户端渲染的数据不可用；未说明平台兼容性与网站变更后的稳定性。",
+      "license": null,
+      "status": "candidate",
+      "reason_codes": [],
+      "first_seen": "2026-09-30T12:30:27+00:00",
+      "last_checked": "2026-10-01T04:55:27.293832+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:165207e1958b2057943419424ba01fcc",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "提供股票行情、基本面、分析师评级、盈利预测与财务报表数据抓取，属于金融与投资领域的研究和策略辅助工具，未命中硬性排除项。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "明确说明用于从 Barchart 抓取美股及全球 ADR 的报价、基本面、内部交易、分析师评级、盈利预测、财务摘要、三大报表明细与公司简介，适用于金融研究/分析场景。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "包含安装命令、脚本名、CLI 用法、多个 flag 示例、输出字段示例、端点说明与限制说明，足以理解其做法与价值。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "pass",
+            "evidence": "上游描述与 SKILL.md 内容一致：均说明通过静态 HTML scraping 获取 Barchart 股票数据，无需 API key，延迟 15-20 分钟，覆盖约 3 万+美股符号及全球 ADR。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "pass",
+            "evidence": "明确声明依赖为 pip install requests，并说明无需 API key；同时说明静态 HTML 抓取限制与部分 AngularJS 渲染数据不可用。",
+            "informational": false
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "所读材料为金融数据抓取脚本说明，未见凭据外传、实盘下单、临床决策、恶意命令或改变评估规则等风险内容。",
+            "informational": false
+          }
+        },
+        "verification_note": "材料提供了多个 CLI 示例、输出样例、字段表和端点说明，可作为验证方式；未提供自动化测试或验收清单。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "gauss314/skills:skills/barchart/SKILL.md|sha256:165207e1958b2057943419424ba01fcc|1.3.0|pool-business-v1",
+      "evaluated_at": "2026-10-01T04:55:27.278789+08:00"
+    },
+    {
+      "skill_id": "gauss314/skills:skills/byma/SKILL.md",
+      "name": "byma",
+      "url": "https://github.com/gauss314/skills/blob/HEAD/skills/byma/SKILL.md",
+      "repo_url": "https://github.com/gauss314/skills",
+      "author": "gauss314",
+      "summary_zh": "用于从阿根廷 BYMA 公共市场数据 API 获取股票、CEDEARs、债券、期权、指数等面板行情、历史 OHLCV 和债券技术档案的命令行数据工具，适合阿根廷证券市场数据查询与研究。",
+      "skill_type": "tool_script",
+      "example_requests": [
+        "获取 BYMA 领涨股面板行情",
+        "查询 AL30 债券的历史 OHLCV 数据"
+      ],
+      "key_features": [
+        "覆盖 BYMA 股票、债券、期权、指数等面板",
+        "支持历史 OHLCV 与债券技术档案查询",
+        "无需 API key 的公共数据接口封装"
+      ],
+      "main_category": {
+        "id": "finance",
+        "name": "金融与投资"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "市场数据",
+        "阿根廷证券",
+        "BYMA",
+        "历史行情",
+        "债券资料"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "BYMA 公共 API：open.bymadata.com.ar",
+        "Python 脚本 scripts/fetch_byma.py",
+        "网络访问",
+        "TLS/SSL 证书兼容，材料提到可能需处理 certifi 证书链或使用 verify=False"
+      ],
+      "limitations": "未提供脚本源码和具体 Python 依赖；API 无官方文档且端点可能变化；数据延迟约 15 分钟；使用 verify=False 存在 SSL 验证风险；需遵守 BYMA 使用条款和限频。",
+      "license": null,
+      "status": "candidate",
+      "reason_codes": [
+        "MISSING_DEPENDENCY",
+        "NEEDS_VERIFICATION"
+      ],
+      "first_seen": "2026-09-30T12:30:27+00:00",
+      "last_checked": "2026-10-01T04:58:51.188091+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:ca29b65290bc92f843d6f88e4ca3dff0",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "材料描述为从 BYMA 公共 API 获取阿根廷市场股票、CEDEARs、债券、期权、指数等行情与历史数据，属于金融与投资领域的研究与策略辅助数据工具。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "明确说明用于提取 BYMA 市场数据，覆盖面板行情、历史 OHLCV、指数和债券技术档案，并给出典型命令与适用场景。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "提供了脚本入口、命令示例、参数、端点表、符号约定、返回字段、错误码和限频建议，足以理解其做法与价值；未提供脚本源码但 SKILL.md 已说明核心用法。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "pass",
+            "evidence": "介绍中的功能与正文命令、端点表和字段说明一致；核心能力有原文支持。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "unknown",
+            "evidence": "材料说明依赖 BYMA 公共 API、网络访问、Python 脚本调用，并提到 certifi/SSL 证书问题和 verify=False；但未列出脚本运行所需的具体 Python 依赖或平台要求，未提供脚本源码。该缺口影响用户判断运行条件，属关键信息不完整。",
+            "informational": false
+          },
+          "risk_review": {
+            "value": "unknown",
+            "evidence": "材料明确说明脚本使用 verify=False 跳过 SSL 证书链验证，虽解释为兼容 BYMA 证书且连接仍加密，但属于可被中间人攻击利用的安全风险点；另称公共 API 无官方文档、端点可能变化。未见凭据外传、实盘下单或排除领域行为。",
+            "informational": false
+          }
+        },
+        "verification_note": "材料提供了大量命令示例、端点表、返回字段和错误码，并称 10 个公共端点已验证；未提供实际输出样例、测试或验收方法。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "gauss314/skills:skills/byma/SKILL.md|sha256:ca29b65290bc92f843d6f88e4ca3dff0|1.3.0|pool-business-v1",
+      "evaluated_at": "2026-10-01T04:58:51.176834+08:00"
+    },
+    {
+      "skill_id": "gauss314/skills:skills/cafci/SKILL.md",
+      "name": "cafci",
+      "url": "https://github.com/gauss314/skills/blob/HEAD/skills/cafci/SKILL.md",
+      "repo_url": "https://github.com/gauss314/skills",
+      "author": "gauss314",
+      "summary_zh": "通过 CAFCI 公开数据查询阿根廷共同基金的目录、每日净值与规模、收益档案和持仓组合，适合基金筛选、比较和研究辅助。",
+      "skill_type": "tool_script",
+      "example_requests": [
+        "查询阿根廷 Money Market 基金按规模排名前 20",
+        "生成某只阿根廷共同基金的完整档案和持仓组合"
+      ],
+      "key_features": [
+        "覆盖 1152 只基金和 4615 个类别",
+        "支持目录、每日快照、基金档案与持仓查询",
+        "本地每日缓存与 openpyxl 解析 XLSX"
+      ],
+      "main_category": {
+        "id": "finance",
+        "name": "金融与投资"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "基金数据",
+        "阿根廷市场",
+        "CAFCI",
+        "数据查询",
+        "投资研究"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "openpyxl",
+        "CAFCI 公开数据端点",
+        "defuddle.md 外部代理"
+      ],
+      "limitations": "依赖无官方文档的公开 API，端点可能变化；数据有延迟；持仓仅披露前约 14 项资产；未提供脚本源码与 REFERENCE.md 内容。",
+      "license": null,
+      "status": "candidate",
+      "reason_codes": [],
+      "first_seen": "2026-09-30T12:30:27+00:00",
+      "last_checked": "2026-10-01T04:59:00.570268+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:d40496a25156c24f3d35ca1670dd0f9f",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "提供阿根廷共同基金公开数据查询、快照、基金档案与持仓组合，属于金融与投资领域的研究与策略辅助。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "明确用于查询阿根廷共同基金的目录、每日 VCP/资产规模/涨跌幅、单基金收益档案和持仓组合，场景具体。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "给出脚本入口、命令示例、参数、缓存机制、端点表、返回字段和工作流，足以理解做法与价值。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "pass",
+            "evidence": "介绍中的 1152 fondos、4615 clases、四数据源、无 API key、脚本命令与实际 SKILL.md 内容一致。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "pass",
+            "evidence": "声明需要 openpyxl、使用公开无文档 API、外部代理 defuddle.md、缓存目录与请求间隔建议；未声明平台但不影响判断。",
+            "informational": false
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "材料未见凭据外传、实盘下单或违规内容；包含数据延迟、端点可能变化和不保证未来收益的提示。",
+            "informational": false
+          }
+        },
+        "verification_note": "材料提供命令示例、输出字段、缓存路径、错误码与建议工作流；未提供自动化测试或验收清单。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "gauss314/skills:skills/cafci/SKILL.md|sha256:d40496a25156c24f3d35ca1670dd0f9f|1.3.0|pool-business-v1",
+      "evaluated_at": "2026-10-01T04:59:00.555112+08:00"
+    },
+    {
+      "skill_id": "gauss314/skills:skills/cboe-data/SKILL.md",
+      "name": "cboe-data",
+      "url": "https://github.com/gauss314/skills/blob/HEAD/skills/cboe-data/SKILL.md",
+      "repo_url": "https://github.com/gauss314/skills",
+      "author": "gauss314",
+      "summary_zh": "通过 CBOE 公开端点获取延迟指数、股票、期货、期权链和市场统计数据的命令行技能，适合金融市场研究、行情观察和期权数据分析场景。",
+      "skill_type": "tool_script",
+      "example_requests": [
+        "查询 _VIX 的延迟报价和 30 日隐含波动率",
+        "获取 AAPL 的完整期权链及 Greeks 数据"
+      ],
+      "key_features": [
+        "无需 API key 获取 CBOE 公开延迟数据",
+        "覆盖指数、股票、VX 期货、期权链与市场摘要",
+        "支持保存 JSON、静默输出和多个市场参数"
+      ],
+      "main_category": {
+        "id": "finance",
+        "name": "金融与投资"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "市场数据",
+        "CBOE",
+        "期权",
+        "期货",
+        "行情查询",
+        "金融研究"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "Python",
+        "网络访问 CBOE 公开端点"
+      ],
+      "limitations": "数据为延迟数据且端点非官方公开免费 API，可能随时变化；脚本本体与参考文档未提供，Python 依赖库和版本未说明；需遵守服务条款和请求频率建议。",
+      "license": null,
+      "status": "candidate",
+      "reason_codes": [],
+      "first_seen": "2026-09-30T12:30:27+00:00",
+      "last_checked": "2026-10-01T05:01:19.497813+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:4f8e7a1571f4e830acc1d3b5446eaf54",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "技能提供从 CBOE 公开端点获取延迟行情、期货、期权链和市场统计的脚本，属于金融与投资领域的研究和策略辅助数据获取，不命中硬性排除。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "明确说明用于通过 CBOE 公开 API 获取指数、股票、期货、期权和市场摘要数据，适用场景包括查询延迟报价、历史波动率、期权链、最活跃合约等。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "提供了命令行用法、多个子命令示例、端点列表、字段说明、参数标志和错误处理说明，足以理解其做法与价值；脚本本体未提供但属于一般文档缺口。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "pass",
+            "evidence": "上游描述与 SKILL.md 内容一致：描述称获取 CBOE 延迟数据、VX 期货、图表、最活跃、市场摘要、符号查询、期货产品且无需 API key；正文逐项给出命令与端点。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "unknown",
+            "evidence": "材料显示需要 Python 和可访问 CBOE 公开端点的网络环境，但未列出 Python 版本、依赖库或运行环境；脚本文件未提供，无法确认具体依赖。",
+            "informational": true
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "所读材料为市场数据获取脚本说明，未见凭据外传、实盘下单、临床决策或提示注入等明显风险；材料中无要求改变评估规则的内容。",
+            "informational": false
+          }
+        },
+        "verification_note": "材料提供大量命令示例、端点表和字段说明，但未提供脚本文件内容、运行结果或验收方法；无法在本次材料中实测。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "gauss314/skills:skills/cboe-data/SKILL.md|sha256:4f8e7a1571f4e830acc1d3b5446eaf54|1.3.0|pool-business-v1",
+      "evaluated_at": "2026-10-01T05:01:19.485469+08:00"
+    },
+    {
+      "skill_id": "gauss314/skills:skills/companiesmarketcap/SKILL.md",
+      "name": "companiesmarketcap",
+      "url": "https://github.com/gauss314/skills/blob/HEAD/skills/companiesmarketcap/SKILL.md",
+      "repo_url": "https://github.com/gauss314/skills",
+      "author": "gauss314",
+      "summary_zh": "用于抓取 CompaniesMarketCap 的金融排名、股票历史市值和ETF持仓的命令行脚本，适合金融数据收集与研究辅助场景。",
+      "skill_type": "tool_script",
+      "example_requests": [
+        "获取按市值排名的公司列表",
+        "查询NVDA的历史市值数据"
+      ],
+      "key_features": [
+        "支持12项金融排名指标",
+        "无需API key，使用公开CSV下载",
+        "支持股票历史市值与ETF持仓抓取"
+      ],
+      "main_category": {
+        "id": "finance",
+        "name": "金融与投资"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "金融数据抓取",
+        "公司排名",
+        "股票市值",
+        "ETF持仓",
+        "命令行工具"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "requests",
+        "beautifulsoup4"
+      ],
+      "limitations": "未提供脚本实际内容、示例输出和详细参考文档；目标站点无官方API，使用需遵守服务条款并自行控制请求频率。",
+      "license": null,
+      "status": "candidate",
+      "reason_codes": [],
+      "first_seen": "2026-09-30T12:30:27+00:00",
+      "last_checked": "2026-10-01T05:01:20.701959+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:463be0ec12eb2e33e05e2d4b8e487ee6",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "属于金融与投资领域的数据抓取工具，用于获取公司市值、财务排名、股票历史市值和ETF持仓，直接服务金融与投资主分类；未命中硬性排除项。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "明确说明用于抓取 CompaniesMarketCap 的金融排名、股票历史市值和ETF持仓，并给出命令行使用场景，具备实际价值。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "提供安装命令、脚本路径、多个命令示例、参数表、指标表和输出选项，足以理解其做法与价值；更详细文档被指向但未提供，不构成核心理解阻断。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "pass",
+            "evidence": "上游描述与正文一致：描述称可抓取排名、股票历史和ETF持仓且无需API key，正文同样说明通过公开CSV下载实现，并列出脚本与命令。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "pass",
+            "evidence": "声明安装依赖 requests 与 beautifulsoup4，并说明使用公开CSV端点、无需API key，同时提示速率限制；未声明操作系统等更细环境，但不影响判断核心价值。",
+            "informational": false
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "材料未见明显可疑行为；提示遵守目标站点服务条款并实施速率限制。抓取公开站点数据可能存在合规边界，但当前材料未显示明确违规。",
+            "informational": false
+          }
+        },
+        "verification_note": "材料提供了命令示例和输出选项，但未提供示例输出、验收标准或验证方法；详细文档指向 references/REFERENCE.md，未在本次材料中提供。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "gauss314/skills:skills/companiesmarketcap/SKILL.md|sha256:463be0ec12eb2e33e05e2d4b8e487ee6|1.3.0|pool-business-v1",
+      "evaluated_at": "2026-10-01T05:01:20.687557+08:00"
+    },
+    {
+      "skill_id": "gauss314/skills:skills/finnhub/SKILL.md",
+      "name": "finnhub",
+      "url": "https://github.com/gauss314/skills/blob/HEAD/skills/finnhub/SKILL.md",
+      "repo_url": "https://github.com/gauss314/skills",
+      "author": "gauss314",
+      "summary_zh": "Finnhub 金融数据 API 使用指南，说明如何获取 API Key、调用报价、公司资料、新闻、earnings 等端点，并区分免费与付费能力。适合股票、外汇和加密货币数据查询与研究辅助。",
+      "skill_type": "reference",
+      "example_requests": [
+        "查询 AAPL 的实时股价和公司资料",
+        "获取某家公司最近两周的新闻"
+      ],
+      "key_features": [
+        "覆盖报价、公司资料、新闻、earnings 等金融数据",
+        "明确标注免费与 Premium 端点差异",
+        "提供 Python 调用示例与脚本入口"
+      ],
+      "main_category": {
+        "id": "finance",
+        "name": "金融与投资"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "金融数据",
+        "API",
+        "股票",
+        "外汇",
+        "加密货币",
+        "新闻"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "Finnhub API Key",
+        "Python requests 示例",
+        "网络访问"
+      ],
+      "limitations": "免费计划端点较有限；脚本文件与 references/ENDPOINTS.md 未在本次材料中提供，无法核验完整脚本内容；免费端点政策可能变化。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-30T12:30:27+00:00",
+      "last_checked": "2026-10-01T05:04:35.420668+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:d3f7a041a99af080ed68db13d12923d4",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "材料描述为金融数据 API 使用技能，覆盖股票、外汇、加密货币、基本面与新闻，属于金融与投资领域，未命中硬性排除项。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "说明用于通过 Finnhub API 获取实时报价、公司资料、新闻、earnings、指标等，并明确免费与付费端点差异，适合金融数据查询与研究场景。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "提供注册获取 API Key、认证方式、速率限制、多个 Python 调用示例、脚本列表与免费/付费端点覆盖表，足以理解做法与价值。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "pass",
+            "evidence": "上游描述与实际内容一致：均为 Finnhub 金融数据 API 指南，且实际内容进一步说明免费端点限制、认证、示例与脚本。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "unknown",
+            "evidence": "材料声明需要 Finnhub API Key、HTTP 请求环境，示例使用 Python requests，并提示环境变量；但未提供脚本文件内容，无法确认脚本依赖是否完整。",
+            "informational": true
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "所读材料为 API 使用指南，未见凭据外传、实盘下单、临床决策或排除领域内容；还明确提醒不要硬编码 API key。",
+            "informational": false
+          }
+        },
+        "verification_note": "材料提供 Python 示例请求、脚本列表与免费/付费端点表，并称基于 2026 年 6 月免费 API key 实测；未提供脚本文件内容或验收结果。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "gauss314/skills:skills/finnhub/SKILL.md|sha256:d3f7a041a99af080ed68db13d12923d4|1.3.0|pool-business-v1",
+      "evaluated_at": "2026-10-01T05:04:35.408433+08:00"
+    },
+    {
+      "skill_id": "gauss314/skills:skills/fred-macro/SKILL.md",
+      "name": "fred-macro",
+      "url": "https://github.com/gauss314/skills/blob/HEAD/skills/fred-macro/SKILL.md",
+      "repo_url": "https://github.com/gauss314/skills",
+      "author": "gauss314",
+      "summary_zh": "该技能介绍如何通过美联储 FRED API 获取美国宏观经济时间序列数据，适合宏观研究、金融数据抓取和经济指标查询场景。",
+      "skill_type": "reference",
+      "example_requests": [
+        "下载 2020 年以来的美国 GDP 数据",
+        "搜索与 inflation 相关的 FRED 宏观序列"
+      ],
+      "key_features": [
+        "覆盖 840,000+ 条 FRED 宏观时间序列",
+        "提供 Python 请求与 pandas 处理示例",
+        "列出常用宏观指标系列与端点用法"
+      ],
+      "main_category": {
+        "id": "finance",
+        "name": "金融与投资"
+      },
+      "candidate_domains": [
+        "finance"
+      ],
+      "tags": [
+        "宏观经济",
+        "FRED API",
+        "数据获取",
+        "研究辅助",
+        "美国经济指标"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "FRED API Key",
+        "Python requests",
+        "pandas"
+      ],
+      "limitations": "引用的脚本与 SERIES_REFERENCE.md 未提供；数据更新时间、脚本依赖和运行环境未完整说明；材料主要为西班牙语。",
+      "license": null,
+      "status": "candidate",
+      "reason_codes": [],
+      "first_seen": "2026-09-30T12:30:27+00:00",
+      "last_checked": "2026-10-01T05:09:05.477905+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:3e81775da4427504f15a9324e1cf02c5",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "条目提供 FRED 宏观经济数据 API 的查询与下载方法，属于金融与投资领域的宏观数据获取与研究辅助，不命中硬性排除项。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "明确说明用于访问美联储经济数据，覆盖 GDP、CPI、利率、就业、M2、VIX、国债等宏观序列，适合宏观经济研究与数据获取场景。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "包含 API Key 获取、端点列表、响应格式、Python 示例、rate limit、常用系列与最佳实践，足以理解其做法与价值；引用的脚本和参考文件未提供但不影响核心说明理解。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "pass",
+            "evidence": "上游介绍称免费 FRED 宏观数据 API，正文同样描述官方 API、840K+ 序列、端点与 Python 调用方式，介绍与实际内容一致。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "unknown",
+            "evidence": "声明需要 FRED API Key、网络访问，示例使用 Python requests/pandas；但未提供脚本实际依赖、运行环境或引用文件内容。该缺口不阻断判断核心价值。",
+            "informational": true
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "所读材料为公开宏观数据 API 使用指南，未见凭据外传、实盘下单、临床决策或其他明显可疑行为；材料中提示不要硬编码 API Key。",
+            "informational": false
+          }
+        },
+        "verification_note": "材料提供 Python 调用示例、端点说明和响应格式示例，但未提供脚本实际运行结果、验收方法或引用文件内容。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "gauss314/skills:skills/fred-macro/SKILL.md|sha256:3e81775da4427504f15a9324e1cf02c5|1.3.0|pool-business-v1",
+      "evaluated_at": "2026-10-01T05:09:05.460119+08:00"
+    },
+    {
+      "skill_id": "gauss314/skills:skills/google-finance/SKILL.md",
+      "name": "google-finance",
+      "url": "https://github.com/gauss314/skills/blob/HEAD/skills/google-finance/SKILL.md",
+      "repo_url": "https://github.com/gauss314/skills",
+      "author": "gauss314",
+      "summary_zh": "该技能通过非官方 Google Finance batchexecute RPC 获取股票行情、分钟/日线 OHLC、财务、分析师意见、指数与行业热图，适合个人研究、原型和本地回测数据准备，不适合生产交易或公开数据服务。",
+      "skill_type": "tool_script",
+      "example_requests": [
+        "查询 AAPL:NASDAQ 的实时报价和完整公司信息",
+        "获取 GGAL:BCBA 的日线历史、分析师评级和新闻快照"
+      ],
+      "key_features": [
+        "无需 API key 调用 Google Finance 内部 batchexecute",
+        "支持 1 分钟/5 分钟日内 OHLC 与约 6 个月日线",
+        "覆盖财务、分析师意见、全球指数与行业热图"
+      ],
+      "main_category": {
+        "id": "finance",
+        "name": "金融与投资"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "金融数据",
+        "行情获取",
+        "非官方API",
+        "CLI工具",
+        "研究原型"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "Python 脚本 scripts/fetch_gfinance.py",
+        "网络访问 Google Finance batchexecute 端点",
+        "HTTP 请求依赖（材料中提及 requests 错误处理）"
+      ],
+      "limitations": "使用非官方逆向 RPC，可能随时失效或触发限流；响应为位置数组，字段变动可能导致错误解析；材料明确不建议用于生产交易、公开数据服务、高请求量或数据再分发；引用文档和脚本正文未提供。",
+      "license": null,
+      "status": "candidate",
+      "reason_codes": [
+        "NEEDS_VERIFICATION"
+      ],
+      "first_seen": "2026-09-30T12:30:27+00:00",
+      "last_checked": "2026-10-01T05:13:09.092472+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:db595953738078136972e06b9dfd9ffa",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "材料描述的是通过 Google Finance 内部 RPC 获取行情、财务、分析师、指数等金融数据，属于金融与投资领域的研究与策略辅助，未命中硬性排除项。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "明确说明用于获取 Google Finance 数据，覆盖 quote、OHLC、financials、earnings、analyst recommendations、indices、sectors 等，并给出适用与不适用场景。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "提供 Quick start、19 种 CLI 模式、符号格式、输出参数、错误处理与限制说明，足以理解做法与价值；引用的参考文档未提供但不影响核心理解。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "pass",
+            "evidence": "上游介绍与实际 SKILL.md 内容一致，均指向通过 batchexecute 获取 Google Finance 数据的脚本与文档。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "unknown",
+            "evidence": "材料显示需要 Python 脚本、网络访问、requests 类 HTTP 调用和 Google Finance 非官方端点，但未提供脚本依赖清单、运行环境版本或实际脚本文件；这些缺口不阻断理解用途，但影响生产适用判断。",
+            "informational": true
+          },
+          "risk_review": {
+            "value": "unknown",
+            "evidence": "材料明确使用非官方内部 RPC、绕过 consent cookies、逆向工程端点，并提示可能违反服务条款、IP 封禁和不稳定风险；未见凭据外传或实盘下单，但合规与稳定性需复核。",
+            "informational": false
+          }
+        },
+        "verification_note": "材料提供多个 CLI 示例命令、输出选项和参考文档入口，但未提供实际脚本内容、运行结果或验收方法；引用的 LIMITATIONS、COOKBOOK 等文件未在本次材料中给出。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "gauss314/skills:skills/google-finance/SKILL.md|sha256:db595953738078136972e06b9dfd9ffa|1.3.0|pool-business-v1",
+      "evaluated_at": "2026-10-01T05:13:09.080645+08:00"
+    },
+    {
+      "skill_id": "gauss314/skills:skills/historyofmarket/SKILL.md",
+      "name": "historyofmarket",
+      "url": "https://github.com/gauss314/skills/blob/HEAD/skills/historyofmarket/SKILL.md",
+      "repo_url": "https://github.com/gauss314/skills",
+      "author": "gauss314",
+      "summary_zh": "该技能通过 historyofmarket.com 的公开 API 访问美股指数、估值、回撤、成分股和宏观历史数据，并提供重建指数成分与板块轮动分析的脚本，适合金融市场历史研究与策略辅助。",
+      "skill_type": "reference",
+      "example_requests": [
+        "查询 S&P 500 的历史 Shiller CAPE 数据",
+        "重建 2020-01-01 的 Nasdaq 100 成分股"
+      ],
+      "key_features": [
+        "88 个美股历史数据 JSON 端点",
+        "CAPE、回撤原因与驱动分解数据",
+        "指数历史成分重建脚本"
+      ],
+      "main_category": {
+        "id": "finance",
+        "name": "金融与投资"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "金融数据",
+        "市场历史",
+        "API",
+        "指数研究",
+        "宏观数据"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "historyofmarket.com 公开 API",
+        "curl 或等效 HTTP 客户端",
+        "Python 运行脚本"
+      ],
+      "limitations": "未说明脚本依赖、Python 版本、数据更新频率与数据质量验证方法；金融回测或研究限制未充分说明。",
+      "license": null,
+      "status": "candidate",
+      "reason_codes": [],
+      "first_seen": "2026-09-30T12:30:27+00:00",
+      "last_checked": "2026-10-01T05:13:26.475854+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:e781d298f21c6121f2e04dde7b56de1b",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "提供美股指数与宏观历史数据的公开 API 访问与脚本，直接服务金融与投资领域的数据查询与研究辅助。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "明确说明用于访问 historyofmarket.com 的 88 个美国市场历史数据集，覆盖估值、回撤、成分股、宏观等研究场景。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "给出数据覆盖表、示例 curl 端点、脚本用途与命令行用法，以及参考文档和文件结构，足以理解做法与价值。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "pass",
+            "evidence": "SKILL.md 描述与正文中的 API、数据集、脚本和参考文档一致，核心功能有原文支持。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "unknown",
+            "evidence": "说明无需 API key、CORS 自由，并列出 curl 与 Python 脚本；但未提供脚本运行依赖、Python 版本或网络环境要求，未影响核心判断。",
+            "informational": true
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "材料为公开金融历史数据访问说明，未见凭据外传、实盘下单、临床决策或越权指令等明显风险。",
+            "informational": false
+          }
+        },
+        "verification_note": "材料提供多个 curl 示例端点和脚本命令行用法，可用于验证数据访问与脚本用途；未提供验收标准或输出样例。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "gauss314/skills:skills/historyofmarket/SKILL.md|sha256:e781d298f21c6121f2e04dde7b56de1b|1.3.0|pool-business-v1",
+      "evaluated_at": "2026-10-01T05:13:26.460130+08:00"
+    },
+    {
+      "skill_id": "gauss314/skills:skills/investing/SKILL.md",
+      "name": "investing",
+      "url": "https://github.com/gauss314/skills/blob/HEAD/skills/investing/SKILL.md",
+      "repo_url": "https://github.com/gauss314/skills",
+      "author": "gauss314",
+      "summary_zh": "通过解析 Investing.com 公开 HTML 获取股票、商品、指数、外汇、ETF 和加密货币的报价、历史 OHLCV 及基本面数据，适合金融数据查询与研究辅助。",
+      "skill_type": "tool_script",
+      "example_requests": [
+        "查询黄金当前报价并保存为 JSON",
+        "获取苹果公司利润表和财务比率"
+      ],
+      "key_features": [
+        "无需 API key，解析 Investing.com 公开 HTML",
+        "支持报价、历史、财务报表、分红与盈利数据",
+        "明确声明需使用 curl_cffi 绕过 Cloudflare TLS 检测"
+      ],
+      "main_category": {
+        "id": "finance",
+        "name": "金融与投资"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "金融数据",
+        "网页抓取",
+        "行情查询",
+        "基本面数据",
+        "Investing.com"
+      ],
+      "platform_declared": "Windows/Mac/Linux（针对 curl_cffi wheels 的说明）",
+      "dependencies_declared": [
+        "curl_cffi"
+      ],
+      "limitations": "依赖 Cloudflare 绕过方式，可能随时失效或被封 IP；数据有延迟；历史数据默认分页较少；未提供脚本与参考文档正文；抓取第三方网站的合规性需自行评估。",
+      "license": null,
+      "status": "candidate",
+      "reason_codes": [
+        "NEEDS_VERIFICATION"
+      ],
+      "first_seen": "2026-09-30T12:30:27+00:00",
+      "last_checked": "2026-10-01T05:17:47.365499+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:e6f92310b40b26df808c85c2bc9dff2f",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "技能用于从 Investing.com 抓取行情、历史、基本面等金融数据，属于金融与投资领域的研究与策略辅助数据获取，不命中硬性排除项。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "明确说明用于提取 Investing.com 的报价、历史 OHLCV、财务、分红、盈利和公司资料，适合金融数据查询场景。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "提供安装依赖、命令示例、模式表、参数、输出 JSON 结构、限制与注意事项，足以理解用法与价值。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "pass",
+            "evidence": "介绍中的 HTML scrape、无 API key、curl_cffi 依赖、quote/historical/financials 等模式与正文一致，引用支持核心功能。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "pass",
+            "evidence": "明确声明必须安装 curl_cffi，说明 Cloudflare 反爬、速率限制、可能封 IP 与数据延迟；未提供脚本内容但不影响判断依赖条件。",
+            "informational": false
+          },
+          "risk_review": {
+            "value": "unknown",
+            "evidence": "材料明确通过 HTML 抓取并绕过 Cloudflare TLS 指纹检测，同时提示遵守服务条款；未见凭据外传或实盘下单，但抓取第三方网站的合规与稳定性存在需复核疑点。",
+            "informational": false
+          }
+        },
+        "verification_note": "材料提供命令示例、输出 JSON 示例、速率限制与故障说明，但未提供可复现的验收测试或脚本内容；引用文件 fetch_investing.py 与 REFERENCE.md 未在材料中展开。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "gauss314/skills:skills/investing/SKILL.md|sha256:e6f92310b40b26df808c85c2bc9dff2f|1.3.0|pool-business-v1",
+      "evaluated_at": "2026-10-01T05:17:47.351692+08:00"
+    },
+    {
+      "skill_id": "gauss314/skills:skills/indec/SKILL.md",
+      "name": "indec",
+      "url": "https://github.com/gauss314/skills/blob/HEAD/skills/indec/SKILL.md",
+      "repo_url": "https://github.com/gauss314/skills",
+      "author": "gauss314",
+      "summary_zh": "用于通过阿根廷官方时间序列 API 获取 INDEC、BCRA 等机构的宏观与社会经济数据，支持通胀、汇率、工资、储备等指标查询及服务端变换与聚合。适合阿根廷宏观研究、经济数据分析和指标监控场景。",
+      "skill_type": "tool_script",
+      "example_requests": [
+        "查询阿根廷最近12个月的IPC数据",
+        "把阿根廷每日汇率聚合为月度收盘价"
+      ],
+      "key_features": [
+        "覆盖约4250条阿根廷官方宏观与社会时间序列",
+        "无需认证或 API key，调用官方公开数据接口",
+        "支持服务端同比、年初至今变化与时间聚合"
+      ],
+      "main_category": {
+        "id": "finance",
+        "name": "金融与投资"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "宏观经济",
+        "阿根廷",
+        "时间序列",
+        "官方数据",
+        "CLI 工具"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "apis.datos.gob.ar/series 公开 API",
+        "scripts/fetch_indec.py 脚本",
+        "Python 运行环境（由命令 `py` 暗示，未明确版本）"
+      ],
+      "limitations": "单次请求最多1000个数据点；--last 与 --sort/--limit/--offset 不兼容；混合频率多系列需显式聚合；存在停更系列与官方数据发布滞后；脚本依赖与运行环境未完整说明。",
+      "license": null,
+      "status": "candidate",
+      "reason_codes": [],
+      "first_seen": "2026-09-30T12:30:27+00:00",
+      "last_checked": "2026-10-01T05:17:47.512369+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:df831068318aadb253276b790501e6a5",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "技能围绕阿根廷宏观与社会经济时间序列数据获取，属于金融与投资领域的研究与策略辅助数据工具；未见实盘下单、临床决策或凭据外传等排除项。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "明确说明用于通过官方 Series de Tiempo API 获取 INDEC、BCRA、经济部等机构的宏观与社会指标，并给出通胀、汇率、工资、储备等具体场景。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "提供 Quick start 命令、19 个 CLI 模式、主要 flags、典型用例、限制说明和参考文档结构，足以理解其做法与价值；未提供的脚本细节不构成核心理解障碍。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "pass",
+            "evidence": "上游介绍与实际 SKILL.md 内容一致：均描述为阿根廷官方时间序列 API 封装，覆盖约4250系列、无需认证、支持服务端变换与时间聚合。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "unknown",
+            "evidence": "材料声明使用公开 HTTP API、无需 API key，并给出 `py scripts/fetch_indec.py` 命令，暗示需要 Python 与脚本文件；但未明确 Python 版本、依赖包、网络要求或运行环境。该缺口不阻断理解价值，但影响适用条件判断。",
+            "informational": true
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "所读材料为公开宏观数据查询说明，未见凭据收集、外传、实盘下单、临床决策或规避安全控制等可疑行为；对上游不可信内容未见需要执行的指令。",
+            "informational": false
+          }
+        },
+        "verification_note": "材料提供多个 bash/CLI 示例命令与用例，如查询 IPC、EMAE、汇率、搜索系列、组合多系列；未提供验收标准、测试输出或脚本实际运行结果。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "gauss314/skills:skills/indec/SKILL.md|sha256:df831068318aadb253276b790501e6a5|1.3.0|pool-business-v1",
+      "evaluated_at": "2026-10-01T05:17:47.499252+08:00"
+    },
+    {
+      "skill_id": "gauss314/skills:skills/macrotrends/SKILL.md",
+      "name": "macrotrends",
+      "url": "https://github.com/gauss314/skills/blob/HEAD/skills/macrotrends/SKILL.md",
+      "repo_url": "https://github.com/gauss314/skills",
+      "author": "gauss314",
+      "summary_zh": "抓取Macrotrends网站的上市公司历史财务数据，包括财务报表、比率、员工数等内容，适用于金融分析和研究",
+      "skill_type": "tool_script",
+      "example_requests": [
+        "获取苹果公司15年间的完整财务报表",
+        "下载英伟达最新季度利润表"
+      ],
+      "key_features": [
+        "覆盖美国三大交易所+ADRs",
+        "支持年度与季度数据",
+        "内置超过6500种股票代码"
+      ],
+      "main_category": {
+        "id": "finance",
+        "name": "金融与投资"
+      },
+      "candidate_domains": [
+        "finance"
+      ],
+      "tags": [
+        "数据采集",
+        "财务分析"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "requests",
+        "beautifulsoup4"
+      ],
+      "limitations": "网页结构变化可能导致脚本失效；需遵守Macrotrends服务条款",
+      "license": null,
+      "status": "candidate",
+      "reason_codes": [],
+      "first_seen": "2026-09-30T12:30:27+00:00",
+      "last_checked": "2026-10-01T05:18:19.154919+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:1387a301b1666dc71e3bd7ddea87cfa0",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "材料描述金融数据抓取，属于金融与投资领域；金融属于收录范围",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "明确解决获取上市公司财务数据的实际问题；提供了具体使用场景和示例命令",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "提供安装、快速使用步骤、flags解释和常见错误处理",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "pass",
+            "evidence": "描述与示例命令一致",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "pass",
+            "evidence": "明确声明依赖requests和beautifulsoup4",
+            "informational": false
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "无凭据外传、临床诊断或交易下单行为",
+            "informational": false
+          }
+        },
+        "verification_note": "提供示例命令和使用说明；数据准确性依赖第三方网站的HTML结构",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "gauss314/skills:skills/macrotrends/SKILL.md|sha256:1387a301b1666dc71e3bd7ddea87cfa0|1.3.0|pool-business-v1",
+      "evaluated_at": "2026-10-01T05:18:19.140705+08:00"
+    },
+    {
+      "skill_id": "gauss314/skills:skills/mae/SKILL.md",
+      "name": "mae",
+      "url": "https://github.com/gauss314/skills/blob/HEAD/skills/mae/SKILL.md",
+      "repo_url": "https://github.com/gauss314/skills",
+      "author": "gauss314",
+      "summary_zh": "提供阿根廷金融市场（MAE）数据的脚本工具，支持获取固收、外汇、期货、回购等资产的实时与历史数据，适用于金融研究场景",
+      "skill_type": "tool_script",
+      "example_requests": [
+        "获取阿根廷固收资产（Renta Fija）当日前10名概览",
+        "查询特定日期范围内的外汇（FOREX）历史数据"
+      ],
+      "key_features": [
+        "支持17种公开市场数据端点覆盖固收/衍生品",
+        "自动处理延迟数据和API限制",
+        "提供JSON输出和多种查询参数"
+      ],
+      "main_category": {
+        "id": "finance",
+        "name": "金融与投资"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "市场数据",
+        "投资研究"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "Python"
+      ],
+      "limitations": "未提供脚本实际代码；延迟数据未说明精度规则；Windows 终端字符编码问题",
+      "license": null,
+      "status": "candidate",
+      "reason_codes": [
+        "INSUFFICIENT_EVIDENCE"
+      ],
+      "first_seen": "2026-09-30T12:30:27+00:00",
+      "last_checked": "2026-10-01T05:19:29.137350+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:1e519e09601b40ab2968349227d08b9e",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "Material 中描述了获取阿根廷金融市场数据的技能，属于金融与投资领域",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "技能详细说明了支持的各种金融数据类型和用途，提供了具体的使用示例",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "unknown",
+            "evidence": "核心脚本 fetch_mae.py 的描述存在，但未提供完整内容；REFERENCE.md 被引用但未包含在材料中",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "unknown",
+            "evidence": "SKILL.md 内容与表格中列出的功能和使用细节一致；程序未能核实所引原文与行号。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "pass",
+            "evidence": "依赖只声明需要 Python 环境；公开 API 无 API key 要求",
+            "informational": false
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "材料中未发现凭证窃取、实盘交易等风险行为",
+            "informational": false
+          }
+        },
+        "verification_note": "提供了命令示例但不包含输出样例；缺少 REFERENCE.md 等引用文件验证",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "gauss314/skills:skills/mae/SKILL.md|sha256:1e519e09601b40ab2968349227d08b9e|1.3.0|pool-business-v1",
+      "evaluated_at": "2026-10-01T05:19:29.118598+08:00"
+    },
+    {
+      "skill_id": "gauss314/skills:skills/marketscreener/SKILL.md",
+      "name": "marketscreener",
+      "url": "https://github.com/gauss314/skills/blob/HEAD/skills/marketscreener/SKILL.md",
+      "repo_url": "https://github.com/gauss314/skills",
+      "author": "gauss314",
+      "summary_zh": "MarketScreener金融数据爬虫，支持免费获取全球股票、ADRs的财报会议记录、行情、公司资料、财务数据、分析师共识等数据，适用于金融研究和个人投资者。",
+      "skill_type": "tool_script",
+      "example_requests": [
+        "获取阿根廷ADR公司GGAL的最新财报会议记录前500字",
+        "查询苹果公司（AAPL）的股票价格和涨跌幅"
+      ],
+      "key_features": [
+        "无需API密钥或注册即可爬取数据",
+        "支持全球超过20,000家股票、ADRs和ETF数据",
+        "提供多种金融数据类型如财报、估值、分析师共识等"
+      ],
+      "main_category": {
+        "id": "finance",
+        "name": "金融与投资"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "金融数据",
+        "爬虫工具",
+        "股票研究"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "limitations": "金融数据年限有限（如超过3年的财务数据需要付费）；不包括债券和外汇/加密货币数据；需遵守爬虫频率限制防止IP封锁。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-30T12:30:27+00:00",
+      "last_checked": "2026-10-01T05:20:01.783398+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:e22f955669d796f92914079bb5ee59e9",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "material indicates it is a financial data scraping tool for stock-related information, which falls under the 'finance' category.",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "specific functions like scraping earnings transcripts, stock quotes, profiles, financials, etc., without requiring API keys are clearly stated with practical examples.",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "usage examples (lines 65-92), available scripts (lines 98-102), and practices (lines 105-112) provide sufficient guidance on implementation and limitations.",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "pass",
+            "evidence": "description aligns with demonstrated scraping capabilities, supported by examples of accessing free data without registration.",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "unknown",
+            "evidence": "material mentions scraping via HTML parsing with BeautifulSoup and using browser User-Agents, but does not explicitly list Python dependencies or environment requirements.",
+            "informational": true
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "material provides scraping best practices to avoid blocks and does not suggest credential exfiltration or live trading risks.",
+            "informational": false
+          }
+        },
+        "verification_note": "The material includes code examples for using the scripts and describes ethical scraping practices; no explicit validation method is mentioned.",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "gauss314/skills:skills/marketscreener/SKILL.md|sha256:e22f955669d796f92914079bb5ee59e9|1.3.0|pool-business-v1",
+      "evaluated_at": "2026-10-01T05:20:01.769847+08:00"
+    },
+    {
+      "skill_id": "gauss314/skills:skills/marketwatch/SKILL.md",
+      "name": "marketwatch",
+      "url": "https://github.com/gauss314/skills/blob/HEAD/skills/marketwatch/SKILL.md",
+      "repo_url": "https://github.com/gauss314/skills",
+      "author": "gauss314",
+      "summary_zh": "MarketWatch金融数据爬虫脚本，用于获取股票实时报价、财务报表、SEC文件等投资研究数据",
+      "skill_type": "tool_script",
+      "example_requests": [
+        "获取AAPL公司实时报价和公司概要",
+        "获取MSFT公司年度利润表"
+      ],
+      "key_features": [
+        "无须API密钥的公开数据爬取",
+        "支持多类金融数据包括报价/财务报表/期权链",
+        "自动处理反爬机制（Datadome）"
+      ],
+      "main_category": {
+        "id": "finance",
+        "name": "金融与投资"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "金融数据爬取"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "requests",
+        "beautifulsoup4"
+      ],
+      "limitations": "需遵守MarketWatch服务条款；HTML结构变更可能导致脚本失效",
+      "license": null,
+      "status": "candidate",
+      "reason_codes": [],
+      "first_seen": "2026-09-30T12:30:27+00:00",
+      "last_checked": "2026-10-01T05:20:35.068316+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:37df436cb3b7037998702f7cd10c6482",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "材料描述 scraping de MarketWatch 获取金融数据，属于金融投资领域主分类",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "材料明确说明获取实时报价、财务报表、SEC文件等金融数据，有具体应用场景",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "材料提供安装说明、命令行示例和使用说明，足以理解核心能力",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "pass",
+            "evidence": "所有功能在命令行说明中有对应实现引用",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "pass",
+            "evidence": "材料明确声明依赖 requests 和 beautifulsoup4，并说明运行环境为 Python",
+            "informational": false
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "未见凭据外传行为；虽涉及反爬绕过，但作为数据获取工具未见明确违规",
+            "informational": false
+          }
+        },
+        "verification_note": "材料提供完整命令行使用示例和输出字段说明",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "gauss314/skills:skills/marketwatch/SKILL.md|sha256:37df436cb3b7037998702f7cd10c6482|1.3.0|pool-business-v1",
+      "evaluated_at": "2026-10-01T05:20:35.051607+08:00"
+    },
+    {
+      "skill_id": "gauss314/skills:skills/morningstar/SKILL.md",
+      "name": "morningstar",
+      "url": "https://github.com/gauss314/skills/blob/HEAD/skills/morningstar/SKILL.md",
+      "repo_url": "https://github.com/gauss314/skills",
+      "author": "gauss314",
+      "summary_zh": "通过逆向工程接口批量下载Morningstar全球股票数据，支持53个市场（10万+标的）的33个字段查询与导出，适用于金融研究场景。",
+      "skill_type": "tool_script",
+      "example_requests": [
+        "下载阿根廷股市（XBUE）全部数据到CSV文件",
+        "搜索纳斯达克上市的苹果公司股票信息"
+      ],
+      "key_features": [
+        "无需API密钥访问Morningstar数据",
+        "覆盖53个市场（102K+标的）",
+        "支持字段筛选与多格式导出"
+      ],
+      "main_category": {
+        "id": "finance",
+        "name": "金融与投资"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "股票数据",
+        "金融研究"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "Python",
+        "requests"
+      ],
+      "limitations": "非官方接口存在法律与稳定性风险；部分字段名称仅返回英文；未提供数据更新时间信息。",
+      "license": null,
+      "status": "candidate",
+      "reason_codes": [],
+      "first_seen": "2026-09-30T12:30:27+00:00",
+      "last_checked": "2026-10-01T05:21:26.651545+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:2759486576b1132bf768f8740b07f78a",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "该技能提供股市数据下载功能，属于金融与投资领域，且未命中硬性排除规则。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "材料明确说明该技能用于通过逆向工程接口下载Morningstar的全球股票数据库（53个市场、10万+标的），列出具体功能如搜索、批量下载、指定字段导出等，具有实际价值。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "脚本提供完整使用示例（如命令行调用方式）、参数说明和输出格式示例，足以理解操作方法和核心功能；技术细节在REFERENCE.md补充（但未包含在本次材料中，不影响基础判断）。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "pass",
+            "evidence": "材料描述的功能（如批量下载、指定字段）均在脚本参数和示例输出中体现",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "pass",
+            "evidence": "材料明确声明依赖Python和requests库（pip install requests），且无特殊环境要求",
+            "informational": false
+          },
+          "risk_review": {
+            "value": "unknown",
+            "evidence": "该技能通过逆向工程获取非官方API，存在法律合规风险，但未观察到凭据外传等主动违规行为；是否违反Morningstar服务条款需用户自行判断。",
+            "informational": false
+          }
+        },
+        "verification_note": "材料提供命令行输出示例（JSON/CSV格式），但未包含自动化测试或数据准确性验证方法。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "gauss314/skills:skills/morningstar/SKILL.md|sha256:2759486576b1132bf768f8740b07f78a|1.3.0|pool-business-v1",
+      "evaluated_at": "2026-10-01T05:21:26.641823+08:00"
+    },
+    {
+      "skill_id": "gauss314/skills:skills/nasdaq-data/SKILL.md",
+      "name": "nasdaq-data",
+      "url": "https://github.com/gauss314/skills/blob/HEAD/skills/nasdaq-data/SKILL.md",
+      "repo_url": "https://github.com/gauss314/skills",
+      "author": "gauss314",
+      "summary_zh": "使用合法API内部脚本从Nasdaq提取股票、ETF及期权等市场的完整金融数据，适用于金融数据研究",
+      "skill_type": "tool_script",
+      "example_requests": [
+        "获取NVDA公司信息与股价历史",
+        "查询腾讯等公司机构持股情况"
+      ],
+      "key_features": [
+        "从Nasdaq提取股票、期权、ETF等金融数据",
+        "支持财务报表、分红派息、新闻资讯等19种数据类别",
+        "附带详细文档说明"
+      ],
+      "main_category": {
+        "id": "finance",
+        "name": "金融与投资"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "股票",
+        "数据爬取"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "requests"
+      ],
+      "limitations": "依赖Nasdaq内部非官方接口，可能存在随时无法访问；不保证数据完全正确",
+      "license": null,
+      "status": "candidate",
+      "reason_codes": [],
+      "first_seen": "2026-09-30T12:30:27+00:00",
+      "last_checked": "2026-10-01T05:21:32.052525+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:b87fb7e0b2d18cebeb0f63a8b42546e2",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "材料明确说明是提取金融相关数据（如股票、ETF、期权等金融产品数据），属于金融与投资主分类",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "技能描述具体，如提取Nasdaq的股票信息、做空比例、财务报表等，并有用法示例，具有明确价值",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "提供脚本具体用法、命令示例及参数说明，足以使用者快速应用",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "pass",
+            "evidence": "技能介绍与提供脚本功能一致，如描述了对股票等各种金融数据抓取的能力",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "pass",
+            "evidence": "声明依赖 requests 库，并写入代码环境依赖",
+            "informational": false
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "材料中未见凭据外传、实盘交易等明确禁止行为，且附有法律警告遵守服务条款及速率限制",
+            "informational": false
+          }
+        },
+        "verification_note": "材料中提供了多个脚本用法示例，用户可借助这些命令进行本地运行验证",
+        "blocking_reasons": [
+          "领域检查：材料未提供回测功能说明，无风险限制陈述，也未明确提供数据来源的准确性或实效性依据"
+        ]
+      },
+      "last_evaluation_id": "gauss314/skills:skills/nasdaq-data/SKILL.md|sha256:b87fb7e0b2d18cebeb0f63a8b42546e2|1.3.0|pool-business-v1",
+      "evaluated_at": "2026-10-01T05:21:32.036227+08:00"
+    },
+    {
+      "skill_id": "gauss314/skills:skills/option-pricing/SKILL.md",
+      "name": "option-pricing",
+      "url": "https://github.com/gauss314/skills/blob/HEAD/skills/option-pricing/SKILL.md",
+      "repo_url": "https://github.com/gauss314/skills",
+      "author": "gauss314",
+      "summary_zh": "用于欧式和美式期权定价的工具，支持9种方法（如Black-Scholes、二叉树等），适用于回测和金融分析场景。",
+      "skill_type": "tool_script",
+      "example_requests": [
+        "计算Black-Scholes欧式期权价格（S=100, K=100, T=0.25, r=0.05, sigma=0.20）",
+        "计算美式期权隐含波动率（给定市场价格8.50）"
+      ],
+      "key_features": [
+        "O(1)闭式定价方法（如BS、BAW）",
+        "高性能设计（BS达800k ops/sec）",
+        "包含希腊值计算和隐含波动率求解"
+      ],
+      "main_category": {
+        "id": "finance",
+        "name": "金融与投资"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "期权定价",
+        "回测工具"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "Python",
+        "numpy"
+      ],
+      "limitations": "不支持路径依赖期权（如亚式、障碍期权）和离散股息模型；未实现多资产定价",
+      "license": null,
+      "status": "candidate",
+      "reason_codes": [
+        "INSUFFICIENT_EVIDENCE"
+      ],
+      "first_seen": "2026-09-30T12:30:27+00:00",
+      "last_checked": "2026-10-01T05:23:12.731754+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:f301d764fc9aad58a7d01c2d536b563f",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "技能提供金融衍生品（期权）定价工具，属于金融与投资主分类下的研究和策略辅助范围。未命中硬性排除项。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "材料明确说明了解决期权定价问题，适用于回测和分析场景，提供了具体方法和示例。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "提供了详细的命令行使用示例、参数说明和API调用方式（第25-403行），足以理解核心功能的使用。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "unknown",
+            "evidence": "材料中的功能描述（如定价方法、性能指标）与示例和实现细节一致。；程序未能核实所引原文与行号。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "pass",
+            "evidence": "明确声明仅依赖Python和numpy（第10行），未声明其他特殊依赖或平台限制。",
+            "informational": false
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "未发现与收录范围冲突的功能或可疑行为；明确声明不包含实盘交易（仅限回测）和健康领域无关。",
+            "informational": false
+          }
+        },
+        "verification_note": "提供validate模式（第72-73行）和资产文件validation_cases.json用于验证定价准确性",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "gauss314/skills:skills/option-pricing/SKILL.md|sha256:f301d764fc9aad58a7d01c2d536b563f|1.3.0|pool-business-v1",
+      "evaluated_at": "2026-10-01T05:23:12.718421+08:00"
+    },
+    {
+      "skill_id": "gauss314/skills:skills/portfolio/SKILL.md",
+      "name": "portfolio",
+      "url": "https://github.com/gauss314/skills/blob/HEAD/skills/portfolio/SKILL.md",
+      "repo_url": "https://github.com/gauss314/skills",
+      "author": "gauss314",
+      "summary_zh": "提供金融投资组合优化的三种方法：Markowitz均值方差优化、Black-Litterman模型及分层风险平价（HRP）与嵌套集群优化（NCO）。适用于金融研究和策略辅助。",
+      "skill_type": "tool_script",
+      "example_requests": [
+        "计算随机的投资组合并绘制有效前沿",
+        "使用Black-Litterman模型结合CAPM先验收益和投资者观点"
+      ],
+      "key_features": [
+        "仅使用numpy、pandas、scipy实现核心算法",
+        "支持命令行操作并提供多种优化模式",
+        "自含测试和验证文件"
+      ],
+      "main_category": {
+        "id": "finance",
+        "name": "金融与投资"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "投资组合优化"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "numpy",
+        "pandas",
+        "scipy"
+      ],
+      "limitations": "实际金融应用需结合专业分析，示例基于模拟数据。",
+      "license": null,
+      "status": "candidate",
+      "reason_codes": [],
+      "first_seen": "2026-09-30T12:30:27+00:00",
+      "last_checked": "2026-10-01T05:23:14.733903+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:0ad591366259bc637522536c14a1f0f0",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "Portfolio optimization skills fall under Finance, a category explicitly included in §3.1.",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "The skill provides specific methods for portfolio optimization such as Markowitz, Black-Litterman, and HRP/NCO, and details their problem-solving applications in finance.",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "SKILL.md includes CLI examples and library usage code snippets demonstrating how to execute and understand each optimization method.",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "pass",
+            "evidence": "Description matches implementation: references core theory files and script functionality.",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "pass",
+            "evidence": "The dependencies (numpy, pandas, scipy) are explicitly declared and described.",
+            "informational": false
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "No evidence of credential exfiltration, live trading, or exclusionary features found in the material.",
+            "informational": false
+          }
+        },
+        "verification_note": "Validation against reference notebook mentioned; tests included.",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "gauss314/skills:skills/portfolio/SKILL.md|sha256:0ad591366259bc637522536c14a1f0f0|1.3.0|pool-business-v1",
+      "evaluated_at": "2026-10-01T05:23:14.719225+08:00"
+    },
+    {
+      "skill_id": "gauss314/skills:skills/primary/SKILL.md",
+      "name": "primary",
+      "url": "https://github.com/gauss314/skills/blob/HEAD/skills/primary/SKILL.md",
+      "repo_url": "https://github.com/gauss314/skills",
+      "author": "gauss314",
+      "summary_zh": "提供Primary交易平台的API接入服务，支持阿根廷期货期权市场的行情查询、账户管理和实盘交易操作。适用于需直接接入Matba ROFEX市场的开发者。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "获取DLR/JUN26期货的实时买卖价和最新成交价",
+        "在模拟账户中买入10份DLR/JUN26期货合约"
+      ],
+      "key_features": [
+        "支持期货、期权、股票等多元金融产品交易",
+        "提供REST与WebSocket双接口",
+        "包含账户风险与持仓查询"
+      ],
+      "main_category": {
+        "id": "finance",
+        "name": "金融与投资"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "金融API",
+        "交易系统"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "limitations": "仅限阿根廷市场；未声明非Python环境支持；需自行申请交易所账户",
+      "license": null,
+      "status": "excluded",
+      "reason_codes": [
+        "LIVE_TRADING"
+      ],
+      "first_seen": "2026-09-30T12:30:27+00:00",
+      "last_checked": "2026-10-01T05:23:48.695421+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:c798e1fd12b1d25938e852d99dd406bf",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "fail",
+            "evidence": "材料描述交易API，主分类为金融与投资；但文档显示可发送实盘下单指令，包含不可分割的实盘下单核心功能，符合LIVE_TRADING硬性排除标准",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "材料明确说明该API用于操作阿根廷期货期权市场，支持期货、期权、股票、债券等交易功能，并提供行情、账户查询等具体服务",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "文档详细列出认证、行情获取、订单管理、风险API等操作步骤与示例代码，核心功能均有明确说明",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "pass",
+            "evidence": "材料功能描述与代码示例一致，如行情接口、订单发送等关键功能均有对应说明",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "fail",
+            "evidence": "材料要求使用Python的requests库和websocket库，但未声明最低版本或环境要求，且未说明非Python平台的可用性",
+            "informational": false
+          },
+          "risk_review": {
+            "value": "fail",
+            "evidence": "检测到文档包含实盘交易指令发送功能（如脚本示例中place_order.py），属于不可分割的实盘下单核心功能",
+            "informational": false
+          }
+        },
+        "verification_note": "文档提供Python脚本示例，但未包含功能验证或质量保证说明；代码仅做演示且需用户自行测试",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "gauss314/skills:skills/primary/SKILL.md|sha256:c798e1fd12b1d25938e852d99dd406bf|1.3.0|pool-business-v1",
+      "evaluated_at": "2026-10-01T05:23:48.679905+08:00"
+    },
+    {
+      "skill_id": "gauss314/skills:skills/simplywallst/SKILL.md",
+      "name": "simplywallst",
+      "url": "https://github.com/gauss314/skills/blob/HEAD/skills/simplywallst/SKILL.md",
+      "repo_url": "https://github.com/gauss314/skills",
+      "author": "gauss314",
+      "summary_zh": "脚本工具，用于通过内部API从SimplyWallSt提取全球股票财务数据，支持Snowflake评分、股息分析和公司详情查询，适用于股票研究和筛选。",
+      "skill_type": "tool_script",
+      "example_requests": [
+        "获取阿根廷Galicia银行（GGAL）的完整财务数据",
+        "下载所有阿根廷股票代码列表"
+      ],
+      "key_features": [
+        "使用内部API无需注册或密钥",
+        "支持120000+全球股票覆盖90+市场",
+        "提供股息历史和未来预测数据"
+      ],
+      "main_category": {
+        "id": "finance",
+        "name": "金融与投资"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "股票研究",
+        "数据提取",
+        "财务分析"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "requests"
+      ],
+      "limitations": "Depende de una API interna no documentada; actualización de datos diaria pero sin validación externa; snapshot inicial tarda ~10 min.",
+      "license": null,
+      "status": "candidate",
+      "reason_codes": [],
+      "first_seen": "2026-09-30T12:30:27+00:00",
+      "last_checked": "2026-10-01T05:24:21.390464+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:b912d3048fca0e65921ed8ead3b7cc81",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "Material relacionado con la extracción de datos financieros de acciones globales, cubre research y estrategias de inversión (fecha). Línea clave: 'Data financiera de 120K+ stocks globales' (línea 3).",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "Describe concretamente la obtención de datos financieros (snowflake scores, valuation, dividend analysis) mediante un script para análisis de acciones. Ejemplos de uso definidos (líneas 39-65).",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "unknown",
+            "evidence": "SKILL.md incluye comandos básicos, pero references/REFERENCE.md prometido como 'documentación completa' no está disponible para verificar si resuelve incertidumbres clave (p.ej., manejo de errores o estructura de datos).",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "pass",
+            "evidence": "El uso de endpoints internos es explicitado (línea 17). La cobertura de mercados y características declaradas coincide con los ejemplos de scripts (líneas 89-101 vs. uso en líneas 41-64).",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "pass",
+            "evidence": "Declara pip install requests (línea 26) y requiere rate limiting manual (línea 19). No se mencionan otras dependencias críticas para el funcionamiento básico.",
+            "informational": false
+          },
+          "risk_review": {
+            "value": "unknown",
+            "evidence": "Usa una API interna no pública; términos de servicio pueden prohibirlo. Aunque avisa (línea 17), el riesgo legal requiere verificación externa.",
+            "informational": false
+          }
+        },
+        "verification_note": "Proporciona ejemplos de salida para GGAL (líneas 131-154), pero sin datos reales de muestra o verificación externa.",
+        "blocking_reasons": [
+          "领域检查：Actualización diaria declarada (línea 96), pero no especifica fecha de datos actuales ni fuentes primarias. No promete ganancias explícitamente, pero la calidad del snapshot sin verificación (p.ej., discrepancia 54K vs 78K en líneas 194-205) puede afectar decisiones."
+        ]
+      },
+      "last_evaluation_id": "gauss314/skills:skills/simplywallst/SKILL.md|sha256:b912d3048fca0e65921ed8ead3b7cc81|1.3.0|pool-business-v1",
+      "evaluated_at": "2026-10-01T05:24:21.373646+08:00"
+    },
+    {
+      "skill_id": "gauss314/skills:skills/yahoo-finance/SKILL.md",
+      "name": "yahoo-finance",
+      "url": "https://github.com/gauss314/skills/blob/HEAD/skills/yahoo-finance/SKILL.md",
+      "repo_url": "https://github.com/gauss314/skills",
+      "author": "gauss314",
+      "summary_zh": "通过HTTP请求直接访问Yahoo Finance非官方API，提供股票、ETF、加密货币等金融产品的历史价格、实时报价、基本面及期权数据检索能力；适用于金融市场数据分析与研究场景。",
+      "skill_type": "tool_script",
+      "example_requests": [
+        "获取Apple公司(AAPL)过去一年的历史价格数据",
+        "批量获取AAPL、MSFT和GOOGL的实时报价与基本面数据"
+      ],
+      "key_features": [
+        "支持多种金融产品数据：股票、ETF、加密货币",
+        "包含历史图表、实时报价和基本面端点",
+        "提供批量获取脚本支持多标的处理和速率控制"
+      ],
+      "main_category": {
+        "id": "finance",
+        "name": "金融与投资"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "金融市场数据",
+        "数据抓取",
+        "投资研究辅助"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "limitations": "非官方端点可能不稳定；需设置用户代理并进行请求限速；部分端点需凭证；支持的数据时间和市场范围部分未说明",
+      "license": null,
+      "status": "candidate",
+      "reason_codes": [],
+      "first_seen": "2026-09-30T12:30:27+00:00",
+      "last_checked": "2026-10-01T05:25:34.784525+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:892d73bff266654627e90976d931a039",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "fail",
+            "evidence": "该技能属于Yahoo金融API非官方客户端，材料中明确指出提供历史价格、盘前和盘中市场行情数据、基本面分析及期权数据获取功能（第9行）。根据金融与投资分类的范围（宏观、股票、期货、大宗商品及研究和策略辅助），该技能的目标是获取金融市场数据，属于金融领域。但根据硬性排除标准，LIVE_TRADING（包含不可分割的实盘下单核心功能）为主要排除项。材料中无实盘下单功能的描述，但提供了行情和基本面数据获取的功能。材料中提到数据用于研究而非交易（仅获取数据，未执行交易订单）。因此，无需排除。材料证据不支持排除条件中的实盘下单核心功能。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "文档提供明确的端点访问方法（例如第80行历史OHLCV数据、第103行报价、第115行基本面数据等），包含具体代码示例和应用场景（如使用批次抓取工具实现多标的获取和使用速度控制）。材料第9行描述为”访问股票、ETF、加密货币、外汇、债券、指数、期权、基本面和新闻数据”，这些都属于金融分析和研究的应用领域。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "SKILL.md包含API调用方法（例如代码块第918行虚拟机服务端话术参考点历史图表），并提供详细的CAIM工作结构（如文档在350行处下代码以繁荣粮格式描述文档结构）。具体脚本如batch_fetch.py等脚本描述定位（155行至176行列表和应用示例），重要的依赖项目和认证过程（第288安全入口认证）有清晰说明。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "pass",
+            "evidence": "材料中的描述与链接的一致性和设计目标相符。标题Yahoo金融——非官方API（第7行）后包含相同API操作方法。详细文档API_REFERENCE.md被引用多次（第27至29行，236行），实操方法如代码块INTERACTION_LACK在URL示例篇之中涉及稳定性和步骤。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "unknown",
+            "evidence": "材料指出需要使用Python的requests库（第45行示例中导入），但未明确列出其他依赖。第262行提到使用其他第三方库可能导致出错，说明脚本可能需要特定环境和版本。由于多个脚本都可能存在隐式依赖，这对用户判断造成障碍，因此定义为关键信息缺口。",
+            "informational": false
+          },
+          "risk_review": {
+            "value": "unknown",
+            "evidence": "输入中提及依赖可能存在安全漏洞问题（262行处输出时由机器报刊语Remarkete user-agent造成阻塞），可能不从信任源加载，具体问题未讨论详细。自定义321自控脚本是否安全也未知。",
+            "informational": false
+          }
+        },
+        "verification_note": "脚本中包含代码测试示例（例如第184行的批量抓取测试命令），可使用命令运行真实库码以测试脚本，但由于材料未提供调用示例结果有效性的验证标准，验证方式尚不完整。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "gauss314/skills:skills/yahoo-finance/SKILL.md|sha256:892d73bff266654627e90976d931a039|1.3.0|pool-business-v1",
+      "evaluated_at": "2026-10-01T05:25:34.768868+08:00"
+    },
+    {
+      "skill_id": "gauss314/skills:skills/tradingview/SKILL.md",
+      "name": "tradingview",
+      "url": "https://github.com/gauss314/skills/blob/HEAD/skills/tradingview/SKILL.md",
+      "repo_url": "https://github.com/gauss314/skills",
+      "author": "gauss314",
+      "summary_zh": "通过非官方 API 从 TradingView 获取全球市场的实时行情、技术指标、财务数据和新闻，适用于金融数据采集与初步分析",
+      "skill_type": "tool_script",
+      "example_requests": [
+        "获取阿根廷股市前30只股票的报价",
+        "查询苹果公司的最新分析师评级"
+      ],
+      "key_features": [
+        "无需 API 密钥访问 TradingView 内部API",
+        "支持全球10万+股票、5万+加密货币",
+        "预计算技术指标与分析师评级"
+      ],
+      "main_category": {
+        "id": "finance",
+        "name": "金融与投资"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "市场数据",
+        "金融分析"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "limitations": "数据延迟约15分钟；部分端点请求频率受限；非官方API可能变更",
+      "license": null,
+      "status": "candidate",
+      "reason_codes": [],
+      "first_seen": "2026-09-30T12:30:27+00:00",
+      "last_checked": "2026-10-01T05:25:41.688826+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:bb1ee31eae0b05aa8da5f4768e9924a4",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "Skill 属于金融与投资领域，无 hard_exclusions 排除项",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "明确解决市场数据获取问题，支持股票、加密货币等金融工具的扫描、报价、新闻及技术指标获取",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "提供命令行使用示例、参数说明及参考文档目录，足以理解核心功能",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "pass",
+            "evidence": "介绍与内容一致",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "unknown",
+            "evidence": "未明确声明特殊依赖，但涉及 Python 脚本执行，需注意环境要求",
+            "informational": true
+          },
+          "risk_review": {
+            "value": "unknown",
+            "evidence": "使用非官方 API，可能违反服务条款，但无凭据外传等违规行为",
+            "informational": false
+          }
+        },
+        "verification_note": "需通过外部验证确认 API 可用性",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "gauss314/skills:skills/tradingview/SKILL.md|sha256:bb1ee31eae0b05aa8da5f4768e9924a4|1.3.0|pool-business-v1",
+      "evaluated_at": "2026-10-01T05:25:41.678103+08:00"
+    },
+    {
+      "skill_id": "tradermonty/claude-trading-skills:skills/market-news-analyst/SKILL.md",
+      "name": "SKILL.md",
+      "url": "https://github.com/tradermonty/claude-trading-skills/blob/main/skills/market-news-analyst/SKILL.md",
+      "repo_url": "https://github.com/tradermonty/claude-trading-skills",
+      "author": "tradermonty",
+      "summary_zh": "完整面梳理大型新闻事件对股、债或期货等金融产品价格动态影响工具，优化券商与投资研究人员决策参考",
+      "skill_type": "guideline",
+      "example_requests": [
+        "列举刚发生10天英格兰银行布达引发货币波动可能成因",
+        "测算特斯拉暴雷可引起标普500跌落权重几何"
+      ],
+      "key_features": [
+        "量化事件要素三层次：冲击计分(Asset Price Impact)、传递广度(Breadth Multiplier)、",
+        "关键6层战术手续：新闻>匹配历史模板>层面权重>环节反应>多事件关联>生成多语种比较"
+      ],
+      "main_category": {
+        "id": "finance",
+        "name": "金融与投资"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "新闻解析",
+        "资产波动建模",
+        "宏观政策传导"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "WebSearch",
+        "WebFetch"
+      ],
+      "limitations": "仅针对过去10天显性事件，租用的生产模型无法推断情绪面非主流趋势",
+      "license": null,
+      "status": "candidate",
+      "reason_codes": [
+        "INSUFFICIENT_EVIDENCE"
+      ],
+      "first_seen": "2026-09-30T12:30:27+00:00",
+      "last_checked": "2026-10-01T05:26:05.420592+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:1429967e2dd26f8e44bce06978460ce0",
+      "source_type": "community",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "描述分析股票指数、大宗商品等市场产品价格变化与宏观信息事件的关系，强化金融资讯深度解析，精准匹配'金融与投资'领域",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "展示完整事件要素分析模板与量化计算方式，明确适合商业分析师/金融研究人员等场景，有实际指导意义",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "6步工作流细节完整铺陈，阐明各类敏感阈值与风险要素是否需要客户提供参数，依然满足核心概念传递",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "unknown",
+            "evidence": "示例提法：'利用搜索工具构建批量事件查询'在步骤1与示例请求一致；程序未能核实所引原文与行号。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "pass",
+            "evidence": "申明WebSearch及WebFetch路条判别依据，提示重要新闻源等级限制但无不可重现硬要求",
+            "informational": false
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "提供分析观点而不参与资金管控，不发送订单指令明确排除'实盘交易'坚守边界；免除承诺收益危害",
+            "informational": false
+          }
+        },
+        "verification_note": "重大事件与社会影响的验证部分提示：引述出错辨识官方数据（Prioritize官方来源），但无市场神经网络验证要求",
+        "blocking_reasons": [
+          "领域检查：明确表述样本偏差（Anomaly Identification）与历史模型验证（Pattern Comparison）；程序未能核实所引原文与行号。"
+        ]
+      },
+      "last_evaluation_id": "tradermonty/claude-trading-skills:skills/market-news-analyst/SKILL.md|sha256:1429967e2dd26f8e44bce06978460ce0|1.3.0|pool-business-v1",
+      "evaluated_at": "2026-10-01T05:26:05.409020+08:00"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/animation-system/SKILL.md",
+      "name": "animation-system",
+      "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/animation-system/SKILL.md",
+      "repo_url": "https://github.com/skillmedev/skills",
+      "author": "skillmedev",
+      "summary_zh": "构建统一的UI动画系统，包括时间尺度、缓动曲线和组件映射规则，适用于设计系统开发场景",
+      "skill_type": "guideline",
+      "example_requests": [
+        "定义我们的运动令牌，使产品动画更一致",
+        "设置模态框的动画时长标准"
+      ],
+      "key_features": [
+        "定义分层持续时间尺度（行26-34）",
+        "指定非对称缓动曲线（行36-44）",
+        "提供组件映射模板（行92-99）"
+      ],
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "动画规范",
+        "设计系统"
+      ],
+      "platform_declared": [
+        "web",
+        "iOS",
+        "Android"
+      ],
+      "dependencies_declared": [
+        "CSS",
+        "Framer Motion"
+      ],
+      "limitations": "未明确说明非CSS环境下的实现细节；依赖具体代码实现",
+      "license": null,
+      "status": "candidate",
+      "reason_codes": [
+        "INSUFFICIENT_EVIDENCE"
+      ],
+      "first_seen": "2026-09-30T12:30:27+00:00",
+      "last_checked": "2026-10-01T05:29:19.719552+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:01478c8e48f31ae7a6d7e29548072898",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "所属主分类为产品与设计，内容属于设计系统相关的规则与模板，属于 taxonomy.json 的设计系统领域",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "材料明确说明解决UI动画不一致性问题，提供了具体的方法和规则，如第8行描述问题，第14-119行详细步骤",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "步骤完整（Step 1至Step 7），包含具体模板（第74-100行），核心做法可理解",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "unknown",
+            "evidence": "介绍与实际内容一致：描述构建动画系统（行2-3），内容为规则、模板和步骤；程序未能核实所引原文与行号。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "unknown",
+            "evidence": "材料未声明运行环境或特定工具依赖（如仅泛称支持CSS、Framer Motion）；影响跨平台适用性判断",
+            "informational": true
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "未见凭据外传、实盘交易等违规行为；内容聚焦设计规范",
+            "informational": false
+          }
+        },
+        "verification_note": "材料提供验收清单（第121-127行）并含示例代码，但未说明如何测试减少动画偏好设置",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "skillmedev/skills:skills/animation-system/SKILL.md|sha256:01478c8e48f31ae7a6d7e29548072898|1.3.0|pool-business-v1",
+      "evaluated_at": "2026-10-01T05:29:19.697452+08:00"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/big-purchase-decision/SKILL.md",
+      "name": "big-purchase-decision",
+      "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/big-purchase-decision/SKILL.md",
+      "repo_url": "https://github.com/skillmedev/skills",
+      "author": "skillmedev",
+      "summary_zh": "评估重大购买决策的财务可行性，提供总拥有成本计算、机会成本分析和负担能力红线检查，适用于车辆、家电等大额消费",
+      "skill_type": "guideline",
+      "example_requests": [
+        "我应该买这辆车吗？",
+        "这个购买是个好主意吗？"
+      ],
+      "key_features": [
+        "总拥有成本计算（含利息与所有权成本）",
+        "四道负担能力红线检查",
+        "机会成本以10年为基准量化"
+      ],
+      "main_category": {
+        "id": "finance",
+        "name": "金融与投资"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "个人理财",
+        "消费决策"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "limitations": "依赖用户输入准确财务数据，无专业会计功能",
+      "license": null,
+      "status": "candidate",
+      "reason_codes": [],
+      "first_seen": "2026-09-30T12:30:27+00:00",
+      "last_checked": "2026-10-01T05:31:27.066337+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:db195ab6d500acba51788a9d58f925dc",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "评估重大购买决策，属于金融与投资范围",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "具体说明评估方法，分析总拥有成本、机会成本和负担能力红线",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "提供完整步骤，包括阈值、输入数据、计算和评分卡填充",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "pass",
+            "evidence": "技能描述与实际内容一致",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "unknown",
+            "evidence": "未声明特殊工具或依赖，但缺相关信息可能需用户自行验证",
+            "informational": true
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "未见凭据外传或临床决策，明确非财务建议（第106-107行）",
+            "informational": false
+          }
+        },
+        "verification_note": "材料含详细示例与评分卡模板，需用户自行输入真实数据",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "skillmedev/skills:skills/big-purchase-decision/SKILL.md|sha256:db195ab6d500acba51788a9d58f925dc|1.3.0|pool-business-v1",
+      "evaluated_at": "2026-10-01T05:31:27.048570+08:00"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/bloodwork-explainer/SKILL.md",
+      "name": "bloodwork-explainer",
+      "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/bloodwork-explainer/SKILL.md",
+      "repo_url": "https://github.com/skillmedev/skills",
+      "author": "skillmedev",
+      "summary_zh": "将医学血液检查报告（如血常规、生化等）转化为通俗解释，标记异常值并提供医生咨询问题列表，适用于普通人理解体检报告结果的场景",
+      "skill_type": "guideline",
+      "example_requests": [
+        "解释我的血脂面板检查结果是什么含义",
+        "我的ALT指标偏高需要担心吗"
+      ],
+      "key_features": [
+        "遵循实验室特定参考值范围",
+        "为医学咨询生成优先级问题列表",
+        "严格区分健康教育与医疗诊断"
+      ],
+      "main_category": {
+        "id": "physical_health",
+        "name": "身体健康"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "健康检查解读",
+        "医学报告辅助"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "limitations": "不适用于医学图表总结或临床文档解释；严格禁止提供诊断或治疗建议",
+      "license": null,
+      "status": "candidate",
+      "reason_codes": [
+        "INSUFFICIENT_EVIDENCE"
+      ],
+      "first_seen": "2026-09-30T12:30:27+00:00",
+      "last_checked": "2026-10-01T05:31:36.420129+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:58c7051c9eac5f2199992562ddd4537e",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "属于'身体健康'范畴，材料主要讲解血液检查结果解释。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "材料详细说明了如何将医学血检报告转化为易懂语言，避免自我诊断且生成医生咨询问题列表。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "材料提供了完整的分步操作指南、注意事项和质量检查标准，核心功能描述清晰。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "unknown",
+            "evidence": "功能介绍与实际步骤内容一致；程序未能核实所引原文与行号。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "pass",
+            "evidence": "材料未明确声明技术依赖，但作为指南类技能无特殊依赖要求",
+            "informational": false
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "材料强调不提供医疗诊断建议且明确禁止行为，符合健康领域边界",
+            "informational": false
+          }
+        },
+        "verification_note": "质量检查条包括明确参考值对比、问题列表生成和禁忌事项遵守，无外部数据验证要求",
+        "blocking_reasons": [
+          "领域检查：材料明确指出非专业医疗建议并包含风险升级路径；程序未能核实所引原文与行号。"
+        ]
+      },
+      "last_evaluation_id": "skillmedev/skills:skills/bloodwork-explainer/SKILL.md|sha256:58c7051c9eac5f2199992562ddd4537e|1.3.0|pool-business-v1",
+      "evaluated_at": "2026-10-01T05:31:36.401970+08:00"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/board-management/SKILL.md",
+      "name": "board-management",
+      "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/board-management/SKILL.md",
+      "repo_url": "https://github.com/skillmedev/skills",
+      "author": "skillmedev",
+      "summary_zh": "一套董事会会议管理的操作流程与打包骨架模板，用于优化公司决策效率以避开陷阱（如打断告述在电子推送已提前）；明确适用于私营企业避免低效会议风险.",
+      "skill_type": "guideline",
+      "example_requests": [
+        "如何设计我的董事会会议包以防叙事幻灯片浪费",
+        "董事会成员不知情时才出现争论该如何解决"
+      ],
+      "key_features": [
+        "Step-by-step制备流程",
+        "时段结构化打包骨架",
+        "引前通知：会议至少72小时提前的材料分发"
+      ],
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "会议管理",
+        "治理优化",
+        "流程规范"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "limitations": "仅限营利公司董事会管理（非利机构需适应）",
+      "license": null,
+      "status": "candidate",
+      "reason_codes": [
+        "INSUFFICIENT_EVIDENCE"
+      ],
+      "first_seen": "2026-09-30T12:30:27+00:00",
+      "last_checked": "2026-10-01T05:32:34.023072+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:4407ce87ec0ede4fd7da0c63a65718f0",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "上游材料中描述了一项关于董事会管理的技能，属于一个公司治理的实际操作说明，但不符合主分类的硬性排除项。因未声明健康、金融等专项，也未列为硬性拒绝项（如DSH插件、实盘交易）。主分类暂设为“产品与设计”，因其提供了一套操作流程和模板以实现会议效率改进，属于需求分析和工作流程设计的具体操作规范。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "材料直接回答问题（例如“如何准备董事会会议”）并列举输入项、会议准备流程、决策框架核心元素。文本中包含具体的操作流程图、避免的错误清单以及有价值的工具结构（如打包骨架），而不是仅泛泛设定角色空口号。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "材料中提供了分步操作流程（Step 1-6）、完整的内置板骨架模板、典型时间限制和具体行动建议，足以让读者独立遵循目标迭代会议流程。虽然技术依赖或实际实施需要资历支持（如律师介入），但技能本身已提供足够核心做法理解，无关键材料缺口影响其基本价值理解。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "unknown",
+            "evidence": "上游描述的技能能力（如打包提前交付、避免会议陷布）在步骤和决赛栏中一一对应体现，并未超越材料本身承诺增加功能。设有明确引用关系：例如步句3的72小时提前发送与决赛栏的保持一致（第122行）；步句4 “no surprises” 的原则亦符合后低光前置预防手段（第84行）.；程序未能核实所引原文与行号。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "unknown",
+            "evidence": "材料未提到任何运行环境要求（例如高性能软件或专用协议），但其依赖于董事会成员的响应行为、手动调用电话等标准办公流程。不构成关键运行基础设施需求问题（blocking未要求平台兼容性）。超出办公操作的其他工具未列出；缺客户端或集成工具说明不影响该指南类技能的记述有限理解。",
+            "informational": true
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "主材料未包括任何密钥读取、执行命令或无文档追踪项；组合电子封装板设计也不属于数据股权凭证逻辑影响范围；虽设计企业治理问题但不属临床诊断内容，基本内容适合自主学习（如改变会议方式），不触发健康或金融专项风险复核项。未见可疑行为违规项。",
+            "informational": false
+          }
+        },
+        "verification_note": "仓库提供了明确的验收标准：“Quality bar”列举了输出通过的条件（第120行）.",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "skillmedev/skills:skills/board-management/SKILL.md|sha256:4407ce87ec0ede4fd7da0c63a65718f0|1.3.0|pool-business-v1",
+      "evaluated_at": "2026-10-01T05:32:33.999607+08:00"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/budget-builder/SKILL.md",
+      "name": "budget-builder",
+      "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/budget-builder/SKILL.md",
+      "repo_url": "https://github.com/skillmedev/skills",
+      "author": "skillmedev",
+      "summary_zh": "基于50/30/20框架构建零基月度预算，处理不规则支出并通过沉没资金机制增强可持续性，适用于个人收支调整场景",
+      "skill_type": "guideline",
+      "example_requests": [
+        "根据每月净收入4000美元制定预算",
+        "帮助调整搬家后的开支分配"
+      ],
+      "key_features": [
+        "零基预算强制每一美元分配",
+        "沉没资金机制处理年度不规则支出",
+        "包含5步操作指南及自适应规则"
+      ],
+      "main_category": {
+        "id": "finance",
+        "name": "金融与投资"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "个人理财",
+        "预算管理"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "limitations": "不适用于企业预算或债务优先级决策",
+      "license": null,
+      "status": "candidate",
+      "reason_codes": [
+        "INSUFFICIENT_EVIDENCE"
+      ],
+      "first_seen": "2026-09-30T12:30:27+00:00",
+      "last_checked": "2026-10-01T05:35:18.423479+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:66f05567f528f9e1d70d5381260716f4",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "属于金融与投资主分类下的预算制定辅助技能，未命中排除项",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "明确描述构建零基预算的步骤、场景（如收入变更后）及具体框架（50/30/20准则）",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "提供完整操作步骤、模板、案例及常见错误规避列表",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "unknown",
+            "evidence": "介绍的预算构建流程与实际步骤、模板一致；程序未能核实所引原文与行号。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "pass",
+            "evidence": "无声明特殊运行依赖或工具",
+            "informational": false
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "不含实盘交易或临床决策功能，有明确非投资建议声明（第107-109行）",
+            "informational": false
+          }
+        },
+        "verification_note": "提供完整示例（第82-84行）及质量标准清单（第99-105行）",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "skillmedev/skills:skills/budget-builder/SKILL.md|sha256:66f05567f528f9e1d70d5381260716f4|1.3.0|pool-business-v1",
+      "evaluated_at": "2026-10-01T05:35:18.405713+08:00"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/budget-pacing/SKILL.md",
+      "name": "budget-pacing",
+      "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/budget-pacing/SKILL.md",
+      "repo_url": "https://github.com/skillmedev/skills",
+      "author": "skillmedev",
+      "summary_zh": "提供广告预算月度分配与动态调整策略，通过设置容忍带、再分配储备金和风险红线，确保在控制获客成本（CAC）的同时完成支出目标，适用于月初预算设定、月中超支调整和月末剩余预算处理场景。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "检查当前广告预算支出是否按计划进行",
+        "将预算从Meta转移到Google并解释调整依据"
+      ],
+      "key_features": [
+        "设置±15%容忍带和10-15%再分配储备金",
+        "基于7天CAC和流量可用性的跨渠道预算转移规则",
+        "超过10%偏差/CAC超标/渠道集中度超限时自动升级机制"
+      ],
+      "main_category": {
+        "id": "finance",
+        "name": "金融与投资"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "广告预算管理",
+        "获客成本优化"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "limitations": "未说明具体广告平台集成方式，依赖手动数据录入或API对接实现",
+      "license": null,
+      "status": "candidate",
+      "reason_codes": [],
+      "first_seen": "2026-09-30T12:30:27+00:00",
+      "last_checked": "2026-10-01T05:36:53.624106+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:81a86b1faae0ec8b332428db27f3f2d2",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "材料属于金融与投资分类中的预算管理和广告支出策略，核心是为广告预算分配和效率监控提供方法论",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "清晰说明解决广告预算分配、月度节奏控制、风险规避问题，具体场景包括月初月末预算管理",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "提供六步操作流程、决策规则、示例报告模板，足以理解核心方法与价值",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "pass",
+            "evidence": "材料从目标设定到执行监控内容一致，示例报告匹配描述的关键指标",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "unknown",
+            "evidence": "材料未声明具体技术工具或API依赖，但要求从广告平台API更新数据",
+            "informational": true
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "未见凭据外传、实盘交易或临床决策等风险，聚焦预算管理方法论",
+            "informational": false
+          }
+        },
+        "verification_note": "提供质量验收清单（行95-99）和示例报告模板（行58-75）作为验证依据",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "skillmedev/skills:skills/budget-pacing/SKILL.md|sha256:81a86b1faae0ec8b332428db27f3f2d2|1.3.0|pool-business-v1",
+      "evaluated_at": "2026-10-01T05:36:53.606608+08:00"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/channel-strategy/SKILL.md",
+      "name": "channel-strategy",
+      "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/channel-strategy/SKILL.md",
+      "repo_url": "https://github.com/skillmedev/skills",
+      "author": "skillmedev",
+      "summary_zh": "为企业提供营销渠道选择与排序框架，通过评分矩阵和12个月排序计划解决渠道聚焦与扩展问题，适用于初创公司或增长遇阻企业的渠道战略规划。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "我们的产品增长停滞，应优先拓展哪个营销渠道？",
+        "制订一个包含内容营销和付费广告的12个月渠道策略"
+      ],
+      "key_features": [
+        "五维评分框架（ACV匹配度、买方行为适用性等）",
+        "单一主渠道+复合渠道的排序原则",
+        "60%渠道集中度风险预警机制"
+      ],
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "营销策略",
+        "渠道规划"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "limitations": "依赖用户提供准确的财务数据（如ACV、CAC），部分评估需依赖外部工具执行。",
+      "license": null,
+      "status": "candidate",
+      "reason_codes": [
+        "INSUFFICIENT_EVIDENCE"
+      ],
+      "first_seen": "2026-09-30T12:30:27+00:00",
+      "last_checked": "2026-10-01T05:37:50.780849+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:129fd8a9723819608fc85b0a9c6b40b7",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "材料提供了清晰的市场策略规划和评分框架，属于产品与设计领域的需求分析和产品策略制定范畴。该技能独立服务于公司营销战略分析和规划，不涉及硬性排除项。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "SKILL.md明确阐述了其在解决'如何聚焦营销渠道'、'何时添加新渠道'等具体问题中的应用场景（行2-3），提供了一套评分矩阵、排序规则和操作流程（行10-58），具备实际价值。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "文档详细列出了五步操作流程（行11-58），并附有评分规则（行36-45）和示例矩阵（行74-88），核心方法和输出要求（行92）清晰可执行。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "unknown",
+            "evidence": "描述与内容一致：示例矩阵（行74-88）展示了评分维度；操作步骤（行10-58）和交付要求（行92）均与介绍相符。；程序未能核实所引原文与行号。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "unknown",
+            "evidence": "材料未声明运行环境或工具依赖（全篇仅描述方法步骤）。鉴于其为指南型技能，不强制要求声明工具依赖，但其可操作性可能隐式依赖外部数据（如CAC计算），此缺口不影响当前理解核心方法。",
+            "informational": true
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "未见凭据外传、实盘交易、临床决策等风险；内容聚焦商业分析，未涉健康或金融敏感操作。",
+            "informational": false
+          }
+        },
+        "verification_note": "材料通过描述性示例展示输出质量（行74-88），并列出五项质量要求作为验证参考（行104-108），但未提供真实数据验证方法。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "skillmedev/skills:skills/channel-strategy/SKILL.md|sha256:129fd8a9723819608fc85b0a9c6b40b7|1.3.0|pool-business-v1",
+      "evaluated_at": "2026-10-01T05:37:50.763971+08:00"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/client-churn-save/SKILL.md",
+      "name": "client-churn-save",
+      "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/client-churn-save/SKILL.md",
+      "repo_url": "https://github.com/skillmedev/skills",
+      "author": "skillmedev",
+      "summary_zh": "提供客户流失风险信号列表、拯救呼叫流程模板及后续预案框架，适用于机构服务商发现客户沉默信号后的挽救工作流",
+      "skill_type": "guideline",
+      "example_requests": [
+        "当客户联系人变更时生成客户拯救方案",
+        "客户连续两次缺席会议后列出风险响应模板"
+      ],
+      "key_features": [
+        "分等级风险信号监测（含5类早期信号）",
+        "呼叫剧本骨架（诊疗前不报价流程）",
+        "30%利润底线决策规则"
+      ],
+      "main_category": {
+        "id": "docs",
+        "name": "文档办公"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "客户沟通",
+        "客户挽留",
+        "工作流指南"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "retainer-economics-calculator（功能引用但未说明实现方式）"
+      ],
+      "limitations": "未声明 retainer-economics-calculator 等依赖的实现；仅提供框架而非可直接运行工具",
+      "license": null,
+      "status": "candidate",
+      "reason_codes": [],
+      "first_seen": "2026-09-30T12:30:27+00:00",
+      "last_checked": "2026-10-01T05:39:50.647426+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:c50534a7300f03567445da0165110461",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "技能围绕机构客户流失风险检测与拯救流程（流程指南），服务于'文档办公'分类（工作流指南）。未命中硬性排除项。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "明确解决当客户呈现沉默信号时的流失风险问题（如客户联系人离开、预算审查消息），提供了具体预案框架（如诊断前不报价的工作流）。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "包含完整的操作步骤（识别信号至拯救呼叫流程的关键步骤）与模板（呼叫脚本骨架等），但未声明依赖（如 retainer-economics-calculator）不算漏洞。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "pass",
+            "evidence": "流程说明与实际内容一致",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "unknown",
+            "evidence": "材料中提及外部依赖（如 retainer-economics-calculator）但未声明来源，无法判断其可获取性且为关键步骤所需",
+            "informational": false
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "未见声称医疗/金融收益等明显违规；但关键依赖未声明，记入 dependency_transparency 不影响本项",
+            "informational": false
+          }
+        },
+        "verification_note": "材料提供剧本模板但未提供运行示例或验证方法",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "skillmedev/skills:skills/client-churn-save/SKILL.md|sha256:c50534a7300f03567445da0165110461|1.3.0|pool-business-v1",
+      "evaluated_at": "2026-10-01T05:39:50.628519+08:00"
     }
   ],
+  "favorites": {
+    "favorites_version": "1.0.0",
+    "source": "docs/运行说明.md §9.1",
+    "note": "人工收藏名单（favorites）：由用户手工维护。manual_picks 长期保留在收藏区（0 模型调用保护）。",
+    "manual_picks": [
+      {
+        "skill_id": "anthropics/skills:skills/canvas-design/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-24",
+        "from": "candidate"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/skill-creator/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-24",
+        "from": "candidate"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/theme-factory/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-22",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/webapp-testing/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-26",
+        "from": "candidate"
+      },
+      {
+        "skill_id": "vercel-labs/skills:skills/find-skills/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-26",
+        "from": "candidate"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/goal-prompt/skills/goal-prompt/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-26",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/trailmark/skills/diagramming-code/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-26",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/trailmark/skills/graph-evolution/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-26",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "google-labs-code/stitch-skills:plugins/stitch-build/skills/react-components/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-26",
+        "from": "candidate"
+      },
+      {
+        "skill_id": "getsentry/skills:skills/commit/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-26",
+        "from": "candidate"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/discernment-nudge/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-24",
+        "from": "candidate"
+      },
+      {
+        "skill_id": "vercel-labs/agent-skills:skills/writing-guidelines/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-22",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/doc-coauthoring/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-24",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/internal-comms/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-24",
+        "from": "candidate"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/pptx/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-22",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/frontend-design/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-24",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "vercel-labs/agent-skills:skills/react-best-practices/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-22",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/docx/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-22",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/xlsx/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-22",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/pdf/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-24",
+        "from": "candidate"
+      },
+      {
+        "skill_id": "getsentry/skills:skills/code-simplifier/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-26",
+        "from": "candidate"
+      },
+      {
+        "skill_id": "getsentry/skills:skills/agents-md/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-26",
+        "from": "candidate"
+      },
+      {
+        "skill_id": "gauss314/skills:skills/alpaca-data/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-27",
+        "from": "candidate"
+      },
+      {
+        "skill_id": "gauss314/skills:skills/alpha-vantage/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-27",
+        "from": "candidate"
+      },
+      {
+        "skill_id": "gauss314/skills:skills/data912/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-29",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "gauss314/skills:skills/sec-data/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-29",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "thousandcents/futures-research:SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-29",
+        "from": "recommended"
+      }
+    ]
+  },
   "overrides": {
     "overrides_version": "1.0.0",
     "source": "docs/运行说明.md §9.2",
@@ -44431,174 +47493,5 @@
     ],
     "source": "docs/产品规范.md#13-已收录名单契约",
     "note": "已收录 Skill 项目级名单：标记为已收录的 Skill 不再出现在推荐、候选、收藏及定向查找结果中，也不再进行自动评估（0 Token 消耗）。"
-  },
-  "favorites": {
-    "favorites_version": "1.0.0",
-    "source": "docs/运行说明.md §9.1",
-    "note": "人工收藏名单（favorites）：由用户手工维护。manual_picks 长期保留在收藏区（0 模型调用保护）。",
-    "manual_picks": [
-      {
-        "skill_id": "anthropics/skills:skills/canvas-design/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-24",
-        "from": "candidate"
-      },
-      {
-        "skill_id": "anthropics/skills:skills/skill-creator/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-24",
-        "from": "candidate"
-      },
-      {
-        "skill_id": "anthropics/skills:skills/theme-factory/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-22",
-        "from": "recommended"
-      },
-      {
-        "skill_id": "anthropics/skills:skills/webapp-testing/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-26",
-        "from": "candidate"
-      },
-      {
-        "skill_id": "vercel-labs/skills:skills/find-skills/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-26",
-        "from": "candidate"
-      },
-      {
-        "skill_id": "trailofbits/skills:plugins/goal-prompt/skills/goal-prompt/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-26",
-        "from": "recommended"
-      },
-      {
-        "skill_id": "trailofbits/skills:plugins/trailmark/skills/diagramming-code/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-26",
-        "from": "recommended"
-      },
-      {
-        "skill_id": "trailofbits/skills:plugins/trailmark/skills/graph-evolution/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-26",
-        "from": "recommended"
-      },
-      {
-        "skill_id": "google-labs-code/stitch-skills:plugins/stitch-build/skills/react-components/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-26",
-        "from": "candidate"
-      },
-      {
-        "skill_id": "getsentry/skills:skills/commit/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-26",
-        "from": "candidate"
-      },
-      {
-        "skill_id": "anthropics/skills:skills/discernment-nudge/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-24",
-        "from": "candidate"
-      },
-      {
-        "skill_id": "vercel-labs/agent-skills:skills/writing-guidelines/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-22",
-        "from": "recommended"
-      },
-      {
-        "skill_id": "anthropics/skills:skills/doc-coauthoring/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-24",
-        "from": "recommended"
-      },
-      {
-        "skill_id": "anthropics/skills:skills/internal-comms/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-24",
-        "from": "candidate"
-      },
-      {
-        "skill_id": "anthropics/skills:skills/pptx/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-22",
-        "from": "recommended"
-      },
-      {
-        "skill_id": "anthropics/skills:skills/frontend-design/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-24",
-        "from": "recommended"
-      },
-      {
-        "skill_id": "vercel-labs/agent-skills:skills/react-best-practices/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-22",
-        "from": "recommended"
-      },
-      {
-        "skill_id": "anthropics/skills:skills/docx/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-22",
-        "from": "recommended"
-      },
-      {
-        "skill_id": "anthropics/skills:skills/xlsx/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-22",
-        "from": "recommended"
-      },
-      {
-        "skill_id": "anthropics/skills:skills/pdf/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-24",
-        "from": "candidate"
-      },
-      {
-        "skill_id": "getsentry/skills:skills/code-simplifier/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-26",
-        "from": "candidate"
-      },
-      {
-        "skill_id": "getsentry/skills:skills/agents-md/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-26",
-        "from": "candidate"
-      },
-      {
-        "skill_id": "gauss314/skills:skills/alpaca-data/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-27",
-        "from": "candidate"
-      },
-      {
-        "skill_id": "gauss314/skills:skills/alpha-vantage/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-27",
-        "from": "candidate"
-      },
-      {
-        "skill_id": "gauss314/skills:skills/data912/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-29",
-        "from": "recommended"
-      },
-      {
-        "skill_id": "gauss314/skills:skills/sec-data/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-29",
-        "from": "recommended"
-      },
-      {
-        "skill_id": "thousandcents/futures-research:SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-29",
-        "from": "recommended"
-      }
-    ]
   }
 }
