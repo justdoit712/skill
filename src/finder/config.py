@@ -38,28 +38,8 @@ def _read_json_file(path: Path, default=None) -> Any:
 
 def load_finder_model_config(config_dir: str | Path = "config") -> dict[str, Any]:
     """读取模型配置，仅加载 model.local.json 或 model.example.json。"""
-    base = Path(config_dir)
-    def _res(fname: str, sub: str) -> Path:
-        sub_p = base / sub / fname
-        flat_p = base / fname
-        if flat_p.exists() and sub_p.exists():
-            try:
-                return flat_p if flat_p.stat().st_mtime >= sub_p.stat().st_mtime else sub_p
-            except OSError:
-                return flat_p
-        if flat_p.exists():
-            return flat_p
-        return sub_p
-
-    local_cfg = _res("model.local.json", "models")
-    example_cfg = _res("model.example.json", "models")
-
-    if local_cfg.exists():
-        cfg = _read_json_file(local_cfg)
-    elif example_cfg.exists():
-        cfg = _read_json_file(example_cfg)
-    else:
-        raise FileNotFoundError(f"未找到模型配置文件：{local_cfg} 或 {example_cfg}")
+    from src.infra.model_config import load_model_config
+    cfg = load_model_config(config_dir)
 
     if not isinstance(cfg, dict):
         raise ValueError("模型配置文件必须是 JSON 对象")
@@ -70,7 +50,8 @@ def load_finder_model_config(config_dir: str | Path = "config") -> dict[str, Any
 
     # 禁用底层库嵌套重试，准确统计单次调用
     cfg_copy = deepcopy(cfg)
-    cfg_copy.setdefault("request", {})["max_attempts"] = 1
+    if "models" not in cfg_copy:
+        cfg_copy.setdefault("request", {})["max_attempts"] = 1
     return cfg_copy
 
 

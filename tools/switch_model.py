@@ -31,6 +31,9 @@ sys.path.insert(0, str(ROOT))
 
 from src.infra.files import read_json, write_json_atomic
 from src.infra.llm import validate_model_config
+from src.infra.model_config import resolve_model_path
+from src.infra.model_pool import ModelPool
+from src.shared.model_config import parse_model_configs, state_key
 
 # 厂商快捷别名映射
 ALIASES: dict[str, str] = {
@@ -131,6 +134,14 @@ def show_current() -> None:
         print(f"当前未激活任何模型：{MODEL_LOCAL_PATH.name} 不存在。")
         return
     cur = read_json(MODEL_LOCAL_PATH, default={})
+    if 'models' in cur:
+        configs = parse_model_configs(cur)
+        state = ModelPool(cur, ROOT).inspect()
+        print('当前模型队列（按顺序）：')
+        for cfg in configs:
+            exhausted = state_key(cfg['endpoint'], cfg['model']) in state['exhausted_models']
+            print(f"  {cfg['model']}：{'已耗尽' if exhausted else '可用'}")
+        return
     auth = cur.get("auth") or {}
     key = auth.get("api_key")
     env_name = auth.get("api_key_env", "LLM_API_KEY")
@@ -182,6 +193,9 @@ def resolve_target_provider_id(query: str, providers: dict) -> str | None:
 
 def switch_to_provider(provider_id: str, catalog: dict | None = None) -> bool:
     """切换到指定独立模型配置文件，并原子覆写到 model.local.json。"""
+    if 'models' in (read_json(MODEL_LOCAL_PATH, default={}) or {}):
+        print('[拒绝] 当前使用模型队列，请编辑 model.local.json 的 models 列表；切换命令不会覆盖队列。')
+        return False
     if catalog is None:
         catalog = load_providers_catalog()
 
@@ -280,6 +294,8 @@ def interactive_select(catalog: dict) -> None:
 
 
 def main() -> None:
+    global MODEL_LOCAL_PATH
+    MODEL_LOCAL_PATH = resolve_model_path(ROOT / 'config')
     parser = argparse.ArgumentParser(description="多厂商大模型与 Key 本地独立文件热插拔管理工具")
     parser.add_argument("provider", nargs="?", help="要切换到的目标模型 ID (如 deepseek, qwen3.8-flash, kimi-k3, glm-5.3 等)")
     parser.add_argument("-l", "--list", action="store_true", help="列出所有已配置的模型及状态")
@@ -290,6 +306,8 @@ def main() -> None:
     catalog = load_providers_catalog()
 
     if args.list:
+        if 'models' in (read_json(MODEL_LOCAL_PATH, default={}) or {}):
+            show_current()
         list_providers(catalog)
         return
 

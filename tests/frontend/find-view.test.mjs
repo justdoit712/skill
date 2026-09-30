@@ -22,6 +22,12 @@ function render(report) {
 
 const report = { schema_version: "1.0.0", topic: "需求", status: "completed", shortlist: [], alternatives: [] };
 
+test("model pool stops describe recoverable work", () => {
+  assert.match(render({ ...report, status: "stopped", stop_reason: "models_exhausted" }), /未完成候选已保留/);
+  assert.match(render({ ...report, status: "stopped", stop_reason: "input_limit_mismatch" }), /完整材料/);
+  assert.match(render({ ...report, status: "error", stop_reason: "quota_response_conflict" }), /停止自动重发/);
+});
+
 test("current 1.1 report remains readable", () => {
   assert.doesNotMatch(render({ ...report, schema_version: "1.1.0" }), /版本不兼容/);
 });

@@ -57,7 +57,17 @@ def _previous_entries(data_dir: Path) -> list[dict]:
 
 
 def _evaluate_queue(queue, cfg, ledger, staged, started, token_cap,
-                    fetch_fn, evaluate_fn, api_key, sleep):
+                    fetch_fn, evaluate_fn, api_key, sleep, model_pool_root=None):
+    from src.infra.model_pool import ModelPool, PoolStopped, PoolReselect
+    pool = None
+    pool_stop = None
+    if 'models' in cfg['model']:
+        pool = ModelPool(cfg['model'], model_pool_root or ledger.state_dir.parent.parent)
+        try:
+            pool.start()
+        except PoolStopped as exc:
+            return {'results': {}, 'evaluated': 0, 'skipped': 0, 'settled_items': [],
+                    'tokens_used': 0, 'token_stopped': [], 'usage_unknown': False, 'stop_reason': exc.reason}
     reserved_ids = set(ledger.reserved)
     tokens_used = 0
     token_stopped = []
@@ -161,25 +171,39 @@ def _evaluate_queue(queue, cfg, ledger, staged, started, token_cap,
             skipped += 1
             continue
         materials = primary_material_bundle(candidate, text, started.isoformat())
-        ledger.begin_attempt(eid, started)
+        if pool is None:
+            ledger.begin_attempt(eid, started)
         request_records = list(existing.get("requests") or [])
         observed_requests = 0
 
         def on_request(event, stage, request_call):
             nonlocal tokens_used, usage_unknown, observed_requests
             if event == "before":
+                if pool:
+                    if not pool.model_available(request_call['requested_model']):
+                        raise PoolReselect()
+                    if usage_unknown:
+                        raise PoolStopped('usage_unknown')
+                    if token_cap and tokens_used + request_call['reserved_tokens'] > token_cap:
+                        raise PoolStopped('token_limit')
                 if stage == "review" and (usage_unknown or (token_cap and tokens_used >= token_cap)):
                     return False
-                request_records.append({"stage": stage, "status": "in_progress", "usage": None})
+                request_records.append({"stage": stage, "state": "started", "status": "in_progress", "usage": None, **(request_call or {})})
             else:
                 usage = UsageTotals()
                 observed_requests += 1
                 summary = usage.add(request_call)
                 tokens_used += usage.total_tokens
                 usage_unknown = usage_unknown or usage.unknown_usage_requests > 0
-                request_records[-1].update(status="completed" if request_call.ok else "failed", usage=summary)
+                request_records[-1].update(status="completed" if request_call.ok else "failed", usage=summary,
+                    state='received' if request_call.ok else 'error', raw_usage=request_call.usage,
+                    billing_state=getattr(request_call, 'billing_state', None),
+                    provider_error_code=getattr(request_call, 'provider_error_code', None),
+                    response={k: getattr(request_call, k, None) for k in ('ok', 'content', 'reason_code', 'http_status')})
             record = ledger.get(eid)
             record["requests"] = request_records
+            if pool:
+                record["status"] = "reserved" if event == "after" and getattr(request_call, "billing_state", None) == "rejected_before_inference" else "in_progress"
             ledger.save_record(eid, record, started)
             return True
 
@@ -187,7 +211,15 @@ def _evaluate_queue(queue, cfg, ledger, staged, started, token_cap,
             candidate, text, model_cfg=cfg["model"], rules=cfg["rules"],
             taxonomy=cfg["taxonomy"], api_key=api_key, sleep=sleep, on_request=on_request,
             pending_evaluation=existing.get("pending_evaluation"),
+            **({"model_pool": pool} if pool else {}),
         )
+        if outcome.get('pool_stop'):
+            pool_stop = outcome['pool_stop']
+            checkpoint = ledger.get(eid)
+            checkpoint.update(status='needs_recovery' if usage_unknown or pool_stop == 'quota_response_conflict' else 'reserved', pause_reason=pool_stop)
+            ledger.save_record(eid, checkpoint, started)
+            results[candidate.skill_id] = {'status': 'stopped', 'note': pool_stop}
+            break
         call = outcome.get("call")
         if call is not None and not observed_requests:
             tokens_used += int(getattr(call, "total_tokens", 0) or 0)
@@ -212,6 +244,8 @@ def _evaluate_queue(queue, cfg, ledger, staged, started, token_cap,
                 "reason_codes": decision["reason_codes"],
                 "main_category": evaluation.get("main_category"),
                 "evaluation": evaluation,
+                "model": getattr(call, "requested_model", None),
+                "model_config_fingerprint": getattr(call, "model_config_fingerprint", None),
                 "materials": materials.manifest(),
                 "request_usage": request_records,
                 "candidate": asdict(candidate),
@@ -223,7 +257,7 @@ def _evaluate_queue(queue, cfg, ledger, staged, started, token_cap,
         results[candidate.skill_id] = {"status": "completed", "decision": decision["decision"]}
         evaluated += 1
 
-    return {"results": results, "evaluated": evaluated, "skipped": skipped, "settled_items": settled_items, "tokens_used": tokens_used, "token_stopped": token_stopped, "usage_unknown": usage_unknown}
+    return {"results": results, "evaluated": evaluated, "skipped": skipped, "settled_items": settled_items, "tokens_used": tokens_used, "token_stopped": token_stopped, "usage_unknown": usage_unknown, "stop_reason": pool_stop}
 
 
 def _build_evaluated_catalog(previous_entries, queue, cfg, ledger, context):
@@ -337,7 +371,8 @@ def phase_evaluate(
             staged = {}
 
     batch = _evaluate_queue(queue, cfg, ledger, staged, started, token_cap,
-                            fetch_fn, evaluate_fn, api_key, sleep)
+                            fetch_fn, evaluate_fn, api_key, sleep,
+                            model_pool_root=Path(config_dir).resolve().parent)
     results, evaluated, skipped = batch["results"], batch["evaluated"], batch["skipped"]
     settled_items = batch["settled_items"]
     tokens_used, token_stopped = batch["tokens_used"], batch["token_stopped"]
@@ -396,6 +431,7 @@ def phase_evaluate(
         "token_cap": token_cap or None,
         "token_stopped": token_stopped,
         "usage_unknown": batch["usage_unknown"],
+        "stop_reason": batch.get("stop_reason"),
         "results": results,
         "entries_before": len(previous_entries),
         "entries_after": len(merged),

@@ -21,7 +21,7 @@ from src.infra.llm import ModelCallResult, REASON_NETWORK_ERROR, REASON_LENGTH_E
 
 
 class TestFinderDiagnosticsAndAccounting(unittest.TestCase):
-    def test_classify_quota_exhausted(self):
+    def test_plain_403_is_not_quota_exhausted(self):
         # HTTP 403 免费额度耗尽
         res = ModelCallResult(
             ok=False,
@@ -29,7 +29,7 @@ class TestFinderDiagnosticsAndAccounting(unittest.TestCase):
             error='HTTP 403: {"error":{"message":"Free quota exhausted.","type":"AllocationQuota.FreeTierOnly"}}',
         )
         code, msg = classify_evaluation_error(res)
-        self.assertEqual(code, "quota_exhausted")
+        self.assertEqual(code, "auth_error")
         self.assertIn("Free quota exhausted", msg)
 
     def test_classify_auth_error(self):

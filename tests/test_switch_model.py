@@ -22,6 +22,12 @@ class SwitchModelTest(unittest.TestCase):
         self.models_dir = self.root / "config" / "models"
         self.model_local = self.models_dir / "model.local.json"
         self.models_dir.mkdir(parents=True, exist_ok=True)
+        for name, value in [('ROOT', self.root), ('MODELS_DIR', self.models_dir),
+                            ('MODEL_LOCAL_PATH', self.model_local),
+                            ('PROVIDERS_LOCAL_PATH', self.models_dir / 'providers.local.json')]:
+            patched = patch('tools.switch_model.' + name, value)
+            patched.start()
+            self.addCleanup(patched.stop)
 
         # 创建独立的厂商私有配置文件
         (self.models_dir / "deepseek.local.json").write_text(

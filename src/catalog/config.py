@@ -10,6 +10,7 @@ import json
 from pathlib import Path
 
 from src.infra.files import read_json
+from src.infra.model_config import load_model_config
 from src.infra.llm import validate_model_config
 from src.infra.owned import load_owned_config
 from src.shared.owned import validate_owned_config
@@ -70,12 +71,10 @@ def load_all_config(config_dir: str | Path = "config") -> dict:
     """加载目录流水线运行所需的全部配置字典。"""
     base = Path(config_dir)
     prescreen_cfg = load_config(base)
-    model_path = _resolve_config_file(base, "model.local.json", "models")
-    if model_path.exists():
-        model_cfg = _load_json(model_path)
-    else:
-        ex_path = _resolve_config_file(base, "model.example.json", "models")
-        model_cfg = _load_json(ex_path) if ex_path.exists() else {}
+    try:
+        model_cfg = load_model_config(base)
+    except FileNotFoundError:
+        model_cfg = {}
 
     overrides_cfg = load_overrides(_resolve_config_file(base, "overrides.json", "governance"))
     snooze_cfg = load_snooze(_resolve_config_file(base, "snoozed.json", "governance"))

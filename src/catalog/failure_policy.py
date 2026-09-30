@@ -56,6 +56,9 @@ STOP_PRIORITY: list[str] = [
     STOP_TOKEN_LIMIT,
     STOP_RETRY_EXHAUSTED,
     STOP_USAGE_UNKNOWN,
+    'quota_response_conflict',
+    'models_exhausted',
+    'input_limit_mismatch',
     STOP_FORMAT_FAILURES,
     STOP_MODEL_FAILURES,
     STOP_TARGET_REACHED,
@@ -64,6 +67,9 @@ STOP_PRIORITY: list[str] = [
 ]
 
 STOP_LABELS: dict[str, str] = {
+    'models_exhausted': '所有模型已耗尽，补充模型后可继续',
+    'input_limit_mismatch': '未耗尽模型均无法接收完整材料',
+    'quota_response_conflict': '额度拒绝响应与实际用量冲突',
     STOP_TARGET_REACHED: "已达成目标推荐数",
     STOP_TOKEN_LIMIT: "已达 Token 上限",
     STOP_EVALUATION_LIMIT: "已达评估次数上限",
@@ -116,6 +122,13 @@ def classify_result(result: dict[str, Any]) -> ClassificationDecision:
     error_kind = result.get("error_kind")
     http_status = getattr(call, "http_status", None)
     stage = result.get("stage")
+    pause = result.get('pool_stop')
+    if not pause:
+        pause = {'QUOTA_EXHAUSTED': 'models_exhausted', 'ALL_MODELS_EXHAUSTED': 'models_exhausted',
+                 'QUOTA_RESPONSE_CONFLICT': 'quota_response_conflict'}.get(reason_code)
+    if pause:
+        return ClassificationDecision(action='pause', category='resource_pause', reason_code=reason_code,
+                                      stage=stage, stop_cause=pause)
 
     # 1. 明确 length_exceeded (reason_code=LENGTH_EXCEEDED 或 finish_reason=length 且非显式 MODEL_ERROR)
     if reason_code == REASON_LENGTH_EXCEEDED or (
@@ -132,7 +145,7 @@ def classify_result(result: dict[str, Any]) -> ClassificationDecision:
         )
 
     # 2. 401 / 403 访问认证/权限异常
-    if http_status in (401, 403) or reason_code == REASON_ACCESS_DENIED:
+    if http_status in (401, 403) or reason_code in (REASON_ACCESS_DENIED, 'ACCOUNT_ERROR'):
         return ClassificationDecision(
             action=ACTION_BLOCKED,
             category="access_denied",

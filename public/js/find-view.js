@@ -114,6 +114,12 @@ export function renderFindView(container, report, ownedState = null) {
     bannerHtml = '<div class="find-status-banner info">ℹ️ 本次发现的候选已全部收录。</div>';
   } else if (stopReason === "usage_unknown") {
     bannerHtml = '<div class="find-status-banner warning">⚠️ 模型调用缺失用量统计 (usage_unknown)，触发安全停机保护；已安全保存中断前的全部局部结果。</div>';
+  } else if (stopReason === "models_exhausted") {
+    bannerHtml = '<div class="find-status-banner warning">模型队列已全部耗尽；未完成候选已保留，补充模型后可恢复查找。</div>';
+  } else if (stopReason === "input_limit_mismatch") {
+    bannerHtml = '<div class="find-status-banner warning">当前可用模型均无法接收完整材料；请调整模型队列后恢复查找。</div>';
+  } else if (stopReason === "quota_response_conflict") {
+    bannerHtml = '<div class="find-status-banner danger">额度拒绝响应同时包含消耗或异常用量；已记录响应并停止自动重发。</div>';
   } else if (stopReason === "token_limit") {
     bannerHtml = '<div class="find-status-banner warning">⚠️ 模型调用消耗已达到本次 Token 预算上限 (token_limit)，查找停止；已保存当前已完成结果。</div>';
   } else if (stopReason === "evaluation_limit") {

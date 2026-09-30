@@ -31,7 +31,9 @@ def initialize_search(state):
     completed = {e["candidate"]["skill_id"] for e in report["evaluations"]}
     # Legacy reports cannot reconstruct pending candidates; rediscover once, skip recorded attempts.
     completed.update(c["skill_id"] for c in report.get("calls", [])
-                     if c.get("skill_id") and c.get("state") != "not_sent")
+                     if c.get("skill_id") and c.get("state") != "not_sent"
+                     and c.get('billing_state') != 'rejected_before_inference'
+                     and c['skill_id'] not in report.get('pending_evaluations', {}))
     search["processed_skill_ids"] = sorted(set(search["processed_skill_ids"]) | completed)
     for query, cursor in search["query_cursors"].items():
         if "page_attempts" not in cursor:
@@ -137,17 +139,22 @@ def _reflect(state, current, cfg, transport, api_key, sleep, log):
     system, user = build_reflection_prompt(report["topic"], report["plan"], previous, recent)
     config = deepcopy(cfg)
     config.setdefault("limits", {})["max_output_tokens"] = PLAN_MAX_OUTPUT_TOKENS
-    if current.get("reflection_started"):
-        call = report["calls"][current["reflection_call_index"]]
-        if not call.get("response"):
-            return [], "usage_unknown"
-        result = SimpleNamespace(**call["response"])
+    saved_calls = report['calls'][current.get('reflection_call_index', len(report['calls'])):]
+    saved_calls = [call for call in saved_calls if call.get('stage') == 'reflection']
+    last = saved_calls[-1] if saved_calls else None
+    # Rotation may append several physical attempts for one reflection. Replay
+    # the last result; a confirmed refusal or unsent checkpoint can be resumed.
+    resumable = last is None or last.get('billing_state') == 'rejected_before_inference' or last.get('state') == 'not_sent'
+    if current.get('reflection_started') and not resumable:
+        if not last.get('response'):
+            return [], 'usage_unknown'
+        result = SimpleNamespace(**last['response'])
         unknown = bool(state.usage.unknown_usage_requests)
     else:
-        current["reflection_started"] = True
-        current["reflection_call_index"] = len(report["calls"])
+        current['reflection_started'] = True
+        current['reflection_call_index'] = len(report['calls'])
         result, unknown = state.call(transport, config, system, user, api_key=api_key, sleep=sleep,
-                                     stage="reflection")
+                                     stage='reflection')
     if unknown:
         return [], "usage_unknown"
     try:

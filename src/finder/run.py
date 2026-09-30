@@ -28,6 +28,7 @@ from uuid import uuid4
 
 from src.infra.files import write_json_atomic
 from src.infra.llm import call_model, resolve_api_key
+from src.infra.model_pool import ModelPool, PoolStopped, PoolReselect
 from src.shared.output_contracts import resolve_response_format
 from src.shared.runtime import is_test_environment, now_local
 from src.shared.usage import UsageTotals, audit_usage_reconciliation
@@ -90,7 +91,7 @@ STATUS_INTERRUPTED = "interrupted"
 STATUS_ERROR = "error"
 STATUS_STOPPED = "stopped"
 STATUS_INVALID_CONFIG = "invalid_config"
-STATUS_QUOTA_EXHAUSTED = "quota_exhausted"
+STATUS_QUOTA_EXHAUSTED = "models_exhausted"
 
 
 MAX_CONSECUTIVE_FAILURES = 20
@@ -179,7 +180,7 @@ def classify_evaluation_error(result, exc: BaseException | None = None) -> tuple
     """细化评估错误类型。
 
     分类包括：
-    - 'quota_exhausted': 免费额度耗尽或账户欠费 (HTTP 403 / FreeTierOnly / Quota)
+    - 'models_exhausted': 结构化明确额度拒绝；普通 403 不属于耗尽
     - 'auth_error': API Key 无效或未授权 (HTTP 401)
     - 'network_timeout': 网络读取或连接超时 (ReadTimeout / ConnectTimeout)
     - 'network_error': 其他底层网络故障
@@ -193,9 +194,9 @@ def classify_evaluation_error(result, exc: BaseException | None = None) -> tuple
     # 1. 额度耗尽与认证
     http_status = getattr(result, "http_status", None)
     err_lower = msg.lower()
-    if http_status == 403 or "free quota exhausted" in err_lower or "allocationquota" in err_lower or ("quota" in err_lower and "exhausted" in err_lower):
-        return "quota_exhausted", msg
-    if http_status == 401 or "unauthorized" in err_lower or ("api key" in err_lower and ("invalid" in err_lower or "missing" in err_lower)):
+    if getattr(result, "reason_code", None) in ("QUOTA_EXHAUSTED", "ALL_MODELS_EXHAUSTED"):
+        return STATUS_QUOTA_EXHAUSTED, msg
+    if http_status in (401, 403) or "unauthorized" in err_lower or ("api key" in err_lower and ("invalid" in err_lower or "missing" in err_lower)):
         return "auth_error", msg
 
     # 2. 输出截断
@@ -229,6 +230,8 @@ class FinderRunState:
     """Per-run facts; no catalog state or global execution context."""
 
     def __init__(self, topic, params, run_dir=None, cfg=None):
+        self.model_pool = None
+        self.pool_stop = None
         self.run_dir = run_dir
         self.usage = UsageTotals()
         self._lock = threading.RLock()
@@ -275,6 +278,8 @@ class FinderRunState:
             )
             if self.usage.unknown_usage_requests or abandoned_started or any(c.get("state") == "unknown" for c in self.report["calls"]):
                 return STATUS_USAGE_UNKNOWN
+            if self.pool_stop:
+                return self.pool_stop
             if _target_reached(self):
                 return STATUS_TARGET_REACHED
             if self.usage.total_tokens >= self.report["parameters"]["max_tokens"]:
@@ -293,6 +298,48 @@ class FinderRunState:
 
     def call(self, transport, cfg, system, user, *, api_key, sleep, candidate_id=None, stage=None):
         stage = stage or ("evaluation" if candidate_id else "planning")
+        if self.model_pool is None:
+            return self._call_once(transport, cfg, system, user, api_key=api_key, sleep=sleep,
+                                   candidate_id=candidate_id, stage=stage)
+        limit = {"clarification": CLARIFICATION_MAX_OUTPUT_TOKENS,
+                 "planning": PLAN_MAX_OUTPUT_TOKENS, "reflection": PLAN_MAX_OUTPUT_TOKENS,
+                 "evaluation": EVAL_MAX_OUTPUT_TOKENS}.get(stage)
+        def invoke(effective, fmt, context):
+            result, unknown = self._call_once(transport, effective, system, user,
+                api_key=api_key, sleep=sleep, candidate_id=candidate_id, stage=stage, context=context)
+            if result.reason_code == 'ACCOUNT_ERROR' or (result.http_status in (401, 403) and result.reason_code not in ('QUOTA_EXHAUSTED', 'QUOTA_RESPONSE_CONFLICT')):
+                if unknown:
+                    self.report.setdefault('stop_causes', []).append(STATUS_USAGE_UNKNOWN)
+                raise RunStopped('access_denied')
+            if result.http_status in (400, 404, 422) and result.reason_code not in ('QUOTA_EXHAUSTED', 'QUOTA_RESPONSE_CONFLICT'):
+                raise RunStopped('request_config_error')
+            if unknown and result.reason_code != 'QUOTA_RESPONSE_CONFLICT':
+                raise RunStopped(STATUS_USAGE_UNKNOWN)
+            return result
+        try:
+            result, attempts = self.model_pool.run(system, user, stage, invoke,
+                                                   stage_limit=limit, sleep=sleep)
+            return result, bool(self.usage.unknown_usage_requests)
+        except RunStopped as exc:
+            with self._budget_changed:
+                self.pool_stop = exc.reason
+                self.report.setdefault('stop_causes', []).append(exc.reason)
+                self._budget_changed.notify_all()
+            raise
+        except OSError as exc:
+            self.model_pool.failure = "storage_error"
+            self.pool_stop = "storage_error"
+            raise RunStopped("storage_error") from exc
+        except PoolStopped as exc:
+            with self._budget_changed:
+                self.pool_stop = exc.reason
+                self.report.setdefault('stop_causes', []).append(exc.reason)
+                self.report['errors'].append({'stage': stage, 'code': exc.reason, 'message': str(exc)})
+                self._budget_changed.notify_all()
+            raise RunStopped(self.stop_reason() or exc.reason) from exc
+
+    def _call_once(self, transport, cfg, system, user, *, api_key, sleep, candidate_id=None, stage=None, context=None):
+        stage = stage or ("evaluation" if candidate_id else "planning")
         fmt = resolve_response_format(cfg, stage)
         reserve = estimate_request_token_bound(cfg, system, user, fmt)
         with self._budget_changed:
@@ -307,10 +354,13 @@ class FinderRunState:
                 if not self._active_call_ids:
                     raise RunStopped(STATUS_TOKEN_LIMIT)
                 self._budget_changed.wait()
-            request_id = uuid4().hex
+            if self.model_pool and not self.model_pool.model_available(cfg['model']):
+                raise PoolReselect()
+            request_id = (context or {}).get('request_id') or uuid4().hex
             call = {"request_id": request_id, "stage": stage, "skill_id": candidate_id,
                     "state": "started", "usage": None, "reserved_tokens": reserve,
                     "reservation_state": "active", "reservation_method": "utf8-bound-v1"}
+            call.update(context or {})
             self.report["calls"].append(call)
             if candidate_id:
                 self.report["evaluation_attempts"] += 1
@@ -347,15 +397,29 @@ class FinderRunState:
 
         with self._budget_changed:
             self._active_call_ids.discard(call_id)
+            result.requested_model = cfg.get('model')
+            if context:
+                result.model_config_fingerprint = context['model_config_fingerprint']
+            call['requested_model'] = cfg.get('model')
+            call['returned_model'] = getattr(result, 'returned_model', None)
+            call['provider_error_code'] = getattr(result, 'provider_error_code', None)
+            call['billing_state'] = getattr(result, 'billing_state', None)
+            call['raw_usage'] = getattr(result, 'usage', None)
+            used = self.report.setdefault('models_used', [])
+            if result.attempts and cfg.get('model') not in used:
+                used.append(cfg.get('model'))
+            rejected = getattr(result, 'billing_state', None) == 'rejected_before_inference'
+            if rejected and candidate_id:
+                self.report['evaluation_attempts'] -= 1
             call["usage"] = self.usage.add(result)
             call["response"] = {key: getattr(result, key, None) for key in
-                                ("ok", "content", "error", "reason_code", "finish_reason", "http_status")}
+                                ("ok", "content", "error", "reason_code", "finish_reason", "http_status", "requested_model", "returned_model", "model_config_fingerprint")}
             if not getattr(result, "ok", False):
                 call["state"] = "not_sent" if call["usage"]["attempts"] == 0 else "error"
             else:
                 call["state"] = "unknown" if call["usage"]["total_tokens"] is None else "received"
             call["reservation_state"] = (
-                "unknown" if call["usage"]["attempts"] > 0 and call["usage"]["total_tokens"] is None else "settled"
+                "unknown" if call["usage"]["attempts"] > 0 and call["usage"]["total_tokens"] is None and not rejected else "settled"
             )
             try:
                 self.save()
@@ -369,7 +433,7 @@ def finalize_run(report, stop_reason, *, status=None, evaluated_items=None, plan
                  evaluation_attempts=None, evaluated_count=None, log=print):
     if status is None:
         status = (STATUS_INTERRUPTED if stop_reason == STATUS_INTERRUPTED else
-                  STATUS_STOPPED if stop_reason in (STATUS_TOKEN_LIMIT, STATUS_EVALUATION_LIMIT, STATUS_USAGE_UNKNOWN, STATUS_MODEL_FAILURES, STATUS_ROUND_LIMIT, STATUS_QUOTA_EXHAUSTED) else
+                  STATUS_STOPPED if stop_reason in (STATUS_TOKEN_LIMIT, STATUS_EVALUATION_LIMIT, STATUS_USAGE_UNKNOWN, STATUS_MODEL_FAILURES, STATUS_ROUND_LIMIT, STATUS_QUOTA_EXHAUSTED, 'input_limit_mismatch') else
                   STATUS_COMPLETED if stop_reason in (STATUS_TARGET_REACHED, STATUS_CANDIDATES_EXHAUSTED, STATUS_ALL_CANDIDATES_OWNED, STATUS_COMPLETED) else STATUS_ERROR)
     history = report.get("search", {}).get("rounds_history", [])
     if history:
@@ -473,6 +537,8 @@ def _record_evaluation(state, candidate, materials, manifest, result):
                     "path": candidate.path,
                     "content_fingerprint": candidate.content_fingerprint,
                 },
+                "model": getattr(result, "requested_model", None) or getattr(result, "model", None),
+                "model_config_fingerprint": getattr(result, "model_config_fingerprint", None),
                 "raw_match": parsed.get("match"),
                 "verified_match": verified.get("match"),
                 "downgrade_reason": downgrade_reason,
@@ -542,6 +608,8 @@ def _recover_pending_evaluations(state):
             raise ValueError(f"恢复请求身份不唯一：{skill_id}")
         if not calls or not calls[0].get("response"):
             # Unsent material may be retried; an unknown request stays blocked.
+            continue
+        if calls[0].get("billing_state") == "rejected_before_inference":
             continue
         if not any(e["candidate"]["skill_id"] == skill_id for e in report["evaluations"]):
             _record_evaluation(state, Candidate(**checkpoint["candidate"]), checkpoint["materials"],
@@ -617,7 +685,7 @@ def _evaluate_candidates_concurrent(
                     last_call = next((c for c in reversed(state.report["calls"]) if c.get("skill_id") == candidate.skill_id), {})
                     last_resp = last_call.get("response") or {}
                     last_err = (last_resp.get("error") or "").lower()
-                    if "allocationquota" in last_err or "free quota exhausted" in last_err or last_resp.get("http_status") == 403:
+                    if last_resp.get("reason_code") in ("QUOTA_EXHAUSTED", "ALL_MODELS_EXHAUSTED"):
                         log(f"  -> 模型免费额度已耗尽 (HTTP 403: {last_resp.get('error')})，立即终止后续尝试。")
                         stop_reason_holder[0] = STATUS_QUOTA_EXHAUSTED
                     elif not last_resp.get("ok", False):
@@ -685,10 +753,6 @@ def _evaluate_candidates_concurrent(
         return STATUS_INTERRUPTED
 
     final_reason = state.stop_reason()
-    if final_reason == STATUS_USAGE_UNKNOWN and any(
-        e.get("code") == STATUS_QUOTA_EXHAUSTED for e in report.get("errors", [])
-    ):
-        return STATUS_QUOTA_EXHAUSTED
     if final_reason:
         return final_reason
     if stop_reason_holder[0]:
@@ -750,7 +814,7 @@ def _evaluate_candidates(state, candidates, cfg, api_key, transport, fetch, slee
             last_call = next((c for c in reversed(state.report["calls"]) if c.get("skill_id") == candidate.skill_id), {})
             last_resp = last_call.get("response") or {}
             last_err = (last_resp.get("error") or "").lower()
-            if "allocationquota" in last_err or "free quota exhausted" in last_err or last_resp.get("http_status") == 403:
+            if last_resp.get("reason_code") in ("QUOTA_EXHAUSTED", "ALL_MODELS_EXHAUSTED"):
                 log(f"  -> 模型免费额度已耗尽 (HTTP 403: {last_resp.get('error')})，立即终止后续尝试。")
                 return STATUS_QUOTA_EXHAUSTED
             elif not last_resp.get("ok", False):
@@ -1009,15 +1073,27 @@ def execute_find_skill(topic="", *, limit=None, max_evaluations=None, max_tokens
     api_key = resolve_api_key(cfg)
     if not api_key:
         raise ValueError("缺少模型 API Key")
-    cfg.setdefault("request", {})["max_attempts"] = 1
+    if "models" not in cfg:
+        cfg.setdefault("request", {})["max_attempts"] = 1
 
     state = FinderRunState(topic.strip(), params, directory, cfg=cfg)
+    if "models" in cfg:
+        state.model_pool = ModelPool(cfg, root, authoritative=model_cfg is None, log=log)
     if resumed:
         state.report = deepcopy(prev_report)
+        if state.model_pool:
+            state.report.setdefault('resume_history', []).append({
+                'previous_stop_reason': state.report.get('stop_reason'),
+                'stop_causes': state.report.get('stop_causes', []),
+                'at': now_local().isoformat()})
+            state.report['stop_causes'] = []
         state.report.setdefault("calls", [])
         state.report.setdefault("errors", [])
         state.report.setdefault("coverage_incomplete", False)
         state.report.setdefault("evaluation_attempts", max(len(state.report.get("evaluations", [])), sum(bool(c.get("skill_id")) for c in state.report["calls"])))
+        previous_fp = state.report.get("environment", {}).get("config_fingerprint")
+        if previous_fp != build_config_fingerprint(cfg):
+            state.report.setdefault("config_changes", []).append({"previous": previous_fp, "current": build_config_fingerprint(cfg), "at": now_local().isoformat()})
         state.report.setdefault("environment", {}).update({
             "schema_version": FINDER_REPORT_SCHEMA_VERSION,
             "output_contract_version": LLM_OUTPUT_CONTRACT_VERSION,
@@ -1067,6 +1143,16 @@ def execute_find_skill(topic="", *, limit=None, max_evaluations=None, max_tokens
     transport = call_model_fn or call_model
     reason = "plan_failed"
     try:
+        if state.model_pool:
+            initial_reason = state.stop_reason()
+            if initial_reason:
+                raise RunStopped(initial_reason)
+            try:
+                state.model_pool.start()
+            except PoolStopped as exc:
+                state.report.setdefault('stop_causes', []).append(exc.reason)
+                state.report['errors'].append({'stage': 'startup', 'code': exc.reason, 'message': str(exc)})
+                raise RunStopped(exc.reason) from exc
         if retry_failed_searches:
             reset_failed_searches(state)
         if resumed:

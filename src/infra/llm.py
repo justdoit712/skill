@@ -9,6 +9,7 @@ import json
 import os
 import time
 from dataclasses import dataclass, field
+from typing import Any
 
 import requests
 from urllib.parse import urlparse
@@ -17,6 +18,13 @@ from urllib.parse import urlparse
 def validate_model_config(config: dict) -> list[str]:
     if not isinstance(config, dict):
         return ["模型配置必须为对象"]
+    if 'models' in config:
+        from src.shared.model_config import parse_model_configs
+        try:
+            configs = parse_model_configs(config)
+        except (ValueError, TypeError) as exc:
+            return [str(exc)]
+        return [error for item in configs for error in validate_model_config(item)]
     endpoint, model = config.get("endpoint"), config.get("model")
     if not isinstance(endpoint, str) or not isinstance(model, str) or not endpoint.strip() or not model.strip():
         return ["模型配置缺 endpoint 或 model"]
@@ -34,6 +42,59 @@ REASON_MODEL_ERROR = "MODEL_ERROR"
 REASON_NETWORK_ERROR = "NETWORK_ERROR"
 REASON_LENGTH_EXCEEDED = "LENGTH_EXCEEDED"
 REASON_RESPONSE_FORMAT_UNSUPPORTED = "RESPONSE_FORMAT_UNSUPPORTED"
+
+
+def apply_provider_error(result, data, config):
+    """Classify only complete structured DashScope errors; never inspect prose."""
+    if not isinstance(data, dict):
+        return
+    usage = data.get('usage')
+    if isinstance(usage, dict):
+        result.usage = usage
+    error = data.get('error')
+    if not isinstance(error, dict):
+        return
+    identifiers = [error[k] for k in ('code', 'type') if k in error]
+    if not identifiers or any(not isinstance(v, str) or not v for v in identifiers):
+        return
+    if len(set(identifiers)) != 1:
+        return
+    code = identifiers[0]
+    # Only a bounded safe code is diagnostic metadata, never an arbitrary body.
+    if len(code) <= 100 and all(ch.isalnum() or ch in '._-' for ch in code):
+        result.provider_error_code = code
+    host = (urlparse(config.get('endpoint', '')).hostname or '').lower()
+    if config.get('provider') != 'dashscope' or not (host == 'aliyuncs.com' or host.endswith('.aliyuncs.com')):
+        return
+    if code == 'Arrearage':
+        result.reason_code = 'ACCOUNT_ERROR'
+        result.error = '模型服务账户欠费，请检查账户状态'
+        return
+    if code != 'AllocationQuota.FreeTierOnly' or result.http_status not in (400, 403, 429):
+        return
+    def tokens(value):
+        if not isinstance(value, dict):
+            return None
+        values = []
+        for key, item in value.items():
+            if key.endswith('_details'):
+                nested = tokens(item)
+                if nested is None:
+                    return None
+                values.extend(nested)
+            elif key.endswith('_tokens'):
+                if type(item) is not int or item < 0:
+                    return None
+                values.append(item)
+        return values
+    counts = [] if usage is None else tokens(usage)
+    if counts is None or any(counts) or data.get('choices'):
+        result.reason_code = 'QUOTA_RESPONSE_CONFLICT'
+        result.error = '额度拒绝响应存在用量或内容冲突'
+        return
+    result.reason_code = 'QUOTA_EXHAUSTED'
+    result.billing_state = 'rejected_before_inference'
+    result.error = '模型免费额度耗尽'
 
 
 def validate_response_format(fmt: Any) -> list[str]:
@@ -80,6 +141,11 @@ class ModelCallResult:
     error_type: str | None = None
     http_status: int | None = None
     is_sample_error: bool = False
+    provider_error_code: str | None = None
+    billing_state: str | None = None
+    requested_model: str | None = None
+    returned_model: str | None = None
+    model_config_fingerprint: str | None = None
 
     @property
     def reasoning_tokens(self) -> int:
@@ -134,6 +200,8 @@ def call_model(
     3. 保留目录现有的遇 408/429/5xx 自动重试语义（默认最多 2 次）
     4. 允许通过 session 和 sleep 注入假网络与时钟进行单元测试
     """
+    if 'models' in model_cfg:
+        raise ValueError('模型池必须通过有逐请求记账的调度器调用')
     key = api_key or resolve_api_key(model_cfg)
     if not key:
         return ModelCallResult(
@@ -180,7 +248,7 @@ def call_model(
 
     owns_session = session is None
     sess = session if session is not None else requests.Session()
-    result = ModelCallResult(model=model_cfg.get("model"))
+    result = ModelCallResult(model=model_cfg.get("model"), requested_model=model_cfg.get('model'))
     started = time.monotonic()
 
     try:
@@ -198,7 +266,7 @@ def call_model(
                 )
             except requests.exceptions.RequestException as exc:
                 result.error_type = type(exc).__name__
-                result.error = f"{type(exc).__name__}: {exc}"
+                result.error = type(exc).__name__
                 if attempt < max_attempts:
                     sleep(min(2.0 ** (attempt - 1), 8.0))
                     continue
@@ -211,7 +279,15 @@ def call_model(
                 result.http_status = status
                 if status >= 400:
                     body = response.text[:300]
-                    result.error = f"HTTP {status}: {body}"
+                    result.error = f"HTTP {status}"
+                    try:
+                        error_data = response.json()
+                    except (ValueError, TypeError):
+                        error_data = None
+                    apply_provider_error(result, error_data, model_cfg)
+                    if result.reason_code in ('QUOTA_EXHAUSTED', 'QUOTA_RESPONSE_CONFLICT', 'ACCOUNT_ERROR'):
+                        result.latency_ms = int((time.monotonic() - started) * 1000)
+                        return result
                     if status == 400 and any(keyword in body.lower() for keyword in ("response_format", "json_schema")):
                         result.latency_ms = int((time.monotonic() - started) * 1000)
                         result.reason_code = REASON_RESPONSE_FORMAT_UNSUPPORTED
@@ -229,6 +305,7 @@ def call_model(
 
             result.latency_ms = int((time.monotonic() - started) * 1000)
             result.usage = data.get("usage") or {}
+            result.returned_model = data.get('model') if isinstance(data.get('model'), str) else None
             choice = (data.get("choices") or [{}])[0]
             result.finish_reason = choice.get("finish_reason")
             message = choice.get("message") or {}

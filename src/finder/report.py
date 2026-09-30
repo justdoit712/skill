@@ -87,6 +87,8 @@ def render_find_markdown_report(report: dict[str, Any]) -> str:
     ]
     if raw_coverage_incomplete:
         lines.append("- **检索覆盖**：本次检索覆盖不完整，部分来源读取失败或超出读取范围。")
+    if report.get('models_used'):
+        lines.append('- **实际请求模型**：' + '、'.join(report['models_used']))
     lines.append(f"- **请求统计**：搜索 {_count(metrics['search']['http_requests'])} 次，重试 {_count(metrics['search']['retries'])} 次；模型 {_count(metrics['model']['requests'])} 次，未知用量 {_count(metrics['model']['unknown_usage_requests'])} 次。")
     for query, cursor in search.get("query_cursors", {}).items():
         if cursor.get("blocked") or cursor.get("page_attempts", 0):
@@ -313,6 +315,7 @@ def sanitize_report_for_public(report: dict[str, Any]) -> dict[str, Any]:
             "max_rounds": params.get("max_rounds", 1),
         },
         "model": str(report.get("model") or ""),
+        "models_used": [str(m) for m in report.get('models_used', [])],
         "plan": {
             "intent": str(plan.get("intent") or ""),
             "criteria": plan.get("criteria") or [],

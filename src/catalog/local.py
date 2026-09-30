@@ -59,6 +59,8 @@ from src.shared.normalization import (
 )
 from src.shared.runtime import is_test_environment
 from src.shared.usage import UsageTotals
+from src.shared.versions import build_config_fingerprint
+from src.shared.model_config import material_fetch_limit
 from .index import CatalogContext, build_catalog, build_entry, index_by_id
 from .store import mutate_catalog
 from .overrides import apply_manual_overrides_to_entry, get_manual_exclusions, get_manual_picks
@@ -197,6 +199,8 @@ def find_normalized_candidate_record(
     3. 严格核对规则版本、模型配置版本、完成态及无未知用量；
     4. 重新核验初评与复核中引用的全部原文证据。
     """
+    if 'models' in state.cfg['model']:
+        return None, 'pool_cache_requires_explicit_model'
     current_norm_fp = getattr(candidate, "normalized_content_fingerprint", None) or normalized_content_fingerprint(text)
     if not current_norm_fp:
         return None, "no_current_fingerprint"
@@ -464,6 +468,8 @@ def save_and_render(
         )
     if report.get("skipped_owned"):
         lines.append(f"- 已收录跳过：{report['skipped_owned']}")
+    if report.get('models_used'):
+        lines.append('- 实际请求模型：' + '、'.join(report['models_used']))
     lines.append(f"- 超长跳过候选：{report.get('skipped_length_exceeded', 0)} 条（超过单条输出 Token 上限）")
     lines.extend([
         f"- 本次新增推荐：{report['new_recommended']} / {settings['target_recommended']}",
@@ -534,7 +540,8 @@ def run_local(
     if problems:
         raise ValueError("；".join(problems))
     # 在本地外层逐次重试并落账；底层禁用嵌套重试，避免 6×6 次请求。
-    cfg["model"].setdefault("request", {})["max_attempts"] = 1
+    if "models" not in cfg["model"]:
+        cfg["model"].setdefault("request", {})["max_attempts"] = 1
     local = root / "data" / "local"
     local.mkdir(parents=True, exist_ok=True)
     lock = local / "run.lock"
@@ -618,12 +625,109 @@ def _record_request_usage(state, call, *, retryable):
     }
     # 网络/临时 HTTP 失败仍是未知用量，但允许在估算预算与尝试额度内重试。
     # 非重试结果缺账单（含截断/格式错误）继续停机保护。
-    if state.active_call['usage']['total_tokens'] is None and not retryable:
+    if (state.active_call['usage']['total_tokens'] is None and not retryable
+            and getattr(call, 'billing_state', None) != 'rejected_before_inference'):
         state.stop_causes.add(STOP_USAGE_UNKNOWN)
         state.report['stop_reason'] = resolve_primary_stop_reason(state.stop_causes)
 
 
+def _evaluate_with_pool(state, candidate, text, eid, record):
+    """Account each physical request while preserving the stable candidate ledger ID."""
+    from src.infra.model_pool import PoolStopped, PoolReselect
+    state.active_eid = eid
+    observed = []
+    def on_request(event, stage, request_call):
+        if event == 'before':
+            if state.report.get('stop_reason'):
+                raise PoolStopped(state.report['stop_reason'])
+            if not state.model_pool.model_available(request_call['requested_model']):
+                raise PoolReselect()
+            reserve = request_call['reserved_tokens']
+            # Callback is serialized by TwoCandidateScheduler when parallel.
+            others = sum(c.get('reserved_tokens', 0) for c in state.report['calls']
+                         if c.get('reservation_state') == 'active')
+            if state.report['budget_tokens'] + others + reserve > state.settings['max_total_tokens']:
+                raise PoolStopped('token_limit')
+            state.unknown_reserve = reserve
+            state.active_call = {'skill_id': candidate.skill_id, 'logical_task_id': eid,
+                'state': 'started', 'status': 'in_progress', 'usage': None,
+                'reservation_state': 'active', **request_call}
+            state.report['calls'].append(state.active_call)
+            checkpoint = state.ledger.get(eid)
+            checkpoint['status'] = 'in_progress'
+            checkpoint.setdefault('requests', []).append(dict(state.active_call))
+            try:
+                state.ledger.save_record(eid, checkpoint)
+                state.save()
+            except OSError as exc:
+                state.active_call.update(state='not_sent', status='not_sent', reservation_state='released')
+                state.active_eid = None
+                raise PoolStopped('storage_error', str(exc)) from exc
+            return True
+        decision = classify_result({'ok': request_call.ok, 'call': request_call})
+        _record_request_usage(state, request_call, retryable=decision.retryable)
+        call = state.active_call
+        rejected = getattr(request_call, 'billing_state', None) == 'rejected_before_inference'
+        if not rejected and not request_call.ok:
+            state.report['failed_requests'] += 1
+        call.update(state='received' if request_call.ok else 'error',
+            status='completed' if request_call.ok else 'failed',
+            reservation_state='settled' if rejected or call['usage']['total_tokens'] is not None else 'unknown',
+            billing_state=getattr(request_call, 'billing_state', None),
+            raw_usage=getattr(request_call, 'usage', None),
+            provider_error_code=getattr(request_call, 'provider_error_code', None),
+            returned_model=getattr(request_call, 'returned_model', None),
+            response={k: getattr(request_call, k, None) for k in ('ok', 'content', 'reason_code', 'http_status')})
+        used = state.report.setdefault('models_used', [])
+        if request_call.attempts and request_call.requested_model not in used:
+            used.append(request_call.requested_model)
+        checkpoint = state.ledger.get(eid)
+        checkpoint['requests'][-1] = dict(call)
+        # A known rejection is safe to resume even if the process dies before rotation.
+        checkpoint['status'] = 'reserved' if rejected else 'in_progress'
+        checkpoint['last_request_model'] = request_call.requested_model
+        observed.append(request_call)
+        try:
+            state.ledger.save_record(eid, checkpoint)
+            state.save()
+        except OSError as exc:
+            state.model_pool.failure = 'storage_error'
+            raise PoolStopped('storage_error', str(exc)) from exc
+    result = state.evaluate_fn(candidate, text, model_cfg=state.cfg['model'],
+        rules=state.cfg['rules'], taxonomy=state.cfg['taxonomy'], sleep=state.sleep,
+        on_request=on_request, pending_evaluation=record.get('pending_evaluation'),
+        model_pool=state.model_pool, pool_max_attempts=state.max_attempts)
+    checkpoint = state.ledger.get(eid)
+    if result.get('pool_stop'):
+        if all(getattr(c, 'billing_state', None) == 'rejected_before_inference' for c in observed):
+            state.report['evaluations'] -= 1
+        requests = checkpoint.get('requests', [])
+        if state.active_call and state.active_call.get('state') == 'not_sent' and requests:
+            requests[-1] = dict(state.active_call)
+        unsettled = any(c.get('state') in ('started', 'unknown') for c in requests)
+        unsafe_storage = result['pool_stop'] == 'storage_error' and any(
+            getattr(c, 'billing_state', None) != 'rejected_before_inference' for c in observed)
+        checkpoint['status'] = 'needs_recovery' if (state.usage.unknown_usage_requests or unsettled or unsafe_storage
+                                                    or result['pool_stop'] == 'quota_response_conflict') else 'reserved'
+        if state.usage.unknown_usage_requests:
+            state.stop_causes.add(STOP_USAGE_UNKNOWN)
+        checkpoint['pause_reason'] = result['pool_stop']
+        state.stop_causes.add(result['pool_stop'])
+        state.report['stop_reason'] = resolve_primary_stop_reason(state.stop_causes)
+    else:
+        checkpoint['attempts'] = int(checkpoint.get('attempts') or 0) + 1
+        if not result['ok']:
+            checkpoint['retry_exhausted'] = classify_result(result).retryable
+            checkpoint.update(status='failed', error={'reason_code': result.get('reason_code'),
+                                                     'message': result.get('error')})
+    state.ledger.save_record(eid, checkpoint)
+    state.active_eid = None
+    return result
+
+
 def _evaluate_with_retries(state, candidate, text, eid, record):
+    if getattr(state, "model_pool", None) is not None:
+        return _evaluate_with_pool(state, candidate, text, eid, record)
     resume_error = validate_pending_evaluation(candidate, text, state.cfg['rules'],
                                                state.cfg['taxonomy'], record.get('pending_evaluation'))
     if resume_error:
@@ -687,6 +791,9 @@ def _evaluate_with_retries(state, candidate, text, eid, record):
 
         result = state.evaluate_fn(candidate, text, model_cfg=state.cfg['model'], rules=state.cfg['rules'], taxonomy=state.cfg['taxonomy'], sleep=state.sleep, on_request=on_request, pending_evaluation=record.get('pending_evaluation'))
         call = result.get('call')
+        key = resolve_api_key(state.cfg['model'])
+        if key and result.get('error'):
+            result['error'] = str(result['error']).replace(key, '[REDACTED]')
         decision = classify_result(result)
         if not observed and call is not None:
             # 兼容单次评估适配器；生产评估逐请求即时落账。
@@ -827,7 +934,7 @@ def process_candidate(state, item):
         fetched = state.batch_materials[candidate.skill_id]
     else:
         url = candidate.url.replace('https://github.com/', 'https://raw.githubusercontent.com/', 1).replace('/blob/', '/', 1)
-        fetched = state.fetch_fn(url, sleep=state.sleep, max_bytes=int(state.cfg['model'].get('limits', {}).get('max_input_bytes') or 262144))
+        fetched = state.fetch_fn(url, sleep=state.sleep, max_bytes=material_fetch_limit(state.cfg['model']))
     if not fetched.ok or not fetched.text or fetched.truncated or (not validate_document(candidate.path, fetched.text)[0]):
         state.report['fetch_failed'] += 1
         update_candidate_status(state.pool, seq, STATUS_FETCH_FAILED)
@@ -858,7 +965,8 @@ def process_candidate(state, item):
         return True
     eid = evaluation_id(candidate, state.cfg['model'], state.cfg['rules'])
     local_record = state.ledger.get(eid)
-    record = local_record or _read(state.root / 'data' / 'state' / 'evaluations' / evaluation_filename(eid), {})
+    record = local_record or ({} if 'models' in state.cfg['model'] else
+        _read(state.root / 'data' / 'state' / 'evaluations' / evaluation_filename(eid), {}))
     if candidate.skill_id in state.manual_picks:
         outcome = record.get('outcome') or ({'decision': (state.entries.get(candidate.skill_id) or {}).get('status')} if candidate.skill_id in state.entries else None)
         state.publish(candidate, pres, outcome=outcome)
@@ -956,7 +1064,7 @@ def process_candidate(state, item):
         return True
     effective_attempt_limit = (int(record.get('max_attempts') or state.max_attempts)
                                if record.get('resume_history') else state.max_attempts)
-    resumable_failure = bool(local_record and record.get('status') == 'failed' and ((record.get('error') or {}).get('reason_code') == 'NETWORK_ERROR' or record.get('retryable')) and (int(record.get('attempts') or 0) < effective_attempt_limit))
+    resumable_failure = bool(local_record and not record.get('retry_exhausted') and record.get('status') == 'failed' and ((record.get('error') or {}).get('reason_code') == 'NETWORK_ERROR' or record.get('retryable')) and (int(record.get('attempts') or 0) < effective_attempt_limit))
     if record.get('status') in ('failed', 'in_progress', 'needs_recovery') and (not resumable_failure):
         reason = 'NON_RETRYABLE_FAILURE' if record.get('status') == 'failed' else 'UNKNOWN_IN_PROGRESS'
         block_info = {
@@ -1005,11 +1113,19 @@ def process_candidate(state, item):
     if result is None:
         return False
     decision = classify_result(result)
+    if decision.category == 'resource_pause':
+        state.stop_causes.add(decision.stop_cause)
+        state.report['stop_reason'] = resolve_primary_stop_reason(state.stop_causes)
+        state.active_eid = state.active_call = None
+        state.save()
+        return False
     if result['ok']:
         evaluation = result['evaluation']
         outcome = {
             **decide(evaluation, state.cfg['rules']),
             'evaluation': evaluation,
+            'model': getattr(result.get('call'), 'requested_model', None),
+            'model_config_fingerprint': getattr(result.get('call'), 'model_config_fingerprint', None),
             'materials': primary_material_bundle(candidate, text, now_local().isoformat()).manifest(),
             'main_category': evaluation.get('main_category'),
             'usage': state.active_call['usage'] if state.active_call else None,
@@ -1139,7 +1255,7 @@ def process_candidate(state, item):
         )
         if decision.retryable:
             final_record = state.ledger.get(eid) or {}
-            if int(final_record.get('attempts') or 0) >= int(final_record.get('max_attempts') or state.max_attempts):
+            if final_record.get('retry_exhausted') or int(final_record.get('attempts') or 0) >= int(final_record.get('max_attempts') or state.max_attempts):
                 state.stop_causes.add(STOP_RETRY_EXHAUSTED)
         else:
             block_info = {
@@ -1162,7 +1278,8 @@ def process_candidate(state, item):
         if state.consecutive_failures >= state.settings['max_consecutive_failures']:
             state.stop_causes.add(STOP_MODEL_FAILURES)
     if (state.active_call and (state.active_call.get('usage') or {}).get('total_tokens') is None
-            and not decision.retryable):
+            and not decision.retryable
+            and state.active_call.get('billing_state') != 'rejected_before_inference'):
         state.stop_causes.add(STOP_USAGE_UNKNOWN)
         state.log("[停止] 当前响应用量未知；本条状态已保存，后续付费调用已停止。")
     state.active_eid = state.active_call = None
@@ -1199,7 +1316,9 @@ def _collect(root, local, settings, cfg, discover_fn, fetch_fn, evaluate_fn, log
         'run_id': run_id,
         'started_at': now_local().isoformat(),
         'status': 'running',
-        'model': cfg['model']['model'],
+        'model': cfg['model'].get('model'),
+        'models_used': [],
+        'config_fingerprint': build_config_fingerprint(cfg['model']),
         'settings': settings,
         'discovered': 0,
         'checked': 0,
@@ -1254,6 +1373,11 @@ def _collect(root, local, settings, cfg, discover_fn, fetch_fn, evaluate_fn, log
     consecutive_failures = 0
     format_failures = 0
     stop_causes = set()
+    if 'models' in cfg['model']:
+        blockers = [eid for eid in ledger.reserved if (ledger.get(eid) or {}).get('status') == 'needs_recovery']
+        if blockers:
+            stop_causes.add(STOP_USAGE_UNKNOWN)
+            report['recovery_blockers'] = blockers
     active_eid = None
     active_call = None
     unknown_reserve = 0
@@ -1271,6 +1395,23 @@ def _collect(root, local, settings, cfg, discover_fn, fetch_fn, evaluate_fn, log
         owned_ids=owned_ids, skipped_owned_ids=skipped_owned_ids,
     )
     try:
+        from src.infra.model_pool import ModelPool, PoolStopped
+        state.model_pool = None
+        if 'models' in cfg['model']:
+            state.model_pool = ModelPool(cfg['model'], root, log=log)
+            state.model_pool.start()
+            if STOP_USAGE_UNKNOWN in state.stop_causes:
+                raise PoolStopped(STOP_USAGE_UNKNOWN, '存在未知结果请求，停止自动重发')
+            history_path = local / 'model-pool-config-history.json'
+            history = _read(history_path, {'changes': []})
+            fingerprint = report['config_fingerprint']
+            if history.get('current') != fingerprint:
+                change = {'previous': history.get('current'), 'current': fingerprint,
+                          'at': now_local().isoformat(), 'run_id': run_id}
+                history['changes'].append(change)
+                history['current'] = fingerprint
+                write_json_atomic(history_path, history)
+                report['config_changes'] = [change]
         state.report['evaluation_threads'] = 2 if settings.get('parallel_evaluation', True) else 1
         state.save()
         state.log(f"目标：新增 {state.settings['target_recommended']} 个推荐技能；上限 {state.settings['max_total_tokens']:,} Token。")
@@ -1303,7 +1444,7 @@ def _collect(root, local, settings, cfg, discover_fn, fetch_fn, evaluate_fn, log
                             cand.url = f'https://github.com/{cand.owner}/{cand.repo}/blob/HEAD/{cand.path}'
                         u = cand.url.replace('https://github.com/', 'https://raw.githubusercontent.com/', 1).replace('/blob/', '/', 1)
                         try:
-                            fetched = state.fetch_fn(u, sleep=state.sleep, max_bytes=int(state.cfg['model'].get('limits', {}).get('max_input_bytes') or 262144))
+                            fetched = state.fetch_fn(u, sleep=state.sleep, max_bytes=material_fetch_limit(state.cfg['model']))
                             state.batch_materials[cand.skill_id] = fetched
                             if fetched.ok and fetched.text and not fetched.truncated:
                                 obs = analyze_static_tier(cand, fetched.text)
@@ -1341,6 +1482,9 @@ def _collect(root, local, settings, cfg, discover_fn, fetch_fn, evaluate_fn, log
             state.stop_causes.add(STOP_CANDIDATES_EXHAUSTED)
         state.report['stop_causes'] = sorted(list(state.stop_causes))
         state.report['stop_reason'] = resolve_primary_stop_reason(state.stop_causes)
+    except PoolStopped as exc:
+        state.stop_causes.add(exc.reason)
+        state.report['error_message'] = str(exc)
     except KeyboardInterrupt:
         state.stop_causes.add(STOP_INTERRUPTED)
         state.report['stop_causes'] = sorted(list(state.stop_causes))
@@ -1470,12 +1614,15 @@ def main(argv=None, *, root: Path | None = None) -> int:
         if problems:
             log("预检失败：" + "；".join(problems))
             return 1
-        log(f"预检通过；模型 {cfg['model']['model']}；API Key 已配置（不显示密钥）。")
+        log(f"预检通过；模型 {cfg['model'].get('model') or '模型队列'}；API Key 已配置（不显示密钥）。")
         log(f"目标 {settings['target_recommended']} 个新增推荐，上限 {settings['max_total_tokens']:,} Token。")
         log(f"网络及临时 HTTP 错误最多重连 {settings.get('max_retries', 5)} 次，尝试次数会保存。")
         if not os.environ.get("GITHUB_TOKEN"):
             log("未设置 GITHUB_TOKEN；GitHub 限流可能导致本轮候选不足，可在 PyCharm 的环境变量中设置。")
         if args.check:
+            if "models" in cfg["model"]:
+                from src.infra.model_pool import ModelPool
+                ModelPool(cfg["model"], root).inspect()
             return 0
         result = run_local(root, settings, cfg=cfg, log=log)
         usage = result["usage"]

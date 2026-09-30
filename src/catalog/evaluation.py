@@ -340,6 +340,8 @@ def evaluate(
     sleep=time.sleep,
     on_request=None,
     pending_evaluation=None,
+    model_pool=None,
+    pool_max_attempts=None,
 ) -> dict:
     """对单个候选进行单轮评估，保留质量检查与程序引用核验。
 
@@ -356,13 +358,41 @@ def evaluate(
 
     system, user = build_prompt(candidate, text, rules, taxonomy)
     if pending_evaluation is None:
-        if on_request is not None:
-            on_request("before", "assessment", None)
-        fmt = resolve_response_format(model_cfg, STAGE_CATALOG_ASSESSMENT)
-        call = call_model(model_cfg, system, user, api_key=api_key, response_format=fmt, session=session, sleep=sleep)
-        calls.append(call)
-        if on_request is not None:
-            on_request("after", "assessment", call)
+        if model_pool is not None:
+            from src.infra.model_pool import PoolStopped
+            if on_request is None:
+                raise ValueError('模型池必须提供持久化请求回调')
+            def invoke(effective, fmt, context):
+                context['reserved_tokens'] = (len((system + user).encode('utf-8')) + 1024
+                    + len(json.dumps(fmt, ensure_ascii=False).encode('utf-8'))
+                    + effective.get('limits', {}).get('max_output_tokens', 4000))
+                if on_request('before', 'assessment', context) is False:
+                    raise PoolStopped('token_limit')
+                response = call_model(effective, system, user, api_key=api_key,
+                                      response_format=fmt, session=session, sleep=sleep)
+                response.requested_model = effective['model']
+                response.model_config_fingerprint = context['model_config_fingerprint']
+                calls.append(response)
+                on_request('after', 'assessment', response)
+                return response
+            try:
+                call, _ = model_pool.run(system, user, STAGE_CATALOG_ASSESSMENT, invoke,
+                                         max_attempts=pool_max_attempts, sleep=sleep)
+            except PoolStopped as exc:
+                return {'ok': False, 'evaluation': None, 'call': calls[-1] if calls else None,
+                        'calls': calls, 'stage': 'assessment', 'reason_code':
+                        'ALL_MODELS_EXHAUSTED' if exc.reason == 'models_exhausted' else exc.reason.upper(),
+                        'error_kind': exc.reason, 'error': str(exc), 'pool_stop': exc.reason}
+        else:
+            if 'models' in model_cfg:
+                raise ValueError('队列配置必须注入 ModelPool，禁止绕过记账')
+            if on_request is not None:
+                on_request("before", "assessment", None)
+            fmt = resolve_response_format(model_cfg, STAGE_CATALOG_ASSESSMENT)
+            call = call_model(model_cfg, system, user, api_key=api_key, response_format=fmt, session=session, sleep=sleep)
+            calls.append(call)
+            if on_request is not None:
+                on_request("after", "assessment", call)
         if not call.ok:
             return {
                 "ok": False,
@@ -432,15 +462,8 @@ def evaluate(
 
 def evaluation_id(candidate: Candidate, model_cfg: dict, rules: dict) -> str:
     """评估 ID：技能稳定 ID + 内容指纹 + 规则版本 + 模型配置版本（§7.3）。"""
-    fingerprint = candidate.content_fingerprint or "nofingerprint"
-    return "|".join(
-        [
-            candidate.skill_id,
-            fingerprint,
-            str(rules.get("rules_version") or ""),
-            str(model_cfg.get("model_config_version") or ""),
-        ]
-    )
+    from src.shared.model_config import evaluation_identity
+    return evaluation_identity(candidate.skill_id, candidate.content_fingerprint, rules, model_cfg)
 
 
 __all__ = [

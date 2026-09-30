@@ -118,6 +118,17 @@ def main():
     args = parser.parse_args()
 
     cfg = load_all_config(ROOT / "config")
+    if 'models' in cfg.get('model', {}):
+        from src.shared.model_config import parse_model_configs
+        if args.all or not args.model:
+            parser.error('队列配置必须用 --model 指定一个精确模型 ID；不自动遍历队列')
+        configs = parse_model_configs(cfg['model'])
+        selected = next((c for c in configs if c['model'] == args.model), None)
+        if selected is None:
+            parser.error('指定的模型 ID 不在当前队列中')
+        selected.setdefault('request', {})['max_attempts'] = 1
+        run_single_test(selected, cfg.get('rules', {}), cfg.get('taxonomy', {}))
+        return
     rules = cfg.get("rules", {})
     taxonomy = cfg.get("taxonomy", {})
 

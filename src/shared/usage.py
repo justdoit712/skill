@@ -25,12 +25,15 @@ class UsageTotals:
 
     def add(self, call) -> dict:
         usage = getattr(call, "usage", None) or {}
+        if not isinstance(usage, dict):
+            usage = {}
         prompt = _number(usage.get("prompt_tokens"))
         completion = _number(usage.get("completion_tokens"))
         total = _number(usage.get("total_tokens"))
         if total is None and prompt is not None and completion is not None:
             total = prompt + completion
-        reasoning = _number((usage.get("completion_tokens_details") or {}).get("reasoning_tokens"))
+        details = usage.get('completion_tokens_details')
+        reasoning = _number(details.get('reasoning_tokens')) if isinstance(details, dict) else None
         attempts = max(0, int(getattr(call, "attempts", 1)))
         # A received response proves a request happened even for legacy adapters
         # which leave attempts at its default zero value.
@@ -41,8 +44,9 @@ class UsageTotals:
                     "total_tokens": None, "attempts": 0}
         self.requests += attempts
         # 失败重试的响应可能没有 usage，不假装它们免费。
-        self.unknown_usage_requests += attempts - 1 + int(total is None)
-        self.incomplete_breakdown_requests += int(prompt is None or completion is None)
+        rejected = getattr(call, 'billing_state', None) == 'rejected_before_inference'
+        self.unknown_usage_requests += attempts - 1 + int(total is None and not rejected)
+        self.incomplete_breakdown_requests += int((prompt is None or completion is None) and not rejected)
         self.prompt_tokens += prompt or 0
         self.completion_tokens += completion or 0
         self.reasoning_tokens += reasoning or 0
@@ -53,6 +57,7 @@ class UsageTotals:
             "reasoning_tokens": reasoning,
             "total_tokens": total,
             "attempts": attempts,
+            "billing_state": getattr(call, 'billing_state', None),
         }
 
     def snapshot(self) -> dict:
@@ -91,8 +96,9 @@ def recompute_usage_from_calls(calls: list[dict]) -> UsageTotals:
         if attempts == 0:
             continue
         totals.requests += attempts
-        totals.unknown_usage_requests += attempts - 1 + int(total is None)
-        totals.incomplete_breakdown_requests += int(prompt is None or completion is None)
+        rejected = u.get('billing_state') == 'rejected_before_inference'
+        totals.unknown_usage_requests += attempts - 1 + int(total is None and not rejected)
+        totals.incomplete_breakdown_requests += int((prompt is None or completion is None) and not rejected)
         totals.prompt_tokens += prompt or 0
         totals.completion_tokens += completion or 0
         totals.reasoning_tokens += reasoning or 0

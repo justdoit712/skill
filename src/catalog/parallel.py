@@ -55,7 +55,19 @@ class _CandidateState:
 
         def synchronized_callback(*args):
             with scheduler.condition:
-                return callback(*args)
+                if args[0] == 'before' and isinstance(args[2], dict):
+                    reserve = args[2].get('reserved_tokens', 0)
+                    while not self.report.get('stop_reason'):
+                        others = sum(c.get('reserved_tokens', 0) for c in self.report['calls']
+                                     if c.get('reservation_state') == 'active')
+                        if (not others or self.report['budget_tokens'] + reserve > self.settings['max_total_tokens']
+                                or self.report['budget_tokens'] + others + reserve <= self.settings['max_total_tokens']):
+                            break
+                        scheduler.condition.wait()
+                try:
+                    return callback(*args)
+                finally:
+                    scheduler.condition.notify_all()
 
         kwargs['on_request'] = synchronized_callback
         scheduler.reservations[self] = self.unknown_reserve

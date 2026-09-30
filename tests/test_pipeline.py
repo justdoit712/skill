@@ -149,7 +149,7 @@ class PipelineHarness(unittest.TestCase):
         """把真实 config 复制到临时目录，并按需覆盖模型 limits。"""
         cfg_dir = self.root / "config"
         if not cfg_dir.exists():
-            shutil.copytree(ROOT / "config", cfg_dir)
+            shutil.copytree(ROOT / "config", cfg_dir, ignore=shutil.ignore_patterns("*.local.json"))
         model_path = cfg_dir / "models" / "model.local.json"
         if not model_path.parent.exists():
             model_path.parent.mkdir(parents=True, exist_ok=True)
@@ -173,7 +173,7 @@ class PipelineHarness(unittest.TestCase):
         model_path.write_text(json.dumps(model, ensure_ascii=False, indent=2), encoding="utf-8")
         flat_p = cfg_dir / "model.local.json"
         if flat_p != model_path:
-            flat_p.write_text(json.dumps(model, ensure_ascii=False, indent=2), encoding="utf-8")
+            flat_p.unlink(missing_ok=True)
         return cfg_dir
 
     def write_previous_catalog(self, entries: list[dict]) -> None:

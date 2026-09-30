@@ -100,6 +100,9 @@ def build_config_fingerprint(cfg: dict | None) -> str:
     import json
     if not isinstance(cfg, dict):
         return "sha256:empty"
+    if 'models' in cfg:
+        from src.shared.model_config import queue_fingerprint
+        return queue_fingerprint(cfg)
     safe = {
         "model": cfg.get("model"),
         "endpoint": cfg.get("endpoint"),

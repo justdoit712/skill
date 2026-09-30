@@ -82,14 +82,8 @@ def skill_of(item: dict) -> str:
 
 
 def skill_evaluation_id(skill_id: str, fingerprint: str, cfg: dict) -> str:
-    return "|".join(
-        [
-            skill_id,
-            fingerprint,
-            str(cfg["rules"].get("rules_version") or ""),
-            str(cfg["model"].get("model_config_version") or ""),
-        ]
-    )
+    from src.shared.model_config import evaluation_identity
+    return evaluation_identity(skill_id, fingerprint, cfg['rules'], cfg['model'])
 
 
 def settled_for(ledger: BudgetLedger, skill_id: str, fingerprint: str, cfg: dict) -> bool:

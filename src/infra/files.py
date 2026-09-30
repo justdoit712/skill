@@ -19,7 +19,7 @@ def _safe_replace(src: Path, dst: Path, max_retries: int = 10, delay: float = 0.
 
     在 Windows 环境下，当目标文件被编辑器（如 PyCharm 索引）、杀毒软件或并发读锁定时，
     os.replace 会抛出 PermissionError: [WinError 5] 拒绝访问。
-    通过指数退避重试并在多次失败后尝试直接覆盖写入，避免瞬时文件锁导致程序崩溃。
+    通过指数退避重试应对瞬时占用；持续失败则抛错，绝不退化为非原子覆盖。
     """
     for attempt in range(max_retries):
         try:
@@ -27,11 +27,7 @@ def _safe_replace(src: Path, dst: Path, max_retries: int = 10, delay: float = 0.
             return
         except PermissionError:
             if attempt == max_retries - 1:
-                try:
-                    dst.write_bytes(src.read_bytes())
-                    return
-                except Exception:
-                    raise
+                raise
             time.sleep(delay * (2 ** min(attempt, 4)))
 
 

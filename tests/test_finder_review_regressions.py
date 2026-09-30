@@ -165,7 +165,7 @@ class FinderRequestAdmissionTest(unittest.TestCase):
                 state, [candidate(1)], CFG, "fake", Mock(),
                 Mock(side_effect=OSError("fetch failed")), lambda _: None, log=lambda *a: None)
 
-    def test_concurrent_quota_failure_keeps_specific_stop_reason(self):
+    def test_plain_403_keeps_unknown_usage_protection(self):
         state = self.state()
         transport = Mock(return_value=ModelCallResult(
             ok=False, attempts=1, http_status=403, error="Free quota exhausted",
@@ -174,7 +174,7 @@ class FinderRequestAdmissionTest(unittest.TestCase):
             state, [candidate(1)], CFG, "fake", transport,
             lambda *a, **k: (True, {"SKILL.md": "comfort"}, None), lambda _: None,
             log=lambda *a: None)
-        self.assertEqual(reason, "quota_exhausted")
+        self.assertEqual(reason, "usage_unknown")
         self.assertEqual(state.usage.unknown_usage_requests, 1)
         self.assertGreater(state.reserved_tokens, 0)
 
