@@ -268,12 +268,12 @@ class BudgetLedger:
         self.save_record(evaluation_id, record, moment)
 
     def mark_needs_recovery(self, evaluation_id: str, note: str, moment: datetime | None = None) -> None:
-        """调用结果不明（如进程被杀在返回之前），不静默重跑。"""
         record = self.get(evaluation_id) or {}
+        if record.get("status") == "completed" or record.get("outcome"):
+            return
         record["status"] = STATUS_NEEDS_RECOVERY
         record["error"] = {"reason_code": "UNKNOWN_OUTCOME", "message": note}
         self.save_record(evaluation_id, record, moment)
-
     def mark_in_progress_as_needs_recovery(self, moment: datetime | None = None) -> list[str]:
         """运行开始时调用：上次留下的 in_progress 说明进程在返回前中断。"""
         recovered: list[str] = []
