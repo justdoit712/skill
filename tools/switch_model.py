@@ -422,18 +422,35 @@ def interactive_select(catalog: dict) -> None:
                 pcfg = providers[target_pid]
                 avail = pcfg.get("available_models") or {}
                 if avail and isinstance(avail, dict):
-                    print(f"\n【{pcfg.get('name', target_pid)} 包含以下可选模型】：")
+                    print(f"\n【{pcfg.get('name', target_pid)} 包含 {len(avail)} 个可选模型】：")
                     sub_keys = list(avail.keys())
+                    current_cat = None
                     for sidx, smid in enumerate(sub_keys, 1):
                         sinfo = avail[smid]
-                        sname = sinfo.get("name", smid) if isinstance(sinfo, dict) else smid
-                        print(f"  [{sidx}] {smid:<30} ({sname})")
-                    sub_choice = input(f"请输入子模型序号 (1-{len(sub_keys)}) 或直接回车使用默认 ({pcfg.get('model')}): ").strip()
+                        scat = sinfo.get("category", "") if isinstance(sinfo, dict) else ""
+                        sbal = sinfo.get("balance", "") if isinstance(sinfo, dict) else ""
+                        if scat and scat != current_cat:
+                            current_cat = scat
+                            print(f"\n  --- {current_cat} ---")
+                        bal_str = f" [{sbal}]" if sbal else ""
+                        print(f"  [{sidx:<3}] {smid:<34}{bal_str}")
+
+                    sub_choice = input(f"\n请输入子模型序号 (1-{len(sub_keys)})、模型名或直接回车使用默认 ({pcfg.get('model')}): ").strip()
+                    if not sub_choice:
+                        switch_to_provider(target_pid, catalog)
+                        return
                     if sub_choice.isdigit() and 1 <= int(sub_choice) <= len(sub_keys):
                         switch_to_provider(sub_keys[int(sub_choice) - 1], catalog)
                         return
-                switch_to_provider(target_pid, catalog)
-                return
+                    matched = [k for k in sub_keys if sub_choice.lower() in k.lower()]
+                    if len(matched) == 1:
+                        switch_to_provider(matched[0], catalog)
+                        return
+                    elif sub_choice in matched:
+                        switch_to_provider(sub_choice, catalog)
+                        return
+                    switch_to_provider(sub_choice, catalog)
+                    return
             else:
                 print(f"[错误] 序号超出有效范围 (1-{len(items)})！")
                 return
