@@ -14,12 +14,33 @@ from contextlib import contextmanager
 import time
 
 
+def _safe_replace(src: Path, dst: Path, max_retries: int = 10, delay: float = 0.05) -> None:
+    """Windows 下原子替换容错。
+
+    在 Windows 环境下，当目标文件被编辑器（如 PyCharm 索引）、杀毒软件或并发读锁定时，
+    os.replace 会抛出 PermissionError: [WinError 5] 拒绝访问。
+    通过指数退避重试并在多次失败后尝试直接覆盖写入，避免瞬时文件锁导致程序崩溃。
+    """
+    for attempt in range(max_retries):
+        try:
+            os.replace(src, dst)
+            return
+        except PermissionError:
+            if attempt == max_retries - 1:
+                try:
+                    dst.write_bytes(src.read_bytes())
+                    return
+                except Exception:
+                    raise
+            time.sleep(delay * (2 ** min(attempt, 4)))
+
+
 def write_json_atomic(path: Path | str, payload: Any, indent: int | None = 2) -> None:
     """原子写入 JSON 文件。
 
     1. 生成同目录下的唯一临时文件名（uuid4 避免多进程/多任务冲突）
     2. 序列化写入临时文件（支持 indent=None 紧凑压缩）
-    3. 调用 os.replace 完成原子重命名替换
+    3. 调用 _safe_replace 完成安全原子替换（含 Windows 文件锁冲突重试）
     4. 发生异常时确保清理临时文件
     """
     target = Path(path)
@@ -29,7 +50,7 @@ def write_json_atomic(path: Path | str, payload: Any, indent: int | None = 2) ->
         separators = (",", ":") if indent is None else None
         content = json.dumps(payload, ensure_ascii=False, indent=indent, separators=separators)
         tmp_path.write_text(content, encoding="utf-8")
-        os.replace(tmp_path, target)
+        _safe_replace(tmp_path, target)
     finally:
         if tmp_path.exists():
             try:
@@ -52,7 +73,7 @@ def write_text_atomic(path: Path | str, text: str) -> None:
     temporary = target.with_name(f"{target.name}.{uuid4().hex}.tmp")
     try:
         temporary.write_text(text, encoding="utf-8")
-        os.replace(temporary, target)
+        _safe_replace(temporary, target)
     finally:
         temporary.unlink(missing_ok=True)
 
