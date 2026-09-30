@@ -4,7 +4,7 @@
   "provider": "dashscope",
   "name": "阿里云百炼平台 (Bailian)",
   "endpoint": "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions",
-  "model": "qwen-plus",
+  "model": "qwen3.8-max",
   "auth": {
     "type": "bearer",
     "api_key_env": "LLM_API_KEY",
@@ -22,11 +22,96 @@
     "max_calls_per_week": 50,
     "max_total_tokens_per_run": 100000000
   },
-  "available_models_note": [
-    "qwen-plus (默认推荐，综合能力与性价比最优",
-    "qwen-max (强推理，复杂代码与长指令分析)",
-    "qwen-turbo (轻量超高速)",
-    "deepseek-v3 (百炼托管的 DeepSeek-V3)",
-    "deepseek-r1 (百炼托管的 DeepSeek-R1)"
-  ]
+  "available_models": {
+    "qwen3.8-max": {
+      "name": "阿里云百炼·通义千问 3.8-Max (旗舰)",
+      "limits": {
+        "max_output_tokens": 32000
+      }
+    },
+    "qwen3.8-flash": {
+      "name": "阿里云百炼·通义千问 3.8-Flash (高速)",
+      "limits": {
+        "max_output_tokens": 16000
+      }
+    },
+    "qwen3.7-flash": {
+      "name": "阿里云百炼·通义千问 3.7-Flash",
+      "limits": {
+        "max_output_tokens": 8000
+      }
+    },
+    "qwen3.7-flash-2026-07-15": {
+      "name": "阿里云百炼·通义千问 3.7-Flash-0715",
+      "limits": {
+        "max_output_tokens": 16000
+      }
+    },
+    "kimi-k3": {
+      "name": "阿里云百炼·Kimi-K3 (月之暗面托管)",
+      "limits": {
+        "max_output_tokens": 8000
+      }
+    },
+    "glm-5.3": {
+      "name": "阿里云百炼·GLM-5.3 (智谱托管)",
+      "limits": {
+        "max_output_tokens": 16000
+      }
+    },
+    "qwen-plus": {
+      "name": "阿里云百炼·通义千问 Plus (稳定标准)",
+      "limits": {
+        "max_output_tokens": 20000
+      }
+    },
+    "qwen3.8-27b": {
+      "name": "阿里云百炼·通义千问 3.8-27B",
+      "limits": {
+        "max_output_tokens": 8000
+      }
+    },
+    "qwen3.8-2.4t-a95b": {
+      "name": "阿里云百炼·通义千问 3.8-2.4T-A95B",
+      "limits": {
+        "max_output_tokens": 8000
+      }
+    },
+    "deepseek-v4-flash-0731": {
+      "name": "阿里云百炼·DeepSeek-V4-Flash-0731",
+      "limits": {
+        "max_output_tokens": 20000
+      }
+    },
+    "deepseek-v4-pro-0813": {
+      "name": "阿里云百炼·DeepSeek-V4-Pro-0813",
+      "limits": {
+        "max_output_tokens": 20000
+      }
+    },
+    "qwen3.8-max-0902": {
+      "name": "阿里云百炼·通义千问 3.8-Max-0902",
+      "limits": {
+        "max_output_tokens": 8000
+      }
+    },
+    "qwen3.8-omni-flash": {
+      "name": "阿里云百炼·通义千问 3.8-Omni-Flash",
+      "limits": {
+        "max_output_tokens": 8000
+      }
+    },
+    "qwen3.8-omni-flash-realtime": {
+      "name": "阿里云百炼·通义千问 3.8-Omni-Realtime",
+      "limits": {
+        "max_output_tokens": 8000
+      }
+    },
+    "qwen-mt-uni": {
+      "name": "阿里云百炼·通义千问 MT-Uni (多模态)",
+      "limits": {
+        "max_output_tokens": 8000
+      }
+    }
+  }
 }

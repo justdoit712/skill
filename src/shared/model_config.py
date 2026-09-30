@@ -96,7 +96,7 @@ def parse_model_configs(config):
         raise ValueError('模型池第一版仅支持 dashscope')
     endpoint = normalize_endpoint(config.get('endpoint'))
     auth = config.get('auth', {})
-    if (not isinstance(auth, dict) or set(auth) - {'api_key', 'api_key_env'}
+    if (not isinstance(auth, dict) or set(auth) - {'api_key', 'api_key_env', 'key_ref', 'type'}
             or any(not isinstance(v, str) for v in auth.values())):
         raise ValueError('auth 配置无效')
     _validate_sections(config)

@@ -109,8 +109,12 @@ class SwitchModelTest(unittest.TestCase):
                 "name": "阿里云百炼平台",
                 "provider": "dashscope",
                 "endpoint": "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions",
-                "model": "qwen-plus",
+                "model": "qwen3.8-max",
                 "auth": {"key_ref": "bailian"},
+                "available_models": {
+                    "kimi-k3": {"name": "Kimi-K3", "limits": {"max_output_tokens": 8000}},
+                    "glm-5.3": {"name": "GLM-5.3", "limits": {"max_output_tokens": 16000}},
+                },
             }),
             encoding="utf-8",
         )
@@ -132,6 +136,16 @@ class SwitchModelTest(unittest.TestCase):
         self.assertEqual(cur["model"], "deepseek-chat")
         self.assertEqual(cur["auth"]["key_ref"], "deepseek")
         self.assertNotIn("api_key", cur["auth"])
+
+    def test_switch_to_sub_model_in_platform(self):
+        self.assertTrue(switch_to_provider("kimi-k3"))
+        cur = json.loads(self.model_json.read_text(encoding="utf-8"))
+        self.assertEqual(cur["provider"], "dashscope")
+        self.assertEqual(cur["model"], "kimi-k3")
+        self.assertEqual(cur["name"], "Kimi-K3")
+        self.assertEqual(cur["limits"]["max_output_tokens"], 8000)
+        self.assertEqual(cur["auth"]["key_ref"], "bailian")
+        self.assertNotIn("available_models", cur)
 
     def test_switch_unlinks_legacy_model_local(self):
         self.model_local.write_text(json.dumps({"provider": "legacy"}), encoding="utf-8")

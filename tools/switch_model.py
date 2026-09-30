@@ -126,28 +126,35 @@ def load_providers_catalog(models_dir: Path | None = None) -> dict:
     if active_path.exists():
         cur = read_json(active_path, default={})
         active_id = cur.get("active_provider")
-        if not active_id or active_id not in providers:
+        if not active_id or (active_id not in providers and not any(str(active_id).startswith(f"{pid}/") for pid in providers)):
             cur_endpoint = cur.get("endpoint")
             cur_model = cur.get("model")
             for pid, pcfg in providers.items():
-                if pcfg.get("endpoint") == cur_endpoint and pcfg.get("model") == cur_model:
-                    active_id = pid
-                    break
+                if pcfg.get("endpoint") == cur_endpoint:
+                    if pcfg.get("model") == cur_model:
+                        active_id = pid
+                        break
+                    avail = pcfg.get("available_models") or {}
+                    if isinstance(avail, dict) and cur_model in avail:
+                        active_id = f"{pid}/{cur_model}"
+                        break
 
     return {"active": active_id, "providers": providers}
 
 
 def list_providers(catalog: dict) -> None:
-    """格式化打印各独立厂商/模型配置状态列表。"""
+    """格式化打印各独立厂商/平台配置状态列表。"""
     providers = catalog.get("providers", {})
     active_id = catalog.get("active")
     secrets = load_secrets()
 
-    print("\n" + "=" * 90)
-    print(f"{'#':<4} {'配置标识 ID':<36} {'模型 Code':<28} {'状态 / Key':<20}")
-    print("-" * 90)
+    print("\n" + "=" * 94)
+    print(f"{'#':<4} {'平台标识 (ID)':<16} {'默认/当前模型':<28} {'子模型':<12} {'状态 / Key':<24}")
+    print("-" * 94)
     for idx, (pid, pcfg) in enumerate(providers.items(), 1):
         model = pcfg.get("model", "unknown")
+        avail = pcfg.get("available_models") or {}
+        sub_count = f"{len(avail)} 个可选" if avail else "-"
         auth = pcfg.get("auth") or {}
         key_ref = auth.get("key_ref")
         direct_key = auth.get("api_key")
@@ -163,10 +170,11 @@ def list_providers(catalog: dict) -> None:
         else:
             key_status = "[未配置 Key]"
 
-        is_active = (pid == active_id)
+        is_active = (pid == active_id or (active_id and str(active_id).startswith(f"{pid}/")))
         active_mark = "[当前激活] " if is_active else "           "
-        print(f"{idx:<4} {pid:<36} {model:<28} {active_mark}{key_status}")
-    print("=" * 90 + "\n")
+        print(f"{idx:<4} {pid:<16} {model:<28} {sub_count:<12} {active_mark}{key_status}")
+    print("=" * 94)
+    print("提示: 可直接使用 'python tools/switch_model.py <模型名>'（如 kimi-k3、glm-5.3、qwen3.7-flash-2026-07-15）切换。\n")
 
 
 def show_current() -> None:
@@ -215,34 +223,55 @@ def show_current() -> None:
     print("=" * 64 + "\n")
 
 
-def resolve_target_provider_id(raw_input: str, providers: dict) -> str | None:
-    """多级模糊匹配目标模型标识。"""
+def resolve_target(raw_input: str, providers: dict) -> tuple[str | None, str | None, dict]:
+    """多级模糊匹配目标模型标识与子模型。
+    
+    返回: (provider_id, sub_model_id, sub_model_metadata)
+    """
     raw = raw_input.strip()
     low = raw.lower()
 
-    # 1. 别名优先查找
+    # 1. 别名优先查找平台
     if low in ALIASES and ALIASES[low] in providers:
-        return ALIASES[low]
+        return ALIASES[low], None, {}
 
-    # 2. 精确匹配配置标识 (如 bailian-kimi-k3 或 deepseek)
+    # 2. 精确匹配平台配置标识 (如 bailian 或 deepseek)
     if raw in providers:
-        return raw
+        return raw, None, {}
     if low in providers:
-        return low
+        return low, None, {}
 
-    # 3. 自动补全 bailian- 前缀 (如 kimi-k3 -> bailian-kimi-k3)
-    if f"bailian-{raw}" in providers:
-        return f"bailian-{raw}"
-    if f"bailian-{low}" in providers:
-        return f"bailian-{low}"
+    # 3. 剥离前缀匹配（如 bailian-kimi-k3 -> kimi-k3）
+    stripped = raw
+    if raw.startswith("bailian-"):
+        stripped = raw[8:]
+    elif low.startswith("bailian-"):
+        stripped = low[8:]
 
-    # 4. 按 model 字段反向搜索
+    # 4. 遍历平台，检查 available_models 匹配
+    for pid, pcfg in providers.items():
+        avail = pcfg.get("available_models") or {}
+        if isinstance(avail, dict):
+            for mid, minfo in avail.items():
+                if mid.lower() == low or mid == raw or mid.lower() == stripped.lower():
+                    meta = minfo if isinstance(minfo, dict) else {}
+                    return pid, mid, meta
+
+    # 5. 按主 model 字段反向搜索
     for pid, pcfg in providers.items():
         m = (pcfg.get("model") or "").strip()
         if m.lower() == low or m == raw:
-            return pid
+            return pid, None, {}
 
-    return None
+    return None, None, {}
+
+
+def resolve_target_provider_id(raw_input: str, providers: dict) -> str | None:
+    """兼容旧接口：返回解析后的平台或模型复合标识。"""
+    pid, sub, _ = resolve_target(raw_input, providers)
+    if not pid:
+        return None
+    return f"{pid}/{sub}" if sub else pid
 
 
 def switch_to_provider(provider_id: str, catalog: dict | None = None) -> bool:
@@ -256,61 +285,79 @@ def switch_to_provider(provider_id: str, catalog: dict | None = None) -> bool:
         catalog = load_providers_catalog()
 
     providers = catalog.get("providers", {})
-    resolved_id = resolve_target_provider_id(provider_id, providers)
-    target_cfg = None
+    resolved_pid, sub_model, sub_meta = resolve_target(provider_id, providers)
 
-    if resolved_id and resolved_id in providers:
-        target_cfg = dict(providers[resolved_id])
-    else:
+    if not resolved_pid or resolved_pid not in providers:
+        # 回退：检查直接以文件名形式存在的配置
         for suffix in (".json", ".local.json"):
             candidate_file = MODELS_DIR / f"{provider_id}{suffix}"
             if candidate_file.exists():
-                target_cfg = read_json(candidate_file, default={})
-                resolved_id = provider_id
+                providers[provider_id] = read_json(candidate_file, default={})
+                resolved_pid = provider_id
                 break
 
-    if not target_cfg or not resolved_id:
+    if not resolved_pid or resolved_pid not in providers:
         print(f"[错误] 未找到模型配置 '{provider_id}'！")
-        print(f"       请运行 'python tools/switch_model.py --list' 查看所有可选模型。")
+        print(f"       请运行 'python tools/switch_model.py --list' 查看所有可选平台与模型。")
         return False
 
-    name = target_cfg.get("name", resolved_id)
+    target_cfg = dict(providers[resolved_pid])
+    platform_name = target_cfg.get("name", resolved_pid)
+
+    # 准备公开输出配置：移除明文 api_key，注入规范 key_ref
+    out_cfg = json.loads(json.dumps(target_cfg))
+    out_cfg.pop("available_models", None)
+
+    if sub_model:
+        out_cfg["model"] = sub_model
+        if sub_meta.get("name"):
+            out_cfg["name"] = sub_meta["name"]
+        else:
+            out_cfg["name"] = f"{platform_name} · {sub_model}"
+        if "limits" in sub_meta and isinstance(sub_meta["limits"], dict):
+            limits = dict(out_cfg.get("limits") or {})
+            limits.update(sub_meta["limits"])
+            out_cfg["limits"] = limits
+        active_id = f"{resolved_pid}/{sub_model}"
+        display_name = out_cfg["name"]
+    else:
+        active_id = resolved_pid
+        display_name = platform_name
 
     # 校验合法性
-    problems = validate_model_config(target_cfg)
+    problems = validate_model_config(out_cfg)
     if problems:
         print(f"[警告] 模型配置预检存在潜在问题：{'；'.join(problems)}")
 
-    # 准备公开输出配置：坚决移除明文 api_key，注入规范 key_ref
-    out_cfg = dict(target_cfg)
     auth = dict(out_cfg.get("auth") or {})
     auth.pop("api_key", None)
 
     # 若未定义 key_ref，则自动推断
     key_ref = auth.get("key_ref")
     if not key_ref:
-        provider_val = str(out_cfg.get("provider") or resolved_id).lower()
-        if "bailian" in resolved_id or "dashscope" in provider_val:
+        provider_val = str(out_cfg.get("provider") or resolved_pid).lower()
+        if "bailian" in resolved_pid or "dashscope" in provider_val:
             key_ref = "bailian"
-        elif "deepseek" in resolved_id or "deepseek" in provider_val:
+        elif "deepseek" in resolved_pid or "deepseek" in provider_val:
             key_ref = "deepseek"
-        elif "gemini" in resolved_id:
+        elif "gemini" in resolved_pid:
             key_ref = "gemini"
-        elif "openai" in resolved_id:
+        elif "openai" in resolved_pid:
             key_ref = "openai"
-        elif "moonshot" in resolved_id or "kimi" in resolved_id:
+        elif "moonshot" in resolved_pid or "kimi" in resolved_pid:
             key_ref = "moonshot"
-        elif "zhipu" in resolved_id or "glm" in resolved_id:
+        elif "zhipu" in resolved_pid or "glm" in resolved_pid:
             key_ref = "zhipu"
-        elif "siliconflow" in resolved_id:
+        elif "siliconflow" in resolved_pid:
             key_ref = "siliconflow"
         else:
-            key_ref = resolved_id.split("-")[0]
+            key_ref = resolved_pid.split("-")[0]
         auth["key_ref"] = key_ref
 
     out_cfg["auth"] = auth
-    out_cfg["active_provider"] = resolved_id
-    out_cfg["note"] = f"当前由 tools/switch_model.py 从 {resolved_id}.json 激活（{name}）。可提交版本库。"
+    out_cfg["provider_id"] = resolved_pid
+    out_cfg["active_provider"] = active_id
+    out_cfg["note"] = f"当前由 tools/switch_model.py 从 {resolved_pid}.json 激活（{display_name}）。可提交版本库。"
 
     # 写入公开的 model.json
     write_json_atomic(MODEL_JSON_PATH, out_cfg)
@@ -323,11 +370,11 @@ def switch_to_provider(provider_id: str, catalog: dict | None = None) -> bool:
             pass
 
     # 同步更新 active 状态
-    catalog["active"] = resolved_id
+    catalog["active"] = active_id
     if PROVIDERS_LOCAL_PATH.exists():
         legacy_data = read_json(PROVIDERS_LOCAL_PATH, default={})
         if isinstance(legacy_data, dict):
-            legacy_data["active"] = resolved_id
+            legacy_data["active"] = active_id
             write_json_atomic(PROVIDERS_LOCAL_PATH, legacy_data)
 
     # 预检密钥状态
@@ -336,10 +383,10 @@ def switch_to_provider(provider_id: str, catalog: dict | None = None) -> bool:
     env_var = auth.get("api_key_env", "LLM_API_KEY")
     has_env = bool(os.environ.get(env_var))
 
-    print(f"[成功] 已热插拔切换至模型：{name} ({resolved_id})")
-    print(f"       配置源文件: config/models/{resolved_id}.json")
+    print(f"[成功] 已热插拔切换至模型：{display_name}")
+    print(f"       配置源文件: config/models/{resolved_pid}.json")
     print(f"       当前生效件: config/models/model.json")
-    print(f"       模型名称  : {out_cfg.get('model')}")
+    print(f"       模型代码  : {out_cfg.get('model')}")
     print(f"       端点地址  : {out_cfg.get('endpoint')}")
     if actual_key:
         print(f"       生效密钥  : {mask_key(actual_key)} (引用: secrets.local.json[{key_ref}])")
@@ -363,7 +410,7 @@ def interactive_select(catalog: dict) -> None:
     items = list(providers.keys())
 
     try:
-        choice = input(f"请输入要激活的模型序号 (1-{len(items)}) 或输入配置标识 (q 退出): ").strip()
+        choice = input(f"请输入要激活的平台序号 (1-{len(items)}) 或模型标识/名称 (q 退出): ").strip()
         if not choice or choice.lower() in ("q", "quit", "exit"):
             print("操作已取消。")
             return
@@ -371,7 +418,22 @@ def interactive_select(catalog: dict) -> None:
         if choice.isdigit():
             idx = int(choice)
             if 1 <= idx <= len(items):
-                target_id = items[idx - 1]
+                target_pid = items[idx - 1]
+                pcfg = providers[target_pid]
+                avail = pcfg.get("available_models") or {}
+                if avail and isinstance(avail, dict):
+                    print(f"\n【{pcfg.get('name', target_pid)} 包含以下可选模型】：")
+                    sub_keys = list(avail.keys())
+                    for sidx, smid in enumerate(sub_keys, 1):
+                        sinfo = avail[smid]
+                        sname = sinfo.get("name", smid) if isinstance(sinfo, dict) else smid
+                        print(f"  [{sidx}] {smid:<30} ({sname})")
+                    sub_choice = input(f"请输入子模型序号 (1-{len(sub_keys)}) 或直接回车使用默认 ({pcfg.get('model')}): ").strip()
+                    if sub_choice.isdigit() and 1 <= int(sub_choice) <= len(sub_keys):
+                        switch_to_provider(sub_keys[int(sub_choice) - 1], catalog)
+                        return
+                switch_to_provider(target_pid, catalog)
+                return
             else:
                 print(f"[错误] 序号超出有效范围 (1-{len(items)})！")
                 return
