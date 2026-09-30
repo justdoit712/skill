@@ -724,6 +724,11 @@ def _evaluate_with_retries(state, candidate, text, eid, record):
         details = [code]
         if result.get('error_kind'):
             details.append(result['error_kind'])
+        if result.get('error'):
+            err_str = str(result['error']).strip().replace('\r', '').replace('\n', ' ')
+            if len(err_str) > 160:
+                err_str = err_str[:157] + '...'
+            details.append(err_str)
         if diagnostic.get('error_type'):
             details.append(diagnostic['error_type'])
         if diagnostic.get('http_status') is not None:
@@ -738,6 +743,8 @@ def _evaluate_with_retries(state, candidate, text, eid, record):
             failure_record['error_kind'] = result.get('error_kind')
         if result.get('stage'):
             failure_record['stage'] = result.get('stage')
+        if result.get('error'):
+            failure_record['error_detail'] = str(result.get('error'))
         state.ledger.save_record(eid, failure_record)
         state.active_eid = None
         if state.active_call:
@@ -1053,6 +1060,8 @@ def process_candidate(state, item):
             'model': state.cfg['model'].get('model'),
             'model_config_version': state.cfg['model'].get('model_config_version'),
         }
+        if result.get('error'):
+            block_info['error_detail'] = str(result.get('error'))
         _update_blocked(state.pool, seq, block_info)
         save_pool(state.pool_path, state.pool)
         state.consecutive_failures, state.format_failures = update_failure_counters(
@@ -1062,7 +1071,8 @@ def process_candidate(state, item):
         state.report['blocked_records'] += 1
         state.report['blocked_new'] += 1
         stage_desc = "复核" if decision.stage == "review" else "初评"
-        state.log(f"[格式异常] #{seq} {candidate.name}：{stage_desc}输出格式不合法（{decision.error_kind}），已保存 blocked（距上次有效结果累计 {state.format_failures}/{state.max_format_failures}）。")
+        err_detail = f"：{result.get('error')}" if result.get('error') else ""
+        state.log(f"[格式异常] #{seq} {candidate.name}：{stage_desc}输出格式不合法（{decision.error_kind}{err_detail}），已保存 blocked（距上次有效结果累计 {state.format_failures}/{state.max_format_failures}）。")
         if state.format_failures >= state.max_format_failures:
             state.stop_causes.add(STOP_FORMAT_FAILURES)
             state.log("[停止] 输出格式异常达到阈值，请检查模型与评估输出契约；后续候选未调用。")
@@ -1336,10 +1346,14 @@ def _collect(root, local, settings, cfg, discover_fn, fetch_fn, evaluate_fn, log
         state.report['stop_causes'] = sorted(list(state.stop_causes))
         state.report['stop_reason'] = resolve_primary_stop_reason(state.stop_causes)
     except Exception as exc:
+        import traceback
         state.stop_causes.add('error')
         state.report['stop_causes'] = sorted(list(state.stop_causes))
         state.report['stop_reason'] = resolve_primary_stop_reason(state.stop_causes) or 'error'
         state.report['error_type'] = type(exc).__name__
+        state.report['error_message'] = str(exc)
+        state.report['error_traceback'] = traceback.format_exc()
+        state.log(f"[系统异常] {type(exc).__name__}: {exc}")
     finally:
         if state.pool is not None:
             save_pool(state.pool_path, state.pool)

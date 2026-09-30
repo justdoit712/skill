@@ -77,6 +77,7 @@ STOP_LABELS: dict[str, str] = {
     STOP_RETRY_EXHAUSTED: "网络重试次数已耗尽",
     STOP_INTERRUPTED: "用户主动中断 (Ctrl+C)",
     STOP_STORAGE_ERROR: "持久化写入失败",
+    "error": "系统发生未捕获异常中断",
 }
 
 
