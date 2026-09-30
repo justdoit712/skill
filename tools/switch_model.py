@@ -152,9 +152,13 @@ def list_providers(catalog: dict) -> None:
     print(f"{'#':<4} {'平台标识 (ID)':<16} {'默认/当前模型':<28} {'子模型':<12} {'状态 / Key':<24}")
     print("-" * 94)
     for idx, (pid, pcfg) in enumerate(providers.items(), 1):
-        model = pcfg.get("model", "unknown")
-        avail = pcfg.get("available_models") or {}
-        sub_count = f"{len(avail)} 个可选" if avail else "-"
+        if "models" in pcfg:
+            model = f"自动轮换({len(pcfg['models'])}个模型)"
+            sub_count = f"{len(pcfg['models'])} 个"
+        else:
+            model = pcfg.get("model", "unknown")
+            avail = pcfg.get("available_models") or {}
+            sub_count = f"{len(avail)} 个可选" if avail else "-"
         auth = pcfg.get("auth") or {}
         key_ref = auth.get("key_ref")
         direct_key = auth.get("api_key")
@@ -248,7 +252,7 @@ def resolve_target(raw_input: str, providers: dict) -> tuple[str | None, str | N
     elif low.startswith("bailian-"):
         stripped = low[8:]
 
-    # 4. 遍历平台，检查 available_models 匹配
+    # 4. 遍历平台，检查 available_models 与 models 队列匹配
     for pid, pcfg in providers.items():
         avail = pcfg.get("available_models") or {}
         if isinstance(avail, dict):
@@ -256,6 +260,13 @@ def resolve_target(raw_input: str, providers: dict) -> tuple[str | None, str | N
                 if mid.lower() == low or mid == raw or mid.lower() == stripped.lower():
                     meta = minfo if isinstance(minfo, dict) else {}
                     return pid, mid, meta
+        models_list = pcfg.get("models") or []
+        if isinstance(models_list, list):
+            for mitem in models_list:
+                mname = mitem if isinstance(mitem, str) else (mitem.get("model") if isinstance(mitem, dict) else "")
+                if mname and (mname.lower() == low or mname == raw or mname.lower() == stripped.lower()):
+                    meta = mitem if isinstance(mitem, dict) else {}
+                    return pid, mname, meta
 
     # 5. 按主 model 字段反向搜索
     for pid, pcfg in providers.items():
@@ -274,11 +285,11 @@ def resolve_target_provider_id(raw_input: str, providers: dict) -> str | None:
     return f"{pid}/{sub}" if sub else pid
 
 
-def switch_to_provider(provider_id: str, catalog: dict | None = None) -> bool:
+def switch_to_provider(provider_id: str, catalog: dict | None = None, force: bool = False) -> bool:
     """切换到指定独立模型配置，并原子覆写到 model.json（不包含明文 Key）。"""
     active_path = MODEL_LOCAL_PATH if MODEL_LOCAL_PATH.exists() else MODEL_JSON_PATH
-    if active_path.exists() and 'models' in (read_json(active_path, default={}) or {}):
-        print('[拒绝] 当前使用模型队列，请编辑 model.json 的 models 列表；切换命令不会覆盖队列。')
+    if not force and active_path.exists() and 'models' in (read_json(active_path, default={}) or {}):
+        print('[拒绝] 当前使用模型队列，请使用 --force 或编辑 model.json 的 models 列表；默认不会覆盖现有队列。')
         return False
 
     if catalog is None:
@@ -309,6 +320,7 @@ def switch_to_provider(provider_id: str, catalog: dict | None = None) -> bool:
     out_cfg.pop("available_models", None)
 
     if sub_model:
+        out_cfg.pop("models", None)
         out_cfg["model"] = sub_model
         if sub_meta.get("name"):
             out_cfg["name"] = sub_meta["name"]
@@ -323,6 +335,9 @@ def switch_to_provider(provider_id: str, catalog: dict | None = None) -> bool:
     else:
         active_id = resolved_pid
         display_name = platform_name
+        if "models" in target_cfg:
+            out_cfg["models"] = list(target_cfg["models"])
+            out_cfg.pop("model", None)
 
     # 校验合法性
     problems = validate_model_config(out_cfg)
@@ -491,6 +506,7 @@ def main() -> int:
     parser.add_argument("--list", "-l", action="store_true", help="列出全部可用的模型配置")
     parser.add_argument("--show", "-s", action="store_true", help="显示当前生效的模型配置详情")
     parser.add_argument("--check", "-c", action="store_true", help="预检当前生效模型的配置与密钥完整性")
+    parser.add_argument("--force", "-f", action="store_true", help="强制覆盖当前已生效的模型或队列")
     args = parser.parse_args()
 
     if args.list:
@@ -508,7 +524,7 @@ def main() -> int:
 
     catalog = load_providers_catalog()
     if args.target:
-        ok = switch_to_provider(args.target, catalog)
+        ok = switch_to_provider(args.target, catalog, force=args.force)
         return 0 if ok else 1
 
     interactive_select(catalog)
