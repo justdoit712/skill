@@ -1,12 +1,12 @@
 {
   "catalog_version": "1.0.0",
   "rules_version": "1.3.0",
-  "generated_at": "2026-09-30T10:41:51.970628+08:00",
+  "generated_at": "2026-10-01T01:48:26.427597+08:00",
   "counts": {
-    "excluded": 81,
-    "candidate": 156,
-    "recommended": 282,
-    "pending": 2
+    "recommended": 276,
+    "candidate": 143,
+    "manual": 23,
+    "excluded": 81
   },
   "entries": [
     {
@@ -200,6 +200,13 @@
       "repo_url": "https://github.com/anthropics/skills",
       "author": "anthropics",
       "summary_zh": "该技能通过创建设计哲学并表达为PDF/PNG视觉艺术作品，适用于制作海报、艺术设计等静态视觉内容。",
+      "skill_type": null,
+      "example_requests": [
+        "“制作海报、艺术设计等静态视觉内容”"
+      ],
+      "key_features": [
+        "通过创建设计哲学并表达为PDF/PNG视觉艺术"
+      ],
       "main_category": {
         "id": "content",
         "name": "内容创作"
@@ -214,35 +221,19 @@
       ],
       "platform_declared": null,
       "dependencies_declared": [],
-      "source_type": "official",
-      "discovery": {
-        "source_ids": [
-          "anthropics_skills"
-        ],
-        "methods": [
-          "spec_initial_candidate"
-        ],
-        "terms": []
-      },
+      "limitations": "仅输出.md、.pdf和.png文件；需要额外工具生成视觉内容；可能需下载字体；未声明具体运行环境。",
+      "license": null,
       "status": "candidate",
+      "reason_codes": [],
+      "first_seen": "2026-09-20T16:59:36+00:00",
+      "last_checked": "2026-09-30T20:56:03.338548+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:a1f288079624402f30682753c1d43920",
+      "source_type": "official",
+      "upstream_status": "ok",
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "flags": [
-        "NO_DOMAIN_TERM_MATCH"
-      ],
-      "reason_codes": [
-        "MISSING_DEPENDENCY"
-      ],
-      "limitations": "仅输出.md、.pdf和.png文件；需要额外工具生成视觉内容；可能需下载字体；未声明具体运行环境。",
-      "evaluation_rules_version": "1.0.1",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-21T01:17:31.343047+08:00",
-      "content_changed_at": null,
-      "content_fingerprint": "sha256:a1f288079624402f30682753c1d43920",
-      "upstream_status": "ok",
-      "license": null,
-      "excluded": false,
       "manual_pick": true,
       "manual_note": {
         "added_at": "2026-09-24",
@@ -250,13 +241,10 @@
         "from": "candidate",
         "auto_status": "candidate"
       },
-      "skill_type": null,
-      "example_requests": [
-        "“制作海报、艺术设计等静态视觉内容”"
-      ],
-      "key_features": [
-        "通过创建设计哲学并表达为PDF/PNG视觉艺术"
-      ]
+      "evaluation_rules_version": "1.0.1",
+      "quality_summary": null,
+      "last_evaluation_id": null,
+      "evaluated_at": null
     },
     {
       "skill_id": "anthropics/skills:skills/claude-api/SKILL.md",
@@ -876,6 +864,13 @@
       "repo_url": "https://github.com/anthropics/skills",
       "author": "anthropics",
       "summary_zh": "用于创建、修改和评估 Claude 技能，包括起草 SKILL.md、运行测试、基准比较和优化描述触发准确性，适用于需要构建或迭代技能的用户。",
+      "skill_type": null,
+      "example_requests": [
+        "“需要构建或迭代技能的用户”"
+      ],
+      "key_features": [
+        "用于创建、修改和评估 Claude 技能"
+      ],
       "main_category": {
         "id": "dev",
         "name": "编程开发"
@@ -896,33 +891,19 @@
         "python",
         "claude CLI"
       ],
-      "source_type": "official",
-      "discovery": {
-        "source_ids": [
-          "anthropics_skills"
-        ],
-        "methods": [
-          "spec_initial_candidate"
-        ],
-        "terms": []
-      },
+      "limitations": "Claude.ai 环境无子代理，无法并行基准测试；描述优化需要 claude CLI；Cowork 环境无浏览器需使用静态查看器。",
+      "license": null,
       "status": "candidate",
+      "reason_codes": [],
+      "first_seen": "2026-09-20T16:59:36+00:00",
+      "last_checked": "2026-09-30T20:56:07.427932+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:dcd4803e61e913e6fc27294184cd3a71",
+      "source_type": "official",
+      "upstream_status": "ok",
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "flags": [
-        "NO_DOMAIN_TERM_MATCH"
-      ],
-      "reason_codes": [],
-      "limitations": "Claude.ai 环境无子代理，无法并行基准测试；描述优化需要 claude CLI；Cowork 环境无浏览器需使用静态查看器。",
-      "evaluation_rules_version": "1.0.1",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-21T01:24:36.215057+08:00",
-      "content_changed_at": null,
-      "content_fingerprint": "sha256:dcd4803e61e913e6fc27294184cd3a71",
-      "upstream_status": "ok",
-      "license": null,
-      "excluded": false,
       "manual_pick": true,
       "manual_note": {
         "added_at": "2026-09-24",
@@ -930,13 +911,10 @@
         "from": "candidate",
         "auto_status": "candidate"
       },
-      "skill_type": null,
-      "example_requests": [
-        "“需要构建或迭代技能的用户”"
-      ],
-      "key_features": [
-        "用于创建、修改和评估 Claude 技能"
-      ]
+      "evaluation_rules_version": "1.0.1",
+      "quality_summary": null,
+      "last_evaluation_id": null,
+      "evaluated_at": null
     },
     {
       "skill_id": "anthropics/skills:skills/slack-gif-creator/SKILL.md",
@@ -1013,6 +991,12 @@
       "repo_url": "https://github.com/anthropics/skills",
       "author": "anthropics",
       "summary_zh": "主题工厂：为幻灯片、文档、报告、HTML 落地页等成品应用专业配色与字体主题，提供 10 个预设主题并支持即时生成自定义主题。典型场景：为演示文稿快速统一视觉风格。",
+      "skill_type": null,
+      "example_requests": [],
+      "key_features": [
+        "支持即时生成自定义主题",
+        "主题工厂：为幻灯片、文档、报告、HTML 落地页等成品应用"
+      ],
       "main_category": {
         "id": "docs",
         "name": "文档办公"
@@ -1029,33 +1013,19 @@
       ],
       "platform_declared": null,
       "dependencies_declared": [],
-      "source_type": "official",
-      "discovery": {
-        "source_ids": [
-          "anthropics_skills"
-        ],
-        "methods": [
-          "spec_initial_candidate"
-        ],
-        "terms": []
-      },
+      "limitations": "仅提供视觉主题应用，不涉及内容生成；依赖 themes/ 目录和 theme-showcase.pdf；自定义主题需人工确认。",
+      "license": null,
       "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-20T16:59:36+00:00",
+      "last_checked": "2026-09-30T20:56:09.355907+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:c35893e221e28895c52143cc11bf30e4",
+      "source_type": "official",
+      "upstream_status": "ok",
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "flags": [
-        "NO_DOMAIN_TERM_MATCH"
-      ],
-      "reason_codes": [],
-      "limitations": "仅提供视觉主题应用，不涉及内容生成；依赖 themes/ 目录和 theme-showcase.pdf；自定义主题需人工确认。",
-      "evaluation_rules_version": "1.0.1",
-      "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-21T01:25:56.313919+08:00",
-      "content_changed_at": null,
-      "content_fingerprint": "sha256:c35893e221e28895c52143cc11bf30e4",
-      "upstream_status": "ok",
-      "license": null,
-      "excluded": false,
       "manual_pick": true,
       "manual_note": {
         "added_at": "2026-09-22",
@@ -1063,12 +1033,10 @@
         "from": "recommended",
         "auto_status": "recommended"
       },
-      "skill_type": null,
-      "example_requests": [],
-      "key_features": [
-        "支持即时生成自定义主题",
-        "主题工厂：为幻灯片、文档、报告、HTML 落地页等成品应用"
-      ]
+      "evaluation_rules_version": "1.0.1",
+      "quality_summary": null,
+      "last_evaluation_id": null,
+      "evaluated_at": null
     },
     {
       "skill_id": "anthropics/skills:skills/web-artifacts-builder/SKILL.md",
@@ -1178,7 +1146,7 @@
       "status": "recommended",
       "reason_codes": [],
       "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-24T17:10:40+08:00",
+      "last_checked": "2026-09-30T20:56:13.791011+08:00",
       "content_changed_at": null,
       "content_fingerprint": "sha256:51b7349e77ec63b7744a6f63647e7566",
       "source_type": "official",
@@ -1270,43 +1238,34 @@
       "repo_url": "https://github.com/anthropics/skills",
       "author": "anthropics",
       "summary_zh": null,
+      "skill_type": null,
+      "example_requests": [],
+      "key_features": [],
       "main_category": null,
       "candidate_domains": [],
       "tags": [],
       "platform_declared": null,
       "dependencies_declared": [],
-      "source_type": "official",
-      "discovery": {
-        "source_ids": [
-          "anthropics_skills"
-        ],
-        "methods": [
-          "spec_initial_candidate"
-        ],
-        "terms": []
-      },
+      "limitations": null,
+      "license": null,
       "status": "excluded",
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "flags": [],
       "reason_codes": [
         "NOT_A_SKILL"
       ],
-      "limitations": null,
-      "evaluation_rules_version": "1.0.1",
       "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-21T01:27:09.318658+08:00",
+      "last_checked": "2026-09-30T20:56:13.975646+08:00",
       "content_changed_at": null,
       "content_fingerprint": null,
+      "source_type": "official",
       "upstream_status": "ok",
-      "license": null,
-      "excluded": true,
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
       "manual_pick": false,
       "manual_note": null,
-      "skill_type": null,
-      "example_requests": [],
-      "key_features": []
+      "quality_summary": null,
+      "last_evaluation_id": null,
+      "evaluated_at": null
     },
     {
       "skill_id": "vercel-labs/skills:skills/find-skills/SKILL.md",
@@ -1346,11 +1305,9 @@
       "limitations": "依赖网络访问与 `npx skills` CLI 可用性；未声明 Node.js 版本或其他运行环境要求；质量推荐依赖安装量、来源与 star 数等外部指标，未说明第三方技能的权限与安全校验方式；材料未给出平台兼容性说明。",
       "license": null,
       "status": "candidate",
-      "reason_codes": [
-        "NEEDS_VERIFICATION"
-      ],
+      "reason_codes": [],
       "first_seen": "2026-09-20T16:59:36+00:00",
-      "last_checked": "2026-09-24T17:11:33+08:00",
+      "last_checked": "2026-09-30T20:56:17.650068+08:00",
       "content_changed_at": null,
       "content_fingerprint": "sha256:c00eeea0e13e74fe4a9d84ba0a854220",
       "source_type": "official",
@@ -4820,7 +4777,7 @@
       "status": "recommended",
       "reason_codes": [],
       "first_seen": "2026-09-24T09:09:16+00:00",
-      "last_checked": "2026-09-24T17:22:13.686753+08:00",
+      "last_checked": "2026-09-30T20:56:51.012224+08:00",
       "content_changed_at": null,
       "content_fingerprint": "sha256:684bd98d836f88e7b7ec552cc329e4e4",
       "source_type": "official",
@@ -4836,6 +4793,7 @@
         "auto_status": "recommended"
       },
       "evaluation_rules_version": "1.0.1",
+      "quality_summary": null,
       "last_evaluation_id": "trailofbits/skills:plugins/goal-prompt/skills/goal-prompt/SKILL.md|sha256:684bd98d836f88e7b7ec552cc329e4e4|1.0.1|1.0.0",
       "evaluated_at": "2026-09-24T17:22:13.686753+08:00"
     },
@@ -7008,7 +6966,7 @@
       "status": "recommended",
       "reason_codes": [],
       "first_seen": "2026-09-24T09:09:16+00:00",
-      "last_checked": "2026-09-24T17:42:37.771739+08:00",
+      "last_checked": "2026-09-30T20:56:53.302777+08:00",
       "content_changed_at": null,
       "content_fingerprint": "sha256:1d2397bd08607b686122078afe8d2742",
       "source_type": "official",
@@ -7024,6 +6982,7 @@
         "auto_status": "recommended"
       },
       "evaluation_rules_version": "1.0.1",
+      "quality_summary": null,
       "last_evaluation_id": "trailofbits/skills:plugins/trailmark/skills/diagramming-code/SKILL.md|sha256:1d2397bd08607b686122078afe8d2742|1.0.1|1.0.0",
       "evaluated_at": "2026-09-24T17:42:37.769833+08:00"
     },
@@ -7127,7 +7086,7 @@
       "status": "recommended",
       "reason_codes": [],
       "first_seen": "2026-09-24T09:09:16+00:00",
-      "last_checked": "2026-09-24T17:43:39.803608+08:00",
+      "last_checked": "2026-09-30T20:56:55.951679+08:00",
       "content_changed_at": null,
       "content_fingerprint": "sha256:009055f8ad529fd9fa3bfe58c510fae7",
       "source_type": "official",
@@ -7143,6 +7102,7 @@
         "auto_status": "recommended"
       },
       "evaluation_rules_version": "1.0.1",
+      "quality_summary": null,
       "last_evaluation_id": "trailofbits/skills:plugins/trailmark/skills/graph-evolution/SKILL.md|sha256:009055f8ad529fd9fa3bfe58c510fae7|1.0.1|1.0.0",
       "evaluated_at": "2026-09-24T17:43:39.802784+08:00"
     },
@@ -7596,7 +7556,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "trailofbits/skills:plugins/zeroize-audit/skills/zeroize-audit/SKILL.md|sha256:b0a6c227817f9702d5168105c85977bb|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-29T10:30:11.702295+08:00"
+      "evaluated_at": "2026-09-29T10:30:11.702295+08:00",
+      "snooze": {
+        "snoozed_at": "2026-09-29",
+        "expires_at": "2027-02-26",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "google-labs-code/stitch-skills:plugins/stitch-build/skills/react-components/SKILL.md",
@@ -7618,7 +7583,7 @@
       "status": "pending",
       "reason_codes": [],
       "first_seen": "2026-09-24T09:09:16+00:00",
-      "last_checked": "2026-09-29T10:30:12.618802+08:00",
+      "last_checked": "2026-09-30T20:57:06.825844+08:00",
       "content_changed_at": null,
       "content_fingerprint": "sha256:a978bf8fb135c69f944432dfa4166d6a",
       "source_type": "official",
@@ -7729,7 +7694,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "google-labs-code/stitch-skills:plugins/stitch-build/skills/remotion/SKILL.md|sha256:7147fc5a627081fceb7b6ab619142664|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-29T10:31:12.863769+08:00"
+      "evaluated_at": "2026-09-29T10:31:12.863769+08:00",
+      "snooze": {
+        "snoozed_at": "2026-09-29",
+        "expires_at": "2027-02-26",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "google-labs-code/stitch-skills:plugins/stitch-design/skills/code-to-design/SKILL.md",
@@ -7817,7 +7787,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "google-labs-code/stitch-skills:plugins/stitch-design/skills/code-to-design/SKILL.md|sha256:1daafb1d89d6e18574edc33818b992b7|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-29T10:31:25.036242+08:00"
+      "evaluated_at": "2026-09-29T10:31:25.036242+08:00",
+      "snooze": {
+        "snoozed_at": "2026-09-29",
+        "expires_at": "2027-02-26",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "google-labs-code/stitch-skills:plugins/stitch-design/skills/extract-static-html/SKILL.md",
@@ -7908,7 +7883,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "google-labs-code/stitch-skills:plugins/stitch-design/skills/extract-static-html/SKILL.md|sha256:87ebabb29c37f903541bb6c32ee5f2c8|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-29T10:32:21.565281+08:00"
+      "evaluated_at": "2026-09-29T10:32:21.565281+08:00",
+      "snooze": {
+        "snoozed_at": "2026-09-29",
+        "expires_at": "2027-02-26",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "google-labs-code/stitch-skills:plugins/stitch-design/skills/manage-design-system/SKILL.md",
@@ -7996,7 +7976,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "google-labs-code/stitch-skills:plugins/stitch-design/skills/manage-design-system/SKILL.md|sha256:5ce0b8adb5261e8a926fc0942d679cda|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-29T10:32:22.935723+08:00"
+      "evaluated_at": "2026-09-29T10:32:22.935723+08:00",
+      "snooze": {
+        "snoozed_at": "2026-09-29",
+        "expires_at": "2027-02-26",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "google-labs-code/stitch-skills:plugins/stitch-utilities/skills/enhance-prompt/SKILL.md",
@@ -8083,7 +8068,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "google-labs-code/stitch-skills:plugins/stitch-utilities/skills/enhance-prompt/SKILL.md|sha256:ccb200c798072438b642b1fa6a5c5155|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-29T10:33:17.119365+08:00"
+      "evaluated_at": "2026-09-29T10:33:17.119365+08:00",
+      "snooze": {
+        "snoozed_at": "2026-09-29",
+        "expires_at": "2027-02-26",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "google-labs-code/stitch-skills:plugins/stitch-design/skills/upload-to-stitch/SKILL.md",
@@ -8173,7 +8163,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "google-labs-code/stitch-skills:plugins/stitch-design/skills/upload-to-stitch/SKILL.md|sha256:e8ddf11677a916e6a4ccf608fafcf0f2|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-29T10:33:47.685804+08:00"
+      "evaluated_at": "2026-09-29T10:33:47.685804+08:00",
+      "snooze": {
+        "snoozed_at": "2026-09-29",
+        "expires_at": "2027-02-26",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "google-labs-code/stitch-skills:plugins/stitch-utilities/skills/site-md/SKILL.md",
@@ -8264,7 +8259,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "google-labs-code/stitch-skills:plugins/stitch-utilities/skills/site-md/SKILL.md|sha256:679a0020ea2fbfdc4c4db84c32936eae|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-29T10:34:16.187160+08:00"
+      "evaluated_at": "2026-09-29T10:34:16.187160+08:00",
+      "snooze": {
+        "snoozed_at": "2026-09-29",
+        "expires_at": "2027-02-26",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "google-labs-code/stitch-skills:plugins/stitch-utilities/skills/taste-design/SKILL.md",
@@ -8354,7 +8354,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "google-labs-code/stitch-skills:plugins/stitch-utilities/skills/taste-design/SKILL.md|sha256:e425fdb7ab250764f6229c48941f97e2|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-29T10:35:05.641519+08:00"
+      "evaluated_at": "2026-09-29T10:35:05.641519+08:00",
+      "snooze": {
+        "snoozed_at": "2026-09-29",
+        "expires_at": "2027-02-26",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "supabase/agent-skills:skills/supabase/SKILL.md",
@@ -8447,7 +8452,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "supabase/agent-skills:skills/supabase/SKILL.md|sha256:697e0e949f97621c6fc1784169eb3ccb|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-29T10:35:17.614957+08:00"
+      "evaluated_at": "2026-09-29T10:35:17.614957+08:00",
+      "snooze": {
+        "snoozed_at": "2026-09-29",
+        "expires_at": "2027-02-26",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "expo/skills:.claude/skills/expo-skill-eval/SKILL.md",
@@ -10192,7 +10202,7 @@
       "status": "pending",
       "reason_codes": [],
       "first_seen": "2026-09-24T09:09:16+00:00",
-      "last_checked": "2026-09-29T10:47:32.796468+08:00",
+      "last_checked": "2026-09-30T20:57:14.692294+08:00",
       "content_changed_at": null,
       "content_fingerprint": "sha256:0307d3ecfe3b3e70246cbd88b19dc585",
       "source_type": "official",
@@ -10387,7 +10397,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "getsentry/skills:skills/create-branch/SKILL.md|sha256:0e017d30c6031477fe147a39e7f40603|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-29T10:48:43.253973+08:00"
+      "evaluated_at": "2026-09-29T10:48:43.253973+08:00",
+      "snooze": {
+        "snoozed_at": "2026-09-29",
+        "expires_at": "2027-02-26",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "getsentry/skills:skills/gha-security-review/SKILL.md",
@@ -10658,16 +10673,16 @@
       "url": "https://github.com/getsentry/skills/blob/HEAD/skills/skill-scanner/SKILL.md",
       "repo_url": "https://github.com/getsentry/skills",
       "author": "getsentry",
-      "summary_zh": "一个用于扫描 Agent 技能安全性的指南，通过静态分析和人工复核检测提示词注入、恶意代码及权限滥用等风险。",
+      "summary_zh": "用于在安装或采纳 agent skill 前扫描其安全问题，覆盖提示注入、恶意脚本、过度权限、密钥暴露和供应链风险。适合安全审查、技能审计和安装前风险评估场景。",
       "skill_type": "guideline",
       "example_requests": [
-        "扫描指定目录下的 Agent 技能是否存在安全风险",
-        "检查某个技能的 SKILL.md 是否包含提示词注入漏洞"
+        "扫描这个 skill 目录，检查是否存在提示注入或恶意脚本",
+        "审计一个 agent skill 的权限和供应链风险，判断是否可安装"
       ],
       "key_features": [
-        "提供8阶段系统化安全扫描工作流",
-        "支持自动化静态扫描与人工意图评估结合",
-        "涵盖提示词注入、供应链风险及权限分析"
+        "自动静态扫描与人工行为分析结合",
+        "覆盖提示注入、脚本、权限与供应链风险",
+        "提供风险分级、置信度和标准化报告模板"
       ],
       "main_category": {
         "id": "security",
@@ -10676,23 +10691,23 @@
       "candidate_domains": [],
       "tags": [
         "安全审计",
-        "Agent安全",
-        "漏洞检测"
+        "skill扫描",
+        "提示注入检测",
+        "供应链风险",
+        "权限分析"
       ],
       "platform_declared": null,
       "dependencies_declared": [
         "uv CLI"
       ],
-      "limitations": "依赖外部参考文件（如 references/prompt-injection-patterns.md）和 bundled script，若这些文件缺失则无法完整执行；需人工判断恶意意图以过滤误报。",
+      "limitations": "引用了 references 下多个模式文件与 scripts/scan_skill.py，但本次材料未提供这些文件内容；自动扫描效果与误报率无法验证。",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
-      ],
+      "status": "recommended",
+      "reason_codes": [],
       "first_seen": "2026-09-24T09:09:16+00:00",
-      "last_checked": "2026-09-29T10:51:31.123358+08:00",
+      "last_checked": "2026-10-01T01:38:20.338075+08:00",
       "content_changed_at": null,
-      "content_fingerprint": "sha256:53976ab5918ddb529bc345f46eb01934",
+      "content_fingerprint": "sha256:b0fdcbb9cd0d11e0425815fa37bb5483",
       "source_type": "official",
       "upstream_status": "ok",
       "needs_review": false,
@@ -10706,40 +10721,40 @@
         "checks": {
           "scope_match": {
             "value": "pass",
-            "evidence": "技能名称为 skill-scanner，描述为扫描代理技能的安全问题（Scan agent skills for security issues），属于安全领域的漏洞检测与审计范畴。",
+            "evidence": "材料描述为扫描/审计 agent skill 的安全问题，检查 prompt injection、恶意脚本、权限、密钥暴露与供应链风险，属于安全领域。",
             "informational": false
           },
           "purpose_clarity": {
             "value": "pass",
-            "evidence": "明确用于在采用前检测提示词注入、恶意代码、过度权限、密钥泄露和供应链风险，适合评估第三方 Agent Skill 的安全性。",
+            "evidence": "明确用于在安装/采纳 agent skill 前做安全审查，给出扫描对象、风险类别、工作流和输出格式，场景具体。",
             "informational": false
           },
           "instruction_completeness": {
             "value": "pass",
-            "evidence": "提供了8个阶段的详细工作流（输入发现、静态扫描、Frontmatter验证、提示词注入分析、行为分析、脚本分析、供应链评估、权限分析）及输出格式规范。",
+            "evidence": "提供八个阶段工作流：输入发现、自动静态扫描、frontmatter 校验、注入分析、行为分析、脚本分析、供应链评估、权限分析，并附输出模板与置信度分级。",
             "informational": false
           },
           "evidence_traceability": {
-            "value": "unknown",
-            "evidence": "SKILL.md 中的描述与实际提供的8阶段扫描工作流及参考文件内容完全一致。；程序未能核实所引原文与行号。",
+            "value": "pass",
+            "evidence": "上游 description 与正文一致，均说明扫描 skill 的安全问题；正文列出对应检查项、脚本命令和参考文件。",
             "informational": false
           },
           "dependency_transparency": {
-            "value": "unknown",
-            "evidence": "材料第14行声明需要 `uv` CLI 用于 Python 包管理，但未说明其他参考文件或脚本的具体依赖版本或环境配置，不影响核心逻辑理解。",
-            "informational": true
+            "value": "pass",
+            "evidence": "明确声明需要 uv CLI，并给出安装指南链接；同时声明 allowed-tools 为 Read Grep Glob Bash，并提示脚本需从仓库根目录运行。",
+            "informational": false
           },
           "risk_review": {
             "value": "pass",
-            "evidence": "该技能本身是安全审计工具，旨在识别风险，未发现凭据外传或违规执行行为。",
+            "evidence": "所读材料为安全扫描工作流，未见凭据外传、实盘交易、临床决策或改变评估规则的注入内容；虽涉及攻击模式描述，但明确是检测/文档用途。",
             "informational": false
           }
         },
-        "verification_note": "材料提供了具体的命令行执行示例（uv run scripts/scan_skill.py <skill-directory>）及结构化 JSON 输出格式，可用于验证扫描结果。",
+        "verification_note": "材料提供 uv run scripts/scan_skill.py <skill-directory> 的自动扫描命令、JSON 输出、人工复核流程和报告模板；未提供实际扫描样例输出或验收结果。",
         "blocking_reasons": []
       },
-      "last_evaluation_id": "getsentry/skills:skills/skill-scanner/SKILL.md|sha256:53976ab5918ddb529bc345f46eb01934|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-29T10:51:31.121189+08:00"
+      "last_evaluation_id": "getsentry/skills:skills/skill-scanner/SKILL.md|sha256:b0fdcbb9cd0d11e0425815fa37bb5483|1.3.0|pool-business-v1",
+      "evaluated_at": "2026-10-01T01:38:20.294623+08:00"
     },
     {
       "skill_id": "getsentry/skills:skills/prompt-optimizer/SKILL.md",
@@ -10747,16 +10762,16 @@
       "url": "https://github.com/getsentry/skills/blob/HEAD/skills/prompt-optimizer/SKILL.md",
       "repo_url": "https://github.com/getsentry/skills",
       "author": "getsentry",
-      "summary_zh": "这是一个用于创建、优化和迭代改进 Agent 提示词的技能，适用于需要提升 LLM 指令遵循能力、跨模型迁移提示词或调试提示词效果的场景。",
+      "summary_zh": "用于创建、优化和迭代 agent、系统和开发者提示词的工程化工作流，适用于改进提示可靠性、跨模型迁移和构建提示评测。",
       "skill_type": "guideline",
       "example_requests": [
-        "优化我的系统提示词以提高代码生成的准确性",
-        "将现有的 ChatGPT 提示词适配到 Claude 模型"
+        "帮我优化一个 agent 的系统提示，让它更可靠",
+        "把一个提示词从 OpenAI 风格迁移到 Claude 风格"
       ],
       "key_features": [
-        "提供结构化的六步提示词优化工作流",
-        "支持跨模型家族（OpenAI, Claude, Gemini）的提示词迁移",
-        "强调基于评估集（evals）的迭代优化和失败分析"
+        "六步提示词优化流程",
+        "支持跨模型家族迁移",
+        "强调评测与失败归因"
       ],
       "main_category": {
         "id": "dev",
@@ -10765,19 +10780,24 @@
       "candidate_domains": [],
       "tags": [
         "prompt-engineering",
-        "agent-development",
-        "optimization"
+        "提示词优化",
+        "评测",
+        "工作流"
       ],
       "platform_declared": null,
-      "dependencies_declared": [],
-      "limitations": "严重依赖外部参考文件（references/*.md）和 SOURCES.md，若这些文件缺失，技能的核心指导能力将无法完整执行。",
-      "license": null,
-      "status": "candidate",
-      "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+      "dependencies_declared": [
+        "references/core-patterns.md",
+        "references/model-family-notes.md",
+        "references/transformed-examples.md",
+        "references/meta-optimization-loop.md",
+        "SOURCES.md"
       ],
+      "limitations": "正文引用多个 references 文件和 SOURCES.md，但材料未提供这些文件内容；未说明运行环境或模型访问依赖。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
       "first_seen": "2026-09-24T09:09:16+00:00",
-      "last_checked": "2026-09-29T10:52:05.448249+08:00",
+      "last_checked": "2026-10-01T01:36:12.385710+08:00",
       "content_changed_at": null,
       "content_fingerprint": "sha256:b5ba1525d7964004d8664fea9d502897",
       "source_type": "official",
@@ -10793,40 +10813,40 @@
         "checks": {
           "scope_match": {
             "value": "pass",
-            "evidence": "技能名称为 prompt-optimizer，描述涉及优化 agent prompts、system prompts 等。这属于 AI 开发中的提示词工程范畴。根据硬性排除标准，'NOT_STANDALONE_DIRECTION' 排除了 '仅属科研、通用数据分析或 AI 开发，未直接服务任何主分类'。虽然该技能本身是 AI 开发工具/方法，但它直接服务于构建和优化 AI Agent（编程开发/自动化）的核心组件。然而，严格来说，它主要解决的是 'AI 开发' 过程中的提示词问题。如果 'AI 开发' 被视为一个独立的未收录领域，或者必须直接服务于某个主分类（如通过优化提示词来辅助代码生成或自动化工作流），则存在争议。但通常 Prompt Engineering 被视为软件开发的一部分（Dev）。考虑到 'dev' 包含 '前后端、重构、调试、测试、代码审查'，Prompt 优化可视为一种特殊的调试/优化手段。更关键的是，材料中明确提到 'port prompts between OpenAI, Claude, or Gemini'，这是具体的开发操作。因此判定为 pass，归类为 dev。",
+            "evidence": "材料围绕创建、优化和迭代 agent/system/developer 提示词与提示词模板，属于编程开发中的提示词工程/开发辅助，不命中硬性排除项。",
             "informational": false
           },
           "purpose_clarity": {
             "value": "pass",
-            "evidence": "材料清晰说明了技能用于 'Creates, optimizes, and iteratively refines agent prompts... Use when asked to improve a prompt...'。提供了具体的步骤（Capture Contract, Inventory Context, Choose Strategy, Shape, Optimize, Return Package）和失败模式，具有明确的实用价值。",
+            "evidence": "明确说明用于改进提示词、优化系统提示、跨 OpenAI/Claude/Gemini 迁移提示、构建提示词评测等具体场景，并给出分步工作流。",
             "informational": false
           },
           "instruction_completeness": {
             "value": "pass",
-            "evidence": "提供了6个详细步骤，包括如何记录契约、列出上下文、选择模型策略、塑造提示词结构、优化迭代流程以及返回结果包的具体格式。虽然引用了外部参考文件（references/*.md），但核心逻辑框架完整，足以理解其做法。",
+            "evidence": "提供 Capture Contract、Inventory External Context、Choose Model Strategy、Shape Prompt、Optimize、Return Package 六步流程、失败模式清单和返回物结构，足以理解做法与价值；引用的参考文件未提供属于限制但不阻断理解。",
             "informational": false
           },
           "evidence_traceability": {
-            "value": "unknown",
-            "evidence": "SKILL.md 内容与其描述的功能一致，步骤与目标对应。；程序未能核实所引原文与行号。",
+            "value": "pass",
+            "evidence": "上游描述与正文一致：正文包含提示词优化、模型家族迁移、评测与迭代优化等内容。",
             "informational": false
           },
           "dependency_transparency": {
             "value": "unknown",
-            "evidence": "材料引用了多个参考文件（`references/core-patterns.md`, `references/model-family-notes.md` 等）和一个来源文件 `SOURCES.md`，但未提供这些文件的内容或说明它们是否随技能一起分发。用户无法确定这些依赖是否存在或可用。",
+            "evidence": "材料提到需要读取 references/*.md 与 SOURCES.md，但未提供这些文件内容；未声明运行环境、外部工具或模型访问要求。缺失不影响理解核心流程，但影响完整复用。",
             "informational": true
           },
           "risk_review": {
             "value": "pass",
-            "evidence": "未发现明显风险。技能专注于提示词优化，不涉及敏感数据泄露、实盘交易或临床决策。",
+            "evidence": "所读材料为提示词优化指南，未见凭据外传、实盘交易、临床决策、越权执行或排除领域内容；也未包含改变评估规则的注入内容。",
             "informational": false
           }
         },
-        "verification_note": "材料未提供具体的验证方法或验收清单，仅建议在优化后 'Validate the winner on holdout cases'。",
+        "verification_note": "材料提出通过 eval set、baseline、holdout cases 验证优化结果，但未提供具体示例数据或验收结果。",
         "blocking_reasons": []
       },
-      "last_evaluation_id": "getsentry/skills:skills/prompt-optimizer/SKILL.md|sha256:b5ba1525d7964004d8664fea9d502897|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-29T10:52:05.445240+08:00"
+      "last_evaluation_id": "getsentry/skills:skills/prompt-optimizer/SKILL.md|sha256:b5ba1525d7964004d8664fea9d502897|1.3.0|pool-business-v1",
+      "evaluated_at": "2026-10-01T01:36:12.368084+08:00"
     },
     {
       "skill_id": "getsentry/skills:skills/skill-writer/SKILL.md",
@@ -10921,16 +10941,16 @@
       "url": "https://github.com/getsentry/skills/blob/HEAD/skills/sred-project-organizer/SKILL.md",
       "repo_url": "https://github.com/getsentry/skills",
       "author": "getsentry",
-      "summary_zh": "该技能用于将过去一年的项目工作摘要按照SRED格式整理，并自动生成结构化的Notion文档集合，适用于年度绩效评估或项目归档场景。",
+      "summary_zh": "将年度项目列表及相关文档整理为加拿大 SRED 申报所需格式，并在 Notion 中生成项目说明文档。适用于需要整理研发项目证据和摘要的申报准备场景。",
       "skill_type": "guideline",
       "example_requests": [
-        "根据我的年度工作摘要，整理出符合SRED格式的项目文档。",
-        "将以下项目列表转换为SRED格式的Notion页面。"
+        "把去年的项目工作摘要整理成 SRED 可申报项目列表",
+        "为每个 SRED 项目生成 Notion 项目说明和不确定性证据"
       ],
       "key_features": [
-        "自动分类项目为SREDable与非SREDable",
-        "生成包含技术不确定性和实验结果的详细Notion文档",
-        "支持用户交互式审核与调整"
+        "按 SRED 格式分类项目",
+        "生成 Notion 项目摘要文档",
+        "整理不确定性、实验与链接"
       ],
       "main_category": {
         "id": "docs",
@@ -10938,26 +10958,26 @@
       },
       "candidate_domains": [],
       "tags": [
-        "文档整理",
-        "自动化",
+        "SRED",
+        "项目整理",
         "Notion",
-        "SRED"
+        "申报文档",
+        "工作流"
       ],
       "platform_declared": null,
       "dependencies_declared": [
         "Github",
         "Notion",
         "Linear",
-        "MCP (for Notion and Linear)"
+        "MCP",
+        "gh CLI"
       ],
-      "limitations": "依赖于上游`sred-work-summary`技能生成的特定格式工作摘要；需要用户手动提供Notion文档链接并确认访问权限。",
+      "limitations": "依赖外部 Notion、Linear、Github 访问与 MCP/gh CLI；引用的 references/SRED.md 与 references/project-template.md 未提供，无法核对具体模板细节。",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
-      ],
+      "status": "recommended",
+      "reason_codes": [],
       "first_seen": "2026-09-24T09:09:16+00:00",
-      "last_checked": "2026-09-29T10:53:23.414290+08:00",
+      "last_checked": "2026-10-01T01:40:09.120251+08:00",
       "content_changed_at": null,
       "content_fingerprint": "sha256:2174432848a32e1ca8bb7085dfcb429b",
       "source_type": "official",
@@ -10973,40 +10993,40 @@
         "checks": {
           "scope_match": {
             "value": "pass",
-            "evidence": "技能涉及文档整理、工作流自动化及工具集成（Notion, Linear, Github），属于文档办公与自动化范畴。",
+            "evidence": "材料描述的是将项目与文档整理为 SRED 提交格式的工作流，属于文档办公/工作流组织，不命中硬性排除。",
             "informational": false
           },
           "purpose_clarity": {
             "value": "pass",
-            "evidence": "明确解决将项目列表按SRED格式组织并输出为Notion文档的问题，适合年度工作总结场景。",
+            "evidence": "明确说明用途：把过去一年项目列表和相关文档整理成 SRED 格式，并输出 Notion 文档；场景具体。",
             "informational": false
           },
           "instruction_completeness": {
             "value": "pass",
-            "evidence": "提供了从获取工作摘要到生成最终文档的完整步骤流程，包含具体的检查点和模板引用。",
+            "evidence": "提供前置条件、6个主步骤、每个项目的8个子步骤、格式要求、字数限制、用户确认环节和输出位置，足以理解做法。",
             "informational": false
           },
           "evidence_traceability": {
-            "value": "unknown",
-            "evidence": "描述与提供的步骤、依赖声明及参考文件一致。；程序未能核实所引原文与行号。",
+            "value": "pass",
+            "evidence": "上游描述与实际内容一致：均围绕把项目列表与文档组织成 SRED 格式并生成 Notion 文档。",
             "informational": false
           },
           "dependency_transparency": {
-            "value": "unknown",
-            "evidence": "材料声明需要Github, Notion, Linear的访问权限，且Notion和Linear需通过MCP连接，但未说明具体MCP配置或CLI工具版本要求。关键运行条件（MCP实现细节）未完全透明，但不影响理解核心逻辑。",
-            "informational": true
+            "value": "pass",
+            "evidence": "明确声明需要访问 Github、Notion 和 Linear；Notion 和 Linear 通过 MCP 连接，Github 可用 MCP 或 gh CLI。",
+            "informational": false
           },
           "risk_review": {
             "value": "pass",
-            "evidence": "无风险行为。",
+            "evidence": "所读材料为项目整理工作流，未见凭据外传、实盘下单、临床决策或其他明显风险。",
             "informational": false
           }
         },
-        "verification_note": "材料提供了示例工作摘要链接作为验证参考。",
+        "verification_note": "材料提供了示例 Work Summary 链接，并要求用户在多个步骤中确认分类和审阅 Notion 文档；未提供自动验收清单。",
         "blocking_reasons": []
       },
-      "last_evaluation_id": "getsentry/skills:skills/sred-project-organizer/SKILL.md|sha256:2174432848a32e1ca8bb7085dfcb429b|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-29T10:53:23.410621+08:00"
+      "last_evaluation_id": "getsentry/skills:skills/sred-project-organizer/SKILL.md|sha256:2174432848a32e1ca8bb7085dfcb429b|1.3.0|pool-business-v1",
+      "evaluated_at": "2026-10-01T01:40:09.101847+08:00"
     },
     {
       "skill_id": "getsentry/skills:skills/triage-frontend-issues/SKILL.md",
@@ -11108,16 +11128,16 @@
       "url": "https://github.com/getsentry/skills/blob/HEAD/skills/typing-exclusion-worker/SKILL.md",
       "repo_url": "https://github.com/getsentry/skills",
       "author": "getsentry",
-      "summary_zh": "这是一个用于自动化修复 Python 项目类型检查问题的技能，通过批量移除 mypy 排除项、修复代码中的类型错误并运行验证测试，最终生成结构化的完成报告。",
+      "summary_zh": "用于按小批次移除 Python 项目 mypy 排除项并修复类型问题的工作流指南，适合并行清理 typing debt 或维护 pyproject 类型检查范围。",
       "skill_type": "guideline",
       "example_requests": [
-        "移除 pyproject.toml 中指定模块的 mypy 排除项并修复类型错误",
-        "对新增模块进行类型注解修复并运行预提交检查"
+        "从 pyproject 的 mypy exclusion 中移除指定模块并修复类型错误",
+        "执行一个 typing-debt 批次并生成验证总结"
       ],
       "key_features": [
-        "提供标准化的批量类型债务修复工作流",
-        "严格限制修改范围，避免跨团队影响",
-        "强制使用结构化 Markdown 模板输出结果"
+        "限定只处理分配的 mypy 排除模块",
+        "包含 mypy、pytest、pre-commit 验证流程",
+        "提供固定 Batch Summary 输出模板"
       ],
       "main_category": {
         "id": "dev",
@@ -11126,25 +11146,24 @@
       "candidate_domains": [],
       "tags": [
         "Python",
-        "Mypy",
-        "Type Checking",
-        "Refactoring",
-        "Automation"
+        "mypy",
+        "类型检查",
+        "代码质量",
+        "工作流"
       ],
       "platform_declared": null,
       "dependencies_declared": [
         "mypy",
         "pytest",
-        "pre-commit"
+        "pre-commit",
+        "pyproject.toml"
       ],
-      "limitations": "仅适用于已配置 mypy 和 pytest 的 Python 项目；依赖上游任务提示提供准确的模块列表和分支信息；未声明具体工具版本兼容性。",
+      "limitations": "未说明工具版本、项目结构要求或自定义验证命令的具体配置；依赖实际项目已有 mypy/pytest/pre-commit 环境。",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
-      ],
+      "status": "recommended",
+      "reason_codes": [],
       "first_seen": "2026-09-24T09:09:16+00:00",
-      "last_checked": "2026-09-29T10:54:16.142286+08:00",
+      "last_checked": "2026-10-01T01:40:29.383343+08:00",
       "content_changed_at": null,
       "content_fingerprint": "sha256:0ec48152ced06a0322978d2f677cfcff",
       "source_type": "official",
@@ -11160,40 +11179,40 @@
         "checks": {
           "scope_match": {
             "value": "pass",
-            "evidence": "材料明确涉及 Python 代码的 typing issues 修复、mypy 排除项移除及测试验证，属于 '编程开发' 领域中的重构、调试与代码审查范畴。",
+            "evidence": "材料描述的是针对 Python 项目中 mypy 排除项清理、类型修复与验证的工作流，属于编程开发中的代码质量/测试验证场景，未命中硬性排除项。",
             "informational": false
           },
           "purpose_clarity": {
             "value": "pass",
-            "evidence": "用途非常具体：解决 mypy 类型检查失败问题，通过批量移除排除项并修复相关代码来降低技术债务。适合在并行处理类型债务或需要清理 pyproject.toml 配置时使用。",
+            "evidence": "明确说明用于按批次移除 mypy exclusion 模块、修复类型问题、运行验证并输出结构化总结，适用于并行 typing-debt 工作。",
             "informational": false
           },
           "instruction_completeness": {
             "value": "pass",
-            "evidence": "提供了清晰的执行工作流（修改配置->运行mypy->修复->运行测试->pre-commit->最终验证），列出了输入要求、范围约束、最佳实践及输出模板，足以指导 AI 或开发者完成特定任务。",
+            "evidence": "提供输入要求、范围约束、执行步骤、类型修复最佳实践、输出模板和停止条件，足以理解其做法与价值。",
             "informational": false
           },
           "evidence_traceability": {
-            "value": "unknown",
-            "evidence": "技能描述与实际提供的步骤、规则完全一致，无夸大或矛盾。；程序未能核实所引原文与行号。",
+            "value": "pass",
+            "evidence": "上游名称与 SKILL.md 内容一致，正文围绕 typing exclusion worker 的批次执行、验证和总结展开，未见与介绍冲突的内容。",
             "informational": false
           },
           "dependency_transparency": {
             "value": "unknown",
-            "evidence": "材料提及依赖 mypy、pytest、pre-commit 等工具，但未声明具体的版本要求或运行环境（如 Python 版本）。这不影响理解核心逻辑，但属于关键运行条件未完全透明。",
+            "evidence": "材料提到 mypy、pytest、pre-commit 和 pyproject.toml，但未说明版本、运行环境或项目前置配置；这些缺口不影响理解核心工作流，但影响适用条件判断。",
             "informational": true
           },
           "risk_review": {
             "value": "pass",
-            "evidence": "材料为标准的代码维护工作流指南，无安全风险或违规内容。",
+            "evidence": "所读材料为开发工作流指南，未见凭据外传、实盘交易、临床决策、越权操作或其他明显可疑行为。",
             "informational": false
           }
         },
-        "verification_note": "材料提供了明确的验证方法：运行 mypy、pre-commit 和 pytest，并要求输出包含 pass/fail 状态的 Batch Summary。",
+        "verification_note": "材料给出验证步骤：运行 mypy、pytest、pre-commit，并在最终验证后输出 Batch Summary；未提供具体示例输出或自动化验收清单。",
         "blocking_reasons": []
       },
-      "last_evaluation_id": "getsentry/skills:skills/typing-exclusion-worker/SKILL.md|sha256:0ec48152ced06a0322978d2f677cfcff|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-29T10:54:16.139280+08:00"
+      "last_evaluation_id": "getsentry/skills:skills/typing-exclusion-worker/SKILL.md|sha256:0ec48152ced06a0322978d2f677cfcff|1.3.0|pool-business-v1",
+      "evaluated_at": "2026-10-01T01:40:29.361180+08:00"
     },
     {
       "skill_id": "better-auth/skills:better-auth/best-practices/SKILL.md",
@@ -11279,7 +11298,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "better-auth/skills:better-auth/best-practices/SKILL.md|sha256:a5337f186300d187fea2c8f7af339e09|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-29T10:54:59.550482+08:00"
+      "evaluated_at": "2026-09-29T10:54:59.550482+08:00",
+      "snooze": {
+        "snoozed_at": "2026-09-29",
+        "expires_at": "2027-02-26",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "better-auth/skills:better-auth/emailAndPassword/SKILL.md",
@@ -11370,7 +11394,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "better-auth/skills:better-auth/emailAndPassword/SKILL.md|sha256:70591495def0161b5adec5c697dd7740|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-29T10:55:24.341805+08:00"
+      "evaluated_at": "2026-09-29T10:55:24.341805+08:00",
+      "snooze": {
+        "snoozed_at": "2026-09-29",
+        "expires_at": "2027-02-26",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "better-auth/skills:better-auth/organization/SKILL.md",
@@ -11378,16 +11407,16 @@
       "url": "https://github.com/better-auth/skills/blob/HEAD/better-auth/organization/SKILL.md",
       "repo_url": "https://github.com/better-auth/skills",
       "author": "better-auth",
-      "summary_zh": "该技能提供基于 Better Auth 的多租户组织、成员管理和 RBAC 权限控制的配置指南，适用于需要实现复杂用户权限体系的 Web 应用开发。",
+      "summary_zh": "Better Auth organization 插件配置指南，用于搭建多租户组织、成员与邀请管理、角色权限、团队和 RBAC。适合需要在应用中实现组织/团队与访问控制的开发场景。",
       "skill_type": "guideline",
       "example_requests": [
-        "如何配置 Better Auth 的组织插件以支持多租户？",
-        "如何在组织中设置自定义角色和权限？"
+        "在 Better Auth 中配置多租户组织、成员邀请和角色权限",
+        "为应用启用团队功能并设置自定义角色与访问控制"
       ],
       "key_features": [
-        "支持多租户组织和团队成员管理",
-        "内置 RBAC 权限控制系统",
-        "提供生命周期钩子和 Schema 自定义能力"
+        "服务端与客户端 organization 插件配置示例",
+        "成员、邀请、团队与角色权限管理",
+        "动态访问控制、生命周期钩子和 schema 定制"
       ],
       "main_category": {
         "id": "dev",
@@ -11395,24 +11424,26 @@
       },
       "candidate_domains": [],
       "tags": [
-        "Better Auth",
-        "RBAC",
+        "认证授权",
         "多租户",
-        "权限管理"
+        "RBAC",
+        "组织管理",
+        "Better Auth"
       ],
       "platform_declared": null,
       "dependencies_declared": [
         "better-auth",
-        "better-auth/plugins"
+        "better-auth/plugins organization",
+        "better-auth/client organizationClient",
+        "数据库迁移（内置适配器或 Drizzle/Prisma）",
+        "@better-auth/organization/addons dynamicAccessControl"
       ],
-      "limitations": "仅适用于使用 Better Auth 框架的项目；具体数据库适配器和版本兼容性需参考官方文档。",
+      "limitations": "未说明具体版本、运行环境、数据库适配器要求与动态访问控制附加包的安装/来源；邮件发送示例依赖用户自行提供 sendEmail 实现。",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
-      ],
+      "status": "recommended",
+      "reason_codes": [],
       "first_seen": "2026-09-24T09:09:16+00:00",
-      "last_checked": "2026-09-29T10:56:12.856893+08:00",
+      "last_checked": "2026-10-01T01:41:50.688539+08:00",
       "content_changed_at": null,
       "content_fingerprint": "sha256:d0450769aab02fbddfddca5c17257dca",
       "source_type": "official",
@@ -11428,40 +11459,40 @@
         "checks": {
           "scope_match": {
             "value": "pass",
-            "evidence": "材料提供 Better Auth 的 organization 插件配置指南，属于编程开发中的后端/认证集成领域。",
+            "evidence": "材料描述 Better Auth organization 插件的多租户组织、成员、邀请、角色权限与团队配置，属于编程开发中的后端/认证配置开发，不命中硬性排除。",
             "informational": false
           },
           "purpose_clarity": {
             "value": "pass",
-            "evidence": "明确解决多租户组织、成员管理、RBAC 权限控制及团队设置的具体问题，适合需要构建企业级用户权限系统的开发者。",
+            "evidence": "frontmatter 明确说明用于配置多租户组织、管理成员和邀请、定义自定义角色权限、设置团队并实现 RBAC，场景具体。",
             "informational": false
           },
           "instruction_completeness": {
             "value": "pass",
-            "evidence": "包含完整的 Setup、创建组织、成员管理、邀请系统、角色权限、团队管理及安全注意事项的代码示例和配置说明。",
+            "evidence": "提供 Setup 步骤、服务端/客户端配置代码、组织创建、成员管理、邀请、角色权限、团队、动态访问控制、钩子和 schema 定制等示例，足以理解做法与价值。",
             "informational": false
           },
           "evidence_traceability": {
-            "value": "unknown",
-            "evidence": "SKILL.md 内容结构清晰，代码片段与描述一致，提供了具体的 API 调用和配置参数。；程序未能核实所引原文与行号。",
+            "value": "pass",
+            "evidence": "描述中的 organization plugin、成员/邀请管理、角色权限、团队与 RBAC 在正文均有对应配置和 API 示例，介绍与内容一致。",
             "informational": false
           },
           "dependency_transparency": {
             "value": "unknown",
-            "evidence": "依赖 Better Auth 框架及其 organization 插件，未声明具体版本兼容性或数据库适配器（如 Prisma/Drizzle）的具体要求。",
+            "evidence": "材料声明依赖 better-auth、organization/organizationClient 插件、数据库迁移命令，并提到 Drizzle/Prisma 可选；但未说明具体运行环境、版本、数据库适配器要求或 @better-auth/organization/addons 的来源，信息缺口不直接阻断理解。",
             "informational": true
           },
           "risk_review": {
             "value": "pass",
-            "evidence": "材料为技术配置指南，无安全风险或违规内容。",
+            "evidence": "所读材料为认证组织插件配置指南，未见凭据外传、恶意指令、实盘交易、临床决策或排除领域内容。",
             "informational": false
           }
         },
-        "verification_note": "材料提供了完整的代码示例和配置步骤，但未提供自动化测试或验收清单。",
+        "verification_note": "材料提供验证方法：运行迁移后检查 organization、member、invitation 表是否存在；未提供测试用例或验收清单。",
         "blocking_reasons": []
       },
-      "last_evaluation_id": "better-auth/skills:better-auth/organization/SKILL.md|sha256:d0450769aab02fbddfddca5c17257dca|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-29T10:56:12.853892+08:00"
+      "last_evaluation_id": "better-auth/skills:better-auth/organization/SKILL.md|sha256:d0450769aab02fbddfddca5c17257dca|1.3.0|pool-business-v1",
+      "evaluated_at": "2026-10-01T01:41:50.665369+08:00"
     },
     {
       "skill_id": "better-auth/skills:better-auth/twoFactor/SKILL.md",
@@ -11469,16 +11500,16 @@
       "url": "https://github.com/better-auth/skills/blob/HEAD/better-auth/twoFactor/SKILL.md",
       "repo_url": "https://github.com/better-auth/skills",
       "author": "better-auth",
-      "summary_zh": "基于 Better Auth 框架实现双因素认证（2FA）的配置指南，涵盖 TOTP、短信/邮件 OTP 及备份码的集成方法。",
+      "summary_zh": "介绍如何在 Better Auth 中配置和使用双因素认证，包括 TOTP、Email/SMS OTP、备份码、可信设备与登录验证流程。适用于需要为应用添加 MFA/2FA 登录安全的开发场景。",
       "skill_type": "guideline",
       "example_requests": [
-        "配置 Better Auth 的 TOTP 双因素认证",
-        "设置 2FA 备用恢复码"
+        "在 Better Auth 项目里给用户登录添加 TOTP 双因素认证",
+        "配置 Better Auth 的 2FA 登录重定向和备份码恢复流程"
       ],
       "key_features": [
-        "支持 TOTP 和 OTP (Email/SMS) 两种验证方式",
-        "提供备份码生成与管理功能",
-        "内置会话管理与速率限制安全机制"
+        "覆盖 TOTP、Email/SMS OTP 与备份码配置",
+        "提供 2FA 登录重定向与可信设备处理流程",
+        "说明加密存储、速率限制与会话安全选项"
       ],
       "main_category": {
         "id": "security",
@@ -11486,23 +11517,29 @@
       },
       "candidate_domains": [],
       "tags": [
-        "2FA",
-        "MFA",
+        "双因素认证",
+        "身份验证",
+        "登录安全",
         "Better Auth",
-        "身份验证"
+        "TOTP",
+        "OTP"
       ],
       "platform_declared": null,
       "dependencies_declared": [
-        "better-auth"
+        "better-auth",
+        "better-auth/plugins",
+        "better-auth/client",
+        "better-auth/client/plugins",
+        "数据库迁移（内置适配器或 Drizzle/Prisma）",
+        "react-qr-code（示例）",
+        "自定义邮件发送实现（示例）"
       ],
-      "limitations": "仅适用于使用 Better Auth 框架的项目；需自行实现邮件/SMS 发送服务。",
+      "limitations": "材料主要围绕 Better Auth 生态；邮件/短信发送实现、数据库适配器和前端二维码展示需由使用者自行补充。",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
-      ],
+      "status": "recommended",
+      "reason_codes": [],
       "first_seen": "2026-09-24T09:09:16+00:00",
-      "last_checked": "2026-09-29T10:56:26.320845+08:00",
+      "last_checked": "2026-10-01T01:42:43.642677+08:00",
       "content_changed_at": null,
       "content_fingerprint": "sha256:a9d80a07fcedb8298277356f8dcc2ea4",
       "source_type": "official",
@@ -11518,40 +11555,40 @@
         "checks": {
           "scope_match": {
             "value": "pass",
-            "evidence": "材料提供 Better Auth 的 twoFactor 插件配置指南，属于身份验证安全实现范畴，符合 '安全' 领域（漏洞检测、代码安全、审计）中的代码安全与认证实践。",
+            "evidence": "内容为 Better Auth 的 twoFactor 插件配置与登录安全实现，属于安全/身份验证开发，未命中硬性排除项。",
             "informational": false
           },
           "purpose_clarity": {
             "value": "pass",
-            "evidence": "明确说明用于配置 TOTP、OTP、备份码及处理 2FA 登录流程，解决多因素认证实施问题。",
+            "evidence": "明确说明用于在 Better Auth 中配置 TOTP、Email/SMS OTP、备份码、可信设备和 2FA 登录流程，场景具体。",
             "informational": false
           },
           "instruction_completeness": {
             "value": "pass",
-            "evidence": "包含服务端/客户端配置、启用步骤、TOTP/OTP/备份码的具体代码示例及完整配置对象，足以理解做法。",
+            "evidence": "提供了服务端/客户端插件接入、迁移验证、启用/验证/禁用 2FA、备份码与登录流程等步骤和代码示例，足以理解做法与价值。",
             "informational": false
           },
           "evidence_traceability": {
-            "value": "unknown",
-            "evidence": "介绍与内容一致，均为 Better Auth 插件的使用文档。；程序未能核实所引原文与行号。",
+            "value": "pass",
+            "evidence": "frontmatter 描述与正文一致，正文包含 Setup、TOTP、OTP、Backup Codes、Sign-In Flow、Trusted Devices、Security Considerations 等对应内容。",
             "informational": false
           },
           "dependency_transparency": {
-            "value": "unknown",
-            "evidence": "依赖 better-auth 库及特定数据库适配器（Drizzle/Prisma），未声明具体版本或运行环境限制。",
-            "informational": true
+            "value": "pass",
+            "evidence": "明确依赖 Better Auth 及其 twoFactor/twoFactorClient 插件、数据库迁移；示例还出现 react-qr-code 和自定义 sendEmail，但作为可选示例依赖可识别。",
+            "informational": false
           },
           "risk_review": {
             "value": "pass",
-            "evidence": "无风险行为，属于标准的安全功能集成指南。",
+            "evidence": "所读材料为认证安全配置指南，未见凭据外传、恶意指令或排除范围冲突。",
             "informational": false
           }
         },
-        "verification_note": "材料提供了完整的代码配置示例和 API 调用方式，用户可通过运行代码验证功能。",
+        "verification_note": "材料提供验证方法：运行迁移后检查 user 表是否出现 twoFactorSecret 列，并给出登录 2FA 重定向与验证流程示例。",
         "blocking_reasons": []
       },
-      "last_evaluation_id": "better-auth/skills:better-auth/twoFactor/SKILL.md|sha256:a9d80a07fcedb8298277356f8dcc2ea4|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-29T10:56:26.318330+08:00"
+      "last_evaluation_id": "better-auth/skills:better-auth/twoFactor/SKILL.md|sha256:a9d80a07fcedb8298277356f8dcc2ea4|1.3.0|pool-business-v1",
+      "evaluated_at": "2026-10-01T01:42:43.596533+08:00"
     },
     {
       "skill_id": "better-auth/skills:security/SKILL.md",
@@ -11559,16 +11596,16 @@
       "url": "https://github.com/better-auth/skills/blob/HEAD/security/SKILL.md",
       "repo_url": "https://github.com/better-auth/skills",
       "author": "better-auth",
-      "summary_zh": "针对 Better Auth 框架的安全配置指南，涵盖密钥管理、限流、CSRF防护等核心安全措施。",
+      "summary_zh": "Better Auth 认证安全加固指南，涵盖密钥管理、速率限制、CSRF 防护、可信来源、会话与 Cookie 安全、OAuth 令牌加密、IP 跟踪和审计日志，适用于安全部署 Better Auth 应用。",
       "skill_type": "guideline",
       "example_requests": [
-        "如何配置 Better Auth 的速率限制？",
-        "Better Auth 中如何设置安全的 Cookie？"
+        "帮我给 Better Auth 配置登录接口的速率限制",
+        "生成一份 Better Auth 生产部署安全检查清单"
       ],
       "key_features": [
-        "提供完整的安全配置代码示例",
-        "包含生产环境安全检查清单",
-        "支持自定义存储与动态信任源"
+        "提供速率限制与敏感端点自定义规则",
+        "说明 CSRF、可信来源与安全 Cookie 配置",
+        "包含 OAuth 令牌加密和审计日志示例"
       ],
       "main_category": {
         "id": "security",
@@ -11576,20 +11613,25 @@
       },
       "candidate_domains": [],
       "tags": [
-        "auth",
-        "security",
-        "best-practices"
+        "认证安全",
+        "Better Auth",
+        "速率限制",
+        "CSRF",
+        "会话安全",
+        "审计日志"
       ],
       "platform_declared": null,
-      "dependencies_declared": [],
-      "limitations": "仅适用于 Better Auth 框架",
-      "license": null,
-      "status": "candidate",
-      "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+      "dependencies_declared": [
+        "better-auth",
+        "可选 Redis/secondary-storage",
+        "可选 serverless 背景任务处理器"
       ],
+      "limitations": "未说明完整依赖版本、运行环境兼容性和验证方法；部分高级配置依赖外部存储或代理环境。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
       "first_seen": "2026-09-24T09:09:16+00:00",
-      "last_checked": "2026-09-29T10:57:07.872002+08:00",
+      "last_checked": "2026-10-01T01:44:49.632887+08:00",
       "content_changed_at": null,
       "content_fingerprint": "sha256:042f01c76b63b436c71797c8a1b84470",
       "source_type": "official",
@@ -11605,40 +11647,40 @@
         "checks": {
           "scope_match": {
             "value": "pass",
-            "evidence": "材料明确为 Better Auth 的安全配置指南，属于安全领域（漏洞检测、代码安全、审计）",
+            "evidence": "材料围绕 Better Auth 的安全配置（速率限制、CSRF、会话与 Cookie 安全、审计日志等），属于安全领域，且直接服务编程开发/安全场景，不命中硬性排除项。",
             "informational": false
           },
           "purpose_clarity": {
             "value": "pass",
-            "evidence": "旨在解决认证系统的安全加固问题，提供具体的配置选项和最佳实践",
+            "evidence": "明确说明用于加固 Better Auth 部署、防止暴力破解和安全配置，适用场景具体，有实际价值。",
             "informational": false
           },
           "instruction_completeness": {
             "value": "pass",
-            "evidence": "提供了完整的代码示例、配置参数说明及安全检查清单",
+            "evidence": "提供了多个配置项、代码示例、默认值、注意事项和部署前检查清单，足以理解其做法与价值。",
             "informational": false
           },
           "evidence_traceability": {
-            "value": "unknown",
-            "evidence": "内容与标题及描述一致，均为安全配置指导；程序未能核实所引原文与行号。",
+            "value": "pass",
+            "evidence": "上游描述与正文内容一致，正文覆盖了描述中提到的速率限制、密钥管理、CSRF、可信来源、会话安全、OAuth 令牌加密、IP 跟踪和审计日志。",
             "informational": false
           },
           "dependency_transparency": {
             "value": "unknown",
-            "evidence": "未声明具体运行环境或依赖版本，但不影响对技能内容的理解",
+            "evidence": "材料表明依赖 better-auth 库及部分运行环境特性（如 serverless 背景任务、Redis 二级存储、反向代理头），但未给出完整依赖列表或版本要求；不影响理解核心安全配置，但可能影响适用条件判断。",
             "informational": true
           },
           "risk_review": {
             "value": "pass",
-            "evidence": "无风险行为",
+            "evidence": "所读材料为安全配置指南，未见凭据外传、恶意命令、绕过安全机制或收录范围冲突等明显风险。",
             "informational": false
           }
         },
-        "verification_note": "材料提供了完整的安全检查清单（Security Checklist），可用于验证部署状态",
+        "verification_note": "材料提供配置示例、默认值说明和部署前安全检查清单，但未提供自动化测试或验收方法。",
         "blocking_reasons": []
       },
-      "last_evaluation_id": "better-auth/skills:security/SKILL.md|sha256:042f01c76b63b436c71797c8a1b84470|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-29T10:57:07.869576+08:00"
+      "last_evaluation_id": "better-auth/skills:security/SKILL.md|sha256:042f01c76b63b436c71797c8a1b84470|1.3.0|pool-business-v1",
+      "evaluated_at": "2026-10-01T01:44:49.614870+08:00"
     },
     {
       "skill_id": "gauss314/skills:skills/alpaca-trading/SKILL.md",
@@ -11646,16 +11688,16 @@
       "url": "https://github.com/gauss314/skills/blob/HEAD/skills/alpaca-trading/SKILL.md",
       "repo_url": "https://github.com/gauss314/skills",
       "author": "gauss314",
-      "summary_zh": "Alpaca 交易 API 的 Python 开发指南，涵盖账户管理、订单执行及实时数据流，适用于量化交易策略开发与自动化交易场景。",
-      "skill_type": "guideline",
+      "summary_zh": "该条目介绍如何通过 Alpaca Trading API 查询账户、管理资产与持仓、提交或取消订单，并支持期权、加密货币、Paper 与 Live 交易。因包含真实资金实盘下单核心能力，不适合作为可收录技能。",
+      "skill_type": "reference",
       "example_requests": [
-        "提交一只股票的市价买入订单",
-        "获取当前账户的所有持仓信息"
+        "查询 Alpaca 账户的购买力、现金和组合价值",
+        "通过 Alpaca API 提交 AAPL 市价买单"
       ],
       "key_features": [
-        "提供 Alpaca Python SDK (alpaca-py) 的核心代码模板",
-        "涵盖股票、加密货币及期权的交易接口",
-        "包含 Paper Trading 与 Live Trading 的配置对比"
+        "覆盖账户、资产、订单、持仓与 Watchlists",
+        "提供 Paper 与 Live 两套 Base URL",
+        "包含订单类型、TIF、错误码与速率限制说明"
       ],
       "main_category": {
         "id": "finance",
@@ -11664,22 +11706,27 @@
       "candidate_domains": [],
       "tags": [
         "Alpaca",
-        "API",
-        "Python",
-        "量化交易"
+        "交易API",
+        "订单管理",
+        "持仓查询",
+        "实盘交易"
       ],
       "platform_declared": null,
       "dependencies_declared": [
-        "alpaca-py"
+        "Alpaca API keys",
+        "alpaca-py",
+        "Python",
+        "Alpaca Trading API",
+        "WebSocket（可选，用于实时更新）"
       ],
-      "limitations": "包含实盘交易功能，存在资金风险；未声明具体 Python 版本要求。",
+      "limitations": "材料包含真实资金实盘下单能力；脚本目录 ./scripts/ 未提供内容；未说明市场数据供应商、地区准入、费用、风险披露或合规限制。",
       "license": null,
       "status": "excluded",
       "reason_codes": [
         "LIVE_TRADING"
       ],
       "first_seen": "2026-09-24T09:09:16+00:00",
-      "last_checked": "2026-09-29T10:57:33.946178+08:00",
+      "last_checked": "2026-10-01T01:45:54.500554+08:00",
       "content_changed_at": null,
       "content_fingerprint": "sha256:c2abaea1fc3864a3e6856f6f24bc60e5",
       "source_type": "community_list",
@@ -11694,41 +11741,41 @@
         "review_status": "single_pass",
         "checks": {
           "scope_match": {
-            "value": "pass",
-            "evidence": "材料明确提供 Alpaca 交易 API 的 Python SDK 使用指南，涵盖账户、订单、持仓等金融操作，属于 '金融与投资' 领域中的策略辅助与工具集成。",
+            "value": "fail",
+            "evidence": "材料明确描述为 Alpaca Trading API，包含 paper trading 与 live trading，并给出提交、取消、替换订单、平仓等实盘交易操作，命中 LIVE_TRADING 硬性排除。",
             "informational": false
           },
           "purpose_clarity": {
             "value": "pass",
-            "evidence": "旨在解决用户接入 Alpaca 交易平台进行股票、加密货币和期权交易的技术实现问题，提供具体的代码模板和操作规范，具有明确的实用价值。",
+            "evidence": "说明用途为通过 Alpaca API 进行股票、加密货币、期权交易，覆盖账户、资产、订单、持仓、市场时间、组合历史、Watchlists 与 WebSocket 更新等具体场景。",
             "informational": false
           },
           "instruction_completeness": {
             "value": "pass",
-            "evidence": "提供了完整的认证流程、核心功能（下单、查询、平仓）的代码示例、错误处理及速率限制建议，足以理解其做法与价值。",
+            "evidence": "提供认证配置、SDK 安装、订单类型、TIF、示例代码、错误处理、速率限制和脚本入口，足以理解其做法与价值；但脚本目录内容未提供，作为限制记录。",
             "informational": false
           },
           "evidence_traceability": {
             "value": "pass",
-            "evidence": "介绍与实际内容一致，均为 Alpaca API 的编程接口说明。",
+            "evidence": "上游描述与实际 SKILL.md 内容一致，均围绕 Alpaca Trading API 的订单、持仓、账户、paper/live 交易展开。",
             "informational": false
           },
           "dependency_transparency": {
-            "value": "unknown",
-            "evidence": "声明了 pip install alpaca-py 依赖，但未声明运行环境（如 Python 版本）或平台兼容性。",
-            "informational": true
+            "value": "pass",
+            "evidence": "声明需要 Alpaca API keys、Python SDK alpaca-py、paper/live Base URLs，并提示使用环境变量；未说明脚本目录内文件细节，但不影响关键运行条件判断。",
+            "informational": false
           },
           "risk_review": {
             "value": "fail",
-            "evidence": "材料包含不可分割的实盘下单核心功能（Live Trading），直接调用 `client.submit_order` 并区分 Paper/Live 环境，违反硬性排除标准 LIVE_TRADING。",
+            "evidence": "材料包含不可分割的实盘下单核心功能，且明确支持 live trading 与真实资金订单，触发 LIVE_TRADING 排除。",
             "informational": false
           }
         },
-        "verification_note": "材料提供了脚本示例（check_account.py, place_order.py）作为验证方法。",
+        "verification_note": "材料提供示例代码、脚本调用命令、错误码表和 paper/live 对比，并建议先在 paper 环境测试；未提供验收清单或实测结果。",
         "blocking_reasons": []
       },
-      "last_evaluation_id": "gauss314/skills:skills/alpaca-trading/SKILL.md|sha256:c2abaea1fc3864a3e6856f6f24bc60e5|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-29T10:57:33.943215+08:00"
+      "last_evaluation_id": "gauss314/skills:skills/alpaca-trading/SKILL.md|sha256:c2abaea1fc3864a3e6856f6f24bc60e5|1.3.0|pool-business-v1",
+      "evaluated_at": "2026-10-01T01:45:54.484607+08:00"
     },
     {
       "skill_id": "gauss314/skills:skills/bcra-macro/SKILL.md",
@@ -12191,7 +12238,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/1on1-agenda/SKILL.md|sha256:52fbc02876c27c4c7a23e728c0b3c2c7|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-29T11:35:31.600177+08:00"
+      "evaluated_at": "2026-09-29T11:35:31.600177+08:00",
+      "snooze": {
+        "snoozed_at": "2026-09-29",
+        "expires_at": "2027-02-26",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "thousandcents/futures-research:SKILL.md",
@@ -12921,7 +12973,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/agency-monthly-report/SKILL.md|sha256:b3d91568106aee55e93ef4385c57776f|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-29T11:44:37.633268+08:00"
+      "evaluated_at": "2026-09-29T11:44:37.633268+08:00",
+      "snooze": {
+        "snoozed_at": "2026-09-29",
+        "expires_at": "2027-02-26",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/agency-positioning/SKILL.md",
@@ -13013,7 +13070,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/agency-positioning/SKILL.md|sha256:53c7e774aa1ea29c7cdaa060687e1282|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-29T11:46:31.164957+08:00"
+      "evaluated_at": "2026-09-29T11:46:31.164957+08:00",
+      "snooze": {
+        "snoozed_at": "2026-09-29",
+        "expires_at": "2027-02-26",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/agent-orchestration/SKILL.md",
@@ -13189,7 +13251,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/agency-qbr-upsell/SKILL.md|sha256:e3f42948aedac4d691424dd072e38b4c|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-29T11:50:12.946951+08:00"
+      "evaluated_at": "2026-09-29T11:50:12.946951+08:00",
+      "snooze": {
+        "snoozed_at": "2026-09-29",
+        "expires_at": "2027-02-26",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/alert-tuning/SKILL.md",
@@ -42967,179 +43034,198 @@
       },
       "last_evaluation_id": "skillmedev/skills:skills/sql-query-optimizer/SKILL.md|sha256:5884812ce5a6abcb840bf73b2b1e8486|1.3.0|1.0.0",
       "evaluated_at": "2026-09-30T10:41:51.967493+08:00"
+    },
+    {
+      "skill_id": "getsentry/skills:skills/secret-serialization/SKILL.md",
+      "name": "secret-serialization",
+      "url": "https://github.com/getsentry/skills/blob/HEAD/skills/secret-serialization/SKILL.md",
+      "repo_url": "https://github.com/getsentry/skills",
+      "author": "getsentry",
+      "summary_zh": "用于代码安全审查，帮助发现因 dataclass、Pydantic、JSON.stringify 等自动生成序列化导致的密钥、令牌或密码泄露。适用于审查日志、链路、错误报告和响应中整体序列化对象的安全风险。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "检查这次改动是否把 credential 字段加到会生成 repr 的 dataclass 里",
+        "审查日志或 span 是否会把包含 token 的对象整体序列化"
+      ],
+      "key_features": [
+        "覆盖 Python 与 JavaScript 常见序列化泄露路径",
+        "提供凭据字段识别与排除机制判断表",
+        "给出调查流程、严重级别和修复建议"
+      ],
+      "main_category": {
+        "id": "security",
+        "name": "安全"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "代码安全",
+        "凭据泄露",
+        "序列化审查",
+        "日志与遥测安全"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "Read",
+        "Grep",
+        "Glob"
+      ],
+      "limitations": "未提供 references/python.md 与 references/javascript-typescript.md 的实际内容；未说明具体运行环境或代码仓库接入方式。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-30T12:30:27+00:00",
+      "last_checked": "2026-10-01T01:36:34.876895+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:fcff1bc1e5f38bdbe9dccccd21a39846",
+      "source_type": "official",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "内容围绕代码审查中防止凭据通过序列化泄露，属于安全领域中的代码安全审计，符合收录范围。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "明确说明用于发现因自动生成序列化（如 repr、asdict、model_dump、JSON.stringify）导致密钥、令牌、密码等泄露的问题，并给出适用场景与触发词。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "提供边界、凭据字段识别规则、排除机制表、调查流程、报告类别、严重级别、修复建议和结果格式，足以理解审查方法。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "pass",
+            "evidence": "材料自述为 secret serialization review，正文详细描述了 holder/sink 模型、检查步骤与报告格式，介绍与实际内容一致。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "unknown",
+            "evidence": "frontmatter 声明 allowed-tools: Read Grep Glob，但未说明运行环境、语言工具链或外部参考文件是否必须；不影响理解核心审查规则，但可能影响实际执行判断。",
+            "informational": true
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "所读材料为安全审查指南，未发现要求读取、输出或外传凭据的行为，也未见其他明显可疑内容。",
+            "informational": false
+          }
+        },
+        "verification_note": "材料提供调查流程、报告类别、严重级别和修复建议，并建议通过回归测试断言序列化结果中不含凭据；未提供可运行示例或验收清单。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "getsentry/skills:skills/secret-serialization/SKILL.md|sha256:fcff1bc1e5f38bdbe9dccccd21a39846|1.3.0|pool-business-v1",
+      "evaluated_at": "2026-10-01T01:36:34.856357+08:00"
+    },
+    {
+      "skill_id": "gauss314/skills:skills/backtesting/SKILL.md",
+      "name": "backtesting",
+      "url": "https://github.com/gauss314/skills/blob/HEAD/skills/backtesting/SKILL.md",
+      "repo_url": "https://github.com/gauss314/skills",
+      "author": "gauss314",
+      "summary_zh": "面向量化研究的 Python 回测与验证框架，提供风险绩效比率、指标、事件驱动回测、组合优化、前瞻模拟和压力测试。适合策略研究、回测评估与模型验证场景。",
+      "skill_type": "tool_script",
+      "example_requests": [
+        "用 SPY 收益数据计算 30+ 风险与绩效比率",
+        "对 SMA 交叉策略做事件驱动回测和参数扫描"
+      ],
+      "key_features": [
+        "30+ numpy 向量化风险/绩效比率",
+        "事件驱动回测引擎与多种内置策略",
+        "Johnson SU + copula 前瞻模拟与压力测试"
+      ],
+      "main_category": {
+        "id": "finance",
+        "name": "金融与投资"
+      },
+      "candidate_domains": [
+        "dev",
+        "finance"
+      ],
+      "tags": [
+        "回测",
+        "量化研究",
+        "风险指标",
+        "组合优化",
+        "模拟"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "numpy",
+        "pandas",
+        "scipy.stats",
+        "statsmodels (optional)",
+        "pytest (for full validation suite)"
+      ],
+      "limitations": "参考文档为西班牙语且未随材料提供；未明确说明数据偏差、样本外验证局限和适用市场边界；平台兼容性未声明。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-30T12:30:27+00:00",
+      "last_checked": "2026-10-01T01:48:26.427597+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:237c7a3e596909e5ca2e61e3ed474f02",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "材料描述为量化研究回测框架，包含风险/绩效比率、指标、事件驱动回测、组合优化与验证，直接属于金融与投资的研究和策略辅助范围；未见实盘下单核心功能。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "明确说明实现五阶段回测方法论，并提供比率计算、指标、回测引擎、前瞻模拟、walk-forward、压力测试与基本面分析等具体能力，适合量化研究与策略回测场景。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "提供文件地图、CLI 命令示例、库调用示例、依赖表和验证命令，足以理解主要用法与价值；参考文档未提供不构成核心理解障碍。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "pass",
+            "evidence": "上游描述中的30+比率、10类指标、事件驱动引擎、Johnson SU+copula 前瞻模拟、walk-forward、压力测试、基本面分析均与正文功能列表、文件地图和命令示例一致。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "pass",
+            "evidence": "明确列出必需依赖 numpy、pandas、scipy.stats，可选 statsmodels，并说明完整验证需 pytest；未声明平台但不影响判断适用条件。",
+            "informational": false
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "所读材料为回测与模拟工具说明，未见凭据外传、实盘下单、临床决策或诱导性风险内容；未发现需要排除的可疑行为。",
+            "informational": false
+          }
+        },
+        "verification_note": "材料提供 Quick Start CLI 示例、库调用示例、4 级验证套件命令（py scripts/validate.py）和 18 个 pytest 测试说明；未实际运行验证。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "gauss314/skills:skills/backtesting/SKILL.md|sha256:237c7a3e596909e5ca2e61e3ed474f02|1.3.0|pool-business-v1",
+      "evaluated_at": "2026-10-01T01:48:26.411281+08:00"
     }
   ],
   "overrides": {
     "overrides_version": "1.0.0",
-    "keyword_exclusions": [
-      "expo"
-    ],
-    "source": "docs/运行说明.md §9",
-    "note": "人工干预名单（overrides）：由用户手工维护。manual_picks 长期保留在收藏区；manual_exclusions 为人工排除黑名单，流水线扫描到直接跳过（0 模型调用）。",
-    "manual_picks": [
-      {
-        "skill_id": "anthropics/skills:skills/canvas-design/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-24",
-        "from": "candidate"
-      },
-      {
-        "skill_id": "anthropics/skills:skills/skill-creator/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-24",
-        "from": "candidate"
-      },
-      {
-        "skill_id": "anthropics/skills:skills/theme-factory/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-22",
-        "from": "recommended"
-      },
-      {
-        "skill_id": "anthropics/skills:skills/webapp-testing/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-26",
-        "from": "candidate"
-      },
-      {
-        "skill_id": "vercel-labs/skills:skills/find-skills/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-26",
-        "from": "candidate"
-      },
-      {
-        "skill_id": "trailofbits/skills:plugins/goal-prompt/skills/goal-prompt/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-26",
-        "from": "recommended"
-      },
-      {
-        "skill_id": "trailofbits/skills:plugins/trailmark/skills/diagramming-code/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-26",
-        "from": "recommended"
-      },
-      {
-        "skill_id": "trailofbits/skills:plugins/trailmark/skills/graph-evolution/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-26",
-        "from": "recommended"
-      },
-      {
-        "skill_id": "google-labs-code/stitch-skills:plugins/stitch-build/skills/react-components/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-26",
-        "from": "candidate"
-      },
-      {
-        "skill_id": "getsentry/skills:skills/commit/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-26",
-        "from": "candidate"
-      },
-      {
-        "skill_id": "anthropics/skills:skills/discernment-nudge/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-24",
-        "from": "candidate"
-      },
-      {
-        "skill_id": "vercel-labs/agent-skills:skills/writing-guidelines/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-22",
-        "from": "recommended"
-      },
-      {
-        "skill_id": "anthropics/skills:skills/doc-coauthoring/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-24",
-        "from": "recommended"
-      },
-      {
-        "skill_id": "anthropics/skills:skills/internal-comms/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-24",
-        "from": "candidate"
-      },
-      {
-        "skill_id": "anthropics/skills:skills/pptx/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-22",
-        "from": "recommended"
-      },
-      {
-        "skill_id": "anthropics/skills:skills/frontend-design/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-24",
-        "from": "recommended"
-      },
-      {
-        "skill_id": "vercel-labs/agent-skills:skills/react-best-practices/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-22",
-        "from": "recommended"
-      },
-      {
-        "skill_id": "anthropics/skills:skills/docx/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-22",
-        "from": "recommended"
-      },
-      {
-        "skill_id": "anthropics/skills:skills/xlsx/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-22",
-        "from": "recommended"
-      },
-      {
-        "skill_id": "anthropics/skills:skills/pdf/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-24",
-        "from": "candidate"
-      },
-      {
-        "skill_id": "getsentry/skills:skills/code-simplifier/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-26",
-        "from": "candidate"
-      },
-      {
-        "skill_id": "getsentry/skills:skills/agents-md/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-26",
-        "from": "candidate"
-      },
-      {
-        "skill_id": "gauss314/skills:skills/alpaca-data/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-27",
-        "from": "candidate"
-      },
-      {
-        "skill_id": "gauss314/skills:skills/alpha-vantage/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-27",
-        "from": "candidate"
-      },
-      {
-        "skill_id": "gauss314/skills:skills/data912/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-29",
-        "from": "recommended"
-      },
-      {
-        "skill_id": "gauss314/skills:skills/sec-data/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-29",
-        "from": "recommended"
-      },
-      {
-        "skill_id": "thousandcents/futures-research:SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-29",
-        "from": "recommended"
-      }
-    ],
+    "source": "docs/运行说明.md §9.2",
+    "note": "人工屏蔽黑名单（overrides）：由用户手工维护。manual_exclusions 为人工排除黑名单，流水线扫描到直接跳过（0 模型调用）。",
     "manual_exclusions": [
       {
         "skill_id": "anthropics/skills:skills/algorithmic-art/SKILL.md",
@@ -44345,5 +44431,174 @@
     ],
     "source": "docs/产品规范.md#13-已收录名单契约",
     "note": "已收录 Skill 项目级名单：标记为已收录的 Skill 不再出现在推荐、候选、收藏及定向查找结果中，也不再进行自动评估（0 Token 消耗）。"
+  },
+  "favorites": {
+    "favorites_version": "1.0.0",
+    "source": "docs/运行说明.md §9.1",
+    "note": "人工收藏名单（favorites）：由用户手工维护。manual_picks 长期保留在收藏区（0 模型调用保护）。",
+    "manual_picks": [
+      {
+        "skill_id": "anthropics/skills:skills/canvas-design/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-24",
+        "from": "candidate"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/skill-creator/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-24",
+        "from": "candidate"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/theme-factory/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-22",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/webapp-testing/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-26",
+        "from": "candidate"
+      },
+      {
+        "skill_id": "vercel-labs/skills:skills/find-skills/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-26",
+        "from": "candidate"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/goal-prompt/skills/goal-prompt/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-26",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/trailmark/skills/diagramming-code/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-26",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/trailmark/skills/graph-evolution/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-26",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "google-labs-code/stitch-skills:plugins/stitch-build/skills/react-components/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-26",
+        "from": "candidate"
+      },
+      {
+        "skill_id": "getsentry/skills:skills/commit/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-26",
+        "from": "candidate"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/discernment-nudge/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-24",
+        "from": "candidate"
+      },
+      {
+        "skill_id": "vercel-labs/agent-skills:skills/writing-guidelines/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-22",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/doc-coauthoring/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-24",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/internal-comms/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-24",
+        "from": "candidate"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/pptx/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-22",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/frontend-design/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-24",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "vercel-labs/agent-skills:skills/react-best-practices/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-22",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/docx/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-22",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/xlsx/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-22",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "anthropics/skills:skills/pdf/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-24",
+        "from": "candidate"
+      },
+      {
+        "skill_id": "getsentry/skills:skills/code-simplifier/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-26",
+        "from": "candidate"
+      },
+      {
+        "skill_id": "getsentry/skills:skills/agents-md/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-26",
+        "from": "candidate"
+      },
+      {
+        "skill_id": "gauss314/skills:skills/alpaca-data/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-27",
+        "from": "candidate"
+      },
+      {
+        "skill_id": "gauss314/skills:skills/alpha-vantage/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-27",
+        "from": "candidate"
+      },
+      {
+        "skill_id": "gauss314/skills:skills/data912/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-29",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "gauss314/skills:skills/sec-data/SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-29",
+        "from": "recommended"
+      },
+      {
+        "skill_id": "thousandcents/futures-research:SKILL.md",
+        "reason": "用户收藏",
+        "added_at": "2026-09-29",
+        "from": "recommended"
+      }
+    ]
   }
 }
