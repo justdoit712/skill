@@ -1,11 +1,11 @@
 {
   "catalog_version": "1.0.0",
   "rules_version": "1.3.0",
-  "generated_at": "2026-09-29T19:33:45.888790+08:00",
+  "generated_at": "2026-09-30T08:44:44.959376+08:00",
   "counts": {
     "excluded": 79,
-    "candidate": 128,
-    "recommended": 196,
+    "candidate": 135,
+    "recommended": 220,
     "pending": 2
   },
   "entries": [
@@ -32667,6 +32667,2745 @@
       },
       "last_evaluation_id": "skillmedev/skills:skills/okr-builder/SKILL.md|sha256:6b9d2b4644b6ff5006f96666fab577e7|1.3.0|1.0.0",
       "evaluated_at": "2026-09-29T19:33:45.885791+08:00"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/oncall-handoff/SKILL.md",
+      "name": "oncall-handoff",
+      "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/oncall-handoff/SKILL.md",
+      "repo_url": "https://github.com/skillmedev/skills",
+      "author": "skillmedev",
+      "summary_zh": "生成结构化 on-call 值班交接笔记，涵盖值班摘要、未决事件、观察项（含数值分页阈值）、静默告警、近24小时变更与升级联系人，并附完成度检查清单和填写模板；适用于值班换班前向下一班工程师交接。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "帮我写今晚的 on-call 交接记录，覆盖未解决事件和静默告警",
+        "我的值班还有一小时结束，帮我准备交接说明"
+      ],
+      "key_features": [
+        "七段固定顺序的交接笔记结构",
+        "观察项必须附数值分页阈值与仪表盘链接",
+        "发送前完成度检查清单与填写模板示例"
+      ],
+      "main_category": {
+        "id": "cloud",
+        "name": "云服务与运维"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "值班交接",
+        "事件响应",
+        "运维文档",
+        "检查清单"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "limitations": "需用户自行从监控/告警/工单系统拉取数据（技能本身不集成工具）；未声明适用平台与工具链；模板占位符需人工填写。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-29T19:36:09.920466+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:e1861255f5a43d1e5e47b7338f07120c",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "属于运维/事件响应领域的值班交接技能，直接服务「云服务与运维」主分类；未命中任何硬性排除项，且为独立技能而非仓库或合集。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "明确解决值班交接信息遗漏的具体问题（如无过期时间的静默告警、未交接的半成品变更），给出典型触发场景（'write my on-call handoff'等），并提供七段固定结构、检查清单等实质方法，价值具体可判断。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "含四步操作流程（收集素材→按固定顺序撰写→完成度检查→交付）、七段结构各附示例与填写要求、发送前检查清单、填写模板、Do NOT 禁忌与质量标准，足以理解其做法与价值。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "pass",
+            "evidence": "描述声称的七类交接内容与完成度检查清单在正文中逐一兑现：Step 2 的七段结构、Step 3 检查清单、Worked artifact 填写模板均存在且与介绍一致。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "unknown",
+            "evidence": "材料未声明特殊工具、运行环境或依赖；本技能为纯文本指南/模板形态，未见影响价值判断的关键运行条件缺口。此判定不代表无依赖或全平台兼容——实际使用需用户自备监控/告警/工单系统的数据。",
+            "informational": true
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "所读材料为纯文档型运维指南，未见凭据外传、命令执行、实盘交易、临床决策等可疑行为，也无试图改变评估规则或要求读取/输出密钥的内容。",
+            "informational": false
+          }
+        },
+        "verification_note": "材料提供填写完整的交接模板示例（Worked artifact）与发送前完成度检查清单作为自检方法；未提供外部验证或实测说明。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "skillmedev/skills:skills/oncall-handoff/SKILL.md|sha256:e1861255f5a43d1e5e47b7338f07120c|1.3.0|1.0.0",
+      "evaluated_at": "2026-09-29T19:36:09.918052+08:00"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/onboarding-plan-builder/SKILL.md",
+      "name": "onboarding-plan-builder",
+      "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/onboarding-plan-builder/SKILL.md",
+      "repo_url": "https://github.com/skillmedev/skills",
+      "author": "skillmedev",
+      "summary_zh": "为特定岗位生成30/60/90天入职计划文档，包含Learn/Contribute/Own三阶段里程碑、可观察成功标准、具体首周安排与三次ramp评审议程；适用于新员工接受offer或确定入职日期后起草、改进岗位入职计划。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "新员工下月入职，帮我为这个岗位写一份30/60/90天入职计划",
+        "帮我改进这份岗位ramp计划，让每个里程碑有可观察的成功标准"
+      ],
+      "key_features": [
+        "按认知负荷划分Learn/Contribute/Own三阶段并按依赖排序里程碑",
+        "每个里程碑配可观察成功标准，拒绝以感受描述进度",
+        "首周安排具体到访问权限、伙伴、会议、文档与首个小胜利任务"
+      ],
+      "main_category": {
+        "id": "docs",
+        "name": "文档办公"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "入职计划",
+        "30/60/90天计划",
+        "新员工培养",
+        "文档起草"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "limitations": "需用户提供岗位实际产出、级别、团队与入职日期等输入，缺失时需先询问或从职位描述推导；不设计1:1会议议程（材料指向另一技能1on1-agenda）；仅为提示词/工作流规范，不含模板文件或自动化脚本。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-29T19:36:20.733559+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:61b1c68e4a1f67aac8027284ba6a4ac1",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "技能核心是起草结构化的岗位入职计划文档（交付物明确为'onboarding plan document'），属文档办公范畴的文档起草/规划类任务；未命中任何硬性排除项，也非科研/通用数据分析/AI开发方向。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "description 明确说明解决的具体问题（把'上手'变成有里程碑与可观察成功标准的30/60/90天计划）、触发场景（新员工接受offer或确定入职日期/被要求写或改进ramp计划）与边界（不用于1:1议程）；正文提供完整方法论，实质价值明确。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "提供8步工作流（采集岗位输入、三阶段划分、里程碑设计、首周安排、成功标准、三次评审、关系与规范、级别校准）、质量标准、交付物结构与禁止事项，足以理解其做法与产出形态。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "pass",
+            "evidence": "frontmatter 描述的分阶段里程碑、首周安排、可观察成功标准与ramp评审，与正文工作流及交付物定义逐项对应，介绍与内容一致。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "pass",
+            "evidence": "内容为纯文本工作流指南，未引用任何外部工具、脚本、API或特殊运行环境，工作流仅依赖对话中提供的岗位信息；对1on1-agenda的引用仅为职责边界而非硬依赖。此判定不等于宣称全平台兼容。",
+            "informational": false
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "全文为入职计划编写规范，无提示注入、凭据外传、命令执行或其他可疑指令；并明确'计划辅助管理者判断，绝不作为雇佣门槛'的伦理边界。",
+            "informational": false
+          }
+        },
+        "verification_note": "材料未提供示例输出或验收测试；仅 Quality bar 一节给出可自检的质量标准（每里程碑须有可观察成功标准、阶段按依赖排序、首周具体无占位符等），可作产出核对清单。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "skillmedev/skills:skills/onboarding-plan-builder/SKILL.md|sha256:61b1c68e4a1f67aac8027284ba6a4ac1|1.3.0|1.0.0",
+      "evaluated_at": "2026-09-29T19:36:20.731551+08:00"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/op-ed-writer/SKILL.md",
+      "name": "op-ed-writer",
+      "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/op-ed-writer/SKILL.md",
+      "repo_url": "https://github.com/skillmedev/skills",
+      "author": "skillmedev",
+      "summary_zh": "指导撰写600-800词评论文章的写作技能，围绕单一可争议论点、新闻由头、证据支撑论证与诚实回应反驳组织全文，适合就时事公开发声或向报刊投稿的场景。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "帮我写一篇关于这个议题的评论文章",
+        "我的观点文章显得立场模糊，帮我改得更有说服力"
+      ],
+      "key_features": [
+        "单一可争议论点加新闻由头的结构化写作流程",
+        "要求证据支撑论证并诚实回应最强反驳",
+        "输出时标记需核实的事实性声明"
+      ],
+      "main_category": {
+        "id": "content",
+        "name": "内容创作"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "评论写作",
+        "观点文章",
+        "写作指南",
+        "新闻评论"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "limitations": "未提供成品示例或验收标准；事实性声明仅标记待核实而不自行验证；未声明适用平台与依赖。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-29T19:37:31.309362+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:8e8533b5a879e54b9221b89eea6159de",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "评论文章（op-ed）写作属于内容创作领域（文章类）；未命中任何硬性排除项，也非仅属 not_standalone_directions。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "明确解决'写出有说服力的评论文章'这一具体问题，给出适用场景（写op-ed、向报刊投稿、修改立场模糊的文章）与不适用边界（学术论证、政策简报），正文含结构、流程、写作规则等实质内容。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "提供完整写作方法：四要素、三步流程、五段式结构、七条写作规则、声音与可信度建议、反模式与输出要求，足以理解其做法与价值；未提供成品示例属一般文档缺口，不构成失败。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "pass",
+            "evidence": "frontmatter 描述（600-800词、单一可争议论点、新闻由头、证据支撑段落、诚实回应反驳、行动号召收尾、标记待核实声明）与正文结构、写作规则和输出要求逐项对应，介绍与内容一致。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "unknown",
+            "evidence": "材料未声明任何特殊工具、运行环境或依赖；作为纯文本写作指南未见明显外部依赖需求，但未声明不等于无依赖或全平台兼容。",
+            "informational": true
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "所读材料为写作指南，无凭据外传、命令执行或试图改变评估规则的内容；且要求标记需核实的事实性声明，属负责任做法。",
+            "informational": false
+          }
+        },
+        "verification_note": "材料未提供成品示例或验收方法；仅在输出要求中说明会标记需核实或需真实来源的事实性声明。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "skillmedev/skills:skills/op-ed-writer/SKILL.md|sha256:8e8533b5a879e54b9221b89eea6159de|1.3.0|1.0.0",
+      "evaluated_at": "2026-09-29T19:37:31.308360+08:00"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/one-pager-designer/SKILL.md",
+      "name": "one-pager-designer",
+      "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/one-pager-designer/SKILL.md",
+      "repo_url": "https://github.com/skillmedev/skills",
+      "author": "skillmedev",
+      "summary_zh": "将问题、证据、影响与具体请求压缩为一页、三分钟内可读完的决策简报写作技能，适合为忙碌决策者准备可独立转发的单页文件（如领导层简报、决策提案）。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "把这份材料整理成一页决策简报，给领导三分钟内看完并拍板",
+        "帮我写一份一页纸的项目提案，包含问题、证据、影响和具体的审批请求"
+      ],
+      "key_features": [
+        "先写请求后写标题的七步写作流程",
+        "六段式一页结构：标题/问题/建议/证据/影响/请求",
+        "附可复制填空骨架与质量验收标准"
+      ],
+      "main_category": {
+        "id": "docs",
+        "name": "文档办公"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "一页纸简报",
+        "决策文档",
+        "商务写作",
+        "写作模板"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "limitations": "纯文本写作指南，无自动化工具或代码；事实与数据需使用者自行提供；引用同仓库其他技能用于分流，但本材料未包含其内容；未声明平台与依赖信息。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-29T19:37:49.348816+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:b18f93df71198242c07c107285eff3b6",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "属于文档写作类技能：产出面向决策者的单页简报文档，落入文档办公（Word/PDF 等文档产出）收录范围；未命中任何硬性排除项，也非仅属科研/通用数据分析方向。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "明确解决'一页简报中请求模糊、读者读完仍无法决策'的具体问题，给出触发场景（如'turn this into a one-pager'、'write a brief for leadership'）与不适用边界，并提供完整写作方法与模板，有实际价值。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "包含输入收集清单（第12-18行）、七步操作流程（第20-32行）、可复制填空骨架（第34-61行）、格式规则（第63-68行）、交付物定义、禁止事项与质量验收标准（第83-85行），足以理解其做法与价值。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "pass",
+            "evidence": "frontmatter 描述（写一页决策简报：问题、证据、影响、具体请求，三分钟可读、可独立转发）与正文的交付物定义、操作流程和骨架模板逐项一致，无夸大。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "unknown",
+            "evidence": "材料未声明任何特殊工具、运行环境或依赖；本技能为纯文本写作指南，无关键运行条件缺口。未声明依赖不等于无依赖或全平台兼容。",
+            "informational": true
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "所读材料为写作方法指南，未见可疑行为、凭据外传、实盘交易或临床决策功能，也未发现试图改变评估规则的指令。",
+            "informational": false
+          }
+        },
+        "verification_note": "材料提供质量验收标准（第83-85行：陌生人可独立据此行动、请求含决策与日期、问题含可验证事实、三分钟读完等）及骨架中的填充示例，可作为产出自检依据；未提供实际成品样例或外部验证方法。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "skillmedev/skills:skills/one-pager-designer/SKILL.md|sha256:b18f93df71198242c07c107285eff3b6|1.3.0|1.0.0",
+      "evaluated_at": "2026-09-29T19:37:49.345302+08:00"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/pagination-and-sync-engineer/SKILL.md",
+      "name": "pagination-and-sync-engineer",
+      "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/pagination-and-sync-engineer/SKILL.md",
+      "repo_url": "https://github.com/skillmedev/skills",
+      "author": "skillmedev",
+      "summary_zh": "该技能指导如何为可变数据集设计正确的游标分页和增量同步，包括排序键、游标契约、updated_at 水位线、删除传播、检查点和幂等重放。适用于解决同步跳行、重复、断点恢复和 API 列表分页设计等后端场景。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "我的同步任务在数据变化时会跳过行，帮我设计增量同步方案",
+        "为这个列表接口设计 cursor pagination 契约"
+      ],
+      "key_features": [
+        "给出 cursor 优于 offset 的决策规则",
+        "规定 >= 水位线、安全余量与 id 去重",
+        "提供检查点、幂等重放与删除传播策略"
+      ],
+      "main_category": {
+        "id": "dev",
+        "name": "编程开发"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "分页设计",
+        "增量同步",
+        "API 集成",
+        "数据一致性",
+        "断点续传"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "limitations": "未声明具体运行环境或工具依赖；主要面向服务端到服务端单向同步，不覆盖移动端离线双向同步或 typed API client 生成。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-29T19:43:25.770744+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:ab885180cbb7598aabeefcafc1a58aa6",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "内容围绕 API 分页与增量同步设计，属于后端/数据同步的工程实践，匹配编程开发范围，未命中硬性排除。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "明确解决可变数据集分页/同步中的跳行、重复、删除传播、断点续传等问题，并列出典型触发场景。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "提供六步操作流程、决策规则、游标契约、水位线规则、检查点与幂等策略，并附示例契约和同步循环骨架，足以理解做法与价值。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "pass",
+            "evidence": "上游描述与实际内容一致：均聚焦 cursor pagination、updated_at watermark、delete propagation、checkpointing、idempotent reprocessing，且明确排除 typed API client 与 mobile offline sync。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "unknown",
+            "evidence": "未声明运行环境、工具或外部依赖；仅提到可与其他技能配合，但未说明必需依赖。未声明不等于无依赖。",
+            "informational": true
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "所读材料为工程方法说明，未见凭据外传、恶意命令、实盘交易、临床决策或排除领域内容。",
+            "informational": false
+          }
+        },
+        "verification_note": "材料提供 Quality bar 作为验收标准，如中断重跑后状态一致、删除可传播、水位线使用 >= 并带去重与安全余量；未提供可执行测试或验证脚本。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "skillmedev/skills:skills/pagination-and-sync-engineer/SKILL.md|sha256:ab885180cbb7598aabeefcafc1a58aa6|1.3.0|1.0.0",
+      "evaluated_at": "2026-09-29T19:43:25.768956+08:00"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/paid-acquisition-audit/SKILL.md",
+      "name": "paid-acquisition-audit",
+      "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/paid-acquisition-audit/SKILL.md",
+      "repo_url": "https://github.com/skillmedev/skills",
+      "author": "skillmedev",
+      "summary_zh": "用于审计付费获客投放的操作指南，通过毛利率计算盈亏平衡ROAS，识别浪费支出、创意疲劳和渠道饱和，并输出带月度美元影响的优先行动清单。适合广告预算复盘、判断是否扩量或ROAS下降排查。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "帮我审计过去90天广告投放，找出低于盈亏平衡ROAS的活动",
+        "这个Meta广告是否已经创意疲劳，还能不能加预算扩量"
+      ],
+      "key_features": [
+        "按毛利率计算盈亏平衡与目标ROAS",
+        "识别品牌词、宽匹配、低CTR等浪费模式",
+        "输出带美元影响的三桶行动清单"
+      ],
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "candidate_domains": [
+        "security"
+      ],
+      "tags": [
+        "付费获客",
+        "广告审计",
+        "ROAS分析",
+        "预算优化",
+        "营销分析"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "90天广告投放数据",
+        "花费、展示、点击、转化和收入明细",
+        "Google搜索词报告",
+        "Meta/展示广告的位置与频次报告",
+        "每日预算与展示份额损失数据",
+        "产品毛利率或可标注为猜测的默认毛利率"
+      ],
+      "limitations": "未声明所需广告平台或数据处理工具；依赖用户准备完整投放数据；默认毛利率假设需标注为猜测，可能影响盈亏平衡判断。",
+      "license": null,
+      "status": "candidate",
+      "reason_codes": [
+        "INSUFFICIENT_EVIDENCE"
+      ],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-29T19:44:51.345739+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:8dcd4a1d9ae9667771df780d844c6f57",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "材料描述的是付费获客投放审计工作流，属于营销/增长分析类操作指南；未命中硬性排除项，也未显示仅属科研/通用数据分析而不服务主分类。最接近的主分类为产品与设计中的需求分析/策略评估，或自动化中的工作流，但按给定主分类可选范围应归入产品与设计。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "明确说明用于审计付费获客渠道中的浪费支出与可扩量空间，适用场景包括“广告预算浪费在哪里”“是否应扩量”“ROAS为何下降”“预算复盘或增加投放前”。有具体输出：按美元影响排序的行动清单。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "提供6步操作流程、输入清单、盈亏平衡ROAS计算、浪费模式检查、创意疲劳与饱和度判断、扩量门槛、交付物格式和检查清单，足以理解做法与价值。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "unknown",
+            "evidence": "上游描述中的核心能力在正文中有对应步骤：计算break-even ROAS、标记创意疲劳与饱和、生成带美元影响的排序行动清单。；程序未能核实所引原文与行号。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "unknown",
+            "evidence": "材料要求90天投放数据、搜索词报告、展示/频次报告、预算与展示份额数据等，但未说明需要哪些广告平台、表格工具或数据导出环境。缺口不影响理解核心方法，但影响用户判断数据准备成本。",
+            "informational": true
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "所读材料为营销审计操作指南，未见凭据外传、实盘下单、临床决策、DSH插件或规避规则等可疑内容；也未包含改变评估规则的指令。",
+            "informational": false
+          }
+        },
+        "verification_note": "材料提供检查清单、阈值、示例计算和质量门槛，例如用$9,000/月、1.4 ROAS、1.67盈亏平衡线的Meta投放示例说明影响金额；未提供自动化验证或真实数据验收。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "skillmedev/skills:skills/paid-acquisition-audit/SKILL.md|sha256:8dcd4a1d9ae9667771df780d844c6f57|1.3.0|1.0.0",
+      "evaluated_at": "2026-09-29T19:44:51.342218+08:00"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/pandas-expert/SKILL.md",
+      "name": "pandas-expert",
+      "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/pandas-expert/SKILL.md",
+      "repo_url": "https://github.com/skillmedev/skills",
+      "author": "skillmedev",
+      "summary_zh": "面向 pandas 表格数据清洗、连接、重塑和聚合的操作规范，强调 dtype 修复、缺失值处理、join 验证和输出对账。适合修复 merge 重复、groupby 异常和慢速 apply 等数据转换问题。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "为什么我的 pandas merge 后行数变多了？",
+        "如何用 pandas 清洗 CSV 并安全做 groupby 汇总？"
+      ],
+      "key_features": [
+        "要求 join 使用 validate 并断言行数",
+        "类型强转后统计并报告失败数量",
+        "提供向量化性能规则与质量验收标准"
+      ],
+      "main_category": {
+        "id": "dev",
+        "name": "编程开发"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "pandas",
+        "数据清洗",
+        "数据转换",
+        "DataFrame",
+        "代码规范"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "pandas",
+        "numpy",
+        "pyarrow（可选，材料提及 pyarrow-backed dtypes）"
+      ],
+      "limitations": "未声明依赖版本与运行环境；明确不适用于首次探索性分析、超大规模单机外数据或直接 SQL 业务问答。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-29T19:45:31.699035+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:d7c8b3cd0593ff8f99862abab379e903",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "内容为 pandas 表格数据清洗、连接、重塑与聚合的操作规范，直接服务编程开发中的数据处理任务，不属于硬性排除项。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "明确解决 merge 重复行、CSV 清洗、groupby 结果异常、apply 过慢等具体问题，并说明适用场景与不适用场景。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "提供按顺序执行的七步流程、性能规则、禁用事项、质量标准和完整示例，足以理解其做法与价值。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "pass",
+            "evidence": "上游描述与实际内容一致：描述中的向量化 pandas、验证 join、dtype 与缺失值处理均在正文有具体规则和示例。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "unknown",
+            "evidence": "材料示例使用 pandas，并提及 numpy、pyarrow-backed dtypes、spark-jobs 作为大数据替代，但未声明版本、运行环境或必装依赖；缺口不影响理解核心规范。",
+            "informational": true
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "所读材料为数据处理规范与示例，未见凭据外传、实盘交易、临床决策、插件容器或越权指令等明显风险。",
+            "informational": false
+          }
+        },
+        "verification_note": "提供 worked example、预期输出、join 验证、行数断言和聚合对账等验证方法。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "skillmedev/skills:skills/pandas-expert/SKILL.md|sha256:d7c8b3cd0593ff8f99862abab379e903|1.3.0|1.0.0",
+      "evaluated_at": "2026-09-29T19:45:31.695019+08:00"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/partition-planner/SKILL.md",
+      "name": "partition-planner",
+      "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/partition-planner/SKILL.md",
+      "repo_url": "https://github.com/skillmedev/skills",
+      "author": "skillmedev",
+      "summary_zh": "为超大数据库表生成分区或分片规划，判断是否应分区，并给出 range/list/hash 策略、分区键、约束、自动化创建、保留删除和迁移方案。适用于表达到数千万行或数百 GB、vacuum 耗时长或大批量删除痛点的数据库运维场景。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "一张表已有数千万行且 autovacuum 很慢，帮我判断是否应该分区并给出分区方案",
+        "在 range、list、hash 分区之间如何选择，并给出分区键和保留删除策略"
+      ],
+      "key_features": [
+        "先按行数、磁盘大小和索引情况判断是否值得分区",
+        "依据热查询 WHERE、保留策略和写入分布选择分区键",
+        "输出包含策略、约束、自动化、保留和迁移的分区计划"
+      ],
+      "main_category": {
+        "id": "cloud",
+        "name": "云服务与运维"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "数据库分区",
+        "分片规划",
+        "PostgreSQL",
+        "运维优化",
+        "数据保留"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "limitations": "未明确声明适用数据库版本、必需工具或运行环境；提及 pg_partman、Citus、Vitess 等但未说明是否为必要依赖。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-29T19:47:33.238674+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:61288e8eefc12a5849a2a79a61e8d272",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "内容围绕超大数据库表的分区/分片规划、分区键选择、约束与运维要求，属于数据库运维/基础设施优化，匹配云服务与运维范围；未命中硬性排除。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "明确说明用于表过大、vacuum/autovacuum 耗时长、保留删除困难等场景，并给出是否分区、选择 range/list/hash 或分片的决策价值。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "提供 7 步工作流、策略选择规则、分区键约束、自动化创建、分区数量与大小建议、交付物和质量标准，足以理解做法与价值。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "pass",
+            "evidence": "名称与描述中‘超大表分区/分片计划、策略选择、分区键、约束、是否分区结论’与正文工作流、交付物、质量栏一致。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "unknown",
+            "evidence": "材料提到 Postgres declarative partitioning、pg_partman、Citus、Vitess 等作为相关技术或示例，但未明确声明运行环境、必需依赖或版本要求；不影响理解核心方法论，但用户需自行确认适用数据库与工具。",
+            "informational": true
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "所读材料为数据库分区规划指南，未见凭据外传、实盘交易、临床决策、恶意命令或越权操作等风险；材料中的不可信内容未要求改变评估规则。",
+            "informational": false
+          }
+        },
+        "verification_note": "材料提供质量标准与 Do NOT 清单，如要求基于实际行数和磁盘大小、分区键出现在热查询 WHERE 子句、允许给出‘不分区’结论；未提供可执行验收脚本或实测案例。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "skillmedev/skills:skills/partition-planner/SKILL.md|sha256:61288e8eefc12a5849a2a79a61e8d272|1.3.0|1.0.0",
+      "evaluated_at": "2026-09-29T19:47:33.234666+08:00"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/performance-review-writer/SKILL.md",
+      "name": "performance-review-writer",
+      "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/performance-review-writer/SKILL.md",
+      "repo_url": "https://github.com/skillmedev/skills",
+      "author": "skillmedev",
+      "summary_zh": "用于撰写基于证据的绩效评审与评级，覆盖证据收集、评级校准、叙事结构和发展建议。适用于管理者起草绩效评审或准备校准会议。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "帮我起草一份基于证据的员工年度绩效评审",
+        "为绩效校准会议整理评级依据和叙述结构"
+      ],
+      "key_features": [
+        "要求先收集自评、同事反馈、岗位期望和工作记录",
+        "提供主题化叙事模板与具体影响表述",
+        "包含评级校准、质量标准与常见偏差提醒"
+      ],
+      "main_category": {
+        "id": "docs",
+        "name": "文档办公"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "绩效评审",
+        "管理沟通",
+        "职场写作",
+        "校准准备"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "limitations": "未提供具体评审表单模板、示例成品或自动化工具；依赖用户已有绩效证据材料。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-29T19:49:24.811503+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:ce8ca99d1f496c38c37de742f7106d42",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "内容是绩效评审写作指南，属于职场文档/管理沟通类工作流，可归入文档办公或内容创作；未命中硬性排除项，也不属于仅科研/通用数据分析/AI开发。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "明确说明用于撰写公平、具体、基于证据的绩效评审与评级，适用于起草评审或准备校准，减少近因偏差和空泛评价。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "提供写前证据收集、评级校准、叙事结构、发展建议、交付物和质量标准等完整工作流，足以理解做法与价值。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "pass",
+            "evidence": "上游描述与正文一致：描述称写公平、具体、证据基础的绩效评审，正文给出证据收集、评级校准、叙事模板和质量标准。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "unknown",
+            "evidence": "未声明特殊工具、运行环境或依赖；内容本身是写作指南，但需要用户提供自评、同事反馈、岗位级别期望和工作记录等材料。未声明不影响理解核心方法。",
+            "informational": true
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "所读材料为绩效评审写作规范，未见凭据外传、自动下单、临床决策、插件容器或排除领域等风险；也未包含要求改变评估规则的内容。",
+            "informational": false
+          }
+        },
+        "verification_note": "材料提供质量标准与常见错误清单，可作为自查依据；未提供示例评审、验收清单或自动化验证方法。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "skillmedev/skills:skills/performance-review-writer/SKILL.md|sha256:ce8ca99d1f496c38c37de742f7106d42|1.3.0|1.0.0",
+      "evaluated_at": "2026-09-29T19:49:24.808394+08:00"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/patent-prior-art/SKILL.md",
+      "name": "patent-prior-art",
+      "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/patent-prior-art/SKILL.md",
+      "repo_url": "https://github.com/skillmedev/skills",
+      "author": "skillmedev",
+      "summary_zh": "用于专利先行技术检索与新颖性评估，按特征分解、分类检索、非专利文献检索和引用追踪生成权利要求图与检索报告，适合专利申请前研究。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "评估这个发明是否已有先行技术",
+        "针对某项专利权利要求查找无效证据"
+      ],
+      "key_features": [
+        "CPC/IPC 分类与关键词结合检索",
+        "覆盖专利与非专利文献",
+        "生成权利要求图与检索日志"
+      ],
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "专利检索",
+        "先行技术",
+        "新颖性评估",
+        "研究报告"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "limitations": "明确声明不是法律建议，不能替代专利律师的可专利性、自由实施或申请策略意见；外部数据库访问条件未说明。",
+      "license": null,
+      "status": "candidate",
+      "reason_codes": [
+        "INSUFFICIENT_EVIDENCE"
+      ],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-29T19:50:01.028683+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:b10eb52b4edd44d12f4108e0cd51fe4d",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "材料描述的是专利先行技术检索与新颖性评估的工作流，属于产品与研究支持类任务，未命中硬性排除项。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "明确用于判断发明是否新颖、是否已有专利或先行技术，适合专利申请前或无效论证前的研究场景，有实际价值。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "提供输入收集、六步操作流程、检索日志模板、交付物、禁止事项与质量标准，足以理解其做法与价值。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "unknown",
+            "evidence": "上游描述与 SKILL.md 内容一致，均强调特征分解、CPC/IPC 分类、专利与非专利文献检索、引用追踪、权利要求图和检索日志。；程序未能核实所引原文与行号。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "unknown",
+            "evidence": "材料提到 Google Patents、Espacenet、USPTO、WIPO PATENTSCOPE、Google Scholar、IEEE、arXiv、Wayback Machine 等外部数据库，但未说明是否需要账号、网络访问、翻译工具或本地运行环境。",
+            "informational": true
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "材料明确声明这是研究而非法律建议，未包含凭据外传、实盘交易、临床决策或插件容器等风险行为。",
+            "informational": false
+          }
+        },
+        "verification_note": "材料提供检索日志模板、质量标准和交付物结构，可作为验收或复核依据，但未提供实际案例或自动验证方法。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "skillmedev/skills:skills/patent-prior-art/SKILL.md|sha256:b10eb52b4edd44d12f4108e0cd51fe4d|1.3.0|1.0.0",
+      "evaluated_at": "2026-09-29T19:50:01.025156+08:00"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/pii-scrubber/SKILL.md",
+      "name": "pii-scrubber",
+      "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/pii-scrubber/SKILL.md",
+      "repo_url": "https://github.com/skillmedev/skills",
+      "author": "skillmedev",
+      "summary_zh": "PII Scrubber 是一套个人身份信息检测与脱敏工作流，适用于日志、数据集、LLM 提示词和第三方导出前的隐私处理。它按下游用途选择掩码、令牌化、哈希或删除等脱敏模式，并强调边界执行与抽样验证。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "scrub PII from these logs",
+        "redact personal data before sending it to the LLM"
+      ],
+      "key_features": [
+        "分层检测：regex、校验和、NER 与上下文规则",
+        "按下游用途选择掩码、令牌化、哈希或删除",
+        "要求边界前脱敏并抽样验证假阴性"
+      ],
+      "main_category": {
+        "id": "security",
+        "name": "安全"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "PII",
+        "数据脱敏",
+        "隐私合规",
+        "日志安全",
+        "LLM 数据安全"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "limitations": "未提供具体可执行工具、库或运行环境；明确不适用于泄露 API keys、tokens 或 credentials；合规细节需法律/合规专业人员参与。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-29T19:52:02.538203+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:afc0d0072a0f5919c0cdfc2776666a0e",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "材料描述对文本、日志、数据集和 LLM prompts 中的 PII 进行检测与脱敏，属于安全/隐私数据处理与审计相关工作流，未命中硬性排除项。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "明确说明用于在日志、分析、提示词、第三方导出等边界处检测并脱敏个人身份信息，并给出典型触发语句与不适用场景（密钥/凭据应使用 secrets-hygiene）。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "提供六步操作流程：收集输入、清点 PII 类别、分层检测、按字段选择脱敏模式、在边界执行、抽样验证；还包含示例日志、合规注意事项、边界情况、交付物和质量标准，足以理解做法与价值。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "pass",
+            "evidence": "上游名称与描述为 PII Scrubber，实际 SKILL.md 内容也围绕 PII 检测、脱敏模式选择、边界执行与验证展开，介绍与内容一致。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "unknown",
+            "evidence": "材料提到 regex、checksum、NER、secret salt、抽样验证等方法，但未声明具体运行环境、工具、库或平台；这些缺口不阻断理解其作为指南的价值。",
+            "informational": true
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "所读材料为隐私脱敏操作指南，明确排除处理泄露密钥/凭据，并要求不记录原始脱敏值、允许清单输出、审计只记录规则触发；未见凭据外传、恶意执行或越权临床/实盘等风险。",
+            "informational": false
+          }
+        },
+        "verification_note": "材料提供验证方法：随机抽取至少 100 条或 1% 的已脱敏记录进行人工复核，并结合 NER 与模式检查；还提供坏/好日志行示例和质量标准。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "skillmedev/skills:skills/pii-scrubber/SKILL.md|sha256:afc0d0072a0f5919c0cdfc2776666a0e|1.3.0|1.0.0",
+      "evaluated_at": "2026-09-29T19:52:02.534185+08:00"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/pitch-deck-builder/SKILL.md",
+      "name": "pitch-deck-builder",
+      "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/pitch-deck-builder/SKILL.md",
+      "repo_url": "https://github.com/skillmedev/skills",
+      "author": "skillmedev",
+      "summary_zh": "为创始人构建或修复融资 pitch deck 提供 11 张幻灯片结构、阶段校准、设计规则和反模式指南。适用于种子轮、Series A 等融资演示准备场景。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "帮我搭建一个面向投资人的种子轮 pitch deck",
+        "检查我的 Series A 融资演示文稿需要哪些幻灯片"
+      ],
+      "key_features": [
+        "给出 11 张融资幻灯片固定顺序",
+        "区分 Pre-seed/Seed 与 Series A 重点",
+        "提供设计规则、反模式与附录交付要求"
+      ],
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "融资",
+        "pitch deck",
+        "演示设计",
+        "创业"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "fundraising-narrative",
+        "fundraising-stage-selector",
+        "market-sizing",
+        "fundraise-team-hiring",
+        "pitch-practice-coach"
+      ],
+      "limitations": "依赖多个未提供的关联技能；未给出实际模板文件、示例输出或验收方法；主要面向融资演示场景而非通用 PPT 制作。",
+      "license": null,
+      "status": "candidate",
+      "reason_codes": [
+        "INSUFFICIENT_EVIDENCE"
+      ],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-29T19:52:21.417957+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:bde9dab313cf5c0650178a891abd832a",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "材料描述的是为创始人构建或修复融资 pitch deck 的幻灯片结构与设计规则，属于产品与设计中的需求表达/演示设计范畴；未命中硬性排除项。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "明确说明用于创始人制作或修复融资演示文稿，给出触发场景如 build my pitch deck、investor deck、seed deck、Series A deck，并强调将叙事转化为投资人期望的幻灯片顺序。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "提供 11 张幻灯片的固定顺序与每张要点、阶段校准、设计规则、反模式和交付物，足以理解其做法与价值；虽引用其他技能但未提供不影响核心理解。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "unknown",
+            "evidence": "上游描述与 SKILL.md 内容一致：用于构建或修复融资 pitch deck，并给出具体幻灯片结构、设计规则和交付物。；程序未能核实所引原文与行号。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "unknown",
+            "evidence": "材料提及需先由 [[fundraising-narrative]] 和 [[fundraising-stage-selector]] 产出叙事与融资阶段，并建议配合 [[market-sizing]]、[[fundraise-team-hiring]]、[[pitch-practice-coach]]，但未提供这些依赖的具体内容或是否必需；不影响理解本技能核心规则，但影响完整工作流适用判断。",
+            "informational": true
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "所读材料为融资演示结构与规则指导，未见凭据外传、实盘下单、临床决策、恶意命令或越权内容；未包含改变评估规则等可疑指令。",
+            "informational": false
+          }
+        },
+        "verification_note": "材料未提供示例输出、验收清单或验证方法；仅给出幻灯片结构、设计规则、反模式和交付物描述。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "skillmedev/skills:skills/pitch-deck-builder/SKILL.md|sha256:bde9dab313cf5c0650178a891abd832a|1.3.0|1.0.0",
+      "evaluated_at": "2026-09-29T19:52:21.414396+08:00"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/playwright-testing/SKILL.md",
+      "name": "playwright-testing",
+      "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/playwright-testing/SKILL.md",
+      "repo_url": "https://github.com/skillmedev/skills",
+      "author": "skillmedev",
+      "summary_zh": "该技能提供 Playwright 端到端测试编写与评审规范，强调基于用户语义的定位器、自动等待断言、测试状态隔离和 CI flake 治理。适用于编写稳定 e2e 测试、排查测试不稳定以及配置 Playwright CI 的场景。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "为密码重置流程写一个 Playwright 测试",
+        "这个 e2e 测试为什么不稳定？"
+      ],
+      "key_features": [
+        "定位器按 getByRole、label、text、data-testid 优先级选择",
+        "禁止固定等待，使用自动等待和 web-first 断言",
+        "要求测试隔离、可并行，并设置 CI 重试与 trace 策略"
+      ],
+      "main_category": {
+        "id": "dev",
+        "name": "编程开发"
+      },
+      "candidate_domains": [
+        "dev"
+      ],
+      "tags": [
+        "测试",
+        "Playwright",
+        "端到端测试",
+        "CI",
+        "测试稳定性"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "Playwright",
+        "CI 环境"
+      ],
+      "limitations": "未声明 Playwright 版本、浏览器或运行环境要求；主要为规范性指导，不包含可直接执行的脚本或完整项目配置。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-29T19:54:48.172089+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:800ce11e15755da2df1e426695f7d01e",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "内容为 Playwright 端到端测试编写与评审规范，属于编程开发中的测试范畴，未命中硬性排除项。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "明确解决 e2e 测试因时序、选择器和状态耦合导致的不稳定问题，适用于编写、评审 Playwright 测试及配置 CI 的场景。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "提供五步操作流程、定位器优先级、反例/正例代码、CI 配置建议、flake 政策与质量红线，足以理解其方法与价值。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "pass",
+            "evidence": "描述中声称的 resilient locators、web-first assertions、isolated state、flake policy 均在正文有对应规则与示例。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "unknown",
+            "evidence": "材料明确围绕 Playwright 与 CI 场景，但未声明具体 Playwright 版本、运行环境、浏览器或项目集成要求；该缺口不阻断理解其规范价值。",
+            "informational": true
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "所读材料为测试编写规范，未见凭据外传、恶意命令、实盘交易、临床决策或越权行为等明显风险。",
+            "informational": false
+          }
+        },
+        "verification_note": "材料提供正例/反例代码、质量红线和重复运行 10 次的验收建议，但未提供实际运行结果或自动化验证方法。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "skillmedev/skills:skills/playwright-testing/SKILL.md|sha256:800ce11e15755da2df1e426695f7d01e|1.3.0|1.0.0",
+      "evaluated_at": "2026-09-29T19:54:48.168511+08:00"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/pitch-practice-coach/SKILL.md",
+      "name": "pitch-practice-coach",
+      "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/pitch-practice-coach/SKILL.md",
+      "repo_url": "https://github.com/skillmedev/skills",
+      "author": "skillmedev",
+      "summary_zh": "用于帮助创始人排练融资路演并准备投资人尖锐提问，适用于模拟投资人会议、问答演练和表达改进。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "帮我排练融资路演开场90秒",
+        "模拟VC提出尖锐问题并帮我准备回答"
+      ],
+      "key_features": [
+        "提供90秒及多时长开场演练方法",
+        "包含投资人常见硬问题清单与回答要求",
+        "给出反馈循环、反模式与会议准备质量标准"
+      ],
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "融资路演",
+        "投资人问答",
+        "演讲排练",
+        "创业沟通"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "limitations": "未说明是否需要配合 pitch-deck-builder、investor-targeting 或 fundraising-narrative 等技能，也未提供自动评分或模拟执行工具。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-29T19:56:34.094374+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:cc0f3552d800b03d3d631f35e52dc1dd",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "内容围绕创始人路演排练、投资人问答演练与表达反馈，属于产品/创业沟通准备，可归入产品与设计；未命中硬性排除。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "明确说明用于创始人 rehearse pitch、准备投资人提问、模拟会议与纠正临场反应，场景具体且有实际训练价值。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "提供开场演练、硬问题清单、回答结构、反馈循环、反模式与质量标准，足以理解其训练方法与产出。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "pass",
+            "evidence": "上游描述与实际内容一致：均为创始人路演排练与投资人问答演练。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "unknown",
+            "evidence": "未声明运行环境、工具或外部依赖；正文提及其他技能如 pitch-deck-builder、investor-targeting、fundraising-narrative，但未说明是否必须安装或如何使用。",
+            "informational": true
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "所读材料为沟通训练指导，未见凭据外传、实盘交易、临床决策或其他明显可疑行为。",
+            "informational": false
+          }
+        },
+        "verification_note": "材料提供质量标准与反馈循环，如90秒开场连续三次稳定、每个问题30秒内回答、核心指标2秒内回答，但未提供可执行示例或自动验收方法。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "skillmedev/skills:skills/pitch-practice-coach/SKILL.md|sha256:cc0f3552d800b03d3d631f35e52dc1dd|1.3.0|1.0.0",
+      "evaluated_at": "2026-09-29T19:56:34.091100+08:00"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/podcast-pitch/SKILL.md",
+      "name": "podcast-pitch",
+      "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/podcast-pitch/SKILL.md",
+      "repo_url": "https://github.com/skillmedev/skills",
+      "author": "skillmedev",
+      "summary_zh": "用于撰写邀请嘉宾上播客的冷启动邮件，提供主题行、个性化开场、受众价值、简短可信度、可录制的谈话角度和低摩擦CTA。适合用户想作为嘉宾联系播客主持、推广书籍或发布活动时使用。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "帮我写一封邮件给这个播客主持，邀请我作为嘉宾",
+        "我要推广新书，帮我写播客嘉宾邀约邮件"
+      ],
+      "key_features": [
+        "要求引用真实近期节目作为个性化开场",
+        "邮件正文控制在约150词并附跟进邮件",
+        "输出3个主题行和可录制话题角度"
+      ],
+      "main_category": {
+        "id": "content",
+        "name": "内容创作"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "邮件写作",
+        "播客嘉宾邀约",
+        "冷启动外联",
+        "个人推广"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "limitations": "需要用户提供真实节目、主持人和近期内容信息；未声明外部工具或自动检索能力。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-29T19:58:26.568890+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:2330eef048700f047b736de327beacec",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "材料是写播客嘉宾冷启动邀约邮件的提示词规范，属于内容创作中的邮件/文案写作场景，不命中硬性排除。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "明确解决“如何写冷邮件让播客主持邀请嘉宾”的问题，并给出适用场景：被要求作为播客嘉宾、给主持写邮件、推广书籍或发布。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "提供流程、邮件结构、规则、反模式与输出要求，包括主题行、个性化开场、受众价值、可信度、话题角度、CTA、字数限制和后续跟进。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "pass",
+            "evidence": "上游描述与实际内容一致，均围绕播客嘉宾冷邮件写作，并强调个性化开场、受众价值和低摩擦CTA。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "unknown",
+            "evidence": "材料未声明运行环境、外部工具或数据来源；需要用户提供节目、主持人和近期节目信息，但未说明是否依赖外部检索。",
+            "informational": true
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "所读材料为写作规范与提示词，未见凭据外传、实盘交易、临床决策或排除领域内容。",
+            "informational": false
+          }
+        },
+        "verification_note": "材料给出输出验收方式：3个主题行选项、1封约150词邮件正文、标注字数，并附一周后跟进邮件；未提供实际投递效果验证。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "skillmedev/skills:skills/podcast-pitch/SKILL.md|sha256:2330eef048700f047b736de327beacec|1.3.0|1.0.0",
+      "evaluated_at": "2026-09-29T19:58:26.565580+08:00"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/plg-motion-designer/SKILL.md",
+      "name": "plg-motion-designer",
+      "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/plg-motion-designer/SKILL.md",
+      "repo_url": "https://github.com/skillmedev/skills",
+      "author": "skillmedev",
+      "summary_zh": "用于设计产品主导增长的自服务激活路径，帮助定义 aha moment、激活里程碑、指标门槛和产品内引导。适用于 SaaS 或自助注册产品优化激活率与 time-to-value。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "设计我们的 PLG 自服务激活流程",
+        "定义产品的 aha moment 和激活里程碑"
+      ],
+      "key_features": [
+        "基于留存差距定义 aha moment",
+        "提供激活里程碑与指标门槛模板",
+        "附 Python 激活漏斗诊断脚本"
+      ],
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "PLG",
+        "用户激活",
+        "增长漏斗",
+        "产品指标",
+        "自服务入门"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "limitations": "未声明 Python 版本、数据来源要求或适用产品类型边界；方法依赖可记录的产品行为数据。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-29T19:59:07.384191+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:d9cecbfbf902b7a4786d75ec5200a77d",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "内容围绕产品主导增长（PLG）的自服务激活路径设计，属于产品与设计中的需求/用户旅程设计范畴，未命中硬性排除项。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "明确用于设计 signup→aha moment→activated 的自服务激活路径，解决激活定义不清、漏斗漏损、TTV 过长等问题，适用场景具体。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "提供四步方法、里程碑模板、指标门槛、nudge 对照表、Python 诊断脚本和填写模板，足以理解做法与价值。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "pass",
+            "evidence": "描述与正文一致：定义 aha moment、拆解激活里程碑、设置指标门槛和产品内 nudge，并附脚本与模板。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "unknown",
+            "evidence": "材料未声明运行环境或外部依赖；仅提到自包含 Python 脚本，未说明版本或平台要求。",
+            "informational": true
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "所读材料为产品增长方法说明与示例脚本，未见凭据外传、实盘交易、临床决策或其他明显风险。",
+            "informational": false
+          }
+        },
+        "verification_note": "提供示例数据、Python 脚本和预期输出，可用于验证漏斗诊断结果；未提供真实数据来源或外部验收方法。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "skillmedev/skills:skills/plg-motion-designer/SKILL.md|sha256:d9cecbfbf902b7a4786d75ec5200a77d|1.3.0|1.0.0",
+      "evaluated_at": "2026-09-29T19:59:07.379216+08:00"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/policy-brief/SKILL.md",
+      "name": "policy-brief",
+      "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/policy-brief/SKILL.md",
+      "repo_url": "https://github.com/skillmedev/skills",
+      "author": "skillmedev",
+      "summary_zh": "用于撰写面向决策者的一至四页政策简报，覆盖问题陈述、证据评估、选项比较、建议与实施第一步。适用于需要将研究或证据转化为可执行决策建议的场景。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "写一份政策简报，向董事会说明是否采用某项员工健康计划",
+        "总结某教育问题的证据与可选方案，并给出建议"
+      ],
+      "key_features": [
+        "提供政策简报八步写作流程",
+        "包含选项比较表模板与质量标准",
+        "强调证据分级、状态基线与可执行建议"
+      ],
+      "main_category": {
+        "id": "content",
+        "name": "内容创作"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "政策简报",
+        "决策文档",
+        "证据写作",
+        "执行摘要",
+        "选项比较"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "limitations": "未声明运行环境或依赖；需要用户提供决策问题、证据材料与约束条件才能生成高质量简报。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-29T20:00:01.345124+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:f49bca5900bb0bbb71fbbded96511be3",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "材料是撰写政策简报的写作工作流与模板，属于内容创作中的文档写作场景；未命中硬性排除项。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "明确说明用于把研究与证据转化为供决策者快速行动的一至四页政策简报，并列出适用与不适用场景。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "提供输入收集清单、八步操作流程、选项比较表模板、交付物结构、禁止事项与质量标准，足以理解做法。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "pass",
+            "evidence": "上游名称与描述称写政策简报，正文确实围绕政策简报的问题、证据、选项、建议与实施步骤展开，介绍与内容一致。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "unknown",
+            "evidence": "未声明运行环境、工具或外部依赖；仅在升级条件中提到可配合 fact-checker 或 deep-research，但这些不是明确必需依赖。",
+            "informational": true
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "所读材料为写作指南，未见凭据外传、实盘交易、临床决策或其他可疑行为；并明确提示法律事项需律师审查。",
+            "informational": false
+          }
+        },
+        "verification_note": "材料提供质量标准与示例摘要，用于检查执行摘要是否独立、证据是否分级、选项是否按同一标准比较；未提供自动化验证方法。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "skillmedev/skills:skills/policy-brief/SKILL.md|sha256:f49bca5900bb0bbb71fbbded96511be3|1.3.0|1.0.0",
+      "evaluated_at": "2026-09-29T20:00:01.342330+08:00"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/positioning-statement/SKILL.md",
+      "name": "positioning-statement",
+      "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/positioning-statement/SKILL.md",
+      "repo_url": "https://github.com/skillmedev/skills",
+      "author": "skillmedev",
+      "summary_zh": "用于在写产品文案或规划发布前，按 April Dunford 方法生成并检查一段式产品定位陈述。适合创始人或产品团队厘清品类、目标客户、竞争替代和独特价值。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "帮我给这个产品写一个定位陈述，说明它适合谁、和什么替代方案不同。",
+        "我们的产品听起来和竞品差不多，帮我明确市场品类和最佳客户细分。"
+      ],
+      "key_features": [
+        "五组件定位流程：替代、属性、价值、细分、市场框架",
+        "提供一段式定位模板与示例",
+        "内置 Node 评分脚本检查常见定位问题"
+      ],
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "产品定位",
+        "市场分类",
+        "目标客户",
+        "GTM",
+        "定位陈述"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "Node.js（用于运行可选评分脚本）"
+      ],
+      "limitations": "明确不用于撰写标题、页面文案或定价；依赖用户自行填写产品事实与竞争替代信息，未提供外部市场数据验证。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-29T20:01:27.989904+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:888ed0893ae13724401f4560c7e316a1",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "材料围绕产品定位、市场框架和发布前内部对齐，属于产品与设计中的需求/定位分析；未命中硬性排除项。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "明确说明用于在写文案或规划发布前定义/锐化产品定位，触发场景包括“how do I position this”“what category are we in”等，并产出单段定位陈述。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "提供五步工作流、模板、示例、评分脚本、质量标准和禁止事项，足以理解做法与价值。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "pass",
+            "evidence": "描述中的竞争替代→独特属性→价值→最佳客户细分→市场框架，与正文五组件工作流、模板和评分脚本一致。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "pass",
+            "evidence": "材料声明评分脚本为自包含 Node 脚本，且注释写明 No deps；未声明其他特殊运行环境。未声明平台兼容性不等于全平台兼容。",
+            "informational": false
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "所读材料为产品定位指南与本地评分脚本，未见凭据外传、实盘交易、临床决策或可疑指令。",
+            "informational": false
+          }
+        },
+        "verification_note": "提供示例定位陈述、预期脚本输出和质量标准，可作为验收/验证参考；未提供真实客户验证或外部数据来源。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "skillmedev/skills:skills/positioning-statement/SKILL.md|sha256:888ed0893ae13724401f4560c7e316a1|1.3.0|1.0.0",
+      "evaluated_at": "2026-09-29T20:01:27.986688+08:00"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/postmortem-writer/SKILL.md",
+      "name": "postmortem-writer",
+      "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/postmortem-writer/SKILL.md",
+      "repo_url": "https://github.com/skillmedev/skills",
+      "author": "skillmedev",
+      "summary_zh": "用于事故后撰写无责难复盘文档，提供时间线重建、多因果分析、行动项管理和模板。适用于 SEV1/SEV2 等事故复盘与组织学习场景。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "write the postmortem for yesterday's outage",
+        "turn these incident notes into a postmortem doc"
+      ],
+      "key_features": [
+        "无责难事故复盘流程",
+        "分钟级时间线与四锚点",
+        "带负责人和日期的行动项模板"
+      ],
+      "main_category": {
+        "id": "cloud",
+        "name": "云服务与运维"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "事故复盘",
+        "postmortem",
+        "运维文档",
+        "无责难回顾",
+        "行动项跟踪"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "limitations": "未说明需要哪些日志、监控或工单系统输入；不适用于事故进行中的客户沟通或实时状态更新。",
+      "license": null,
+      "status": "candidate",
+      "reason_codes": [
+        "INSUFFICIENT_EVIDENCE"
+      ],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-29T20:01:57.309385+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:cbd0a3899752c77a8584c3ab4eab0687",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "材料围绕事故复盘/事后分析文档的撰写流程与模板，属于文档办公或云服务与运维中的事故管理文档实践；未命中硬性排除项，也非仅科研/通用数据分析/AI开发。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "明确说明用于在 SEV1/SEV2 等事故后撰写无责难事故复盘，给出典型触发语句如“write the postmortem for yesterday's outage”，并说明避免用于事故实时对外更新。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "提供六步操作流程：收集输入、重建时间线、分析多因素、记录好坏点、撰写行动项、评审关闭；并附完整 postmortem 模板和质量标准，足以理解做法与价值。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "unknown",
+            "evidence": "上游名称与描述称可写无责难事故复盘、包含日志重建时间线、多因果因素和带负责人日期的行动项；SKILL.md 正文与模板均包含这些内容，描述与正文一致。；程序未能核实所引原文与行号。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "unknown",
+            "evidence": "材料未声明需要特定工具、运行环境或外部依赖；其流程提到日志、告警、聊天记录、部署历史等输入，但未说明必须接入哪些系统。未声明不等于无依赖。",
+            "informational": true
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "所读材料为事故复盘写作规范与模板，未见凭据外传、实盘交易、临床决策、恶意命令或诱导忽略规则等风险内容。",
+            "informational": false
+          }
+        },
+        "verification_note": "材料提供质量标准和模板字段作为验收依据，如时间线四锚点、检测间隔、行动项负责人/日期/工单等；未提供实际示例输出或自动化验证方法。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "skillmedev/skills:skills/postmortem-writer/SKILL.md|sha256:cbd0a3899752c77a8584c3ab4eab0687|1.3.0|1.0.0",
+      "evaluated_at": "2026-09-29T20:01:57.306377+08:00"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/power-bi-dax/SKILL.md",
+      "name": "power-bi-dax",
+      "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/power-bi-dax/SKILL.md",
+      "repo_url": "https://github.com/skillmedev/skills",
+      "author": "skillmedev",
+      "summary_zh": "该技能用于编写正确且高性能的 Power BI DAX 度量，覆盖筛选上下文、时间智能、日期表要求和慢查询诊断，适合排查 DAX 结果错误或报表性能问题。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "为什么我的 DAX 度量在总计里返回错误结果？",
+        "写一个 YTD 或同比的 Power BI 度量。"
+      ],
+      "key_features": [
+        "提供 DAX 度量编写与筛选上下文控制步骤",
+        "包含 YTD、同比等时间智能示例",
+        "给出坏/好度量对比与性能诊断方法"
+      ],
+      "main_category": {
+        "id": "docs",
+        "name": "文档办公"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "Power BI",
+        "DAX",
+        "数据度量",
+        "报表性能",
+        "时间智能"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "Power BI 模型",
+        "Performance Analyzer",
+        "DAX Studio"
+      ],
+      "limitations": "未明确声明工具版本、运行环境或依赖的必要性；性能诊断部分依赖 Power BI 分析工具与 DAX Studio。",
+      "license": null,
+      "status": "candidate",
+      "reason_codes": [
+        "INSUFFICIENT_EVIDENCE"
+      ],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-29T20:03:14.861761+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:6a2dd700b9992e5d499148455fb3ccfa",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "材料围绕 Power BI DAX 度量编写、筛选上下文、时间智能与性能诊断，属于文档办公中 Excel/BI 类数据处理与报表场景，未命中硬性排除项。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "明确说明用于解决 DAX 度量错误、总计错误、YTD/同比、报表慢、CALCULATE 行为异常、度量与计算列选择等具体问题，并给出适用与不适用场景。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "提供输入收集、度量与计算列选择、上下文处理、时间智能、筛选控制、性能诊断、示例坏/好度量、交付物和质量门槛，足以理解其做法与价值。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "unknown",
+            "evidence": "上游描述与正文内容一致，均围绕正确快速 DAX、时间智能、日期表、VertiPaq 友好模式和性能诊断展开。；程序未能核实所引原文与行号。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "unknown",
+            "evidence": "材料提到 Performance Analyzer 与 DAX Studio，并假定 Power BI 模型、日期表等条件，但未系统声明运行环境、版本或必要工具依赖；缺口不阻断理解核心内容。",
+            "informational": true
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "所读材料为 DAX 编写与性能优化指南，未见凭据外传、恶意命令、隐藏指令或明显与收录范围冲突的内容。",
+            "informational": false
+          }
+        },
+        "verification_note": "材料提供验证方法：在总计层级和至少两个切片器组合下验证度量，使用 Performance Analyzer 与 DAX Studio 检查存储引擎/公式引擎耗时占比。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "skillmedev/skills:skills/power-bi-dax/SKILL.md|sha256:6a2dd700b9992e5d499148455fb3ccfa|1.3.0|1.0.0",
+      "evaluated_at": "2026-09-29T20:03:14.859290+08:00"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/press-release-writer/SKILL.md",
+      "name": "press-release-writer",
+      "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/press-release-writer/SKILL.md",
+      "repo_url": "https://github.com/skillmedev/skills",
+      "author": "skillmedev",
+      "summary_zh": "该技能用于撰写符合通讯社/新闻线格式的公告新闻稿，适合产品发布、融资公告等场景。它通过倒金字塔结构、标题与引言规则、模板和质量标准帮助提炼新闻点并避免营销化表达。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "write a press release for our launch",
+        "we're announcing a funding round, draft the release"
+      ],
+      "key_features": [
+        "倒金字塔新闻稿结构与 300-500 词长度约束",
+        "标题低于 100 字符且包含新闻动词",
+        "高管引言讲愿景、客户引言讲结果的引言规则"
+      ],
+      "main_category": {
+        "id": "content",
+        "name": "内容创作"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "新闻稿",
+        "公告写作",
+        "公关传播",
+        "写作模板"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "limitations": "不覆盖 Product Hunt 发布、发布日执行、媒体监测或完整分发策略；涉及上市公司或监管敏感公告需法律审查；未声明运行环境或工具依赖。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-29T20:04:47.978319+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:61630394a76d08557dd79862149c2498",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "SKILL.md 明确用于撰写新闻稿/公告稿，属于内容创作中的文章写作；未命中硬性排除项，也不是仅属科研/通用数据分析/AI 开发。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "说明解决公告被营销措辞淹没、新闻点不突出的问题，适用于发布融资、产品上线等新闻稿撰写场景，并给出具体结构、阈值和模板。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "提供 7 步操作流程、输入收集、具体阈值、完整模板、禁忌和质量标准，足以理解其做法与价值；虽不含实际分发策略，但已明确超出范围。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "pass",
+            "evidence": "上游描述中的倒金字塔、100 字符标题、dateline、引言规则和 boilerplate 均能在正文对应步骤与模板中找到一致内容。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "unknown",
+            "evidence": "材料未声明运行环境、外部工具或依赖；仅提及需要事实来源、引言批准和法律审查等人工/流程条件。未声明不等于无依赖，也不等于全平台兼容。",
+            "informational": true
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "所读材料为写作规范与模板，未见凭据外传、命令执行、绕过规则或实盘/临床等高风险功能；还明确禁止发布未批准引言和未验证事实。",
+            "informational": false
+          }
+        },
+        "verification_note": "材料提供质量栏与验收标准，如标题少于 100 字符、导语 25-40 词、总长 300-500 词、两个引言职责、每个数字可追溯；未提供自动化验证方法。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "skillmedev/skills:skills/press-release-writer/SKILL.md|sha256:61630394a76d08557dd79862149c2498|1.3.0|1.0.0",
+      "evaluated_at": "2026-09-29T20:04:47.974321+08:00"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/pricing-strategy/SKILL.md",
+      "name": "pricing-strategy",
+      "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/pricing-strategy/SKILL.md",
+      "repo_url": "https://github.com/skillmedev/skills",
+      "author": "skillmedev",
+      "summary_zh": "用于为产品设定或调整定价的策略指南，通过价值量化、竞争与成本下限形成推荐结构、价格点和测试计划。适合新产品发布、重新定价或判断是否定价过低。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "我的新产品应该收多少钱？",
+        "应该采用按用量计费还是固定收费？"
+      ],
+      "key_features": [
+        "按价值、竞争、成本三视角定价",
+        "根据增长向量选择收费结构",
+        "包含价格测试与成功指标"
+      ],
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "定价策略",
+        "产品策略",
+        "商业化",
+        "SaaS",
+        "价格测试"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "limitations": "未声明依赖或适用平台；不适用于详细 SaaS 阶梯设计、健身房前端优惠或单位经济验证，需转用其他技能。",
+      "license": null,
+      "status": "candidate",
+      "reason_codes": [
+        "INSUFFICIENT_EVIDENCE"
+      ],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-29T20:05:15.486684+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:1d941da6967ece45e511b0fd49131769",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "内容围绕产品定价策略，属于产品与设计中的需求/策略分析，不命中硬性排除项。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "明确说明用于回答“应该收多少钱”“是否定价过低”“按用量还是固定收费”等场景，并给出推荐结构、价格点与测试计划。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "提供六步操作流程：收集输入、量化支付意愿、三视角校验、选择结构、设定价格点、制定测试计划，并有示例与质量标准。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "unknown",
+            "evidence": "描述与实际内容一致，均为产品定价策略的操作指南；引用支持核心功能。；程序未能核实所引原文与行号。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "unknown",
+            "evidence": "未声明运行环境、工具或外部依赖；材料本身是策略指南，未说明不影响理解核心方法，但无法确认是否有隐含依赖。",
+            "informational": true
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "未见可疑行为、凭据外传、实盘下单或临床决策等风险；明确声明是策略而非财务可行性建议。",
+            "informational": false
+          }
+        },
+        "verification_note": "材料提供了 SaaS 报告工具的完整示例、质量标准与价格测试计划，可作为验证参考；未提供自动化验收方法。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "skillmedev/skills:skills/pricing-strategy/SKILL.md|sha256:1d941da6967ece45e511b0fd49131769|1.3.0|1.0.0",
+      "evaluated_at": "2026-09-29T20:05:15.485091+08:00"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/process-doc/SKILL.md",
+      "name": "process-doc",
+      "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/process-doc/SKILL.md",
+      "repo_url": "https://github.com/skillmedev/skills",
+      "author": "skillmedev",
+      "summary_zh": "该技能用于把重复性业务流程整理成标准操作流程（SOP），覆盖步骤、决策点、边界情况、负责人和验证方式。适合团队沉淀内部流程、降低人员交接和委托执行风险。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "为入职流程写一份可交接的 SOP",
+        "把只存在于某个人脑中的重复任务整理成文档"
+      ],
+      "key_features": [
+        "提供六步 SOP 编写与验证流程",
+        "附 SOP 骨架模板与填写字段",
+        "强调决策点、边界情况和陌生人测试"
+      ],
+      "main_category": {
+        "id": "docs",
+        "name": "文档办公"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "SOP",
+        "流程文档",
+        "知识沉淀",
+        "团队协作",
+        "模板"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "limitations": "不适用于事故响应或值班运维 runbook，也不适用于面向客户的产品文档；未声明运行平台或工具依赖。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-30T08:33:36.613660+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:b8fc210e4b674398716509176ce5b539",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "内容是编写标准操作流程（SOP）的方法与模板，属于文档办公中的流程文档写作，不命中硬性排除，也不属于仅服务科研/通用数据分析/AI开发而不服务主分类的情况。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "明确说明用于把重复性流程写成可交接的 SOP，适用场景包括“write an SOP for this”“document our onboarding process”“this only lives in one person's head”，并排除事故响应 runbook 与面向客户的产品文档。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "提供六步操作流程：资格判断、收集输入、撰写主路径、决策点与边界情况、陌生人测试、负责人与复审节奏；并附 SOP 模板、反例对比、交付物和质量检查项，足以理解做法与价值。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "pass",
+            "evidence": "上游描述称用于生成包含决策点、边界情况和负责人的分步 SOP，正文实际提供了对应流程、模板和验收标准，介绍与内容一致。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "unknown",
+            "evidence": "材料未声明特殊工具、运行环境或外部依赖；仅提到 SOP 中应记录访问权限、工具和输入，但这是被记录流程的前置条件，不是该技能自身依赖。",
+            "informational": true
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "所读材料为文档写作指南与模板，未见凭据外传、实盘交易、临床决策、插件容器或诱导执行可疑命令等风险；也未要求改变评估规则。",
+            "informational": false
+          }
+        },
+        "verification_note": "材料提供验证方法：让从未运行过该流程的人仅凭 SOP 完成一次完整无人协助运行，并给出质量检查项；未提供实际示例文件或自动化验收。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "skillmedev/skills:skills/process-doc/SKILL.md|sha256:b8fc210e4b674398716509176ce5b539|1.3.0|1.0.0",
+      "evaluated_at": "2026-09-30T08:33:36.610995+08:00"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/print-layout/SKILL.md",
+      "name": "print-layout",
+      "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/print-layout/SKILL.md",
+      "repo_url": "https://github.com/skillmedev/skills",
+      "author": "skillmedev",
+      "summary_zh": "该技能提供商业印刷文件准备流程，覆盖出血、安全区、CMYK、字体嵌入、图像分辨率、PDF/X 导出和印前检查。适用于名片、宣传册、海报、包装等需要送印的设计文件。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "帮我把这份宣传册文件整理成可送印的 PDF",
+        "这份名片文件需要多少出血和安全区？"
+      ],
+      "key_features": [
+        "提供 3mm/0.125in 出血与 3-5mm 安全区规范",
+        "包含可复制的印前检查清单",
+        "覆盖 CMYK、ICC、PDF/X 导出与打样流程"
+      ],
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "印刷准备",
+        "印前检查",
+        "PDF/X",
+        "CMYK",
+        "设计交付"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "打印机规格或印厂要求",
+        "ICC 色彩配置文件",
+        "支持 PDF/X 导出的设计或排版环境"
+      ],
+      "limitations": "未声明具体设计软件或运行环境；部分参数需按印厂规格确认，材料仅提供默认值。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-30T08:33:54.567860+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:3f28479b5c1ea3ad0025db0e11d01c4e",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "材料描述为商业印刷准备流程，涉及出血、安全区、CMYK、PDF/X 导出与印前检查，属于产品与设计中的印刷交付/设计文件准备场景；未命中硬性排除项，也不属于仅科研/通用数据分析/AI 开发。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "明确解决“把文件做成可印刷状态”的问题，列出典型触发场景如 get this file print-ready、what bleed do I need、why did my printer reject this PDF，并说明不适用于屏幕设计交付。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "提供输入收集、7步操作流程、可复制的印前检查清单、导出与打样要求、反面/正面对比、交付物和质量标准，足以理解其做法与价值。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "pass",
+            "evidence": "上游名称与描述为商业印刷准备，正文实际内容围绕文档设置、颜色管理、字体、图像分辨率、PDF/X 导出和印前检查展开，介绍与内容一致。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "unknown",
+            "evidence": "材料提到需要打印机规格、ICC profile、PDF/X 标准、打样等外部条件，但未说明具体运行环境、设计软件或工具；这些缺口不阻断理解其作为印刷准备指南的价值。",
+            "informational": true
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "所读材料为设计印前操作指南，未见凭据外传、实盘交易、临床决策、插件容器或诱导改变评估规则等可疑内容。",
+            "informational": false
+          }
+        },
+        "verification_note": "材料提供可复制的印前检查清单、质量标准和正反案例对比，可作为交付前核对依据；未提供自动化验证或实测方法。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "skillmedev/skills:skills/print-layout/SKILL.md|sha256:3f28479b5c1ea3ad0025db0e11d01c4e|1.3.0|1.0.0",
+      "evaluated_at": "2026-09-30T08:33:54.565851+08:00"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/product-analytics/SKILL.md",
+      "name": "product-analytics",
+      "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/product-analytics/SKILL.md",
+      "repo_url": "https://github.com/skillmedev/skills",
+      "author": "skillmedev",
+      "summary_zh": "该技能指导从决策问题反推产品分析体系，建立北极星指标、事件命名与跟踪计划，并优先构建激活漏斗、队列留存和功能采用分析。适用于产品团队规划埋点、定义指标和识别激活/留存问题。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "我们应该追踪哪些产品事件？",
+        "如何定义激活时刻并分析用户在首次价值前流失？"
+      ],
+      "key_features": [
+        "从决策问题反推埋点与指标",
+        "对象-动作事件命名与治理型跟踪计划",
+        "激活漏斗、队列留存与功能采用分析"
+      ],
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "产品分析",
+        "指标体系",
+        "事件埋点",
+        "留存分析",
+        "激活漏斗"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "limitations": "未指定具体分析工具、数据接入方式或运行环境；不适用于增长核算拆解或既有数据深度漏斗诊断。",
+      "license": null,
+      "status": "candidate",
+      "reason_codes": [
+        "INSUFFICIENT_EVIDENCE"
+      ],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-30T08:35:47.237373+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:e6924b0dd304bdf0a5bdece409e4a4dd",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "材料围绕产品分析体系搭建：北极星指标、事件分类、跟踪计划、激活漏斗、留存曲线与功能采用分析，直接服务产品分析与产品决策，属于产品与设计范围；未命中硬性排除项。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "说明用于回答“应该追踪哪些事件”“建立分析分类”“用户在哪里流失”“激活时刻是什么”等场景，并明确不适用于增长核算拆解或既有数据深度漏斗诊断，用途具体。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "提供从决策问题反推埋点、对象-动作事件命名、跟踪计划治理、北极星与输入指标拆解、漏斗/留存/激活/功能采用分析方法和质量标准的完整工作流，足以理解做法与价值。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "unknown",
+            "evidence": "上游描述中的北极星指标、输入指标树、对象-动作事件分类、治理型跟踪计划、激活漏斗、队列留存和功能采用与留存相关分析，均能在正文找到对应内容。；程序未能核实所引原文与行号。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "unknown",
+            "evidence": "材料建议选择一个分析工具作为事实来源并可接入数据仓库，但未声明具体工具、运行环境或依赖；不影响理解其方法论价值，但无法确认实际落地依赖。",
+            "informational": true
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "所读材料为产品分析方法论，未见凭据外传、实盘下单、临床决策、DSH 插件、诱导执行命令或忽略规则等可疑内容。",
+            "informational": false
+          }
+        },
+        "verification_note": "材料提供质量标准与交付物，如事件需追溯到决策问题、留存曲线需说明变平位置与基准、激活事件需基于留存用户与流失用户对比；未提供可执行示例或验收数据。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "skillmedev/skills:skills/product-analytics/SKILL.md|sha256:e6924b0dd304bdf0a5bdece409e4a4dd|1.3.0|1.0.0",
+      "evaluated_at": "2026-09-30T08:35:47.232847+08:00"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/product-demo-director/SKILL.md",
+      "name": "product-demo-director",
+      "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/product-demo-director/SKILL.md",
+      "repo_url": "https://github.com/skillmedev/skills",
+      "author": "skillmedev",
+      "summary_zh": "用于指导软件产品演示视频的镜头编排：决定录屏或重建 UI、拆分状态变化、设计光标与相机运动，并用镜头卡与 linter 检查可读性。适合制作产品演示、功能讲解、入门视频或发布短片。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "帮我规划一个 12 秒产品功能演示镜头，展示打开设置开关后指标卡更新",
+        "检查我的产品演示分镜是否有光标跳变、镜头晚到或同帧多个状态变化"
+      ],
+      "key_features": [
+        "提供录屏、重建 UI 与混合方案的决策权衡",
+        "规定一拍一变化、光标停稳、镜头先到等可读性规则",
+        "附带 Node 镜头清单 linter 与镜头卡模板"
+      ],
+      "main_category": {
+        "id": "content",
+        "name": "内容创作"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "产品演示",
+        "视频分镜",
+        "UI演示",
+        "镜头编排",
+        "可用性检查"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "Node.js（用于运行 demo_lint.js）"
+      ],
+      "limitations": "主要覆盖演示镜头编排与可读性，不处理缓动细节、故事板、文字动画、声音设计或 React/Remotion 实现；未声明具体操作系统兼容性。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-30T08:37:07.411073+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:af07e926b0610fa252bcbf84ba23b1c3",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "内容围绕产品演示视频的镜头编排、光标与状态变化可读性，属于内容创作中的视频制作场景，未命中硬性排除。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "明确解决软件产品演示中原始录屏难以理解的问题，适用于产品演示、功能讲解、入门视频或发布短片。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "提供六步工作流、质量标准、禁止项、镜头卡模板、录屏/重建权衡表和可运行的 Node linter，足以理解做法与价值。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "pass",
+            "evidence": "上游描述与实际内容一致：SKILL.md 同时包含镜头编排规则、录屏/重建决策、光标与相机语言、可读性处理和 linter。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "pass",
+            "evidence": "明确说明 linter 为自包含 Node 脚本，运行命令为 node demo_lint.js，且声明 No dependencies；未声明平台细节不影响判断核心价值。",
+            "informational": false
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "材料为创作指导与本地脚本示例，未见凭据外传、实盘交易、临床决策、恶意指令或越权要求。",
+            "informational": false
+          }
+        },
+        "verification_note": "提供 worked example 的 linter 输出和修复说明，可作为验证示例；未提供实际视频制作验收流程。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "skillmedev/skills:skills/product-demo-director/SKILL.md|sha256:af07e926b0610fa252bcbf84ba23b1c3|1.3.0|1.0.0",
+      "evaluated_at": "2026-09-30T08:37:07.406475+08:00"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/product-description-writer/SKILL.md",
+      "name": "product-description-writer",
+      "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/product-description-writer/SKILL.md",
+      "repo_url": "https://github.com/skillmedev/skills",
+      "author": "skillmedev",
+      "summary_zh": "将产品规格或功能清单转写为站内产品详情页主文案，适用于电商 PDP 转化文案撰写。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "根据这份产品规格表写一段站内产品详情页主文案",
+        "把这些功能点改写成面向目标客户的 PDP 卖点文案"
+      ],
+      "key_features": [
+        "从规格到收益的六步写作流程",
+        "明确 PDP 结构与质量标准",
+        "禁止编造性能、认证或虚假紧迫感"
+      ],
+      "main_category": {
+        "id": "content",
+        "name": "内容创作"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "电商文案",
+        "产品描述",
+        "PDP",
+        "转化文案"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "limitations": "不适用于亚马逊或 marketplace 列表，也不用于生成多尺寸/颜色变体文案；未声明运行平台或外部依赖。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-30T08:37:21.172285+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:dc4785cc787a7473e865610b3ce463e7",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "材料描述将产品规格转写为站内 PDP 主文案，属于内容创作中的产品描述文案，不命中硬性排除。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "明确说明用于从规格表或功能清单生成站内产品详情页主文案，并排除亚马逊/多平台变体场景，适用场景具体。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "提供六步工作流、质量标准、交付物结构和禁止事项，足以理解其做法与输出形态。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "pass",
+            "evidence": "上游介绍与 SKILL.md 内容一致，均围绕 PDP 主文案生成；核心流程和交付物有原文支持。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "unknown",
+            "evidence": "未声明特殊工具、运行环境或外部依赖；仅说明需要输入规格/功能列表、目标客户和品牌语气。",
+            "informational": true
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "所读材料未见可疑行为；明确禁止编造性能、认证、材料、健康/安全/收益声明和虚假紧迫感。",
+            "informational": false
+          }
+        },
+        "verification_note": "材料提供质量标准和 Do NOT 规则作为验收依据，但未提供具体示例输出或自动化验证方法。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "skillmedev/skills:skills/product-description-writer/SKILL.md|sha256:dc4785cc787a7473e865610b3ce463e7|1.3.0|1.0.0",
+      "evaluated_at": "2026-09-30T08:37:21.169840+08:00"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/product-hunt-launch/SKILL.md",
+      "name": "product-hunt-launch",
+      "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/product-hunt-launch/SKILL.md",
+      "repo_url": "https://github.com/skillmedev/skills",
+      "author": "skillmedev",
+      "summary_zh": "该技能用于准备 Product Hunt 发布包，包括标语、卡片描述、首条 maker comment、回复模板，以及发布时间、hunter 选择和首小时动量计划。适合产品团队在 Product Hunt 上线前整理发布文案与运营节奏。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "write our Product Hunt tagline",
+        "how do we get momentum in the first hour"
+      ],
+      "key_features": [
+        "生成 5 条排名标语并说明首选理由",
+        "提供首条 maker comment 与 5 类回复模板",
+        "给出发布时间、hunter 选择与首小时动量机制"
+      ],
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "产品发布",
+        "Product Hunt",
+        "发布文案",
+        "增长运营"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "limitations": "明确不适用于跨渠道实时发布日执行、整体发布日历规划或非 Product Hunt 的独立项目发布；未声明外部工具或平台访问依赖。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-30T08:39:58.570217+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:511582f5765f16ce8db75d36c6379259",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "材料围绕 Product Hunt 产品发布文案与发布策略，属于产品发布/推广相关方法，可归入产品与设计，未命中硬性排除项。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "明确说明用于撰写 Product Hunt 发布包：标语、卡片描述、首条 maker comment、回复模板，以及发布时间、hunter 选择和首小时动量计划，并列出典型触发场景。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "提供输入收集、找卖点、写标语/描述/首评、回复模板、发布机制、时间线、交付物和质量标准等步骤，足以理解其做法与价值。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "pass",
+            "evidence": "description 中声称的发布包与机制设置，在正文步骤、时间线和 Deliverable 部分均有对应内容，介绍与实际内容一致。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "unknown",
+            "evidence": "材料未声明特殊工具、运行环境或外部依赖；内容本身是文案与流程指南，但缺少对 Product Hunt 页面访问、团队协作工具等条件的说明。未声明不等于无依赖。",
+            "informational": true
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "所读材料为发布文案与运营流程指南，明确禁止直接索要 upvotes、付费 hunter 等可疑行为，未见凭据外传、恶意命令或排除项冲突。",
+            "informational": false
+          }
+        },
+        "verification_note": "材料提供 worked artifact 时间线、好坏 tagline 示例、Do NOT 与 Quality bar，可作为验收或自检参考；未提供外部实测或平台官方验证。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "skillmedev/skills:skills/product-hunt-launch/SKILL.md|sha256:511582f5765f16ce8db75d36c6379259|1.3.0|1.0.0",
+      "evaluated_at": "2026-09-30T08:39:58.568144+08:00"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/product-roadmap/SKILL.md",
+      "name": "product-roadmap",
+      "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/product-roadmap/SKILL.md",
+      "repo_url": "https://github.com/skillmedev/skills",
+      "author": "skillmedev",
+      "summary_zh": "该技能指导将产品策略转化为以主题划分的 Now/Next/Later 路线图，强调目标追溯、置信度、显式权衡和不承诺超过一个季度的日期。适用于产品团队制定和沟通路线图、向管理层说明方向而避免过度承诺。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "帮我们把当前产品优先级整理成路线图",
+        "为管理层制作一份不过度承诺交付日期的产品路线图"
+      ],
+      "key_features": [
+        "Now/Next/Later 分桶并限制长期承诺日期",
+        "每个主题包含目标、置信度、不做什么和成功指标",
+        "提供路线图行模板、正反示例与质量标准"
+      ],
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "产品路线图",
+        "产品规划",
+        "优先级管理",
+        "沟通模板"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "limitations": "未说明所需输入数据如何收集或验证；未声明工具、平台或与其他技能的实际集成方式。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-30T08:42:30.334104+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:2d75a2ab964e4b26e358578467dfa72f",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "材料描述将产品策略转化为 Now/Next/Later 产品路线图，属于产品与设计中的需求分析/产品规划，不命中硬性排除项。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "明确解决产品路线图沟通与承诺日期过度问题，适用于“build our product roadmap”“turn these priorities into a roadmap”等场景，并说明避免年度经营计划、OKR 目标制定、冲刺排期等相邻场景。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "提供 6 步操作流程、行模板、正反示例、交付物、禁止项和质量标准，足以理解其做法与价值。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "pass",
+            "evidence": "上游描述与正文一致：正文确实围绕 Now/Next/Later、显式权衡、置信度和不超过一个季度承诺日期展开。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "unknown",
+            "evidence": "材料未声明特殊工具、运行环境或依赖；作为指南类技能，未声明依赖不阻断理解，但不能推断无依赖或全平台兼容。",
+            "informational": true
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "所读材料为产品路线图制定指南，未见凭据外传、实盘下单、临床决策、恶意命令或超出收录范围等明显风险。",
+            "informational": false
+          }
+        },
+        "verification_note": "材料提供正反示例、质量标准和交付物清单作为验收/验证依据，但未提供实际运行示例或自动化验证方法。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "skillmedev/skills:skills/product-roadmap/SKILL.md|sha256:2d75a2ab964e4b26e358578467dfa72f|1.3.0|1.0.0",
+      "evaluated_at": "2026-09-30T08:42:30.330104+08:00"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/productized-service-designer/SKILL.md",
+      "name": "productized-service-designer",
+      "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/productized-service-designer/SKILL.md",
+      "repo_url": "https://github.com/skillmedev/skills",
+      "author": "skillmedev",
+      "summary_zh": "帮助自由职业者把定制服务转化为固定范围、固定价格的产品化服务包，适用于设计服务分层、明确交付物与避免范围蔓延的场景。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "我每个项目都要单独报价，怎么把设计服务打包成固定价格的产品？",
+        "帮我设计三个服务层级，让客户清楚每月能得到哪些交付物。"
+      ],
+      "key_features": [
+        "scope-box 四项测试筛选可产品化交付物",
+        "三层报价结构并以中间层为目标",
+        "交付物需定义数量、格式、修订轮次和交付时限"
+      ],
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "服务产品化",
+        "自由职业",
+        "报价设计",
+        "交付物定义",
+        "范围管理"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [
+        "freelance-positioning 的定位声明作为输入",
+        "retainer-pricing-calculator 用于价格验证",
+        "statement-of-work-writer 用于合同/变更单",
+        "scope-creep-defense 用于边界防御"
+      ],
+      "limitations": "依赖相邻技能提供的定位和定价输入；未说明工具或运行环境；示例中的价格和转化率数据未提供外部来源。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-30T08:43:17.235890+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:ab26be412db5f5a87e92921dd53e3a33",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "材料描述将自由职业定制服务转化为固定范围、固定价格的产品化服务包，属于产品与设计中的需求分析/服务方案设计；未命中硬性排除项。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "明确解决自由职业者每个项目都需定制报价、按小时出售时间的问题，适合将服务打包为固定范围、固定价格的分层报价场景，并给出具体方法与示例。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "提供五步操作流程：收集输入、scope-box 四项测试、交付物定义规则、三层报价结构、压力测试；还包含阈值、禁忌和质量标准，足以理解做法与价值。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "pass",
+            "evidence": "上游描述中的 scope-box、3-tier、middle tier as target、deliverable definition rules 均在正文中有对应步骤、规则和示例。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "unknown",
+            "evidence": "材料说明需要来自 freelance-positioning 的定位输入，并建议用 retainer-pricing-calculator、statement-of-work-writer、scope-creep-defense 等相邻技能，但未说明运行环境、工具或这些依赖是否必需；不影响理解核心方法。",
+            "informational": true
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "所读材料为服务产品化设计指南，未见凭据外传、实盘交易、临床决策、恶意命令或规避规则等明显风险；未包含改变评估规则的内容。",
+            "informational": false
+          }
+        },
+        "verification_note": "材料提供 Maya 品牌设计师示例、三层报价样例、stranger/worst-client/outside-the-box 压力测试和 Quality bar 验收条件，但未提供外部验证或实测结果。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "skillmedev/skills:skills/productized-service-designer/SKILL.md|sha256:ab26be412db5f5a87e92921dd53e3a33|1.3.0|1.0.0",
+      "evaluated_at": "2026-09-30T08:43:17.231861+08:00"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/prompt-engineer/SKILL.md",
+      "name": "prompt-engineer",
+      "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/prompt-engineer/SKILL.md",
+      "repo_url": "https://github.com/skillmedev/skills",
+      "author": "skillmedev",
+      "summary_zh": "该技能提供一套将模糊需求转化为结构化、可复用 LLM 提示词的操作规程，适用于需要稳定输出格式、处理边界情况和降低提示注入风险的提示工程场景。",
+      "skill_type": "guideline",
+      "example_requests": [
+        "为什么我的提示词输出不稳定？帮我改成更可靠的结构化提示词。",
+        "为情感分类任务写一个带 JSON 输出、失败处理和少样本示例的提示词。"
+      ],
+      "key_features": [
+        "提供角色、任务、格式、规则与上下文的四段式模板",
+        "强调用少样本示例替代形容词式要求",
+        "给出分隔用户输入与明确失败模式的防注入规则"
+      ],
+      "main_category": {
+        "id": "automation",
+        "name": "自动化"
+      },
+      "candidate_domains": [],
+      "tags": [
+        "提示词工程",
+        "LLM",
+        "工作流",
+        "输出格式约束",
+        "提示注入防护"
+      ],
+      "platform_declared": null,
+      "dependencies_declared": [],
+      "limitations": "未声明适用模型、运行环境或评测工具细节；效果验证依赖真实输入迭代和外部评估，材料未提供实测证据。",
+      "license": null,
+      "status": "recommended",
+      "reason_codes": [],
+      "first_seen": "2026-09-24T09:09:16+00:00",
+      "last_checked": "2026-09-30T08:44:44.959376+08:00",
+      "content_changed_at": null,
+      "content_fingerprint": "sha256:7c62a62b72faefbd3ce1cd291a84f2e1",
+      "source_type": "community_list",
+      "upstream_status": "ok",
+      "needs_review": false,
+      "review_note": null,
+      "pending_review": null,
+      "manual_pick": false,
+      "manual_note": null,
+      "evaluation_rules_version": "1.3.0",
+      "quality_summary": {
+        "review_status": "single_pass",
+        "checks": {
+          "scope_match": {
+            "value": "pass",
+            "evidence": "内容是关于编写与优化 LLM prompt 的操作规程，属于提示词工程/工作流指南，直接服务自动化或内容创作中的 LLM 应用，不属于排除项。",
+            "informational": false
+          },
+          "purpose_clarity": {
+            "value": "pass",
+            "evidence": "明确说明用于把模糊需求转成结构化、可靠提示词，并列出典型场景：提示结果不稳定、JSON 被破坏、防止用户输入注入等。",
+            "informational": false
+          },
+          "instruction_completeness": {
+            "value": "pass",
+            "evidence": "提供五步操作流程、四段式提示词模板、好坏示例、边界加固规则、迭代修复方法和交付物清单，足以理解其做法与价值。",
+            "informational": false
+          },
+          "evidence_traceability": {
+            "value": "pass",
+            "evidence": "上游描述与正文一致：均强调将模糊请求转为包含角色、任务、格式、失败处理和少样本示例的结构化 prompt，并给出具体模板和示例。",
+            "informational": false
+          },
+          "dependency_transparency": {
+            "value": "unknown",
+            "evidence": "材料未声明具体运行环境、模型或工具依赖；只提及可配合 llm-evaluation 使用，但该依赖非必需且未展开。未声明不等于无依赖。",
+            "informational": true
+          },
+          "risk_review": {
+            "value": "pass",
+            "evidence": "所读材料为提示词编写规范，未见凭据外传、实盘交易、临床决策或排除领域内容；还明确提示用分隔符降低注入风险。",
+            "informational": false
+          }
+        },
+        "verification_note": "材料提供真实输入迭代、边界示例、质量标准和将改进评估交给 llm-evaluation 的验证思路，但未提供可执行验收脚本或实测结果。",
+        "blocking_reasons": []
+      },
+      "last_evaluation_id": "skillmedev/skills:skills/prompt-engineer/SKILL.md|sha256:7c62a62b72faefbd3ce1cd291a84f2e1|1.3.0|1.0.0",
+      "evaluated_at": "2026-09-30T08:44:44.955574+08:00"
     }
   ],
   "overrides": {
