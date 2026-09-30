@@ -35,8 +35,8 @@
   ],
   "per_domain": {
     "dev": {
-      "zh": ["代码审查", "重构", "调试", "测试", "前端", "后端"],
-      "en": ["code review", "refactor", "debugging", "testing", "frontend", "backend"]
+      "zh": ["代码审查", "重构", "调试", "测试", "后端"],
+      "en": ["code review", "refactor", "debugging", "testing", "backend"]
     },
     "docs": {
       "zh": ["文档处理", "表格", "演示文稿"],
@@ -47,8 +47,8 @@
       "en": ["article", "image", "video", "audio", "writing"]
     },
     "product": {
-      "zh": ["需求分析", "界面设计", "原型"],
-      "en": ["requirements", "ui design", "prototype", "wireframe"]
+      "zh": ["需求分析",  "原型"],
+      "en": ["requirements",  "prototype", "wireframe"]
     },
     "automation": {
       "zh": ["浏览器操作", "文件处理", "工作流"],
