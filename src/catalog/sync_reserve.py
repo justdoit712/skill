@@ -21,7 +21,6 @@ from .dedupe import dedupe
 from .discovery import discover
 from .evaluation import evaluation_id
 from .models import Candidate, PrescreenResult
-from .filter_rules import filter_discovered_candidates
 from .overrides import get_manual_picks
 from .prescreen import DECISION_QUEUED, prescreen, should_static_skip
 from .snooze import get_active_snoozed
@@ -212,10 +211,7 @@ def prepare(
         if skill and item.get("content_fingerprint"):
             catalogued.setdefault(skill, item["content_fingerprint"])
 
-    existing_ids = set(cat_entries.keys()) | {_skill_of(it) for it in (pending or []) if _skill_of(it)}
-    filter_rules = cfg.get("filter_rules")
-    filtered_merged = filter_discovered_candidates(merged, existing_ids, filter_rules)
-    first_pass = [(candidate, prescreen(candidate, cfg["prescreen"], None)) for candidate in filtered_merged]
+    first_pass = [(candidate, prescreen(candidate, cfg["prescreen"], None)) for candidate in merged]
 
     owned_cfg = (cfg or {}).get("owned") or {}
     owned_items = owned_cfg.get("items", [])

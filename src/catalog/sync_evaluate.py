@@ -19,7 +19,7 @@ from .budget import BudgetLedger
 from .decide import decide
 from .prescreen import should_static_skip
 from .evaluation import evaluate, evaluation_id
-from .filter_rules import filter_new_evaluation, successful_evaluation_skill_ids
+from .filter_rules import eligible_for_topic_filter, filter_new_evaluation, successful_evaluation_skill_ids
 from .models import Candidate, PrescreenResult
 from .overrides import apply_manual_overrides, get_manual_exclusions, get_manual_picks
 from .report import build_report, write_report
@@ -217,11 +217,18 @@ def _evaluate_queue(queue, cfg, ledger, staged, started, token_cap,
             ledger.save_record(eid, record, started)
             return True
 
+        topic_options = {}
+        if eligible_for_topic_filter(
+            filter_rules, previous_by_id.get(candidate.skill_id),
+            previously_evaluated=candidate.skill_id in evaluated_skill_ids,
+        ):
+            topic_options["filter_rules"] = filter_rules
         outcome = evaluate_fn(
             candidate, text, model_cfg=cfg["model"], rules=cfg["rules"],
             taxonomy=cfg["taxonomy"], api_key=api_key, sleep=sleep, on_request=on_request,
             pending_evaluation=existing.get("pending_evaluation"),
             **({"model_pool": pool} if pool else {}),
+            **topic_options,
         )
         if outcome.get('pool_stop'):
             pool_stop = outcome['pool_stop']

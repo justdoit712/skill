@@ -31,7 +31,8 @@ from src.catalog.favorites import (
 )
 from src.catalog.filter_rules import (
     FilterRules,
-    filter_discovered_candidates,
+    eligible_for_topic_filter,
+    filter_new_evaluation,
     load_filter_rules,
     validate_filter_rules,
 )
@@ -178,7 +179,7 @@ class OverridesTest(unittest.TestCase):
             (data / "catalog.json").write_text(json.dumps(catalog), encoding="utf-8")
             for name, payload in (("favorites.json", favorites), ("overrides.json", exclusions),
                                   ("snoozed.json", snoozed),
-                                  ("filter-rules.json", {"evaluation": {"blocked_tags": ["营销规划"]}}),
+                                  ("filter-rules.json", {"blocked_topics": [{"name": "营销推广与获客增长"}]}),
                                   ("owned-skills.json", {"schema_version": OWNED_SCHEMA_VERSION, "items": [
                                       {"skill_id": "demo/repo:skills/owned/SKILL.md", "name": "owned", "added_at": "2026-10-01"}]})):
                 (config / name).write_text(json.dumps(payload), encoding="utf-8")
@@ -220,54 +221,181 @@ class OverridesTest(unittest.TestCase):
 
 @smoke
 class FilterRulesTest(unittest.TestCase):
-    """阶段过滤规则校验、词界匹配与0模型调用契约。"""
+    """主题规则、主要用途判断及首次评估边界；不增加模型调用。"""
     def test_validate_filter_rules(self):
         valid = {
-            "filter_rules_version": "1.0.0",
-            "discovery": {"blocked_keywords": ["expo", "App Store"]},
-            "evaluation": {"blocked_tags": ["营销规划"]},
+            "filter_rules_version": "2.0.0",
+            "_comment": ["新增主题只需要填写 name。", "description 可以省略。"],
+            "blocked_topics": [
+                {"name": "手机 App", "description": "主要用于 Android、iOS 或 Expo 手机应用。"},
+                {"name": "营销推广与获客增长"},
+            ],
         }
         self.assertEqual(validate_filter_rules(valid), [])
+        configured = FilterRules(valid)
+        comments_changed = {**valid, "_comment": ["这里只修改说明。"]}
+        self.assertEqual(configured.fingerprint, FilterRules(comments_changed).fingerprint)
+        self.assertTrue(configured.has_evaluation_rules)
+        self.assertFalse(FilterRules().has_evaluation_rules)
+        for bad in (
+            {"blocked_topics": "手机 App"},
+            {"blocked_topics": ["手机 App"]},
+            {"blocked_topics": [{"name": ""}]},
+            {"blocked_topics": [{"name": " 手机 App"}]},
+            {"blocked_topics": [{"name": "手机 App", "description": 123}]},
+            {"blocked_topics": [{"name": "手机 App"}, {"name": "手机 App"}]},
+            {"discovery": {"blocked_keywords": ["expo"]}},
+            {"evaluation": {"blocked_tags": ["营销规划"]}},
+        ):
+            with self.subTest(bad=bad):
+                self.assertTrue(validate_filter_rules(bad))
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "filter-rules.json"
+            self.assertFalse(load_filter_rules(path).has_evaluation_rules)
+            path.write_text(json.dumps(valid), encoding="utf-8")
+            self.assertEqual(load_filter_rules(path).fingerprint, configured.fingerprint)
 
-    def test_discovery_keyword_word_boundaries(self):
-        rules = FilterRules(blocked_keywords=["expo", "App Store"])
-        # expo 边界测试：expo 命中，export 不命中
-        self.assertTrue(rules.matches_discovery("expo", "skills/expo/SKILL.md"))
-        self.assertTrue(rules.matches_discovery("demo", "skills/expo-cli/SKILL.md"))
-        self.assertFalse(rules.matches_discovery("export-tool", "skills/export/SKILL.md"))
+    def test_topic_prompt_uses_the_normal_assessment_request(self):
+        from src.catalog.evaluation import build_prompt, evaluate
+        from src.catalog.local import _unknown_usage_reserve
+        from src.catalog.models import Candidate
+        from src.infra.llm import ModelCallResult
 
-        # App Store 变体测试：App Store, AppStore, app-store 命中，apple storefront 不命中
-        self.assertTrue(rules.matches_discovery("App Store Connect", "skills/tool/SKILL.md"))
-        self.assertTrue(rules.matches_discovery("my-tool", "skills/AppStore/SKILL.md"))
-        self.assertTrue(rules.matches_discovery("app-store-helper", "skills/test/SKILL.md"))
-        self.assertFalse(rules.matches_discovery("Apple Storefront", "skills/apple-storefront/SKILL.md"))
+        topics = FilterRules({"blocked_topics": [
+            {"name": "手机 App", "description": "主要用于 Android、iOS 手机应用。"},
+            {"name": "营销推广与获客增长"},
+        ]})
+        candidate = Candidate("test/repo:SKILL.md", "test", "repo", name="demo")
+        taxonomy = {"main_categories": [{"id": "dev", "name": "开发"}]}
+        rules = {"rules_version": "1.0.0"}
+        system, _ = build_prompt(candidate, "通用开发工具。", rules, taxonomy, filter_rules=topics)
+        for topic in topics.blocked_topics:
+            self.assertIn(topic["name"], system)
+            self.assertIn(topic["topic_id"], system)
+        self.assertIn("主要", system)
+        self.assertIn("unknown", system)
+        self.assertIn("no_match", system)
+        cfg = {"rules": rules, "taxonomy": taxonomy, "model": {}}
+        self.assertGreater(
+            _unknown_usage_reserve(candidate, "材料", cfg, filter_rules=topics),
+            _unknown_usage_reserve(candidate, "材料", cfg),
+        )
+        for inactive in (None, FilterRules()):
+            baseline, _ = build_prompt(candidate, "材料", rules, taxonomy, filter_rules=inactive)
+            self.assertNotIn("topic_assessments", baseline)
+        # 主题字段缺失或非法不应令正常评估失败，也不应追加请求来补问。
+        for topic_output in (None, "bad", [{"topic_id": "unknown", "result": "match", "evidence": "广告"}]):
+            with self.subTest(topic_output=topic_output):
+                raw = {"main_category": "dev", "topic_assessments": topic_output}
+                response = ModelCallResult(ok=True, content=json.dumps(raw), attempts=1)
+                with patch("src.catalog.evaluation.call_model", return_value=response) as model:
+                    result = evaluate(candidate, "通用开发工具。", model_cfg={}, rules=rules,
+                        taxonomy=taxonomy, filter_rules=topics)
+                self.assertTrue(result["ok"])
+                self.assertEqual(model.call_count, 1)
+                self.assertEqual(len(result["calls"]), 1)
+        response = ModelCallResult(ok=True, content=json.dumps({"main_category": "dev"}))
+        with patch("src.catalog.evaluation.call_model", return_value=response) as model:
+            # Finder 等调用方省略新参数时保持原来的评估调用方式。
+            result = evaluate(candidate, "通用开发工具。", model_cfg={}, rules=rules, taxonomy=taxonomy)
+        self.assertTrue(result["ok"])
+        model.assert_called_once()
+        self.assertNotIn("topic_assessments", model.call_args.args[1])
 
-    def test_filter_discovered_candidates(self):
-        rules = FilterRules(blocked_keywords=["expo", "App Store"])
-        candidates = [
-            {"name": "expo-tool", "skill_path": "skills/expo-tool/SKILL.md"},
-            {"name": "export-tool", "skill_path": "skills/export-tool/SKILL.md"},
-            {"name": "app-store-sync", "skill_path": "skills/sync/SKILL.md"},
-            {"name": "good-tool", "skill_path": "skills/good/SKILL.md"},
-        ]
-        report = {}
-        kept = filter_discovered_candidates(candidates, existing_ids=set(), filter_rules=rules, report=report)
-        self.assertEqual(len(kept), 2)
-        self.assertEqual([c["name"] for c in kept], ["export-tool", "good-tool"])
-        self.assertEqual(len(report.get("discovery_filtered", [])), 2)
+    def test_invalid_topic_assessments_preserve_the_normal_decision(self):
+        from src.catalog.evaluation import parse_evaluation
 
-    def test_evaluation_blocked_tags(self):
-        rules = FilterRules(blocked_tags=["营销规划"])
-        # 精确标签匹配
-        self.assertTrue(rules.matches_evaluation(["营销规划"]))
-        self.assertTrue(rules.matches_evaluation(["技术工具", "营销规划"]))
-        # 前缀/子串不误伤
-        self.assertFalse(rules.matches_evaluation(["营销规划工具"]))
-        self.assertFalse(rules.matches_evaluation(["营销"]))
-        self.assertFalse(rules.matches_evaluation([]))
+        topics = FilterRules({"blocked_topics": [{"name": "营销推广与获客增长"}]})
+        topic_id = topics.blocked_topics[0]["topic_id"]
+        match = {"topic_id": topic_id, "result": "match", "evidence": "主要用于广告投放。"}
+        decision = {"decision": "recommended", "reason_codes": []}
+        for raw in (
+            None, "bad", {}, [],
+            [{"result": "match", "evidence": "广告投放"}],
+            [{**match, "topic_id": "unknown-topic"}],
+            [{**match, "topic_id": []}],
+            [{**match, "topic_id": {"id": topic_id}}],
+            [{**match, "result": "yes"}],
+            [{"topic_id": topic_id, "result": "match"}],
+            [{**match, "evidence": "   "}],
+            [{**match, "evidence": ["广告投放"]}],
+            [match, {**match, "result": "no_match"}],
+            [match, match],
+            [None, "match"],
+        ):
+            with self.subTest(raw=raw):
+                parsed = parse_evaluation(json.dumps({"topic_assessments": raw}), {}, None,
+                    filter_rules=topics)
+                filtered = filter_new_evaluation(decision, parsed, topics)
+                self.assertEqual(filtered["decision"], "recommended")
+                self.assertNotIn("TOPIC_FILTERED", filtered["reason_codes"])
+        self.assertEqual(decision, {"decision": "recommended", "reason_codes": []})
+
+    def test_topic_filter_uses_main_purpose_and_preserves_history(self):
+        from src.catalog.evaluation import evaluate, parse_evaluation
+        from src.catalog.models import Candidate
+
+        topics = FilterRules({"blocked_topics": [{"name": "营销推广与获客增长"}]})
+        topic_id = topics.blocked_topics[0]["topic_id"]
+        decision = {"decision": "candidate", "reason_codes": ["REVIEW_NEEDED"]}
+        evaluation = {"tags": ["获客策略"], "topic_assessments": [
+            {"topic_id": topic_id, "result": "match", "evidence": "以会员获客和广告投放为主要用途。"}]}
+        before = copy.deepcopy(evaluation)
+        filtered = filter_new_evaluation(decision, evaluation, topics)
+        self.assertEqual(filtered["decision"], "excluded")
+        self.assertEqual(filtered["blocked_topics"], ["营销推广与获客增长"])
+        self.assertTrue(filtered["topic_filtered"])
+        self.assertEqual(filtered["original_decision"], decision)
+        self.assertEqual(filtered["reason_codes"], ["REVIEW_NEEDED", "TOPIC_FILTERED"])
+        audit = filtered["topic_filter_audit"]
+        self.assertEqual(audit["rules_fingerprint"], topics.fingerprint)
+        self.assertEqual(audit["topic_assessments"][0]["result"], "match")
+        self.assertEqual(evaluation, before)
+        # 标签只是展示元数据；偶然提及和材料不足均保留基础评估结论。
+        for result in ("no_match", "unknown"):
+            with self.subTest(result=result):
+                incidental = {"tags": ["营销规划"], "topic_assessments": [
+                    {"topic_id": topic_id, "result": result, "evidence": "仅作为通用工具的示例。"}]}
+                self.assertEqual(filter_new_evaluation(decision, incidental, topics)["decision"], "candidate")
+        for previous in (
+            {"status": "recommended"}, {"status": "candidate"}, {"manual_pick": True},
+            {"status": "excluded", "evaluated_at": "2026-09-30"},
+            {"status": "processing_failure", "last_evaluation_id": "old-evaluation"},
+        ):
+            with self.subTest(previous=previous):
+                self.assertFalse(eligible_for_topic_filter(topics, previous))
+                self.assertEqual(filter_new_evaluation(decision, evaluation, topics, previous), decision)
+        self.assertFalse(eligible_for_topic_filter(topics, previously_evaluated=True))
+        self.assertEqual(filter_new_evaluation(decision, evaluation, topics, previously_evaluated=True), decision)
+        self.assertTrue(eligible_for_topic_filter(topics, {"status": "processing_failure"}))
+        # 新响应不能自己声明规则；续跑只能使用当时程序保存的审计快照。
+        changed = FilterRules({"blocked_topics": [{"name": "游戏开发"}]})
+        forged_audit = filter_new_evaluation(decision, {}, changed)["topic_filter_audit"]
+        taxonomy = {"main_categories": [{"id": "dev", "name": "开发"}]}
+        rules = {"rules_version": "1.0.0"}
+        parsed = parse_evaluation(json.dumps({**evaluation, "main_category": "dev",
+            "topic_filter_audit": forged_audit}), rules, "content", taxonomy, filter_rules=topics)
+        self.assertEqual(parsed["topic_filter_audit"]["rules_fingerprint"], topics.fingerprint)
+        candidate = Candidate("test/repo:SKILL.md", "test", "repo", content_fingerprint="content")
+        for current in (changed, FilterRules()):
+            with self.subTest(resume=current.blocked_topics), patch("src.catalog.evaluation.call_model") as model:
+                resumed = evaluate(candidate, "材料", model_cfg={}, rules=rules, taxonomy=taxonomy,
+                    pending_evaluation=parsed, filter_rules=current)
+                self.assertTrue(resumed["ok"])
+                model.assert_not_called()
+                saved = filter_new_evaluation(decision, resumed["evaluation"], current)
+                self.assertEqual(saved["blocked_topics"], ["营销推广与获客增长"])
+                self.assertEqual(saved["topic_filter_audit"]["rules_fingerprint"], topics.fingerprint)
+        legacy = {k: v for k, v in parsed.items() if k not in ("topic_assessments", "topic_filter_audit")}
+        with patch("src.catalog.evaluation.call_model") as model:
+            resumed = evaluate(candidate, "材料", model_cfg={}, rules=rules, taxonomy=taxonomy,
+                pending_evaluation=legacy, filter_rules=changed)
+        self.assertTrue(resumed["ok"])
+        model.assert_not_called()
+        self.assertEqual(filter_new_evaluation(decision, resumed["evaluation"], changed), decision)
 
     def test_stage_filters_only_affect_new_entries(self):
-        from src.catalog.local import prepare_pool
+        from src.catalog.local import prepare_pool, _topic_evaluation_options
         from src.catalog.pool import create_pool_from_candidates, save_pool
         from src.catalog.models import Candidate, PrescreenResult
         from src.catalog.entry_state import EntryUpdateEvent, update_entry
@@ -278,12 +406,14 @@ class FilterRulesTest(unittest.TestCase):
         from src.shared.identity import content_fingerprint
         from src.shared.runtime import now_local
 
-        rules = FilterRules(blocked_keywords=["expo"], blocked_tags=["营销规划"])
+        rules = FilterRules({"blocked_topics": [{"name": "手机 App"}, {"name": "营销推广与获客增长"}]})
+        topic_id = rules.blocked_topics[1]["topic_id"]
         text = "---\nname: demo\ndescription: A useful skill\n---\n# Demo\n" + "Complete a useful task. " * 20
         context = CatalogContext(rules_version="1.0.0")
         names = ("recommended", "candidate", "favorite", "pending", "new", "history", "retry")
         candidates = [Candidate(f"demo/repo:skills/expo-{name}/SKILL.md", "demo", "repo",
             name=f"expo-{name}", path=f"skills/expo-{name}/SKILL.md", content_fingerprint=content_fingerprint(text)) for name in names]
+        candidates[4].description = "A general tool with an optional App Store publishing example."
         previous = [update_entry(None, c, EntryUpdateEvent(kind="fresh_evaluation",
             evaluation={"tags": ["general"]}, decision={"decision": status},
             evaluation_id="prior-" + name), context) for c, status, name in zip(
@@ -295,6 +425,12 @@ class FilterRulesTest(unittest.TestCase):
             "rules": {"rules_version": "1.0.0"}, "taxonomy": {}, "prescreen": SimpleNamespace(domain_names={}),
             "favorites": {"manual_picks": [{"skill_id": candidates[2].skill_id}]},
             "overrides": {"manual_exclusions": []}}
+        local_state = SimpleNamespace(cfg=cfg, entries={e["skill_id"]: e for e in previous},
+            evaluated_skill_ids={candidates[5].skill_id})
+        for candidate, name in zip(candidates, names):
+            with self.subTest(local=name):
+                expected = {"filter_rules": rules} if name in ("pending", "new", "retry") else {}
+                self.assertEqual(_topic_evaluation_options(local_state, candidate), expected)
 
         for mode in ("refresh", "expired", "refill"):
             with self.subTest(mode=mode), tempfile.TemporaryDirectory() as tmp:
@@ -309,8 +445,9 @@ class FilterRulesTest(unittest.TestCase):
                 discover = Mock(return_value=(candidates[:5], []))
                 pool = prepare_pool(root, local, cfg, {"refresh_pool": mode == "refresh", "pool_watermark": 99},
                     {candidates[0].skill_id}, discover_fn=discover, log=lambda *a: None, report=report)
-                self.assertEqual({i.candidate.skill_id for i in pool.items}, {c.skill_id for c in candidates[:4]})
-                self.assertEqual([r["skill_id"] for r in report["discovery_filtered"]], [candidates[4].skill_id])
+                # 名称中的 Expo / App Store 不再提前拦截，新条目进入正常评估。
+                self.assertEqual({i.candidate.skill_id for i in pool.items}, {c.skill_id for c in candidates[:5]})
+                self.assertFalse(report.get("discovery_filtered"))
 
         with tempfile.TemporaryDirectory() as tmp:
             ledger = BudgetLedger.load(Path(tmp) / "state", 20)
@@ -322,19 +459,33 @@ class FilterRulesTest(unittest.TestCase):
                 ledger.reserve([{"evaluation_id": eid, "skill_id": c.skill_id}])
                 queue["pending"].append({"candidate": asdict(c), "prescreen": asdict(PrescreenResult(c.skill_id, "queued")),
                     "content_fingerprint": c.content_fingerprint, "fetch": {"ok": True}})
-            evaluation = Mock(return_value={"ok": True, "evaluation": {"tags": ["营销规划"]}})
+            def assess(candidate, _text, **kwargs):
+                result = {"tags": ["获客策略"]}
+                if kwargs.get("filter_rules"):
+                    result["topic_assessments"] = [
+                        {"topic_id": rules.blocked_topics[0]["topic_id"], "result": "no_match", "evidence": "主要做营销获客。"},
+                        {"topic_id": topic_id, "result": "match", "evidence": "主要用于会员获客和广告投放。"},
+                    ]
+                return {"ok": True, "evaluation": result}
+            evaluation = Mock(side_effect=assess)
             fetch = Mock(side_effect=AssertionError("unexpected network"))
             _evaluate_queue(queue, cfg, ledger, {c.skill_id: text for c in candidates}, now_local(), 0,
                 fetch, evaluation, None, lambda *a: None, previous_entries=previous)
             outcomes = {c.name: (ledger.get(evaluation_id(c, cfg["model"], cfg["rules"])) or {}).get("outcome", {}) for c in candidates}
             for name in ("recommended", "candidate", "history"):
                 self.assertEqual(outcomes[f"expo-{name}"]["decision"], "recommended")
-                self.assertNotIn("TAG_FILTERED", outcomes[f"expo-{name}"]["reason_codes"])
+                self.assertNotIn("TOPIC_FILTERED", outcomes[f"expo-{name}"]["reason_codes"])
             for name in ("pending", "new", "retry"):
                 outcome = outcomes[f"expo-{name}"]
                 self.assertEqual(outcome["decision"], "excluded")
-                self.assertEqual(outcome["blocked_tag"], "营销规划")
+                self.assertEqual(outcome["blocked_topics"], ["营销推广与获客增长"])
                 self.assertEqual(outcome["original_decision"]["decision"], "recommended")
+                self.assertEqual(outcome["topic_filter_audit"]["rules_fingerprint"], rules.fingerprint)
+            calls_by_name = {call.args[0].name: call for call in evaluation.call_args_list}
+            for name in ("recommended", "candidate", "history"):
+                self.assertIsNone(calls_by_name[f"expo-{name}"].kwargs.get("filter_rules"))
+            for name in ("pending", "new", "retry"):
+                self.assertIs(calls_by_name[f"expo-{name}"].kwargs.get("filter_rules"), rules)
             evaluation_calls = evaluation.call_count
             rebuilt = _build_evaluated_catalog(previous, queue, cfg, ledger, context)
             self.assertEqual(next(e for e in rebuilt["entries"] if e["skill_id"] == candidates[0].skill_id)["status"], "recommended")
@@ -343,6 +494,7 @@ class FilterRulesTest(unittest.TestCase):
             self.assertTrue(favorite["manual_pick"])
             # 后续缓存复用不因当前规则改变而重新检查；账本结论保持原样。
             cfg["filter_rules"] = FilterRules()
+            self.assertEqual(_topic_evaluation_options(local_state, candidates[4]), {})
             _evaluate_queue(queue, cfg, ledger, {}, now_local(), 0, fetch, evaluation, None, lambda *a: None, previous_entries=previous)
             self.assertEqual(evaluation.call_count, evaluation_calls)
             self.assertEqual(ledger.get(evaluation_id(candidates[4], cfg["model"], cfg["rules"]))["outcome"]["decision"], "excluded")

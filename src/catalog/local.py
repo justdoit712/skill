@@ -63,7 +63,7 @@ from src.shared.versions import build_config_fingerprint
 from src.shared.model_config import material_fetch_limit
 from .index import CatalogContext, build_catalog, build_entry, index_by_id
 from .store import mutate_catalog
-from .filter_rules import filter_discovered_candidates, filter_new_evaluation, successful_evaluation_skill_ids
+from .filter_rules import eligible_for_topic_filter, filter_new_evaluation, successful_evaluation_skill_ids
 from .overrides import apply_manual_overrides_to_entry, get_manual_exclusions, get_manual_picks
 from .snooze import apply_snooze_overrides, get_active_snoozed, load_snooze
 from .pool import (
@@ -152,12 +152,14 @@ def _retryable(result: dict) -> bool:
     )
 
 
-def _unknown_usage_reserve(candidate, text, cfg) -> int:
+def _unknown_usage_reserve(candidate, text, cfg, *, filter_rules=None) -> int:
     """未返回 usage 的请求按输入 UTF-8 字节数＋最大输出＋消息余量预留预算。
 
     这是偏保守的估算，不声称是接口的精确分词或账单；与已知 Token 分列。
     """
-    system, material = build_prompt(candidate, text, cfg["rules"], cfg["taxonomy"])
+    system, material = build_prompt(
+        candidate, text, cfg["rules"], cfg["taxonomy"], filter_rules=filter_rules,
+    )
     return (
         len(system.encode("utf-8"))
         + len(material.encode("utf-8"))
@@ -287,13 +289,6 @@ def prepare_pool(
                     if it.status == STATUS_LENGTH_EXCEEDED} if previous_pool else {}
     blocked_skips = {it.candidate.skill_id: it for it in previous_pool.items
                      if it.status == STATUS_BLOCKED} if previous_pool else {}
-    existing_ids = set(index_by_id((_read(root / "data" / "catalog.json", {}) or {}).get("entries") or [])) | set(old_recommended)
-    if previous_pool:
-        existing_ids.update(it.candidate.skill_id for it in previous_pool.items if it.candidate.skill_id)
-    existing_ids.update(get_manual_picks(cfg.get("favorites") or {}).keys())
-    existing_ids.update(manual_exclusions)
-    existing_ids.update(active_snoozed)
-    existing_ids.update(owned_ids)
 
     def count_actionable(p) -> int:
         return sum(
@@ -328,12 +323,8 @@ def prepare_pool(
         )
         if report is not None:
             report["discovery_failures"] = sum(not item.ok for item in outcomes)
-        filter_rules = cfg.get("filter_rules")
-        filtered_candidates = filter_discovered_candidates(
-            candidates, existing_ids, filter_rules, log=log, report=report
-        )
         pool = create_pool_from_candidates(
-            list(filtered_candidates) + [it.candidate for it in length_skips.values()]
+            list(candidates) + [it.candidate for it in length_skips.values()]
             + [it.candidate for it in blocked_skips.values()],
             old_recommended, cfg["source_types"])
         for item in pool.items:
@@ -366,11 +357,7 @@ def prepare_pool(
             )
             if report is not None:
                 report["discovery_failures"] = sum(not item.ok for item in outcomes)
-            filter_rules = cfg.get("filter_rules")
-            filtered_candidates = filter_discovered_candidates(
-                candidates, existing_ids, filter_rules, log=log, report=report
-            )
-            added = append_new_candidates(pool, filtered_candidates, old_recommended, cfg["source_types"])
+            added = append_new_candidates(pool, candidates, old_recommended, cfg["source_types"])
             save_pool(pool_path, pool)
             actionable_count = count_actionable(pool)
             log(f"增量补水完成，新增 {added} 条候选入池，当前池总量 {len(pool)} 条，可处理候选 {actionable_count} 条。")
@@ -648,6 +635,16 @@ def _record_request_usage(state, call, *, retryable):
         state.report['stop_reason'] = resolve_primary_stop_reason(state.stop_causes)
 
 
+def _topic_evaluation_options(state, candidate):
+    filter_rules = state.cfg.get("filter_rules")
+    if eligible_for_topic_filter(
+        filter_rules, state.entries.get(candidate.skill_id),
+        previously_evaluated=candidate.skill_id in state.evaluated_skill_ids,
+    ):
+        return {"filter_rules": filter_rules}
+    return {}
+
+
 def _evaluate_with_pool(state, candidate, text, eid, record):
     """Account each physical request while preserving the stable candidate ledger ID."""
     from src.infra.model_pool import PoolStopped, PoolReselect
@@ -713,7 +710,8 @@ def _evaluate_with_pool(state, candidate, text, eid, record):
     result = state.evaluate_fn(candidate, text, model_cfg=state.cfg['model'],
         rules=state.cfg['rules'], taxonomy=state.cfg['taxonomy'], sleep=state.sleep,
         on_request=on_request, pending_evaluation=record.get('pending_evaluation'),
-        model_pool=state.model_pool, pool_max_attempts=state.max_attempts)
+        model_pool=state.model_pool, pool_max_attempts=state.max_attempts,
+        **_topic_evaluation_options(state, candidate))
     checkpoint = state.ledger.get(eid)
     if result.get('pool_stop'):
         if all(getattr(c, 'billing_state', None) == 'rejected_before_inference' for c in observed):
@@ -806,7 +804,12 @@ def _evaluate_with_retries(state, candidate, text, eid, record):
             observed.append(request_call)
             state.save()
 
-        result = state.evaluate_fn(candidate, text, model_cfg=state.cfg['model'], rules=state.cfg['rules'], taxonomy=state.cfg['taxonomy'], sleep=state.sleep, on_request=on_request, pending_evaluation=record.get('pending_evaluation'))
+        result = state.evaluate_fn(
+            candidate, text, model_cfg=state.cfg['model'], rules=state.cfg['rules'],
+            taxonomy=state.cfg['taxonomy'], sleep=state.sleep, on_request=on_request,
+            pending_evaluation=record.get('pending_evaluation'),
+            **_topic_evaluation_options(state, candidate),
+        )
         call = result.get('call')
         key = resolve_api_key(state.cfg['model'])
         if key and result.get('error'):
@@ -1105,7 +1108,9 @@ def process_candidate(state, item):
         return True
     norm_fp = candidate.normalized_content_fingerprint or normalized_content_fingerprint(text)
     if hasattr(state, 'wait_for_budget'):
-        state.unknown_reserve = _unknown_usage_reserve(candidate, text, state.cfg)
+        state.unknown_reserve = _unknown_usage_reserve(
+            candidate, text, state.cfg, **_topic_evaluation_options(state, candidate),
+        )
         if not state.wait_for_budget():
             return False
     state.ledger.reserve([{
@@ -1124,7 +1129,9 @@ def process_candidate(state, item):
     state.ledger.save_record(eid, record)
     state.report['evaluations'] += 1
     state.log(f"评估 #{state.report['evaluations']}：{candidate.name}（累计 {state.usage.total_tokens:,} Token）")
-    state.unknown_reserve = _unknown_usage_reserve(candidate, text, state.cfg)
+    state.unknown_reserve = _unknown_usage_reserve(
+        candidate, text, state.cfg, **_topic_evaluation_options(state, candidate),
+    )
     result = None
     result = _evaluate_with_retries(state, candidate, text, eid, record)
     if result is None:
@@ -1155,9 +1162,10 @@ def process_candidate(state, item):
             'normalization_version': NORMALIZATION_VERSION,
             'output_contract_version': LLM_OUTPUT_CONTRACT_VERSION,
         }
-        if outcome.get("tag_filtered"):
-            state.log(f"[阶段过滤] #{seq} {candidate.skill_id}：命中标签过滤规则 '{outcome['blocked_tag']}'，结论置为 excluded，不进入推荐或候选。")
-            state.report["tag_filtered"] = state.report.get("tag_filtered", 0) + 1
+        if outcome.get("topic_filtered"):
+            topics = "、".join(outcome["blocked_topics"])
+            state.log(f"[主题屏蔽] #{seq} {candidate.skill_id}：主要用途属于 {topics}，不进入推荐或候选。")
+            state.report["topic_filtered"] = state.report.get("topic_filtered", 0) + 1
         outcome['candidate'] = asdict(candidate)
         outcome['request_usage'] = (state.ledger.get(eid) or {}).get('requests', [])
         outcome['prescreen'] = asdict(pres)

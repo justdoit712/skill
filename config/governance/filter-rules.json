@@ -1,14 +1,24 @@
 {
-  "filter_rules_version": "1.0.0",
-  "discovery": {
-    "blocked_keywords": [
-      "expo",
-      "App Store"
-    ]
-  },
-  "evaluation": {
-    "blocked_tags": [
-      "营销规划"
-    ]
-  }
+  "filter_rules_version": "2.0.0",
+  "_comment": [
+    "只屏蔽以后的新条目，已有收藏、推荐和候选不受影响。",
+    "【添加位置】在下面 blocked_topics 列表中新增一个对象。",
+    "name 必填：写你不想要的内容主题，例如 游戏开发。",
+    "description 可选：名称不够清楚时，再补充范围说明。",
+    "最简单的新增项：{\"name\": \"游戏开发\"}。",
+    "相邻对象用逗号分隔；删除一项即可取消该主题。",
+    "清空为 [] 即关闭主题屏蔽，不恢复已排除条目。",
+    "在首次 AI 评估中判断主要用途，同类表达也算。",
+    "仅顺带提到或判断不清楚时，保留原评估结论。"
+  ],
+  "blocked_topics": [
+    {
+      "name": "手机 App",
+      "description": "主要用于手机应用开发、发布或运营，含 Android、iOS、Expo、App Store。"
+    },
+    {
+      "name": "营销推广与获客增长",
+      "description": "主要用于营销策划、广告投放、SEO、社交媒体推广、获客或增长。"
+    }
+  ]
 }
