@@ -1,0 +1,25 @@
+{
+  "model_config_version": "1.0.0",
+  "provider_id": "siliconflow",
+  "provider": "siliconflow",
+  "name": "硅基流动 (SiliconFlow)",
+  "endpoint": "https://api.siliconflow.cn/v1/chat/completions",
+  "model": "deepseek-ai/DeepSeek-V3",
+  "auth": {
+    "type": "bearer",
+    "api_key_env": "LLM_API_KEY",
+    "key_ref": "siliconflow"
+  },
+  "request": {
+    "timeout_seconds": 600,
+    "max_attempts": 2,
+    "temperature": 0,
+    "response_format": "json_object"
+  },
+  "limits": {
+    "max_input_bytes": 262144,
+    "max_output_tokens": 8000,
+    "max_calls_per_week": 50,
+    "max_total_tokens_per_run": 100000000
+  }
+}

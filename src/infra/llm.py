@@ -157,27 +157,75 @@ class ModelCallResult:
         return int((self.usage or {}).get("total_tokens") or 0)
 
 
-def resolve_api_key(model_cfg: dict) -> str | None:
-    """解析凭据：先环境变量，后本地私密配置文件。
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[2]
+
+
+def load_secrets(config_dir: str | Path | None = None) -> dict[str, str]:
+    """读取本地独立密钥文件 config/secrets.local.json。"""
+    candidates: list[Path] = []
+    if config_dir:
+        cd = Path(config_dir)
+        candidates.extend([cd / "secrets.local.json", cd / "config" / "secrets.local.json"])
+    candidates.append(ROOT / "config" / "secrets.local.json")
+
+    for path in candidates:
+        if path.is_file():
+            try:
+                data = json.loads(path.read_text(encoding="utf-8"))
+                if isinstance(data, dict):
+                    return {str(k): str(v).strip() for k, v in data.items() if v}
+            except Exception:
+                pass
+    return {}
+
+
+def resolve_api_key(model_cfg: dict, config_dir: str | Path | None = None) -> str | None:
+    """解析凭据：先环境变量，次 secrets.local.json[key_ref]，后本地私密配置文件字面量。
 
     环境变量优先，这样部署环境（GitHub Secrets 注入）总能覆盖本地遗留值，
-    不会被陈旧配置遮蔽。文件里的字面量只服务本机运行。
+    不会被陈旧配置遮蔽。文件里的字面量与 key_ref 只服务本机运行。
     """
     auth = model_cfg.get("auth") or {}
     env_name = auth.get("api_key_env") or "LLM_API_KEY"
     value = (os.environ.get(env_name) or "").strip()
     if value:
         return value
+
+    # 1. 尝试从独立密钥文件按 key_ref 解析
+    key_ref = auth.get("key_ref")
+    if key_ref:
+        ref_env = os.environ.get(f"SKILL_SECRET_{str(key_ref).upper()}") or os.environ.get(f"{str(key_ref).upper()}_API_KEY")
+        if ref_env and ref_env.strip():
+            return ref_env.strip()
+        secrets = load_secrets(config_dir)
+        secret_val = secrets.get(str(key_ref))
+        if secret_val:
+            return secret_val
+
+    # 2. 兼容历史配置中的直接内联 api_key 字面量
     literal = (auth.get("api_key") or "").strip()
     return literal or None
 
 
-def api_key_source(model_cfg: dict) -> str:
+def api_key_source(model_cfg: dict, config_dir: str | Path | None = None) -> str:
     """凭据来源描述，用于报错与日志。**不输出凭据本身。**"""
     auth = model_cfg.get("auth") or {}
     env_name = auth.get("api_key_env") or "LLM_API_KEY"
     if (os.environ.get(env_name) or "").strip():
         return f"环境变量 {env_name}"
+
+    key_ref = auth.get("key_ref")
+    if key_ref:
+        ref_env_name = f"SKILL_SECRET_{str(key_ref).upper()}"
+        if (os.environ.get(ref_env_name) or "").strip():
+            return f"环境变量 {ref_env_name} (对应 key_ref={key_ref})"
+        secrets = load_secrets(config_dir)
+        if str(key_ref) in secrets:
+            return f"密钥文件 secrets.local.json[{key_ref}]"
+        return f"未设置（secrets.local.json 缺少 '{key_ref}' 且环境变量均为空）"
+
     if (auth.get("api_key") or "").strip():
         return "配置文件中的 api_key"
     return f"未设置（环境变量 {env_name} 与配置 api_key 均为空）"

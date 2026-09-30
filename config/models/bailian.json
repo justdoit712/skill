@@ -1,0 +1,32 @@
+{
+  "model_config_version": "1.0.0",
+  "provider_id": "bailian",
+  "provider": "dashscope",
+  "name": "阿里云百炼平台 (Bailian)",
+  "endpoint": "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions",
+  "model": "qwen-plus",
+  "auth": {
+    "type": "bearer",
+    "api_key_env": "LLM_API_KEY",
+    "key_ref": "bailian"
+  },
+  "request": {
+    "timeout_seconds": 600,
+    "max_attempts": 2,
+    "temperature": 0,
+    "response_format": "json_object"
+  },
+  "limits": {
+    "max_input_bytes": 262144,
+    "max_output_tokens": 20000,
+    "max_calls_per_week": 50,
+    "max_total_tokens_per_run": 100000000
+  },
+  "available_models_note": [
+    "qwen-plus (默认推荐，综合能力与性价比最优",
+    "qwen-max (强推理，复杂代码与长指令分析)",
+    "qwen-turbo (轻量超高速)",
+    "deepseek-v3 (百炼托管的 DeepSeek-V3)",
+    "deepseek-r1 (百炼托管的 DeepSeek-R1)"
+  ]
+}

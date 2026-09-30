@@ -1,11 +1,11 @@
 """多厂商模型与 API Key 本地独立文件热插拔管理工具。
 
-设计原则（分离存储、独立自治）：
-1. 每个厂商/模型拥有独立的私有配置文件：config/models/<标识>.local.json；
-2. 相互独立、互不混合，各自存放端点、模型名与私有 API Key；
-3. 一键热插拔激活：选中后原子写入 config/models/model.local.json（当前项目生效模型）；
-4. 支持智能模糊匹配与别名（如 kimi-k3 自动定位到 bailian-kimi-k3，qwen 指向百炼）；
-5. 所有 *.local.json 均被 .gitignore 严格忽略，杜绝凭据泄漏风险。
+设计原则（配置公开、凭据分离、独立自治）：
+1. 模型结构配置公开可提交：config/models/<标识>.json（含端点、模型名、参数与 key_ref）；
+2. 密钥凭证独立存放在本地：config/secrets.local.json（被 .gitignore 严格忽略，仅本机保留）；
+3. 共享引用：同一厂商多个模型共用同一个 key_ref（如 bailian），无需重复填写；
+4. 一键热插拔激活：选中后原子写入 config/models/model.json（当前项目生效模型），不包含明文 Key；
+5. 智能别名与模糊匹配（如 kimi-k3 自动定位到 bailian-kimi-k3，qwen 指向百炼）。
 
 用法：
     python tools/switch_model.py                 # 交互式菜单选择切换
@@ -30,7 +30,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from src.infra.files import read_json, write_json_atomic
-from src.infra.llm import validate_model_config
+from src.infra.llm import validate_model_config, load_secrets, resolve_api_key
 from src.infra.model_config import resolve_model_path
 from src.infra.model_pool import ModelPool
 from src.shared.model_config import parse_model_configs, state_key
@@ -52,8 +52,10 @@ def _get_models_dir() -> Path:
 
 
 MODELS_DIR = _get_models_dir()
+MODEL_JSON_PATH = MODELS_DIR / "model.json"
 MODEL_LOCAL_PATH = MODELS_DIR / "model.local.json"
 PROVIDERS_LOCAL_PATH = MODELS_DIR / "providers.local.json"
+SECRETS_LOCAL_PATH = ROOT / "config" / "secrets.local.json"
 
 
 def mask_key(key: str | None) -> str:
@@ -68,18 +70,41 @@ def mask_key(key: str | None) -> str:
 
 def load_providers_catalog(models_dir: Path | None = None) -> dict:
     """加载所有独立厂商/模型配置文件。
-    
-    自动扫描 models_dir 下的 *.local.json（排除当前生效的 model.local.json 与旧版 providers.local.json）。
+
+    自动扫描 models_dir 下的 *.json 与 *.local.json（排除生效文件 model.json/model.local.json 与 secrets 文件）。
     """
     directory = models_dir or MODELS_DIR
     providers: dict[str, dict] = {}
+    excluded = {
+        "model.json",
+        "model.local.json",
+        "model.example.json",
+        "providers.json",
+        "providers.local.json",
+        "secrets.local.json",
+        "secrets.json",
+    }
 
     if directory.exists():
-        for p in sorted(directory.glob("*.local.json")):
-            if p.name in ("model.local.json", "providers.local.json"):
+        # 1. 先扫描公开的 *.json 配置
+        for p in sorted(directory.glob("*.json")):
+            if p.name in excluded or p.name.endswith(".local.json"):
                 continue
-            # pid: deepseek.local.json -> deepseek
-            pid = p.name[:-11] if p.name.endswith(".local.json") else p.stem
+            pid = p.stem
+            try:
+                content = read_json(p, default={})
+                if isinstance(content, dict):
+                    content.setdefault("name", pid)
+                    content.setdefault("provider_id", pid)
+                    providers[pid] = content
+            except Exception:
+                continue
+
+        # 2. 再扫描私有的 *.local.json 配置（可补充或覆盖公开项）
+        for p in sorted(directory.glob("*.local.json")):
+            if p.name in excluded:
+                continue
+            pid = p.name[:-11]  # 剔除 .local.json
             try:
                 content = read_json(p, default={})
                 if isinstance(content, dict):
@@ -97,8 +122,9 @@ def load_providers_catalog(models_dir: Path | None = None) -> dict:
 
     # 检测当前激活厂商
     active_id: str | None = None
-    if MODEL_LOCAL_PATH.exists():
-        cur = read_json(MODEL_LOCAL_PATH, default={})
+    active_path = MODEL_LOCAL_PATH if MODEL_LOCAL_PATH.exists() else MODEL_JSON_PATH
+    if active_path.exists():
+        cur = read_json(active_path, default={})
         active_id = cur.get("active_provider")
         if not active_id or active_id not in providers:
             cur_endpoint = cur.get("endpoint")
@@ -115,58 +141,86 @@ def list_providers(catalog: dict) -> None:
     """格式化打印各独立厂商/模型配置状态列表。"""
     providers = catalog.get("providers", {})
     active_id = catalog.get("active")
-    print("\n" + "=" * 82)
-    print(f"{'#':<4} {'配置标识 ID':<36} {'模型 Code':<28} {'状态 / Key':<14}")
-    print("-" * 82)
+    secrets = load_secrets()
+
+    print("\n" + "=" * 90)
+    print(f"{'#':<4} {'配置标识 ID':<36} {'模型 Code':<28} {'状态 / Key':<20}")
+    print("-" * 90)
     for idx, (pid, pcfg) in enumerate(providers.items(), 1):
         model = pcfg.get("model", "unknown")
-        key = (pcfg.get("auth") or {}).get("api_key")
+        auth = pcfg.get("auth") or {}
+        key_ref = auth.get("key_ref")
+        direct_key = auth.get("api_key")
+
+        if key_ref:
+            sec_val = secrets.get(str(key_ref))
+            if sec_val:
+                key_status = f"{mask_key(sec_val)} (ref:{key_ref})"
+            else:
+                key_status = f"[缺密钥 (ref:{key_ref})]"
+        elif direct_key:
+            key_status = mask_key(direct_key)
+        else:
+            key_status = "[未配置 Key]"
+
         is_active = (pid == active_id)
         active_mark = "[当前激活] " if is_active else "           "
-        key_status = mask_key(key)
         print(f"{idx:<4} {pid:<36} {model:<28} {active_mark}{key_status}")
-    print("=" * 82 + "\n")
+    print("=" * 90 + "\n")
 
 
 def show_current() -> None:
-    """打印当前生效的 model.local.json 配置摘要。"""
-    if not MODEL_LOCAL_PATH.exists():
-        print(f"当前未激活任何模型：{MODEL_LOCAL_PATH.name} 不存在。")
+    """打印当前生效的 model.json / model.local.json 配置摘要。"""
+    active_path = MODEL_LOCAL_PATH if MODEL_LOCAL_PATH.exists() else MODEL_JSON_PATH
+    if not active_path.exists():
+        print(f"当前未激活任何模型：model.json 与 model.local.json 均不存在。")
         return
-    cur = read_json(MODEL_LOCAL_PATH, default={})
+
+    cur = read_json(active_path, default={})
     if 'models' in cur:
         configs = parse_model_configs(cur)
         state = ModelPool(cur, ROOT).inspect()
-        print('当前模型队列（按顺序）：')
+        print(f"【当前生效模型队列 (来源: {active_path.name})】")
         for cfg in configs:
             exhausted = state_key(cfg['endpoint'], cfg['model']) in state['exhausted_models']
-            print(f"  {cfg['model']}：{'已耗尽' if exhausted else '可用'}")
+            ref = (cfg.get("auth") or {}).get("key_ref")
+            ref_str = f" [ref:{ref}]" if ref else ""
+            print(f"  {cfg['model']}{ref_str}：{'已耗尽' if exhausted else '可用'}")
         return
+
     auth = cur.get("auth") or {}
-    key = auth.get("api_key")
+    key_ref = auth.get("key_ref")
+    direct_key = auth.get("api_key")
     env_name = auth.get("api_key_env", "LLM_API_KEY")
     env_key = os.environ.get(env_name)
+    secrets = load_secrets()
+    ref_key = secrets.get(str(key_ref)) if key_ref else None
 
-    print("\n" + "=" * 58)
-    print("【当前项目生效模型配置 (config/models/model.local.json)】")
+    print("\n" + "=" * 64)
+    print(f"【当前项目生效模型配置 (来源: {active_path.name})】")
     print(f"  激活来源  : {cur.get('active_provider', 'custom')}")
     print(f"  展示名称  : {cur.get('name')}")
     print(f"  服务标识  : {cur.get('provider')}")
     print(f"  模型名称  : {cur.get('model')}")
     print(f"  服务端点  : {cur.get('endpoint')}")
-    print(f"  文件密钥  : {mask_key(key)}")
+    if key_ref:
+        print(f"  密钥引用  : key_ref = '{key_ref}' -> {mask_key(ref_key)}")
+    elif direct_key:
+        print(f"  文件密钥  : {mask_key(direct_key)} (直接内联)")
+    else:
+        print(f"  文件密钥  : [未配置]")
     print(f"  环境密钥  : {mask_key(env_key)} (变量: {env_name})")
     print(f"  超时时间  : {cur.get('request', {}).get('timeout_seconds')} 秒")
     print(f"  响应格式  : {cur.get('request', {}).get('response_format', 'default')}")
-    print("=" * 58 + "\n")
+    print("=" * 64 + "\n")
 
 
-def resolve_target_provider_id(query: str, providers: dict) -> str | None:
-    """智能解析用户输入的厂商或模型 ID。"""
-    raw = query.strip()
+def resolve_target_provider_id(raw_input: str, providers: dict) -> str | None:
+    """多级模糊匹配目标模型标识。"""
+    raw = raw_input.strip()
     low = raw.lower()
 
-    # 1. 别名表直接映射
+    # 1. 别名优先查找
     if low in ALIASES and ALIASES[low] in providers:
         return ALIASES[low]
 
@@ -192,10 +246,12 @@ def resolve_target_provider_id(query: str, providers: dict) -> str | None:
 
 
 def switch_to_provider(provider_id: str, catalog: dict | None = None) -> bool:
-    """切换到指定独立模型配置文件，并原子覆写到 model.local.json。"""
-    if 'models' in (read_json(MODEL_LOCAL_PATH, default={}) or {}):
-        print('[拒绝] 当前使用模型队列，请编辑 model.local.json 的 models 列表；切换命令不会覆盖队列。')
+    """切换到指定独立模型配置，并原子覆写到 model.json（不包含明文 Key）。"""
+    active_path = MODEL_LOCAL_PATH if MODEL_LOCAL_PATH.exists() else MODEL_JSON_PATH
+    if active_path.exists() and 'models' in (read_json(active_path, default={}) or {}):
+        print('[拒绝] 当前使用模型队列，请编辑 model.json 的 models 列表；切换命令不会覆盖队列。')
         return False
+
     if catalog is None:
         catalog = load_providers_catalog()
 
@@ -206,11 +262,12 @@ def switch_to_provider(provider_id: str, catalog: dict | None = None) -> bool:
     if resolved_id and resolved_id in providers:
         target_cfg = dict(providers[resolved_id])
     else:
-        # 尝试直接从本地文件读取
-        candidate_file = MODELS_DIR / f"{provider_id}.local.json"
-        if candidate_file.exists():
-            target_cfg = read_json(candidate_file, default={})
-            resolved_id = provider_id
+        for suffix in (".json", ".local.json"):
+            candidate_file = MODELS_DIR / f"{provider_id}{suffix}"
+            if candidate_file.exists():
+                target_cfg = read_json(candidate_file, default={})
+                resolved_id = provider_id
+                break
 
     if not target_cfg or not resolved_id:
         print(f"[错误] 未找到模型配置 '{provider_id}'！")
@@ -224,19 +281,46 @@ def switch_to_provider(provider_id: str, catalog: dict | None = None) -> bool:
     if problems:
         print(f"[警告] 模型配置预检存在潜在问题：{'；'.join(problems)}")
 
-    auth = target_cfg.get("auth") or {}
-    key = auth.get("api_key")
-    env_var = auth.get("api_key_env", "LLM_API_KEY")
-    has_env = bool(os.environ.get(env_var))
+    # 准备公开输出配置：坚决移除明文 api_key，注入规范 key_ref
+    out_cfg = dict(target_cfg)
+    auth = dict(out_cfg.get("auth") or {})
+    auth.pop("api_key", None)
 
-    if not key and not has_env:
-        print(f"[提示] 注意：模型 '{resolved_id}' 当前未设置 api_key，环境变量 '{env_var}' 亦为空。")
-        print(f"       请在 config/models/{resolved_id}.local.json 中填入私有 Key。")
+    # 若未定义 key_ref，则自动推断
+    key_ref = auth.get("key_ref")
+    if not key_ref:
+        provider_val = str(out_cfg.get("provider") or resolved_id).lower()
+        if "bailian" in resolved_id or "dashscope" in provider_val:
+            key_ref = "bailian"
+        elif "deepseek" in resolved_id or "deepseek" in provider_val:
+            key_ref = "deepseek"
+        elif "gemini" in resolved_id:
+            key_ref = "gemini"
+        elif "openai" in resolved_id:
+            key_ref = "openai"
+        elif "moonshot" in resolved_id or "kimi" in resolved_id:
+            key_ref = "moonshot"
+        elif "zhipu" in resolved_id or "glm" in resolved_id:
+            key_ref = "zhipu"
+        elif "siliconflow" in resolved_id:
+            key_ref = "siliconflow"
+        else:
+            key_ref = resolved_id.split("-")[0]
+        auth["key_ref"] = key_ref
 
-    # 记录 active 标记并原子写入 model.local.json
-    target_cfg["active_provider"] = resolved_id
-    target_cfg["note"] = f"当前由 tools/switch_model.py 从 {resolved_id}.local.json 激活（{name}）。禁止提交、禁止写入日志。"
-    write_json_atomic(MODEL_LOCAL_PATH, target_cfg)
+    out_cfg["auth"] = auth
+    out_cfg["active_provider"] = resolved_id
+    out_cfg["note"] = f"当前由 tools/switch_model.py 从 {resolved_id}.json 激活（{name}）。可提交版本库。"
+
+    # 写入公开的 model.json
+    write_json_atomic(MODEL_JSON_PATH, out_cfg)
+
+    # 若之前存在本地私有覆盖 model.local.json，将其移除以确保 model.json 生效
+    if MODEL_LOCAL_PATH.exists():
+        try:
+            MODEL_LOCAL_PATH.unlink()
+        except OSError:
+            pass
 
     # 同步更新 active 状态
     catalog["active"] = resolved_id
@@ -246,12 +330,25 @@ def switch_to_provider(provider_id: str, catalog: dict | None = None) -> bool:
             legacy_data["active"] = resolved_id
             write_json_atomic(PROVIDERS_LOCAL_PATH, legacy_data)
 
+    # 预检密钥状态
+    secrets = load_secrets()
+    actual_key = secrets.get(key_ref)
+    env_var = auth.get("api_key_env", "LLM_API_KEY")
+    has_env = bool(os.environ.get(env_var))
+
     print(f"[成功] 已热插拔切换至模型：{name} ({resolved_id})")
-    print(f"       独立源文件: config/models/{resolved_id}.local.json")
-    print(f"       当前生效件: config/models/model.local.json")
-    print(f"       模型名称  : {target_cfg.get('model')}")
-    print(f"       端点地址  : {target_cfg.get('endpoint')}")
-    print(f"       当前密钥  : {mask_key(key)}")
+    print(f"       配置源文件: config/models/{resolved_id}.json")
+    print(f"       当前生效件: config/models/model.json")
+    print(f"       模型名称  : {out_cfg.get('model')}")
+    print(f"       端点地址  : {out_cfg.get('endpoint')}")
+    if actual_key:
+        print(f"       生效密钥  : {mask_key(actual_key)} (引用: secrets.local.json[{key_ref}])")
+    elif has_env:
+        print(f"       生效密钥  : {mask_key(os.environ.get(env_var))} (来自环境变量: {env_var})")
+    else:
+        print(f"[提示] 注意：尚未在 config/secrets.local.json 中设置 '{key_ref}' 的 Key。")
+        print(f"       请在该文件中补充：{{\"{key_ref}\": \"你的API_Key\"}}")
+
     return True
 
 
@@ -259,82 +356,87 @@ def interactive_select(catalog: dict) -> None:
     """交互式终端选择菜单。"""
     providers = catalog.get("providers", {})
     if not providers:
-        print("[错误] 未扫描到任何独立模型配置文件 (config/models/*.local.json)！")
+        print("未发现任何可用的模型配置。")
         return
 
     list_providers(catalog)
-    keys = list(providers.keys())
-    active_id = catalog.get("active")
+    items = list(providers.keys())
 
     try:
-        choice = input(f"请输入要激活的编号 [1-{len(keys)}] 或 模型ID (直接回车保持当前): ").strip()
-    except (KeyboardInterrupt, EOFError):
-        print("\n已取消操作。")
-        return
-
-    if not choice:
-        print(f"保持当前模型：{active_id}")
-        return
-
-    if choice.isdigit():
-        idx = int(choice)
-        if 1 <= idx <= len(keys):
-            target_id = keys[idx - 1]
-            switch_to_provider(target_id, catalog)
+        choice = input(f"请输入要激活的模型序号 (1-{len(items)}) 或输入配置标识 (q 退出): ").strip()
+        if not choice or choice.lower() in ("q", "quit", "exit"):
+            print("操作已取消。")
             return
+
+        if choice.isdigit():
+            idx = int(choice)
+            if 1 <= idx <= len(items):
+                target_id = items[idx - 1]
+            else:
+                print(f"[错误] 序号超出有效范围 (1-{len(items)})！")
+                return
         else:
-            print("[错误] 输入编号超出范围。")
-            return
+            target_id = choice
 
-    resolved = resolve_target_provider_id(choice, providers)
-    if resolved:
-        switch_to_provider(resolved, catalog)
-    else:
-        print(f"[错误] 未找到模型: '{choice}'")
+        switch_to_provider(target_id, catalog)
+    except (KeyboardInterrupt, EOFError):
+        print("\n操作已取消。")
 
 
-def main() -> None:
-    global MODEL_LOCAL_PATH
-    MODEL_LOCAL_PATH = resolve_model_path(ROOT / 'config')
-    parser = argparse.ArgumentParser(description="多厂商大模型与 Key 本地独立文件热插拔管理工具")
-    parser.add_argument("provider", nargs="?", help="要切换到的目标模型 ID (如 deepseek, qwen3.8-flash, kimi-k3, glm-5.3 等)")
-    parser.add_argument("-l", "--list", action="store_true", help="列出所有已配置的模型及状态")
-    parser.add_argument("-s", "--show", "--current", action="store_true", help="显示当前生效模型详情")
-    parser.add_argument("-c", "--check", action="store_true", help="预检当前生效的模型连接配置")
+def check_current_model_connectivity() -> bool:
+    """预检当前生效模型的连接性与凭据有效性。"""
+    active_path = MODEL_LOCAL_PATH if MODEL_LOCAL_PATH.exists() else MODEL_JSON_PATH
+    if not active_path.exists():
+        print(f"[错误] 生效模型配置文件不存在！")
+        return False
+
+    cfg = read_json(active_path, default={})
+    key = resolve_api_key(cfg)
+
+    print("\n" + "=" * 50)
+    print("【当前模型配置预检】")
+    print(f"  模型名称: {cfg.get('model')}")
+    print(f"  端点地址: {cfg.get('endpoint')}")
+    print(f"  凭据检测: {'[OK] 已就绪 ' + mask_key(key) if key else '[FAIL] 凭据缺失'}")
+
+    problems = validate_model_config(cfg)
+    if problems:
+        print(f"  配置合法性: [FAIL] {'；'.join(problems)}")
+        return False
+    print(f"  配置合法性: [OK] 格式合法")
+    print("=" * 50 + "\n")
+    return bool(key)
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description="多厂商模型本地独立文件热插拔管理工具")
+    parser.add_argument("target", nargs="?", default=None, help="目标模型标识或快捷别名（如 deepseek, qwen3.8-flash, kimi-k3）")
+    parser.add_argument("--list", "-l", action="store_true", help="列出全部可用的模型配置")
+    parser.add_argument("--show", "-s", action="store_true", help="显示当前生效的模型配置详情")
+    parser.add_argument("--check", "-c", action="store_true", help="预检当前生效模型的配置与密钥完整性")
     args = parser.parse_args()
 
-    catalog = load_providers_catalog()
-
     if args.list:
-        if 'models' in (read_json(MODEL_LOCAL_PATH, default={}) or {}):
-            show_current()
+        catalog = load_providers_catalog()
         list_providers(catalog)
-        return
+        return 0
 
     if args.show:
         show_current()
-        return
+        return 0
 
     if args.check:
-        if not MODEL_LOCAL_PATH.exists():
-            print(f"[错误] {MODEL_LOCAL_PATH.name} 不存在，请先切换或配置模型。")
-            sys.exit(1)
-        cur = read_json(MODEL_LOCAL_PATH, default={})
-        problems = validate_model_config(cur)
-        if problems:
-            print("[预检未通过]:\n  - " + "\n  - ".join(problems))
-            sys.exit(1)
-        print("[OK] 当前模型连接配置格式合法！")
-        show_current()
-        return
+        ok = check_current_model_connectivity()
+        return 0 if ok else 1
 
-    if args.provider:
-        ok = switch_to_provider(args.provider.strip(), catalog)
-        sys.exit(0 if ok else 1)
+    catalog = load_providers_catalog()
+    if args.target:
+        ok = switch_to_provider(args.target, catalog)
+        return 0 if ok else 1
 
-    # 无参数时进入交互选择
     interactive_select(catalog)
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

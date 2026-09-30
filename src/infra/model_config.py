@@ -4,12 +4,24 @@ from pathlib import Path
 from src.shared.model_config import parse_model_configs
 
 
-def resolve_model_path(config_dir, filename='model.local.json'):
+def resolve_model_path(config_dir, filename=None):
     base = Path(config_dir)
-    modern, legacy = base / 'models' / filename, base / filename
-    if modern.exists() and legacy.exists():
-        raise ValueError('模型配置新旧路径冲突，请只保留一份：' + filename)
-    return legacy if legacy.exists() else modern
+    if filename:
+        modern, legacy = base / 'models' / filename, base / filename
+        if modern.exists() and legacy.exists():
+            raise ValueError('模型配置新旧路径冲突，请只保留一份：' + filename)
+        return legacy if legacy.exists() else modern
+
+    for candidate in [
+        base / 'models' / 'model.local.json',
+        base / 'model.local.json',
+        base / 'models' / 'model.json',
+        base / 'model.json',
+    ]:
+        if candidate.is_file():
+            return candidate
+
+    return base / 'models' / 'model.json'
 
 
 def load_model_config(config_dir, *, allow_example=True):

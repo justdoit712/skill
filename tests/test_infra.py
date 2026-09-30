@@ -78,11 +78,13 @@ class SwitchModelTest(unittest.TestCase):
         self.temp_dir = tempfile.TemporaryDirectory(ignore_cleanup_errors=True)
         self.root = Path(self.temp_dir.name)
         self.models_dir = self.root / "config" / "models"
+        self.model_json = self.models_dir / "model.json"
         self.model_local = self.models_dir / "model.local.json"
         self.models_dir.mkdir(parents=True, exist_ok=True)
         for name, value in [
             ('ROOT', self.root),
             ('MODELS_DIR', self.models_dir),
+            ('MODEL_JSON_PATH', self.model_json),
             ('MODEL_LOCAL_PATH', self.model_local),
             ('PROVIDERS_LOCAL_PATH', self.models_dir / 'providers.local.json'),
         ]:
@@ -90,25 +92,25 @@ class SwitchModelTest(unittest.TestCase):
             patched.start()
             self.addCleanup(patched.stop)
 
-        (self.models_dir / "deepseek.local.json").write_text(
+        (self.models_dir / "deepseek.json").write_text(
             json.dumps({
                 "model_config_version": "1.0.0",
                 "name": "DeepSeek",
                 "provider": "deepseek",
                 "endpoint": "https://api.deepseek.com/chat/completions",
                 "model": "deepseek-chat",
-                "auth": {"api_key": "sk-deepseek-key-1234"},
+                "auth": {"key_ref": "deepseek"},
             }),
             encoding="utf-8",
         )
-        (self.models_dir / "bailian.local.json").write_text(
+        (self.models_dir / "bailian.json").write_text(
             json.dumps({
                 "model_config_version": "1.0.0",
                 "name": "阿里云百炼平台",
                 "provider": "dashscope",
                 "endpoint": "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions",
                 "model": "qwen-plus",
-                "auth": {"api_key": "sk-bailian-key-5678"},
+                "auth": {"key_ref": "bailian"},
             }),
             encoding="utf-8",
         )
@@ -124,13 +126,47 @@ class SwitchModelTest(unittest.TestCase):
 
     def test_switch_to_provider(self):
         self.assertTrue(switch_to_provider("deepseek"))
-        cur = json.loads(self.model_local.read_text(encoding="utf-8"))
+        self.assertTrue(self.model_json.exists())
+        cur = json.loads(self.model_json.read_text(encoding="utf-8"))
         self.assertEqual(cur["provider"], "deepseek")
         self.assertEqual(cur["model"], "deepseek-chat")
+        self.assertEqual(cur["auth"]["key_ref"], "deepseek")
+        self.assertNotIn("api_key", cur["auth"])
+
+    def test_switch_unlinks_legacy_model_local(self):
+        self.model_local.write_text(json.dumps({"provider": "legacy"}), encoding="utf-8")
+        self.assertTrue(self.model_local.exists())
+        self.assertTrue(switch_to_provider("deepseek"))
+        self.assertFalse(self.model_local.exists())
+        self.assertTrue(self.model_json.exists())
 
     def test_refuse_switch_when_queue_active(self):
-        self.model_local.write_text(json.dumps({"models": ["qwen-plus", "qwen-max"]}))
+        self.model_json.write_text(json.dumps({"models": ["qwen-plus", "qwen-max"]}), encoding="utf-8")
         self.assertFalse(switch_to_provider("deepseek"))
+
+    def test_resolve_model_path_hierarchy(self):
+        d = self.root / "test_cfg"
+        d.mkdir(parents=True, exist_ok=True)
+        (d / "models").mkdir(parents=True, exist_ok=True)
+
+        # 1. 默认降级为 models/model.json
+        self.assertEqual(resolve_model_path(d), d / "models" / "model.json")
+
+        # 2. 存在根目录 model.json
+        (d / "model.json").write_text("{}", encoding="utf-8")
+        self.assertEqual(resolve_model_path(d), d / "model.json")
+
+        # 3. 存在 models/model.json 优先于根目录 model.json
+        (d / "models" / "model.json").write_text("{}", encoding="utf-8")
+        self.assertEqual(resolve_model_path(d), d / "models" / "model.json")
+
+        # 4. 存在根目录 model.local.json 优先于公开 model.json
+        (d / "model.local.json").write_text("{}", encoding="utf-8")
+        self.assertEqual(resolve_model_path(d), d / "model.local.json")
+
+        # 5. models/model.local.json 优先级最高
+        (d / "models" / "model.local.json").write_text("{}", encoding="utf-8")
+        self.assertEqual(resolve_model_path(d), d / "models" / "model.local.json")
 
 
 @smoke
@@ -188,18 +224,29 @@ class ModelPoolTest(unittest.TestCase):
 
 @smoke
 class ApiKeyResolutionTest(unittest.TestCase):
-    """凭据解析：环境变量优先于配置文件，且任何输出都不得泄漏凭据本身。"""
+    """凭据解析：环境变量优先于独立密钥文件与配置文件，且任何输出都不得泄漏凭据本身。"""
     ENV_NAME = "DSH_TEST_LLM_KEY"
     FAKE_ENV_KEY = "sk-env-0000000000000000000000000000"
     FAKE_FILE_KEY = "sk-file-111111111111111111111111111"
+    FAKE_SECRET_KEY = "sk-secret-2222222222222222222222222"
 
     def setUp(self) -> None:
         import os
         os.environ.pop(self.ENV_NAME, None)
+        os.environ.pop("SKILL_SECRET_TESTREF", None)
+        self.tmp = tempfile.TemporaryDirectory(ignore_cleanup_errors=True)
+        self.tmp_path = Path(self.tmp.name)
+        self.secrets_file = self.tmp_path / "secrets.local.json"
+        self.secrets_file.write_text(
+            json.dumps({"testref": self.FAKE_SECRET_KEY}),
+            encoding="utf-8",
+        )
 
     def tearDown(self) -> None:
         import os
         os.environ.pop(self.ENV_NAME, None)
+        os.environ.pop("SKILL_SECRET_TESTREF", None)
+        self.tmp.cleanup()
 
     def cfg(self, **auth) -> dict:
         return {"auth": {"api_key_env": self.ENV_NAME, **auth}}
@@ -210,11 +257,30 @@ class ApiKeyResolutionTest(unittest.TestCase):
         os.environ[self.ENV_NAME] = self.FAKE_ENV_KEY
         self.assertEqual(resolve_api_key(self.cfg()), self.FAKE_ENV_KEY)
 
+    def test_env_wins_over_key_ref(self) -> None:
+        import os
+        from src.infra.llm import resolve_api_key
+        os.environ[self.ENV_NAME] = self.FAKE_ENV_KEY
+        cfg = self.cfg(key_ref="testref")
+        self.assertEqual(resolve_api_key(cfg, config_dir=self.tmp_path), self.FAKE_ENV_KEY)
+
     def test_env_wins_over_config_file(self) -> None:
         import os
         from src.infra.llm import resolve_api_key
         os.environ[self.ENV_NAME] = self.FAKE_ENV_KEY
         self.assertEqual(resolve_api_key(self.cfg(api_key=self.FAKE_FILE_KEY)), self.FAKE_ENV_KEY)
+
+    def test_key_ref_resolved_from_secrets_local(self) -> None:
+        from src.infra.llm import resolve_api_key, api_key_source
+        cfg = {"auth": {"key_ref": "testref"}}
+        self.assertEqual(resolve_api_key(cfg, config_dir=self.tmp_path), self.FAKE_SECRET_KEY)
+        src = api_key_source(cfg, config_dir=self.tmp_path)
+        self.assertIn("secrets.local.json[testref]", src)
+
+    def test_key_ref_wins_over_legacy_api_key(self) -> None:
+        from src.infra.llm import resolve_api_key
+        cfg = {"auth": {"key_ref": "testref", "api_key": self.FAKE_FILE_KEY}}
+        self.assertEqual(resolve_api_key(cfg, config_dir=self.tmp_path), self.FAKE_SECRET_KEY)
 
     def test_falls_back_to_config_literal(self) -> None:
         from src.infra.llm import resolve_api_key

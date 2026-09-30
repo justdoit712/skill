@@ -1,0 +1,13 @@
+{
+  "model_config_version": "1.0.0",
+  "name": "DeepSeek",
+  "provider": "deepseek",
+  "endpoint": "https://api.deepseek.com/chat/completions",
+  "model": "deepseek-chat",
+  "auth": {
+    "key_ref": "deepseek"
+  },
+  "provider_id": "deepseek",
+  "active_provider": "deepseek",
+  "note": "当前由 tools/switch_model.py 从 deepseek.json 激活（DeepSeek）。可提交版本库。"
+}
