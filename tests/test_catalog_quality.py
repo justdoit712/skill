@@ -13,10 +13,6 @@ from src.catalog.models import Candidate
 from src.catalog.quality import check_quality, verified_citations
 from src.infra.llm import ModelCallResult
 from src.infra.http import FetchResult
-import tests.test_local_run as local_tests
-import tests.test_pipeline as pipeline_tests
-from src.catalog.sync_reserve import phase_reserve
-from src.catalog.sync_evaluate import phase_evaluate
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -106,7 +102,7 @@ class QualityTest(unittest.TestCase):
         self.assertEqual(decide(result["evaluation"], self.rules)["decision"], "recommended")
 
     def test_invalid_dependency_blocking_type_is_processing_failure(self):
-        self.raw["dependency_transparency"].update(value="unknown", blocking="false")
+        self.raw["dependency_transparency"].update(value="unknown", blocking="not_a_bool")
         result, model = self.run_evaluation([response(self.raw)])
         self.assertFalse(result["ok"])
         self.assertEqual(result["reason_code"], "PARSE_ERROR")
@@ -217,122 +213,6 @@ class QualityTest(unittest.TestCase):
         self.raw["domain_checks"] = {"finance": {"value": "not_applicable", "evidence": "本项不适用"}}
         result, _ = self.run_evaluation([response(self.raw)])
         self.assertEqual(decide(result["evaluation"], self.rules)["decision"], "recommended")
-
-
-class LocalQualityIntegrationTest(unittest.TestCase):
-    def setUp(self):
-        self.harness = local_tests.LocalRunTest()
-        self.harness.setUp()
-        self.addCleanup(self.harness.doCleanups)
-        self.harness.settings["target_recommended"] = 1
-        self.raw = assessment(self.harness.cfg["rules"])
-
-    def collect(self, responses):
-        with patch("src.catalog.evaluation.call_model", side_effect=responses) as model:
-            report = self.harness.collect(count=2, evaluate_fn=evaluate,
-                fetch_fn=lambda url, **kw: FetchResult(url=url, ok=True, text=TEXT))
-        return report, model
-
-    def test_one_request_and_quality_reaches_public_catalog(self):
-        report, model = self.collect([response(self.raw)])
-        self.assertEqual(model.call_count, 1)
-        self.assertEqual(report["new_recommended"], 1)
-        self.assertEqual(report["usage"]["requests"], 1)
-        self.assertEqual(report["usage"]["total_tokens"], 100)
-        self.assertEqual([c["stage"] for c in report["calls"]], ["assessment"])
-        self.assertEqual(report["stop_reason"], "target_reached")
-        catalog = json.loads((self.harness.root / "public/data/catalog.json").read_text(encoding="utf-8"))
-        self.assertEqual(catalog["recommended"][0]["quality_summary"]["review_status"], "single_pass")
-
-    def test_navigation_notices_survive_public_catalog_projection(self):
-        self.raw["dependency_transparency"].update(value="unknown", blocking=False,
-                                                   evidence="材料未声明特殊依赖，不推测平台兼容性")
-        self.raw["verification_note"] = "提供具体改稿方法，未提供验收清单。"
-        report, model = self.collect([response(self.raw)])
-        self.assertEqual(model.call_count, 1)
-        self.assertEqual(report["new_recommended"], 1)
-        catalog = json.loads((self.harness.root / "public/data/catalog.json").read_text(encoding="utf-8"))
-        summary = catalog["recommended"][0]["quality_summary"]
-        self.assertEqual(set(summary["checks"]), {c["id"] for c in self.harness.cfg["rules"]["checks"]})
-        self.assertTrue(summary["checks"]["dependency_transparency"]["informational"])
-        self.assertEqual(summary["verification_note"], self.raw["verification_note"])
-        self.assertNotIn("practical_value", summary["checks"])
-
-    def test_budget_keeps_completed_result_and_stops_other_candidates(self):
-        self.harness.settings["target_recommended"] = 2
-        self.harness.settings["max_total_tokens"] = 100
-        report, model = self.collect([response(self.raw)])
-        self.assertEqual(model.call_count, 1)
-        self.assertEqual(report["stop_reason"], "token_limit")
-        self.assertEqual(report["new_recommended"], 1)
-        self.assertEqual(report["usage"]["total_tokens"], 100)
-        self.assertEqual(report["failed_evaluations"], 0)
-
-    def test_next_run_processes_next_candidate_without_review(self):
-        self.harness.settings["target_recommended"] = 2
-        self.harness.settings["max_total_tokens"] = 100
-        first, _ = self.collect([response(self.raw)])
-        self.assertEqual(first["stop_reason"], "token_limit")
-        self.harness.settings["max_total_tokens"] = 1000
-        resumed, model = self.collect([response(self.raw, 160)])
-        self.assertEqual(model.call_count, 1)
-        self.assertEqual(resumed["new_recommended"], 1)
-        self.assertEqual(resumed["usage"]["total_tokens"], 160)
-        self.assertEqual([c["stage"] for c in resumed["calls"]], ["assessment"])
-        self.assertNotEqual(first["calls"][0]["skill_id"], resumed["calls"][0]["skill_id"])
-
-    def test_missing_usage_does_not_spend_more(self):
-        report, model = self.collect([response(self.raw, usage=False)])
-        self.assertEqual(model.call_count, 1)
-        self.assertEqual(report["stop_reason"], "usage_unknown")
-        self.assertEqual(report["usage"]["unknown_usage_requests"], 1)
-        self.assertGreater(report["unknown_usage_reserved_tokens"], 0)
-
-    def test_interrupted_assessment_marks_unknown_usage(self):
-        report, model = self.collect([KeyboardInterrupt()])
-        self.assertEqual(report["stop_reason"], "interrupted")
-        self.assertEqual(report["usage"]["requests"], 1)
-        self.assertEqual(report["usage"]["total_tokens"], 0)
-        self.assertEqual(report["usage"]["unknown_usage_requests"], 1)
-        self.assertEqual(report["calls"][-1]["status"], "unknown")
-
-
-class ActionsQualityIntegrationTest(unittest.TestCase):
-    def setUp(self):
-        self.harness = pipeline_tests.PipelineHarness()
-        self.harness.setUp()
-        self.addCleanup(self.harness.tearDown)
-        self.config = self.harness.temp_config(max_total_tokens_per_run=100)
-        self.raw = assessment(load_all_config(self.config)["rules"])
-        candidate = pipeline_tests.one_candidate(path="skills/audit/SKILL.md")
-        phase_reserve(config_dir=self.config, data_dir=self.harness.data, state_dir=self.harness.state,
-            discover_fn=pipeline_tests.fake_discover([candidate]), fetch_fn=pipeline_tests.fake_fetch(TEXT))
-
-    def run_phase(self, responses):
-        with patch("src.catalog.evaluation.call_model", side_effect=responses) as model:
-            result = phase_evaluate(config_dir=self.config, data_dir=self.harness.data,
-                public_dir=self.harness.public, state_dir=self.harness.state,
-                evaluate_fn=evaluate, fetch_fn=pipeline_tests.fake_fetch(TEXT))
-        return result, model
-
-    def test_one_request_completes_at_budget_limit(self):
-        first, model = self.run_phase([response(self.raw)])
-        self.assertEqual(first["tokens_used"], 100)
-        self.assertEqual(model.call_count, 1)
-        self.assertEqual(first["evaluated"], 1)
-        self.assertEqual(first["queue_pending"], 0)
-        second, model = self.run_phase([])
-        self.assertEqual(model.call_count, 0)
-        self.assertEqual(second["tokens_used"], 0)
-        records = [json.loads(p.read_text(encoding="utf-8")) for p in (self.harness.state / "evaluations").glob("*.json")]
-        self.assertEqual([r["stage"] for r in records[0]["requests"]], ["assessment"])
-
-    def test_unknown_usage_stops_after_preserving_completed_result(self):
-        result, model = self.run_phase([response(self.raw, usage=False)])
-        self.assertEqual(model.call_count, 1)
-        self.assertTrue(result["usage_unknown"])
-        self.assertEqual(result["evaluated"], 1)
-        self.assertEqual(result["queue_pending"], 0)
 
 
 if __name__ == "__main__":

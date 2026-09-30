@@ -1,16 +1,27 @@
-"""workflow 约束：把 §7.2 的链路要求固化成断言，防止后续改动悄悄破坏。"""
+"""workflow、文档与站点发布约束测试。
+
+合并自原有分散的 test_workflows.py、test_public.py 与 test_docs.py。
+"""
 
 from __future__ import annotations
 
 import json
+from pathlib import Path
 import re
 import unittest
-from pathlib import Path
-
+import xml.etree.ElementTree as ET
 import yaml
+
+from tests import smoke
 
 ROOT = Path(__file__).resolve().parents[1]
 WORKFLOWS = ROOT / ".github" / "workflows"
+PUBLIC = ROOT / "public"
+SITE_ROOT = "https://justdoit712.github.io/skill/"
+PAGES = ["index.html", "styles.css", "robots.txt", "sitemap.xml"]
+DOC_FILES = ["README.md", "CONTRIBUTING.md", "LICENSE-CONTENT.md"]
+DOC_FILES += [str(p.relative_to(ROOT)).replace("\\", "/") for p in sorted((ROOT / "docs").glob("*.md"))]
+LINK = re.compile(r"\]\(([^)\s]+?)\)")
 
 
 def load(name: str) -> dict:
@@ -18,7 +29,6 @@ def load(name: str) -> dict:
 
 
 def triggers(doc: dict):
-    # YAML 1.1 会把裸 on 解析成布尔 True
     return doc.get("on", doc.get(True))
 
 
@@ -26,6 +36,7 @@ def step_runs(doc: dict, job: str) -> str:
     return "\n".join(s.get("run", "") for s in doc["jobs"][job]["steps"] if isinstance(s, dict))
 
 
+@smoke
 class SyncWorkflowTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
@@ -39,35 +50,21 @@ class SyncWorkflowTest(unittest.TestCase):
         self.assertNotIn("0 2 * * *", crons, "不得保留旧的每日表达式")
 
     def test_automation_switch_is_config_driven(self) -> None:
-        """定时是否执行由 config/automation.json 决定，而不是靠改本文件。
-
-        on.schedule 是静态配置，无法按文件注册/注销触发器；因此 schedule 常驻本文件，
-        由 gate job 读配置后在运行期决定继续或退出。手动触发不受开关限制。
-        """
         gate = self.doc["jobs"]["gate"]
         runs = "\n".join(s.get("run", "") for s in gate["steps"] if isinstance(s, dict))
         self.assertIn("automation.json", runs, "gate 必须读取 automation.json")
         self.assertIn("scheduled_sync_enabled", runs, "gate 必须读取 scheduled_sync_enabled")
         self.assertIn("run_sync", gate["outputs"])
         self.assertEqual(self.doc["jobs"]["sync"]["needs"], "gate")
-        self.assertEqual(
-            self.doc["jobs"]["sync"]["if"], "needs.gate.outputs.run_sync == 'true'"
-        )
+        self.assertEqual(self.doc["jobs"]["sync"]["if"], "needs.gate.outputs.run_sync == 'true'")
         self.assertIn("workflow_dispatch", runs, "手动触发必须绕过开关")
 
     def test_job_outputs_reference_existing_step_ids(self) -> None:
-        """回归守卫：job outputs 引用的 step id 必须真实存在。
-
-        历史上 outputs 写成 steps.run（实际 id 只有 args/reserve），输出恒为空串，
-        deploy 条件恒假，定时运行即使成功也永不发布。
-        """
         for job_name, job in self.doc["jobs"].items():
             ids = {s.get("id") for s in job.get("steps", []) if isinstance(s, dict)}
             for key, value in (job.get("outputs") or {}).items():
                 for ref in re.findall(r"steps\.([A-Za-z0-9_-]+)\.outputs", str(value)):
-                    self.assertIn(
-                        ref, ids, f"{job_name}.outputs.{key} 引用了不存在的 step id: {ref}"
-                    )
+                    self.assertIn(ref, ids, f"{job_name}.outputs.{key} 引用了不存在的 step id: {ref}")
 
     def test_manual_trigger_with_dry_run(self) -> None:
         dispatch = self.trig["workflow_dispatch"]
@@ -86,10 +83,6 @@ class SyncWorkflowTest(unittest.TestCase):
         self.assertIn("python -m src.pipeline", self.runs)
 
     def test_two_phases_with_commit_between_them(self) -> None:
-        """§7.2 步骤 3：额度预留必须先 commit/push，之后才可付费调用。
-
-        否则 runner 中断或 push 失败时，下次运行读不到已消耗额度，会重复计费。
-        """
         steps = self.doc["jobs"]["sync"]["steps"]
         names = [s.get("name", "") for s in steps if isinstance(s, dict)]
         reserve = next(i for i, n in enumerate(names) if "阶段一" in n)
@@ -112,11 +105,9 @@ class SyncWorkflowTest(unittest.TestCase):
                 self.assertIn("阶段二", step.get("name", ""), "凭据只应注入评估阶段")
 
     def test_precheck_stops_before_paid_calls(self) -> None:
-        """缺凭据时必须在调用模型之前中止。"""
         self.assertIn("缺少 LLM_API_KEY", self.runs)
 
     def test_commit_scope_is_explicit(self) -> None:
-        """§7.2 步骤 5：禁止无差别 git add。"""
         self.assertNotIn("git add .", self.runs)
         self.assertNotIn("git add -A", self.runs)
         self.assertNotIn("git add --all", self.runs)
@@ -154,7 +145,6 @@ class DeployWorkflowTest(unittest.TestCase):
         self.assertNotIn("schedule", self.trig)
 
     def test_does_not_declare_its_own_concurrency(self) -> None:
-        """顶层已持有固定组，重复申请会相互阻塞（§7.2）。"""
         self.assertNotIn("concurrency", self.doc)
 
     def test_permissions_cover_pages(self) -> None:
@@ -165,19 +155,11 @@ class DeployWorkflowTest(unittest.TestCase):
     def test_downloads_artifact_instead_of_checking_out(self) -> None:
         self.assertIn("download-artifact", self.runs + str(self.doc))
         uses = [s.get("uses", "") for s in self.doc["jobs"]["deploy"]["steps"] if isinstance(s, dict)]
-        self.assertFalse(
-            any(u.startswith("actions/checkout") for u in uses),
-            "不得重新检出仓库里的旧 public/",
-        )
-        self.assertFalse(
-            any("sparse-checkout" in str(s) for s in self.doc["jobs"]["deploy"]["steps"]),
-            "不得使用稀疏检出",
-        )
+        self.assertFalse(any(u.startswith("actions/checkout") for u in uses))
+        self.assertFalse(any("sparse-checkout" in str(s) for s in self.doc["jobs"]["deploy"]["steps"]))
 
 
 class PublishWorkflowTest(unittest.TestCase):
-    """人工发布入口：只发布已提交产物，不得引入第二个构建/部署实现。"""
-
     @classmethod
     def setUpClass(cls) -> None:
         cls.doc = load("publish-pages.yml")
@@ -186,8 +168,8 @@ class PublishWorkflowTest(unittest.TestCase):
 
     def test_manual_only(self) -> None:
         self.assertIn("workflow_dispatch", self.trig)
-        self.assertNotIn("schedule", self.trig, "发布入口不得有定时触发")
-        self.assertNotIn("push", self.trig, "发布入口不得监听 push，避免与顶层入口争夺部署")
+        self.assertNotIn("schedule", self.trig)
+        self.assertNotIn("push", self.trig)
 
     def test_reuses_the_single_deploy_workflow(self) -> None:
         deploy = self.doc["jobs"]["deploy"]
@@ -195,17 +177,16 @@ class PublishWorkflowTest(unittest.TestCase):
         self.assertEqual(deploy["needs"], "stage")
 
     def test_uploads_the_committed_artifact_without_rebuilding(self) -> None:
-        """发布不得运行采集/评估：一旦引入解释器或依赖安装，就会出现第二个产物来源。"""
         self.assertIn("actions/upload-artifact", self.raw)
-        self.assertNotIn("pip install", self.raw, "发布入口不得安装依赖")
-        self.assertNotRegex(self.raw, r"run:\s*[^\n]*python", "发布入口不得运行采集/评估程序")
-        self.assertIn("public/data/catalog.json", self.raw, "应校验页面数据存在")
+        self.assertNotIn("pip install", self.raw)
+        self.assertNotRegex(self.raw, r"run:\s*[^\n]*python")
+        self.assertIn("public/data/catalog.json", self.raw)
 
     def test_concurrency_shares_deploy_group(self) -> None:
         conc = self.doc.get("concurrency")
-        self.assertIsNotNone(conc, "发布入口必须声明并发组")
-        self.assertEqual(conc["group"], "pages-deploy", "发布入口必须与顶层同步共用 pages-deploy 锁")
-        self.assertFalse(conc["cancel-in-progress"], "不得中途取消，应排队串行执行")
+        self.assertIsNotNone(conc)
+        self.assertEqual(conc["group"], "pages-deploy")
+        self.assertFalse(conc["cancel-in-progress"])
 
 
 class SyncConfigDeployWorkflowTest(unittest.TestCase):
@@ -229,11 +210,126 @@ class SyncConfigDeployWorkflowTest(unittest.TestCase):
 
     def test_concurrency_shares_deploy_group(self) -> None:
         conc = self.doc.get("concurrency")
-        self.assertIsNotNone(conc, "配置同步入口必须声明并发组")
-        self.assertEqual(conc["group"], "pages-deploy", "配置同步入口必须与顶层同步共用 pages-deploy 锁")
-        self.assertFalse(conc["cancel-in-progress"], "不得中途取消，应排队串行执行")
+        self.assertIsNotNone(conc)
+        self.assertEqual(conc["group"], "pages-deploy")
+        self.assertFalse(conc["cancel-in-progress"])
+
+
+@smoke
+class DocLinkTest(unittest.TestCase):
+    """合并自 test_docs.py：文档链接与文件存在性检查。"""
+    def test_all_local_links_resolve(self) -> None:
+        broken: list[str] = []
+        checked = 0
+        for rel in DOC_FILES:
+            path = ROOT / rel
+            if not path.exists():
+                broken.append(f"{rel}（文档本身不存在）")
+                continue
+            base = path.parent
+            for target in LINK.findall(path.read_text(encoding="utf-8")):
+                if target.startswith(("http://", "https://", "mailto:", "#")):
+                    continue
+                checked += 1
+                clean_target = re.sub(r":\d+$", "", target.split("#")[0])
+                if not (base / clean_target).exists():
+                    broken.append(f"{rel} -> {target}")
+        self.assertGreater(checked, 0, "没有检查到任何本地链接")
+        self.assertEqual(broken, [], "存在失效的本地链接：\n" + "\n".join(broken))
+
+    def test_docs_dir_has_no_unexpected_files(self) -> None:
+        names = sorted(p.name for p in (ROOT / "docs").glob("*.md"))
+        self.assertEqual(
+            names,
+            ["产品规范.md", "架构约定.md", "运行说明.md"],
+            "docs/ 的文件集合发生变化；若是刻意调整，请同步更新本断言",
+        )
+
+
+@smoke
+class NoUpstreamTracesTest(unittest.TestCase):
+    """合并自 test_public.py：站点身份与内容范围。"""
+    FORBIDDEN = {
+        "旧域名": "miyucaicai",
+        "上游署名": "anbeime",
+        "站群标识": "TOPGO",
+        "站群用词": "站群",
+        "旧计数 182": "182",
+        "旧计数 245": "245",
+        "旧计数 2326": "2326",
+        "旧英文页": "skills-en",
+        "本地技能页": "local-skills",
+        "聊天演示页": "chat-demo",
+        "项目案例页": "projects.html",
+    }
+
+    def test_no_forbidden_traces(self) -> None:
+        for name in PAGES:
+            blob = (PUBLIC / name).read_text(encoding="utf-8")
+            for label, needle in self.FORBIDDEN.items():
+                with self.subTest(page=name, label=label):
+                    self.assertNotIn(needle, blob, f"{name} 出现{label}")
+
+    def test_no_orphan_promo_selectors_in_css(self) -> None:
+        css = (PUBLIC / "styles.css").read_text(encoding="utf-8")
+        for selector in (".eco-grid", ".eco-link", ".contact-badge", ".qr-box"):
+            self.assertNotIn(selector, css, f"styles.css 残留孤立样式 {selector}")
+
+    def test_skills_page_is_merged_and_removed(self) -> None:
+        self.assertFalse((PUBLIC / "skills.html").exists(), "skills.html 应已合并删除")
+
+
+class IndexPageTest(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls) -> None:
+        raw_html = (PUBLIC / "index.html").read_text(encoding="utf-8")
+        js_files = sorted((PUBLIC / "js").glob("*.js"))
+        js_content = "\n".join(f.read_text(encoding="utf-8") for f in js_files)
+        cls.raw_html = raw_html
+        cls.html = raw_html + "\n" + js_content
+
+    def test_canonical_points_at_user_pages_subpath(self) -> None:
+        self.assertIn(f'<link rel="canonical" href="{SITE_ROOT}">', self.html)
+
+    def test_loads_index_generated_page_data(self) -> None:
+        self.assertIn('fetch("data/catalog.json"', self.html)
+
+    def test_has_search_and_filters(self) -> None:
+        for element_id in ('id="q"', 'id="category"', 'id="source"', 'id="tab-candidate"'):
+            self.assertIn(element_id, self.html)
+
+    def test_no_custom_domain_cname(self) -> None:
+        self.assertFalse((PUBLIC / "CNAME").exists())
+
+    def test_relative_links_do_not_escape_public_dir(self) -> None:
+        offenders = [
+            m.group(1)
+            for m in re.finditer(r'(?:href|src)="([^"]+)"', self.html)
+            if m.group(1).startswith("../")
+        ]
+        self.assertEqual(offenders, [], f"存在跳出 public/ 的链接：{offenders}")
+
+
+class RobotsAndSitemapTest(unittest.TestCase):
+    def test_robots_uses_new_site_and_sitemap_url(self) -> None:
+        robots = (PUBLIC / "robots.txt").read_text(encoding="utf-8")
+        self.assertIn(f"Sitemap: {SITE_ROOT}sitemap.xml", robots)
+        self.assertIn("justdoit712.github.io", robots)
+        self.assertIn("User-agent: *", robots)
+
+    def test_sitemap_is_valid_xml_and_only_lists_new_site(self) -> None:
+        tree = ET.parse(PUBLIC / "sitemap.xml")
+        ns = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9"}
+        locs = [e.text.strip() for e in tree.getroot().findall(".//sm:loc", ns)]
+        self.assertTrue(locs, "sitemap 至少要有一个 URL")
+        for loc in locs:
+            self.assertTrue(loc.startswith(SITE_ROOT), f"{loc} 不在发布地址下")
+
+    def test_sitemap_has_no_deleted_pages(self) -> None:
+        blob = (PUBLIC / "sitemap.xml").read_text(encoding="utf-8")
+        for gone in ("skills.html", "skills-en.html", "local-skills.html", "projects.html", "llms.txt"):
+            self.assertNotIn(gone, blob, f"sitemap 仍列出已删除页面 {gone}")
 
 
 if __name__ == "__main__":
     unittest.main()
-

@@ -470,5 +470,122 @@ class SearchAdapterTest(unittest.TestCase):
         self.assertEqual(logs[0]["omitted_files"], 0)
 
 
+
+# =====================================================================
+# 有界批次调度与主动反思测试 (Batch Refill & Active Reflection)
+# =====================================================================
+
+BATCH_PLAN = {
+    "intent": "emotional support",
+    "queries": ["emotional support prompt", "cbt skill"],
+    "criteria": [{"id": "support", "kind": "required", "description": "emotional support"}],
+}
+
+
+def _batch_resp(data, tokens=100):
+    return ModelCallResult(
+        ok=True, content=json.dumps(data), attempts=1,
+        usage={"prompt_tokens": tokens - 20, "completion_tokens": 20, "total_tokens": tokens},
+    )
+
+
+def _batch_eval(match="none", path="SKILL.md", tokens=100):
+    return _batch_resp(
+        {
+            "match": match,
+            "documentation": "clear",
+            "summary_zh": "evaluation summary",
+            "criteria_results": [
+                {
+                    "criterion_id": "support",
+                    "status": "supported" if match == "strong" else "unsupported",
+                    "evidence": (
+                        [{"source_path": path, "start_line": 1, "end_line": 1, "quote": "emotional support"}]
+                        if match == "strong"
+                        else []
+                    ),
+                }
+            ],
+        },
+        tokens,
+    )
+
+
+def _batch_cand(n, path="SKILL.md", desc=""):
+    return Candidate(
+        skill_id=f"test-owner/r{n}:{path}",
+        owner="test-owner", repo=f"r{n}", path=path,
+        name=f"r{n}", description=desc,
+        url=f"https://github.com/test-owner/r{n}/blob/main/{path}",
+        repo_url=f"https://github.com/test-owner/r{n}",
+    )
+
+
+class FinderBatchRefillTest(unittest.TestCase):
+    """测试 Finder 有界批次调度、待展开仓库间隙穿插与主动反思机制。"""
+
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory(ignore_cleanup_errors=True)
+        self.addCleanup(self.temp.cleanup)
+        self.root = Path(self.temp.name)
+
+    def run_find(self, model_side_effect, search_fn, expand_fn, **kwargs):
+        call_model = (
+            Mock(side_effect=model_side_effect)
+            if isinstance(model_side_effect, (list, tuple))
+            else model_side_effect
+        )
+        args = dict(
+            root_dir=self.root,
+            model_cfg={"endpoint": "https://fake", "model": "fake", "auth": {"api_key": "fake"}},
+            call_model_fn=call_model,
+            search_github_repos_fn=search_fn,
+            expand_and_collect_candidates_fn=expand_fn,
+            fetch_candidate_materials_fn=Mock(side_effect=lambda c, **kw: (True, {c.path: "emotional support"}, None)),
+            max_clarification_turns=0,
+            limit=1,
+            log=lambda *a: None,
+            sleep=lambda *a: None,
+            enable_active_reflection=kwargs.pop("enable_active_reflection", False),
+        )
+        args.update(kwargs)
+        return execute_find_skill("emotional support", **args)
+
+    def test_interleaved_pending_repo_expansion_between_batches(self):
+        repos = [{"owner": "test-owner", "repo": f"r{i}", "url": f"https://github.com/test-owner/r{i}", "description": "tool"} for i in range(20)]
+        search_fn = Mock(return_value=(True, repos, None))
+        expand_fn = Mock(side_effect=lambda repo_list, **kw: ([_batch_cand(int(r["repo"][1:])) for r in repo_list], []))
+        model_calls = [_batch_resp(BATCH_PLAN)] + [_batch_eval("none") for _ in range(12)] + [_batch_eval("strong")]
+
+        r = self.run_find(model_calls, search_fn, expand_fn, limit=1, max_rounds=1)
+        self.assertEqual(r["stop_reason"], "target_reached")
+        history = r["search"]["rounds_history"]
+        self.assertTrue(len(history) >= 1)
+        self.assertGreaterEqual(history[0].get("batch_index", 0), 1)
+
+    def test_active_reflection_triggers_on_two_consecutive_zero_batches(self):
+        def search_fn(query, **kw):
+            if "wellness" in query or "companion" in query:
+                return True, [{"owner": "test-owner", "repo": "r99", "url": "https://github.com/test-owner/r99", "description": "cbt"}], None
+            return True, [{"owner": "test-owner", "repo": f"r{i}", "url": f"https://github.com/test-owner/r{i}", "description": ""} for i in range(30)], None
+
+        expand_fn = Mock(side_effect=lambda repo_list, **kw: ([_batch_cand(int(r["repo"][1:])) for r in repo_list], []))
+        reflection_result = {"queries": ["cbt wellness companion", "empathy listener skill", "mindfulness companion"]}
+
+        def model_call(cfg, system, user, **kw):
+            if "prompt generator" in system or "规划" in system:
+                return _batch_resp(BATCH_PLAN)
+            if "新短语1" in system or "检索词" in system or "previous_queries" in user:
+                return _batch_resp(reflection_result)
+            if "r99" in user:
+                return _batch_eval("strong")
+            return _batch_eval("none")
+
+        r = self.run_find(model_call, search_fn, expand_fn, enable_active_reflection=True, limit=1, max_rounds=2)
+        self.assertEqual(r["stop_reason"], "target_reached")
+        history = r["search"]["rounds_history"]
+        self.assertEqual(history[0].get("active_reflections", 0), 1)
+
+
 if __name__ == "__main__":
     unittest.main()

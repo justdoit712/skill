@@ -31,5 +31,27 @@
 - **运行环境**：本项目仅在 Windows PowerShell 环境下本地运行与开发，不部署亦不在 Linux 中运行。
 - **Python 解释器**：优先使用项目内的虚拟环境解释器 `.\.venv\Scripts\python.exe`。
 - **本地任务入口**：`.\.venv\Scripts\python.exe tools/run_local.py`
+- **核心冒烟测试（日常开发推荐，0.3 秒内完成）**：
+  ```powershell
+  .\.venv\Scripts\python.exe tools/run_tests.py --smoke
+  # 或使用 npm 快捷命令：
+  npm run test:smoke
+  ```
+- **全量回归测试**：
+  ```powershell
+  .\.venv\Scripts\python.exe tools/run_tests.py
+  # 或使用 npm 快捷命令：
+  npm run test:py
+  # 亦可使用标准 unittest：
+  .\.venv\Scripts\python.exe -m unittest discover -s tests -q
+  ```
 - **前端测试**：`npm test`
-- **单元测试**：`.\.venv\Scripts\python.exe -m unittest discover -s tests -q`
+
+## 4. 测试资产分层与瘦身治理规范（用完即收规则）
+
+- **测试分层与日常入口**：日常编码、Bug 修复与代码预提交**必须优先执行核心冒烟测试**（`--smoke`，覆盖 89 项关键业务契约，0.3 秒内完成）；CI 流水线、合并主分支或发版前执行全量回归测试。
+- **架构模块收敛原则**：测试套件严格按架构领域组织，总文件数保持在 10~15 个以内（当前收敛为 10 个领域模块），严禁针对单次迭代碎片化新建测试文件。
+- **验收测试“用完即收”规则**：针对特定临时方案、专项重构或阶段性调研（如 `*-spec.md`）新增的验收测试，在方案落地验证完毕后，**必须执行用完即收流程**：
+  1. 仅允许挑选 1~2 个具备长期守门价值的不可替代断言合入对应的领域主测试（并视情况打上 `@smoke` 标记）；
+  2. 其余阶段性临时测试用例与实施文档一同清理删除；
+  3. 严禁无休止累加阶段性验证脚本，彻底切断测试资产债务膨胀。
