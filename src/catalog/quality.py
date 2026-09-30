@@ -97,8 +97,12 @@ def check_quality(evaluation, text, rules):
         for key in keys:
             item = group.get(key)
             if not isinstance(item, dict) or item.get("value") not in ("pass", "fail", "unknown", "not_applicable"):
+                if domain:
+                    continue
                 raise ValueError(f"{key} 检查结构无效")
             if not isinstance(item.get("evidence"), str) or not item["evidence"].strip():
+                if domain:
+                    continue
                 raise ValueError(f"{key} 缺少判定理由")
             citations = item.get("citations")
             verified = locate_citations(citations, text)

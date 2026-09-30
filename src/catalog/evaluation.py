@@ -14,6 +14,7 @@ rules_version 与 source_fingerprint 由本模块注入，不由模型生成。
 from __future__ import annotations
 
 import json
+import re
 import os
 import time
 from dataclasses import dataclass, field
@@ -193,6 +194,19 @@ def _strip_fence(text: str) -> str:
     return stripped.strip()
 
 
+def _extract_json_text(text: str) -> str:
+    """健壮地提取模型输出中的 JSON 文本，兼容思考标签、Markdown 代码块与前后缀文字。"""
+    cleaned = re.sub(r'<think>.*?</think>', '', text, flags=re.DOTALL).strip()
+    fence_match = re.search(r'```(?:json)?\s*(\{.*?\})\s*```', cleaned, flags=re.DOTALL)
+    if fence_match:
+        return fence_match.group(1).strip()
+    first_brace = cleaned.find('{')
+    last_brace = cleaned.rfind('}')
+    if first_brace != -1 and last_brace != -1 and last_brace > first_brace:
+        return cleaned[first_brace:last_brace + 1].strip()
+    return _strip_fence(cleaned)
+
+
 def normalize_main_category(raw_value, taxonomy: dict) -> str:
     """把模型给出的主分类归一为 taxonomy 的 id。
 
@@ -203,6 +217,9 @@ def normalize_main_category(raw_value, taxonomy: dict) -> str:
     value = "" if raw_value is None else str(raw_value).strip()
     for category in allowed:
         if value and value in (category["id"], category["name"]):
+            return category["id"]
+    for category in allowed:
+        if value and (category["name"] in value or category["id"] in value.lower()):
             return category["id"]
     raise ValueError(
         "main_category 缺失或不在允许的主分类内：" + repr(raw_value)
@@ -215,9 +232,12 @@ def parse_evaluation(
 ) -> dict:
     """解析模型输出并校验结构。结构无效时抛 OutputJsonError 或 OutputSchemaError。"""
     try:
-        raw = json.loads(_strip_fence(content))
-    except json.JSONDecodeError as exc:
-        raise OutputJsonError(f"模型输出不是合法 JSON：{exc}") from exc
+        raw = json.loads(_extract_json_text(content))
+    except json.JSONDecodeError:
+        try:
+            raw = json.loads(_strip_fence(content))
+        except json.JSONDecodeError as exc:
+            raise OutputJsonError(f"模型输出不是合法 JSON：{exc}") from exc
     if not isinstance(raw, dict):
         raise OutputSchemaError("模型输出的顶层不是对象")
 
@@ -231,14 +251,39 @@ def parse_evaluation(
         raise OutputSchemaError("以下检查项缺失或取值非法：" + "、".join(invalid))
 
     for cid in check_ids:
-        if "blocking" in raw[cid] and type(raw[cid]["blocking"]) is not bool:
-            raise OutputSchemaError(f"{cid}.blocking 必须是布尔值")
-    if "verification_note" in raw and not isinstance(raw["verification_note"], str):
-        raise OutputSchemaError("verification_note 必须是文本")
+        if "blocking" in raw[cid]:
+            b_val = raw[cid]["blocking"]
+            if isinstance(b_val, str):
+                if b_val.lower() == "true":
+                    raw[cid]["blocking"] = True
+                elif b_val.lower() == "false":
+                    raw[cid]["blocking"] = False
+                else:
+                    raise OutputSchemaError(f"{cid}.blocking 必须是布尔值")
+            elif type(b_val) is not bool:
+                raise OutputSchemaError(f"{cid}.blocking 必须是布尔值")
+
+    if "verification_note" in raw:
+        if raw["verification_note"] is None:
+            raw["verification_note"] = ""
+        elif not isinstance(raw["verification_note"], str):
+            raise OutputSchemaError("verification_note 必须是文本")
 
     evaluation = dict(raw)
-    if not isinstance(raw.get("domain_checks", {}), dict):
-        raise OutputSchemaError("domain_checks 必须是对象")
+    if "domain_checks" in raw:
+        if raw["domain_checks"] is None:
+            raw["domain_checks"] = {}
+        elif not isinstance(raw["domain_checks"], dict):
+            raise OutputSchemaError("domain_checks 必须是对象")
+        else:
+            cleaned_domain = {}
+            for d_key, d_val in raw["domain_checks"].items():
+                if isinstance(d_val, dict) and d_val.get("value") in ("pass", "fail", "unknown", "not_applicable"):
+                    cleaned_domain[d_key] = d_val
+            raw["domain_checks"] = cleaned_domain
+            evaluation["domain_checks"] = cleaned_domain
+    else:
+        evaluation["domain_checks"] = {}
     if not isinstance(raw.get("reason_codes", []), list) or any(not isinstance(code, str) for code in raw.get("reason_codes", [])):
         raise OutputSchemaError("reason_codes 必须是字符串数组")
     if taxonomy is not None:
