@@ -311,7 +311,8 @@ class FinderRunState:
                 if unknown:
                     self.report.setdefault('stop_causes', []).append(STATUS_USAGE_UNKNOWN)
                 raise RunStopped('access_denied')
-            if result.http_status in (400, 404, 422) and result.reason_code not in ('QUOTA_EXHAUSTED', 'QUOTA_RESPONSE_CONFLICT'):
+            if result.http_status in (400, 404, 422) and result.reason_code not in (
+                    'QUOTA_EXHAUSTED', 'QUOTA_RESPONSE_CONFLICT', 'MODEL_REQUEST_INCOMPATIBLE'):
                 raise RunStopped('request_config_error')
             if unknown and result.reason_code != 'QUOTA_RESPONSE_CONFLICT':
                 raise RunStopped(STATUS_USAGE_UNKNOWN)
@@ -433,7 +434,7 @@ def finalize_run(report, stop_reason, *, status=None, evaluated_items=None, plan
                  evaluation_attempts=None, evaluated_count=None, log=print):
     if status is None:
         status = (STATUS_INTERRUPTED if stop_reason == STATUS_INTERRUPTED else
-                  STATUS_STOPPED if stop_reason in (STATUS_TOKEN_LIMIT, STATUS_EVALUATION_LIMIT, STATUS_USAGE_UNKNOWN, STATUS_MODEL_FAILURES, STATUS_ROUND_LIMIT, STATUS_QUOTA_EXHAUSTED, 'input_limit_mismatch') else
+                  STATUS_STOPPED if stop_reason in (STATUS_TOKEN_LIMIT, STATUS_EVALUATION_LIMIT, STATUS_USAGE_UNKNOWN, STATUS_MODEL_FAILURES, STATUS_ROUND_LIMIT, STATUS_QUOTA_EXHAUSTED, 'input_limit_mismatch', 'models_incompatible') else
                   STATUS_COMPLETED if stop_reason in (STATUS_TARGET_REACHED, STATUS_CANDIDATES_EXHAUSTED, STATUS_ALL_CANDIDATES_OWNED, STATUS_COMPLETED) else STATUS_ERROR)
     history = report.get("search", {}).get("rounds_history", [])
     if history:

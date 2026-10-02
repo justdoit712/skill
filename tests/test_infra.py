@@ -258,6 +258,99 @@ class ModelPoolTest(unittest.TestCase):
         expired.start()
         self.assertEqual(expired.select()['model'], 'model-a')
 
+    def test_parameter_rejections_rotate_with_safe_billing_and_configuration_recovery(self):
+        from copy import deepcopy
+        from src.infra.llm import call_model
+        from src.finder.run import FinderRunState
+        from src.shared.usage import UsageTotals
+        raw = {'provider': 'dashscope',
+               'endpoint': 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions',
+               'models': ['model-a', 'model-b'], 'request': {'response_format': 'json_object'}}
+        body = {'error': {'code': 'invalid_parameter_error', 'type': 'invalid_request_error',
+                         'message': 'parameter.enable_thinking must be set to false for non-streaming calls. sk-sensitive'}}
+
+        def transport(session):
+            return lambda cfg, system, user, **kwargs: call_model(cfg, system, user, session=session, **kwargs)
+
+        def session_for(error_body, status=400):
+            session = Mock()
+            session.post.side_effect = [
+                Mock(status_code=status, text=json.dumps(error_body), json=Mock(return_value=error_body)),
+                Mock(status_code=200, json=Mock(return_value={'usage': {'total_tokens': 13},
+                    'choices': [{'finish_reason': 'stop', 'message': {'content': '{"ok":true}'}}]})),
+            ]
+            return session
+
+        for parameter, message in (
+                ('enable_thinking', body['error']['message']),
+                ('max_tokens', 'Range of max_tokens should be [1, 8192]'),
+                ('response_format', 'response_format is not supported for this model')):
+            with self.subTest(parameter=parameter):
+                root = self.root / parameter
+                pool = ModelPool(raw, root, authoritative=False)
+                error_body = deepcopy(body)
+                error_body['error']['message'] = message
+                session = session_for(error_body)
+                contexts = []
+                def invoke(cfg, fmt, context):
+                    contexts.append(context)
+                    return call_model(cfg, 's', 'u', api_key='fake', session=session, response_format=fmt)
+                result, calls = pool.run('s', 'u', 'catalog_assessment', invoke)
+                self.assertTrue(result.ok)
+                self.assertEqual([c.requested_model for c in calls], ['model-a', 'model-b'])
+                self.assertEqual(contexts[1]['switch_reason'], 'request_incompatible')
+                totals = UsageTotals()
+                for call in calls:
+                    totals.add(call)
+                self.assertEqual((totals.requests, totals.unknown_usage_requests, totals.total_tokens), (2, 0, 13))
+                self.assertNotIn('sk-sensitive', calls[0].error)
+                self.assertEqual(calls[0].incompatible_parameter, parameter)
+                restarted = ModelPool(raw, root, authoritative=False)
+                restarted.start()
+                self.assertEqual(restarted.select()['model'], 'model-b')
+                changed = deepcopy(raw)
+                changed['models'][0] = {'model': 'model-a', 'limits': {'max_output_tokens': 2000}}
+                updated = ModelPool(changed, root, authoritative=False)
+                updated.start()
+                self.assertEqual(updated.select()['model'], 'model-a')
+
+        # Both callers use the same accounted rotation rather than stopping at
+        # the first 400; Finder has an additional HTTP/usage guard to exercise.
+        finder = FinderRunState('test', {'max_tokens': 10000}, cfg={'model': raw})
+        finder.model_pool = ModelPool(raw, self.root / 'finder', authoritative=False)
+        result, unknown = finder.call(transport(session_for(body)), raw, 's', 'u',
+                                      api_key='fake', sleep=lambda _: None)
+        self.assertTrue(result.ok)
+        self.assertFalse(unknown)
+        self.assertEqual(finder.report['calls'][1]['switch_reason'], 'request_incompatible')
+
+        for index, (overrides, status, provider, endpoint) in enumerate((
+                ({'usage': {'total_tokens': 1}}, 400, 'dashscope', raw['endpoint']),
+                ({'usage': {'total_tokens': 'bad'}}, 400, 'dashscope', raw['endpoint']),
+                ({'choices': [{'message': {'content': 'partial'}}]}, 400, 'dashscope', raw['endpoint']),
+                ({'error': {'code': 'other_error', 'message': 'enable_thinking must be false'}}, 400, 'dashscope', raw['endpoint']),
+                ({'error': {'code': 'invalid_parameter_error', 'message': 'request body malformed'}}, 400, 'dashscope', raw['endpoint']),
+                ({}, 401, 'dashscope', raw['endpoint']),
+                ({}, 403, 'dashscope', raw['endpoint']),
+                ({}, 400, 'other', raw['endpoint']),
+                ({}, 400, 'dashscope', 'https://untrusted.invalid/chat/completions'))):
+            with self.subTest(rejection=index):
+                cfg = {**raw, 'provider': provider, 'endpoint': endpoint}
+                session = session_for({**deepcopy(body), **overrides}, status)
+                pool = None
+                if provider == 'dashscope':
+                    pool = ModelPool(cfg, self.root / f'negative-{index}', authoritative=False)
+                    result, calls = pool.run('s', 'u', 'catalog_assessment',
+                        lambda model_cfg, fmt, context: call_model(model_cfg, 's', 'u', api_key='fake', session=session))
+                else:
+                    single = {key: value for key, value in cfg.items() if key != 'models'}
+                    result = call_model({**single, 'model': 'model-a'}, 's', 'u', api_key='fake', session=session)
+                self.assertFalse(result.ok)
+                self.assertIsNone(result.billing_state)
+                self.assertEqual(session.post.call_count, 1)
+                if pool is not None:
+                    self.assertFalse(pool.inspect().get('incompatible_models'))
+
 
 @smoke
 class ApiKeyResolutionTest(unittest.TestCase):

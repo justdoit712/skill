@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import time
 from dataclasses import dataclass, field
 from typing import Any
@@ -43,6 +44,68 @@ REASON_RESPONSE_EMPTY = "RESPONSE_EMPTY"
 REASON_NETWORK_ERROR = "NETWORK_ERROR"
 REASON_LENGTH_EXCEEDED = "LENGTH_EXCEEDED"
 REASON_RESPONSE_FORMAT_UNSUPPORTED = "RESPONSE_FORMAT_UNSUPPORTED"
+REASON_MODEL_REQUEST_INCOMPATIBLE = "MODEL_REQUEST_INCOMPATIBLE"
+INCOMPATIBLE_PARAMETERS = frozenset({
+    'enable_thinking', 'max_tokens', 'max_completion_tokens',
+    'response_format', 'json_schema', 'temperature', 'system_role',
+})
+
+
+def _rejection_token_counts(value):
+    if not isinstance(value, dict):
+        return None
+    values = []
+    for key, item in value.items():
+        if key.endswith('_details'):
+            nested = _rejection_token_counts(item)
+            if nested is None:
+                return None
+            values.extend(nested)
+        elif key.endswith('_tokens'):
+            if type(item) is not int or item < 0:
+                return None
+            values.append(item)
+    return values
+
+
+def apply_parameter_rejection(result, data, config):
+    """Recognize bounded DashScope validation errors, without persisting prose."""
+    host = (urlparse(config.get('endpoint', '')).hostname or '').lower()
+    if (result.http_status != 400 or config.get('provider') != 'dashscope'
+            or not (host == 'aliyuncs.com' or host.endswith('.aliyuncs.com'))
+            or not isinstance(data, dict) or not isinstance(data.get('error'), dict)):
+        return
+    error = data['error']
+    codes = {'invalid_parameter_error', 'invalid_request_error', 'InvalidParameter',
+             'InvalidParameterValue', 'InvalidParameter.InvalidParameterValue', 'unsupported_parameter'}
+    identifiers = [error[k] for k in ('code', 'type') if k in error]
+    if not identifiers or any(not isinstance(code, str) or code not in codes for code in identifiers):
+        return
+    message = error.get('message')
+    message = message[:2048].lower() if isinstance(message, str) else ''
+    parameter = error.get('param')
+    if not isinstance(parameter, str) or parameter not in INCOMPATIBLE_PARAMETERS:
+        parameter = None
+        if any(word in message for word in ('must ', 'should ', 'not support', 'unsupported', 'invalid', 'range', 'only support')):
+            parameter = next((name for name in sorted(INCOMPATIBLE_PARAMETERS)
+                              if name != 'system_role' and re.search(r'\b' + name + r'\b', message)), None)
+            if parameter is None and 'system' in message and 'role' in message and 'support' in message:
+                parameter = 'system_role'
+    if parameter is None:
+        return
+    # A validation rejection with content or nonzero/malformed usage cannot be
+    # treated as free. Preserve its usage and leave the ordinary stop policy.
+    usage = data.get('usage')
+    counts = [] if usage is None else _rejection_token_counts(usage)
+    result.provider_error_code = error.get('code') or identifiers[0]
+    result.incompatible_parameter = parameter
+    if counts is None or any(counts) or data.get('choices') or data.get('output'):
+        result.reason_code = REASON_MODEL_ERROR
+        result.error = f'模型参数拒绝响应存在用量或内容冲突（{parameter}）'
+        return
+    result.reason_code = REASON_MODEL_REQUEST_INCOMPATIBLE
+    result.billing_state = 'rejected_before_inference'
+    result.error = f'模型请求参数不兼容（{parameter}，{result.provider_error_code}）'
 
 
 def apply_provider_error(result, data, config):
@@ -73,22 +136,7 @@ def apply_provider_error(result, data, config):
         return
     if code != 'AllocationQuota.FreeTierOnly' or result.http_status not in (400, 403, 429):
         return
-    def tokens(value):
-        if not isinstance(value, dict):
-            return None
-        values = []
-        for key, item in value.items():
-            if key.endswith('_details'):
-                nested = tokens(item)
-                if nested is None:
-                    return None
-                values.extend(nested)
-            elif key.endswith('_tokens'):
-                if type(item) is not int or item < 0:
-                    return None
-                values.append(item)
-        return values
-    counts = [] if usage is None else tokens(usage)
+    counts = [] if usage is None else _rejection_token_counts(usage)
     if counts is None or any(counts) or data.get('choices'):
         result.reason_code = 'QUOTA_RESPONSE_CONFLICT'
         result.error = '额度拒绝响应存在用量或内容冲突'
@@ -143,6 +191,7 @@ class ModelCallResult:
     http_status: int | None = None
     is_sample_error: bool = False
     provider_error_code: str | None = None
+    incompatible_parameter: str | None = None
     billing_state: str | None = None
     requested_model: str | None = None
     returned_model: str | None = None
@@ -335,6 +384,10 @@ def call_model(
                         error_data = None
                     apply_provider_error(result, error_data, model_cfg)
                     if result.reason_code in ('QUOTA_EXHAUSTED', 'QUOTA_RESPONSE_CONFLICT', 'ACCOUNT_ERROR'):
+                        result.latency_ms = int((time.monotonic() - started) * 1000)
+                        return result
+                    apply_parameter_rejection(result, error_data, model_cfg)
+                    if result.reason_code == REASON_MODEL_REQUEST_INCOMPATIBLE:
                         result.latency_ms = int((time.monotonic() - started) * 1000)
                         return result
                     if status == 400 and any(keyword in body.lower() for keyword in ("response_format", "json_schema")):

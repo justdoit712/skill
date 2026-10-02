@@ -23,6 +23,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 from src.infra.files import write_json_atomic
+from src.shared.usage import _number, recompute_usage_from_calls
 from src.shared.runtime import (
     SHANGHAI_TZ,
     TZ_SOURCE,
@@ -282,6 +283,68 @@ class BudgetLedger:
             if record.get("status") == STATUS_IN_PROGRESS:
                 self.mark_needs_recovery(evaluation_id, "上次运行在返回前中断", moment)
                 recovered.append(evaluation_id)
+        return recovered
+
+    def recover_settled_pool_pauses(self, *, dry_run=False, moment: datetime | None = None) -> list[str]:
+        """Recover peer-induced pauses only when every own request is safe.
+
+        Keep request usage and attempt limits intact. Actual unknown requests,
+        successful results and storage/conflict failures still require recovery.
+        """
+        pauses = {'request_config_error', 'usage_unknown', 'models_exhausted',
+                  'models_cooling_down', 'models_incompatible', 'input_limit_mismatch', 'token_limit'}
+        recovered = []
+        for evaluation_id in self.reserved:
+            record = self.get(evaluation_id) or {}
+            requests = record.get('requests')
+            if (record.get('status') != STATUS_NEEDS_RECOVERY or record.get('outcome')
+                    or record.get('pause_reason') not in pauses
+                    or not isinstance(requests, list) or not requests):
+                continue
+            safe = True
+            for call in requests:
+                if not isinstance(call, dict):
+                    safe = False
+                    break
+                if call.get('state') == 'not_sent' and call.get('reservation_state') == 'released':
+                    continue
+                response = call.get('response')
+                usage = call.get('usage')
+                if (call.get('state') != 'error' or call.get('reservation_state') != 'settled'
+                        or not isinstance(response, dict) or response.get('ok') is not False
+                        or not isinstance(usage, dict) or type(usage.get('attempts')) is not int
+                        or usage['attempts'] != 1):
+                    safe = False
+                    break
+                total = _number(usage.get('total_tokens'))
+                prompt, completion = _number(usage.get('prompt_tokens')), _number(usage.get('completion_tokens'))
+                if total is None and prompt is not None and completion is not None:
+                    total = prompt + completion
+                if total is not None and prompt is not None and completion is not None and total != prompt + completion:
+                    safe = False
+                    break
+                rejected = (usage.get('billing_state') == 'rejected_before_inference'
+                            and response.get('reason_code') in ('QUOTA_EXHAUSTED', 'MODEL_REQUEST_INCOMPATIBLE')
+                            and not any(value for value in (total, prompt, completion)))
+                status, content = response.get('http_status'), response.get('content')
+                empty = (response.get('reason_code') in ('RESPONSE_EMPTY', 'MODEL_ERROR')
+                         and type(status) is int and 200 <= status < 300
+                         and (content is None or isinstance(content, str) and not content.strip())
+                         and response.get('finish_reason') != 'length' and total is not None)
+                if not rejected and not empty:
+                    safe = False
+                    break
+            if not safe or recompute_usage_from_calls(requests).unknown_usage_requests:
+                continue
+            recovered.append(evaluation_id)
+            if not dry_run:
+                record['status'] = STATUS_RESERVED
+                record.setdefault('recovery_history', []).append({
+                    'recovered_at': _iso(moment), 'previous_status': STATUS_NEEDS_RECOVERY,
+                    'pause_reason': record['pause_reason'],
+                    'reason': '本候选请求均已结算，解除并发其他候选导致的恢复阻止；保留用量和尝试历史',
+                })
+                self.save_record(evaluation_id, record, moment)
         return recovered
 
     def snapshot(self) -> dict:

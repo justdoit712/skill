@@ -2,6 +2,7 @@
 from copy import deepcopy
 from datetime import datetime, timedelta
 import json
+import re
 from pathlib import Path
 import threading
 from uuid import uuid4
@@ -11,7 +12,7 @@ from src.infra.model_config import load_model_config
 from src.shared.model_config import parse_model_configs, state_key, normalize_endpoint, model_fingerprint
 from src.shared.output_contracts import resolve_response_format
 from src.shared.usage import UsageTotals
-from src.infra.llm import REASON_RESPONSE_EMPTY
+from src.infra.llm import REASON_RESPONSE_EMPTY, REASON_MODEL_REQUEST_INCOMPATIBLE, INCOMPATIBLE_PARAMETERS
 
 QUOTA_CODE = 'AllocationQuota.FreeTierOnly'
 EMPTY_RESPONSE_MAX_ATTEMPTS = 2
@@ -38,6 +39,7 @@ class ModelPool:
         self._lock = threading.RLock()
         self._local_exhausted = set()
         self._local_cooled = set()
+        self._local_incompatible = set()
         self.now = now or (lambda: datetime.now().astimezone())
         self.authoritative = authoritative
         self.log = log
@@ -76,6 +78,20 @@ class ModelPool:
             until = datetime.fromisoformat(row['cooldown_until'])
             if started.tzinfo is None or until.tzinfo is None or until <= started:
                 raise ValueError('模型冷却时间不合法')
+        incompatible = state.setdefault('incompatible_models', {})
+        if not isinstance(incompatible, dict):
+            raise ValueError('模型参数不兼容状态必须为对象')
+        for key, row in incompatible.items():
+            if (not isinstance(row, dict) or not isinstance(row.get('model'), str) or not row['model'].strip()
+                    or row['model'] != row['model'].strip() or row.get('reason_code') != REASON_MODEL_REQUEST_INCOMPATIBLE
+                    or type(row.get('http_status')) is not int or row['http_status'] != 400
+                    or normalize_endpoint(row.get('endpoint')) != row.get('endpoint')
+                    or state_key(row['endpoint'], row['model']) != key
+                    or not isinstance(row.get('config_fingerprint'), str)
+                    or not re.fullmatch(r'sha256:[0-9a-f]{16}', row['config_fingerprint'])
+                    or row.get('parameter') not in INCOMPATIBLE_PARAMETERS):
+                raise ValueError('模型参数不兼容记录身份或字段不合法')
+            datetime.fromisoformat(row['rejected_at'])
         return state
 
     def _current(self):
@@ -114,7 +130,13 @@ class ModelPool:
                      or (v['endpoint'] == endpoint and v['model'] not in names)]
             for key in stale:
                 del cooldowns[key]
-            return bool(remove or stale)
+            incompatible = state.setdefault('incompatible_models', {})
+            fingerprints = {state_key(c['endpoint'], c['model']): model_fingerprint(c) for c in self._configs}
+            changed = [key for key, row in incompatible.items() if row['endpoint'] == endpoint
+                       and row['config_fingerprint'] != fingerprints.get(key)]
+            for key in changed:
+                del incompatible[key]
+            return bool(remove or stale or changed)
         self._transaction(cleanup)
         self.select()
 
@@ -126,6 +148,10 @@ class ModelPool:
         available = [c for c in self._configs if state_key(c['endpoint'], c['model']) not in exhausted]
         if not available:
             raise PoolStopped('models_exhausted', '所有模型已耗尽，请补充模型后恢复任务')
+        incompatible = self._incompatible_keys(state)
+        available = [c for c in available if state_key(c['endpoint'], c['model']) not in incompatible]
+        if not available:
+            raise PoolStopped('models_incompatible', '剩余模型均因参数不兼容被跳过，请调整模型配置后重跑；候选保留待处理')
         cooled = self._cooled_keys(state)
         available = [c for c in available if state_key(c['endpoint'], c['model']) not in cooled]
         if not available:
@@ -138,6 +164,40 @@ class ModelPool:
     def _cooled_keys(self, state):
         return self._local_cooled | {key for key, row in state.get('cooldown_models', {}).items()
                                     if datetime.fromisoformat(row['cooldown_until']) > self.now()}
+
+    def _incompatible_keys(self, state):
+        rows = state.get('incompatible_models', {})
+        return {key for cfg in self._configs
+                for key, fingerprint in [(state_key(cfg['endpoint'], cfg['model']), model_fingerprint(cfg))]
+                if (key, fingerprint) in self._local_incompatible
+                or rows.get(key, {}).get('config_fingerprint') == fingerprint}
+
+    def skip_incompatible(self, cfg, result):
+        """Persist rejection for this configuration; parameter changes unblock it."""
+        if (result.reason_code != REASON_MODEL_REQUEST_INCOMPATIBLE
+                or result.http_status != 400 or result.billing_state != 'rejected_before_inference'
+                or result.incompatible_parameter not in INCOMPATIBLE_PARAMETERS):
+            raise ValueError('仅已确认的模型参数拒绝可以跳过模型')
+        key = state_key(cfg['endpoint'], cfg['model'])
+        original = next(c for c in self._configs if state_key(c['endpoint'], c['model']) == key)
+        fingerprint = model_fingerprint(original)
+        def merge(state):
+            current = {state_key(c['endpoint'], c['model']): model_fingerprint(c)
+                       for c in parse_model_configs(self._current())}
+            rows = state.setdefault('incompatible_models', {})
+            if current.get(key) != fingerprint or rows.get(key, {}).get('config_fingerprint') == fingerprint:
+                return False
+            rows[key] = {'endpoint': normalize_endpoint(cfg['endpoint']), 'model': cfg['model'],
+                         'config_fingerprint': fingerprint, 'reason_code': REASON_MODEL_REQUEST_INCOMPATIBLE,
+                         'http_status': 400, 'parameter': result.incompatible_parameter,
+                         'rejected_at': self.now().isoformat()}
+            return True
+        self._transaction(merge)
+        with self._lock:
+            already_skipped = (key, fingerprint) in self._local_incompatible
+            self._local_incompatible.add((key, fingerprint))
+        if not already_skipped:
+            self.log(f'模型参数不兼容，跳过并选择下一个：{cfg["model"]}（{result.incompatible_parameter}）')
 
     def cooldown(self, cfg, result):
         """Skip this model for the session and persist a 30-minute retry window."""
@@ -184,6 +244,7 @@ class ModelPool:
         state = self._transaction(lambda state: False)
         exhausted = set(state['exhausted_models']) | self._local_exhausted
         exhausted |= self._cooled_keys(state)
+        exhausted |= self._incompatible_keys(state)
         return any(c['model'] == model and state_key(c['endpoint'], model) not in exhausted
                    for c in self._configs)
 
@@ -199,7 +260,8 @@ class ModelPool:
                 self.log('输入上限不足，本次跳过：' + cfg['model'])
                 continue
             if cfg['model'] != selected:
-                switch_reason = ({'QUOTA_EXHAUSTED': 'quota_exhausted', REASON_RESPONSE_EMPTY: 'response_empty'}
+                switch_reason = ({'QUOTA_EXHAUSTED': 'quota_exhausted', REASON_RESPONSE_EMPTY: 'response_empty',
+                                  REASON_MODEL_REQUEST_INCOMPATIBLE: 'request_incompatible'}
                                  .get(attempts[-1].reason_code) if attempts else None)
                 selected, tries, empty_tries = cfg['model'], 0, 0
                 self.log('选择模型：' + selected)
@@ -229,6 +291,11 @@ class ModelPool:
                 raise PoolStopped('quota_response_conflict', '额度拒绝与实际用量冲突，已记账并停止')
             if result.reason_code == 'ACCOUNT_ERROR':
                 return result, attempts
+            if result.reason_code == REASON_MODEL_REQUEST_INCOMPATIBLE:
+                if result.billing_state != 'rejected_before_inference':
+                    raise PoolStopped('usage_unknown', '模型参数拒绝用量未确认，停止自动轮换')
+                self.skip_incompatible(cfg, result)
+                continue
             if result.reason_code == REASON_RESPONSE_EMPTY:
                 if UsageTotals().add(result)['total_tokens'] is None:
                     raise PoolStopped('usage_unknown', '空响应用量未知，停止自动重试')

@@ -58,7 +58,7 @@ from src.shared.normalization import (
     normalized_content_fingerprint,
 )
 from src.shared.runtime import is_test_environment
-from src.shared.usage import UsageTotals
+from src.shared.usage import UsageTotals, recompute_usage_from_calls
 from src.shared.versions import build_config_fingerprint
 from src.shared.model_config import material_fetch_limit
 from .index import CatalogContext, build_catalog, build_entry, index_by_id
@@ -724,7 +724,8 @@ def _evaluate_with_pool(state, candidate, text, eid, record):
         unsettled = any(c.get('state') in ('started', 'unknown') for c in requests)
         unsafe_storage = result['pool_stop'] == 'storage_error' and any(
             getattr(c, 'billing_state', None) != 'rejected_before_inference' for c in observed)
-        checkpoint['status'] = 'needs_recovery' if (state.usage.unknown_usage_requests or unsettled or unsafe_storage
+        own_unknown_usage = recompute_usage_from_calls(requests).unknown_usage_requests
+        checkpoint['status'] = 'needs_recovery' if (own_unknown_usage or unsettled or unsafe_storage
                                                     or result['pool_stop'] == 'quota_response_conflict') else 'reserved'
         if state.usage.unknown_usage_requests:
             state.stop_causes.add(STOP_USAGE_UNKNOWN)
@@ -1416,6 +1417,10 @@ def _collect(root, local, settings, cfg, discover_fn, fetch_fn, evaluate_fn, log
     format_failures = 0
     stop_causes = set()
     if 'models' in cfg['model']:
+        recovered = ledger.recover_settled_pool_pauses()
+        if recovered:
+            report['recovered_settled_pauses'] = recovered
+            log(f'恢复 {len(recovered)} 条请求已结算的候选；保留原请求、用量和尝试历史。')
         blockers = [eid for eid in ledger.reserved if (ledger.get(eid) or {}).get('status') == 'needs_recovery']
         if blockers:
             stop_causes.add(STOP_USAGE_UNKNOWN)

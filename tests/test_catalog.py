@@ -136,6 +136,121 @@ class CandidatePoolTest(unittest.TestCase):
                 self.assertEqual((len(record['requests']), report['usage']['total_tokens']),
                                  (calls, calls * (tokens or 0)))
 
+    def test_parameter_rejection_rotation_preserves_candidates_budget_and_parallel_accounting(self):
+        import json
+        from copy import deepcopy
+        from unittest.mock import Mock
+        from src.catalog.config import load_all_config
+        from src.catalog.local import run_local
+        from src.infra.http import FetchResult
+        from tests.test_catalog_quality import TEXT, assessment
+
+        original = load_all_config(ROOT / 'config')
+        original['model'] = {'provider': 'dashscope', 'auth': {'api_key': 'fake'},
+            'endpoint': 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions',
+            'models': ['model-a', 'model-b']}
+        rejection = {'error': {'code': 'invalid_parameter_error', 'type': 'invalid_request_error',
+                              'message': 'parameter.enable_thinking must be set to false for non-streaming calls.'}}
+        settings = {'target_recommended': 1, 'max_total_tokens': 1000000,
+                    'max_consecutive_failures': 3, 'pool_watermark': 1, 'parallel_evaluation': False}
+        for mode in ('rotate', 'parallel', 'all_incompatible', 'generic', 'charged'):
+            with self.subTest(mode=mode):
+                cfg = deepcopy(original)
+                root = self.root / mode
+                write_json_atomic(root / 'config/models/model.json', cfg['model'])
+                count = 2 if mode == 'parallel' else 1
+                candidates = [Candidate(skill_id=f'test/audit-{i}:SKILL.md', owner='test',
+                                         repo=f'audit-{i}', path='SKILL.md') for i in range(count)]
+                pool_path = root / 'data/local/pool.json'
+                save_pool(pool_path, create_pool_from_candidates(candidates))
+                session = Mock()
+                def post(endpoint, *, data, **kwargs):
+                    model = json.loads(data)['model']
+                    if model == 'model-a' or mode == 'all_incompatible':
+                        body = deepcopy(rejection)
+                        if mode == 'generic':
+                            body['error']['message'] = 'malformed request'
+                        elif mode == 'charged':
+                            body['usage'] = {'total_tokens': 9}
+                        return Mock(status_code=400, text=json.dumps(body), json=Mock(return_value=body))
+                    return Mock(status_code=200, json=Mock(return_value={
+                        'usage': {'prompt_tokens': 80, 'completion_tokens': 20, 'total_tokens': 100},
+                        'choices': [{'finish_reason': 'stop', 'message': {
+                            'content': json.dumps(assessment(cfg['rules']), ensure_ascii=False)}}]}))
+                session.post.side_effect = post
+                options = {**settings, 'parallel_evaluation': mode == 'parallel', 'target_recommended': count}
+                def collect():
+                    return run_local(root, options, cfg=cfg,
+                        discover_fn=lambda *args, **kwargs: ([], []),
+                        fetch_fn=lambda *args, **kwargs: FetchResult(url='fake', ok=True, text=TEXT),
+                        sleep=lambda _: None, log=lambda _: None)
+                with patch('src.infra.llm.requests.Session', return_value=session):
+                    report = collect()
+                if mode in ('rotate', 'parallel'):
+                    self.assertEqual((report['stop_reason'], report['new_recommended'],
+                                      report['usage']['unknown_usage_requests'], report['budget_tokens']),
+                                     ('target_reached', count, 0, count * 100))
+                    self.assertTrue(all(item.status == 'done' for item in load_pool(pool_path).items))
+                    self.assertTrue(any(call['switch_reason'] == 'request_incompatible' for call in report['calls']))
+                elif mode == 'all_incompatible':
+                    record = read_json(next((root / 'data/local/state/evaluations').glob('*.json')))
+                    self.assertEqual((report['stop_reason'], load_pool(pool_path).items[0].status,
+                                      record['status'], report['budget_tokens'], report['usage']['requests']),
+                                     ('models_incompatible', 'pending', 'reserved', 0, 2))
+                    with patch('src.infra.llm.requests.Session', return_value=session):
+                        resumed = collect()
+                    self.assertEqual((resumed['stop_reason'], session.post.call_count), ('models_incompatible', 2))
+                else:
+                    self.assertEqual((report['stop_reason'], session.post.call_count), ('request_config_error', 1))
+                    self.assertEqual(report['usage']['unknown_usage_requests'], int(mode == 'generic'))
+                    self.assertEqual(report['usage']['total_tokens'], 9 if mode == 'charged' else 0)
+
+    def test_parallel_unknown_usage_does_not_mark_a_settled_peer_for_recovery(self):
+        import threading
+        from src.catalog.config import load_all_config
+        from src.catalog.local import run_local, _record_request_usage
+        from src.infra.http import FetchResult
+        from src.infra.llm import ModelCallResult
+        from tests.test_catalog_quality import TEXT
+
+        cfg = load_all_config(ROOT / 'config')
+        cfg['model'] = {'provider': 'dashscope', 'auth': {'api_key': 'fake'},
+            'endpoint': 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions',
+            'models': ['model-a', 'model-b']}
+        write_json_atomic(self.root / 'config/models/model.json', cfg['model'])
+        candidates = [Candidate(skill_id=f'test/{name}:SKILL.md', owner='test', repo=name,
+                                 path='SKILL.md', url=f'https://fake/{name}') for name in ('known', 'unknown')]
+        pool_path = self.root / 'data/local/pool.json'
+        save_pool(pool_path, create_pool_from_candidates(candidates))
+        barrier, unknown_recorded = threading.Barrier(2), threading.Event()
+        def model(cfg, system, user, **kwargs):
+            barrier.wait(timeout=5)
+            if 'marker_known' in user:
+                if not unknown_recorded.wait(timeout=5):
+                    raise RuntimeError('peer usage callback did not run')
+                return ModelCallResult(http_status=200, attempts=1, reason_code='RESPONSE_EMPTY',
+                                       content='', usage={'total_tokens': 10})
+            return ModelCallResult(http_status=400, attempts=1, reason_code='MODEL_ERROR', error='HTTP 400')
+        def record_usage(state, call, *, retryable):
+            _record_request_usage(state, call, retryable=retryable)
+            if call.http_status == 400:
+                unknown_recorded.set()
+        options = {'target_recommended': 2, 'max_total_tokens': 1000000,
+                   'max_consecutive_failures': 3, 'pool_watermark': 1, 'parallel_evaluation': True}
+        with patch('src.catalog.evaluation.call_model', side_effect=model), \
+                patch('src.catalog.local._record_request_usage', side_effect=record_usage):
+            report = run_local(self.root, options, cfg=cfg,
+                discover_fn=lambda *args, **kwargs: ([], []),
+                fetch_fn=lambda url, **kwargs: FetchResult(url=url, ok=True,
+                    text=TEXT + ('\nmarker_known' if 'known' in url.split('/') else '\nmarker_unknown')),
+                sleep=lambda _: None, log=lambda _: None)
+        self.assertEqual(report['usage']['unknown_usage_requests'], 1)
+        records = [read_json(path) for path in (self.root / 'data/local/state/evaluations').glob('*.json')]
+        known = next(record for record in records if record['skill_id'] == candidates[0].skill_id)
+        self.assertEqual(known['status'], 'reserved', str(known['requests']))
+        self.assertEqual(known['requests'][0]['usage']['total_tokens'], 10)
+        self.assertEqual(load_pool(pool_path).items[0].status, 'pending')
+
 
 @smoke
 class CatalogStoreTest(unittest.TestCase):
@@ -261,6 +376,37 @@ class BudgetLedgerTest(unittest.TestCase):
         recovered = fresh.mark_in_progress_as_needs_recovery()
         self.assertEqual(recovered, ["c1"])
         self.assertEqual(fresh.get("c1")["status"], STATUS_NEEDS_RECOVERY)
+
+    def test_recover_settled_pool_pauses_preserves_accounting_and_real_blockers(self):
+        from copy import deepcopy
+        from src.catalog.budget import BudgetLedger
+        ledger = BudgetLedger.load(self.state, 20, max_attempts=4)
+        empty = {'state': 'error', 'reservation_state': 'settled',
+                 'usage': {'prompt_tokens': 7, 'completion_tokens': 3, 'total_tokens': 10, 'attempts': 1},
+                 'response': {'ok': False, 'http_status': 200, 'content': '', 'reason_code': 'MODEL_ERROR'}}
+        variants = {'safe': {}, 'unknown': {'usage': {'attempts': 1}},
+                    'active': {'state': 'started', 'reservation_state': 'active'},
+                    'success': {'response': {'ok': True, 'content': '{"ok":true}', 'http_status': 200}},
+                    'generic_400': {'response': {'ok': False, 'http_status': 400, 'reason_code': 'MODEL_ERROR'}},
+                    'aggregated': {'usage': {**empty['usage'], 'attempts': 2}},
+                    'conflicting': {'usage': {**empty['usage'], 'total_tokens': 11}}, 'storage': {}}
+        ledger.reserve([{'evaluation_id': name, 'skill_id': name} for name in variants])
+        for name, changes in variants.items():
+            record = ledger.get(name)
+            record.update(status='needs_recovery', attempts=1,
+                          pause_reason='storage_error' if name == 'storage' else 'request_config_error',
+                          requests=[{**deepcopy(empty), **deepcopy(changes)}])
+            ledger.save_record(name, record)
+        before = deepcopy(ledger.get('safe'))
+        self.assertEqual(ledger.recover_settled_pool_pauses(dry_run=True), ['safe'])
+        self.assertEqual(ledger.get('safe'), before)
+        self.assertEqual(ledger.recover_settled_pool_pauses(), ['safe'])
+        after = ledger.get('safe')
+        self.assertEqual((after['status'], after['requests'], after['attempts'], after['max_attempts']),
+                         ('reserved', before['requests'], before['attempts'], before['max_attempts']))
+        self.assertEqual(len(after['recovery_history']), 1)
+        self.assertEqual(ledger.recover_settled_pool_pauses(), [])
+        self.assertTrue(all(ledger.get(name)['status'] == 'needs_recovery' for name in variants if name != 'safe'))
 
 
 if __name__ == "__main__":

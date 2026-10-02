@@ -59,6 +59,7 @@ STOP_PRIORITY: list[str] = [
     'quota_response_conflict',
     'models_exhausted',
     'models_cooling_down',
+    'models_incompatible',
     'input_limit_mismatch',
     STOP_FORMAT_FAILURES,
     STOP_MODEL_FAILURES,
@@ -70,6 +71,7 @@ STOP_PRIORITY: list[str] = [
 STOP_LABELS: dict[str, str] = {
     'models_exhausted': '所有模型已耗尽，补充模型后可继续',
     'models_cooling_down': '可用模型均因空响应暂时冷却，候选保留待处理',
+    'models_incompatible': '剩余模型参数不兼容，请调整配置后重跑，候选保留待处理',
     'input_limit_mismatch': '未耗尽模型均无法接收完整材料',
     'quota_response_conflict': '额度拒绝响应与实际用量冲突',
     STOP_TARGET_REACHED: "已达成目标推荐数",
