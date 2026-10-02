@@ -39,6 +39,7 @@ DEFAULT_TIMEOUT_SECONDS = 600.0
 DEFAULT_MAX_ATTEMPTS = 2
 RETRYABLE_STATUS = frozenset({408, 429, 500, 502, 503, 504})
 REASON_MODEL_ERROR = "MODEL_ERROR"
+REASON_RESPONSE_EMPTY = "RESPONSE_EMPTY"
 REASON_NETWORK_ERROR = "NETWORK_ERROR"
 REASON_LENGTH_EXCEEDED = "LENGTH_EXCEEDED"
 REASON_RESPONSE_FORMAT_UNSUPPORTED = "RESPONSE_FORMAT_UNSUPPORTED"
@@ -371,9 +372,9 @@ def call_model(
                 result.notes.append("推理模型的推理 token 计入 max_tokens，截断结果不得采用")
                 return result
 
-            if not result.content:
+            if not result.content or (isinstance(result.content, str) and not result.content.strip()):
                 result.ok = False
-                result.reason_code = REASON_MODEL_ERROR
+                result.reason_code = REASON_RESPONSE_EMPTY
                 result.error = f"响应无内容（finish_reason={result.finish_reason}）"
                 return result
 

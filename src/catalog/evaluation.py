@@ -464,7 +464,7 @@ def evaluate(
                 "call": call,
                 "calls": calls,
                 "stage": "assessment",
-                "reason_code": REASON_MODEL_ERROR,
+                "reason_code": ERROR_KIND_RESPONSE_EMPTY,
                 "error_kind": ERROR_KIND_RESPONSE_EMPTY,
                 "error": "模型正常结束但未提供有效正文",
             }

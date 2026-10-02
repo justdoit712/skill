@@ -58,6 +58,7 @@ STOP_PRIORITY: list[str] = [
     STOP_USAGE_UNKNOWN,
     'quota_response_conflict',
     'models_exhausted',
+    'models_cooling_down',
     'input_limit_mismatch',
     STOP_FORMAT_FAILURES,
     STOP_MODEL_FAILURES,
@@ -68,6 +69,7 @@ STOP_PRIORITY: list[str] = [
 
 STOP_LABELS: dict[str, str] = {
     'models_exhausted': '所有模型已耗尽，补充模型后可继续',
+    'models_cooling_down': '可用模型均因空响应暂时冷却，候选保留待处理',
     'input_limit_mismatch': '未耗尽模型均无法接收完整材料',
     'quota_response_conflict': '额度拒绝响应与实际用量冲突',
     STOP_TARGET_REACHED: "已达成目标推荐数",
@@ -225,6 +227,12 @@ def classify_result(result: dict[str, Any]) -> ClassificationDecision:
         )
 
     # 7. 其他模型异常 / 正常结束无正文
+    if reason_code == ERROR_KIND_RESPONSE_EMPTY:
+        return ClassificationDecision(action=ACTION_RETRY, category='model_failure',
+                                      reason_code=ERROR_KIND_RESPONSE_EMPTY, error_kind=ERROR_KIND_RESPONSE_EMPTY,
+                                      stage=stage, http_status=http_status,
+                                      is_service_failure=True, retryable=True)
+
     return ClassificationDecision(
         action=ACTION_BLOCKED,
         category="model_failure",

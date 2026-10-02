@@ -263,5 +263,93 @@ class BudgetLedgerTest(unittest.TestCase):
         self.assertEqual(fresh.get("c1")["status"], STATUS_NEEDS_RECOVERY)
 
 
+@smoke
+class EmptyResponseRecoveryTest(unittest.TestCase):
+    def test_rotation_cooling_and_unknown_usage_preserve_candidate_and_accounting(self):
+        from src.catalog.config import load_all_config
+        from src.catalog.filter_rules import FilterRules
+        from src.catalog.local import run_local
+        from src.infra.http import FetchResult
+        from src.infra.llm import ModelCallResult
+        from tests.test_catalog_quality import TEXT, assessment, response
+
+        settings = {"target_recommended": 1, "max_total_tokens": 1000000,
+                    "max_consecutive_failures": 3, "max_retries": 5,
+                    "pool_watermark": 1, "pool_max_age_days": 7, "parallel_evaluation": False}
+        for mode, calls, stop in (("rotate", 3, "target_reached"),
+                                  ("parallel", None, "target_reached"),
+                                  ("cool", 4, "models_cooling_down"),
+                                  ("unknown", 1, "usage_unknown")):
+            with self.subTest(mode=mode), tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as temp:
+                root = Path(temp)
+                run_settings = dict(settings)
+                if mode == 'parallel':
+                    run_settings.update(target_recommended=2, parallel_evaluation=True)
+                cfg = load_all_config(ROOT / "config")
+                cfg['model'] = {"provider": "dashscope", "auth": {"api_key": "fake"},
+                    "model_config_version": "1.0.0", "request": {"max_attempts": 6},
+                    "endpoint": "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions",
+                    "models": ["model-a", "model-b"]}
+                cfg['filter_rules'] = FilterRules()
+                write_json_atomic(root / 'config/models/model.json', cfg['model'])
+                candidate = Candidate(skill_id='test/audit:SKILL.md', owner='test', repo='audit', path='SKILL.md')
+                candidates = [candidate]
+                if mode == 'parallel':
+                    candidates.append(Candidate(skill_id='test/audit2:SKILL.md', owner='test', repo='audit2', path='SKILL.md'))
+                save_pool(root / 'data/local/pool.json', create_pool_from_candidates(candidates))
+
+                def transport(model_cfg, *args, **kwargs):
+                    if mode in ('rotate', 'parallel') and model_cfg['model'] == 'model-b':
+                        return response(assessment(cfg['rules']))
+                    return ModelCallResult(ok=False, content='', finish_reason='stop', attempts=1,
+                        http_status=200, reason_code='RESPONSE_EMPTY', error='响应无内容（finish_reason=stop）',
+                        usage={} if mode == 'unknown' else {'prompt_tokens': 50, 'completion_tokens': 3, 'total_tokens': 53})
+
+                with patch('src.catalog.evaluation.call_model', side_effect=transport) as model:
+                    report = run_local(root, run_settings, cfg=cfg,
+                        discover_fn=lambda *args, **kwargs: ([], []),
+                        fetch_fn=lambda *args, **kwargs: FetchResult(url='fake', ok=True, text=TEXT),
+                        sleep=lambda _: None, log=lambda _: None)
+                if mode == 'parallel':
+                    self.assertGreaterEqual(model.call_count, 4)
+                    self.assertLessEqual(model.call_count, 6)
+                    self.assertEqual(report['new_recommended'], 2)
+                    self.assertEqual(report['usage']['requests'], model.call_count)
+                    self.assertEqual(report['usage']['total_tokens'], 200 + 53 * (model.call_count - 2))
+                    self.assertEqual(report['blocked_new'], 0)
+                    self.assertEqual(report['stop_reason'], stop)
+                    self.assertTrue(all(item.status == 'done' for item in load_pool(root / 'data/local/pool.json').items))
+                    records = [read_json(path) for path in (root / 'data/local/state/evaluations').glob('*.json')]
+                    self.assertEqual(len(records), 2)
+                    self.assertTrue(all(record['status'] == 'completed' for record in records))
+                    self.assertEqual(sum(len(record['requests']) for record in records), model.call_count)
+                    continue
+                self.assertEqual(model.call_count, calls)
+                self.assertEqual(report['stop_reason'], stop)
+                self.assertEqual(report['usage']['requests'], calls)
+                self.assertEqual(report['usage']['total_tokens'], {'rotate': 206, 'cool': 212, 'unknown': 0}[mode])
+                self.assertEqual(report['blocked_new'], 0)
+                item = load_pool(root / 'data/local/pool.json').items[0]
+                self.assertEqual(item.status, 'done' if mode == 'rotate' else 'pending')
+                records = list((root / 'data/local/state/evaluations').glob('*.json'))
+                self.assertEqual(len(records), 1)
+                record = read_json(records[0])
+                self.assertEqual(len(record['requests']), calls)
+                self.assertEqual(record['status'], {'rotate': 'completed', 'cool': 'reserved', 'unknown': 'needs_recovery'}[mode])
+                self.assertEqual(report['calls'][0]['response']['finish_reason'], 'stop')
+                if mode == 'rotate':
+                    self.assertEqual(report['calls'][-1]['switch_reason'], 'response_empty')
+                    self.assertEqual(report['new_recommended'], 1)
+                else:
+                    with patch('src.catalog.evaluation.call_model') as model:
+                        restarted = run_local(root, settings, cfg=cfg,
+                            discover_fn=lambda *args, **kwargs: ([], []),
+                            fetch_fn=lambda *args, **kwargs: FetchResult(url='fake', ok=True, text=TEXT),
+                            sleep=lambda _: None, log=lambda _: None)
+                    self.assertEqual(restarted['stop_reason'], stop)
+                    model.assert_not_called()
+                    self.assertEqual(len(read_json(records[0])['requests']), calls)
+
+
 if __name__ == "__main__":
     unittest.main()

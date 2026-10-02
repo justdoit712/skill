@@ -31,7 +31,8 @@ STATUS_SUPPORTED = "supported"
 
 PUBLIC_REASONS = {"completed", "target_reached", "candidates_exhausted", "all_candidates_owned", "token_limit", "evaluation_limit",
                   "usage_unknown", "model_failures", "interrupted", "search_failed", "expansion_failed",
-                  "material_failed", "plan_failed", "execution_error", "artifact_failed", "round_limit", "reflection_failed"}
+                  "material_failed", "plan_failed", "execution_error", "artifact_failed", "round_limit", "reflection_failed",
+                  "models_cooling_down"}
 
 
 def _escape_markdown(value):
@@ -402,7 +403,7 @@ def should_update_public_snapshot(report: dict[str, Any]) -> bool:
     # 3. 异常中断/熔断，但已有部分有效条目
     if has_any_items and (
         status in ("stopped", "interrupted")
-        or stop_reason in ("token_limit", "evaluation_limit", "usage_unknown", "model_failures", "interrupted")
+        or stop_reason in ("token_limit", "evaluation_limit", "usage_unknown", "model_failures", "interrupted", "models_cooling_down")
     ):
         return True
 

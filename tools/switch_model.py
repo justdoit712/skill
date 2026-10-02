@@ -190,14 +190,19 @@ def show_current() -> None:
 
     cur = read_json(active_path, default={})
     if 'models' in cur:
+        from datetime import datetime
         configs = parse_model_configs(cur)
         state = ModelPool(cur, ROOT).inspect()
         print(f"【当前生效模型队列 (来源: {active_path.name})】")
         for cfg in configs:
-            exhausted = state_key(cfg['endpoint'], cfg['model']) in state['exhausted_models']
+            key = state_key(cfg['endpoint'], cfg['model'])
+            exhausted = key in state['exhausted_models']
+            cooldown = state.get('cooldown_models', {}).get(key)
+            cooling = cooldown and datetime.fromisoformat(cooldown['cooldown_until']) > datetime.now().astimezone()
+            status = '已耗尽' if exhausted else f"冷却至 {cooldown['cooldown_until']}" if cooling else '可用'
             ref = (cfg.get("auth") or {}).get("key_ref")
             ref_str = f" [ref:{ref}]" if ref else ""
-            print(f"  {cfg['model']}{ref_str}：{'已耗尽' if exhausted else '可用'}")
+            print(f"  {cfg['model']}{ref_str}：{status}")
         return
 
     auth = cur.get("auth") or {}

@@ -629,7 +629,8 @@ def _record_request_usage(state, call, *, retryable):
     }
     # 网络/临时 HTTP 失败仍是未知用量，但允许在估算预算与尝试额度内重试。
     # 非重试结果缺账单（含截断/格式错误）继续停机保护。
-    if (state.active_call['usage']['total_tokens'] is None and not retryable
+    if (state.active_call['usage']['total_tokens'] is None
+            and (not retryable or getattr(call, 'reason_code', None) == 'RESPONSE_EMPTY')
             and getattr(call, 'billing_state', None) != 'rejected_before_inference'):
         state.stop_causes.add(STOP_USAGE_UNKNOWN)
         state.report['stop_reason'] = resolve_primary_stop_reason(state.stop_causes)
@@ -691,7 +692,8 @@ def _evaluate_with_pool(state, candidate, text, eid, record):
             raw_usage=getattr(request_call, 'usage', None),
             provider_error_code=getattr(request_call, 'provider_error_code', None),
             returned_model=getattr(request_call, 'returned_model', None),
-            response={k: getattr(request_call, k, None) for k in ('ok', 'content', 'reason_code', 'http_status')})
+            response={k: getattr(request_call, k, None) for k in
+                      ('ok', 'content', 'reason_code', 'http_status', 'finish_reason', 'error')})
         used = state.report.setdefault('models_used', [])
         if request_call.attempts and request_call.requested_model not in used:
             used.append(request_call.requested_model)
@@ -741,6 +743,7 @@ def _evaluate_with_pool(state, candidate, text, eid, record):
 
 
 def _evaluate_with_retries(state, candidate, text, eid, record):
+    from src.infra.model_pool import EMPTY_RESPONSE_MAX_ATTEMPTS
     if getattr(state, "model_pool", None) is not None:
         return _evaluate_with_pool(state, candidate, text, eid, record)
     resume_error = validate_pending_evaluation(candidate, text, state.cfg['rules'],
@@ -752,6 +755,7 @@ def _evaluate_with_retries(state, candidate, text, eid, record):
         state.ledger.save_record(eid, checkpoint)
         return resume_error
     result = None
+    empty_attempts = 0
     attempt_limit = int(record.get('max_attempts') or state.max_attempts)
     initial_attempts = int(record.get('attempts') or 0)
     for index in range(initial_attempts, attempt_limit):
@@ -847,6 +851,8 @@ def _evaluate_with_retries(state, candidate, text, eid, record):
         if result['ok']:
             break
         code = result.get('reason_code') or decision.reason_code or 'MODEL_ERROR'
+        if code == 'RESPONSE_EMPTY':
+            empty_attempts += 1
         diagnostic = state.active_call.get('diagnostics', {}) if state.active_call else {}
         details = [code]
         if result.get('error_kind'):
@@ -894,6 +900,8 @@ def _evaluate_with_retries(state, candidate, text, eid, record):
         state.report['failed_requests'] += 1
         state.save()
         state.log(f'请求失败：{candidate.name}；{message}。')
+        if empty_attempts >= EMPTY_RESPONSE_MAX_ATTEMPTS:
+            break
         if not decision.retryable or state.report['stop_reason']:
             break
     return result
