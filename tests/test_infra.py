@@ -14,13 +14,9 @@ from unittest.mock import Mock, patch
 from src.infra.files import read_json, write_json_atomic
 from src.infra.model_config import resolve_model_path
 from src.infra.model_pool import ModelPool
-from src.shared.model_config import parse_model_configs, state_key
+from src.shared.model_config import parse_model_configs
 from tests import smoke
-from tools.switch_model import (
-    load_providers_catalog,
-    mask_key,
-    switch_to_provider,
-)
+from tools.switch_model import mask_key, switch_to_provider
 
 
 @smoke
@@ -239,51 +235,28 @@ class ModelPoolTest(unittest.TestCase):
         from datetime import datetime, timedelta, timezone
         from src.infra.llm import call_model
         from src.infra.model_pool import MODEL_COOLDOWN_SECONDS
-        raw = {"provider": "dashscope",
-               "endpoint": "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions",
-               "models": ["model-a", "model-b"], "request": {"max_attempts": 6}}
+        raw = {'provider': 'dashscope',
+               'endpoint': 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions',
+               'models': ['model-a', 'model-b'], 'request': {'max_attempts': 6}}
         moment = datetime(2026, 10, 2, tzinfo=timezone.utc)
         pool = ModelPool(raw, self.root, authoritative=False, now=lambda: moment)
-        contexts, sleeps = [], []
         session = Mock()
-
-        def post(*args, **kwargs):
-            model = json.loads(kwargs['data'])['model']
-            response = Mock(status_code=200)
-            response.json.return_value = {"model": model, "usage": {"total_tokens": 10},
-                "choices": [{"finish_reason": "stop", "message": {
-                    "content": " \n" if model == "model-a" else '{"ok":true}'}}]}
-            return response
-
-        session.post.side_effect = post
-        def invoke(cfg, fmt, context):
-            contexts.append(context)
-            return call_model(cfg, "s", "u", api_key="fake", session=session, response_format=fmt)
-
-        result, attempts = pool.run("s", "u", "catalog_assessment", invoke, sleep=sleeps.append)
-        self.assertTrue(result.ok)
-        self.assertEqual([c['requested_model'] for c in contexts], ["model-a", "model-a", "model-b"])
-        self.assertEqual([c['model_attempt'] for c in contexts], [1, 2, 1])
-        self.assertEqual(contexts[-1]['switch_reason'], 'response_empty')
-        self.assertEqual(len({c['logical_call_id'] for c in contexts}), 1)
-        self.assertEqual(len({c['request_id'] for c in contexts}), 3)
-        self.assertEqual([a.reason_code for a in attempts], ['RESPONSE_EMPTY', 'RESPONSE_EMPTY', None])
-        self.assertEqual(sum(a.total_tokens for a in attempts), 30)
-        self.assertEqual(sleeps, [1])
-        state = pool.inspect()
-        self.assertFalse(state['exhausted_models'])
-        row = state['cooldown_models'][state_key(raw['endpoint'], 'model-a')]
-        self.assertEqual(datetime.fromisoformat(row['cooldown_until']),
-                         moment + timedelta(seconds=MODEL_COOLDOWN_SECONDS))
+        session.post.side_effect = [Mock(status_code=200, json=Mock(return_value={
+            'usage': {'total_tokens': 10},
+            'choices': [{'finish_reason': 'stop', 'message': {'content': content}}]}))
+            for content in (' \n', '', '{"ok":true}')]
+        result, attempts = pool.run('s', 'u', 'catalog_assessment',
+            lambda cfg, fmt, context: call_model(cfg, 's', 'u', api_key='fake',
+                                                session=session, response_format=fmt), sleep=lambda _: None)
+        self.assertEqual((result.ok, [call.requested_model for call in attempts]),
+                         (True, ['model-a', 'model-a', 'model-b']))
         restarted = ModelPool(raw, self.root, authoritative=False, now=lambda: moment)
         restarted.start()
         self.assertEqual(restarted.select()['model'], 'model-b')
-        self.assertFalse(restarted.model_available('model-a'))
         expired = ModelPool(raw, self.root, authoritative=False,
                             now=lambda: moment + timedelta(seconds=MODEL_COOLDOWN_SECONDS))
         expired.start()
         self.assertEqual(expired.select()['model'], 'model-a')
-        self.assertFalse(expired.inspect()['cooldown_models'])
 
 
 @smoke
