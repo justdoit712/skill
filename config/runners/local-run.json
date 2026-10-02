@@ -1,5 +1,5 @@
 {
-  "target_recommended": 50,
+  "target_recommended": 500,
   "max_total_tokens": 100000000,
   "max_evaluations": null,
   "limit_queries": null,
