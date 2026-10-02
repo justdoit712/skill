@@ -24,7 +24,6 @@
   "models": [
     "qwen3.8-max",
     "deepseek-r1",
-    "kimi-k3",
     "glm-5.3",
     "qwen3.8-flash",
     "qwen-plus",
