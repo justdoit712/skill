@@ -692,6 +692,191 @@
       "added_at": "2026-10-02",
       "reason": "用户屏蔽/删除",
       "skill_id": "skillmedev/skills:skills/vercel-ai-gateway/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "expo/skills:plugins/expo/skills/expo-web-to-native/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/comparison-page-builder/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/competitive-intelligence/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/course-outline-architect/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/dependency-risk-audit/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/formatted-report-writer/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/go-to-market-planner/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/gym-meta-ads-funnel/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/icp-persona-builder/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/image-license-rights/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/jetpack-compose-builder/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/landing-page-copy/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/landing-page-cro/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/mock-stub-designer/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/motion-color-and-light/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/motion-spec/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/next-on-vercel-perf/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/nextjs-app-router/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/pitch-practice-coach/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/playwright-testing/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/plg-motion-designer/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/podcast-pitch/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/press-release-writer/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/product-demo-director/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/product-description-writer/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/product-hunt-launch/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/push-notification-copy/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/push-notification-wirer/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/quote-follow-up-sequences/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/re-negotiation-prep/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/react-native-pro/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/referral-and-affiliate-system/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/remotion-render/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/retention-and-churn-killer/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/review-to-faq-builder/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/secure-code-review/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/variant-copy-scaler/SKILL.md"
     }
   ]
 }

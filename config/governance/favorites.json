@@ -206,6 +206,66 @@
       "from": "recommended",
       "reason": "用户收藏",
       "skill_id": "skillmedev/skills:skills/index-advisor/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "skillmedev/skills:skills/api-design/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "skillmedev/skills:skills/interview-guide-builder/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "skillmedev/skills:skills/jira-ticket-writer/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "skillmedev/skills:skills/kafka-pipelines/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "skillmedev/skills:skills/prompt-to-skill/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "skillmedev/skills:skills/query-rewriter/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "skillmedev/skills:skills/research-synthesis/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "skillmedev/skills:skills/rubric-builder/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "skillmedev/skills:skills/rust-patterns/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "skillmedev/skills:skills/second-brain/SKILL.md"
     }
   ]
 }

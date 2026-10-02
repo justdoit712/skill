@@ -1137,6 +1137,391 @@
       "reason": "用户暂不关注",
       "skill_id": "skillmedev/skills:skills/vercel-env-management/SKILL.md",
       "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/cross-platform-reformatter/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/curriculum-mapper/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/data-drift-monitor/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/data-quality/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/dead-code-eliminator/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/debt-payoff-planner/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/decision-making/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/eng-status-rollup/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/executive-summary/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/feature-store-design/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/feedback-writer/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/flaky-test-detangler/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/flutter-widget-architect/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/fundraising-narrative/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/graphql-schema/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/gtd-system/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/hiring-scorecard/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/interview-synthesis/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/jd-bias-scrubber/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/job-description-writer/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/job-interview-prep/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/kb-article-writer/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/keyword-cluster-builder/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/meal-planner/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/mongodb-expert/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/monolith-decomposer/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/n-plus-one-hunter/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/narration-script/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/notion-database/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/okr-builder/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/onboarding-plan-builder/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/oncall-handoff/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/one-pager-designer/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/op-ed-writer/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/partition-planner/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/print-layout/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/process-doc/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/product-roadmap/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/productized-service-designer/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/prompt-engineer/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/python-async/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/quiz-generator/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/r-for-analysis/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/raise-your-rates-playbook/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/rate-limit-handler/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/redline-annotation/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/refund-deescalation/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/regex-master/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/regulatory-scan/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/remotion-compose/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/remotion-setup/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/replication-lag-debugger/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/retainer-pricing-calculator/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/runbook-writer/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/saas-pricing/SKILL.md",
+      "snoozed_at": "2026-10-02"
     }
   ]
 }
