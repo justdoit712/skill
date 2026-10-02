@@ -164,6 +164,48 @@
       "reason": "用户收藏",
       "added_at": "2026-09-29",
       "from": "recommended"
+    },
+    {
+      "added_at": "2026-10-01",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "skillmedev/skills:skills/async-communication/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "skillmedev/skills:skills/caching-strategy/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "skillmedev/skills:skills/characterization-test-writer/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "skillmedev/skills:skills/circuit-breaker-builder/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "skillmedev/skills:skills/connection-pool-tuner/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "skillmedev/skills:skills/financial-planner/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "skillmedev/skills:skills/index-advisor/SKILL.md"
     }
   ]
 }

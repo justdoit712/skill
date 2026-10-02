@@ -717,6 +717,426 @@
       "reason": "用户暂不关注",
       "skill_id": "google-labs-code/stitch-skills:plugins/stitch-design/skills/code-to-design/SKILL.md",
       "snoozed_at": "2026-09-29"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-02-28",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/api-versioning-strategist/SKILL.md",
+      "snoozed_at": "2026-10-01"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/clickhouse-analytics/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/code-review-checklist/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/cover-letter-writer/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/data-story/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/error-budget-policy/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/error-handling/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/escalation-summary/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/fiction-scene-writer/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/fitness-program/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/freelance-positioning/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/geo-places/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/ghostwriter/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/github-actions/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/goals-accountability/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/government-open-data/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/habit-builder/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "better-auth/skills:better-auth/organization/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "better-auth/skills:better-auth/twoFactor/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "gauss314/skills:skills/bcra-macro/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "gauss314/skills:skills/finviz/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "getsentry/skills:skills/claude-settings-audit/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "getsentry/skills:skills/doc-coauthoring/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "getsentry/skills:skills/gha-security-review/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "getsentry/skills:skills/iterate-pr/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "getsentry/skills:skills/prompt-optimizer/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "getsentry/skills:skills/skill-scanner/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "getsentry/skills:skills/skill-writer/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "getsentry/skills:skills/sred-project-organizer/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/business-rule-extractor/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/candidate-outreach-personalizer/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/cap-table-manager/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/carousel-scripter/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/case-study-builder/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/changelog-generator/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/changelog-writer/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/citation-tracker/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/content-repurposing/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/data-table-design/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/fun-content/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/help-documentation/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/inbox-zero/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/injury-prehab/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/instagram-post-builder/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/instagram-trend-scout/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/job-application/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/kpi-scoreboard-and-cadence/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/language-reference/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/lifecycle-journey-map/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/linear-workflow/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/linkedin-post-writer/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/literature-review/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/llm-evaluation/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/load-testing/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/localization-guide/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/meeting-notes-to-actions/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/microservices/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/migration-safety-checker/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/vercel-deploy-pipeline/SKILL.md",
+      "snoozed_at": "2026-10-02"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-01",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/vercel-env-management/SKILL.md",
+      "snoozed_at": "2026-10-02"
     }
   ]
 }

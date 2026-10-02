@@ -392,6 +392,306 @@
       "added_at": "2026-09-29",
       "reason": "用户屏蔽/删除",
       "skill_id": "expo/skills:plugins/expo/skills/expo-ui/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-01",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "better-auth/skills:security/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-01",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/annual-plan/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-01",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/app-store-copy/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/audience-targeting/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/buying-signal-tracker/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/cma-narrative-builder/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/cold-email-craft/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/core-four-lead-engine/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/course-sales-page/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/creator-content-calendar/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/data-room-builder/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/design-qa-checklist/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/discovery-call-prep/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/donor-communications/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/email-deliverability/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/email-drip-builder/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/email-newsletter-pro/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/email-triage/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/error-message-writer/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/funnel-analysis/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/grand-slam-offer-builder/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/grant-loi-writer/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/grant-proposal-writer/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/growth-accounting/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/gym-pricing-and-guarantees/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "getsentry/skills:skills/typing-exclusion-worker/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/abandoned-cart-sequence/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/aeo-answer-blockifier/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/apollo-prospecting/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/app-store-release-prep/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/book-proposal/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/brand-guidelines/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/brand-naming/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/build-on-agent-native/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/churn-reduction/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/client-onboarding-system/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/color-accessibility/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/color-palette-builder/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/community-engagement-playbook/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/content-refresh-auditor/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/google-business-profile-optimizer/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/hiring-pipeline/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/impact-report-builder/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/investor-pipeline-crm/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/kinetic-typography/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/launch-email-sequence/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/lead-enrichment/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/lesson-plan-builder/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/listing-description-writer/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/logo-brief-writer/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/m-and-a-analysis/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/manuscript-reviser/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/market-sizing/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/meeting-agenda/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/messaging-hierarchy/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/meta-title-optimizer/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/mobile-offline-sync/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/motion-design-principles/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/vc-pitch-email/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-02",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/vercel-ai-gateway/SKILL.md"
     }
   ]
 }
