@@ -4,7 +4,7 @@
 1. 规则 1（双向绝缘）：src/catalog/ 与 src/finder/ 绝对不得互相导入。
 2. 规则 2（底层纯净）：src/infra/ 绝对不依赖 catalog 或 finder 业务包。
 3. 规则 3（数据中性）：src/shared/ 零业务依赖（不导入 catalog, finder, infra）。
-4. 规则 4（入口单向）：src/ 内部业务包绝对不得反向依赖命令行入口（tools 目录及 src.pipeline）。
+4. 规则 4（入口单向）：src/ 内部业务包绝对不得反向依赖命令行入口（tools 目录）。
 """
 
 from __future__ import annotations
@@ -92,12 +92,10 @@ class ArchitectureGuardTest(unittest.TestCase):
     def test_business_code_never_imports_cli_entries(self):
         """规则 4：业务包代码绝对不得反向依赖 CLI 入口。"""
         for p in SRC_DIR.glob("**/*.py"):
-            if p.name == "pipeline.py":  # 顶层 CLI 自身除外
-                continue
             imps = self._collect_imported_targets(p)
             for imp in imps:
                 self.assertFalse(
-                    imp == "tools" or imp.startswith("tools.") or imp == "src.pipeline" or imp.startswith("src.pipeline."),
+                    imp == "tools" or imp.startswith("tools."),
                     f"架构违规：业务模块 {p.relative_to(ROOT)} 反向依赖了 CLI: {imp}",
                 )
 
@@ -143,7 +141,7 @@ class ArchitectureGuardTest(unittest.TestCase):
 
     def test_store_does_not_depend_on_use_cases(self):
         for target in self._collect_imported_targets(SRC_DIR / "catalog" / "store.py"):
-            self.assertFalse(any(target.endswith("." + name) for name in ("local", "maintenance", "sync_evaluate", "sync_reserve")), target)
+            self.assertFalse(any(target.endswith("." + name) for name in ("local", "maintenance")), target)
 
 
 if __name__ == "__main__":

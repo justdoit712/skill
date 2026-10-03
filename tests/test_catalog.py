@@ -103,39 +103,6 @@ class CandidatePoolTest(unittest.TestCase):
         self.assertEqual(pool.items[0].status, STATUS_DONE)
         self.assertEqual(pool.items[0].checked_at, "2026-09-30T10:00:00")
 
-    def test_changed_material_cannot_use_reserved_evaluation_identity(self):
-        from unittest.mock import Mock
-        from src.catalog.config import load_all_config
-        from src.catalog.sync_reserve import phase_reserve
-        from src.catalog.sync_evaluate import phase_evaluate
-        from src.infra.http import FetchResult
-
-        cfg = load_all_config(ROOT / "config")
-        cfg["model"] = {"endpoint": "https://example.test/chat/completions",
-                        "model": "fake-model", "auth": {"api_key": "fake"}}
-        candidate = candidate_from_repo("example", "demo", path="SKILL.md", name="代码审查",
-            url="https://github.com/example/demo/blob/HEAD/SKILL.md")
-        original = "---\nname: demo\ndescription: 代码审查与测试\n---\n" + "代码审查步骤与示例。\n" * 40
-        data = self.root / "data"
-        evaluator = Mock(side_effect=AssertionError("材料变化后不得调用评估模型"))
-        with patch("src.catalog.sync_reserve.load_all_config", return_value=cfg), \
-             patch("src.catalog.sync_evaluate.load_all_config", return_value=cfg), \
-             patch("requests.sessions.Session.request", side_effect=AssertionError("禁止真实网络请求")):
-            reserved = phase_reserve(data_dir=data, limit_evaluations=1,
-                discover_fn=lambda *a, **kw: ([candidate], []),
-                fetch_fn=lambda url, **kw: FetchResult(url=url, ok=True, text=original),
-                sleep=lambda _: None)
-            self.assertTrue(reserved["ok"], reserved)
-            self.assertEqual(reserved["reserved"], 1)
-            (data / "state/texts/staged.json").unlink()
-            result = phase_evaluate(data_dir=data, public_dir=self.root / "public",
-                fetch_fn=lambda url, **kw: FetchResult(url=url, ok=True, text=original + "New revision\n"),
-                evaluate_fn=evaluator, sleep=lambda _: None)
-        evaluator.assert_not_called()
-        self.assertTrue(result["ok"], result)
-        self.assertEqual(result["evaluated"], 0)
-        self.assertEqual(result["skipped"], 1)
-
     def test_empty_responses_pause_without_blocking_or_losing_usage(self):
         from src.catalog.config import load_all_config
         from src.catalog.local import run_local

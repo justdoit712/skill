@@ -11,7 +11,7 @@ from pathlib import Path
 import tempfile
 import unittest
 
-from src.catalog.config import load_all_config, load_automation, precheck
+from src.catalog.config import load_all_config, precheck
 from src.catalog.dedupe import candidate_from_repo
 from src.catalog.prescreen import DECISION_EXCLUDED, DECISION_QUEUED, load_config, prescreen
 from src.shared.materials import (

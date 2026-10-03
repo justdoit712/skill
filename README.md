@@ -5,48 +5,30 @@
 
 **不下载、不镜像、不安装、不启用、不执行任何技能包。**
 
-线上地址：<https://justdoit712.github.io/skill/> —— **当前未发布**（2026-09-23 实测返回 404）。
-本仓库为私有，而 GitHub Pages 在 **Free 套餐下只支持公开仓库**；私有仓库需 Pro/Team（页面依然对全网公开），
-"仅成员可见"需 Enterprise Cloud。三种可行路径与具体步骤见 [部署与访问](#部署与访问)。
+本项目为本地个人知识库与 Skill 评估系统，产物为静态页面与数据。本地运行与预览请参见 [本地预览与访问](#本地预览与访问)。
 
 ## 当前状态
 
 项目提供技能目录、独立定向查找和静态浏览页面，产品范围与业务规则见 [产品规范](docs/产品规范.md)。
 
-采集、评估、队列、待复核链路已实现，仓库已包含目录条目、页面数据和定向查找入口；分层代码已落地，并于 2026-09-23 补齐本轮验收发现的缺口：
+采集、评估、候选池、待复核链路已实现，仓库已包含目录条目、页面数据和定向查找入口；分层代码已落地，并于 2026-09-23 补齐本轮验收发现的缺口：
 `src/` 按 `catalog` / `finder` / `infra` / `shared` 分包，前端拆成原生 ES 模块，并有 AST 架构守卫。
-本轮通过 320 项 Python 测试、12 项前端测试和本地浏览器冒烟；真实模型与远端 Actions/部署未验收。修复范围、证据和恢复命令见 [分层重构修复验收](docs/audit/2026-09-23-分层重构修复验收.md)。
+本轮通过 320 项 Python 测试、12 项前端测试和本地浏览器冒烟。修复范围、证据和恢复命令见 [分层重构修复验收](docs/audit/2026-09-23-分层重构修复验收.md)。
 
-尚未完成的部分：
+系统状态：
 
-- **线上从未发布**：目标地址实测 404，仓库中也没有任何一次成功的 Actions 产物（`data/state`、`data/reports` 均不存在）。
-- **定时采集默认关闭**：开关在 [config/automation.json](config/runners/automation.json) 的 `scheduled_sync_enabled`（当前 `false`）；手动触发不受该开关限制。
+- **精简为本地运行**：已清退 Actions 调度与远端 Pages 部署链路，采用本地 Windows PowerShell 运行与浏览器预览。
 - **历史审计须按范围复核**：[全量审计报告](docs/audit/2026-09-23-全量审计报告.md) 是修复前记录；其中阶段一抓取失败的 `NameError` 已修复并回归。本轮仅关闭分层验收列出的缺口，不代表该历史报告全部问题或线上运行均已验收。
 
-## 部署与访问
+## 本地预览与访问
 
-页面是纯静态产物（`public/` 下的 `index.html`、`styles.css`、`js/`、`data/`），本地预览：
+页面是纯静态产物（`public/` 下的 `index.html`、`styles.css`、`js/`、`data/`），本地一键预览：
 
 ```powershell
 .\scripts\preview.ps1            # 自动选空闲端口并打开浏览器
+# 或直接通过 Python 启动静态文件服务：
+python -m http.server 8000 --directory public
 ```
-
-发布到 GitHub Pages 有两个入口，**发布前需先把仓库设置里的 Pages Source 设为 `GitHub Actions`**：
-
-| 入口 | 触发方式 | 行为 |
-| --- | --- | --- |
-| [publish-pages.yml](.github/workflows/publish-pages.yml) | 手动（Run workflow） | 只上传已提交的 `public/` 产物：不采集、不评估、不调用模型、不联网、不写数据 |
-| [sync-skills.yml](.github/workflows/sync-skills.yml) | 定时（周日 10:00 北京时间）或手动 | 完整两阶段链路，成功后一并部署；定时是否执行由 [config/automation.json](config/runners/automation.json) 决定 |
-
-**为什么不能用"分支部署"**：站点首页位于 `public/` 子目录，而 Pages 的分支部署只能指向仓库根或 `/docs`，
-因此必须走 Actions 入口，或者把 `public/` 的内容放到另一个仓库的根目录再发布。
-
-**仓库可见性对 Pages 的影响**（GitHub 官方规则）：
-
-| 仓库 | Free | Pro / Team | Enterprise Cloud |
-| --- | --- | --- | --- |
-| 公开 | 可用，页面公开 | 可用，页面公开 | 可用，可设为私有 |
-| 私有 | 不可用 | 可用，但页面仍是公开的 | 可用，可设为私有 |
 
 ## 在本地运行
 
@@ -162,14 +144,7 @@ Token 上限在每次请求后检查；预留使用估算值，最后的在途�
 
 ## 运行方式
 
-每周通过 GitHub Actions 自动采集与评估，也支持手动触发；**定时是否执行由
-[config/automation.json](config/runners/automation.json) 的 `scheduled_sync_enabled` 决定**（`true` 执行、
-`false` 跳过，关闭时该次运行只做判断即退出；手动触发不受该开关限制）。每周新增与重评合计
-**最多 50 个**，优先复核发生变化的已有推荐。
-
-Actions 定时与手动共享同一额度账本，手动触发不绕过上限。本地 `run_local.py` 按上述单次目标与预算运行，使用独立账本。网络失败时保留上次有效数据，
-不做批量删除或虚假下架。超出本周额度的候选留在跨轮累积的待办队列里，
-后续运行按公平轮转依次处理，不会每轮重复跳过同一批。
+系统统一在本地 Windows PowerShell 环境下运行，通过 `tools/run_local.py` 驱动。本地收集按单次目标与预算运行，支持断点保存、增量累积与离线恢复。网络失败时保留上次有效数据，不做批量删除或虚假下架。超出单次预算或目标的候选保留在候选池与队列中，后续运行依次处理。
 
 操作步骤与运行后检查见 [运行说明](docs/运行说明.md)。
 

@@ -400,9 +400,6 @@ class FilterRulesTest(unittest.TestCase):
         from src.catalog.models import Candidate, PrescreenResult
         from src.catalog.entry_state import EntryUpdateEvent, update_entry
         from src.catalog.index import CatalogContext
-        from src.catalog.budget import BudgetLedger
-        from src.catalog.evaluation import evaluation_id
-        from src.catalog.sync_evaluate import _evaluate_queue, _build_evaluated_catalog
         from src.shared.identity import content_fingerprint
         from src.shared.runtime import now_local
 
@@ -448,57 +445,6 @@ class FilterRulesTest(unittest.TestCase):
                 # 名称中的 Expo / App Store 不再提前拦截，新条目进入正常评估。
                 self.assertEqual({i.candidate.skill_id for i in pool.items}, {c.skill_id for c in candidates[:5]})
                 self.assertFalse(report.get("discovery_filtered"))
-
-        with tempfile.TemporaryDirectory() as tmp:
-            ledger = BudgetLedger.load(Path(tmp) / "state", 20)
-            ledger.reserve([{"evaluation_id": "old-history", "skill_id": candidates[5].skill_id}])
-            ledger.complete("old-history", {"decision": "recommended", "evaluation": {"tags": ["general"]}})
-            queue = {"pending": []}
-            for c in candidates:
-                eid = evaluation_id(c, cfg["model"], cfg["rules"])
-                ledger.reserve([{"evaluation_id": eid, "skill_id": c.skill_id}])
-                queue["pending"].append({"candidate": asdict(c), "prescreen": asdict(PrescreenResult(c.skill_id, "queued")),
-                    "content_fingerprint": c.content_fingerprint, "fetch": {"ok": True}})
-            def assess(candidate, _text, **kwargs):
-                result = {"tags": ["获客策略"]}
-                if kwargs.get("filter_rules"):
-                    result["topic_assessments"] = [
-                        {"topic_id": rules.blocked_topics[0]["topic_id"], "result": "no_match", "evidence": "主要做营销获客。"},
-                        {"topic_id": topic_id, "result": "match", "evidence": "主要用于会员获客和广告投放。"},
-                    ]
-                return {"ok": True, "evaluation": result}
-            evaluation = Mock(side_effect=assess)
-            fetch = Mock(side_effect=AssertionError("unexpected network"))
-            _evaluate_queue(queue, cfg, ledger, {c.skill_id: text for c in candidates}, now_local(), 0,
-                fetch, evaluation, None, lambda *a: None, previous_entries=previous)
-            outcomes = {c.name: (ledger.get(evaluation_id(c, cfg["model"], cfg["rules"])) or {}).get("outcome", {}) for c in candidates}
-            for name in ("recommended", "candidate", "history"):
-                self.assertEqual(outcomes[f"expo-{name}"]["decision"], "recommended")
-                self.assertNotIn("TOPIC_FILTERED", outcomes[f"expo-{name}"]["reason_codes"])
-            for name in ("pending", "new", "retry"):
-                outcome = outcomes[f"expo-{name}"]
-                self.assertEqual(outcome["decision"], "excluded")
-                self.assertEqual(outcome["blocked_topics"], ["营销推广与获客增长"])
-                self.assertEqual(outcome["original_decision"]["decision"], "recommended")
-                self.assertEqual(outcome["topic_filter_audit"]["rules_fingerprint"], rules.fingerprint)
-            calls_by_name = {call.args[0].name: call for call in evaluation.call_args_list}
-            for name in ("recommended", "candidate", "history"):
-                self.assertIsNone(calls_by_name[f"expo-{name}"].kwargs.get("filter_rules"))
-            for name in ("pending", "new", "retry"):
-                self.assertIs(calls_by_name[f"expo-{name}"].kwargs.get("filter_rules"), rules)
-            evaluation_calls = evaluation.call_count
-            rebuilt = _build_evaluated_catalog(previous, queue, cfg, ledger, context)
-            self.assertEqual(next(e for e in rebuilt["entries"] if e["skill_id"] == candidates[0].skill_id)["status"], "recommended")
-            favorite = next(e for e in rebuilt["entries"] if e["skill_id"] == candidates[2].skill_id)
-            self.assertEqual(favorite["status"], "candidate")
-            self.assertTrue(favorite["manual_pick"])
-            # 后续缓存复用不因当前规则改变而重新检查；账本结论保持原样。
-            cfg["filter_rules"] = FilterRules()
-            self.assertEqual(_topic_evaluation_options(local_state, candidates[4]), {})
-            _evaluate_queue(queue, cfg, ledger, {}, now_local(), 0, fetch, evaluation, None, lambda *a: None, previous_entries=previous)
-            self.assertEqual(evaluation.call_count, evaluation_calls)
-            self.assertEqual(ledger.get(evaluation_id(candidates[4], cfg["model"], cfg["rules"]))["outcome"]["decision"], "excluded")
-            fetch.assert_not_called()
 
 
 @smoke
