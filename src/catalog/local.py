@@ -30,7 +30,25 @@ from .parallel import TwoCandidateScheduler
 from .config import load_all_config, precheck
 from .decide import decide
 from .dedupe import content_fingerprint, dedupe
-from .discovery import discover
+from .discovery import (
+    DEFAULT_EXCLUDE_TERMS,
+    DEFAULT_QUERY_TEMPLATE,
+    discover,
+    github_search,
+)
+from src.infra.github import list_skill_paths
+from .batch import (
+    DiscoveryStopped,
+    acquire_next_repo_batch,
+    build_expansion_prompt,
+    build_query_string,
+    expand_batch_skills,
+    init_or_migrate_discovery_state,
+    load_discovery_state,
+    parse_expansion_response,
+    reconcile_batch_and_repositories,
+    save_discovery_state,
+)
 from .entry_state import (
     EntryUpdateEvent,
     STATUS_RECOMMENDED,
@@ -67,6 +85,7 @@ from .filter_rules import eligible_for_topic_filter, filter_new_evaluation, succ
 from .overrides import apply_manual_overrides_to_entry, get_manual_exclusions, get_manual_picks
 from .snooze import apply_snooze_overrides, get_active_snoozed, load_snooze
 from .pool import (
+    POOL_TERMINAL_STATUSES,
     STATUS_DONE,
     STATUS_EXCLUDED as POOL_STATUS_EXCLUDED,
     STATUS_FETCH_FAILED,
@@ -76,6 +95,8 @@ from .pool import (
     STATUS_PENDING as POOL_STATUS_PENDING,
     STATUS_STATIC_SKIPPED,
     append_new_candidates,
+    CandidatePool,
+    classify_pending_candidate,
     create_pool_from_candidates,
     get_pending_candidates,
     is_pool_expired,
@@ -116,12 +137,18 @@ from .failure_policy import (
     update_failure_counters,
 )
 
+DEFAULT_BATCH_REPO_LIMIT = 1000
+
 
 def _read(path: Path, default=None):
     return json.loads(path.read_text(encoding="utf-8")) if path.exists() else default
 
 
 def _valid_settings(settings: dict) -> None:
+    settings.setdefault("batch_repo_limit", DEFAULT_BATCH_REPO_LIMIT)
+    batch_limit = settings.get("batch_repo_limit")
+    if isinstance(batch_limit, bool) or not isinstance(batch_limit, int) or batch_limit < 1:
+        raise ValueError("batch_repo_limit 必须是正整数")
     retries = settings.get("max_retries", 5)
     if isinstance(retries, bool) or not isinstance(retries, int) or retries < 0:
         raise ValueError("max_retries 必须是非负整数")
@@ -438,6 +465,9 @@ def save_and_render(
     run_id: str = "",
     cfg: dict | None = None,
     owned_ids: set[str] | None = None,
+    active_snoozed: set[str] | None = None,
+    manual_exclusions: set[str] | dict | None = None,
+    discovery_state: Any = None,
 ) -> None:
     """管道步骤 4：落盘运行报告、可读 Markdown 以及目录差异报告。"""
     report["usage"] = usage.snapshot()
@@ -454,6 +484,45 @@ def save_and_render(
     report["metrics"] = build_run_metrics(report, kind="catalog")
     if pool is not None:
         report["pool_stats"] = pool.stats()
+        actionable_count, skip_breakdown = pool.count_actionable(
+            active_snoozed or set(),
+            manual_exclusions or set(),
+            owned_set,
+        )
+        report["pending_breakdown"] = {
+            "total_pending": pool.pending_count,
+            "actionable": actionable_count,
+            "snoozed": skip_breakdown.get("snoozed", 0),
+            "manual_excluded": skip_breakdown.get("manual_excluded", 0),
+            "owned": skip_breakdown.get("owned", 0),
+        }
+    if discovery_state is not None:
+        report["discovery_summary"] = {
+            "schema_version": discovery_state.schema_version,
+            "total_repositories_known": len(discovery_state.repository_index),
+            "total_repositories_processed": sum(1 for r in discovery_state.repository_index.values() if r.get("processed")),
+            "unassigned_repositories_count": len(discovery_state.unassigned_repositories),
+            "query_cursors_total": len(discovery_state.query_cursors),
+            "query_cursors_exhausted": sum(1 for c in discovery_state.query_cursors.values() if c.get("exhausted")),
+            "expansion_rounds": len(discovery_state.expansion_history),
+            "failed_repositories": [k for k, r in discovery_state.repository_index.items()
+                                    if not r.get("expanded") and r.get("expand_error")],
+        }
+        report["batches"] = {
+            "active_batch": discovery_state.active_batch,
+            "completed_batches_count": len(discovery_state.completed_batches),
+            "completed_batches": [
+                {
+                    "batch_id": b.get("batch_id"),
+                    "batch_seq": b.get("batch_seq"),
+                    "repositories_count": len(b.get("repositories", [])),
+                    "skills_count": len(b.get("skill_ids", [])),
+                    "stage": b.get("stage"),
+                }
+                for b in discovery_state.completed_batches
+            ],
+        }
+        report["expansion_history"] = discovery_state.expansion_history
     write_json_atomic(run_dir / "report.json", report)
     write_json_atomic(local / "latest-run.json", report)
 
@@ -465,10 +534,29 @@ def save_and_render(
     ]
     if pool is not None:
         pst = pool.stats()
+        pbd = report.get("pending_breakdown", {})
+        if pbd:
+            lines.append(
+                f"- 候选池：共 {pst['total']} 条，待处理 {pst['pending']} 条"
+                f"（有效可处理 {pbd.get('actionable', 0)} 条，冷冻 {pbd.get('snoozed', 0)} 条，"
+                f"排除 {pbd.get('manual_excluded', 0)} 条，已收录 {pbd.get('owned', 0)} 条；"
+                f"已完成 {pst['done']}，排除 {pst['excluded']}，抓取失败 {pst['fetch_failed']}，非技能 {pst['not_skill']}，超长跳过 {pst['length_exceeded']}，已阻止 {pst['blocked']}）"
+            )
+        else:
+            lines.append(
+                f"- 候选池：共 {pst['total']} 条，待处理 {pst['pending']} 条"
+                f"（已完成 {pst['done']}，排除 {pst['excluded']}，抓取失败 {pst['fetch_failed']}，非技能 {pst['not_skill']}，超长跳过 {pst['length_exceeded']}，已阻止 {pst['blocked']}）"
+            )
+    if discovery_state is not None:
+        ds = report.get("discovery_summary", {})
         lines.append(
-            f"- 候选池：共 {pst['total']} 条，待处理 {pst['pending']} 条"
-            f"（已完成 {pst['done']}，排除 {pst['excluded']}，抓取失败 {pst['fetch_failed']}，非技能 {pst['not_skill']}，超长跳过 {pst['length_exceeded']}，已阻止 {pst['blocked']}）"
+            f"- 仓库批次：已知仓库 {ds.get('total_repositories_known', 0)} 个，已处理 {ds.get('total_repositories_processed', 0)} 个，待分配队列 {ds.get('unassigned_repositories_count', 0)} 个；已完成批次 {len(discovery_state.completed_batches)} 个"
         )
+        if discovery_state.active_batch:
+            ab = discovery_state.active_batch
+            lines.append(f"- 活动批次：{ab.get('batch_id')}（阶段：{ab.get('stage')}，仓库数：{len(ab.get('repositories', []))}）")
+        if discovery_state.expansion_history:
+            lines.append(f"- 检索扩词：已执行 {len(discovery_state.expansion_history)} 轮分类内关键词扩展")
     if report.get("skipped_owned"):
         lines.append(f"- 已收录跳过：{report['skipped_owned']}")
     if report.get('models_used'):
@@ -522,6 +610,8 @@ def run_local(
     *,
     cfg=None,
     discover_fn=discover,
+    search_fn=github_search,
+    expand_fn=list_skill_paths,
     fetch_fn=fetch_text,
     evaluate_fn=evaluate,
     log=print,
@@ -555,7 +645,7 @@ def run_local(
     with os.fdopen(fd, "w") as handle:
         handle.write(str(os.getpid()))
     try:
-        return _collect(root, local, settings, cfg, discover_fn, fetch_fn, evaluate_fn, log, sleep)
+        return _collect(root, local, settings, cfg, discover_fn, fetch_fn, evaluate_fn, log, sleep, search_fn=search_fn, expand_fn=expand_fn)
     finally:
         lock.unlink(missing_ok=True)
 
@@ -601,12 +691,17 @@ class LocalCollection:
     stop_causes: set = field(default_factory=set)
     _skill_eval_records_index: Any = None
     evaluated_skill_ids: set[str] = field(default_factory=set)
+    search_fn: Any = None
+    expand_fn: Any = None
+    discovery_state: Any = None
+    batch_materials: dict = field(default_factory=dict)
 
     def save(self):
         save_and_render(self.run_dir, self.local, self.report, self.pool, self.usage,
             self.settings, self.entries, self.old_recommended, context=self.context,
             baseline=self.baseline, dirty=self.dirty, run_id=self.run_id,
-            cfg=self.cfg, owned_ids=self.owned_ids)
+            cfg=self.cfg, owned_ids=self.owned_ids, active_snoozed=self.active_snoozed,
+            manual_exclusions=self.manual_exclusions, discovery_state=self.discovery_state)
 
     def publish(self, candidate, pres, outcome=None, upstream_status="ok"):
         apply_result(candidate, pres, outcome, upstream_status=upstream_status,
@@ -1299,7 +1394,17 @@ def process_candidate(state, item):
         if decision.retryable:
             final_record = state.ledger.get(eid) or {}
             if final_record.get('retry_exhausted') or int(final_record.get('attempts') or 0) >= int(final_record.get('max_attempts') or state.max_attempts):
-                state.stop_causes.add(STOP_RETRY_EXHAUSTED)
+                _update_blocked(state.pool, seq, {
+                    'evaluation_id': eid, 'reason': 'RETRY_EXHAUSTED',
+                    'reason_code': result.get('reason_code'),
+                    'attempts': final_record.get('attempts'),
+                    'max_attempts': final_record.get('max_attempts'),
+                    'blocked_at': now_local().isoformat(), 'source': 'local_ledger',
+                })
+                save_pool(state.pool_path, state.pool)
+                state.report['blocked_records'] += 1
+                state.report['blocked_new'] += 1
+                state.log(f"[跳过] {candidate.skill_id} 重试次数已耗尽，继续下一个候选。")
         else:
             block_info = {
                 'evaluation_id': eid,
@@ -1338,7 +1443,189 @@ def process_candidate(state, item):
         return False
     return True
 
-def _collect(root, local, settings, cfg, discover_fn, fetch_fn, evaluate_fn, log, sleep):
+
+def _evaluate_candidate_items(state: LocalCollection, items: list[PoolItem]) -> bool:
+    """按小批次切分并在批内排序，调度并发或串行评估条目。返回 True 表示该组处理完毕，False 表示触发停止原因。"""
+    if not items:
+        return True
+    enable_batch_prioritization = bool(
+        state.settings.get('enable_batch_prioritization', False)
+        or state.settings.get('enable_static_skip', False)
+    )
+    batch_size = int(state.settings.get('batch_size', 20) or 20)
+
+    for chunk_start in range(0, len(items), batch_size):
+        chunk = items[chunk_start : chunk_start + batch_size]
+        tier_map: dict[str, str] = {}
+        if enable_batch_prioritization:
+            for it in chunk:
+                cand = it.candidate
+                if cand.skill_id not in state.batch_materials and cand.path.split('/')[-1] == 'SKILL.md':
+                    if '/blob/' not in cand.url:
+                        cand.url = f'https://github.com/{cand.owner}/{cand.repo}/blob/HEAD/{cand.path}'
+                    u = cand.url.replace('https://github.com/', 'https://raw.githubusercontent.com/', 1).replace('/blob/', '/', 1)
+                    try:
+                        fetched = state.fetch_fn(u, sleep=state.sleep, max_bytes=material_fetch_limit(state.cfg['model']))
+                        state.batch_materials[cand.skill_id] = fetched
+                        if fetched.ok and fetched.text and not fetched.truncated:
+                            obs = analyze_static_tier(cand, fetched.text)
+                            tier_map[cand.skill_id] = obs.get("tier")
+                    except (IOError, OSError, TimeoutError, ValueError):
+                        pass
+            prioritized_chunk = prioritize_pending_batch(
+                chunk,
+                batch_size=batch_size,
+                manual_picks=state.manual_picks,
+                tier_map=tier_map,
+                enabled=True,
+            )
+        else:
+            prioritized_chunk = chunk
+
+        if state.settings.get('parallel_evaluation', True):
+            stopped = not TwoCandidateScheduler(state, process_candidate).run(prioritized_chunk)
+        else:
+            stopped = False
+            for item in prioritized_chunk:
+                state.pending_items.append(item)
+                if not process_candidate(state, item):
+                    stopped = True
+                    break
+        if stopped or state.report.get('stop_reason'):
+            return False
+    return True
+
+
+def _expand_search_queries(state: LocalCollection) -> list[dict[str, str]]:
+    """扩词请求逐次预记账、结算；收到的响应可离线恢复，不重复付费。"""
+    from src.catalog.evaluation import call_model
+    from src.infra.model_pool import PoolStopped
+    from src.shared.output_contracts import resolve_response_format
+
+    ds = state.discovery_state
+    path = state.local / "state" / "discovery.json"
+    taxonomy = state.cfg.get("taxonomy") or {}
+    allowed = {d["id"] for d in taxonomy.get("main_categories", [])}
+    if not allowed:
+        raise DiscoveryStopped("search_plan_invalid")
+    searches = state.cfg.get("searches", {})
+    template = (searches.get("file_constraint") or {}).get("query_template", DEFAULT_QUERY_TEMPLATE)
+    excludes = tuple((searches.get("global_exclusions") or {}).get("query_terms", DEFAULT_EXCLUDE_TERMS))
+    existing = [c.get("term", "") for c in ds.query_cursors.values()]
+    seen = {t.casefold() for t in existing}
+    if ds.pending_expansion is None:
+        ds.pending_expansion = {"task_id": f"expansion-round-{len(ds.expansion_history) + 1}",
+                                "attempt": 1, "requests": []}
+    pending = ds.pending_expansion
+    accepted, rejected = [], []
+
+    def persist():
+        try:
+            save_discovery_state(path, ds)
+            state.save()
+        except OSError as exc:
+            raise PoolStopped('storage_error', str(exc)) from exc
+
+    def invoke(model_cfg, fmt, context):
+        if state.report.get("stop_reason"):
+            raise PoolStopped(state.report["stop_reason"])
+        if len(pending["requests"]) >= state.max_attempts:
+            raise PoolStopped("retry_exhausted")
+        reserve = (len(system.encode("utf-8")) + len(user.encode("utf-8"))
+                   + len(json.dumps(fmt).encode("utf-8"))
+                   + int((model_cfg.get("limits") or {}).get("max_output_tokens", 4000)) + 1024)
+        if state.report["budget_tokens"] + reserve > state.settings["max_total_tokens"]:
+            raise PoolStopped("token_limit")
+        row = {**context, "logical_task_id": pending["task_id"], "run_id": state.run_id,
+               "stage": "expansion", "state": "started", "status": "in_progress",
+               "reserved_tokens": reserve, "reservation_state": "active", "usage": None}
+        pending["requests"].append(row)
+        state.report["calls"].append(row)
+        persist()  # 请求前持久化；落盘失败则不调用模型。
+        cfg = deepcopy(model_cfg)
+        cfg.setdefault("request", {})["max_attempts"] = 1
+        try:
+            result = call_model(cfg, system, user, api_key=resolve_api_key(cfg),
+                                response_format=fmt, sleep=state.sleep)
+        except BaseException:
+            state.usage.record_unknown_request()
+            state.report["unknown_usage_reserved_tokens"] += reserve
+            row.update(state="unknown", status="unknown", reservation_state="unknown",
+                       unknown_usage_reserved_tokens=reserve)
+            persist()
+            raise
+        previous_call, previous_reserve = state.active_call, state.unknown_reserve
+        state.active_call, state.unknown_reserve = row, reserve
+        try:
+            decision = classify_result({"ok": result.ok, "call": result})
+            _record_request_usage(state, result, retryable=decision.retryable)
+        finally:
+            state.active_call, state.unknown_reserve = previous_call, previous_reserve
+        known = row["usage"]["total_tokens"] is not None or result.billing_state == "rejected_before_inference"
+        row.update(state="received" if result.ok else "error", status="completed" if result.ok else "failed",
+                   reservation_state="settled" if known else "unknown", raw_usage=result.usage,
+                   response={k: getattr(result, k, None) for k in ("ok", "content", "reason_code", "error")})
+        if not result.ok and result.billing_state != "rejected_before_inference":
+            state.report["failed_requests"] += 1
+        used = state.report.setdefault("models_used", [])
+        model = getattr(result, "requested_model", None) or model_cfg.get("model")
+        if model and model not in used:
+            used.append(model)
+        pending["response"] = row["response"]
+        persist()
+        if state.report.get("stop_reason"):
+            raise PoolStopped(state.report["stop_reason"])
+        return result
+
+    while pending["attempt"] <= 2:
+        system, user = build_expansion_prompt(taxonomy, existing)
+        if pending["attempt"] > 1:
+            user += "\n上一轮词汇重复或无效，请严格使用给出的分类 ID，并提供不同的检索词。"
+        response = pending.get("response")
+        if not response or not response.get("ok"):
+            if getattr(state, "model_pool", None) is not None:
+                result, _ = state.model_pool.run(system, user, "catalog_expansion", invoke,
+                                                max_attempts=state.max_attempts, sleep=state.sleep)
+            else:
+                while True:
+                    result = invoke(state.cfg["model"], resolve_response_format(state.cfg["model"], "catalog_expansion"),
+                                    {"request_id": uuid4().hex, "requested_model": state.cfg["model"].get("model")})
+                    decision = classify_result({"ok": result.ok, "call": result})
+                    if result.ok or not decision.retryable:
+                        break
+                    state.sleep(1)
+            if not result.ok:
+                decision = classify_result({"ok": result.ok, "call": result})
+                raise PoolStopped(decision.stop_cause or "search_plan_invalid")
+            response = pending["response"]
+        for item in parse_expansion_response(response.get("content") or ""):
+            term, domain = item["term"], item["domain_id"]
+            if domain not in allowed or term.casefold() in seen:
+                rejected.append(item)
+                continue
+            domain_excludes = tuple((searches.get("per_domain", {}).get(domain) or {}).get("exclude_terms", []))
+            ds.query_cursors[f"{domain}:{term}"] = {
+                "domain_id": domain, "term": term,
+                "q": build_query_string(term, template, excludes + domain_excludes),
+                "source": "expansion", "next_page": 1, "exhausted": False,
+                "page_attempts": 0, "last_error": None, "retry_at": None, "total_count": None,
+            }
+            accepted.append(item)
+            seen.add(term.casefold())
+        if accepted:
+            break
+        pending["attempt"] += 1
+        pending.pop("response", None)
+        persist()
+    ds.expansion_history.append({**pending, "at": now_local().isoformat(),
+        "input_basis": {"taxonomy_domains": len(allowed), "existing_terms_count": len(existing)},
+        "accepted_count": len(accepted), "accepted_queries": accepted, "rejected_queries": rejected})
+    ds.pending_expansion = None
+    persist()
+    return accepted
+
+
+def _collect(root, local, settings, cfg, discover_fn, fetch_fn, evaluate_fn, log, sleep, search_fn=github_search, expand_fn=list_skill_paths):
     run_id = now_local().strftime('%Y%m%d-%H%M%S-') + uuid4().hex[:6]
     run_dir = local / 'runs' / run_id
     usage = UsageTotals()
@@ -1440,6 +1727,7 @@ def _collect(root, local, settings, cfg, discover_fn, fetch_fn, evaluate_fn, log
         active_eid=active_eid, active_call=active_call, unknown_reserve=unknown_reserve,
         max_attempts=max_attempts, max_retries=max_retries, pending_items=[],
         owned_ids=owned_ids, skipped_owned_ids=skipped_owned_ids,
+        search_fn=search_fn, expand_fn=expand_fn,
     )
     if cfg.get("filter_rules") and cfg["filter_rules"].has_evaluation_rules:
         state.evaluated_skill_ids = successful_evaluation_skill_ids(
@@ -1467,62 +1755,171 @@ def _collect(root, local, settings, cfg, discover_fn, fetch_fn, evaluate_fn, log
         state.save()
         state.log(f"目标：新增 {state.settings['target_recommended']} 个推荐技能；上限 {state.settings['max_total_tokens']:,} Token。")
         state.log(f"评估并发：{state.report['evaluation_threads']} 个候选；账本与结果串行写入。")
-        state.pool = prepare_pool(state.root, state.local, state.cfg, state.settings, state.old_recommended, discover_fn=state.discover_fn, sleep=state.sleep, log=state.log, report=state.report)
+        if pool_path.exists():
+            state.pool = load_pool(pool_path)
+        else:
+            state.pool = CandidatePool(items=[])
+            save_pool(pool_path, state.pool)
+
+        discovery_path = local / 'state' / 'discovery.json'
+        state.discovery_state = init_or_migrate_discovery_state(
+            discovery_path, state.pool, state.cfg.get('searches', {}), state.cfg.get('sources')
+        )
+        pending_expansion = state.discovery_state.pending_expansion or {}
+        if any(r.get('reservation_state') in ('active', 'unknown')
+               for r in pending_expansion.get('requests', [])):
+            raise PoolStopped(STOP_USAGE_UNKNOWN, '扩词请求结果或用量未确认，禁止自动重复付费请求')
+        queried_keys, expanded_keys = set(), set()
+        if settings.get("refresh_pool"):
+            state.log("已指定 --refresh-pool，重置搜索游标以重新扫描...")
+            for c in state.discovery_state.query_cursors.values():
+                c["exhausted"] = False
+                c["next_page"] = 1
+                c["page_attempts"] = 0
+            save_discovery_state(discovery_path, state.discovery_state)
+
         state.report['discovered'] = len(state.pool)
         state.report['blocked_total'] = state.pool.stats().get('blocked', 0)
         state.ledger.cap = state.ledger.reserved_count + max(1, len(state.pool))
         state.ledger.save()
         state.save()
-        enable_batch_prioritization = bool(
-            state.settings.get('enable_batch_prioritization', False)
-            or state.settings.get('enable_static_skip', False)
-        )
-        batch_size = int(state.settings.get('batch_size', 20) or 20)
-        pending_candidates = get_pending_candidates(state.pool)
 
-        state.batch_materials = {}
-        tier_map: dict[str, str] = {}
-        state.pending_items = []
+        batch_repo_limit = int(state.settings.get("batch_repo_limit", 1000) or 1000)
+        target_recommended = int(state.settings.get("target_recommended", 500) or 500)
+        max_total_tokens = int(state.settings.get("max_total_tokens", 100000000) or 100000000)
+        max_evaluations = state.settings.get("max_evaluations")
 
-        # 按小批次切分处理，确保后续每个批次均经过正文材料分级与批内排序
-        for chunk_start in range(0, len(pending_candidates), batch_size):
-            chunk = pending_candidates[chunk_start : chunk_start + batch_size]
-            if enable_batch_prioritization:
-                for it in chunk:
-                    cand = it.candidate
-                    if cand.skill_id not in state.batch_materials and cand.path.split('/')[-1] == 'SKILL.md':
-                        if '/blob/' not in cand.url:
-                            cand.url = f'https://github.com/{cand.owner}/{cand.repo}/blob/HEAD/{cand.path}'
-                        u = cand.url.replace('https://github.com/', 'https://raw.githubusercontent.com/', 1).replace('/blob/', '/', 1)
-                        try:
-                            fetched = state.fetch_fn(u, sleep=state.sleep, max_bytes=material_fetch_limit(state.cfg['model']))
-                            state.batch_materials[cand.skill_id] = fetched
-                            if fetched.ok and fetched.text and not fetched.truncated:
-                                obs = analyze_static_tier(cand, fetched.text)
-                                tier_map[cand.skill_id] = obs.get("tier")
-                        except (IOError, OSError, TimeoutError, ValueError):
-                            pass
-                prioritized_chunk = prioritize_pending_batch(
-                    chunk,
-                    batch_size=batch_size,
-                    manual_picks=state.manual_picks,
-                    tier_map=tier_map,
-                    enabled=True,
-                )
-            else:
-                prioritized_chunk = chunk
-
-            if settings.get('parallel_evaluation', True):
-                stopped = not TwoCandidateScheduler(state, process_candidate).run(prioritized_chunk)
-            else:
-                stopped = False
-                for item in prioritized_chunk:
-                    state.pending_items.append(item)
-                    if not process_candidate(state, item):
-                        stopped = True
-                        break
-            if stopped:
+        while True:
+            # 1. 运行级停止边界检查
+            if state.report.get("stop_reason"):
                 break
+            if state.report["new_recommended"] >= target_recommended:
+                state.stop_causes.add(STOP_TARGET_REACHED)
+                state.report["stop_reason"] = resolve_primary_stop_reason(state.stop_causes)
+                break
+            if state.report["budget_tokens"] >= max_total_tokens:
+                state.stop_causes.add(STOP_TOKEN_LIMIT)
+                state.report["stop_reason"] = resolve_primary_stop_reason(state.stop_causes)
+                break
+            if max_evaluations and state.report["evaluations"] >= max_evaluations:
+                state.stop_causes.add(STOP_EVALUATION_LIMIT)
+                state.report["stop_reason"] = resolve_primary_stop_reason(state.stop_causes)
+                break
+
+            # 2. 如果当前没有活动批次，优先消耗已有候选池中的存量可处理候选
+            if state.discovery_state.active_batch is None:
+                actionable_items = [
+                    it for it in state.pool.items
+                    if it.status == POOL_STATUS_PENDING
+                    and classify_pending_candidate(
+                        it.candidate.skill_id,
+                        state.active_snoozed,
+                        state.manual_exclusions,
+                        state.owned_ids,
+                    )[0]
+                ]
+                if actionable_items:
+                    state.log(f"发现已有候选池中有 {len(actionable_items)} 个可处理候选，优先评估存量工作...")
+                    completed = _evaluate_candidate_items(state, actionable_items)
+                    state.save()
+                    if not completed or state.report.get("stop_reason"):
+                        break
+                    continue
+
+                # 存量候选处理完毕，获取下一批仓库（至多 batch_repo_limit 个）
+                state.log(f"存量工作已就绪，获取下一批新仓库（上限 {batch_repo_limit} 个）...")
+                batch = acquire_next_repo_batch(
+                    state.discovery_state,
+                    discovery_path,
+                    batch_repo_limit,
+                    state.cfg.get("searches", {}),
+                    state.cfg.get("sources"),
+                    search_fn=state.search_fn,
+                    sleep=state.sleep,
+                    log=state.log,
+                    max_attempts=state.max_attempts,
+                    limit_queries=settings.get('limit_queries'),
+                    queried_keys=queried_keys,
+                )
+
+                if batch is not None:
+                    allocated_repos = len(batch.get("repositories", []))
+                    if allocated_repos < batch_repo_limit:
+                        state.log(f"批次 #{batch['batch_id']}：发现 {allocated_repos}/{batch_repo_limit} 个新仓库；当前查询扫描完成，先评估这 {allocated_repos} 个")
+                    else:
+                        state.log(f"批次 #{batch['batch_id']}：分配 {allocated_repos}/{batch_repo_limit} 个新仓库进入展开与评估")
+                else:
+                    # 现有查询与分页无法产生新仓库，尝试分类内扩词
+                    state.log("现有查询无法提供新仓库，正在分类范围内扩展关键词...")
+                    new_queries = _expand_search_queries(state)
+                    if new_queries:
+                        state.log(f"扩词成功，新增 {len(new_queries)} 个新查询，继续搜索下一批...")
+                        continue
+                    else:
+                        if not state.report.get("stop_reason"):
+                            state.stop_causes.add(STOP_CANDIDATES_EXHAUSTED)
+                            state.report["stop_reason"] = resolve_primary_stop_reason(state.stop_causes)
+                        break
+
+            # 3. 处理当前活动批次
+            active = state.discovery_state.active_batch
+            if active is not None:
+                active_id = active.get("batch_id")
+                stage = active.get("stage")
+                if stage in ("discovering", "expanding"):
+                    state.log(f"展开批次 #{active_id} 的仓库 SKILL.md...")
+                    expand_batch_skills(
+                        state.discovery_state,
+                        discovery_path,
+                        state.pool,
+                        state.pool_path,
+                        expand_repo_fn=state.expand_fn,
+                        old_recommended=state.old_recommended,
+                        source_types=state.cfg.get("source_types"),
+                        sleep=state.sleep,
+                        log=state.log,
+                        max_attempts=state.max_attempts,
+                        expand_limit=settings.get('expand_limit'),
+                        expanded_keys=expanded_keys,
+                    )
+                    state.report['discovered'] = len(state.pool)
+                    state.ledger.cap = state.ledger.reserved_count + max(1, len(state.pool))
+                    state.ledger.save()
+                    state.save()
+
+                # 评估当前批次的可处理技能
+                batch_skill_ids = set(active.get("skill_ids") or [])
+                batch_actionable = [
+                    it for it in state.pool.items
+                    if it.candidate.skill_id in batch_skill_ids
+                    and it.status == POOL_STATUS_PENDING
+                    and classify_pending_candidate(
+                        it.candidate.skill_id,
+                        state.active_snoozed,
+                        state.manual_exclusions,
+                        state.owned_ids,
+                    )[0]
+                ]
+                if batch_actionable:
+                    state.log(f"批次 #{active_id}：评估 {len(batch_actionable)} 个可处理 Skill（本次新增推荐 {state.report['new_recommended']}/{target_recommended}）...")
+                    completed = _evaluate_candidate_items(state, batch_actionable)
+                else:
+                    completed = True
+
+                batch_finished = reconcile_batch_and_repositories(
+                    state.discovery_state,
+                    discovery_path,
+                    state.pool,
+                    state.active_snoozed,
+                    state.manual_exclusions,
+                    state.owned_ids,
+                )
+                state.save()
+                if batch_finished:
+                    state.log(f"批次 #{active_id} 已完成，开始获取下一批新仓库")
+
+                if not completed or state.report.get("stop_reason"):
+                    break
         if state.report['new_recommended'] >= state.settings['target_recommended']:
             state.stop_causes.add(STOP_TARGET_REACHED)
         elif state.report['budget_tokens'] >= state.settings['max_total_tokens']:
@@ -1533,7 +1930,7 @@ def _collect(root, local, settings, cfg, discover_fn, fetch_fn, evaluate_fn, log
             state.stop_causes.add(STOP_CANDIDATES_EXHAUSTED)
         state.report['stop_causes'] = sorted(list(state.stop_causes))
         state.report['stop_reason'] = resolve_primary_stop_reason(state.stop_causes)
-    except PoolStopped as exc:
+    except (PoolStopped, DiscoveryStopped) as exc:
         state.stop_causes.add(exc.reason)
         state.report['error_message'] = str(exc)
     except KeyboardInterrupt:
@@ -1552,6 +1949,8 @@ def _collect(root, local, settings, cfg, discover_fn, fetch_fn, evaluate_fn, log
     finally:
         if state.pool is not None:
             save_pool(state.pool_path, state.pool)
+        if getattr(state, "discovery_state", None) is not None:
+            save_discovery_state(local / "state" / "discovery.json", state.discovery_state)
         if state.active_eid:
             state.ledger.mark_needs_recovery(state.active_eid, '运行中断或异常，禁止自动重复付费请求')
             if state.active_call and state.active_call.get('usage') is None:
@@ -1574,6 +1973,7 @@ def main(argv=None, *, root: Path | None = None) -> int:
     parser = argparse.ArgumentParser(description="本地收集 50 个推荐 Skill，并显示 Token 消耗")
     parser.add_argument("--recover-catalog", action="store_true", help="离线恢复已完成评估与页面，不调用模型")
     parser.add_argument("--check", action="store_true", help="仅本地预检：不联网、不调用模型、不写运行数据")
+    parser.add_argument("--batch-repos", type=int, help="每个新批次最多分配的不同仓库数 N，默认 1000")
     parser.add_argument("--target", type=int, help="本次新增推荐目标")
     parser.add_argument("--max-tokens", type=int, help="输入加输出的本次 Token 上限")
     parser.add_argument("--max-evaluations", type=int, help="可选：本次最多评估多少条")
@@ -1587,7 +1987,7 @@ def main(argv=None, *, root: Path | None = None) -> int:
     parser.add_argument("--enable-static-skip", action="store_true", help="启用静态规则明确空壳占位跳过（避免调用模型）")
     parser.add_argument("--enable-normalized-cache", action="store_true", help="启用受限规范化缓存复用（仅在明确验证换行等价且证据完全核验时复用）")
     parser.add_argument("--enable-batch-prioritization", action="store_true", help="启用小批次材料准备与正文分级排序（含 20%% 防饥饿配额）")
-    parser.add_argument("--pool-watermark", type=int, help="候选池待处理数量低于此水位线时自动增量补水，默认 20")
+    parser.add_argument("--pool-watermark", type=int, help="候选池待处理数量低于此水位线时自动增量补水（已弃用）")
     args = parser.parse_args(argv)
     log = lambda message: print(message, flush=True)
 
@@ -1638,6 +2038,7 @@ def main(argv=None, *, root: Path | None = None) -> int:
         settings = _read(run_file)
         settings.setdefault("max_format_failures_without_valid_result", 10)
         for argument, key in (
+            ("batch_repos", "batch_repo_limit"),
             ("target", "target_recommended"),
             ("max_tokens", "max_total_tokens"),
             ("max_evaluations", "max_evaluations"),
@@ -1649,6 +2050,8 @@ def main(argv=None, *, root: Path | None = None) -> int:
         ):
             if getattr(args, argument) is not None:
                 settings[key] = getattr(args, argument)
+        if args.pool_watermark is not None:
+            log("提示：--pool-watermark 已弃用，本地采集已切换为仓库分批与断点恢复模式。")
         if args.refresh_pool:
             settings["refresh_pool"] = True
         if args.enable_static_skip:
@@ -1666,7 +2069,7 @@ def main(argv=None, *, root: Path | None = None) -> int:
             log("预检失败：" + "；".join(problems))
             return 1
         log(f"预检通过；模型 {cfg['model'].get('model') or '模型队列'}；API Key 已配置（不显示密钥）。")
-        log(f"目标 {settings['target_recommended']} 个新增推荐，上限 {settings['max_total_tokens']:,} Token。")
+        log(f"目标 {settings['target_recommended']} 个新增推荐，上限 {settings['max_total_tokens']:,} Token，每批仓库上限 {settings.get('batch_repo_limit', 1000)} 个。")
         log(f"网络及临时 HTTP 错误最多重连 {settings.get('max_retries', 5)} 次，尝试次数会保存。")
         if not os.environ.get("GITHUB_TOKEN"):
             log("未设置 GITHUB_TOKEN；GitHub 限流可能导致本轮候选不足，可在 PyCharm 的环境变量中设置。")

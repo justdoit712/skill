@@ -65,10 +65,18 @@ STOP_PRIORITY: list[str] = [
     STOP_MODEL_FAILURES,
     STOP_TARGET_REACHED,
     STOP_EVALUATION_LIMIT,
+    'search_failed',
+    'repository_expand_failed',
+    'search_plan_invalid',
+    'discovery_limit',
     STOP_CANDIDATES_EXHAUSTED,
 ]
 
 STOP_LABELS: dict[str, str] = {
+    'search_failed': '搜索失败，分页及累计尝试次数已保存',
+    'repository_expand_failed': '仓库展开失败，失败仓库与累计尝试次数已保存',
+    'search_plan_invalid': '扩词配置或模型响应无效',
+    'discovery_limit': '已达本次查询或仓库展开上限，剩余工作已保存',
     'models_exhausted': '所有模型已耗尽，补充模型后可继续',
     'models_cooling_down': '可用模型均因空响应暂时冷却，候选保留待处理',
     'models_incompatible': '剩余模型参数不兼容，请调整配置后重跑，候选保留待处理',

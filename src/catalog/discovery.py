@@ -104,17 +104,19 @@ def _utc_now() -> str:
 def github_search(
     query: Query,
     *,
+    page: int = 1,
     session: requests.Session | None = None,
     per_page: int = DEFAULT_PER_PAGE,
     timeout: float = DEFAULT_TIMEOUT_SECONDS,
     max_attempts: int = DEFAULT_MAX_ATTEMPTS,
     sleep=time.sleep,
     discovered_at: str | None = None,
+    retry_info: dict | None = None,
 ) -> SearchOutcome:
     """执行一次 GitHub 仓库搜索，把结果转成候选。"""
     from src.infra.github import search_repositories
     ok, items, total, error = search_repositories(query.q, session=session, per_page=per_page,
-        timeout=timeout, max_attempts=max_attempts, sleep=sleep)
+        page=page, timeout=timeout, max_attempts=max_attempts, sleep=sleep, retry_info=retry_info)
     outcome = SearchOutcome(query=query, ok=ok, total_count=total, error=error)
     if not ok:
         outcome.reason_code = REASON_UPSTREAM_GONE if error == "HTTP 404" else REASON_HTTP_ERROR if (error or "").startswith("HTTP") else REASON_NETWORK_ERROR

@@ -409,5 +409,503 @@ class BudgetLedgerTest(unittest.TestCase):
         self.assertTrue(all(ledger.get(name)['status'] == 'needs_recovery' for name in variants if name != 'safe'))
 
 
+@smoke
+class RepoBatchAndCheckpointRecoveryTest(unittest.TestCase):
+    """分批仓库抓取、游标断点恢复与待处理有效性过滤长效契约。"""
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory(ignore_cleanup_errors=True)
+        self.root = Path(self.tmp.name)
+        (self.root / "config").mkdir(parents=True)
+        (self.root / "data" / "local" / "state").mkdir(parents=True)
+
+    def tearDown(self):
+        self.tmp.cleanup()
+
+    def test_settings_validation_batch_repo_limit(self):
+        from src.catalog.local import _valid_settings, DEFAULT_BATCH_REPO_LIMIT
+        settings = {"target_recommended": 5, "max_total_tokens": 1000, "max_consecutive_failures": 3}
+        _valid_settings(settings)
+        self.assertEqual(settings["batch_repo_limit"], DEFAULT_BATCH_REPO_LIMIT)
+
+        for bad in (0, -1, True, False, 1.5, "100"):
+            with self.subTest(bad=bad), self.assertRaises(ValueError):
+                _valid_settings({**settings, "batch_repo_limit": bad})
+
+    def test_batch_repo_overflow_and_unassigned_queue(self):
+        from src.catalog.batch import (
+            DiscoveryState,
+            acquire_next_repo_batch,
+            save_discovery_state,
+        )
+        state_path = self.root / "data" / "local" / "state" / "discovery.json"
+        state = DiscoveryState(
+            search_config_fingerprint="test-fp",
+            query_cursors={
+                "domain1:term1": {
+                    "domain_id": "domain1",
+                    "term": "term1",
+                    "q": "dummy query",
+                    "source": "searches",
+                    "next_page": 1,
+                    "exhausted": False,
+                    "page_attempts": 0,
+                    "last_error": None,
+                    "retry_at": None,
+                    "total_count": None,
+                }
+            },
+        )
+        save_discovery_state(state_path, state)
+
+        # Mock search returning 5 repositories
+        def mock_search(q, per_page=30, page=1, **kwargs):
+            return [
+                {"full_name": f"owner/repo-{i}", "html_url": f"https://github.com/owner/repo-{i}"}
+                for i in range(1, 6)
+            ], 5
+
+        # Request batch with N=2
+        batch = acquire_next_repo_batch(
+            state,
+            state_path,
+            batch_repo_limit=2,
+            searches_cfg={},
+            search_fn=mock_search,
+            sleep=lambda _: None,
+            log=lambda _: None,
+        )
+        self.assertIsNotNone(batch)
+        self.assertEqual(batch["repo_limit"], 2)
+        self.assertEqual(len(batch["repositories"]), 2)
+        self.assertEqual(batch["repositories"], ["owner/repo-1", "owner/repo-2"])
+        # Remaining 3 repos must be saved in unassigned_repositories
+        self.assertEqual(len(state.unassigned_repositories), 3)
+        self.assertEqual(
+            [f"{r['owner']}/{r['repo']}" for r in state.unassigned_repositories],
+            ["owner/repo-3", "owner/repo-4", "owner/repo-5"],
+        )
+
+        # Mark first batch as completed
+        state.active_batch = None
+        save_discovery_state(state_path, state)
+
+        # Acquire next batch with N=2, must consume unassigned_repositories without calling search
+        search_called = []
+        def guarded_search(*args, **kwargs):
+            search_called.append(True)
+            return [], 0
+
+        batch2 = acquire_next_repo_batch(
+            state,
+            state_path,
+            batch_repo_limit=2,
+            searches_cfg={},
+            search_fn=guarded_search,
+            sleep=lambda _: None,
+            log=lambda _: None,
+        )
+        self.assertFalse(search_called, "Should consume unassigned repos before querying search API")
+        self.assertEqual(len(batch2["repositories"]), 2)
+        self.assertEqual(batch2["repositories"], ["owner/repo-3", "owner/repo-4"])
+        self.assertEqual(len(state.unassigned_repositories), 1)
+
+    def test_pending_breakdown_and_actionable_classification(self):
+        from src.catalog.pool import (
+            CandidatePool,
+            PoolItem,
+            classify_pending_candidate,
+            REASON_SNOOZED,
+            REASON_MANUAL_EXCLUDED,
+            REASON_OWNED,
+        )
+        cand_active = Candidate("user/repo1:SKILL.md", "user", "repo1", path="SKILL.md")
+        cand_snoozed = Candidate("user/repo2:SKILL.md", "user", "repo2", path="SKILL.md")
+        cand_excluded = Candidate("user/repo3:SKILL.md", "user", "repo3", path="SKILL.md")
+        cand_owned = Candidate("user/repo4:SKILL.md", "user", "repo4", path="SKILL.md")
+
+        active_snoozed = {cand_snoozed.skill_id}
+        manual_exclusions = {cand_excluded.skill_id}
+        owned_ids = {cand_owned.skill_id}
+
+        self.assertEqual(classify_pending_candidate(cand_active, active_snoozed, manual_exclusions, owned_ids), (True, None))
+        self.assertEqual(classify_pending_candidate(cand_snoozed, active_snoozed, manual_exclusions, owned_ids), (False, REASON_SNOOZED))
+        self.assertEqual(classify_pending_candidate(cand_excluded, active_snoozed, manual_exclusions, owned_ids), (False, REASON_MANUAL_EXCLUDED))
+        self.assertEqual(classify_pending_candidate(cand_owned, active_snoozed, manual_exclusions, owned_ids), (False, REASON_OWNED))
+
+        pool = CandidatePool(items=[
+            PoolItem(1, cand_active),
+            PoolItem(2, cand_snoozed),
+            PoolItem(3, cand_excluded),
+            PoolItem(4, cand_owned),
+        ])
+        actionable_count, breakdown = pool.count_actionable(
+            active_snoozed=active_snoozed,
+            manual_exclusions=manual_exclusions,
+            owned_ids=owned_ids,
+        )
+        self.assertEqual(actionable_count, 1)
+        self.assertEqual(breakdown["actionable"], 1)
+        self.assertEqual(breakdown["snoozed"], 1)
+        self.assertEqual(breakdown["manual_excluded"], 1)
+        self.assertEqual(breakdown["owned"], 1)
+
+    def test_continuous_batch_run_with_custom_n_and_m(self):
+        import json
+        from src.catalog.config import load_all_config
+        from src.catalog.local import run_local
+        from src.infra.http import FetchResult
+        from src.infra.llm import ModelCallResult
+        from tests.test_catalog_quality import TEXT, assessment
+
+        cfg = load_all_config(ROOT / "config")
+        cfg["model"] = {
+            "endpoint": "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions",
+            "model": "mock-llm",
+            "auth": {"api_key": "fake-key"},
+        }
+        cfg["sources"] = {"sources": []}
+        cfg["searches"]["per_domain"] = {"dev": {"en": ["test"]}}
+        write_json_atomic(self.root / "config/models/model.json", cfg["model"])
+        searched = []
+
+        # N = 2, M = 3
+        # Search returns 2 repos on page 1, 2 repos on page 2
+        def mock_search(q, per_page=30, page=1, **kwargs):
+            searched.append(page)
+            if page == 1:
+                return [
+                    {"full_name": "alpha/repo1", "html_url": "https://github.com/alpha/repo1"},
+                    {"full_name": "alpha/repo2", "html_url": "https://github.com/alpha/repo2"},
+                ], 4
+            elif page == 2:
+                return [
+                    {"full_name": "beta/repo3", "html_url": "https://github.com/beta/repo3"},
+                    {"full_name": "beta/repo4", "html_url": "https://github.com/beta/repo4"},
+                ], 4
+            return [], 4
+
+        def mock_expand(owner, repo, sleep=None):
+            return [f"skills/{repo}/SKILL.md"], None
+
+        def mock_fetch(url, **kwargs):
+            return FetchResult(
+                url=url,
+                ok=True,
+                text=TEXT,
+            )
+
+        # Mock model output recommending the skill
+        rec_content = json.dumps(assessment(cfg["rules"]), ensure_ascii=False)
+        def mock_call_model(model_cfg, system, user, **kwargs):
+            return ModelCallResult(
+                ok=True,
+                http_status=200,
+                content=rec_content,
+                usage={"prompt_tokens": 100, "completion_tokens": 50, "total_tokens": 150},
+            )
+
+        options = {
+            "batch_repo_limit": 2,
+            "target_recommended": 3,
+            "max_total_tokens": 1000000,
+            "max_consecutive_failures": 3,
+            "parallel_evaluation": False,
+        }
+
+        from src.catalog.batch import acquire_next_repo_batch
+        def acquire(*args, **kwargs):
+            return acquire_next_repo_batch(*args, **kwargs, per_page=2)
+        with patch("src.catalog.evaluation.call_model", side_effect=mock_call_model), patch(
+                "src.catalog.local.acquire_next_repo_batch", side_effect=acquire):
+            report = run_local(
+                self.root,
+                options,
+                cfg=cfg,
+                search_fn=mock_search,
+                expand_fn=mock_expand,
+                fetch_fn=mock_fetch,
+                sleep=lambda _: None,
+                log=lambda _: None,
+            )
+
+        self.assertEqual(searched, [1, 2])
+        self.assertEqual(report["stop_reason"], "target_reached")
+        self.assertEqual(report["new_recommended"], 3)
+        self.assertEqual(report["evaluations"], 3)
+
+        # Verify discovery.json state persistence
+        disc_state = read_json(self.root / "data" / "local" / "state" / "discovery.json")
+        self.assertIsNotNone(disc_state)
+        # Batch 1 was completed (2 repos evaluated -> 2 recommendations)
+        self.assertTrue(len(disc_state["completed_batches"]) >= 1)
+        # Active batch was Batch 2, stopped when target was reached (3 recommendations total)
+        self.assertIsNotNone(disc_state["active_batch"])
+        self.assertEqual(disc_state["active_batch"]["batch_seq"], 2)
+
+        # 用独立目录重放同一流水线，首个候选连续失败两次，其余三个成功。
+        isolated = self.root / "failure-case"
+        write_json_atomic(isolated / "config/models/model.json", cfg["model"])
+        failure = ModelCallResult(ok=False, reason_code="NETWORK_ERROR", attempts=1,
+                                  usage={"total_tokens": 10})
+        success = ModelCallResult(ok=True, http_status=200, content=rec_content,
+                                  usage={"total_tokens": 150})
+        with patch("src.catalog.evaluation.call_model", side_effect=[failure, failure, success, success, success]), patch(
+                "src.catalog.local.acquire_next_repo_batch", side_effect=acquire):
+            report = run_local(isolated, {**options, "max_retries": 1}, cfg=cfg,
+                               search_fn=mock_search, expand_fn=mock_expand, fetch_fn=mock_fetch,
+                               sleep=lambda _: None, log=lambda _: None)
+        self.assertEqual(report["stop_reason"], "target_reached", report.get("error_message"))
+        self.assertEqual(report["new_recommended"], 3)
+        self.assertEqual(report["blocked_new"], 1)
+        self.assertEqual(report["usage"]["total_tokens"], 470)
+        # 已完成页恢复后不再检索；限额不能触发额外付费扩词。
+        limit_root = self.root / "query-limit"
+        write_json_atomic(limit_root / "config/models/model.json", cfg["model"])
+        with patch("src.catalog.evaluation.call_model", side_effect=AssertionError("unexpected model request")):
+            report = run_local(limit_root, {**options, "limit_queries": 0}, cfg=cfg,
+                search_fn=lambda *a, **kw: self.fail("query limit ignored"),
+                expand_fn=mock_expand, sleep=lambda _: None, log=lambda _: None)
+        self.assertEqual(report["stop_reason"], "discovery_limit")
+        outage_root = self.root / "search-outage"
+        write_json_atomic(outage_root / "config/models/model.json", cfg["model"])
+        with patch("src.catalog.evaluation.call_model", side_effect=AssertionError("outage triggered paid expansion")):
+            report = run_local(outage_root, {**options, "max_retries": 1}, cfg=cfg,
+                search_fn=lambda *a, **kw: (False, [], 0, "NETWORK_ERROR"),
+                expand_fn=mock_expand, sleep=lambda _: None, log=lambda _: None)
+        self.assertEqual(report["stop_reason"], "search_failed")
+
+
+    def test_expand_error_isolation_and_not_marked_completed(self):
+        from src.catalog.batch import (
+            DiscoveryState,
+            expand_batch_skills,
+            reconcile_batch_and_repositories,
+            save_discovery_state,
+        )
+        from src.catalog.pool import CandidatePool
+        state_path = self.root / "data" / "local" / "state" / "discovery.json"
+        pool_path = self.root / "data" / "local" / "pool.json"
+        state = DiscoveryState(
+            search_config_fingerprint="test-fp",
+            repository_index={
+                "owner/failed-repo": {
+                    "owner": "owner",
+                    "repo": "failed-repo",
+                    "url": "https://github.com/owner/failed-repo",
+                    "expanded": False,
+                    "expand_error": None,
+                    "skill_paths": [],
+                    "has_skills": False,
+                    "status": "pending",
+                    "processed": False,
+                    "batch_id": "batch-1",
+                },
+                "owner/ok-repo": {
+                    "owner": "owner",
+                    "repo": "ok-repo",
+                    "url": "https://github.com/owner/ok-repo",
+                    "expanded": False,
+                    "expand_error": None,
+                    "skill_paths": [],
+                    "has_skills": False,
+                    "status": "pending",
+                    "processed": False,
+                    "batch_id": "batch-1",
+                },
+            },
+            active_batch={
+                "batch_id": "batch-1",
+                "batch_seq": 1,
+                "repo_limit": 2,
+                "stage": "expanding",
+                "repositories": ["owner/failed-repo", "owner/ok-repo"],
+                "skill_ids": [],
+                "summary": {},
+            },
+        )
+        save_discovery_state(state_path, state)
+        pool = CandidatePool(items=[])
+
+        def mock_expand(owner, repo, **kwargs):
+            if repo == "failed-repo":
+                return [], "HTTP_500: Internal Server Error"
+            return [], None  # Confirmed no skills
+
+        added, expanded = expand_batch_skills(
+            state, state_path, pool, pool_path,
+            expand_repo_fn=mock_expand,
+        )
+        self.assertEqual(expanded, 1)
+        failed_info = state.repository_index["owner/failed-repo"]
+        self.assertFalse(failed_info["expanded"])
+        self.assertEqual(failed_info["expand_error"], "HTTP_500: Internal Server Error")
+        self.assertEqual(failed_info["status"], "expand_failed")
+        self.assertFalse(failed_info["processed"])
+
+        ok_info = state.repository_index["owner/ok-repo"]
+        self.assertTrue(ok_info["expanded"])
+        self.assertTrue(ok_info["processed"])
+        self.assertEqual(ok_info["status"], "completed")
+
+        # Now reconcile
+        reconcile_batch_and_repositories(
+            state, state_path, pool,
+            active_snoozed=set(), manual_exclusions=set(), owned_ids=set(),
+        )
+        # failed-repo MUST NOT be marked processed=True
+        self.assertFalse(state.repository_index["owner/failed-repo"]["processed"])
+        self.assertEqual(state.repository_index["owner/failed-repo"]["status"], "expand_failed")
+        self.assertEqual(state.active_batch["stage"], "expanding")
+        from src.catalog.batch import load_discovery_state
+        state = load_discovery_state(state_path)
+        self.assertEqual(state.repository_index["owner/failed-repo"]["expand_attempts"], 1)
+        expand_batch_skills(state, state_path, pool, pool_path,
+                            expand_repo_fn=lambda *a, **kw: ([], None))
+        self.assertTrue(reconcile_batch_and_repositories(state, state_path, pool, set(), set(), set()))
+        self.assertTrue(state.repository_index["owner/failed-repo"]["processed"])
+
+
+    def test_expansion_accounting_budget_and_recovery(self):
+        import json
+        from types import SimpleNamespace
+        from src.catalog.batch import DiscoveryState, load_discovery_state
+        from src.catalog.local import _expand_search_queries
+        from src.infra.llm import ModelCallResult
+        from src.infra.model_pool import PoolStopped
+        from src.shared.usage import UsageTotals, recompute_usage_from_calls
+
+        for mode in ("single", "pool", "rotation", "budget", "interrupt", "unknown", "resume"):
+            with self.subTest(mode=mode):
+                local = self.root / mode
+                state = SimpleNamespace(
+                    cfg={"taxonomy": {"main_categories": [{"id": "dev", "name": "开发", "scope": "测试"}]},
+                         "searches": {"per_domain": {"dev": {"exclude_terms": ["-private"]}}},
+                         "model": {"model": "mock", "auth": {"api_key": "fake"}}},
+                    local=local, discovery_state=DiscoveryState(), usage=UsageTotals(),
+                    report={"calls": [], "budget_tokens": 0, "unknown_usage_reserved_tokens": 0, "failed_requests": 0},
+                    settings={"max_total_tokens": 100000}, run_id="run", max_attempts=3,
+                    active_call=None, unknown_reserve=0, stop_causes=set(), sleep=lambda _: None,
+                    model_pool=None)
+                state.save = lambda: state.report.update(budget_tokens=state.usage.total_tokens + state.report["unknown_usage_reserved_tokens"])
+                path = local / "state/discovery.json"
+                content = json.dumps({"queries": [{"domain_id": "dev", "term": "pytest"},
+                    {"domain_id": "invented", "term": "bad"}, {"domain_id": "dev", "term": ["bad"]}]})
+                result = ModelCallResult(ok=True, content=content, attempts=1, usage={"total_tokens": 150})
+                observed = []
+                def call(cfg, system, user, **kw):
+                    checkpoint = load_discovery_state(path).pending_expansion
+                    self.assertEqual(checkpoint["requests"][-1]["state"], "started")
+                    self.assertIn("领域ID: dev", user)
+                    self.assertIn("测试", user)
+                    self.assertEqual(cfg["request"]["max_attempts"], 1)
+                    observed.append(True)
+                    if mode == "rotation" and len(observed) == 1:
+                        return ModelCallResult(ok=False, http_status=403, attempts=1,
+                            reason_code="QUOTA_EXHAUSTED", billing_state="rejected_before_inference")
+                    if mode == "interrupt":
+                        raise KeyboardInterrupt()
+                    if mode == "unknown":
+                        return ModelCallResult(ok=True, content=content, attempts=1)
+                    return result
+                class Pool:
+                    def run(self, system, user, stage, invoke, **kw):
+                        first = invoke(state.cfg["model"], {"type": "json_object"}, {})
+                        if mode == "budget":
+                            # 只允许已发生的第一次请求；第二次回调必须先拦截。
+                            state.settings["max_total_tokens"] = state.report["budget_tokens"]
+                            invoke(state.cfg["model"], {"type": "json_object"}, {})
+                        return first, [first]
+                if mode in ("pool", "budget"):
+                    state.model_pool = Pool()
+                if mode == "rotation":
+                    from src.infra.model_pool import ModelPool
+                    queue = {"provider": "dashscope", "endpoint": "https://example.test/chat/completions",
+                             "models": ["first", "second"], "auth": {"api_key": "fake"}}
+                    write_json_atomic(local / "config/models/model.json", queue)
+                    state.model_pool = ModelPool(queue, local, log=lambda _: None)
+                    state.model_pool.start()
+                if mode == "resume":
+                    state.discovery_state.pending_expansion = {"task_id": "saved", "attempt": 1,
+                        "requests": [], "response": {"ok": True, "content": content}}
+                with patch("src.catalog.evaluation.call_model", side_effect=call):
+                    if mode in ("budget", "unknown"):
+                        with self.assertRaises(PoolStopped) as caught:
+                            _expand_search_queries(state)
+                        self.assertEqual(caught.exception.reason, "token_limit" if mode == "budget" else "usage_unknown")
+                    elif mode == "interrupt":
+                        with self.assertRaises(KeyboardInterrupt):
+                            _expand_search_queries(state)
+                    else:
+                        self.assertEqual(_expand_search_queries(state), [{"domain_id": "dev", "term": "pytest"}])
+                        self.assertIn("-private", state.discovery_state.query_cursors["dev:pytest"]["q"])
+                self.assertEqual(len(observed), 0 if mode == "resume" else 2 if mode == "rotation" else 1)
+                self.assertEqual(state.usage.total_tokens, 0 if mode in ("unknown", "interrupt", "resume") else 150)
+                self.assertEqual(recompute_usage_from_calls(state.report["calls"]).total_tokens, state.usage.total_tokens)
+                saved = load_discovery_state(path)
+                if mode in ("interrupt", "unknown"):
+                    self.assertEqual(saved.pending_expansion["requests"][-1]["reservation_state"], "unknown")
+                if mode == "budget":
+                    # 已收到响应的请求在新 run 恢复时不得重新收费。
+                    state.discovery_state = saved
+                    with patch("src.catalog.evaluation.call_model", side_effect=AssertionError("duplicate payment")):
+                        self.assertEqual(len(_expand_search_queries(state)), 1)
+
+    def test_discovery_failures_limits_and_seed_paths(self):
+        from src.catalog.batch import (DiscoveryStopped, acquire_next_repo_batch, expand_batch_skills,
+            init_or_migrate_discovery_state, load_discovery_state, reconcile_batch_and_repositories)
+        from src.catalog.pool import CandidatePool
+        searches = {"per_domain": {"dev": {"en": ["one", "two"]}}}
+        path = self.root / "guard/discovery.json"
+        ds = init_or_migrate_discovery_state(path, None, searches)
+        calls = []
+        def failed(q, **kw):
+            calls.append(kw["page"])
+            self.assertEqual(kw["max_attempts"], 1)
+            self.assertGreater(load_discovery_state(path).query_cursors[f"dev:{q.term}"]["page_attempts"], 0)
+            return False, [], 0, "NETWORK_ERROR"
+        with self.assertRaises(DiscoveryStopped) as caught:
+            acquire_next_repo_batch(ds, path, search_fn=failed, limit_queries=0)
+        self.assertEqual(caught.exception.reason, "discovery_limit")
+        self.assertEqual(calls, [])
+        with self.assertRaises(DiscoveryStopped) as caught:
+            acquire_next_repo_batch(ds, path, search_fn=failed, max_attempts=2, sleep=lambda _: None)
+        self.assertEqual(caught.exception.reason, "search_failed")
+        self.assertEqual(calls, [1, 1, 1, 1])
+        ds = load_discovery_state(path)
+        with self.assertRaises(DiscoveryStopped):
+            acquire_next_repo_batch(ds, path, search_fn=failed, max_attempts=2)
+        self.assertEqual(len(calls), 4, "重启不得重置失败页尝试次数")
+        self.assertTrue(all(not c["exhausted"] for c in ds.query_cursors.values()))
+
+        seeds = {"sources": [{"id": "seed", "url": "https://github.com/owner/repo",
+                               "skill_paths": ["a/SKILL.md", "b/SKILL.md"]},
+                              {"id": "other", "url": "https://github.com/owner/other"}]}
+        path = self.root / "seeds/discovery.json"
+        ds = init_or_migrate_discovery_state(path, None, {}, seeds)
+        acquire_next_repo_batch(ds, path, batch_repo_limit=2, sources_cfg=seeds)
+        self.assertEqual(ds.repository_index["owner/repo"]["skill_paths"], ["a/SKILL.md", "b/SKILL.md"])
+        self.assertFalse(ds.repository_index["owner/repo"]["expanded"])
+        expanded = []
+        def expand(owner, repo, **kw):
+            expanded.append(repo)
+            return ["c/SKILL.md"] if repo == "repo" else [], None
+        pool = CandidatePool(items=[])
+        pool_path = self.root / "seeds/pool.json"
+        expand_batch_skills(ds, path, pool, pool_path, expand_repo_fn=expand, expand_limit=1)
+        self.assertEqual(expanded, ["repo"])
+        self.assertEqual(len(pool.items), 3)
+        for item in pool.items:
+            item.status = "done"
+        with self.assertRaises(DiscoveryStopped) as caught:
+            reconcile_batch_and_repositories(ds, path, pool, set(), set(), set())
+        self.assertEqual(caught.exception.reason, "discovery_limit")
+        self.assertEqual(ds.active_batch["stage"], "expanding")
+        ds = load_discovery_state(path)
+        expand_batch_skills(ds, path, pool, pool_path, expand_repo_fn=expand, expand_limit=1)
+        self.assertEqual(expanded, ["repo", "other"])
+        self.assertTrue(reconcile_batch_and_repositories(ds, path, pool, set(), set(), set()))
+
+
 if __name__ == "__main__":
     unittest.main()

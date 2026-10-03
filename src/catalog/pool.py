@@ -19,6 +19,7 @@ from pathlib import Path
 import re
 from typing import Any
 from src.infra.files import write_json_atomic
+from src.shared.owned import is_skill_owned
 from src.shared.runtime import now_local
 from .dedupe import dedupe
 from .models import Candidate
@@ -42,6 +43,44 @@ VALID_STATUSES = {
     STATUS_BLOCKED,
     STATUS_STATIC_SKIPPED,
 }
+
+POOL_TERMINAL_STATUSES = frozenset({
+    STATUS_DONE,
+    STATUS_EXCLUDED,
+    STATUS_FETCH_FAILED,
+    STATUS_NOT_SKILL,
+    STATUS_LENGTH_EXCEEDED,
+    STATUS_BLOCKED,
+    STATUS_STATIC_SKIPPED,
+})
+
+REASON_SNOOZED = "snoozed"
+REASON_MANUAL_EXCLUDED = "manual_excluded"
+REASON_OWNED = "owned"
+
+
+def classify_pending_candidate(
+    candidate: Candidate | str,
+    active_snoozed: set[str],
+    manual_exclusions: set[str] | dict,
+    owned_ids: set[str],
+) -> tuple[bool, str | None]:
+    """对处于 pending 状态的候选进行有效性判断，给出互斥主原因。
+
+    统一优先级：
+    1. active_snoozed -> (False, "snoozed")
+    2. manual_exclusions -> (False, "manual_excluded")
+    3. owned_ids -> (False, "owned")
+    4. 其余 -> (True, None)
+    """
+    sid = candidate.skill_id if hasattr(candidate, "skill_id") else str(candidate)
+    if sid in active_snoozed:
+        return False, REASON_SNOOZED
+    if sid in manual_exclusions:
+        return False, REASON_MANUAL_EXCLUDED
+    if is_skill_owned(sid, owned_ids):
+        return False, REASON_OWNED
+    return True, None
 
 
 @dataclass
@@ -83,6 +122,31 @@ class CandidatePool:
     @property
     def pending_count(self) -> int:
         return sum(1 for item in self.items if item.status == STATUS_PENDING)
+
+    def count_actionable(
+        self,
+        active_snoozed: set[str],
+        manual_exclusions: set[str] | dict,
+        owned_ids: set[str],
+    ) -> tuple[int, dict[str, int]]:
+        """返回 (有效可处理数, 各跳过原因统计字典)。"""
+        counts = {
+            REASON_SNOOZED: 0,
+            REASON_MANUAL_EXCLUDED: 0,
+            REASON_OWNED: 0,
+        }
+        actionable = 0
+        for item in self.items:
+            if item.status == STATUS_PENDING:
+                is_act, reason = classify_pending_candidate(
+                    item.candidate, active_snoozed, manual_exclusions, owned_ids
+                )
+                if is_act:
+                    actionable += 1
+                elif reason:
+                    counts[reason] = counts.get(reason, 0) + 1
+        counts["actionable"] = actionable
+        return actionable, counts
 
     @property
     def candidates(self) -> list[PoolItem]:
