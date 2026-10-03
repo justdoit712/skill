@@ -1,6 +1,0 @@
-requirements.txt
-*.py
-__pycache__
-.venv
-venv
-*.pyc
