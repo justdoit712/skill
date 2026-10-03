@@ -1,4 +1,5 @@
 {
+  "batch_repo_limit": 1000,
   "target_recommended": 500,
   "max_total_tokens": 100000000,
   "max_evaluations": null,
@@ -9,5 +10,5 @@
   "max_retries": 5,
   "pool_watermark": 20,
   "pool_max_age_days": 7,
-  "note": "本地手动运行：目标为本次新增推荐数。输入与输出合计上限 100M Token；未知用量的失败请求另预留估算预算，最后一次请求仍可能超出上限。null 表示评估次数/查询数/展开仓库数不额外限制。网络错误及临时 HTTP 错误最多重试 5 次（含首次共 6 次），重试成功后继续；尝试次数持久化，重跑不重置。候选池持久化至 data/local/pool.json，待处理候选低于水位线时自动增量补水，默认有效期 7 天。Actions 周额度仍为 50。"
+  "note": "本地手动运行：采用分批抓取与断点恢复机制。batch_repo_limit 为每个新批次最多分配的不同仓库数 N（默认 1000）；目标 target_recommended 为本次新增推荐数 M（默认 500）；输入与输出合计上限 100M Token；未知用量的失败请求另预留估算预算。网络错误及临时 HTTP 错误最多重试 5 次，尝试次数持久化。搜索游标与批次断点保存于 data/local/state/discovery.json，pool_watermark 已弃用。Actions 周额度仍为 50。"
 }
