@@ -208,7 +208,8 @@ class CandidatePoolTest(unittest.TestCase):
     def test_parallel_unknown_usage_does_not_mark_a_settled_peer_for_recovery(self):
         import threading
         from src.catalog.config import load_all_config
-        from src.catalog.local import run_local, _record_request_usage
+        from src.catalog.local import run_local
+        from src.catalog.local_candidate import _record_request_usage
         from src.infra.http import FetchResult
         from src.infra.llm import ModelCallResult
         from tests.test_catalog_quality import TEXT
@@ -238,7 +239,7 @@ class CandidatePoolTest(unittest.TestCase):
         options = {'target_recommended': 2, 'max_total_tokens': 1000000,
                    'max_consecutive_failures': 3, 'pool_watermark': 1, 'parallel_evaluation': True}
         with patch('src.catalog.evaluation.call_model', side_effect=model), \
-                patch('src.catalog.local._record_request_usage', side_effect=record_usage):
+                patch('src.catalog.local_candidate._record_request_usage', side_effect=record_usage):
             report = run_local(self.root, options, cfg=cfg,
                 discover_fn=lambda *args, **kwargs: ([], []),
                 fetch_fn=lambda url, **kwargs: FetchResult(url=url, ok=True,

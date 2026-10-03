@@ -1,17 +1,16 @@
 """本地按推荐数量收集；复用采集、筛选、决策与索引，不改 Actions 周额度。
 
-拆解为 4 步管道函数，保持签名与行为 100% 向后兼容：
-- Step 1: prepare_pool: 候选池加载、水位线检查与自动补水
-- Step 2: process_candidate: 候选预筛、内容抓取、缓存复用与受控模型评估
-- Step 3: apply_result: 条目状态机更新（update_entry）与持久化
-- Step 4: save_and_render: 运行报告、Markdown 页面与变更记录保存
+拆解为模块化协同：
+- local_state: LocalCollection 运行状态、检查点落盘与报告渲染
+- local_candidate: 单候选预筛、材料抓取、缓存复用与受控模型评估
+- local: 发现补水编排、仓库批次调度与 CLI 入口
 """
 
 from __future__ import annotations
 
 import argparse
 from copy import deepcopy
-from dataclasses import dataclass, asdict, field
+from dataclasses import asdict
 import json
 import os
 from pathlib import Path
@@ -20,24 +19,16 @@ from typing import Any, Callable, Optional
 from uuid import uuid4
 
 from src.infra.files import write_json_atomic, write_text_atomic
-from src.shared.runtime import now_local
-from src.shared.versions import LLM_OUTPUT_CONTRACT_VERSION, STATIC_HEURISTIC_VERSION
-from src.shared.materials import validate_document, primary_material_bundle
+from src.infra.http import fetch_text
+from src.shared.materials import validate_document
+from src.shared.model_config import material_fetch_limit
 from src.shared.owned import is_skill_owned
-from .store import catalog_task
-from .budget import BudgetLedger, evaluation_filename
-from .parallel import TwoCandidateScheduler
-from .config import load_all_config, precheck
-from .decide import decide
-from .dedupe import content_fingerprint, dedupe
-from .discovery import (
+from src.shared.runtime import is_test_environment, now_local
+from src.shared.usage import UsageTotals
+from src.shared.versions import STATIC_HEURISTIC_VERSION, build_config_fingerprint
+from .batch import (
     DEFAULT_EXCLUDE_TERMS,
     DEFAULT_QUERY_TEMPLATE,
-    discover,
-    github_search,
-)
-from src.infra.github import list_skill_paths
-from .batch import (
     DiscoveryStopped,
     acquire_next_repo_batch,
     build_expansion_prompt,
@@ -49,244 +40,64 @@ from .batch import (
     reconcile_batch_and_repositories,
     save_discovery_state,
 )
-from .entry_state import (
-    EntryUpdateEvent,
-    STATUS_RECOMMENDED,
-    STATUS_CANDIDATE,
-    STATUS_EXCLUDED,
-    STATUS_PENDING,
-    admission_decision,
-    review_state,
-    update_entry,
-)
-from .evaluation import (
-    RETRYABLE_STATUS,
-    build_prompt,
-    evaluate,
-    evaluation_id,
-    resolve_api_key,
-    validate_pending_evaluation,
-)
-from src.infra.http import fetch_text
-from src.infra.llm import REASON_LENGTH_EXCEEDED
-from src.shared.normalization import (
-    NORMALIZATION_VERSION,
-    create_reuse_audit,
-    inspect_record_for_normalized_reuse,
-    normalized_content_fingerprint,
-)
-from src.shared.runtime import is_test_environment
-from src.shared.usage import UsageTotals, recompute_usage_from_calls
-from src.shared.versions import build_config_fingerprint
-from src.shared.model_config import material_fetch_limit
-from .index import CatalogContext, build_catalog, build_entry, index_by_id
-from .store import mutate_catalog
-from .filter_rules import eligible_for_topic_filter, filter_new_evaluation, successful_evaluation_skill_ids
-from .overrides import apply_manual_overrides_to_entry, get_manual_exclusions, get_manual_picks
-from .snooze import apply_snooze_overrides, get_active_snoozed, load_snooze
-from .pool import (
-    POOL_TERMINAL_STATUSES,
-    STATUS_DONE,
-    STATUS_EXCLUDED as POOL_STATUS_EXCLUDED,
-    STATUS_FETCH_FAILED,
-    STATUS_NOT_SKILL,
-    STATUS_LENGTH_EXCEEDED,
-    STATUS_BLOCKED,
-    STATUS_PENDING as POOL_STATUS_PENDING,
-    STATUS_STATIC_SKIPPED,
-    append_new_candidates,
-    CandidatePool,
-    classify_pending_candidate,
-    create_pool_from_candidates,
-    get_pending_candidates,
-    is_pool_expired,
-    prioritize_pending_batch,
-    load_pool,
-    save_pool,
-    update_candidate_status,
-)
-from .prescreen import analyze_static_tier, prescreen, should_static_skip
-from .report import build_report, write_report
+from .budget import BudgetLedger
+from .config import load_all_config, precheck
+from .discovery import discover, github_search
+from .entry_state import STATUS_RECOMMENDED
 from .failure_policy import (
-    ACTION_BLOCKED,
-    ACTION_DONE,
-    ACTION_LENGTH_EXCEEDED,
-    ACTION_RETRY,
-    ERROR_KIND_OUTPUT_JSON_INVALID,
-    ERROR_KIND_OUTPUT_SCHEMA_INVALID,
-    ERROR_KIND_RESUME_STATE_INVALID,
-    REASON_ACCESS_DENIED,
-    REASON_REQUEST_CONFIG_ERROR,
-    REASON_RESUME_STATE_INVALID,
-    STOP_ACCESS_DENIED,
     STOP_CANDIDATES_EXHAUSTED,
     STOP_EVALUATION_LIMIT,
-    STOP_FORMAT_FAILURES,
     STOP_INTERRUPTED,
     STOP_LABELS,
-    STOP_MODEL_FAILURES,
-    STOP_REQUEST_CONFIG_ERROR,
-    STOP_RESUME_STATE_INVALID,
-    STOP_RETRY_EXHAUSTED,
-    STOP_STORAGE_ERROR,
     STOP_TARGET_REACHED,
     STOP_TOKEN_LIMIT,
     STOP_USAGE_UNKNOWN,
-    classify_result,
     resolve_primary_stop_reason,
-    update_failure_counters,
 )
-
-DEFAULT_BATCH_REPO_LIMIT = 1000
-
-
-def _read(path: Path, default=None):
-    return json.loads(path.read_text(encoding="utf-8")) if path.exists() else default
-
-
-def _valid_settings(settings: dict) -> None:
-    settings.setdefault("batch_repo_limit", DEFAULT_BATCH_REPO_LIMIT)
-    batch_limit = settings.get("batch_repo_limit")
-    if isinstance(batch_limit, bool) or not isinstance(batch_limit, int) or batch_limit < 1:
-        raise ValueError("batch_repo_limit 必须是正整数")
-    retries = settings.get("max_retries", 5)
-    if isinstance(retries, bool) or not isinstance(retries, int) or retries < 0:
-        raise ValueError("max_retries 必须是非负整数")
-    for name in ("target_recommended", "max_total_tokens", "max_consecutive_failures"):
-        value = settings.get(name)
-        if isinstance(value, bool) or not isinstance(value, int) or value < 1:
-            raise ValueError(f"{name} 必须是正整数")
-    format_limit = settings.get("max_format_failures_without_valid_result", 10)
-    if isinstance(format_limit, bool) or not isinstance(format_limit, int) or format_limit < 1:
-        raise ValueError("max_format_failures_without_valid_result 必须是正整数")
-    for name in ("max_evaluations", "limit_queries", "expand_limit"):
-        value = settings.get(name)
-        minimum = 0 if name == "limit_queries" else 1
-        if value is not None and (isinstance(value, bool) or not isinstance(value, int) or value < minimum):
-            raise ValueError(f"{name} 必须 >= {minimum}，或设为 null")
-    watermark = settings.get("pool_watermark", 20)
-    if isinstance(watermark, bool) or not isinstance(watermark, int) or watermark < 0:
-        raise ValueError("pool_watermark 必须是非负整数")
-    max_age = settings.get("pool_max_age_days", 7)
-    if isinstance(max_age, bool) or not isinstance(max_age, int) or max_age < 1:
-        raise ValueError("pool_max_age_days 必须是正整数")
-
-
-def _retryable(result: dict) -> bool:
-    return not result["ok"] and (
-        result.get("reason_code") == "NETWORK_ERROR"
-        or getattr(result.get("call"), "http_status", None) in RETRYABLE_STATUS
-    )
-
-
-def _unknown_usage_reserve(candidate, text, cfg, *, filter_rules=None) -> int:
-    """未返回 usage 的请求按输入 UTF-8 字节数＋最大输出＋消息余量预留预算。
-
-    这是偏保守的估算，不声称是接口的精确分词或账单；与已知 Token 分列。
-    """
-    system, material = build_prompt(
-        candidate, text, cfg["rules"], cfg["taxonomy"], filter_rules=filter_rules,
-    )
-    return (
-        len(system.encode("utf-8"))
-        + len(material.encode("utf-8"))
-        + 1024
-        + int(cfg["model"].get("limits", {}).get("max_output_tokens", 4000))
-    )
-
-
-
-def _record_static_observation(report: dict[str, Any], observation: dict[str, Any] | None) -> None:
-    """记录静态规则分级观察模式指标（纯统计，不改变排队与调用）。"""
-    if not observation:
-        return
-    sh = report.setdefault('static_heuristics', {
-        'version': STATIC_HEURISTIC_VERSION,
-        'observed_count': 0,
-        'tier_counts': {},
-        'signal_counts': {},
-        'suggested_actions': {},
-    })
-    sh['observed_count'] += 1
-    tier = observation.get('tier', 'unknown')
-    sh['tier_counts'][tier] = sh['tier_counts'].get(tier, 0) + 1
-    action = observation.get('suggested_action', 'unknown')
-    sh['suggested_actions'][action] = sh['suggested_actions'].get(action, 0) + 1
-    for sig in observation.get('signals', []):
-        sh['signal_counts'][sig] = sh['signal_counts'].get(sig, 0) + 1
-
-
-def find_normalized_candidate_record(
-    state: Any,
-    candidate: Any,
-    text: str,
-) -> tuple[dict | None, str | None]:
-    """在账本与历史评估中查找符合受限规范化复用条件的候选记录。
-
-    严格遵循 P4 契约：
-    1. 首版仅支持换行编码等价（CRLF / CR -> LF）；
-    2. 无可信辅助指纹时不反推历史辅助指纹；
-    3. 严格核对规则版本、模型配置版本、完成态及无未知用量；
-    4. 重新核验初评与复核中引用的全部原文证据。
-    """
-    if 'models' in state.cfg['model']:
-        return None, 'pool_cache_requires_explicit_model'
-    current_norm_fp = getattr(candidate, "normalized_content_fingerprint", None) or normalized_content_fingerprint(text)
-    if not current_norm_fp:
-        return None, "no_current_fingerprint"
-
-    # 构建/获取账本及历史评估索引
-    if not hasattr(state, "_skill_eval_records_index") or state._skill_eval_records_index is None:
-        index: dict[str, list[dict]] = {}
-        eval_dirs = []
-        if hasattr(state, "ledger") and hasattr(state.ledger, "evaluations_dir"):
-            eval_dirs.append(state.ledger.evaluations_dir)
-        root_eval_dir = state.root / "data" / "state" / "evaluations"
-        if root_eval_dir.exists() and root_eval_dir not in eval_dirs:
-            eval_dirs.append(root_eval_dir)
-        for ed in eval_dirs:
-            if ed.exists():
-                for p in ed.glob("*.json"):
-                    try:
-                        rec = json.loads(p.read_text(encoding="utf-8"))
-                        sid = rec.get("skill_id")
-                        if sid:
-                            index.setdefault(sid, []).append(rec)
-                    except Exception:
-                        continue
-        state._skill_eval_records_index = index
-
-    candidate_records = list(state._skill_eval_records_index.get(candidate.skill_id, []))
-    if not candidate_records:
-        return None, "no_history_records"
-
-    expected_rules_v = str(state.cfg.get("rules", {}).get("rules_version") or "")
-    expected_model_cfg_v = str(state.cfg.get("model", {}).get("model_config_version") or "")
-
-    last_rejection_reason = "no_matching_candidate"
-    for rec in candidate_records:
-        rec_norm_fp = rec.get("normalized_content_fingerprint")
-        if not rec_norm_fp:
-            docs = (rec.get("outcome") or {}).get("materials", {}).get("documents") or []
-            if docs and isinstance(docs, list) and isinstance(docs[0], dict):
-                rec_norm_fp = docs[0].get("normalized_fingerprint")
-
-        # 核心保证：不反推旧记录辅助指纹，无辅助指纹则不命中
-        if not rec_norm_fp or rec_norm_fp != current_norm_fp:
-            continue
-
-        ok, reason = inspect_record_for_normalized_reuse(
-            rec,
-            text,
-            expected_rules_version=expected_rules_v,
-            expected_model_config_version=expected_model_cfg_v,
-        )
-        if ok:
-            return rec, None
-        else:
-            last_rejection_reason = reason
-
-    return None, last_rejection_reason
+from .index import CatalogContext, build_catalog, index_by_id
+from .local_candidate import (
+    _evaluate_with_pool,
+    _evaluate_with_retries,
+    _record_request_usage,
+    _retryable,
+    _topic_evaluation_options,
+    _update_blocked,
+    find_normalized_candidate_record,
+    process_candidate,
+)
+from .local_state import (
+    DEFAULT_BATCH_REPO_LIMIT,
+    LocalCollection,
+    _read,
+    _record_static_observation,
+    _unknown_usage_reserve,
+    _valid_settings,
+    apply_result,
+    init_local_state,
+    save_and_render,
+)
+from .overrides import apply_manual_overrides_to_entry, get_manual_exclusions, get_manual_picks
+from .parallel import TwoCandidateScheduler
+from .pool import (
+    CandidatePool,
+    PoolItem,
+    STATUS_BLOCKED,
+    STATUS_DONE,
+    STATUS_LENGTH_EXCEEDED,
+    STATUS_PENDING as POOL_STATUS_PENDING,
+    append_new_candidates,
+    classify_pending_candidate,
+    create_pool_from_candidates,
+    is_pool_expired,
+    load_pool,
+    prioritize_pending_batch,
+    save_pool,
+    update_candidate_status,
+)
+from .prescreen import analyze_static_tier
+from .report import build_report, write_report
+from .snooze import get_active_snoozed
+from .store import catalog_task, mutate_catalog
 
 
 def prepare_pool(
@@ -396,1054 +207,6 @@ def prepare_pool(
     return pool
 
 
-def apply_result(
-    candidate: Any,
-    pres: Any,
-    outcome: dict | None = None,
-    upstream_status: str = "ok",
-    *,
-    entries: dict[str, dict],
-    context: CatalogContext,
-    manual_picks: dict,
-    manual_exclusions: dict,
-    active_snoozed: set[str],
-    root: Path,
-    cfg: dict,
-) -> dict:
-    """管道步骤 3：统一条目状态转移并原子持久化到目录。"""
-    outcome = outcome or {}
-    previous = entries.get(candidate.skill_id)
-    current_fp = getattr(candidate, "content_fingerprint", None)
-
-    if not outcome:
-        kind = "fetch_failed" if (pres and getattr(pres, "excluded", False)) or upstream_status != "ok" else "no_evaluation"
-    elif outcome.get("cached"):
-        kind = "cached_evaluation"
-    else:
-        kind = "fresh_evaluation"
-
-    event = EntryUpdateEvent(
-        kind=kind,
-        prescreen_result=pres,
-        evaluation=outcome.get("evaluation"),
-        decision=outcome if outcome.get("decision") else None,
-        upstream_status=upstream_status,
-        fetched_fingerprint=current_fp,
-        rules_version=cfg["rules"]["rules_version"],
-        model_config_version=cfg["model"].get("model_config_version", "1.0.0"),
-        evaluation_id=evaluation_id(candidate, cfg["model"], cfg["rules"]),
-        evaluated_at=outcome.get("evaluated_at"),
-    )
-    context.generated_at = now_local().isoformat()
-    entry = update_entry(
-        previous_entry=previous,
-        candidate=candidate,
-        event=event,
-        context=context,
-    )
-    apply_manual_overrides_to_entry(entry, manual_picks, manual_exclusions)
-    apply_snooze_overrides([entry], active_snoozed)
-    entries[candidate.skill_id] = entry
-
-    mutate_catalog(root, lambda current: build_catalog(list(entries.values()), context=context, favorites=cfg.get("favorites"), overrides=cfg.get("overrides"), snoozed=cfg.get("snoozed"), owned=cfg.get("owned")))
-    return entry
-
-
-def save_and_render(
-    run_dir: Path,
-    local: Path,
-    report: dict,
-    pool: Any,
-    usage: UsageTotals,
-    settings: dict,
-    entries: dict[str, dict],
-    old_recommended: set[str],
-    *,
-    context: CatalogContext | None = None,
-    baseline: dict | None = None,
-    dirty: bool = False,
-    run_id: str = "",
-    cfg: dict | None = None,
-    owned_ids: set[str] | None = None,
-    active_snoozed: set[str] | None = None,
-    manual_exclusions: set[str] | dict | None = None,
-    discovery_state: Any = None,
-) -> None:
-    """管道步骤 4：落盘运行报告、可读 Markdown 以及目录差异报告。"""
-    report["usage"] = usage.snapshot()
-    report["budget_tokens"] = usage.total_tokens + report.get("unknown_usage_reserved_tokens", 0)
-    report["updated_at"] = now_local().isoformat()
-    owned_set = owned_ids or set()
-    report["recommendations"] = [
-        {key: e.get(key) for key in ("skill_id", "name", "url", "summary_zh", "main_category")}
-        for sid, e in entries.items()
-        if sid not in old_recommended and e.get("status") == STATUS_RECOMMENDED and not e.get("needs_review") and not e.get("manual_pick") and not is_skill_owned(sid, owned_set)
-    ]
-    report["new_recommended"] = len(report["recommendations"])
-    from src.shared.metrics import build_run_metrics
-    report["metrics"] = build_run_metrics(report, kind="catalog")
-    if pool is not None:
-        report["pool_stats"] = pool.stats()
-        actionable_count, skip_breakdown = pool.count_actionable(
-            active_snoozed or set(),
-            manual_exclusions or set(),
-            owned_set,
-        )
-        report["pending_breakdown"] = {
-            "total_pending": pool.pending_count,
-            "actionable": actionable_count,
-            "snoozed": skip_breakdown.get("snoozed", 0),
-            "manual_excluded": skip_breakdown.get("manual_excluded", 0),
-            "owned": skip_breakdown.get("owned", 0),
-        }
-    if discovery_state is not None:
-        report["discovery_summary"] = {
-            "schema_version": discovery_state.schema_version,
-            "total_repositories_known": len(discovery_state.repository_index),
-            "total_repositories_processed": sum(1 for r in discovery_state.repository_index.values() if r.get("processed")),
-            "unassigned_repositories_count": len(discovery_state.unassigned_repositories),
-            "query_cursors_total": len(discovery_state.query_cursors),
-            "query_cursors_exhausted": sum(1 for c in discovery_state.query_cursors.values() if c.get("exhausted")),
-            "expansion_rounds": len(discovery_state.expansion_history),
-            "failed_repositories": [k for k, r in discovery_state.repository_index.items()
-                                    if not r.get("expanded") and r.get("expand_error")],
-        }
-        report["batches"] = {
-            "active_batch": discovery_state.active_batch,
-            "completed_batches_count": len(discovery_state.completed_batches),
-            "completed_batches": [
-                {
-                    "batch_id": b.get("batch_id"),
-                    "batch_seq": b.get("batch_seq"),
-                    "repositories_count": len(b.get("repositories", [])),
-                    "skills_count": len(b.get("skill_ids", [])),
-                    "stage": b.get("stage"),
-                }
-                for b in discovery_state.completed_batches
-            ],
-        }
-        report["expansion_history"] = discovery_state.expansion_history
-    write_json_atomic(run_dir / "report.json", report)
-    write_json_atomic(local / "latest-run.json", report)
-
-    lines = [
-        "# 本地运行报告",
-        "",
-        f"- 运行：{run_id}",
-        f"- 状态：{STOP_LABELS.get(report.get('stop_reason'), '运行中')}",
-    ]
-    if pool is not None:
-        pst = pool.stats()
-        pbd = report.get("pending_breakdown", {})
-        if pbd:
-            lines.append(
-                f"- 候选池：共 {pst['total']} 条，待处理 {pst['pending']} 条"
-                f"（有效可处理 {pbd.get('actionable', 0)} 条，冷冻 {pbd.get('snoozed', 0)} 条，"
-                f"排除 {pbd.get('manual_excluded', 0)} 条，已收录 {pbd.get('owned', 0)} 条；"
-                f"已完成 {pst['done']}，排除 {pst['excluded']}，抓取失败 {pst['fetch_failed']}，非技能 {pst['not_skill']}，超长跳过 {pst['length_exceeded']}，已阻止 {pst['blocked']}）"
-            )
-        else:
-            lines.append(
-                f"- 候选池：共 {pst['total']} 条，待处理 {pst['pending']} 条"
-                f"（已完成 {pst['done']}，排除 {pst['excluded']}，抓取失败 {pst['fetch_failed']}，非技能 {pst['not_skill']}，超长跳过 {pst['length_exceeded']}，已阻止 {pst['blocked']}）"
-            )
-    if discovery_state is not None:
-        ds = report.get("discovery_summary", {})
-        lines.append(
-            f"- 仓库批次：已知仓库 {ds.get('total_repositories_known', 0)} 个，已处理 {ds.get('total_repositories_processed', 0)} 个，待分配队列 {ds.get('unassigned_repositories_count', 0)} 个；已完成批次 {len(discovery_state.completed_batches)} 个"
-        )
-        if discovery_state.active_batch:
-            ab = discovery_state.active_batch
-            lines.append(f"- 活动批次：{ab.get('batch_id')}（阶段：{ab.get('stage')}，仓库数：{len(ab.get('repositories', []))}）")
-        if discovery_state.expansion_history:
-            lines.append(f"- 检索扩词：已执行 {len(discovery_state.expansion_history)} 轮分类内关键词扩展")
-    if report.get("skipped_owned"):
-        lines.append(f"- 已收录跳过：{report['skipped_owned']}")
-    if report.get('models_used'):
-        lines.append('- 实际请求模型：' + '、'.join(report['models_used']))
-    lines.append(f"- 超长跳过候选：{report.get('skipped_length_exceeded', 0)} 条（超过单条输出 Token 上限）")
-    lines.extend([
-        f"- 本次新增推荐：{report['new_recommended']} / {settings['target_recommended']}",
-        f"- 评估次数：{report['evaluations']}；复用已有评估：{report['cached']}",
-    ])
-    if report.get("cache_observation"):
-        c_obs = report["cache_observation"]
-        status_text = "已启用" if c_obs.get("enabled") else "观察模式"
-        lines.append(
-            f"- 规范化缓存：潜在命中 {c_obs.get('potential_hits', 0)} 条，实际复用 {c_obs.get('actual_reused', 0)} 条（{status_text}）"
-        )
-    lines.extend([
-        f"- 请求次数（含重试）：{usage.requests}；失败请求：{report['failed_requests']}",
-        f"- 已知输入 Token：{usage.prompt_tokens:,}",
-        f"- 已知输出 Token：{usage.completion_tokens:,}",
-        f"- 已知总 Token：{usage.total_tokens:,} / {settings['max_total_tokens']:,}",
-        f"- 未知用量预留预算：{report.get('unknown_usage_reserved_tokens', 0):,} Token（估算，不是实际用量）",
-        f"- 预算占用合计：{report['budget_tokens']:,} Token",
-        f"- 推理 Token：{usage.reasoning_tokens:,}（已包含在输出内）",
-        f"- 用量未知请求：{usage.unknown_usage_requests}",
-        f"- 分项不完整请求：{usage.incomplete_breakdown_requests}",
-        "",
-        "未知用量按输入字节数＋最大输出＋消息余量预留预算；这不是精确计费。Token 上限在每次请求结束后检查。金额以服务商账单为准。",
-        "",
-        "## 本次新增推荐",
-        "",
-    ])
-    for item in report["recommendations"]:
-        name = str(item["name"] or item["skill_id"]).replace("[", "（").replace("]", "）").replace("\n", " ")
-        summary = str(item["summary_zh"] or "").replace("\n", " ")
-        lines.append(f"- [{name}]({item['url']})：{summary}")
-    write_text_atomic(run_dir / "report.md", "\n".join(lines) + "\n")
-
-    if dirty and context is not None and baseline is not None:
-        changes = build_report(
-            build_catalog(list(entries.values()), context=context, overrides=(cfg or {}).get("overrides"), snoozed=(cfg or {}).get("snoozed"), owned=(cfg or {}).get("owned")),
-            previous_catalog=baseline,
-            run_meta={"usage": usage.snapshot(), "run_id": run_id},
-        )
-        write_report(changes, json_path=run_dir / "changes.json", markdown_path=run_dir / "changes.md")
-
-
-@catalog_task
-def run_local(
-    root: Path,
-    settings: dict,
-    *,
-    cfg=None,
-    discover_fn=discover,
-    search_fn=github_search,
-    expand_fn=list_skill_paths,
-    fetch_fn=fetch_text,
-    evaluate_fn=evaluate,
-    log=print,
-    sleep=time.sleep,
-) -> dict:
-    """每个候选本轮最多处理一次；每次模型响应后立即保存用量、记录与页面数据。"""
-    _valid_settings(settings)
-    root = Path(root).resolve()
-    project_root = Path(__file__).resolve().parents[2].resolve()
-    if root == project_root and is_test_environment():
-        raise RuntimeError(
-            "测试环境中禁止直接写入工程生产 data/local 目录！"
-            "请在测试用例中显式提供临时隔离目录（如 tempfile.TemporaryDirectory）。"
-        )
-    cfg = deepcopy(cfg if cfg is not None else load_all_config(root / "config"))
-    problems = precheck(cfg)
-    if not resolve_api_key(cfg["model"]):
-        problems.append("缺少模型 API Key，请设置 config/model.local.json 或对应环境变量")
-    if problems:
-        raise ValueError("；".join(problems))
-    # 在本地外层逐次重试并落账；底层禁用嵌套重试，避免 6×6 次请求。
-    if "models" not in cfg["model"]:
-        cfg["model"].setdefault("request", {})["max_attempts"] = 1
-    local = root / "data" / "local"
-    local.mkdir(parents=True, exist_ok=True)
-    lock = local / "run.lock"
-    try:
-        fd = os.open(str(lock), os.O_CREAT | os.O_EXCL | os.O_WRONLY)
-    except FileExistsError as exc:
-        raise ValueError("已有本地任务或上次强制终止留下 run.lock；确认旧进程退出后才能移除该锁") from exc
-    with os.fdopen(fd, "w") as handle:
-        handle.write(str(os.getpid()))
-    try:
-        return _collect(root, local, settings, cfg, discover_fn, fetch_fn, evaluate_fn, log, sleep, search_fn=search_fn, expand_fn=expand_fn)
-    finally:
-        lock.unlink(missing_ok=True)
-
-
-@dataclass
-class LocalCollection:
-    """Facts and injected dependencies for one local collection; never shared globally."""
-    root: Any
-    local: Any
-    settings: Any
-    cfg: Any
-    discover_fn: Any
-    fetch_fn: Any
-    evaluate_fn: Any
-    log: Any
-    sleep: Any
-    run_id: Any
-    run_dir: Any
-    usage: Any
-    report: Any
-    ledger: Any
-    context: Any
-    entries: Any
-    old_recommended: Any
-    baseline: Any
-    active_snoozed: Any
-    manual_exclusions: Any
-    manual_picks: Any
-    pool_path: Any
-    pool: Any
-    dirty: Any
-    consecutive_failures: Any
-    active_eid: Any
-    active_call: Any
-    unknown_reserve: Any
-    max_attempts: Any
-    max_retries: Any
-    pending_items: Any
-    owned_ids: Any
-    skipped_owned_ids: Any
-    format_failures: int = 0
-    max_format_failures: int = 10
-    stop_causes: set = field(default_factory=set)
-    _skill_eval_records_index: Any = None
-    evaluated_skill_ids: set[str] = field(default_factory=set)
-    search_fn: Any = None
-    expand_fn: Any = None
-    discovery_state: Any = None
-    batch_materials: dict = field(default_factory=dict)
-
-    def save(self):
-        save_and_render(self.run_dir, self.local, self.report, self.pool, self.usage,
-            self.settings, self.entries, self.old_recommended, context=self.context,
-            baseline=self.baseline, dirty=self.dirty, run_id=self.run_id,
-            cfg=self.cfg, owned_ids=self.owned_ids, active_snoozed=self.active_snoozed,
-            manual_exclusions=self.manual_exclusions, discovery_state=self.discovery_state)
-
-    def publish(self, candidate, pres, outcome=None, upstream_status="ok"):
-        apply_result(candidate, pres, outcome, upstream_status=upstream_status,
-            entries=self.entries, context=self.context, manual_picks=self.manual_picks,
-            manual_exclusions=self.manual_exclusions, active_snoozed=self.active_snoozed,
-            root=self.root, cfg=self.cfg)
-        self.dirty = True
-
-def _record_request_usage(state, call, *, retryable):
-    """真实回调和单次适配器共用记账与未知用量策略。"""
-    unknown_before = state.usage.unknown_usage_requests
-    state.active_call['usage'] = state.usage.add(call)
-    reserved = (state.usage.unknown_usage_requests - unknown_before) * state.unknown_reserve
-    state.report['unknown_usage_reserved_tokens'] += reserved
-    state.active_call['unknown_usage_reserved_tokens'] = reserved
-    state.active_call['diagnostics'] = {
-        'error_type': getattr(call, 'error_type', None),
-        'http_status': getattr(call, 'http_status', None),
-        'latency_ms': getattr(call, 'latency_ms', None),
-    }
-    # 网络/临时 HTTP 失败仍是未知用量，但允许在估算预算与尝试额度内重试。
-    # 非重试结果缺账单（含截断/格式错误）继续停机保护。
-    if (state.active_call['usage']['total_tokens'] is None
-            and (not retryable or getattr(call, 'reason_code', None) == 'RESPONSE_EMPTY')
-            and getattr(call, 'billing_state', None) != 'rejected_before_inference'):
-        state.stop_causes.add(STOP_USAGE_UNKNOWN)
-        state.report['stop_reason'] = resolve_primary_stop_reason(state.stop_causes)
-
-
-def _topic_evaluation_options(state, candidate):
-    filter_rules = state.cfg.get("filter_rules")
-    if eligible_for_topic_filter(
-        filter_rules, state.entries.get(candidate.skill_id),
-        previously_evaluated=candidate.skill_id in state.evaluated_skill_ids,
-    ):
-        return {"filter_rules": filter_rules}
-    return {}
-
-
-def _evaluate_with_pool(state, candidate, text, eid, record):
-    """Account each physical request while preserving the stable candidate ledger ID."""
-    from src.infra.model_pool import PoolStopped, PoolReselect
-    state.active_eid = eid
-    observed = []
-    def on_request(event, stage, request_call):
-        if event == 'before':
-            if state.report.get('stop_reason'):
-                raise PoolStopped(state.report['stop_reason'])
-            if not state.model_pool.model_available(request_call['requested_model']):
-                raise PoolReselect()
-            reserve = request_call['reserved_tokens']
-            # Callback is serialized by TwoCandidateScheduler when parallel.
-            others = sum(c.get('reserved_tokens', 0) for c in state.report['calls']
-                         if c.get('reservation_state') == 'active')
-            if state.report['budget_tokens'] + others + reserve > state.settings['max_total_tokens']:
-                raise PoolStopped('token_limit')
-            state.unknown_reserve = reserve
-            state.active_call = {'skill_id': candidate.skill_id, 'logical_task_id': eid,
-                'state': 'started', 'status': 'in_progress', 'usage': None,
-                'reservation_state': 'active', **request_call}
-            state.report['calls'].append(state.active_call)
-            checkpoint = state.ledger.get(eid)
-            checkpoint['status'] = 'in_progress'
-            checkpoint.setdefault('requests', []).append(dict(state.active_call))
-            try:
-                state.ledger.save_record(eid, checkpoint)
-                state.save()
-            except OSError as exc:
-                state.active_call.update(state='not_sent', status='not_sent', reservation_state='released')
-                state.active_eid = None
-                raise PoolStopped('storage_error', str(exc)) from exc
-            return True
-        decision = classify_result({'ok': request_call.ok, 'call': request_call})
-        _record_request_usage(state, request_call, retryable=decision.retryable)
-        call = state.active_call
-        rejected = getattr(request_call, 'billing_state', None) == 'rejected_before_inference'
-        if not rejected and not request_call.ok:
-            state.report['failed_requests'] += 1
-        call.update(state='received' if request_call.ok else 'error',
-            status='completed' if request_call.ok else 'failed',
-            reservation_state='settled' if rejected or call['usage']['total_tokens'] is not None else 'unknown',
-            billing_state=getattr(request_call, 'billing_state', None),
-            raw_usage=getattr(request_call, 'usage', None),
-            provider_error_code=getattr(request_call, 'provider_error_code', None),
-            returned_model=getattr(request_call, 'returned_model', None),
-            response={k: getattr(request_call, k, None) for k in
-                      ('ok', 'content', 'reason_code', 'http_status', 'finish_reason', 'error')})
-        used = state.report.setdefault('models_used', [])
-        if request_call.attempts and request_call.requested_model not in used:
-            used.append(request_call.requested_model)
-        checkpoint = state.ledger.get(eid)
-        checkpoint['requests'][-1] = dict(call)
-        # A known rejection is safe to resume even if the process dies before rotation.
-        checkpoint['status'] = 'reserved' if rejected else 'in_progress'
-        checkpoint['last_request_model'] = request_call.requested_model
-        observed.append(request_call)
-        try:
-            state.ledger.save_record(eid, checkpoint)
-            state.save()
-        except OSError as exc:
-            state.model_pool.failure = 'storage_error'
-            raise PoolStopped('storage_error', str(exc)) from exc
-    result = state.evaluate_fn(candidate, text, model_cfg=state.cfg['model'],
-        rules=state.cfg['rules'], taxonomy=state.cfg['taxonomy'], sleep=state.sleep,
-        on_request=on_request, pending_evaluation=record.get('pending_evaluation'),
-        model_pool=state.model_pool, pool_max_attempts=state.max_attempts,
-        **_topic_evaluation_options(state, candidate))
-    checkpoint = state.ledger.get(eid)
-    if result.get('pool_stop'):
-        if all(getattr(c, 'billing_state', None) == 'rejected_before_inference' for c in observed):
-            state.report['evaluations'] -= 1
-        requests = checkpoint.get('requests', [])
-        if state.active_call and state.active_call.get('state') == 'not_sent' and requests:
-            requests[-1] = dict(state.active_call)
-        unsettled = any(c.get('state') in ('started', 'unknown') for c in requests)
-        unsafe_storage = result['pool_stop'] == 'storage_error' and any(
-            getattr(c, 'billing_state', None) != 'rejected_before_inference' for c in observed)
-        own_unknown_usage = recompute_usage_from_calls(requests).unknown_usage_requests
-        checkpoint['status'] = 'needs_recovery' if (own_unknown_usage or unsettled or unsafe_storage
-                                                    or result['pool_stop'] == 'quota_response_conflict') else 'reserved'
-        if state.usage.unknown_usage_requests:
-            state.stop_causes.add(STOP_USAGE_UNKNOWN)
-        checkpoint['pause_reason'] = result['pool_stop']
-        state.stop_causes.add(result['pool_stop'])
-        state.report['stop_reason'] = resolve_primary_stop_reason(state.stop_causes)
-    else:
-        checkpoint['attempts'] = int(checkpoint.get('attempts') or 0) + 1
-        if not result['ok']:
-            checkpoint['retry_exhausted'] = classify_result(result).retryable
-            checkpoint.update(status='failed', error={'reason_code': result.get('reason_code'),
-                                                     'message': result.get('error')})
-    state.ledger.save_record(eid, checkpoint)
-    state.active_eid = None
-    return result
-
-
-def _evaluate_with_retries(state, candidate, text, eid, record):
-    from src.infra.model_pool import EMPTY_RESPONSE_MAX_ATTEMPTS
-    if getattr(state, "model_pool", None) is not None:
-        return _evaluate_with_pool(state, candidate, text, eid, record)
-    resume_error = validate_pending_evaluation(candidate, text, state.cfg['rules'],
-                                               state.cfg['taxonomy'], record.get('pending_evaluation'))
-    if resume_error:
-        state.ledger.fail(eid, resume_error['reason_code'], resume_error['error'])
-        checkpoint = state.ledger.get(eid)
-        checkpoint.update(error_kind=resume_error['error_kind'], stage='resume', retryable=False)
-        state.ledger.save_record(eid, checkpoint)
-        return resume_error
-    result = None
-    empty_attempts = 0
-    attempt_limit = int(record.get('max_attempts') or state.max_attempts)
-    initial_attempts = int(record.get('attempts') or 0)
-    for index in range(initial_attempts, attempt_limit):
-        if hasattr(state, 'wait_for_budget') and not state.wait_for_budget():
-            break
-        if state.report['budget_tokens'] >= state.settings['max_total_tokens']:
-            state.stop_causes.add(STOP_TOKEN_LIMIT)
-            state.report['stop_reason'] = resolve_primary_stop_reason(state.stop_causes)
-            break
-        if index and (not record.get('pending_evaluation') or index > initial_attempts):
-            delay = min(2 ** (index - 1), 8)
-            state.log(f'重连 {index}/{state.max_retries}：{candidate.name}，{delay} 秒后重试。')
-            state.sleep(delay)
-        attempt = state.ledger.begin_attempt(eid)
-        state.active_eid = eid
-        state.active_call = {'skill_id': candidate.skill_id, 'attempt': attempt, 'max_attempts': attempt_limit, 'status': 'in_progress', 'usage': None}
-        state.report['calls'].append(state.active_call)
-        state.save()
-        observed = []
-
-        def on_request(event, stage, request_call):
-            if event == 'before':
-                if stage == 'review':
-                    if state.report.get('stop_reason'):
-                        return False
-                    if state.report['budget_tokens'] >= state.settings['max_total_tokens']:
-                        state.stop_causes.add(STOP_TOKEN_LIMIT)
-                        state.report['stop_reason'] = resolve_primary_stop_reason(state.stop_causes)
-                        return False
-                    if observed:
-                        state.active_call = {'skill_id': candidate.skill_id, 'attempt': attempt,
-                            'max_attempts': attempt_limit, 'status': 'in_progress', 'usage': None}
-                        state.report['calls'].append(state.active_call)
-                state.active_call['stage'] = stage
-                checkpoint = state.ledger.get(eid)
-                checkpoint.setdefault('requests', []).append(dict(state.active_call))
-                state.ledger.save_record(eid, checkpoint)
-                state.save()
-                return True
-            request_decision = classify_result({'ok': request_call.ok, 'call': request_call,
-                                                'reason_code': request_call.reason_code})
-            _record_request_usage(state, request_call, retryable=request_decision.retryable)
-            state.active_call['status'] = 'completed' if request_call.ok else 'failed'
-            if getattr(request_call, 'reason_code', None) == REASON_LENGTH_EXCEEDED:
-                state.active_call.update(status=STATUS_LENGTH_EXCEEDED,
-                                         reason_code=REASON_LENGTH_EXCEEDED, is_sample_error=True)
-            checkpoint = state.ledger.get(eid)
-            checkpoint['requests'][-1] = dict(state.active_call)
-            state.ledger.save_record(eid, checkpoint)
-            observed.append(request_call)
-            state.save()
-
-        result = state.evaluate_fn(
-            candidate, text, model_cfg=state.cfg['model'], rules=state.cfg['rules'],
-            taxonomy=state.cfg['taxonomy'], sleep=state.sleep, on_request=on_request,
-            pending_evaluation=record.get('pending_evaluation'),
-            **_topic_evaluation_options(state, candidate),
-        )
-        call = result.get('call')
-        key = resolve_api_key(state.cfg['model'])
-        if key and result.get('error'):
-            result['error'] = str(result['error']).replace(key, '[REDACTED]')
-        decision = classify_result(result)
-        if not observed and call is not None:
-            # 兼容单次评估适配器；生产评估逐请求即时落账。
-            _record_request_usage(state, call, retryable=decision.retryable)
-        if state.active_call:
-            state.active_call['stage'] = result.get('stage') or state.active_call.get('stage')
-            state.active_call['status'] = (STATUS_LENGTH_EXCEEDED
-                if decision.is_length_exceeded
-                else 'completed' if result['ok'] else 'failed')
-            if decision.is_length_exceeded:
-                state.active_call['reason_code'] = REASON_LENGTH_EXCEEDED
-                state.active_call['is_sample_error'] = True
-            elif decision.is_format_error:
-                state.active_call['reason_code'] = decision.reason_code
-                state.active_call['error_kind'] = decision.error_kind
-                state.active_call['is_sample_error'] = True
-            elif not result['ok']:
-                state.active_call['reason_code'] = decision.reason_code
-                state.active_call['error_kind'] = decision.error_kind
-        state.save()
-        if result.get('pending_evaluation'):
-            checkpoint = state.ledger.get(eid)
-            checkpoint.update(status='reserved', pending_evaluation=result['pending_evaluation'],
-                              max_attempts=(attempt_limit if checkpoint.get('resume_history') else
-                                            max(int(checkpoint.get('max_attempts') or 0), state.max_attempts + 1)))
-            state.ledger.save_record(eid, checkpoint)
-            if state.active_call:
-                state.active_call['status'] = 'completed'
-            state.active_eid = None
-            break
-        if result['ok']:
-            break
-        code = result.get('reason_code') or decision.reason_code or 'MODEL_ERROR'
-        if code == 'RESPONSE_EMPTY':
-            empty_attempts += 1
-        diagnostic = state.active_call.get('diagnostics', {}) if state.active_call else {}
-        details = [code]
-        if result.get('error_kind'):
-            details.append(result['error_kind'])
-        if result.get('error'):
-            err_str = str(result['error']).strip().replace('\r', '').replace('\n', ' ')
-            if len(err_str) > 160:
-                err_str = err_str[:157] + '...'
-            details.append(err_str)
-        if diagnostic.get('error_type'):
-            details.append(diagnostic['error_type'])
-        if diagnostic.get('http_status') is not None:
-            details.append(f"HTTP {diagnostic['http_status']}")
-        if diagnostic.get('latency_ms') is not None:
-            details.append(f"耗时 {diagnostic['latency_ms'] / 1000:.1f} 秒")
-        message = '；'.join(details)
-        state.ledger.fail(eid, code, message)
-        failure_record = state.ledger.get(eid)
-        failure_record['retryable'] = decision.retryable
-        if result.get('error_kind'):
-            failure_record['error_kind'] = result.get('error_kind')
-        if result.get('stage'):
-            failure_record['stage'] = result.get('stage')
-        if result.get('error'):
-            failure_record['error_detail'] = str(result.get('error'))
-        state.ledger.save_record(eid, failure_record)
-        state.active_eid = None
-        if state.active_call:
-            state.active_call['reason_code'] = code
-        if decision.is_length_exceeded:
-            if state.active_call:
-                state.active_call['status'] = STATUS_LENGTH_EXCEEDED
-                state.active_call['is_sample_error'] = True
-            state.save()
-            break
-        if decision.is_format_error:
-            # 格式异常为样本异常，不触发服务重连
-            state.save()
-            break
-        if decision.stop_cause in (STOP_ACCESS_DENIED, STOP_RESUME_STATE_INVALID, STOP_REQUEST_CONFIG_ERROR):
-            state.stop_causes.add(decision.stop_cause)
-            state.report['stop_reason'] = resolve_primary_stop_reason(state.stop_causes)
-            state.save()
-            break
-        state.report['failed_requests'] += 1
-        state.save()
-        state.log(f'请求失败：{candidate.name}；{message}。')
-        if empty_attempts >= EMPTY_RESPONSE_MAX_ATTEMPTS:
-            break
-        if not decision.retryable or state.report['stop_reason']:
-            break
-    return result
-
-
-def _update_blocked(pool, seq: int, block_info: dict) -> None:
-    """把候选池条目推进为 blocked 状态并记录阻止元数据。"""
-    item = next((it for it in pool.items if it.seq == seq), None)
-    if item is not None:
-        item.block_info = block_info
-    update_candidate_status(pool, seq, STATUS_BLOCKED)
-
-
-def process_candidate(state, item):
-    candidate = item.candidate
-    seq = item.seq
-    if is_skill_owned(candidate.skill_id, state.owned_ids):
-        state.skipped_owned_ids.add(candidate.skill_id)
-        state.report["skipped_owned"] = len(state.skipped_owned_ids)
-        return True
-    if candidate.skill_id in state.active_snoozed:
-        return True
-    if candidate.skill_id in state.manual_exclusions:
-        return True
-    if state.report.get('stop_reason'):
-        return False
-    if state.report['new_recommended'] >= state.settings['target_recommended']:
-        state.stop_causes.add(STOP_TARGET_REACHED)
-        state.report['stop_reason'] = resolve_primary_stop_reason(state.stop_causes)
-        return False
-    if state.report['budget_tokens'] >= state.settings['max_total_tokens']:
-        state.stop_causes.add(STOP_TOKEN_LIMIT)
-        state.report['stop_reason'] = resolve_primary_stop_reason(state.stop_causes)
-        return False
-    if state.settings.get('max_evaluations') and state.report['evaluations'] >= state.settings['max_evaluations']:
-        state.stop_causes.add(STOP_EVALUATION_LIMIT)
-        state.report['stop_reason'] = resolve_primary_stop_reason(state.stop_causes)
-        return False
-    state.report['checked'] += 1
-    if candidate.path.split('/')[-1] != 'SKILL.md':
-        state.report['not_skill_files'] += 1
-        update_candidate_status(state.pool, seq, STATUS_NOT_SKILL)
-        save_pool(state.pool_path, state.pool)
-        return True
-    pres = prescreen(candidate, state.cfg['prescreen'], None)
-    if pres.excluded:
-        _record_static_observation(state.report, pres.static_observation)
-        state.report['prescreen_excluded'] += 1
-        state.publish(candidate, pres)
-        update_candidate_status(state.pool, seq, POOL_STATUS_EXCLUDED)
-        save_pool(state.pool_path, state.pool)
-        state.save()
-        return True
-    state.log(f"检查 #{seq}（本轮进度 {state.report['checked']}/{len(state.pending_items)}，全池 {len(state.pool)}）：{candidate.skill_id}")
-    if '/blob/' not in candidate.url:
-        candidate.url = f'https://github.com/{candidate.owner}/{candidate.repo}/blob/HEAD/{candidate.path}'
-    if hasattr(state, 'batch_materials') and candidate.skill_id in state.batch_materials:
-        fetched = state.batch_materials[candidate.skill_id]
-    else:
-        url = candidate.url.replace('https://github.com/', 'https://raw.githubusercontent.com/', 1).replace('/blob/', '/', 1)
-        fetched = state.fetch_fn(url, sleep=state.sleep, max_bytes=material_fetch_limit(state.cfg['model']))
-    if not fetched.ok or not fetched.text or fetched.truncated or (not validate_document(candidate.path, fetched.text)[0]):
-        state.report['fetch_failed'] += 1
-        update_candidate_status(state.pool, seq, STATUS_FETCH_FAILED)
-        save_pool(state.pool_path, state.pool)
-        state.save()
-        return True
-    text = fetched.text
-    candidate.content_fingerprint = content_fingerprint(text)
-    candidate.normalized_content_fingerprint = normalized_content_fingerprint(text)
-    pres = prescreen(candidate, state.cfg['prescreen'], text)
-    _record_static_observation(state.report, pres.static_observation)
-    if pres.excluded:
-        state.report['prescreen_excluded'] += 1
-        state.publish(candidate, pres)
-        update_candidate_status(state.pool, seq, POOL_STATUS_EXCLUDED)
-        save_pool(state.pool_path, state.pool)
-        state.save()
-        return True
-    enable_static_skip = state.settings.get('enable_static_skip', False) or (state.cfg.get('rules', {}).get('static_heuristics', {}).get('enable_skip', False))
-    if should_static_skip(pres.static_observation, enable_static_skip):
-        state.report['static_skipped'] += 1
-        state.report.setdefault('static_heuristics', {}).setdefault('skipped_count', 0)
-        state.report['static_heuristics']['skipped_count'] += 1
-        state.log(f"跳过 #{seq}（静态规则明确空壳占位，不调用模型）：{candidate.skill_id}")
-        update_candidate_status(state.pool, seq, STATUS_STATIC_SKIPPED)
-        save_pool(state.pool_path, state.pool)
-        state.save()
-        return True
-    eid = evaluation_id(candidate, state.cfg['model'], state.cfg['rules'])
-    local_record = state.ledger.get(eid)
-    record = local_record or ({} if 'models' in state.cfg['model'] else
-        _read(state.root / 'data' / 'state' / 'evaluations' / evaluation_filename(eid), {}))
-    if candidate.skill_id in state.manual_picks:
-        outcome = record.get('outcome') or ({'decision': (state.entries.get(candidate.skill_id) or {}).get('status')} if candidate.skill_id in state.entries else None)
-        state.publish(candidate, pres, outcome=outcome)
-        update_candidate_status(state.pool, seq, STATUS_DONE)
-        save_pool(state.pool_path, state.pool)
-        state.save()
-        return True
-    if record.get('status') == 'completed':
-        state.report['cached'] += 1
-        cached_outcome = dict(record['outcome']) if isinstance(record['outcome'], dict) else {}
-        cached_outcome['cached'] = True
-        state.publish(candidate, pres, cached_outcome)
-        update_candidate_status(state.pool, seq, STATUS_DONE)
-        save_pool(state.pool_path, state.pool)
-        state.save()
-        return True
-
-    # 受限规范化缓存复用与观察检查 (Unit 9 / P4)
-    cache_obs = state.report.setdefault("cache_observation", {
-        "version": NORMALIZATION_VERSION,
-        "enabled": False,
-        "observed_count": 0,
-        "potential_hits": 0,
-        "actual_reused": 0,
-        "rejection_reasons": {},
-    })
-    enable_norm_cache = bool(
-        state.settings.get("enable_normalized_cache", False)
-        or state.cfg.get("rules", {}).get("cache", {}).get("enable_normalized_reuse", False)
-    )
-    cache_obs["enabled"] = enable_norm_cache
-
-    norm_record, norm_rejection = find_normalized_candidate_record(state, candidate, text)
-    if norm_record is not None:
-        cache_obs["observed_count"] += 1
-        cache_obs["potential_hits"] += 1
-        if enable_norm_cache:
-            cache_obs["actual_reused"] += 1
-            state.report["cached"] += 1
-            reuse_audit = create_reuse_audit(norm_record, text, exact_match=False)
-            reused_outcome = deepcopy(norm_record["outcome"]) if isinstance(norm_record["outcome"], dict) else {}
-            reused_outcome["cached"] = True
-            reused_outcome["reuse_audit"] = reuse_audit
-            reused_outcome["candidate"] = asdict(candidate)
-            reused_outcome["materials"] = primary_material_bundle(candidate, text, now_local().isoformat()).manifest()
-            if isinstance(reused_outcome.get("evaluation"), dict):
-                reused_outcome["evaluation"]["source_fingerprint"] = candidate.content_fingerprint
-            reused_outcome["normalized_content_fingerprint"] = candidate.normalized_content_fingerprint
-            reused_outcome["normalization_version"] = NORMALIZATION_VERSION
-            reused_outcome["output_contract_version"] = LLM_OUTPUT_CONTRACT_VERSION
-            reused_outcome["evaluated_at"] = now_local().isoformat()
-            state.ledger.reserve([{
-                "evaluation_id": eid,
-                "skill_id": candidate.skill_id,
-                "content_fingerprint": candidate.content_fingerprint,
-                "normalized_content_fingerprint": candidate.normalized_content_fingerprint,
-                "normalization_version": NORMALIZATION_VERSION,
-                "output_contract_version": LLM_OUTPUT_CONTRACT_VERSION,
-                "rules_version": state.cfg["rules"]["rules_version"],
-                "model_config_version": state.cfg["model"].get("model_config_version"),
-            }])
-            state.ledger.complete(eid, reused_outcome)
-            ledger_rec = state.ledger.get(eid)
-            if ledger_rec:
-                ledger_rec['normalized_content_fingerprint'] = candidate.normalized_content_fingerprint
-                ledger_rec['normalization_version'] = NORMALIZATION_VERSION
-                ledger_rec['output_contract_version'] = LLM_OUTPUT_CONTRACT_VERSION
-                state.ledger.save_record(eid, ledger_rec)
-                if hasattr(state, '_skill_eval_records_index') and state._skill_eval_records_index is not None:
-                    state._skill_eval_records_index.setdefault(candidate.skill_id, []).append(ledger_rec)
-            state.publish(candidate, pres, reused_outcome)
-            update_candidate_status(state.pool, seq, STATUS_DONE)
-            save_pool(state.pool_path, state.pool)
-            state.log(
-                f"[受限规范化复用] #{seq} {candidate.skill_id}：成功复用历史评估（来源：{norm_record.get('evaluation_id')}，版本：{NORMALIZATION_VERSION}），0 Token 消耗。"
-            )
-            state.save()
-            return True
-        else:
-            state.log(
-                f"[受限规范化观察] #{seq} {candidate.skill_id}：检测到潜在复用记录（来源：{norm_record.get('evaluation_id')}），观察模式下不阻断模型评估。"
-            )
-    elif norm_rejection and norm_rejection not in ("no_matching_candidate", "no_history_records", "no_current_fingerprint"):
-        cache_obs["observed_count"] += 1
-        reason_key = norm_rejection.split(":")[0]
-        cache_obs["rejection_reasons"][reason_key] = cache_obs["rejection_reasons"].get(reason_key, 0) + 1
-
-    if (record.get('error') or {}).get('reason_code') == REASON_LENGTH_EXCEEDED:
-        # 账本已落盘而候选池写入前中断时，补齐终态，不再付费重试。
-        update_candidate_status(state.pool, seq, STATUS_LENGTH_EXCEEDED)
-        save_pool(state.pool_path, state.pool)
-        state.report['skipped_length_exceeded'] += 1
-        state.report['reconciled_blocked'] += 1
-        state.save()
-        return True
-    effective_attempt_limit = (int(record.get('max_attempts') or state.max_attempts)
-                               if record.get('resume_history') else state.max_attempts)
-    resumable_failure = bool(local_record and not record.get('retry_exhausted') and record.get('status') == 'failed' and ((record.get('error') or {}).get('reason_code') == 'NETWORK_ERROR' or record.get('retryable')) and (int(record.get('attempts') or 0) < effective_attempt_limit))
-    if record.get('status') in ('failed', 'in_progress', 'needs_recovery') and (not resumable_failure):
-        reason = 'NON_RETRYABLE_FAILURE' if record.get('status') == 'failed' else 'UNKNOWN_IN_PROGRESS'
-        block_info = {
-            'evaluation_id': eid,
-            'reason': reason,
-            'reason_code': (record.get('error') or {}).get('reason_code'),
-            'error_kind': (record.get('error') or {}).get('error_kind') or record.get('error_kind'),
-            'stage': record.get('stage'),
-            'http_status': (record.get('error') or {}).get('http_status'),
-            'blocked_at': now_local().isoformat(),
-            'source': 'local_ledger',
-            'model': state.cfg['model'].get('model'),
-            'model_config_version': state.cfg['model'].get('model_config_version'),
-        }
-        _update_blocked(state.pool, seq, block_info)
-        state.report['blocked_records'] += 1
-        state.report['reconciled_blocked'] += 1
-        save_pool(state.pool_path, state.pool)
-        state.log(f"[阻止] #{seq} {candidate.skill_id}：存在不可重试评估记录（{reason}），已持久化为 blocked，本次未调用模型。")
-        state.save()
-        return True
-    norm_fp = candidate.normalized_content_fingerprint or normalized_content_fingerprint(text)
-    if hasattr(state, 'wait_for_budget'):
-        state.unknown_reserve = _unknown_usage_reserve(
-            candidate, text, state.cfg, **_topic_evaluation_options(state, candidate),
-        )
-        if not state.wait_for_budget():
-            return False
-    state.ledger.reserve([{
-        'evaluation_id': eid,
-        'skill_id': candidate.skill_id,
-        'content_fingerprint': candidate.content_fingerprint,
-        'normalized_content_fingerprint': norm_fp,
-        'normalization_version': NORMALIZATION_VERSION,
-        'rules_version': state.cfg['rules']['rules_version'],
-        'model_config_version': state.cfg['model'].get('model_config_version'),
-    }])
-    record = state.ledger.get(eid) or {}
-    record['max_attempts'] = (int(record.get('max_attempts') or effective_attempt_limit)
-                             if record.get('resume_history')
-                             else state.max_attempts + int(bool(record.get('pending_evaluation'))))
-    state.ledger.save_record(eid, record)
-    state.report['evaluations'] += 1
-    state.log(f"评估 #{state.report['evaluations']}：{candidate.name}（累计 {state.usage.total_tokens:,} Token）")
-    state.unknown_reserve = _unknown_usage_reserve(
-        candidate, text, state.cfg, **_topic_evaluation_options(state, candidate),
-    )
-    result = None
-    result = _evaluate_with_retries(state, candidate, text, eid, record)
-    if result is None:
-        return False
-    decision = classify_result(result)
-    if decision.category == 'resource_pause':
-        state.stop_causes.add(decision.stop_cause)
-        state.report['stop_reason'] = resolve_primary_stop_reason(state.stop_causes)
-        state.active_eid = state.active_call = None
-        state.save()
-        return False
-    if result['ok']:
-        evaluation = result['evaluation']
-        filtered_decision = filter_new_evaluation(
-            decide(evaluation, state.cfg['rules']), evaluation, state.cfg.get("filter_rules"),
-            state.entries.get(candidate.skill_id),
-            previously_evaluated=candidate.skill_id in state.evaluated_skill_ids,
-        )
-        outcome = {
-            **filtered_decision,
-            'evaluation': evaluation,
-            'model': getattr(result.get('call'), 'requested_model', None),
-            'model_config_fingerprint': getattr(result.get('call'), 'model_config_fingerprint', None),
-            'materials': primary_material_bundle(candidate, text, now_local().isoformat()).manifest(),
-            'main_category': evaluation.get('main_category'),
-            'usage': state.active_call['usage'] if state.active_call else None,
-            'normalized_content_fingerprint': candidate.normalized_content_fingerprint,
-            'normalization_version': NORMALIZATION_VERSION,
-            'output_contract_version': LLM_OUTPUT_CONTRACT_VERSION,
-        }
-        if outcome.get("topic_filtered"):
-            topics = "、".join(outcome["blocked_topics"])
-            state.log(f"[主题屏蔽] #{seq} {candidate.skill_id}：主要用途属于 {topics}，不进入推荐或候选。")
-            state.report["topic_filtered"] = state.report.get("topic_filtered", 0) + 1
-        outcome['candidate'] = asdict(candidate)
-        outcome['request_usage'] = (state.ledger.get(eid) or {}).get('requests', [])
-        outcome['prescreen'] = asdict(pres)
-        outcome['evaluated_at'] = now_local().isoformat()
-        state.ledger.complete(eid, outcome)
-        state.evaluated_skill_ids.add(candidate.skill_id)
-        ledger_rec = state.ledger.get(eid)
-        if ledger_rec:
-            ledger_rec['normalized_content_fingerprint'] = candidate.normalized_content_fingerprint
-            ledger_rec['normalization_version'] = NORMALIZATION_VERSION
-            ledger_rec['output_contract_version'] = LLM_OUTPUT_CONTRACT_VERSION
-            state.ledger.save_record(eid, ledger_rec)
-            if hasattr(state, '_skill_eval_records_index') and state._skill_eval_records_index is not None:
-                state._skill_eval_records_index.setdefault(candidate.skill_id, []).append(ledger_rec)
-        if state.active_call:
-            state.active_call['decision'] = outcome['decision']
-        state.publish(candidate, pres, outcome)
-        state.consecutive_failures, state.format_failures = update_failure_counters(
-            result, decision, state.consecutive_failures, state.format_failures
-        )
-        update_candidate_status(state.pool, seq, STATUS_DONE)
-        save_pool(state.pool_path, state.pool)
-    elif decision.is_length_exceeded:
-        update_candidate_status(state.pool, seq, STATUS_LENGTH_EXCEEDED)
-        save_pool(state.pool_path, state.pool)
-        state.consecutive_failures, state.format_failures = update_failure_counters(
-            result, decision, state.consecutive_failures, state.format_failures
-        )
-        state.report['skipped_length_exceeded'] += 1
-        limit = state.cfg['model'].get('limits', {}).get('max_output_tokens', 4000)
-        state.log(f"[自动跳过] #{seq} {candidate.name}：输出达到 {limit} Token 上限，已保存 length_exceeded。")
-    elif decision.is_format_error:
-        block_info = {
-            'evaluation_id': eid,
-            'reason': decision.block_reason or 'OUTPUT_FORMAT_INVALID',
-            'reason_code': decision.reason_code,
-            'error_kind': decision.error_kind,
-            'stage': decision.stage,
-            'http_status': decision.http_status or 200,
-            'blocked_at': now_local().isoformat(),
-            'source': 'local_ledger',
-            'model': state.cfg['model'].get('model'),
-            'model_config_version': state.cfg['model'].get('model_config_version'),
-        }
-        if result.get('error'):
-            block_info['error_detail'] = str(result.get('error'))
-        _update_blocked(state.pool, seq, block_info)
-        save_pool(state.pool_path, state.pool)
-        state.consecutive_failures, state.format_failures = update_failure_counters(
-            result, decision, state.consecutive_failures, state.format_failures
-        )
-        state.report['skipped_output_format'] += 1
-        state.report['blocked_records'] += 1
-        state.report['blocked_new'] += 1
-        stage_desc = "复核" if decision.stage == "review" else "初评"
-        err_detail = f"：{result.get('error')}" if result.get('error') else ""
-        state.log(f"[格式异常] #{seq} {candidate.name}：{stage_desc}输出格式不合法（{decision.error_kind}{err_detail}），已保存 blocked（距上次有效结果累计 {state.format_failures}/{state.max_format_failures}）。")
-        if state.format_failures >= state.max_format_failures:
-            state.stop_causes.add(STOP_FORMAT_FAILURES)
-            state.log("[停止] 输出格式异常达到阈值，请检查模型与评估输出契约；后续候选未调用。")
-    elif decision.category == 'access_denied':
-        block_info = {
-            'evaluation_id': eid,
-            'reason': decision.block_reason or 'ACCESS_DENIED',
-            'reason_code': decision.reason_code,
-            'error_kind': decision.error_kind,
-            'stage': decision.stage,
-            'http_status': decision.http_status,
-            'blocked_at': now_local().isoformat(),
-            'source': 'local_ledger',
-            'model': state.cfg['model'].get('model'),
-            'model_config_version': state.cfg['model'].get('model_config_version'),
-        }
-        _update_blocked(state.pool, seq, block_info)
-        save_pool(state.pool_path, state.pool)
-        state.report['blocked_records'] += 1
-        state.report['blocked_new'] += 1
-        state.stop_causes.add(STOP_ACCESS_DENIED)
-        state.log(f"[停止] 访问认证或权限失败 (HTTP {decision.http_status})，已将本条标记 blocked 并终止运行。")
-    elif decision.category == 'resume_state_invalid':
-        block_info = {
-            'evaluation_id': eid,
-            'reason': decision.block_reason or 'RESUME_STATE_INVALID',
-            'reason_code': decision.reason_code,
-            'error_kind': decision.error_kind,
-            'stage': decision.stage,
-            'blocked_at': now_local().isoformat(),
-            'source': 'local_ledger',
-            'model': state.cfg['model'].get('model'),
-            'model_config_version': state.cfg['model'].get('model_config_version'),
-        }
-        _update_blocked(state.pool, seq, block_info)
-        save_pool(state.pool_path, state.pool)
-        state.report['blocked_records'] += 1
-        state.report['blocked_new'] += 1
-        state.stop_causes.add(STOP_RESUME_STATE_INVALID)
-        state.log(f"[停止] 恢复状态冲突：{result.get('error')}，已停止运行。")
-    elif decision.category == 'request_config_error':
-        block_info = {
-            'evaluation_id': eid,
-            'reason': decision.block_reason or 'REQUEST_CONFIG_ERROR',
-            'reason_code': decision.reason_code,
-            'error_kind': decision.error_kind,
-            'stage': decision.stage,
-            'http_status': decision.http_status,
-            'blocked_at': now_local().isoformat(),
-            'source': 'local_ledger',
-            'model': state.cfg['model'].get('model'),
-            'model_config_version': state.cfg['model'].get('model_config_version'),
-        }
-        _update_blocked(state.pool, seq, block_info)
-        save_pool(state.pool_path, state.pool)
-        state.report['blocked_records'] += 1
-        state.report['blocked_new'] += 1
-        state.stop_causes.add(STOP_REQUEST_CONFIG_ERROR)
-        state.log(f"[停止] 请求配置错误 (HTTP {decision.http_status})，已停止运行。")
-    elif not result.get('pending_evaluation'):
-        state.report['failed_evaluations'] += 1
-        state.consecutive_failures, state.format_failures = update_failure_counters(
-            result, decision, state.consecutive_failures, state.format_failures
-        )
-        if decision.retryable:
-            final_record = state.ledger.get(eid) or {}
-            if final_record.get('retry_exhausted') or int(final_record.get('attempts') or 0) >= int(final_record.get('max_attempts') or state.max_attempts):
-                _update_blocked(state.pool, seq, {
-                    'evaluation_id': eid, 'reason': 'RETRY_EXHAUSTED',
-                    'reason_code': result.get('reason_code'),
-                    'attempts': final_record.get('attempts'),
-                    'max_attempts': final_record.get('max_attempts'),
-                    'blocked_at': now_local().isoformat(), 'source': 'local_ledger',
-                })
-                save_pool(state.pool_path, state.pool)
-                state.report['blocked_records'] += 1
-                state.report['blocked_new'] += 1
-                state.log(f"[跳过] {candidate.skill_id} 重试次数已耗尽，继续下一个候选。")
-        else:
-            block_info = {
-                'evaluation_id': eid,
-                'reason': 'NON_RETRYABLE_FAILURE',
-                'reason_code': result.get('reason_code'),
-                'error_kind': result.get('error_kind'),
-                'stage': result.get('stage'),
-                'http_status': getattr(result.get('call'), 'http_status', None),
-                'blocked_at': now_local().isoformat(),
-                'source': 'local_ledger',
-                'model': state.cfg['model'].get('model'),
-                'model_config_version': state.cfg['model'].get('model_config_version'),
-            }
-            _update_blocked(state.pool, seq, block_info)
-            save_pool(state.pool_path, state.pool)
-            state.report['blocked_records'] += 1
-            state.report['blocked_new'] += 1
-            state.log(f"[阻止] #{seq} {candidate.skill_id}：评估失败且不可重试（{result.get('reason_code')}），已持久化为 blocked。")
-        if state.consecutive_failures >= state.settings['max_consecutive_failures']:
-            state.stop_causes.add(STOP_MODEL_FAILURES)
-    if (state.active_call and (state.active_call.get('usage') or {}).get('total_tokens') is None
-            and not decision.retryable
-            and state.active_call.get('billing_state') != 'rejected_before_inference'):
-        state.stop_causes.add(STOP_USAGE_UNKNOWN)
-        state.log("[停止] 当前响应用量未知；本条状态已保存，后续付费调用已停止。")
-    state.active_eid = state.active_call = None
-    state.report['format_failures_without_valid_result'] = state.format_failures
-    state.report['blocked_total'] = state.pool.stats().get('blocked', 0) if state.pool else 0
-    state.report['stop_causes'] = sorted(list(state.stop_causes))
-    primary_stop = resolve_primary_stop_reason(state.stop_causes)
-    if primary_stop:
-        state.report['stop_reason'] = primary_stop
-    state.save()
-    state.log(f"新增推荐 {state.report['new_recommended']}/{state.settings['target_recommended']}；输入 {state.usage.prompt_tokens:,}，输出 {state.usage.completion_tokens:,}，合计 {state.usage.total_tokens:,} Token。")
-    if state.report['stop_reason']:
-        return False
-    return True
-
-
 def _evaluate_candidate_items(state: LocalCollection, items: list[PoolItem]) -> bool:
     """按小批次切分并在批内排序，调度并发或串行评估条目。返回 True 表示该组处理完毕，False 表示触发停止原因。"""
     if not items:
@@ -1498,9 +261,10 @@ def _evaluate_candidate_items(state: LocalCollection, items: list[PoolItem]) -> 
 
 def _expand_search_queries(state: LocalCollection) -> list[dict[str, str]]:
     """扩词请求逐次预记账、结算；收到的响应可离线恢复，不重复付费。"""
-    from src.catalog.evaluation import call_model
+    from src.catalog.evaluation import call_model, resolve_api_key
     from src.infra.model_pool import PoolStopped
     from src.shared.output_contracts import resolve_response_format
+    from .failure_policy import classify_result
 
     ds = state.discovery_state
     path = state.local / "state" / "discovery.json"
@@ -1541,7 +305,7 @@ def _expand_search_queries(state: LocalCollection) -> list[dict[str, str]]:
                "reserved_tokens": reserve, "reservation_state": "active", "usage": None}
         pending["requests"].append(row)
         state.report["calls"].append(row)
-        persist()  # 请求前持久化；落盘失败则不调用模型。
+        persist()
         cfg = deepcopy(model_cfg)
         cfg.setdefault("request", {})["max_attempts"] = 1
         try:
@@ -1623,116 +387,37 @@ def _expand_search_queries(state: LocalCollection) -> list[dict[str, str]]:
     ds.pending_expansion = None
     persist()
     return accepted
+    return accepted
 
 
-def _collect(root, local, settings, cfg, discover_fn, fetch_fn, evaluate_fn, log, sleep, search_fn=github_search, expand_fn=list_skill_paths):
-    run_id = now_local().strftime('%Y%m%d-%H%M%S-') + uuid4().hex[:6]
-    run_dir = local / 'runs' / run_id
-    usage = UsageTotals()
-    max_retries = settings.get('max_retries', 5)
-    max_attempts = max_retries + 1
-    max_format_failures = settings.get('max_format_failures_without_valid_result', 10)
-    manual_picks = get_manual_picks(cfg.get('favorites') or cfg.get('overrides') or {})
-    manual_exclusions = get_manual_exclusions(cfg.get('overrides') or {})
-    baseline = _read(root / 'data' / 'catalog.json', {'entries': []})
-    entries = index_by_id(baseline.get('entries') or [])
-    for e in entries.values():
-        apply_manual_overrides_to_entry(e, manual_picks, manual_exclusions)
-    old_recommended = {k for k, v in entries.items() if v.get('status') == STATUS_RECOMMENDED and (not v.get('manual_pick'))}
-    owned_cfg = cfg.get('owned') or {}
-    owned_ids = {it['skill_id'] for it in owned_cfg.get('items', [])}
-    skipped_owned_ids = set()
-    report = {
-        'run_id': run_id,
-        'started_at': now_local().isoformat(),
-        'status': 'running',
-        'model': cfg['model'].get('model'),
-        'models_used': [],
-        'config_fingerprint': build_config_fingerprint(cfg['model']),
-        'settings': settings,
-        'discovered': 0,
-        'checked': 0,
-        'evaluations': 0,
-        'cached': 0,
-        'fetch_failed': 0,
-        'prescreen_excluded': 0,
-        'static_skipped': 0,
-        'static_heuristics': {
-            'version': STATIC_HEURISTIC_VERSION,
-            'observed_count': 0,
-            'skipped_count': 0,
-            'tier_counts': {},
-            'signal_counts': {},
-            'suggested_actions': {},
-        },
-        'cache_observation': {
-            'version': NORMALIZATION_VERSION,
-            'enabled': bool(settings.get('enable_normalized_cache', False) or (cfg.get('rules', {}).get('cache', {}).get('enable_normalized_reuse', False))),
-            'observed_count': 0,
-            'potential_hits': 0,
-            'actual_reused': 0,
-            'rejection_reasons': {},
-        },
-        'not_skill_files': 0,
-        'blocked_records': 0,
-        'blocked_new': 0,
-        'blocked_total': 0,
-        'reconciled_blocked': 0,
-        'skipped_output_format': 0,
-        'format_failures_without_valid_result': 0,
-        'failed_evaluations': 0,
-        'new_recommended': 0,
-        'failed_requests': 0,
-        'unknown_usage_reserved_tokens': 0,
-        'skipped_owned': 0,
-        'skipped_length_exceeded': 0,
-        'recommendations': [],
-        'calls': [],
-        'stop_causes': [],
-        'stop_reason': None,
-        'report_path': str(run_dir / 'report.json'),
-    }
-    ledger = BudgetLedger.load(local / 'state', cap=1, max_attempts=max_attempts)
-    ledger.rollover()
-    ledger.mark_in_progress_as_needs_recovery()
-    context = CatalogContext(rules_version=cfg['rules']['rules_version'], domain_names=cfg['prescreen'].domain_names, source_types=cfg['source_types'])
-    dirty = False
-    active_snoozed = get_active_snoozed(cfg.get('snoozed') or {})
-    pool_path = local / 'pool.json'
-    pool = None
-    consecutive_failures = 0
-    format_failures = 0
-    stop_causes = set()
-    if 'models' in cfg['model']:
-        recovered = ledger.recover_settled_pool_pauses()
-        if recovered:
-            report['recovered_settled_pauses'] = recovered
-            log(f'恢复 {len(recovered)} 条请求已结算的候选；保留原请求、用量和尝试历史。')
-        blockers = [eid for eid in ledger.reserved if (ledger.get(eid) or {}).get('status') == 'needs_recovery']
-        if blockers:
-            stop_causes.add(STOP_USAGE_UNKNOWN)
-            report['recovery_blockers'] = blockers
-    active_eid = None
-    active_call = None
-    unknown_reserve = 0
-    state = LocalCollection(
-        root=root, local=local, settings=settings, cfg=cfg, discover_fn=discover_fn,
-        fetch_fn=fetch_fn, evaluate_fn=evaluate_fn, log=log, sleep=sleep, run_id=run_id,
-        run_dir=run_dir, usage=usage, report=report, ledger=ledger, context=context,
-        entries=entries, old_recommended=old_recommended, baseline=baseline,
-        active_snoozed=active_snoozed, manual_exclusions=manual_exclusions,
-        manual_picks=manual_picks, pool_path=pool_path, pool=pool, dirty=dirty,
-        consecutive_failures=consecutive_failures, format_failures=format_failures,
-        max_format_failures=max_format_failures, stop_causes=stop_causes,
-        active_eid=active_eid, active_call=active_call, unknown_reserve=unknown_reserve,
-        max_attempts=max_attempts, max_retries=max_retries, pending_items=[],
-        owned_ids=owned_ids, skipped_owned_ids=skipped_owned_ids,
-        search_fn=search_fn, expand_fn=expand_fn,
+def _collect(
+    root: Path,
+    local: Path,
+    settings: dict,
+    cfg: dict,
+    *,
+    discover_fn: Callable = discover,
+    fetch_fn: Callable = fetch_text,
+    evaluate_fn: Callable = None,
+    log: Callable = print,
+    sleep: Callable = time.sleep,
+    search_fn: Any = None,
+    expand_fn: Any = None,
+) -> dict:
+    """本地收集主管道编排：初始化状态、候选池与批次调度、受控评估并收尾。"""
+    if evaluate_fn is None:
+        from .evaluation import evaluate
+        evaluate_fn = evaluate
+
+    run_id = uuid4().hex[:6]
+    state = init_local_state(
+        root=root, local=local, settings=settings, cfg=cfg, run_id=run_id,
+        discover_fn=discover_fn, fetch_fn=fetch_fn, evaluate_fn=evaluate_fn,
+        log=log, sleep=sleep, search_fn=search_fn, expand_fn=expand_fn,
     )
-    if cfg.get("filter_rules") and cfg["filter_rules"].has_evaluation_rules:
-        state.evaluated_skill_ids = successful_evaluation_skill_ids(
-            ledger.evaluations_dir, root / "data" / "state" / "evaluations",
-        )
+    pool_path = state.pool_path
+    discovery_path = local / 'state' / 'discovery.json'
+
     try:
         from src.infra.model_pool import ModelPool, PoolStopped
         state.model_pool = None
@@ -1743,32 +428,34 @@ def _collect(root, local, settings, cfg, discover_fn, fetch_fn, evaluate_fn, log
                 raise PoolStopped(STOP_USAGE_UNKNOWN, '存在未知结果请求，停止自动重发')
             history_path = local / 'model-pool-config-history.json'
             history = _read(history_path, {'changes': []})
-            fingerprint = report['config_fingerprint']
+            fingerprint = state.report['config_fingerprint']
             if history.get('current') != fingerprint:
                 change = {'previous': history.get('current'), 'current': fingerprint,
                           'at': now_local().isoformat(), 'run_id': run_id}
                 history['changes'].append(change)
                 history['current'] = fingerprint
                 write_json_atomic(history_path, history)
-                report['config_changes'] = [change]
+                state.report['config_changes'] = [change]
+
         state.report['evaluation_threads'] = 2 if settings.get('parallel_evaluation', True) else 1
         state.save()
         state.log(f"目标：新增 {state.settings['target_recommended']} 个推荐技能；上限 {state.settings['max_total_tokens']:,} Token。")
         state.log(f"评估并发：{state.report['evaluation_threads']} 个候选；账本与结果串行写入。")
+
         if pool_path.exists():
             state.pool = load_pool(pool_path)
         else:
             state.pool = CandidatePool(items=[])
             save_pool(pool_path, state.pool)
 
-        discovery_path = local / 'state' / 'discovery.json'
         state.discovery_state = init_or_migrate_discovery_state(
-            discovery_path, state.pool, state.cfg.get('searches', {}), state.cfg.get('sources')
+            discovery_path, state.pool, state.cfg.get('searches', {}), state.cfg.get('sources'),
         )
         pending_expansion = state.discovery_state.pending_expansion or {}
         if any(r.get('reservation_state') in ('active', 'unknown')
                for r in pending_expansion.get('requests', [])):
             raise PoolStopped(STOP_USAGE_UNKNOWN, '扩词请求结果或用量未确认，禁止自动重复付费请求')
+
         queried_keys, expanded_keys = set(), set()
         if settings.get("refresh_pool"):
             state.log("已指定 --refresh-pool，重置搜索游标以重新扫描...")
@@ -1826,7 +513,7 @@ def _collect(root, local, settings, cfg, discover_fn, fetch_fn, evaluate_fn, log
                         break
                     continue
 
-                # 存量候选处理完毕，获取下一批仓库（至多 batch_repo_limit 个）
+                # 存量候选处理完毕，获取下一批仓库
                 state.log(f"存量工作已就绪，获取下一批新仓库（上限 {batch_repo_limit} 个）...")
                 batch = acquire_next_repo_batch(
                     state.discovery_state,
@@ -1849,7 +536,6 @@ def _collect(root, local, settings, cfg, discover_fn, fetch_fn, evaluate_fn, log
                     else:
                         state.log(f"批次 #{batch['batch_id']}：分配 {allocated_repos}/{batch_repo_limit} 个新仓库进入展开与评估")
                 else:
-                    # 现有查询与分页无法产生新仓库，尝试分类内扩词
                     state.log("现有查询无法提供新仓库，正在分类范围内扩展关键词...")
                     new_queries = _expand_search_queries(state)
                     if new_queries:
@@ -1887,7 +573,6 @@ def _collect(root, local, settings, cfg, discover_fn, fetch_fn, evaluate_fn, log
                     state.ledger.save()
                     state.save()
 
-                # 评估当前批次的可处理技能
                 batch_skill_ids = set(active.get("skill_ids") or [])
                 batch_actionable = [
                     it for it in state.pool.items
@@ -1920,6 +605,7 @@ def _collect(root, local, settings, cfg, discover_fn, fetch_fn, evaluate_fn, log
 
                 if not completed or state.report.get("stop_reason"):
                     break
+
         if state.report['new_recommended'] >= state.settings['target_recommended']:
             state.stop_causes.add(STOP_TARGET_REACHED)
         elif state.report['budget_tokens'] >= state.settings['max_total_tokens']:
@@ -1963,157 +649,160 @@ def _collect(root, local, settings, cfg, discover_fn, fetch_fn, evaluate_fn, log
         state.report['status'] = 'completed' if state.report['stop_reason'] == 'target_reached' else 'stopped'
         state.save()
         if state.dirty:
-            changes = build_report(build_catalog(list(state.entries.values()), context=state.context, overrides=state.cfg.get('overrides'), snoozed=state.cfg.get('snoozed'), owned=state.cfg.get('owned')), previous_catalog=state.baseline, run_meta={'usage': state.usage.snapshot(), 'run_id': state.run_id})
+            changes = build_report(
+                build_catalog(list(state.entries.values()), context=state.context, overrides=state.cfg.get('overrides'), snoozed=state.cfg.get('snoozed'), owned=state.cfg.get('owned')),
+                previous_catalog=state.baseline,
+                run_meta={'usage': state.usage.snapshot(), 'run_id': state.run_id},
+            )
             write_report(changes, json_path=state.run_dir / 'changes.json', markdown_path=state.run_dir / 'changes.md')
+
     return state.report
 
 
-def main(argv=None, *, root: Path | None = None) -> int:
-    root = Path(root or Path(__file__).resolve().parents[2]).resolve()
-    parser = argparse.ArgumentParser(description="本地收集 50 个推荐 Skill，并显示 Token 消耗")
-    parser.add_argument("--recover-catalog", action="store_true", help="离线恢复已完成评估与页面，不调用模型")
-    parser.add_argument("--check", action="store_true", help="仅本地预检：不联网、不调用模型、不写运行数据")
-    parser.add_argument("--batch-repos", type=int, help="每个新批次最多分配的不同仓库数 N，默认 1000")
-    parser.add_argument("--target", type=int, help="本次新增推荐目标")
-    parser.add_argument("--max-tokens", type=int, help="输入加输出的本次 Token 上限")
-    parser.add_argument("--max-evaluations", type=int, help="可选：本次最多评估多少条")
-    parser.add_argument("--max-retries", type=int, help="首次失败后的最多重连次数，默认 5")
-    parser.add_argument("--max-format-failures", type=int, help="距上次有效评估允许的最大连续格式异常数，默认 10")
-    parser.add_argument("--limit-queries", type=int)
-    parser.add_argument("--expand-limit", type=int)
-    parser.add_argument("--sync-config", action="store_true", help="纯离线重建：无需模型凭据与网络，将 config/*.json 同步到 data 与 public/data")
-    parser.add_argument("--enrich-catalog", action="store_true", help="离线结构化增强：从现有数据中提取形态、示例请求与亮点，不修改原中文简述")
-    parser.add_argument("--refresh-pool", action="store_true", help="重新搜索并重建候选池，保留超长跳过标记")
-    parser.add_argument("--enable-static-skip", action="store_true", help="启用静态规则明确空壳占位跳过（避免调用模型）")
-    parser.add_argument("--enable-normalized-cache", action="store_true", help="启用受限规范化缓存复用（仅在明确验证换行等价且证据完全核验时复用）")
-    parser.add_argument("--enable-batch-prioritization", action="store_true", help="启用小批次材料准备与正文分级排序（含 20%% 防饥饿配额）")
-    parser.add_argument("--pool-watermark", type=int, help="候选池待处理数量低于此水位线时自动增量补水（已弃用）")
+@catalog_task
+def run_local(
+    root: Path,
+    settings: dict,
+    *,
+    cfg: dict | None = None,
+    discover_fn: Callable = discover,
+    fetch_fn: Callable = fetch_text,
+    evaluate_fn: Callable = None,
+    log: Callable = print,
+    sleep: Callable = time.sleep,
+    search_fn: Any = None,
+    expand_fn: Any = None,
+) -> dict:
+    """本地收集核心业务函数，受 catalog_task 会话级文件锁保护。"""
+    cfg = cfg or load_all_config(root / 'config')
+    _valid_settings(settings)
+    local = root / 'data' / 'local'
+    (local / 'runs').mkdir(parents=True, exist_ok=True)
+    (local / 'state').mkdir(parents=True, exist_ok=True)
+
+    return _collect(
+        root, local, settings, cfg,
+        discover_fn=discover_fn, fetch_fn=fetch_fn, evaluate_fn=evaluate_fn,
+        log=log, sleep=sleep, search_fn=search_fn, expand_fn=expand_fn,
+    )
+
+
+def main(argv=None) -> int:
+    """本地收集命令行入口。"""
+    parser = argparse.ArgumentParser(description='本地收集技能')
+    parser.add_argument('--check', action='store_true', help='仅预检')
+    parser.add_argument('--refresh-pool', action='store_true', help='重建候选池')
+    parser.add_argument('--batch-repos', type=int, help='每批最多分配的新仓库数')
+    parser.add_argument('--target', type=int, help='新增推荐目标')
+    parser.add_argument('--max-tokens', type=int, help='Token 上限')
+    parser.add_argument('--max-evals', type=int, help='评估上限')
+    parser.add_argument('--limit-queries', type=int, help='查询上限')
+    parser.add_argument('--expand-limit', type=int, help='单仓库展开上限')
+    parser.add_argument('--sync-config', action='store_true', help='同步本地配置')
     args = parser.parse_args(argv)
-    log = lambda message: print(message, flush=True)
 
-    if args.recover_catalog:
-        from .maintenance import recover_completed_results
-        try:
-            log(json.dumps(recover_completed_results(root), ensure_ascii=False))
-            return 0
-        except (OSError, ValueError, RuntimeError) as exc:
-            log(f"恢复失败：{exc}")
-            return 1
-
-    if args.enrich_catalog:
-        try:
-            from .maintenance import enrich_catalog_offline
-            stats = enrich_catalog_offline(root)
-            log("离线数据增强完成！")
-            log(f"统计：处理 {stats['total']} 条，具有有效中文简述 {stats['with_summary']} 条")
-            log(f"增强结果：示例请求 {stats['with_example_requests']} 条 · 核心亮点 {stats['with_key_features']} 条 · 明确形态 {stats['with_skill_type']} 条")
-            log("原始 summary_zh 完整保留，未做任何修改。")
-            log(f"已更新主索引：{stats['catalog_path']}")
-            log(f"已生成页面数据：{stats['page_path']}")
-            log("部署到 GitHub Pages 请执行：git add data/ public/data/ && git commit -m 'chore: enrich catalog' && git push")
-            return 0
-        except Exception as exc:
-            log(f"增强失败（{type(exc).__name__}）：{exc}")
-            return 1
+    root = Path(__file__).resolve().parents[2]
+    cfg = load_all_config(root / 'config')
 
     if args.sync_config:
-        try:
-            from .maintenance import sync_config_offline
-            manifest = sync_config_offline(root)
-            counts = manifest["counts"]
-            log("离线配置同步完成！")
-            log(f"统计：推荐 {counts.get('recommended', 0)} · 候选 {counts.get('candidate', 0)} · 收藏 {counts.get('manual', 0)} · 排除 {counts.get('excluded', 0)}（当前活跃冷冻 {manifest.get('active_snoozed', 0)} 条）")
-            log(f"已更新主索引：{manifest['catalog_path']}")
-            log(f"已生成页面数据：{manifest['page_path']}")
-            log("部署到 GitHub Pages 请执行：git add config/ data/ public/data/ && git commit -m 'chore: sync config' && git push")
-            return 0
-        except Exception as exc:
-            log(f"同步失败（{type(exc).__name__}）：{exc}")
-            return 1
+        print("正在同步本地配置...")
+        baseline = _read(root / 'data' / 'catalog.json', {'entries': []})
+        entries = index_by_id(baseline.get('entries') or [])
+        manual_picks = get_manual_picks(cfg.get('favorites') or cfg.get('overrides') or {})
+        manual_exclusions = get_manual_exclusions(cfg.get('overrides') or {})
+        active_snoozed = get_active_snoozed(cfg.get('snoozed') or {})
+        for e in entries.values():
+            apply_manual_overrides_to_entry(e, manual_picks, manual_exclusions)
+        apply_snooze_overrides(list(entries.values()), active_snoozed)
+        context = CatalogContext(rules_version=cfg['rules']['rules_version'],
+                                 domain_names=cfg['prescreen'].domain_names,
+                                 source_types=cfg['source_types'])
+        mutate_catalog(root, lambda _: build_catalog(list(entries.values()), context=context,
+                                                    favorites=cfg.get("favorites"),
+                                                    overrides=cfg.get("overrides"),
+                                                    snoozed=cfg.get("snoozed"),
+                                                    owned=cfg.get("owned")))
+        print("本地配置同步完成。")
+        return 0
 
-    try:
-        run_file = root / "config" / "runners" / "local-run.json"
-        if not run_file.exists():
-            run_file = root / "config" / "local-run.json"
-        settings = _read(run_file)
-        settings.setdefault("max_format_failures_without_valid_result", 10)
-        for argument, key in (
-            ("batch_repos", "batch_repo_limit"),
-            ("target", "target_recommended"),
-            ("max_tokens", "max_total_tokens"),
-            ("max_evaluations", "max_evaluations"),
-            ("limit_queries", "limit_queries"),
-            ("expand_limit", "expand_limit"),
-            ("max_retries", "max_retries"),
-            ("max_format_failures", "max_format_failures_without_valid_result"),
-            ("pool_watermark", "pool_watermark"),
-        ):
-            if getattr(args, argument) is not None:
-                settings[key] = getattr(args, argument)
-        if args.pool_watermark is not None:
-            log("提示：--pool-watermark 已弃用，本地采集已切换为仓库分批与断点恢复模式。")
-        if args.refresh_pool:
-            settings["refresh_pool"] = True
-        if args.enable_static_skip:
-            settings["enable_static_skip"] = True
-        if args.enable_normalized_cache:
-            settings["enable_normalized_cache"] = True
-        if args.enable_batch_prioritization:
-            settings["enable_batch_prioritization"] = True
-        _valid_settings(settings)
-        cfg = load_all_config(root / "config")
-        problems = precheck(cfg)
-        if not resolve_api_key(cfg["model"]):
-            problems.append("缺少模型 API Key")
-        if problems:
-            log("预检失败：" + "；".join(problems))
-            return 1
-        log(f"预检通过；模型 {cfg['model'].get('model') or '模型队列'}；API Key 已配置（不显示密钥）。")
-        log(f"目标 {settings['target_recommended']} 个新增推荐，上限 {settings['max_total_tokens']:,} Token，每批仓库上限 {settings.get('batch_repo_limit', 1000)} 个。")
-        log(f"网络及临时 HTTP 错误最多重连 {settings.get('max_retries', 5)} 次，尝试次数会保存。")
-        if not os.environ.get("GITHUB_TOKEN"):
-            log("未设置 GITHUB_TOKEN；GitHub 限流可能导致本轮候选不足，可在 PyCharm 的环境变量中设置。")
-        if args.check:
-            if "models" in cfg["model"]:
-                from src.infra.model_pool import ModelPool
-                ModelPool(cfg["model"], root).inspect()
-            return 0
-        result = run_local(root, settings, cfg=cfg, log=log)
-        usage = result["usage"]
-        stop_reason = result.get("stop_reason")
-        log(STOP_LABELS.get(stop_reason, stop_reason or "运行结束"))
-        log(f"本次新增推荐：{result['new_recommended']}/{settings['target_recommended']}；评估 {result['evaluations']} 次。")
-        if result.get("pool_stats"):
-            pst = result["pool_stats"]
-            log(f"候选池状态：总计 {pst['total']} 条，待处理 {pst['pending']} 条，已完成 {pst['done']} 条，排除 {pst['excluded']} 条。")
-        if result.get("skipped_length_exceeded"):
-            log(f"超长跳过：{result['skipped_length_exceeded']} 条（输出达 Token 上限，已标 length_exceeded）。")
-        if result.get("skipped_output_format"):
-            log(f"格式异常隔离：{result['skipped_output_format']} 条（输出非合法结构，已标 blocked）。")
-        log(f"请求 {usage['requests']} 次（含重试），失败请求 {result['failed_requests']} 次。")
-        log(f"已知输入 {usage['prompt_tokens']:,} / 输出 {usage['completion_tokens']:,} / 合计 {usage['total_tokens']:,} Token。")
-        log(f"其中推理 {usage['reasoning_tokens']:,}（已含在输出中）；用量未知请求 {usage['unknown_usage_requests']}。")
-        if result["unknown_usage_reserved_tokens"]:
-            log(f"未知用量预留预算 {result['unknown_usage_reserved_tokens']:,} Token（估算）；预算占用合计 {result['budget_tokens']:,}。")
-        if usage["incomplete_breakdown_requests"]:
-            log("部分响应未返回完整输入/输出明细，分项数值仅包含已返回的部分。")
-        log(f"完整报告与本次推荐链接：{result['report_path']}")
-        log(f"可读报告：{Path(result['report_path']).with_suffix('.md')}")
-        log("查看目录：运行 scripts/preview.ps1，或 python -m http.server 8000 --directory public")
-        return 0 if result["stop_reason"] == "target_reached" else 2
-    except (OSError, ValueError, KeyError, TypeError) as exc:
-        log(f"本地启动失败（{type(exc).__name__}），请检查配置、依赖与运行锁。")
+    pre = precheck(cfg)
+    if not pre.ok:
+        for err in pre.errors:
+            print(f"[错误] {err}")
         return 1
 
+    model_display = '模型队列' if 'models' in cfg['model'] else cfg['model'].get('model', '未配置')
+    print(f"预检通过；模型 {model_display}；API Key 已配置（不显示密钥）。")
+    if args.check:
+        return 0
 
-__all__ = [
-    "STOP_LABELS",
-    "_valid_settings",
-    "_retryable",
-    "_unknown_usage_reserve",
-    "prepare_pool",
-    "apply_result",
-    "save_and_render",
-    "run_local",
-    "main",
-]
+    run_config = _read(root / 'config' / 'runners' / 'local-run.json', {})
+    settings = dict(run_config.get('settings', {}))
+    if args.batch_repos is not None:
+        settings['batch_repo_limit'] = args.batch_repos
+    if args.target is not None:
+        settings['target_recommended'] = args.target
+    if args.max_tokens is not None:
+        settings['max_total_tokens'] = args.max_tokens
+    if args.max_evals is not None:
+        settings['max_evaluations'] = args.max_evals
+    if args.limit_queries is not None:
+        settings['limit_queries'] = args.limit_queries
+    if args.expand_limit is not None:
+        settings['expand_limit'] = args.expand_limit
+    if args.refresh_pool:
+        settings['refresh_pool'] = True
+
+    try:
+        _valid_settings(settings)
+    except ValueError as exc:
+        print(f"[配置错误] {exc}")
+        return 1
+
+    print(f"目标 {settings['target_recommended']} 个新增推荐，上限 {settings['max_total_tokens']:,} Token，每批仓库上限 {settings.get('batch_repo_limit', DEFAULT_BATCH_REPO_LIMIT)} 个。")
+    print(f"网络及临时 HTTP 错误最多重连 {settings.get('max_retries', 5)} 次，尝试次数会保存。")
+    if not os.environ.get('GITHUB_TOKEN'):
+        print("未设置 GITHUB_TOKEN；GitHub 限流可能导致本轮候选不足，可在 PyCharm 的环境变量中设置。")
+
+    report = run_local(root, settings, cfg=cfg)
+
+    primary = report.get('stop_reason')
+    if primary:
+        msg = {
+            'target_reached': '已达到推荐目标',
+            'token_limit': '已达到 Token 上限',
+            'evaluation_limit': '已达到评估次数上限',
+            'candidates_exhausted': '候选池已全部处理完毕',
+            'model_failures': '模型连续失败次数达到上限',
+            'retry_exhausted': '单条候选重试次数已达上限',
+            'format_failures': '模型输出格式异常达到上限',
+            'access_denied': '访问凭据失效或权限不足',
+            'resume_state_invalid': '恢复状态冲突',
+            'request_config_error': '模型请求配置错误',
+            'usage_unknown': '响应用量未知，停止自动重试',
+            'interrupted': '用户中断运行',
+            'storage_error': '持久化存储故障',
+        }.get(primary, f'未知停止原因: {primary}')
+        print(f"\n{msg}")
+
+    print(f"本次新增推荐：{report['new_recommended']}/{settings['target_recommended']}；评估 {report['evaluations']} 次。")
+    if 'pool_stats' in report:
+        st = report['pool_stats']
+        print(f"候选池状态：总计 {st['total']} 条，待处理 {st['pending']} 条，已完成 {st['done']} 条，排除 {st['excluded']} 条。")
+    u = report.get('usage', {})
+    print(f"请求 {u.get('requests', 0)} 次（含重试），失败请求 {report.get('failed_requests', 0)} 次。")
+    print(f"已知输入 {u.get('prompt_tokens', 0):,} / 输出 {u.get('completion_tokens', 0):,} / 合计 {u.get('total_tokens', 0):,} Token。")
+    print(f"其中推理 {u.get('reasoning_tokens', 0):,}（已含在输出中）；用量未知请求 {u.get('unknown_usage_requests', 0)}。")
+    if report.get('unknown_usage_reserved_tokens', 0):
+        print(f"未知用量预留预算 {report['unknown_usage_reserved_tokens']:,} Token（估算）；预算占用合计 {report.get('budget_tokens', 0):,}。")
+    if u.get('incomplete_breakdown_requests'):
+        print("部分响应未返回完整输入/输出明细，分项数值仅包含已返回的部分。")
+    print(f"完整报告与本次推荐链接：{report['report_path']}")
+    print(f"可读报告：{Path(report['report_path']).with_suffix('.md')}")
+    print("查看目录：运行 scripts/preview.ps1，或 python -m http.server 8000 --directory public")
+
+    return 0 if report.get('stop_reason') in ('target_reached', 'candidates_exhausted', None) else 1
+
+
+if __name__ == '__main__':
+    raise SystemExit(main())
