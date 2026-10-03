@@ -105,19 +105,9 @@ def fetch_text(
     try:
         for attempt in range(1, max_attempts + 1):
             result.attempts = attempt
-
+            response = None
             try:
                 response = sess.get(url, timeout=timeout, stream=True, allow_redirects=True)
-            except requests.exceptions.RequestException as exc:
-                result.error = f"{type(exc).__name__}: {exc}"
-                if attempt < max_attempts:
-                    sleep(_backoff_seconds(attempt))
-                    continue
-                result.reason_code = REASON_NETWORK_ERROR
-                result.notes.append("网络或超时失败，属采集失败，不作质量判定")
-                return result
-
-            try:
                 status = response.status_code
                 result.status = status
 
@@ -130,7 +120,6 @@ def fetch_text(
                 if status >= 400:
                     result.error = f"HTTP {status}"
                     if status in RETRYABLE_STATUS and attempt < max_attempts:
-                        response.close()
                         sleep(_backoff_seconds(attempt))
                         continue
                     result.reason_code = REASON_HTTP_ERROR
@@ -148,8 +137,17 @@ def fetch_text(
                         f"截断内容不得用于推荐结论（{REASON_TRUNCATED}）"
                     )
                 return result
+            except (requests.exceptions.RequestException, IOError, OSError, TimeoutError) as exc:
+                result.error = f"{type(exc).__name__}: {exc}"
+                if attempt < max_attempts:
+                    sleep(_backoff_seconds(attempt))
+                    continue
+                result.reason_code = REASON_NETWORK_ERROR
+                result.notes.append("网络或超时失败，属采集失败，不作质量判定")
+                return result
             finally:
-                response.close()
+                if response is not None:
+                    response.close()
     finally:
         if owns_session:
             sess.close()

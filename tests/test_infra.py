@@ -456,5 +456,44 @@ class ModelDiagnosticsTest(unittest.TestCase):
         self.assertIsNone(result.http_status)
 
 
+@smoke
+class HttpFetchTest(unittest.TestCase):
+    """HTTP 文本抓取与流式正文异常处理。"""
+
+    def test_fetch_text_stream_read_timeout_retries_and_cleans_response(self):
+        import requests
+        from src.infra.http import fetch_text
+
+        session = Mock()
+        resp1 = Mock(status_code=200)
+        resp1.iter_content.side_effect = requests.exceptions.ConnectionError("read timeout midway")
+
+        resp2 = Mock(status_code=200)
+        resp2.iter_content.return_value = [b"valid content"]
+
+        session.get.side_effect = [resp1, resp2]
+        result = fetch_text("https://example.com/SKILL.md", session=session, max_attempts=3, sleep=lambda _: None)
+        self.assertTrue(result.ok)
+        self.assertEqual(result.text, "valid content")
+        self.assertEqual(result.attempts, 2)
+        resp1.close.assert_called_once()
+        resp2.close.assert_called_once()
+
+    def test_fetch_text_stream_exhausted_retries_returns_network_error(self):
+        import requests
+        from src.infra.http import fetch_text, REASON_NETWORK_ERROR
+
+        session = Mock()
+        resp = Mock(status_code=200)
+        resp.iter_content.side_effect = requests.exceptions.ConnectionError("stream dropped")
+        session.get.return_value = resp
+
+        result = fetch_text("https://example.com/SKILL.md", session=session, max_attempts=2, sleep=lambda _: None)
+        self.assertFalse(result.ok)
+        self.assertEqual(result.reason_code, REASON_NETWORK_ERROR)
+        self.assertEqual(result.attempts, 2)
+        self.assertEqual(resp.close.call_count, 2)
+
+
 if __name__ == "__main__":
     unittest.main()
