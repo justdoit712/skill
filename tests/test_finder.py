@@ -294,6 +294,19 @@ class FinderEvidenceAndRankingTest(unittest.TestCase):
         self.assertEqual(res.start_line, 2)
         self.assertEqual(res.match_method, "nearby_drift")
 
+    def test_evidence_verification_preserves_input_and_is_repeatable(self):
+        evaluation = {"match": "strong", "documentation": "clear", "limitations": [],
+            "criteria_results": [{"criterion_id": "r1", "status": "supported",
+                                  "explanation": "claim", "evidence": []}]}
+        original = copy.deepcopy(evaluation)
+        criteria = [{"id": "r1", "kind": "required"}]
+        first = verify_and_adjust_evaluation(evaluation, {}, criteria)
+        second = verify_and_adjust_evaluation(evaluation, {}, criteria)
+        self.assertEqual(evaluation, original)
+        self.assertEqual(first, second)
+        self.assertEqual(first["criteria_results"][0]["status"], "unknown")
+        self.assertNotEqual(first["match"], "strong")
+
     def test_rank_find_results_stable_order(self):
         # strong clear > partial clear > none
         cands = [

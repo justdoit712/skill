@@ -656,7 +656,7 @@ export function populateBaseline(overridesState, data, today = null) {
 
 /**
  * 分区条目：已收录项排除，排除项跳过，收藏项进入 activeManual，冷冻项跳过，其余按基线严格白名单划入 activeRecommended / activeCandidates。
- * 遵循《已收录功能代码复核与修复方案》O-03：非展示状态（excluded, pending, processing_failure 等）决不误入候选区。
+ * 非展示状态（excluded, pending, processing_failure 等）决不误入候选区。
  */
 export function partitionEntries(allEntries, overridesState, today = null, ownedState = null) {
   const curToday = today || shanghaiTodayStr();

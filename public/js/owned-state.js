@@ -132,7 +132,7 @@ export function markOwned(ownedState, item, today = null, timestamp = null) {
  * 取消已收录状态。
  * 取消后保留私人详情（方便误操作恢复）。
  *
- * 遵循《已收录功能代码复核与修复方案》O-01：
+ * 基线取消契约：
  * 若条目同时存在于 stagedAdds 和 baseline，删除 stagedAdds 后必须继续记录 stagedDeletes，
  * 保证基线条目被真正取消并生成有效的删除变更包。
  */
@@ -160,7 +160,7 @@ export function unmarkOwned(ownedState, skillId, timestamp = null) {
 /**
  * 自动对账浏览器暂存状态与公共基线状态。
  *
- * 遵循《已收录功能代码复核与修复方案》O-01：
+ * 暂存与基线对账契约：
  * 1. 若 stagedAdds[sid] 已存在于新基线 baseline[sid]，判为已成功同步至仓库，自动清除该暂存；
  * 2. 若 stagedDeletes 包含 sid 且 baseline 中已经不含 sid，判为删除已同步，自动清除该删除标记；
  * 3. 返回清除的数量 { reconciledAdds: number, reconciledDeletes: number }。
