@@ -19,7 +19,7 @@ WORKFLOWS = ROOT / ".github" / "workflows"
 PUBLIC = ROOT / "public"
 SITE_ROOT = "https://justdoit712.github.io/skill/"
 PAGES = ["index.html", "styles.css", "robots.txt", "sitemap.xml"]
-DOC_FILES = ["README.md", "CONTRIBUTING.md", "LICENSE-CONTENT.md"]
+DOC_FILES = ["README.md", "LICENSE-CONTENT.md"]
 DOC_FILES += [str(p.relative_to(ROOT)).replace("\\", "/") for p in sorted((ROOT / "docs").glob("*.md"))]
 LINK = re.compile(r"\]\(([^)\s]+?)\)")
 
