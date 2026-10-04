@@ -3,7 +3,7 @@
 
     Usage (run from the repo root, or just press Run in PyCharm):
         .\scripts\run-local.ps1                  # 3 evaluation slots (safe trial)
-        .\scripts\run-local.ps1 -Limit 50        # full weekly quota
+        .\scripts\run-local.ps1 -Limit 50        # at most 50 candidate evaluations
         .\scripts\run-local.ps1 -DryRun          # config check only: no model call, no ledger write
 
     Runbook and result checks: docs/运行说明.md
@@ -12,6 +12,7 @@
 #>
 [CmdletBinding()]
 param(
+    [ValidateRange(1, 2147483647)]
     [int]$Limit = 3,
     [int]$Fetch = 0,
     [int]$Queries = 0,
@@ -58,15 +59,13 @@ if (-not (Test-Path $PYTHONPATH)) {
     exit 1
 }
 
-$runArgs = @("-m", "src.pipeline")
+$runArgs = @("tools/run_local.py", "--max-evaluations", "$Limit")
 if ($DryRun) {
     # requirement 7.3: dry_run does not touch the ledger, the model, git or the deployment
-    $runArgs += @("--dry-run", "--limit-evaluations", $Limit)
-} else {
-    $runArgs += @("--phase", "all", "--limit-evaluations", $Limit)
+    $runArgs += @("--check")
 }
-if ($Fetch -gt 0) { $runArgs += @("--limit-fetches", $Fetch) }
-if ($Queries -gt 0) { $runArgs += @("--limit-queries", $Queries) }
+if ($Fetch -gt 0) { $runArgs += @("--expand-limit", "$Fetch") }
+if ($Queries -gt 0) { $runArgs += @("--limit-queries", "$Queries") }
 
 if (-not $env:GITHUB_TOKEN) {
     Write-Host (Get-Msg $M.NoToken1) -ForegroundColor Yellow
