@@ -62,7 +62,7 @@ class RefillTest(unittest.TestCase):
         self.search.return_value = True, [repo(0), repo(1)], None
         self.model.side_effect = [response(PLAN, 900), evaluated("strong", tokens=100)]
         # Isolate stop-priority behavior with explicit simulated reservation bounds.
-        with patch("src.finder.run.estimate_request_token_bound", side_effect=[900, 100]):
+        with patch("src.finder.session.estimate_request_token_bound", side_effect=[900, 100]):
             r = self.run_find(max_tokens=1000, max_evaluations=1)
         self.assertEqual(r["stop_reason"], "target_reached")
         self.assertEqual(self.fetch.call_count, 1)
@@ -112,14 +112,14 @@ class RefillTest(unittest.TestCase):
 
     def test_budget_after_planning_prevents_search(self):
         self.model.side_effect = [response(PLAN, 1000)]
-        with patch("src.finder.run.estimate_request_token_bound", return_value=200):
+        with patch("src.finder.session.estimate_request_token_bound", return_value=200):
             r = self.run_find(max_tokens=1000)
         self.assertEqual(r["stop_reason"], "token_limit")
         self.search.assert_not_called()
 
     def test_budget_after_reflection_prevents_new_search(self):
         self.model.side_effect = [response(PLAN, 400), evaluated(tokens=400), response({"queries": ["a", "b", "c"]}, 200)]
-        with patch("src.finder.run.estimate_request_token_bound", return_value=200):
+        with patch("src.finder.session.estimate_request_token_bound", return_value=200):
             r = self.run_find(max_tokens=1000)
         self.assertEqual(r["stop_reason"], "token_limit")
         self.assertEqual(self.search.call_count, 1)
@@ -157,7 +157,7 @@ class RefillTest(unittest.TestCase):
         self.model.assert_not_called(); self.search.assert_not_called()
 
     def test_received_evaluation_is_recovered_without_refetch_or_new_paid_call(self):
-        with patch("src.finder.run._record_evaluation", side_effect=KeyboardInterrupt):
+        with patch("src.finder.candidates._record_evaluation", side_effect=KeyboardInterrupt):
             r = self.run_find(max_evaluations=1)
         self.assertEqual(r["stop_reason"], "interrupted")
         self.assertIn("pending_evaluation", r)

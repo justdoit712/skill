@@ -678,8 +678,7 @@ def execute_find_skill(
                 run_rounds_kwargs = {}
                 if _supports_kwarg(run_rounds, "enable_active_reflection"):
                     run_rounds_kwargs["enable_active_reflection"] = params["enable_active_reflection"]
-                finder_run = sys.modules.get("src.finder.run")
-                eval_fn = getattr(finder_run, "_evaluate_candidates", _evaluate_candidates) if finder_run else _evaluate_candidates
+                eval_fn = _evaluate_candidates
                 reason = run_rounds(
                     state,
                     cfg,

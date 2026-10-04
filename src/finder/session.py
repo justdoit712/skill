@@ -228,9 +228,7 @@ class FinderRunState:
     def _call_once(self, transport: Any, cfg: dict, system: str, user: str, *, api_key: str | None, sleep: Any, candidate_id: str | None = None, stage: str | None = None, context: dict | None = None):
         stage = stage or ("evaluation" if candidate_id else "planning")
         fmt = resolve_response_format(cfg, stage)
-        finder_run = sys.modules.get("src.finder.run")
-        estimate_fn = getattr(finder_run, "estimate_request_token_bound", estimate_request_token_bound) if finder_run else estimate_request_token_bound
-        reserve = estimate_fn(cfg, system, user, fmt)
+        reserve = estimate_request_token_bound(cfg, system, user, fmt)
         with self._budget_changed:
             while True:
                 reason = self.stop_reason()

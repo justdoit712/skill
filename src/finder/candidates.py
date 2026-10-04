@@ -87,9 +87,7 @@ def _evaluate_candidate(state: FinderRunState, candidate: Any, materials: Any, c
 
     system, user = build_evaluation_prompt(candidate, materials, report["plan"], report["topic"])
     result, unknown = state.call(transport, cfg, system, user, api_key=api_key, sleep=sleep, candidate_id=candidate.skill_id)
-    finder_run = sys.modules.get("src.finder.run")
-    record_fn = getattr(finder_run, "_record_evaluation", _record_evaluation) if finder_run else _record_evaluation
-    return record_fn(state, candidate, materials, manifest, result), unknown
+    return _record_evaluation(state, candidate, materials, manifest, result), unknown
 
 
 def _record_evaluation(state: FinderRunState, candidate: Any, materials: Any, manifest: dict, result: Any) -> bool:
@@ -192,9 +190,7 @@ def _recover_pending_evaluations(state: FinderRunState) -> None:
         if calls[0].get("billing_state") == "rejected_before_inference":
             continue
         if not any(e["candidate"]["skill_id"] == skill_id for e in report["evaluations"]):
-            finder_run = sys.modules.get("src.finder.run")
-            record_fn = getattr(finder_run, "_record_evaluation", _record_evaluation) if finder_run else _record_evaluation
-            record_fn(
+            _record_evaluation(
                 state, Candidate(**checkpoint["candidate"]), checkpoint["materials"],
                 checkpoint["manifest"], SimpleNamespace(**calls[0]["response"]),
             )
