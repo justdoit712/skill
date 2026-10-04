@@ -43,6 +43,8 @@ from .batch import (
 from .budget import BudgetLedger
 from .config import load_all_config, precheck
 from .discovery import discover, github_search
+from src.infra.github import list_skill_paths
+from .evaluation import evaluate, resolve_api_key
 from .entry_state import STATUS_RECOMMENDED
 from .failure_policy import (
     STOP_CANDIDATES_EXHAUSTED,
@@ -406,8 +408,9 @@ def _collect(
 ) -> dict:
     """本地收集主管道编排：初始化状态、候选池与批次调度、受控评估并收尾。"""
     if evaluate_fn is None:
-        from .evaluation import evaluate
         evaluate_fn = evaluate
+    search_fn = search_fn or github_search
+    expand_fn = expand_fn or list_skill_paths
 
     run_id = uuid4().hex[:6]
     state = init_local_state(
@@ -667,18 +670,35 @@ def run_local(
     cfg: dict | None = None,
     discover_fn: Callable = discover,
     fetch_fn: Callable = fetch_text,
-    evaluate_fn: Callable = None,
+    evaluate_fn: Callable = evaluate,
     log: Callable = print,
     sleep: Callable = time.sleep,
-    search_fn: Any = None,
-    expand_fn: Any = None,
+    search_fn: Callable = github_search,
+    expand_fn: Callable = list_skill_paths,
 ) -> dict:
     """本地收集核心业务函数，受 catalog_task 会话级文件锁保护。"""
-    cfg = cfg or load_all_config(root / 'config')
     _valid_settings(settings)
+    root = Path(root).resolve()
+    project_root = Path(__file__).resolve().parents[2].resolve()
+    if root == project_root and is_test_environment():
+        raise RuntimeError(
+            "测试环境中禁止直接写入工程生产 data/local 目录！"
+            "请在测试用例中显式提供临时隔离目录（如 tempfile.TemporaryDirectory）。"
+        )
+    cfg = deepcopy(cfg if cfg is not None else load_all_config(root / 'config'))
+    # 在本地外层逐次重试并落账；底层单模型禁用嵌套重试，避免 6×6 次请求，保证逐请求控制与检查点
+    if "models" not in cfg.get("model", {}):
+        cfg.setdefault("model", {}).setdefault("request", {})["max_attempts"] = 1
+
     local = root / 'data' / 'local'
     (local / 'runs').mkdir(parents=True, exist_ok=True)
     (local / 'state').mkdir(parents=True, exist_ok=True)
+
+    discover_fn = discover_fn or discover
+    search_fn = search_fn or github_search
+    expand_fn = expand_fn or list_skill_paths
+    fetch_fn = fetch_fn or fetch_text
+    evaluate_fn = evaluate_fn or evaluate
 
     return _collect(
         root, local, settings, cfg,
@@ -687,82 +707,128 @@ def run_local(
     )
 
 
-def main(argv=None) -> int:
+def main(argv=None, *, root: Path | None = None) -> int:
     """本地收集命令行入口。"""
-    parser = argparse.ArgumentParser(description='本地收集技能')
-    parser.add_argument('--check', action='store_true', help='仅预检')
-    parser.add_argument('--refresh-pool', action='store_true', help='重建候选池')
-    parser.add_argument('--batch-repos', type=int, help='每批最多分配的新仓库数')
-    parser.add_argument('--target', type=int, help='新增推荐目标')
-    parser.add_argument('--max-tokens', type=int, help='Token 上限')
-    parser.add_argument('--max-evals', type=int, help='评估上限')
-    parser.add_argument('--limit-queries', type=int, help='查询上限')
-    parser.add_argument('--expand-limit', type=int, help='单仓库展开上限')
-    parser.add_argument('--sync-config', action='store_true', help='同步本地配置')
+    root = Path(root or Path(__file__).resolve().parents[2]).resolve()
+    parser = argparse.ArgumentParser(description="本地收集 50 个推荐 Skill，并显示 Token 消耗")
+    parser.add_argument("--recover-catalog", action="store_true", help="离线恢复已完成评估与页面，不调用模型")
+    parser.add_argument("--check", action="store_true", help="仅本地预检：不联网、不调用模型、不写运行数据")
+    parser.add_argument("--batch-repos", type=int, help="每个新批次最多分配的不同仓库数 N，默认 1000")
+    parser.add_argument("--target", type=int, help="本次新增推荐目标")
+    parser.add_argument("--max-tokens", type=int, help="输入加输出的本次 Token 上限")
+    parser.add_argument("--max-evaluations", "--max-evals", dest="max_evaluations", type=int, help="可选：本次最多评估多少条")
+    parser.add_argument("--max-retries", type=int, help="首次失败后的最多重连次数，默认 5")
+    parser.add_argument("--max-format-failures", type=int, help="距上次有效评估允许的最大连续格式异常数，默认 10")
+    parser.add_argument("--limit-queries", type=int, help="查询上限")
+    parser.add_argument("--expand-limit", type=int, help="单仓库展开上限")
+    parser.add_argument("--sync-config", action="store_true", help="纯离线重建：无需模型凭据与网络，将 config/*.json 同步到 data 与 public/data")
+    parser.add_argument("--enrich-catalog", action="store_true", help="离线结构化增强：从现有数据中提取形态、示例请求与亮点，不修改原中文简述")
+    parser.add_argument("--refresh-pool", action="store_true", help="重新搜索并重建候选池，保留超长跳过标记")
+    parser.add_argument("--enable-static-skip", action="store_true", help="启用静态规则明确空壳占位跳过（避免调用模型）")
+    parser.add_argument("--enable-normalized-cache", action="store_true", help="启用受限规范化缓存复用（仅在明确验证换行等价且证据完全核验时复用）")
+    parser.add_argument("--enable-batch-prioritization", action="store_true", help="启用小批次材料准备与正文分级排序（含 20%% 防饥饿配额）")
+    parser.add_argument("--pool-watermark", type=int, help="候选池待处理数量低于此水位线时自动增量补水（已弃用）")
     args = parser.parse_args(argv)
+    log = lambda message: print(message, flush=True)
 
-    root = Path(__file__).resolve().parents[2]
-    cfg = load_all_config(root / 'config')
+    if args.recover_catalog:
+        from .maintenance import recover_completed_results
+        try:
+            log(json.dumps(recover_completed_results(root), ensure_ascii=False))
+            return 0
+        except (OSError, ValueError, RuntimeError) as exc:
+            log(f"恢复失败：{exc}")
+            return 1
+
+    if args.enrich_catalog:
+        try:
+            from .maintenance import enrich_catalog_offline
+            stats = enrich_catalog_offline(root)
+            log("离线数据增强完成！")
+            log(f"统计：处理 {stats['total']} 条，具有有效中文简述 {stats['with_summary']} 条")
+            log(f"增强结果：示例请求 {stats['with_example_requests']} 条 · 核心亮点 {stats['with_key_features']} 条 · 明确形态 {stats['with_skill_type']} 条")
+            log("原始 summary_zh 完整保留，未做任何修改。")
+            log(f"已更新主索引：{stats['catalog_path']}")
+            log(f"已生成页面数据：{stats['page_path']}")
+            return 0
+        except Exception as exc:
+            log(f"增强失败（{type(exc).__name__}）：{exc}")
+            return 1
 
     if args.sync_config:
-        print("正在同步本地配置...")
-        baseline = _read(root / 'data' / 'catalog.json', {'entries': []})
-        entries = index_by_id(baseline.get('entries') or [])
-        manual_picks = get_manual_picks(cfg.get('favorites') or cfg.get('overrides') or {})
-        manual_exclusions = get_manual_exclusions(cfg.get('overrides') or {})
-        active_snoozed = get_active_snoozed(cfg.get('snoozed') or {})
-        for e in entries.values():
-            apply_manual_overrides_to_entry(e, manual_picks, manual_exclusions)
-        apply_snooze_overrides(list(entries.values()), active_snoozed)
-        context = CatalogContext(rules_version=cfg['rules']['rules_version'],
-                                 domain_names=cfg['prescreen'].domain_names,
-                                 source_types=cfg['source_types'])
-        mutate_catalog(root, lambda _: build_catalog(list(entries.values()), context=context,
-                                                    favorites=cfg.get("favorites"),
-                                                    overrides=cfg.get("overrides"),
-                                                    snoozed=cfg.get("snoozed"),
-                                                    owned=cfg.get("owned")))
-        print("本地配置同步完成。")
-        return 0
+        try:
+            from .maintenance import sync_config_offline
+            manifest = sync_config_offline(root)
+            counts = manifest.get("counts", {})
+            log("离线配置同步完成！")
+            log(f"统计：推荐 {counts.get('recommended', 0)} · 候选 {counts.get('candidate', 0)} · 收藏 {counts.get('manual', 0)} · 排除 {counts.get('excluded', 0)}（当前活跃冷冻 {manifest.get('active_snoozed', 0)} 条）")
+            log(f"已更新主索引：{manifest['catalog_path']}")
+            log(f"已生成页面数据：{manifest['page_path']}")
+            return 0
+        except Exception as exc:
+            log(f"同步失败（{type(exc).__name__}）：{exc}")
+            return 1
 
-    pre = precheck(cfg)
-    if not pre.ok:
-        for err in pre.errors:
-            print(f"[错误] {err}")
+    cfg = load_all_config(root / 'config')
+    problems = precheck(cfg)
+    if not resolve_api_key(cfg.get("model", {})):
+        problems.append("缺少模型 API Key")
+    if problems:
+        for err in problems:
+            log(f"[预检失败] {err}")
         return 1
 
-    model_display = '模型队列' if 'models' in cfg['model'] else cfg['model'].get('model', '未配置')
-    print(f"预检通过；模型 {model_display}；API Key 已配置（不显示密钥）。")
-    if args.check:
-        return 0
+    run_file = root / "config" / "runners" / "local-run.json"
+    if not run_file.exists():
+        run_file = root / "config" / "local-run.json"
+    raw_settings = _read(run_file, {})
+    if "settings" in raw_settings and isinstance(raw_settings["settings"], dict):
+        settings = dict(raw_settings["settings"])
+    else:
+        settings = dict(raw_settings)
+    settings.setdefault("max_format_failures_without_valid_result", 10)
 
-    run_config = _read(root / 'config' / 'runners' / 'local-run.json', {})
-    settings = dict(run_config.get('settings', {}))
-    if args.batch_repos is not None:
-        settings['batch_repo_limit'] = args.batch_repos
-    if args.target is not None:
-        settings['target_recommended'] = args.target
-    if args.max_tokens is not None:
-        settings['max_total_tokens'] = args.max_tokens
-    if args.max_evals is not None:
-        settings['max_evaluations'] = args.max_evals
-    if args.limit_queries is not None:
-        settings['limit_queries'] = args.limit_queries
-    if args.expand_limit is not None:
-        settings['expand_limit'] = args.expand_limit
-    if args.refresh_pool:
-        settings['refresh_pool'] = True
+    for argument, key in (
+        ("batch_repos", "batch_repo_limit"),
+        ("target", "target_recommended"),
+        ("max_tokens", "max_total_tokens"),
+        ("max_evaluations", "max_evaluations"),
+        ("limit_queries", "limit_queries"),
+        ("expand_limit", "expand_limit"),
+        ("max_retries", "max_retries"),
+        ("max_format_failures", "max_format_failures_without_valid_result"),
+        ("pool_watermark", "pool_watermark"),
+    ):
+        val = getattr(args, argument, None)
+        if val is not None:
+            settings[key] = val
+
+    if args.pool_watermark is not None:
+        log("提示：--pool-watermark 已弃用，本地采集已切换为仓库分批与断点恢复模式。")
+    if getattr(args, "refresh_pool", False):
+        settings["refresh_pool"] = True
+    if getattr(args, "enable_static_skip", False):
+        settings["enable_static_skip"] = True
+    if getattr(args, "enable_normalized_cache", False):
+        settings["enable_normalized_cache"] = True
+    if getattr(args, "enable_batch_prioritization", False):
+        settings["enable_batch_prioritization"] = True
 
     try:
         _valid_settings(settings)
     except ValueError as exc:
-        print(f"[配置错误] {exc}")
+        log(f"[配置错误] {exc}")
         return 1
 
-    print(f"目标 {settings['target_recommended']} 个新增推荐，上限 {settings['max_total_tokens']:,} Token，每批仓库上限 {settings.get('batch_repo_limit', DEFAULT_BATCH_REPO_LIMIT)} 个。")
-    print(f"网络及临时 HTTP 错误最多重连 {settings.get('max_retries', 5)} 次，尝试次数会保存。")
+    model_display = '模型队列' if 'models' in cfg.get('model', {}) else cfg.get('model', {}).get('model', '未配置')
+    log(f"预检通过；模型 {model_display}；API Key 已配置（不显示密钥）。")
+    if args.check:
+        return 0
+
+    log(f"目标 {settings['target_recommended']} 个新增推荐，上限 {settings['max_total_tokens']:,} Token，每批仓库上限 {settings.get('batch_repo_limit', DEFAULT_BATCH_REPO_LIMIT)} 个。")
+    log(f"网络及临时 HTTP 错误最多重连 {settings.get('max_retries', 5)} 次，尝试次数会保存。")
     if not os.environ.get('GITHUB_TOKEN'):
-        print("未设置 GITHUB_TOKEN；GitHub 限流可能导致本轮候选不足，可在 PyCharm 的环境变量中设置。")
+        log("未设置 GITHUB_TOKEN；GitHub 限流可能导致本轮候选不足，可在 PyCharm 的环境变量中设置。")
 
     report = run_local(root, settings, cfg=cfg)
 
@@ -783,23 +849,23 @@ def main(argv=None) -> int:
             'interrupted': '用户中断运行',
             'storage_error': '持久化存储故障',
         }.get(primary, f'未知停止原因: {primary}')
-        print(f"\n{msg}")
+        log(f"\n{msg}")
 
-    print(f"本次新增推荐：{report['new_recommended']}/{settings['target_recommended']}；评估 {report['evaluations']} 次。")
+    log(f"本次新增推荐：{report['new_recommended']}/{settings['target_recommended']}；评估 {report['evaluations']} 次。")
     if 'pool_stats' in report:
         st = report['pool_stats']
-        print(f"候选池状态：总计 {st['total']} 条，待处理 {st['pending']} 条，已完成 {st['done']} 条，排除 {st['excluded']} 条。")
+        log(f"候选池状态：总计 {st['total']} 条，待处理 {st['pending']} 条，已完成 {st['done']} 条，排除 {st['excluded']} 条。")
     u = report.get('usage', {})
-    print(f"请求 {u.get('requests', 0)} 次（含重试），失败请求 {report.get('failed_requests', 0)} 次。")
-    print(f"已知输入 {u.get('prompt_tokens', 0):,} / 输出 {u.get('completion_tokens', 0):,} / 合计 {u.get('total_tokens', 0):,} Token。")
-    print(f"其中推理 {u.get('reasoning_tokens', 0):,}（已含在输出中）；用量未知请求 {u.get('unknown_usage_requests', 0)}。")
+    log(f"请求 {u.get('requests', 0)} 次（含重试），失败请求 {report.get('failed_requests', 0)} 次。")
+    log(f"已知输入 {u.get('prompt_tokens', 0):,} / 输出 {u.get('completion_tokens', 0):,} / 合计 {u.get('total_tokens', 0):,} Token。")
+    log(f"其中推理 {u.get('reasoning_tokens', 0):,}（已含在输出中）；用量未知请求 {u.get('unknown_usage_requests', 0)}。")
     if report.get('unknown_usage_reserved_tokens', 0):
-        print(f"未知用量预留预算 {report['unknown_usage_reserved_tokens']:,} Token（估算）；预算占用合计 {report.get('budget_tokens', 0):,}。")
+        log(f"未知用量预留预算 {report['unknown_usage_reserved_tokens']:,} Token（估算）；预算占用合计 {report.get('budget_tokens', 0):,}。")
     if u.get('incomplete_breakdown_requests'):
-        print("部分响应未返回完整输入/输出明细，分项数值仅包含已返回的部分。")
-    print(f"完整报告与本次推荐链接：{report['report_path']}")
-    print(f"可读报告：{Path(report['report_path']).with_suffix('.md')}")
-    print("查看目录：运行 scripts/preview.ps1，或 python -m http.server 8000 --directory public")
+        log("部分响应未返回完整输入/输出明细，分项数值仅包含已返回的部分。")
+    log(f"完整报告与本次推荐链接：{report['report_path']}")
+    log(f"可读报告：{Path(report['report_path']).with_suffix('.md')}")
+    log("查看目录：运行 scripts/preview.ps1，或 python -m http.server 8000 --directory public")
 
     return 0 if report.get('stop_reason') in ('target_reached', 'candidates_exhausted', None) else 1
 

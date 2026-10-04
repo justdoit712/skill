@@ -81,6 +81,82 @@ class CandidatePoolTest(unittest.TestCase):
     def tearDown(self):
         self.tmp.cleanup()
 
+    def test_local_check_validates_run_settings_without_starting_collection(self):
+        import io
+        from contextlib import redirect_stdout
+        from src.catalog import local
+
+        valid = {"target_recommended": 1, "max_total_tokens": 1000,
+                 "max_consecutive_failures": 3}
+        config_path = self.root / "config/runners/local-run.json"
+        cases = [
+            (valid, [], 0),
+            ({**valid, "target_recommended": 0}, [], 1),
+            (valid, ["--target", "0"], 1),
+            (valid, ["--max-tokens", "-1"], 1),
+            (valid, ["--max-evaluations", "0"], 1),
+            ({**valid, "target_recommended": 0}, ["--target", "2"], 0),
+        ]
+        with patch.object(local, "load_all_config", return_value={"model": {"model": "fake"}}), \
+             patch.object(local, "precheck", return_value=[]), \
+             patch.object(local, "resolve_api_key", return_value="fake"), \
+             patch.object(local, "run_local", side_effect=AssertionError("check started collection")) as run:
+            for settings, args, expected in cases:
+                with self.subTest(settings=settings, args=args):
+                    write_json_atomic(config_path, settings)
+                    before = config_path.read_bytes()
+                    output = io.StringIO()
+                    with redirect_stdout(output):
+                        code = local.main(["--check", *args], root=self.root)
+                    self.assertEqual(code, expected, output.getvalue())
+                    self.assertEqual(config_path.read_bytes(), before)
+                    self.assertFalse((self.root / "data").exists())
+            run.assert_not_called()
+
+    def test_historical_failures_are_reconciled_without_new_blocks_or_requests(self):
+        from src.catalog.config import load_all_config
+        from src.catalog.evaluation import evaluation_id
+        from src.catalog.local_candidate import process_candidate
+        from src.catalog.local_state import init_local_state
+        from src.infra.http import FetchResult
+        from src.shared.identity import content_fingerprint
+        from tests.test_catalog_quality import TEXT
+
+        cfg = load_all_config(ROOT / "config")
+        cfg["model"] = {"model": "fake", "endpoint": "https://example.invalid/v1/chat/completions",
+                        "auth": {"api_key": "fake"}}
+        settings = {"target_recommended": 1, "max_total_tokens": 1000000,
+                    "max_consecutive_failures": 3}
+        for status in ("failed", "needs_recovery"):
+            with self.subTest(status=status):
+                root = self.root / status
+                state = init_local_state(root, root / "data/local", settings, cfg, "review",
+                    discover_fn=lambda *a, **kw: self.fail("unexpected discovery"),
+                    fetch_fn=lambda *a, **kw: FetchResult(url="fake", ok=True, text=TEXT),
+                    evaluate_fn=lambda *a, **kw: self.fail("unexpected model call"),
+                    log=lambda _: None, sleep=lambda _: None)
+                candidate = Candidate(skill_id="test/audit:SKILL.md", owner="test", repo="audit",
+                    path="SKILL.md", content_fingerprint=content_fingerprint(TEXT))
+                state.pool = create_pool_from_candidates([candidate])
+                state.pending_items = state.pool.items
+                save_pool(state.pool_path, state.pool)
+                eid = evaluation_id(candidate, cfg["model"], cfg["rules"])
+                state.ledger.reserve([{"evaluation_id": eid, "skill_id": candidate.skill_id}])
+                state.ledger.fail(eid, "OUTPUT_SCHEMA_INVALID", "historical failure")
+                if status == "needs_recovery":
+                    state.ledger.mark_needs_recovery(eid, "historical interrupted request")
+                before = state.ledger.get(eid)
+                state.save()
+
+                self.assertTrue(process_candidate(state, state.pool.items[0]))
+                self.assertEqual(state.pool.items[0].status, "blocked")
+                self.assertEqual(state.report["blocked_records"], 1)
+                self.assertEqual(state.report["reconciled_blocked"], 1)
+                self.assertEqual(state.report["blocked_new"], 0)
+                self.assertEqual(state.report["evaluations"], 0)
+                self.assertEqual(state.report["calls"], [])
+                self.assertEqual(state.ledger.get(eid), before)
+
     def test_pool_save_and_load(self):
         cand = candidate_from_repo("test-owner", "tool-repo", path="skills/tool/SKILL.md")
         cand.content_fingerprint = "sha256:abcd"

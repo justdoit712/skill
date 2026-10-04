@@ -184,12 +184,12 @@ def _update_blocked(pool: Any, seq: int, block_info: dict) -> None:
     update_candidate_status(pool, seq, STATUS_BLOCKED)
 
 
-def _record_blocked_candidate(state: LocalCollection, seq: int, block_info: dict) -> None:
-    """持久化保存 blocked 状态候选并递增相关计数。"""
+def _record_blocked_candidate(state: LocalCollection, seq: int, block_info: dict, *, reconciled: bool = False) -> None:
+    """保存阻止状态，区分历史记录对账与本轮新失败。"""
     _update_blocked(state.pool, seq, block_info)
     save_pool(state.pool_path, state.pool)
     state.report['blocked_records'] += 1
-    state.report['blocked_new'] += 1
+    state.report['reconciled_blocked' if reconciled else 'blocked_new'] += 1
 
 
 def _build_block_info(
@@ -712,8 +712,7 @@ def process_candidate(state: LocalCollection, item: Any) -> bool:
         )
         block_info['reason_code'] = (record.get('error') or {}).get('reason_code')
         block_info['error_kind'] = (record.get('error') or {}).get('error_kind') or record.get('error_kind')
-        _record_blocked_candidate(state, seq, block_info)
-        state.report['reconciled_blocked'] += 1
+        _record_blocked_candidate(state, seq, block_info, reconciled=True)
         state.log(f"[阻止] #{seq} {candidate.skill_id}：存在不可重试评估记录（{reason}），已持久化为 blocked，本次未调用模型。")
         state.save()
         return True
