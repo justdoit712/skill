@@ -202,5 +202,90 @@ class VersionCompatibilityTest(unittest.TestCase):
         self.assertIsNone(m_zero.value)
 
 
+@smoke
+class PreflightSharedContractsTest(unittest.TestCase):
+    """预检配置校验、默认值注入与兼容性指纹测试（Section 11 验收矩阵）。"""
+
+    def test_preflight_config_defaults_and_validation(self):
+        from src.infra.llm import validate_model_config
+        from src.shared.model_config import parse_model_configs
+
+        # 1. 默认值注入：未显式配置 preflight 时注入稳定默认值
+        raw = {
+            "model": "qwen-turbo",
+            "endpoint": "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions",
+            "auth": {"api_key": "test-key"},
+        }
+        parsed = parse_model_configs(raw)
+        self.assertEqual(len(parsed), 1)
+        pf = parsed[0]["preflight"]
+        self.assertEqual(pf["mode"], "off")
+        self.assertEqual(pf["unknown_spec"], "passthrough")
+        self.assertEqual(pf["uncertain_tokens"], "conservative")
+        self.assertEqual(pf["safety_margin_tokens"], 1024)
+
+        # 2. 合法模式配置通过校验
+        valid_cfg = {
+            **raw,
+            "preflight": {
+                "mode": "validate",
+                "unknown_spec": "reject",
+                "uncertain_tokens": "reject",
+                "safety_margin_tokens": 512,
+            },
+        }
+        self.assertEqual(validate_model_config(valid_cfg), [])
+
+        # 3. 非法配置产生明确校验错误
+        for invalid_pf, expected_substr in [
+            ({"mode": "invalid_mode"}, "preflight.mode 必须为 off、validate 或 adapt"),
+            ({"unknown_spec": "invalid_policy"}, "preflight.unknown_spec 必须为 passthrough 或 reject"),
+            ({"uncertain_tokens": "invalid_tokens"}, "preflight.uncertain_tokens 必须为 conservative 或 reject"),
+            ({"safety_margin_tokens": -10}, "preflight.safety_margin_tokens 必须为非负整数"),
+        ]:
+            invalid_cfg = {**raw, "preflight": invalid_pf}
+            with self.assertRaises(ValueError) as ctx:
+                parse_model_configs(invalid_cfg)
+            self.assertIn(expected_substr, str(ctx.exception))
+
+    def test_compatibility_fingerprint_stability_and_reproducibility(self):
+        from src.shared.llm_contracts import build_compatibility_fingerprint
+
+        # 相同入参产生完全一致的确定性哈希
+        fp1 = build_compatibility_fingerprint(
+            endpoint="https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions",
+            model="qwen-plus",
+            effective_output_tokens=4000,
+            adapter_revision="openai-compatible-v1",
+        )
+        fp2 = build_compatibility_fingerprint(
+            endpoint="https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions",
+            model="qwen-plus",
+            effective_output_tokens=4000,
+            adapter_revision="openai-compatible-v1",
+        )
+        self.assertEqual(fp1, fp2)
+        self.assertTrue(fp1.startswith("sha256:"))
+        self.assertEqual(len(fp1), 23)  # sha256: + 16 chars
+
+        # 模型名称边缘空白归一化
+        fp_normalized = build_compatibility_fingerprint(
+            endpoint="https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions",
+            model="  qwen-plus  ",
+            effective_output_tokens=4000,
+            adapter_revision="openai-compatible-v1",
+        )
+        self.assertEqual(fp1, fp_normalized)
+
+        # 关键要素变化产生不同指纹
+        fp_diff_model = build_compatibility_fingerprint(
+            endpoint="https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions",
+            model="qwen-turbo",
+            effective_output_tokens=4000,
+            adapter_revision="openai-compatible-v1",
+        )
+        self.assertNotEqual(fp1, fp_diff_model)
+
+
 if __name__ == "__main__":
     unittest.main()

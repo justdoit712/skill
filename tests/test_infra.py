@@ -18,6 +18,8 @@ from src.shared.model_config import parse_model_configs
 from tests import smoke
 from tools.switch_model import mask_key, switch_to_provider
 
+ROOT = Path(__file__).resolve().parents[1]
+
 
 @smoke
 class FilesTest(unittest.TestCase):
@@ -493,6 +495,306 @@ class HttpFetchTest(unittest.TestCase):
         self.assertEqual(result.reason_code, REASON_NETWORK_ERROR)
         self.assertEqual(result.attempts, 2)
         self.assertEqual(resp.close.call_count, 2)
+
+
+@smoke
+class PreflightAndAdaptationTest(unittest.TestCase):
+    """模型请求预检与适配闭环验证（Section 11 验收矩阵）。"""
+
+    def setUp(self):
+        from src.infra.model_specs import load_specs
+        from src.infra.llm_gateway import build_runtime
+        self.specs_path = ROOT / "config" / "models" / "model_specs.json"
+        self.snapshot = load_specs(self.specs_path)
+
+    def test_preflight_mode_off_bypasses_specs_and_counter(self):
+        from src.infra.llm_gateway import prepare
+        from src.shared.llm_contracts import RequestIntent
+        cfg = {
+            "model": "completely-unknown-custom-model",
+            "endpoint": "https://custom.endpoint/v1/chat/completions",
+            "limits": {"max_output_tokens": 12345},
+            "preflight": {"mode": "off"},
+        }
+        intent = RequestIntent(
+            messages=[{"role": "user", "content": "hello"}],
+            requested_output_tokens=12345,
+        )
+        prep = prepare(intent, cfg)
+        self.assertIsNone(prep.rejection)
+        self.assertIsNotNone(prep.plan)
+        plan = prep.plan
+        self.assertEqual(plan.preflight_mode, "off")
+        self.assertEqual(plan.preflight_outcome, "bypassed")
+        self.assertEqual(plan.effective_output_tokens, 12345)
+        self.assertEqual(len(plan.adjustments), 0)
+
+    def test_preflight_mode_validate_rejects_output_budget_exceeded(self):
+        from src.infra.llm_gateway import build_runtime, prepare
+        from src.shared.llm_contracts import RequestIntent, PREFLIGHT_OUTPUT_LIMIT_EXCEEDED
+        cfg = {
+            "model": "qwen-turbo",
+            "endpoint": "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions",
+            "limits": {"max_output_tokens": 12000},
+            "preflight": {"mode": "validate", "unknown_spec": "reject"},
+        }
+        rt = build_runtime(cfg, spec_snapshot=self.snapshot)
+        intent = RequestIntent(
+            messages=[{"role": "user", "content": "hello"}],
+            requested_output_tokens=12000,
+        )
+        prep = prepare(intent, cfg, rt)
+        self.assertIsNone(prep.plan)
+        self.assertIsNotNone(prep.rejection)
+        self.assertEqual(prep.rejection.reason_code, PREFLIGHT_OUTPUT_LIMIT_EXCEEDED)
+
+    def test_preflight_mode_adapt_clips_output_and_preserves_prompt(self):
+        import json
+        from src.infra.llm_gateway import build_runtime, prepare
+        from src.shared.llm_contracts import RequestIntent
+        cfg = {
+            "model": "qwen-turbo",
+            "endpoint": "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions",
+            "limits": {"max_output_tokens": 12000},
+            "preflight": {"mode": "adapt", "unknown_spec": "reject"},
+        }
+        rt = build_runtime(cfg, spec_snapshot=self.snapshot)
+        user_prompt = "请详细分析以下代码结构，保持原意不变"
+        intent = RequestIntent(
+            messages=[{"role": "user", "content": user_prompt}],
+            requested_output_tokens=12000,
+            response_format={"type": "json_object"},
+        )
+        prep = prepare(intent, cfg, rt)
+        self.assertIsNone(prep.rejection)
+        self.assertIsNotNone(prep.plan)
+        plan = prep.plan
+        self.assertEqual(plan.preflight_mode, "adapt")
+        self.assertEqual(plan.preflight_outcome, "adapted")
+        self.assertEqual(plan.effective_output_tokens, 8192)
+        self.assertEqual(len(plan.adjustments), 1)
+        self.assertEqual(plan.adjustments[0]["field"], "max_tokens")
+        self.assertEqual(plan.adjustments[0]["effective"], 8192)
+
+        # 验证 payload 严格与计划一致，且 prompt/schema 未被截断或降级
+        body = json.loads(plan.encoded_body.decode("utf-8"))
+        self.assertEqual(body["max_tokens"], 8192)
+        self.assertEqual(body["messages"][0]["content"], user_prompt)
+        self.assertEqual(body["response_format"], {"type": "json_object"})
+
+    def test_context_window_and_min_output_tokens_guard(self):
+        from src.infra.llm_gateway import build_runtime, prepare
+        from src.infra.model_specs import ModelSpec, SpecSnapshot
+        from src.shared.llm_contracts import RequestIntent, PREFLIGHT_OUTPUT_BUDGET_TOO_SMALL
+        custom_spec = ModelSpec.from_dict({
+            "spec_id": "test-tiny",
+            "revision": "2026-10-05.1",
+            "provider": "dashscope",
+            "endpoint": "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions",
+            "model": "tiny-context-model",
+            "mode": "chat",
+            "context_window": 200,
+            "max_input_tokens": 150,
+            "max_output_tokens": 100,
+            "context_accounting": "shared",
+            "output_budget_semantics": "clipped_to_remaining_context",
+            "response_formats": {"json_object": True},
+            "token_counter": "conservative_fallback",
+            "source": "official_doc",
+            "verified_at": "2026-10-05",
+        })
+        snapshot = SpecSnapshot(
+            schema_version="1.0.0",
+            revision="test",
+            digest="sha256:test",
+            specs={custom_spec.match_key: custom_spec},
+        )
+        cfg = {
+            "model": "tiny-context-model",
+            "endpoint": "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions",
+            "limits": {"max_output_tokens": 50},
+            "preflight": {"mode": "adapt", "safety_margin_tokens": 50},
+        }
+        rt = build_runtime(cfg, spec_snapshot=snapshot)
+
+        # 输入 + 安全边际 (50) 占满 200，导致剩余空间不足 min_output_tokens (60)
+        intent = RequestIntent(
+            messages=[{"role": "user", "content": "A" * 120}],
+            requested_output_tokens=80,
+            min_output_tokens=60,
+        )
+        prep = prepare(intent, cfg, rt)
+        self.assertIsNotNone(prep.rejection)
+        self.assertEqual(prep.rejection.reason_code, PREFLIGHT_OUTPUT_BUDGET_TOO_SMALL)
+
+    def test_unknown_spec_passthrough_vs_reject(self):
+        from src.infra.llm_gateway import build_runtime, prepare
+        from src.shared.llm_contracts import RequestIntent, PREFLIGHT_SPEC_UNKNOWN
+        cfg_pass = {
+            "model": "novel-unseen-model",
+            "endpoint": "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions",
+            "limits": {"max_output_tokens": 2048},
+            "preflight": {"mode": "validate", "unknown_spec": "passthrough"},
+        }
+        rt_pass = build_runtime(cfg_pass, spec_snapshot=self.snapshot)
+        intent = RequestIntent(
+            messages=[{"role": "user", "content": "hi"}],
+            requested_output_tokens=2048,
+        )
+        prep_pass = prepare(intent, cfg_pass, rt_pass)
+        self.assertIsNone(prep_pass.rejection)
+        self.assertIsNotNone(prep_pass.plan)
+
+        cfg_rej = {
+            "model": "novel-unseen-model",
+            "endpoint": "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions",
+            "limits": {"max_output_tokens": 2048},
+            "preflight": {"mode": "validate", "unknown_spec": "reject"},
+        }
+        rt_rej = build_runtime(cfg_rej, spec_snapshot=self.snapshot)
+        prep_rej = prepare(intent, cfg_rej, rt_rej)
+        self.assertIsNotNone(prep_rej.rejection)
+        self.assertEqual(prep_rej.rejection.reason_code, PREFLIGHT_SPEC_UNKNOWN)
+
+    def test_capability_unsupported_rejection(self):
+        from src.infra.llm_gateway import build_runtime, prepare
+        from src.infra.model_specs import ModelSpec, SpecSnapshot
+        from src.shared.llm_contracts import RequestIntent, PREFLIGHT_CAPABILITY_UNSUPPORTED
+        custom_spec = ModelSpec.from_dict({
+            "spec_id": "test-no-json",
+            "revision": "2026-10-05.1",
+            "provider": "dashscope",
+            "endpoint": "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions",
+            "model": "no-json-model",
+            "mode": "chat",
+            "context_window": 8192,
+            "max_input_tokens": 6000,
+            "max_output_tokens": 2048,
+            "context_accounting": "shared",
+            "output_budget_semantics": "clipped_to_remaining_context",
+            "response_formats": {"json_object": False},
+            "token_counter": "conservative_fallback",
+            "source": "official_doc",
+            "verified_at": "2026-10-05",
+        })
+        snapshot = SpecSnapshot(
+            schema_version="1.0.0",
+            revision="test",
+            digest="sha256:test",
+            specs={custom_spec.match_key: custom_spec},
+        )
+        cfg = {
+            "model": "no-json-model",
+            "endpoint": "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions",
+            "limits": {"max_output_tokens": 1000},
+            "preflight": {"mode": "validate"},
+        }
+        rt = build_runtime(cfg, spec_snapshot=snapshot)
+        intent = RequestIntent(
+            messages=[{"role": "user", "content": "hi"}],
+            requested_output_tokens=1000,
+            response_format={"type": "json_object"},
+        )
+        prep = prepare(intent, cfg, rt)
+        self.assertIsNotNone(prep.rejection)
+        self.assertEqual(prep.rejection.reason_code, PREFLIGHT_CAPABILITY_UNSUPPORTED)
+
+    def test_preflight_mode_off_true_bypass_without_calling_snapshot(self):
+        from src.infra.llm_gateway import PreflightRuntime, prepare
+        from src.infra.preflight import PreflightPolicy
+        from src.shared.llm_contracts import RequestIntent
+        mock_snapshot = Mock()
+        mock_counter = Mock()
+        rt = PreflightRuntime(
+            policy=PreflightPolicy(mode="off"),
+            counter=mock_counter,
+            spec_snapshot=mock_snapshot,
+        )
+        cfg = {
+            "model": "any-model",
+            "endpoint": "https://custom.endpoint/v1/chat/completions",
+            "limits": {"max_output_tokens": 12345},
+            "preflight": {"mode": "off"},
+        }
+        intent = RequestIntent(
+            messages=[{"role": "user", "content": "hello"}],
+            requested_output_tokens=12345,
+        )
+        prep = prepare(intent, cfg, rt)
+        self.assertIsNone(prep.rejection)
+        self.assertIsNotNone(prep.plan)
+        # 3. 确保关闭时真正旁路：即使传入规格快照，也不调用其查询方法，亦不调用计数器
+        self.assertEqual(mock_snapshot.find.call_count, 0)
+        self.assertEqual(mock_counter.count_tokens.call_count, 0)
+        self.assertEqual(prep.plan.preflight_mode, "off")
+        self.assertEqual(prep.plan.preflight_outcome, "bypassed")
+        self.assertEqual(prep.plan.effective_output_tokens, 12345)
+
+    def test_configuration_errors_raise_value_error_without_guessing_defaults(self):
+        from src.infra.llm_gateway import prepare
+        from src.shared.llm_contracts import RequestIntent
+        intent = RequestIntent(messages=[{"role": "user", "content": "hi"}], requested_output_tokens=100)
+        # 5. 配置错误明确报错：缺少 endpoint 时不猜测 DashScope
+        with self.assertRaises(ValueError):
+            prepare(intent, {"model": "test-model"})
+        # 5. 缺少 model 时不填入 "default"
+        with self.assertRaises(ValueError):
+            prepare(intent, {"endpoint": "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions"})
+
+    def test_invalid_response_format_raises_error(self):
+        from src.shared.llm_contracts import RequestIntent
+        # 6. 非法 response_format 严格报错，不能静默删除
+        with self.assertRaises(ValueError):
+            RequestIntent(
+                messages=[{"role": "user", "content": "hi"}],
+                requested_output_tokens=100,
+                response_format={"type": "invalid_type"},
+            )
+        with self.assertRaises(ValueError):
+            RequestIntent(
+                messages=[{"role": "user", "content": "hi"}],
+                requested_output_tokens=100,
+                response_format="unsupported_str_type",
+            )
+
+    def test_spec_capability_three_state_distinction(self):
+        from src.infra.model_specs import ModelSpec
+        # 6. 规格中能力声明严格区分支持、不支持、未知，不能通过 bool(value) 强制转换
+        spec = ModelSpec.from_dict({
+            "spec_id": "test-tri-state",
+            "revision": "2026-10-05.1",
+            "provider": "dashscope",
+            "endpoint": "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions",
+            "model": "tri-state-model",
+            "mode": "chat",
+            "context_window": 8192,
+            "max_output_tokens": 2048,
+            "context_accounting": "shared",
+            "output_budget_semantics": "clipped_to_remaining_context",
+            "response_formats": {
+                "json_object": True,
+                "text": False,
+                "json_schema": None,  # 未知状态
+            },
+            "token_counter": "conservative_fallback",
+            "source": "test",
+            "verified_at": "2026-10-05",
+        })
+        self.assertIs(spec.response_formats["json_object"], True)
+        self.assertIs(spec.response_formats["text"], False)
+        self.assertIsNone(spec.response_formats["json_schema"])
+        # 非法布尔/None 格式值应报错
+        with self.assertRaises(ValueError):
+            ModelSpec.from_dict({
+                "spec_id": "test-bad",
+                "endpoint": "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions",
+                "model": "bad-model",
+                "context_window": 8192,
+                "max_output_tokens": 2048,
+                "context_accounting": "shared",
+                "output_budget_semantics": "clipped_to_remaining_context",
+                "response_formats": {"json_object": "not_a_bool"},
+            })
 
 
 if __name__ == "__main__":

@@ -1,0 +1,195 @@
+{
+  "schema_version": "1.0.0",
+  "revision": "2026-10-05-v1",
+  "specs": [
+    {
+      "spec_id": "dashscope-qwen-turbo",
+      "revision": "2026-10-05-v1",
+      "provider": "dashscope",
+      "endpoint": "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions",
+      "model": "qwen-turbo",
+      "mode": "chat",
+      "context_window": 131072,
+      "max_input_tokens": 129024,
+      "max_output_tokens": 8192,
+      "context_accounting": "shared",
+      "output_budget_semantics": "shared_with_reasoning",
+      "response_formats": {
+        "text": true,
+        "json_object": true,
+        "json_schema": true
+      },
+      "token_counter": "conservative",
+      "source": "dashscope_official_specs",
+      "verified_at": "2026-10-05"
+    },
+    {
+      "spec_id": "dashscope-qwen-plus",
+      "revision": "2026-10-05-v1",
+      "provider": "dashscope",
+      "endpoint": "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions",
+      "model": "qwen-plus",
+      "mode": "chat",
+      "context_window": 131072,
+      "max_input_tokens": 129024,
+      "max_output_tokens": 8192,
+      "context_accounting": "shared",
+      "output_budget_semantics": "shared_with_reasoning",
+      "response_formats": {
+        "text": true,
+        "json_object": true,
+        "json_schema": true
+      },
+      "token_counter": "conservative",
+      "source": "dashscope_official_specs",
+      "verified_at": "2026-10-05"
+    },
+    {
+      "spec_id": "dashscope-qwen-max",
+      "revision": "2026-10-05-v1",
+      "provider": "dashscope",
+      "endpoint": "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions",
+      "model": "qwen-max",
+      "mode": "chat",
+      "context_window": 32768,
+      "max_input_tokens": 30720,
+      "max_output_tokens": 8192,
+      "context_accounting": "shared",
+      "output_budget_semantics": "shared_with_reasoning",
+      "response_formats": {
+        "text": true,
+        "json_object": true,
+        "json_schema": true
+      },
+      "token_counter": "conservative",
+      "source": "dashscope_official_specs",
+      "verified_at": "2026-10-05"
+    },
+    {
+      "spec_id": "dashscope-deepseek-r1-distill-qwen-7b",
+      "revision": "2026-10-05-v1",
+      "provider": "dashscope",
+      "endpoint": "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions",
+      "model": "deepseek-r1-distill-qwen-7b",
+      "mode": "chat",
+      "context_window": 32768,
+      "max_input_tokens": 30720,
+      "max_output_tokens": 8192,
+      "context_accounting": "shared",
+      "output_budget_semantics": "shared_with_reasoning",
+      "response_formats": {
+        "text": true,
+        "json_object": true,
+        "json_schema": true
+      },
+      "token_counter": "conservative",
+      "source": "dashscope_official_specs",
+      "verified_at": "2026-10-05"
+    },
+    {
+      "spec_id": "dashscope-deepseek-r1-distill-qwen-14b",
+      "revision": "2026-10-05-v1",
+      "provider": "dashscope",
+      "endpoint": "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions",
+      "model": "deepseek-r1-distill-qwen-14b",
+      "mode": "chat",
+      "context_window": 32768,
+      "max_input_tokens": 30720,
+      "max_output_tokens": 8192,
+      "context_accounting": "shared",
+      "output_budget_semantics": "shared_with_reasoning",
+      "response_formats": {
+        "text": true,
+        "json_object": true,
+        "json_schema": true
+      },
+      "token_counter": "conservative",
+      "source": "dashscope_official_specs",
+      "verified_at": "2026-10-05"
+    },
+    {
+      "spec_id": "dashscope-deepseek-r1-distill-qwen-32b",
+      "revision": "2026-10-05-v1",
+      "provider": "dashscope",
+      "endpoint": "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions",
+      "model": "deepseek-r1-distill-qwen-32b",
+      "mode": "chat",
+      "context_window": 32768,
+      "max_input_tokens": 30720,
+      "max_output_tokens": 8192,
+      "context_accounting": "shared",
+      "output_budget_semantics": "shared_with_reasoning",
+      "response_formats": {
+        "text": true,
+        "json_object": true,
+        "json_schema": true
+      },
+      "token_counter": "conservative",
+      "source": "dashscope_official_specs",
+      "verified_at": "2026-10-05"
+    },
+    {
+      "spec_id": "dashscope-qwen3-8b",
+      "revision": "2026-10-05-v1",
+      "provider": "dashscope",
+      "endpoint": "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions",
+      "model": "qwen3-8b",
+      "mode": "chat",
+      "context_window": 32768,
+      "max_input_tokens": 30720,
+      "max_output_tokens": 8192,
+      "context_accounting": "shared",
+      "output_budget_semantics": "shared_with_reasoning",
+      "response_formats": {
+        "text": true,
+        "json_object": true,
+        "json_schema": true
+      },
+      "token_counter": "conservative",
+      "source": "dashscope_official_specs",
+      "verified_at": "2026-10-05"
+    },
+    {
+      "spec_id": "dashscope-qwen3-14b",
+      "revision": "2026-10-05-v1",
+      "provider": "dashscope",
+      "endpoint": "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions",
+      "model": "qwen3-14b",
+      "mode": "chat",
+      "context_window": 32768,
+      "max_input_tokens": 30720,
+      "max_output_tokens": 8192,
+      "context_accounting": "shared",
+      "output_budget_semantics": "shared_with_reasoning",
+      "response_formats": {
+        "text": true,
+        "json_object": true,
+        "json_schema": true
+      },
+      "token_counter": "conservative",
+      "source": "dashscope_official_specs",
+      "verified_at": "2026-10-05"
+    },
+    {
+      "spec_id": "dashscope-qwen3-32b",
+      "revision": "2026-10-05-v1",
+      "provider": "dashscope",
+      "endpoint": "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions",
+      "model": "qwen3-32b",
+      "mode": "chat",
+      "context_window": 32768,
+      "max_input_tokens": 30720,
+      "max_output_tokens": 8192,
+      "context_accounting": "shared",
+      "output_budget_semantics": "shared_with_reasoning",
+      "response_formats": {
+        "text": true,
+        "json_object": true,
+        "json_schema": true
+      },
+      "token_counter": "conservative",
+      "source": "dashscope_official_specs",
+      "verified_at": "2026-10-05"
+    }
+  ]
+}

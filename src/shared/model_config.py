@@ -8,6 +8,13 @@ from urllib.parse import urlsplit, urlunsplit
 REQUEST_FIELDS = frozenset({'timeout_seconds', 'max_attempts', 'temperature', 'response_format'})
 SINGLE_LIMITS = frozenset({'max_input_bytes', 'max_output_tokens'})
 TASK_LIMITS = frozenset({'max_calls_per_week', 'max_total_tokens_per_run'})
+PREFLIGHT_FIELDS = frozenset({'mode', 'unknown_spec', 'uncertain_tokens', 'safety_margin_tokens'})
+DEFAULT_PREFLIGHT = {
+    'mode': 'off',
+    'unknown_spec': 'passthrough',
+    'uncertain_tokens': 'conservative',
+    'safety_margin_tokens': 1024,
+}
 
 
 def normalize_endpoint(value):
@@ -39,7 +46,7 @@ def _positive(value, name, integer=True):
 
 def _validate_sections(cfg):
     for section, allowed in (('request', REQUEST_FIELDS), ('limits', SINGLE_LIMITS | TASK_LIMITS),
-                             ('capabilities', {'json_schema'})):
+                             ('capabilities', {'json_schema'}), ('preflight', PREFLIGHT_FIELDS)):
         data = cfg.get(section, {})
         if not isinstance(data, dict) or set(data) - allowed:
             raise ValueError(section + ' 包含不支持的字段或类型错误')
@@ -56,6 +63,17 @@ def _validate_sections(cfg):
     caps = cfg.get('capabilities', {})
     if any(type(v) is not bool for v in caps.values()):
         raise ValueError('capabilities 必须使用布尔值')
+    pf = cfg.get('preflight', {})
+    if 'mode' in pf and pf['mode'] not in ('off', 'validate', 'adapt'):
+        raise ValueError('preflight.mode 必须为 off、validate 或 adapt')
+    if 'unknown_spec' in pf and pf['unknown_spec'] not in ('passthrough', 'reject'):
+        raise ValueError('preflight.unknown_spec 必须为 passthrough 或 reject')
+    if 'uncertain_tokens' in pf and pf['uncertain_tokens'] not in ('conservative', 'reject'):
+        raise ValueError('preflight.uncertain_tokens 必须为 conservative 或 reject')
+    if 'safety_margin_tokens' in pf:
+        v = pf['safety_margin_tokens']
+        if isinstance(v, bool) or not isinstance(v, int) or v < 0:
+            raise ValueError('preflight.safety_margin_tokens 必须为非负整数')
     fmt = req.get('response_format')
     if fmt is not None:
         if isinstance(fmt, str):
@@ -86,7 +104,10 @@ def parse_model_configs(config):
     if 'models' not in config:
         if not isinstance(config.get('model'), str) or not config['model'].strip():
             raise ValueError('模型配置缺 model')
-        return (deepcopy(config),)
+        _validate_sections(config)
+        effective = deepcopy(config)
+        effective['preflight'] = {**DEFAULT_PREFLIGHT, **effective.get('preflight', {})}
+        return (effective,)
     if 'model' in config:
         raise ValueError('model 与 models 字段互斥')
     items = config['models']
@@ -100,6 +121,7 @@ def parse_model_configs(config):
             or any(not isinstance(v, str) for v in auth.values())):
         raise ValueError('auth 配置无效')
     _validate_sections(config)
+    root_preflight = {**DEFAULT_PREFLIGHT, **config.get('preflight', {})}
     seen, result = set(), []
     for item in items:
         entry = {'model': item} if isinstance(item, str) else item
@@ -112,6 +134,7 @@ def parse_model_configs(config):
         seen.add(name)
         effective = deepcopy({k: v for k, v in config.items() if k != 'models'})
         effective.update(model=name, endpoint=endpoint)
+        effective['preflight'] = deepcopy(root_preflight)
         for section in ('request', 'limits', 'capabilities'):
             override = entry.get(section, {})
             if not isinstance(override, dict):
@@ -130,6 +153,8 @@ def model_fingerprint(config):
             'request': {k: v for k, v in config.get('request', {}).items() if k in REQUEST_FIELDS},
             'limits': {k: v for k, v in config.get('limits', {}).items() if k in SINGLE_LIMITS},
             'capabilities': {k: v for k, v in config.get('capabilities', {}).items() if k == 'json_schema'}}
+    if 'preflight' in config and config['preflight'] != DEFAULT_PREFLIGHT:
+        safe['preflight'] = {k: v for k, v in config['preflight'].items() if k in PREFLIGHT_FIELDS}
     return 'sha256:' + hashlib.sha256(json.dumps(safe, sort_keys=True, ensure_ascii=False).encode()).hexdigest()[:16]
 
 
