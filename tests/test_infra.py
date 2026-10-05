@@ -310,6 +310,18 @@ class ModelPoolTest(unittest.TestCase):
                 restarted = ModelPool(raw, root, authoritative=False)
                 restarted.start()
                 self.assertEqual(restarted.select()['model'], 'model-b')
+                # The standalone preflight switch must not unblock a rejection
+                # while production still sends the same request parameters.
+                for mode in ('off', 'validate', 'adapt'):
+                    with self.subTest(preflight_mode=mode):
+                        standalone = deepcopy(raw)
+                        standalone['preflight'] = {
+                            'mode': mode, 'unknown_spec': 'reject',
+                            'uncertain_tokens': 'reject', 'safety_margin_tokens': 512,
+                        }
+                        unchanged = ModelPool(standalone, root, authoritative=False)
+                        unchanged.start()
+                        self.assertEqual(unchanged.select()['model'], 'model-b')
                 changed = deepcopy(raw)
                 changed['models'][0] = {'model': 'model-a', 'limits': {'max_output_tokens': 2000}}
                 updated = ModelPool(changed, root, authoritative=False)
@@ -731,7 +743,7 @@ class PreflightAndAdaptationTest(unittest.TestCase):
         self.assertEqual(prep.plan.effective_output_tokens, 12345)
 
     def test_configuration_errors_raise_value_error_without_guessing_defaults(self):
-        from src.infra.llm_gateway import prepare
+        from src.infra.llm_gateway import build_runtime, prepare
         from src.shared.llm_contracts import RequestIntent
         intent = RequestIntent(messages=[{"role": "user", "content": "hi"}], requested_output_tokens=100)
         # 5. 配置错误明确报错：缺少 endpoint 时不猜测 DashScope
@@ -741,21 +753,71 @@ class PreflightAndAdaptationTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             prepare(intent, {"endpoint": "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions"})
 
+        cfg = {'model': 'test', 'endpoint': 'https://test.invalid/chat/completions'}
+        for invalid in (False, [], None, {'safety_margin_token': 123}, {'mode': 'typo'}):
+            with self.subTest(invalid_preflight=invalid):
+                bad = {**cfg, 'preflight': invalid}
+                for validate in (parse_model_configs, build_runtime, lambda c: prepare(intent, c)):
+                    with self.assertRaises(ValueError):
+                        validate(bad)
+
+        for content in (None, {}, [], 123):
+            with self.subTest(content=content), self.assertRaises(ValueError):
+                RequestIntent(messages=[{'role': 'user', 'content': content}], requested_output_tokens=100)
+        for temperature in (True, '1', float('nan'), float('inf'), -1, 3):
+            with self.subTest(temperature=temperature), self.assertRaises(ValueError):
+                RequestIntent(messages=[{'role': 'user', 'content': 'hi'}],
+                              requested_output_tokens=100, temperature=temperature)
+
+        # Runtime construction must enforce the same integer contract as config parsing.
+        for mode in ('off', 'validate', 'adapt'):
+            for margin in (True, False, 0.9, '512', None, -1):
+                with self.subTest(mode=mode, invalid_margin=margin):
+                    with self.assertRaisesRegex(ValueError, 'safety_margin_tokens'):
+                        build_runtime({'preflight': {
+                            'mode': mode, 'safety_margin_tokens': margin,
+                        }}, spec_snapshot=Mock())
+            for margin in (0, 512):
+                with self.subTest(mode=mode, valid_margin=margin):
+                    runtime = build_runtime({'preflight': {
+                        'mode': mode, 'safety_margin_tokens': margin,
+                    }}, spec_snapshot=Mock())
+                    self.assertEqual(runtime.policy.safety_margin_tokens, margin)
+
     def test_invalid_response_format_raises_error(self):
+        from src.infra.llm_gateway import prepare
         from src.shared.llm_contracts import RequestIntent
         # 6. 非法 response_format 严格报错，不能静默删除
-        with self.assertRaises(ValueError):
-            RequestIntent(
-                messages=[{"role": "user", "content": "hi"}],
-                requested_output_tokens=100,
-                response_format={"type": "invalid_type"},
-            )
-        with self.assertRaises(ValueError):
-            RequestIntent(
-                messages=[{"role": "user", "content": "hi"}],
-                requested_output_tokens=100,
-                response_format="unsupported_str_type",
-            )
+        for fmt in (
+            {"type": "invalid_type"}, "unsupported_str_type", 123, "json_schema",
+            {"type": "json_schema"},
+            {"type": "json_schema", "json_schema": {"schema": {}}},
+            {"type": "json_schema", "json_schema": {"name": "result"}},
+            {"type": "json_schema", "json_schema": {"name": "  ", "schema": {}}},
+        ):
+            with self.subTest(invalid_format=fmt):
+                with self.assertRaises(ValueError):
+                    RequestIntent(
+                        messages=[{"role": "user", "content": "hi"}],
+                        requested_output_tokens=100,
+                        response_format=fmt,
+                    )
+
+        schema = {"type": "json_schema", "json_schema": {
+            "name": "result", "schema": {"type": "object"}, "strict": True,
+        }}
+        for fmt in ('text', 'json_object', schema):
+            with self.subTest(valid_format=fmt):
+                intent = RequestIntent(
+                    messages=[{"role": "user", "content": "hi"}],
+                    requested_output_tokens=100, response_format=fmt,
+                )
+                plan = prepare(intent, {
+                    'model': 'test-model', 'endpoint': 'https://test.invalid/chat/completions',
+                    'preflight': {'mode': 'off'},
+                }).plan
+                self.assertEqual(json.loads(plan.encoded_body)['response_format'],
+                                 {'type': fmt} if isinstance(fmt, str) else fmt)
 
     def test_spec_capability_three_state_distinction(self):
         from src.infra.model_specs import ModelSpec
@@ -795,6 +857,115 @@ class PreflightAndAdaptationTest(unittest.TestCase):
                 "output_budget_semantics": "clipped_to_remaining_context",
                 "response_formats": {"json_object": "not_a_bool"},
             })
+
+    def test_request_snapshot_and_runtime_are_stable_across_modes(self):
+        from dataclasses import replace
+        from src.infra.llm_gateway import build_runtime, prepare
+        from src.infra.model_specs import ModelSpec, SpecSnapshot
+        from src.infra.preflight import PreflightPolicy
+        from src.shared.llm_contracts import RequestIntent
+
+        cfg = {'model': 'test', 'provider': 'dashscope',
+               'endpoint': 'https://test.invalid/chat/completions',
+               'preflight': {'mode': 'adapt', 'safety_margin_tokens': 0}}
+        row = {'spec_id': 'test', 'provider': cfg['provider'], 'endpoint': cfg['endpoint'],
+               'model': cfg['model'], 'context_window': 10000, 'max_output_tokens': 1000,
+               'context_accounting': 'shared', 'output_budget_semantics': 'shared_with_reasoning',
+               'response_formats': {'json_schema': True}, 'token_counter': 'conservative'}
+        spec = ModelSpec.from_dict(row)
+        rows = {spec.match_key: spec}
+        snapshot = SpecSnapshot('1.0.0', '1', 'test', rows)
+        rows.clear()
+        self.assertIs(snapshot.find(cfg['provider'], cfg['endpoint'], cfg['model']), spec)
+        with self.assertRaises(TypeError):
+            snapshot.specs[spec.match_key] = spec
+
+        schema = {'type': 'json_schema', 'json_schema': {
+            'name': 'answer', 'schema': {'type': 'object', 'required': ['answer']}}}
+        messages = [{'role': 'user', 'content': 'original'}]
+        expected_schema = json.loads(json.dumps(schema))
+        intent = RequestIntent(messages=messages, requested_output_tokens=100, response_format=schema)
+        schema['json_schema'].clear()
+        messages[0]['content'] = 'changed'
+        with self.assertRaises(TypeError):
+            intent.messages[0]['content'] = 'changed'
+        with self.assertRaises(TypeError):
+            intent.response_format['json_schema']['schema']['required'][0] = 'changed'
+
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / 'model_specs.json'
+            path.write_text(json.dumps({'schema_version': '1.0.0', 'specs': [row]}), encoding='utf-8')
+            runtime = build_runtime(cfg, config_dir=tmp)
+            path.write_text('invalid JSON after runtime construction', encoding='utf-8')
+            with patch('src.infra.llm_gateway.load_specs', side_effect=AssertionError('unexpected I/O')):
+                with self.assertRaisesRegex(ValueError, 'build_runtime'):
+                    prepare(intent, cfg)
+                fingerprints = []
+                for _ in range(2):
+                    fingerprints.append(prepare(intent, cfg, runtime).plan.compatibility_fingerprint)
+                self.assertEqual(*fingerprints)
+                for mode in ('off', 'validate', 'adapt'):
+                    estimator = Mock(return_value=9000)
+                    rt = replace(runtime, policy=PreflightPolicy(mode=mode, safety_margin_tokens=0),
+                                 estimate_reservation_fn=estimator, reservation_method='custom-v1')
+                    plan = prepare(intent, cfg, rt).plan
+                    estimator.assert_called_once_with(intent, 100)
+                    self.assertEqual((plan.reservation_tokens, plan.reservation_method), (9000, 'custom-v1'))
+                    body = json.loads(plan.encoded_body)
+                    self.assertEqual(body['response_format'], expected_schema)
+                    self.assertEqual(body['messages'], [{'role': 'user', 'content': 'original'}])
+
+    def test_incomplete_specs_bypass_or_reject_before_counting(self):
+        from src.infra.llm_gateway import PreflightRuntime, prepare
+        from src.infra.model_specs import ModelSpec, SpecSnapshot, load_specs
+        from src.infra.preflight import PreflightPolicy
+        from src.shared.llm_contracts import RequestIntent, TokenAssessment, PREFLIGHT_SPEC_UNKNOWN
+
+        cfg = {'model': 'test', 'provider': 'dashscope', 'endpoint': 'https://test.invalid/chat/completions'}
+        base = {'spec_id': 'test', 'provider': cfg['provider'], 'endpoint': cfg['endpoint'],
+                'model': cfg['model'], 'context_window': 1000, 'max_input_tokens': 1,
+                'max_output_tokens': 40, 'context_accounting': 'shared',
+                'output_budget_semantics': 'shared_with_reasoning', 'token_counter': 'conservative'}
+        intent = RequestIntent(messages=[{'role': 'user', 'content': 'larger than input limit'}],
+                               requested_output_tokens=100)
+        variants = [{key: value for key, value in base.items() if key != missing}
+                    for missing in ('context_window', 'max_output_tokens', 'context_accounting',
+                                    'output_budget_semantics', 'token_counter')]
+        variants += [{**base, 'context_accounting': 'unsupported'},
+                     {**base, 'output_budget_semantics': 'unsupported'},
+                     {**base, 'token_counter': 'unknown-counter'}]
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / 'model_specs.json'
+            for row in variants:
+                # File loading and direct construction must preserve the same unknowns.
+                spec = ModelSpec.from_dict(row)
+                path.write_text(json.dumps({'schema_version': '1.0.0', 'specs': [row]}), encoding='utf-8')
+                self.assertEqual(load_specs(path).find(cfg['provider'], cfg['endpoint'], cfg['model']), spec)
+                snapshot = SpecSnapshot('1.0.0', '1', 'test', {spec.match_key: spec})
+                for mode in ('validate', 'adapt'):
+                    for unknown in ('passthrough', 'reject'):
+                        with self.subTest(row=row, mode=mode, unknown=unknown):
+                            counter = Mock(spec_ids=frozenset({'conservative'}))
+                            counter.count_tokens.side_effect = AssertionError('must not count')
+                            rt = PreflightRuntime(policy=PreflightPolicy(mode=mode, unknown_spec=unknown),
+                                                  counter=counter, spec_snapshot=snapshot)
+                            result = prepare(intent, cfg, rt)
+                            counter.count_tokens.assert_not_called()
+                            if unknown == 'passthrough':
+                                self.assertEqual((result.plan.preflight_outcome, result.plan.effective_output_tokens),
+                                                 ('bypassed', 100))
+                            else:
+                                self.assertEqual(result.rejection.reason_code, PREFLIGHT_SPEC_UNKNOWN)
+
+        # A declared injected counter is used; no silent fallback to the default.
+        spec = ModelSpec.from_dict({**base, 'token_counter': 'custom-exact', 'max_input_tokens': 100})
+        counter = Mock(spec_ids=frozenset({'custom-exact'}))
+        counter.count_tokens.return_value = TokenAssessment(20, 'exact', 'custom', '1')
+        rt = PreflightRuntime(policy=PreflightPolicy(mode='adapt', uncertain_tokens='reject', safety_margin_tokens=0),
+                              counter=counter, spec_snapshot=SpecSnapshot('1.0.0', '1', 'test', {spec.match_key: spec}))
+        plan = prepare(intent, cfg, rt).plan
+        self.assertEqual(plan.effective_output_tokens, 40)
+        counter.count_tokens.assert_called_once()
 
 
 if __name__ == "__main__":

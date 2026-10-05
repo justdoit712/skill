@@ -286,6 +286,17 @@ class PreflightSharedContractsTest(unittest.TestCase):
         )
         self.assertNotEqual(fp1, fp_diff_model)
 
+        # Roles affect compatibility; prompt text must remain outside the identity.
+        from src.infra.llm_gateway import prepare
+        from src.shared.llm_contracts import RequestIntent
+        cfg = {'model': 'test', 'endpoint': 'https://test.invalid/chat/completions'}
+        fingerprints = []
+        for role, content in (('system', 'hello'), ('user', 'hello'), ('user', 'different text')):
+            intent = RequestIntent(messages=[{'role': role, 'content': content}], requested_output_tokens=100)
+            fingerprints.append(prepare(intent, cfg).plan.compatibility_fingerprint)
+        self.assertNotEqual(fingerprints[0], fingerprints[1])
+        self.assertEqual(fingerprints[1], fingerprints[2])
+
 
 if __name__ == "__main__":
     unittest.main()

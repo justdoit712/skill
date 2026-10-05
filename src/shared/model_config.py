@@ -44,6 +44,23 @@ def _positive(value, name, integer=True):
         raise ValueError(name + ' 必须为正' + ('整数' if integer else '数'))
 
 
+def parse_preflight_config(value):
+    """Validate the standalone policy without coercing values or ignoring fields."""
+    if not isinstance(value, dict) or set(value) - PREFLIGHT_FIELDS:
+        raise ValueError('preflight 包含不支持的字段或类型错误')
+    pf = {**DEFAULT_PREFLIGHT, **value}
+    if pf['mode'] not in ('off', 'validate', 'adapt'):
+        raise ValueError('preflight.mode 必须为 off、validate 或 adapt')
+    if pf['unknown_spec'] not in ('passthrough', 'reject'):
+        raise ValueError('preflight.unknown_spec 必须为 passthrough 或 reject')
+    if pf['uncertain_tokens'] not in ('conservative', 'reject'):
+        raise ValueError('preflight.uncertain_tokens 必须为 conservative 或 reject')
+    margin = pf['safety_margin_tokens']
+    if type(margin) is not int or margin < 0:
+        raise ValueError('preflight.safety_margin_tokens 必须为非负整数')
+    return pf
+
+
 def _validate_sections(cfg):
     for section, allowed in (('request', REQUEST_FIELDS), ('limits', SINGLE_LIMITS | TASK_LIMITS),
                              ('capabilities', {'json_schema'}), ('preflight', PREFLIGHT_FIELDS)):
@@ -63,17 +80,7 @@ def _validate_sections(cfg):
     caps = cfg.get('capabilities', {})
     if any(type(v) is not bool for v in caps.values()):
         raise ValueError('capabilities 必须使用布尔值')
-    pf = cfg.get('preflight', {})
-    if 'mode' in pf and pf['mode'] not in ('off', 'validate', 'adapt'):
-        raise ValueError('preflight.mode 必须为 off、validate 或 adapt')
-    if 'unknown_spec' in pf and pf['unknown_spec'] not in ('passthrough', 'reject'):
-        raise ValueError('preflight.unknown_spec 必须为 passthrough 或 reject')
-    if 'uncertain_tokens' in pf and pf['uncertain_tokens'] not in ('conservative', 'reject'):
-        raise ValueError('preflight.uncertain_tokens 必须为 conservative 或 reject')
-    if 'safety_margin_tokens' in pf:
-        v = pf['safety_margin_tokens']
-        if isinstance(v, bool) or not isinstance(v, int) or v < 0:
-            raise ValueError('preflight.safety_margin_tokens 必须为非负整数')
+    parse_preflight_config(cfg.get('preflight', {}))
     fmt = req.get('response_format')
     if fmt is not None:
         if isinstance(fmt, str):
@@ -148,13 +155,13 @@ def parse_model_configs(config):
 
 
 def model_fingerprint(config):
+    # Preflight is standalone and does not change production requests yet.
+    # Keep its compatibility identity separate from the live pool cache key.
     safe = {'endpoint': normalize_endpoint(config['endpoint']), 'model': config.get('model'),
             'provider': config.get('provider'),
             'request': {k: v for k, v in config.get('request', {}).items() if k in REQUEST_FIELDS},
             'limits': {k: v for k, v in config.get('limits', {}).items() if k in SINGLE_LIMITS},
             'capabilities': {k: v for k, v in config.get('capabilities', {}).items() if k == 'json_schema'}}
-    if 'preflight' in config and config['preflight'] != DEFAULT_PREFLIGHT:
-        safe['preflight'] = {k: v for k, v in config['preflight'].items() if k in PREFLIGHT_FIELDS}
     return 'sha256:' + hashlib.sha256(json.dumps(safe, sort_keys=True, ensure_ascii=False).encode()).hexdigest()[:16]
 
 

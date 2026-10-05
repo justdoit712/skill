@@ -24,12 +24,12 @@ class ModelSpec:
     endpoint: str
     model: str
     mode: str
-    context_window: int
+    context_window: int | None
     max_input_tokens: int | None
-    max_output_tokens: int
+    max_output_tokens: int | None
     context_accounting: str
     output_budget_semantics: str
-    response_formats: Mapping[str, bool]
+    response_formats: Mapping[str, bool | None]
     token_counter: str
     source: str
     verified_at: str
@@ -43,13 +43,13 @@ class ModelSpec:
         endpoint: str,
         model: str,
         mode: str,
-        context_window: int,
+        context_window: int | None,
         max_input_tokens: int | None,
-        max_output_tokens: int,
-        context_accounting: str,
-        output_budget_semantics: str,
-        response_formats: dict[str, bool] | Mapping[str, bool],
-        token_counter: str,
+        max_output_tokens: int | None,
+        context_accounting: str | None,
+        output_budget_semantics: str | None,
+        response_formats: Mapping[str, bool | None],
+        token_counter: str | None,
         source: str,
         verified_at: str,
     ) -> None:
@@ -65,7 +65,7 @@ class ModelSpec:
         object.__setattr__(self, "model", model.strip())
         object.__setattr__(self, "mode", str(mode).strip() if mode else "chat")
 
-        if isinstance(context_window, bool) or not isinstance(context_window, int) or context_window <= 0:
+        if context_window is not None and (type(context_window) is not int or context_window <= 0):
             raise ValueError("context_window 必须为正整数")
         object.__setattr__(self, "context_window", context_window)
 
@@ -74,12 +74,16 @@ class ModelSpec:
                 raise ValueError("max_input_tokens 必须为正整数")
         object.__setattr__(self, "max_input_tokens", max_input_tokens)
 
-        if isinstance(max_output_tokens, bool) or not isinstance(max_output_tokens, int) or max_output_tokens <= 0:
+        if max_output_tokens is not None and (type(max_output_tokens) is not int or max_output_tokens <= 0):
             raise ValueError("max_output_tokens 必须为正整数")
         object.__setattr__(self, "max_output_tokens", max_output_tokens)
 
-        object.__setattr__(self, "context_accounting", str(context_accounting).strip())
-        object.__setattr__(self, "output_budget_semantics", str(output_budget_semantics).strip())
+        for name, value in (('context_accounting', context_accounting),
+                            ('output_budget_semantics', output_budget_semantics),
+                            ('token_counter', token_counter)):
+            if value is not None and not isinstance(value, str):
+                raise ValueError(name + ' 必须为字符串或 None')
+            object.__setattr__(self, name, (value or '').strip())
 
         if not isinstance(response_formats, (dict, Mapping)):
             raise ValueError("response_formats 必须为对象")
@@ -93,7 +97,6 @@ class ModelSpec:
                 raise ValueError(f"response_formats[{k}] 必须为布尔值或 None（严格区分支持、不支持与未知）")
         object.__setattr__(self, "response_formats", MappingProxyType(frozen_formats))
 
-        object.__setattr__(self, "token_counter", str(token_counter).strip())
         object.__setattr__(self, "source", str(source).strip())
         object.__setattr__(self, "verified_at", str(verified_at).strip())
 
@@ -106,15 +109,15 @@ class ModelSpec:
             endpoint=item.get("endpoint", ""),
             model=item.get("model", ""),
             mode=item.get("mode", "chat"),
-            context_window=item.get("context_window", 0),
+            context_window=item.get("context_window"),
             max_input_tokens=item.get("max_input_tokens"),
-            max_output_tokens=item.get("max_output_tokens", 0),
-            context_accounting=item.get("context_accounting", "shared"),
-            output_budget_semantics=item.get("output_budget_semantics", "clipped_to_remaining_context"),
+            max_output_tokens=item.get("max_output_tokens"),
+            context_accounting=item.get("context_accounting"),
+            output_budget_semantics=item.get("output_budget_semantics"),
             response_formats=item.get("response_formats", {}),
-            token_counter=item.get("token_counter", "conservative_fallback"),
-            source=item.get("source", "official_doc"),
-            verified_at=item.get("verified_at", "2026-10-05"),
+            token_counter=item.get("token_counter"),
+            source=item.get("source", ""),
+            verified_at=item.get("verified_at", ""),
         )
 
     @property
@@ -129,6 +132,15 @@ class SpecSnapshot:
     revision: str
     digest: str
     specs: Mapping[tuple[str, str, str, str], ModelSpec]
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.specs, Mapping):
+            raise ValueError('specs 必须为规格映射')
+        copied = dict(self.specs)
+        if any(not isinstance(spec, ModelSpec) or key != spec.match_key
+               for key, spec in copied.items()):
+            raise ValueError('规格映射身份不匹配')
+        object.__setattr__(self, 'specs', MappingProxyType(copied))
 
     def find(
         self,
@@ -174,23 +186,7 @@ def load_specs(path: Path | str) -> SpecSnapshot:
     for item in raw_specs:
         if not isinstance(item, dict):
             raise ValueError("规格项必须为对象")
-        spec = ModelSpec(
-            spec_id=item.get("spec_id", ""),
-            revision=item.get("revision", revision),
-            provider=item.get("provider", ""),
-            endpoint=item.get("endpoint", ""),
-            model=item.get("model", ""),
-            mode=item.get("mode", "chat"),
-            context_window=item.get("context_window", 0),
-            max_input_tokens=item.get("max_input_tokens"),
-            max_output_tokens=item.get("max_output_tokens", 0),
-            context_accounting=item.get("context_accounting", "shared"),
-            output_budget_semantics=item.get("output_budget_semantics", "shared_with_reasoning"),
-            response_formats=item.get("response_formats", {}),
-            token_counter=item.get("token_counter", "conservative"),
-            source=item.get("source", ""),
-            verified_at=item.get("verified_at", ""),
-        )
+        spec = ModelSpec.from_dict(item, default_revision=revision)
         key = spec.match_key
         if key in specs_map:
             raise ValueError(f"规格重复匹配冲突（同身份已存在）：{key}")

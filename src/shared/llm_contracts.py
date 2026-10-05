@@ -8,8 +8,33 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 import hashlib
 import json
+import math
 from types import MappingProxyType
 from typing import Any, Mapping
+
+
+def freeze_json(value: Any) -> Any:
+    """Copy and deeply freeze JSON data, rejecting unsupported or nonfinite values."""
+    if isinstance(value, Mapping):
+        if any(not isinstance(key, str) for key in value):
+            raise ValueError('JSON 对象的键必须为字符串')
+        return MappingProxyType({key: freeze_json(item) for key, item in value.items()})
+    if isinstance(value, (list, tuple)):
+        return tuple(freeze_json(item) for item in value)
+    if value is None or isinstance(value, (str, bool, int)):
+        return value
+    if isinstance(value, float) and math.isfinite(value):
+        return value
+    raise ValueError('只支持有限数值及有效 JSON 数据')
+
+
+def thaw_json(value: Any) -> Any:
+    """Create mutable JSON containers only at serialization boundaries."""
+    if isinstance(value, Mapping):
+        return {key: thaw_json(item) for key, item in value.items()}
+    if isinstance(value, tuple):
+        return [thaw_json(item) for item in value]
+    return value
 
 # Preflight Reason Codes (Section 9.1)
 PREFLIGHT_SPEC_UNKNOWN = "PREFLIGHT_SPEC_UNKNOWN"
@@ -78,7 +103,7 @@ class LocalRejection:
 @dataclass(frozen=True)
 class RequestIntent:
     """Business layer neutral request declaration."""
-    messages: tuple[dict[str, str], ...]
+    messages: tuple[Mapping[str, str], ...]
     requested_output_tokens: int
     min_output_tokens: int = 1
     response_format: Any = None
@@ -96,10 +121,14 @@ class RequestIntent:
             raise ValueError("messages 必须为非空列表或元组")
         validated_messages: list[dict[str, str]] = []
         for msg in messages:
-            if not isinstance(msg, dict) or "role" not in msg or "content" not in msg:
+            if not isinstance(msg, Mapping) or set(msg) != {'role', 'content'}:
                 raise ValueError("messages 中的项必须为包含 role 与 content 的字典")
-            validated_messages.append({"role": str(msg["role"]), "content": str(msg["content"])})
-        object.__setattr__(self, "messages", tuple(validated_messages))
+            if not isinstance(msg['role'], str) or msg['role'] not in ('system', 'user', 'assistant', 'developer'):
+                raise ValueError('不支持的消息 role')
+            if not isinstance(msg['content'], str):
+                raise ValueError('当前预检仅支持字符串 content')
+            validated_messages.append(dict(msg))
+        object.__setattr__(self, "messages", freeze_json(validated_messages))
 
         if (
             isinstance(requested_output_tokens, bool)
@@ -125,7 +154,10 @@ class RequestIntent:
             errs = validate_response_format(response_format)
             if errs:
                 raise ValueError("非法 response_format：" + "; ".join(errs))
-        object.__setattr__(self, "response_format", response_format)
+        object.__setattr__(self, "response_format", freeze_json(response_format))
+        if (isinstance(temperature, bool) or not isinstance(temperature, (int, float))
+                or not math.isfinite(temperature) or not 0 <= temperature <= 2):
+            raise ValueError('temperature 必须为 0 到 2 之间的有限数值')
         object.__setattr__(self, "temperature", float(temperature))
 
 
@@ -134,24 +166,34 @@ def validate_response_format(fmt: Any) -> list[str]:
     if fmt is None:
         return []
     if isinstance(fmt, str):
-        if fmt not in ("json_object", "text", "json_schema"):
+        if fmt == "json_schema":
+            return ["json_schema 必须使用包含 name 与 schema 的完整配置对象"]
+        if fmt not in ("json_object", "text"):
             return [f"未知字符串 response_format 类型：{fmt}"]
         return []
-    if not isinstance(fmt, dict):
+    if not isinstance(fmt, Mapping):
         return ["response_format 必须是字符串或对象"]
+    if set(fmt) - {'type', 'json_schema'}:
+        return ['response_format 包含不支持字段']
     fmt_type = fmt.get("type")
     if not fmt_type:
         return ["response_format 对象缺少 type 字段"]
     if fmt_type == "json_schema":
         js = fmt.get("json_schema")
-        if not isinstance(js, dict):
+        if not isinstance(js, Mapping):
             return ["json_schema 类型必须包含 json_schema 配置对象"]
-        if not js.get("name") or not isinstance(js.get("name"), str):
+        if (set(js) - {'name', 'schema', 'strict', 'description'}
+                or ('strict' in js and type(js['strict']) is not bool)
+                or ('description' in js and not isinstance(js['description'], str))):
+            return ['json_schema 包含不支持字段或字段类型错误']
+        if not isinstance(js.get("name"), str) or not js["name"].strip():
             return ["json_schema 必须提供非空的 name"]
-        if "schema" not in js or not isinstance(js["schema"], dict):
+        if "schema" not in js or not isinstance(js["schema"], Mapping):
             return ["json_schema 必须提供有效的 schema 对象"]
     elif fmt_type not in ("json_object", "text"):
         return [f"不支持的 response_format type: {fmt_type}"]
+    elif set(fmt) != {'type'}:
+        return ['response_format 包含不支持字段']
     return []
 
 
@@ -218,7 +260,7 @@ class RequestPlan:
             }
         else:
             assessment_dict = dict(input_token_assessment)
-        object.__setattr__(self, "input_token_assessment", MappingProxyType(assessment_dict))
+        object.__setattr__(self, "input_token_assessment", freeze_json(assessment_dict))
 
         if isinstance(reservation_tokens, bool) or not isinstance(reservation_tokens, int) or reservation_tokens <= 0:
             raise ValueError("reservation_tokens 必须为正整数")
@@ -239,7 +281,7 @@ class RequestPlan:
         object.__setattr__(self, "policy_revision", str(policy_revision))
 
         frozen_adjustments = tuple(
-            MappingProxyType(dict(adj)) if isinstance(adj, dict) else MappingProxyType({
+            freeze_json(adj) if isinstance(adj, Mapping) else freeze_json({
                 "field": adj.field,
                 "original": adj.original,
                 "effective": adj.effective,
@@ -308,6 +350,7 @@ def build_compatibility_fingerprint(
     effective_output_tokens: int,
     response_format: Any = None,
     temperature: float = 0.0,
+    roles: tuple[str, ...] = (),
     run_mode: str = "chat",
     preflight_mode: str = "off",
     spec_digest: str | None = None,
@@ -319,12 +362,12 @@ def build_compatibility_fingerprint(
     fmt_summary: Any = None
     if isinstance(response_format, str):
         fmt_summary = {"type": response_format}
-    elif isinstance(response_format, dict):
+    elif isinstance(response_format, Mapping):
         fmt_type = response_format.get("type")
         if fmt_type == "json_schema":
             js = response_format.get("json_schema") or {}
             schema_data = js.get("schema") or {}
-            schema_str = json.dumps(schema_data, sort_keys=True, separators=(",", ":"))
+            schema_str = json.dumps(thaw_json(schema_data), sort_keys=True, separators=(",", ":"), allow_nan=False)
             schema_digest = hashlib.sha256(schema_str.encode("utf-8")).hexdigest()[:16]
             fmt_summary = {
                 "type": "json_schema",
@@ -342,7 +385,8 @@ def build_compatibility_fingerprint(
         "endpoint": normalize_endpoint(str(endpoint)),
         "effective_output_tokens": int(effective_output_tokens),
         "response_format": fmt_summary,
-        "temperature": round(float(temperature), 4),
+        "temperature": float(temperature),
+        "roles": list(roles),
         "run_mode": str(run_mode),
         "preflight_mode": str(preflight_mode),
         "spec_digest": str(spec_digest or ""),
@@ -350,5 +394,5 @@ def build_compatibility_fingerprint(
         "adapter_revision": str(adapter_revision),
         "policy_revision": str(policy_revision),
     }
-    raw = json.dumps(safe, sort_keys=True, ensure_ascii=False, separators=(",", ":"))
+    raw = json.dumps(safe, sort_keys=True, ensure_ascii=False, separators=(",", ":"), allow_nan=False)
     return "sha256:" + hashlib.sha256(raw.encode("utf-8")).hexdigest()[:16]

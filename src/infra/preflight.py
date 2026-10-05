@@ -6,8 +6,7 @@ Implements 'off', 'validate', and 'adapt' modes without side effects, I/O, or ne
 from __future__ import annotations
 
 from dataclasses import dataclass
-import json
-from typing import Any
+from typing import Any, Mapping
 
 from src.shared.llm_contracts import (
     LocalRejection,
@@ -23,6 +22,7 @@ from src.shared.llm_contracts import (
 )
 from src.infra.llm_adapters import RequestCountView
 from src.infra.model_specs import ModelSpec
+from src.shared.model_config import parse_preflight_config
 
 
 @dataclass(frozen=True)
@@ -34,23 +34,17 @@ class PreflightPolicy:
     safety_margin_tokens: int = 1024
 
     def __post_init__(self) -> None:
-        if self.mode not in ("off", "validate", "adapt"):
-            raise ValueError(f"preflight.mode 必须为 off、validate 或 adapt：{self.mode}")
-        if self.unknown_spec not in ("passthrough", "reject"):
-            raise ValueError(f"preflight.unknown_spec 必须为 passthrough 或 reject：{self.unknown_spec}")
-        if self.uncertain_tokens not in ("conservative", "reject"):
-            raise ValueError(f"preflight.uncertain_tokens 必须为 conservative 或 reject：{self.uncertain_tokens}")
-        if (
-            isinstance(self.safety_margin_tokens, bool)
-            or not isinstance(self.safety_margin_tokens, int)
-            or self.safety_margin_tokens < 0
-        ):
-            raise ValueError(f"preflight.safety_margin_tokens 必须为非负整数：{self.safety_margin_tokens}")
+        parse_preflight_config({
+            'mode': self.mode, 'unknown_spec': self.unknown_spec,
+            'uncertain_tokens': self.uncertain_tokens,
+            'safety_margin_tokens': self.safety_margin_tokens,
+        })
 
 
 class ConservativeTokenCounter:
     """Default local conservative token estimator based on protocol view."""
     revision = "conservative-estimator-v1"
+    spec_ids = frozenset({'conservative', 'conservative_fallback'})
 
     def count_tokens(self, count_view: RequestCountView) -> TokenAssessment:
         # Conservative estimate: byte length of messages + overhead + schema length
@@ -120,11 +114,15 @@ def evaluate_preflight(
             normalized_endpoint=endpoint,
         )
 
-    # 3. Check spec completeness
+    # Decide unsupported semantics/counter declarations before any counting.
+    counter_ids = getattr(counter if counter is not None else ConservativeTokenCounter, 'spec_ids', ())
     if (
         not spec.context_window
         or not spec.max_output_tokens
-        or not spec.context_accounting
+        or spec.context_accounting != 'shared'
+        or spec.output_budget_semantics not in ('shared_with_reasoning', 'clipped_to_remaining_context')
+        or not isinstance(counter_ids, (tuple, list, set, frozenset))
+        or spec.token_counter not in counter_ids
     ):
         if policy.unknown_spec == "passthrough":
             return PreflightDecision(
@@ -140,7 +138,7 @@ def evaluate_preflight(
             )
         return LocalRejection(
             reason_code=PREFLIGHT_SPEC_UNKNOWN,
-            message=f"模型规格不完整（缺失必要上下文或输出限制）：{model_identity}",
+            message=f"模型规格不完整或计量规则、计数器不受支持：{model_identity}",
             model_identity=model_identity,
             normalized_endpoint=endpoint,
         )
@@ -150,7 +148,7 @@ def evaluate_preflight(
         fmt = intent.response_format
         if isinstance(fmt, str):
             kind = fmt
-        elif isinstance(fmt, dict):
+        elif isinstance(fmt, Mapping):
             kind = fmt.get("type", "json_object")
         else:
             kind = "unknown"
@@ -185,13 +183,15 @@ def evaluate_preflight(
             )
 
     # 5. Token counting
+    if counter is None:
+        counter = ConservativeTokenCounter()
     count_view = adapter.build_count_view(intent)
     try:
         assessment = counter.count_tokens(count_view)
     except Exception as exc:
         return LocalRejection(
             reason_code=PREFLIGHT_TOKEN_COUNT_UNCERTAIN,
-            message=f"输入 Token 计数器执行异常：{exc}",
+            message=f"输入 Token 计数器执行异常：{type(exc).__name__}",
             model_identity=model_identity,
             normalized_endpoint=endpoint,
         )
@@ -294,19 +294,3 @@ def evaluate_preflight(
             )
         else:
             raise ValueError(f"不支持的预检模式：{policy.mode}")
-
-    # Unsupported context accounting
-    if policy.unknown_spec == "passthrough":
-        return PreflightDecision(
-            outcome="bypassed",
-            effective_output_tokens=intent.requested_output_tokens,
-            adjustments=(),
-            token_assessment=assessment,
-        )
-
-    return LocalRejection(
-        reason_code=PREFLIGHT_SPEC_UNKNOWN,
-        message=f"不支持的 context_accounting 规则：{spec.context_accounting}",
-        model_identity=model_identity,
-        normalized_endpoint=endpoint,
-    )

@@ -7,9 +7,9 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 import json
-from typing import Any
+from typing import Any, Mapping
 
-from src.shared.llm_contracts import RequestIntent
+from src.shared.llm_contracts import RequestIntent, thaw_json
 
 
 @dataclass(frozen=True)
@@ -28,11 +28,11 @@ class OpenAIProtocolAdapter:
     def build_count_view(self, intent: RequestIntent) -> RequestCountView:
         texts = tuple(m["content"] for m in intent.messages)
         schema_text: str | None = None
-        if isinstance(intent.response_format, dict):
+        if isinstance(intent.response_format, Mapping):
             fmt_type = intent.response_format.get("type")
             if fmt_type == "json_schema":
                 js = intent.response_format.get("json_schema") or {}
-                schema_text = json.dumps(js, sort_keys=True, ensure_ascii=False)
+                schema_text = json.dumps(thaw_json(js), sort_keys=True, ensure_ascii=False, allow_nan=False)
         return RequestCountView(
             messages_text=texts,
             message_count=len(intent.messages),
@@ -48,7 +48,7 @@ class OpenAIProtocolAdapter:
     ) -> bytes:
         payload: dict[str, Any] = {
             "model": model,
-            "messages": list(intent.messages),
+            "messages": thaw_json(intent.messages),
             "temperature": intent.temperature,
             "max_tokens": effective_output_tokens,
         }
@@ -56,6 +56,6 @@ class OpenAIProtocolAdapter:
         if fmt is not None:
             if isinstance(fmt, str):
                 payload["response_format"] = {"type": fmt}
-            elif isinstance(fmt, dict):
-                payload["response_format"] = fmt
-        return json.dumps(payload, ensure_ascii=False).encode("utf-8")
+            elif isinstance(fmt, Mapping):
+                payload["response_format"] = thaw_json(fmt)
+        return json.dumps(payload, ensure_ascii=False, allow_nan=False).encode("utf-8")
