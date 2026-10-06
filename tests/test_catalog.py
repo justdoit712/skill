@@ -71,7 +71,6 @@ class EntryStateMachineTest(unittest.TestCase):
         self.assertEqual(updated["main_category"], {"id": "programming", "name": "编程开发"})
 
 
-@smoke
 class CandidatePoolTest(unittest.TestCase):
     """候选池创建、状态更新与读写往返。"""
     def setUp(self):
@@ -157,6 +156,7 @@ class CandidatePoolTest(unittest.TestCase):
                 self.assertEqual(state.report["calls"], [])
                 self.assertEqual(state.ledger.get(eid), before)
 
+    @smoke
     def test_pool_save_and_load(self):
         cand = candidate_from_repo("test-owner", "tool-repo", path="skills/tool/SKILL.md")
         cand.content_fingerprint = "sha256:abcd"
@@ -170,6 +170,7 @@ class CandidatePoolTest(unittest.TestCase):
         self.assertEqual(len(loaded.items), 1)
         self.assertEqual(loaded.items[0].candidate.skill_id, cand.skill_id)
 
+    @smoke
     def test_update_candidate_status(self):
         cand = candidate_from_repo("test-owner", "tool-repo", path="skills/tool/SKILL.md")
         pool = create_pool_from_candidates([cand])
@@ -486,7 +487,6 @@ class BudgetLedgerTest(unittest.TestCase):
         self.assertTrue(all(ledger.get(name)['status'] == 'needs_recovery' for name in variants if name != 'safe'))
 
 
-@smoke
 class RepoBatchAndCheckpointRecoveryTest(unittest.TestCase):
     """分批仓库抓取、游标断点恢复与待处理有效性过滤长效契约。"""
 
@@ -499,6 +499,7 @@ class RepoBatchAndCheckpointRecoveryTest(unittest.TestCase):
     def tearDown(self):
         self.tmp.cleanup()
 
+    @smoke
     def test_settings_validation_batch_repo_limit(self):
         from src.catalog.local import _valid_settings, DEFAULT_BATCH_REPO_LIMIT
         settings = {"target_recommended": 5, "max_total_tokens": 1000, "max_consecutive_failures": 3}
@@ -587,6 +588,7 @@ class RepoBatchAndCheckpointRecoveryTest(unittest.TestCase):
         self.assertEqual(batch2["repositories"], ["owner/repo-3", "owner/repo-4"])
         self.assertEqual(len(state.unassigned_repositories), 1)
 
+    @smoke
     def test_pending_breakdown_and_actionable_classification(self):
         from src.catalog.pool import (
             CandidatePool,
