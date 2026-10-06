@@ -69,6 +69,7 @@ from src.infra.owned import (
     load_owned_ids,
     save_owned_config,
 )
+from src.infra.llm import ModelCallResult
 from src.shared.runtime import is_test_environment
 from tests import smoke
 from tools.manage_owned import main as manage_owned_main
@@ -551,6 +552,461 @@ class DataIsolationTest(unittest.TestCase):
     """测试环境与生产数据的物理隔离保护。"""
     def test_environment_detector_identifies_unittest_runner(self) -> None:
         self.assertTrue(is_test_environment())
+
+
+
+
+class ExistingCatalogFilterTest(unittest.TestCase):
+    """存量目录黑名单一次性过滤维护工具端到端契约与治理安全测试。"""
+
+    @staticmethod
+    def _mk_entry(skill_id, name="", status="recommended", summary="", manual_pick=False, **kw):
+        base = {
+            "skill_id": skill_id,
+            "name": name or skill_id.split(":")[0],
+            "status": status,
+            "url": f"https://github.com/{skill_id}",
+            "author": skill_id.split("/")[0],
+            "main_category": {"id": "other", "name": "其他"},
+            "tags": [],
+            "platform_declared": None,
+            "dependencies_declared": [],
+            "source_type": "github_search",
+            "needs_review": False,
+            "review_note": None,
+            "key_features": [],
+            "example_requests": [],
+            "limitations": [],
+            "summary_zh": summary,
+            "reason_codes": [],
+            "first_seen": "2026-10-01T00:00:00+08:00",
+            "last_checked": "2026-10-01T00:00:00+08:00",
+            "content_changed_at": "2026-10-01T00:00:00+08:00",
+            "upstream_status": "active",
+            "license": None,
+            "manual_pick": manual_pick,
+        }
+        base.update(kw)
+        return base
+
+    @staticmethod
+    def _mock_topic_response(topic_ecommerce_id, topic_gym_id, match_ecom=False, quote="", evidence="", usage=None):
+        assessments = [
+            {
+                "topic_id": topic_ecommerce_id,
+                "result": "match" if match_ecom else "no_match",
+                "evidence_source": "summary_zh" if match_ecom else "",
+                "evidence_quote": quote if match_ecom else "",
+                "evidence": evidence or ("核心用途是电商商品文案" if match_ecom else "无关"),
+            },
+            {
+                "topic_id": topic_gym_id,
+                "result": "no_match",
+                "evidence_source": "",
+                "evidence_quote": "",
+                "evidence": "无关",
+            },
+        ]
+        content = json.dumps({"topic_assessments": assessments})
+        return ModelCallResult(ok=True, content=content, model="test-model", usage=usage)
+
+    def setUp(self):
+        self.temp_dir = tempfile.TemporaryDirectory()
+        self.root = Path(self.temp_dir.name)
+
+        # 目录结构
+        (self.root / "data").mkdir(parents=True)
+        (self.root / "public" / "data").mkdir(parents=True)
+        (self.root / "config" / "governance").mkdir(parents=True)
+        (self.root / "config" / "models").mkdir(parents=True)
+
+        # 1. 构造 filter-rules.json
+        self.rules_data = {
+            "filter_rules_version": "1.0.0",
+            "blocked_topics": [
+                {"name": "电商文案", "description": "用于电商商品详情、促销广告或带货文案编写。"},
+                {"name": "健身房运营", "description": "用于健身房会员管理与排课。"}
+            ]
+        }
+        (self.root / "config" / "governance" / "filter-rules.json").write_text(
+            json.dumps(self.rules_data, ensure_ascii=False), encoding="utf-8"
+        )
+
+        # 2. 构造 favorites.json
+        self.fav_data = {
+            "favorites_version": "1.0.0",
+            "manual_picks": [
+                {"skill_id": "fav/skill:SKILL.md", "reason": "收藏保护", "added_at": "2026-10-01"}
+            ]
+        }
+        (self.root / "config" / "governance" / "favorites.json").write_text(
+            json.dumps(self.fav_data, ensure_ascii=False), encoding="utf-8"
+        )
+
+        # 3. 构造 overrides.json (含一条活跃排除和一条退休排除)
+        self.ov_data = {
+            "overrides_version": "1.0.0",
+            "manual_exclusions": [
+                {"skill_id": "already/excluded:SKILL.md", "reason": "原有手工排除", "added_at": "2026-09-01"},
+                {"skill_id": "retired/skill:SKILL.md", "reason": "已退休排除", "added_at": "2026-08-01", "retired_at": "2026-09-15"}
+            ]
+        }
+        (self.root / "config" / "governance" / "overrides.json").write_text(
+            json.dumps(self.ov_data, ensure_ascii=False), encoding="utf-8"
+        )
+
+        # 4. 构造 snoozed.json (含一条活跃冷冻)
+        self.snooze_data = {
+            "snooze_version": "1.0.0",
+            "default_snooze_days": 150,
+            "snoozed": [
+                {"skill_id": "snoozed/skill:SKILL.md", "snoozed_at": "2026-10-01", "expires_at": "2027-03-01", "reason": "临时冷冻"}
+            ]
+        }
+        (self.root / "config" / "governance" / "snoozed.json").write_text(
+            json.dumps(self.snooze_data, ensure_ascii=False), encoding="utf-8"
+        )
+
+        # 5. 构造 owned-skills.json
+        self.owned_data = {
+            "schema_version": "1.0.0",
+            "items": [
+                {"skill_id": "official/owned:SKILL.md", "name": "官方资产", "added_at": "2026-09-01"}
+            ]
+        }
+        (self.root / "config" / "governance" / "owned-skills.json").write_text(
+            json.dumps(self.owned_data, ensure_ascii=False), encoding="utf-8"
+        )
+
+        # 6. 构造 model.json
+        self.model_data = {
+            "model_config_version": "1.0.0",
+            "provider_id": "test",
+            "endpoint": "https://api.test.com/v1/chat/completions",
+            "model": "test-model",
+            "auth": {"api_key": "test-key"}
+        }
+        (self.root / "config" / "models" / "model.json").write_text(
+            json.dumps(self.model_data, ensure_ascii=False), encoding="utf-8"
+        )
+
+        # 7. 构造 catalog.json
+        self.entries = [
+            self._mk_entry("target/ecommerce:SKILL.md", "电商文案爆款大师", "recommended", "核心功能是撰写电商商品详情与促销广告文案。", key_features=["一键生成商品详情页", "自动提炼卖点"], example_requests=["帮我写一段保温杯详情"], tags=["电商", "文案"]),
+            self._mk_entry("target/coder:SKILL.md", "Python 编程助手", "candidate", "编写高内聚低耦合的代码，附带单元测试。", key_features=["代码重构"], example_requests=["重构这个类"], tags=["开发"]),
+            self._mk_entry("snoozed/skill:SKILL.md", "健身房排课排期表", "recommended", "专为健身房运营设计的会员与私教课程排班系统。", key_features=["私教排课"], tags=["健身"]),
+            self._mk_entry("retired/skill:SKILL.md", "旧版促销文案脚本", "candidate", "用于生成各类电商秒杀与满减文案。", key_features=["秒杀文案"]),
+            self._mk_entry("fav/skill:SKILL.md", "受保护的收藏技能", "recommended", "虽然包含电商，但被收藏保护。", manual_pick=True),
+            self._mk_entry("already/excluded:SKILL.md", "已被手工排除技能", "excluded", "已在排除名单中。"),
+            self._mk_entry("official/owned:SKILL.md", "已收录官方技能", "recommended", "官方资产。"),
+            self._mk_entry("failed/eval:SKILL.md", "评估失败技能", "processing_failure", "历史处理失败。"),
+        ]
+        self.catalog_doc = {
+            "catalog_version": "1.0.0",
+            "entries": self.entries,
+            "counts": {"recommended": 3, "candidate": 2, "excluded": 1, "processing_failure": 1}
+        }
+        (self.root / "data" / "catalog.json").write_text(
+            json.dumps(self.catalog_doc, ensure_ascii=False), encoding="utf-8"
+        )
+        (self.root / "public" / "data" / "catalog.json").write_text(
+            json.dumps(self.catalog_doc, ensure_ascii=False), encoding="utf-8"
+        )
+
+    def tearDown(self):
+        self.temp_dir.cleanup()
+
+    def test_prepare_run_range_selection_and_snapshots(self):
+        """测试快照准备：精确筛选推荐/候选，保护收藏与已收录，纳入冷冻并标记样本。"""
+        from tools.filter_existing_catalog import prepare_run
+
+        res = prepare_run(self.root, "test-batch-01")
+        self.assertEqual(res["run_id"], "test-batch-01")
+        # 4 个目标进入范围: target/ecommerce, target/coder, snoozed/skill, retired/skill
+        self.assertEqual(res["total_targets"], 4)
+        self.assertEqual(res["recommended_count"], 2)
+        self.assertEqual(res["candidate_count"], 2)
+        self.assertEqual(res["snoozed_count"], 1)
+
+        run_file = Path(res["run_dir"]) / "run.json"
+        targets_file = Path(res["run_dir"]) / "targets.json"
+        self.assertTrue(run_file.exists())
+        self.assertTrue(targets_file.exists())
+
+        targets_doc = json.loads(targets_file.read_text(encoding="utf-8"))
+        target_ids = {t["skill_id"] for t in targets_doc["targets"]}
+        self.assertIn("target/ecommerce:SKILL.md", target_ids)
+        self.assertIn("target/coder:SKILL.md", target_ids)
+        self.assertIn("snoozed/skill:SKILL.md", target_ids)
+        self.assertIn("retired/skill:SKILL.md", target_ids)
+
+        # 保护项不得进入 targets:
+        self.assertNotIn("fav/skill:SKILL.md", target_ids)
+        self.assertNotIn("already/excluded:SKILL.md", target_ids)
+        self.assertNotIn("official/owned:SKILL.md", target_ids)
+        self.assertNotIn("failed/eval:SKILL.md", target_ids)
+
+    def test_validate_topic_response_and_citation_verification(self):
+        """测试证据校验：合法引文命中，伪造引文降级为 unknown。"""
+        from tools.filter_existing_catalog import validate_topic_response
+        from src.catalog.filter_rules import FilterRules
+
+        rules = FilterRules(self.rules_data)
+        topic_ecommerce = rules.blocked_topics[0]
+        topic_gym = rules.blocked_topics[1]
+
+        target = {
+            "skill_id": "target/ecommerce:SKILL.md",
+            "materials": {
+                "name": "电商文案爆款大师",
+                "summary_zh": "核心功能是撰写电商商品详情与促销广告文案。",
+                "key_features": ["一键生成商品详情页", "自动提炼卖点"]
+            }
+        }
+
+        # 1. 真实字面引文 -> match
+        valid_json = json.dumps({
+            "topic_assessments": [
+                {
+                    "topic_id": topic_ecommerce["topic_id"],
+                    "result": "match",
+                    "evidence_source": "summary_zh",
+                    "evidence_quote": "撰写电商商品详情与促销广告文案",
+                    "evidence": "主要用途为电商文案撰写"
+                },
+                {
+                    "topic_id": topic_gym["topic_id"],
+                    "result": "no_match",
+                    "evidence_source": "",
+                    "evidence_quote": "",
+                    "evidence": "不属于健身"
+                }
+            ]
+        })
+        skill_res, assessments, err = validate_topic_response(rules, target, valid_json)
+        self.assertIsNone(err)
+        self.assertEqual(skill_res, "match")
+        self.assertEqual(assessments[0]["result"], "match")
+
+        # 2. 编造引文（原文不存在） -> 降级为 unknown
+        fake_quote_json = json.dumps({
+            "topic_assessments": [
+                {
+                    "topic_id": topic_ecommerce["topic_id"],
+                    "result": "match",
+                    "evidence_source": "summary_zh",
+                    "evidence_quote": "完全不存在的编造文字",
+                    "evidence": "强行说匹配"
+                },
+                {
+                    "topic_id": topic_gym["topic_id"],
+                    "result": "no_match",
+                    "evidence_source": "",
+                    "evidence_quote": "",
+                    "evidence": "不属于健身"
+                }
+            ]
+        })
+        skill_res, assessments, err = validate_topic_response(rules, target, fake_quote_json)
+        self.assertIsNone(err)
+        # 降级后，因无 match 且含 unknown，条目结果为 unknown
+        self.assertEqual(skill_res, "unknown")
+        self.assertEqual(assessments[0]["result"], "unknown")
+        self.assertIn("引文校验未通过", assessments[0]["evidence"])
+
+    def test_run_assessments_simulation_and_offline_recovery(self):
+        """测试任务调度、单次记账、预算预留以及未决任务的零模型调用离线恢复。"""
+        from tools.filter_existing_catalog import prepare_run, run_assessments
+        from src.catalog.filter_rules import FilterRules
+
+        prepare_run(self.root, "test-batch-02")
+        rules = FilterRules(self.rules_data)
+        topic_ecommerce = rules.blocked_topics[0]
+        topic_gym = rules.blocked_topics[1]
+
+        def fake_caller(cfg, sys_prompt, usr_prompt, request_id):
+            is_ecom = "target/ecommerce:SKILL.md" in usr_prompt
+            quote = "撰写电商商品详情与促销广告文案" if is_ecom else ""
+            return self._mock_topic_response(
+                topic_ecommerce["topic_id"], topic_gym["topic_id"],
+                match_ecom=is_ecom, quote=quote,
+                usage={"prompt_tokens": 100, "completion_tokens": 50, "total_tokens": 150}
+            )
+
+        # 运行评估
+        progress = run_assessments(
+            self.root,
+            "test-batch-02",
+            max_total_tokens=100000,
+            max_total_requests=10,
+            model_caller=fake_caller
+        )
+        self.assertEqual(progress["completed"], 4)
+        self.assertEqual(progress["matched"], 1)
+        self.assertEqual(progress["no_match"], 3)
+        self.assertEqual(progress["requests"], 4)
+        self.assertEqual(progress["tokens"], 600)
+
+        # 验证离线断点恢复：人为将一个条目置为 needs_recovery，重跑不调用模型
+        results_dir = self.root / "data" / "local" / "topic-filter" / "test-batch-02" / "results"
+        sample_file = next(results_dir.glob("*.json"))
+        sample_doc = json.loads(sample_file.read_text(encoding="utf-8"))
+        sample_doc["status"] = "needs_recovery"
+        sample_file.write_text(json.dumps(sample_doc), encoding="utf-8")
+
+        mock_caller_no_call = Mock(side_effect=AssertionError("不应产生新的网络请求！"))
+        run_assessments(
+            self.root,
+            "test-batch-02",
+            model_caller=mock_caller_no_call
+        )
+        # 恢复后再次变成 completed
+        recovered_doc = json.loads(sample_file.read_text(encoding="utf-8"))
+        self.assertEqual(recovered_doc["status"], "completed")
+
+    def test_report_and_apply_flow_with_governance_sync(self):
+        """测试审核报告生成、选择导出、干预写入、冷冻移除与离线目录投影同步。"""
+        from tools.filter_existing_catalog import prepare_run, run_assessments, render_report, plan_apply, execute_apply
+        from src.catalog.filter_rules import FilterRules
+
+        prepare_run(self.root, "test-batch-03")
+        rules = FilterRules(self.rules_data)
+        topic_ecommerce = rules.blocked_topics[0]
+        topic_gym = rules.blocked_topics[1]
+
+        def fake_caller(cfg, sys_prompt, usr_prompt, request_id):
+            is_ecom = "target/ecommerce:SKILL.md" in usr_prompt
+            is_retired = "retired/skill:SKILL.md" in usr_prompt
+            match = is_ecom or is_retired
+            quote = "电商" if is_retired else ("撰写电商商品详情与促销广告文案" if is_ecom else "")
+            return self._mock_topic_response(
+                topic_ecommerce["topic_id"], topic_gym["topic_id"],
+                match_ecom=match, quote=quote,
+                usage={"total_tokens": 100}
+            )
+
+        run_assessments(self.root, "test-batch-03", model_caller=fake_caller)
+
+        # 1. 生成报告
+        report_html_path = render_report(self.root, "test-batch-03")
+        self.assertTrue(Path(report_html_path).exists())
+        review_file = self.root / "data" / "local" / "topic-filter" / "test-batch-03" / "review.json"
+        self.assertTrue(review_file.exists())
+        review_doc = json.loads(review_file.read_text(encoding="utf-8"))
+        # 默认选中了命中的两项: target/ecommerce 和 retired/skill
+        self.assertEqual(set(review_doc["selected_skill_ids"]), {"target/ecommerce:SKILL.md", "retired/skill:SKILL.md"})
+
+        # 2. 计划预览 (plan_apply)
+        plan = plan_apply(self.root, "test-batch-03", review_file)
+        self.assertEqual(plan["conflicts_count"], 0)
+        self.assertEqual(plan["to_add_count"], 1)  # target/ecommerce
+        self.assertEqual(plan["to_reactivate_count"], 1)  # retired/skill
+        self.assertEqual(plan["already_active_count"], 0)
+
+        # 3. 正式应用 (execute_apply)
+        manifest = execute_apply(self.root, "test-batch-03")
+        self.assertEqual(manifest["phase"], "completed")
+
+        # 4. 验证 overrides.json
+        ov_after = json.loads((self.root / "config" / "governance" / "overrides.json").read_text(encoding="utf-8"))
+        ov_exclusions = ov_after["manual_exclusions"]
+        self.assertEqual(len(ov_exclusions), 3)  # 原有 1 活跃 + 1 退休转活跃 + 1 新增 = 3
+
+        # target/ecommerce 已新增
+        ecom_ex = next(x for x in ov_exclusions if x["skill_id"] == "target/ecommerce:SKILL.md")
+        self.assertIn("存量主题过滤", ecom_ex["reason"])
+
+        # retired/skill 已就地重新激活 (retired_at 字段被移除，且未产生重复条目)
+        retired_ex = next(x for x in ov_exclusions if x["skill_id"] == "retired/skill:SKILL.md")
+        self.assertNotIn("retired_at", retired_ex)
+        self.assertIn("存量主题过滤", retired_ex["reason"])
+
+        # 5. 验证 catalog.json 同步结果
+        cat_after = json.loads((self.root / "data" / "catalog.json").read_text(encoding="utf-8"))
+        entries_after = {e["skill_id"]: e for e in cat_after["entries"]}
+        # target/ecommerce 原为 recommended，应用后被置为 excluded
+        self.assertEqual(entries_after["target/ecommerce:SKILL.md"]["status"], "excluded")
+        # retired/skill 原为 candidate，应用后被置为 excluded
+        self.assertEqual(entries_after["retired/skill:SKILL.md"]["status"], "excluded")
+
+    def test_plan_apply_conflicts_and_idempotency(self):
+        """测试应用前材料指纹变化冲突检测与重复应用的幂等性。"""
+        from tools.filter_existing_catalog import prepare_run, run_assessments, render_report, plan_apply, execute_apply
+        from src.catalog.filter_rules import FilterRules
+
+        prepare_run(self.root, "test-batch-04")
+        rules = FilterRules(self.rules_data)
+        topic_ecommerce = rules.blocked_topics[0]
+        topic_gym = rules.blocked_topics[1]
+
+        def fake_caller(cfg, sys_prompt, usr_prompt, request_id):
+            is_ecom = "target/ecommerce:SKILL.md" in usr_prompt
+            quote = "撰写电商商品详情与促销广告文案" if is_ecom else ""
+            return self._mock_topic_response(
+                topic_ecommerce["topic_id"], topic_gym["topic_id"],
+                match_ecom=is_ecom, quote=quote,
+                usage={"total_tokens": 100}
+            )
+
+        run_assessments(self.root, "test-batch-04", model_caller=fake_caller)
+        render_report(self.root, "test-batch-04")
+        review_file = self.root / "data" / "local" / "topic-filter" / "test-batch-04" / "review.json"
+
+        # 模拟在准备与应用之间，外部修改了目标技能的 materials 内容
+        cat_file = self.root / "data" / "catalog.json"
+        cat_data = json.loads(cat_file.read_text(encoding="utf-8"))
+        for e in cat_data["entries"]:
+            if e["skill_id"] == "target/ecommerce:SKILL.md":
+                e["summary_zh"] = "已被外部篡改为全新的无关摘要文本"
+        cat_file.write_text(json.dumps(cat_data, ensure_ascii=False), encoding="utf-8")
+
+        # 计划预览应捕获 content_changed 冲突
+        plan = plan_apply(self.root, "test-batch-04", review_file)
+        self.assertGreater(plan["conflicts_count"], 0)
+        self.assertEqual(plan["conflicts"][0]["reason"], "content_changed")
+
+        # 恢复原状后可正常应用
+        for e in cat_data["entries"]:
+            if e["skill_id"] == "target/ecommerce:SKILL.md":
+                e["summary_zh"] = "核心功能是撰写电商商品详情与促销广告文案。"
+        cat_file.write_text(json.dumps(cat_data, ensure_ascii=False), encoding="utf-8")
+
+        plan_ok = plan_apply(self.root, "test-batch-04", review_file)
+        self.assertEqual(plan_ok["conflicts_count"], 0)
+
+        # 首次执行应用
+        manifest1 = execute_apply(self.root, "test-batch-04")
+        self.assertEqual(manifest1["phase"], "completed")
+
+        # 再次执行应用应幂等返回
+        manifest2 = execute_apply(self.root, "test-batch-04")
+        self.assertEqual(manifest2["phase"], "completed")
+
+    def test_unknown_usage_stops_dispatch(self):
+        """测试响应缺少用量明细时保守预留并安全停止派发，防范未记账超额调用。"""
+        from tools.filter_existing_catalog import prepare_run, run_assessments
+        from src.catalog.filter_rules import FilterRules
+
+        prepare_run(self.root, "test-batch-05")
+        rules = FilterRules(self.rules_data)
+        topic_ecommerce = rules.blocked_topics[0]
+        topic_gym = rules.blocked_topics[1]
+
+        call_count = 0
+
+        def caller_missing_usage(cfg, sys_prompt, usr_prompt, request_id):
+            nonlocal call_count
+            call_count += 1
+            return self._mock_topic_response(
+                topic_ecommerce["topic_id"], topic_gym["topic_id"],
+                match_ecom=False, usage=None
+            )
+
+        prog = run_assessments(self.root, "test-batch-05", model_caller=caller_missing_usage)
+        # 仅执行 1 次即因未知用量停止
+        self.assertEqual(call_count, 1)
+        self.assertEqual(prog["stop_reason"], "usage_unknown")
+        self.assertGreaterEqual(prog["tokens"], 3000)
 
 
 if __name__ == "__main__":
