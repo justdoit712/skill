@@ -37,6 +37,7 @@ from src.infra.model_config import load_model_config
 from src.infra.model_pool import ModelPool, PoolStopped
 from src.infra.owned import load_owned_config
 from src.shared.model_config import model_fingerprint
+from src.shared.output_contracts import resolve_response_format
 from src.shared.owned import is_skill_owned, normalize_owned_id
 from src.shared.runtime import now_local
 from src.shared.usage import UsageTotals
@@ -669,6 +670,16 @@ def run_assessments(
         if is_queue:
             pool = ModelPool(model_cfg, root, log=log)
 
+        # 与主程序共用本地重试配置；实际 HTTP 请求仍逐次持久化和检查预算。
+        settings_path = root / "config" / "runners" / "local-run.json"
+        if not settings_path.exists():
+            settings_path = root / "config" / "local-run.json"
+        raw_settings = read_json(settings_path, {})
+        settings = raw_settings.get("settings", raw_settings)
+        max_retries = settings.get("max_retries", 5)
+        if type(max_retries) is not int or max_retries < 0:
+            raise ValueError("max_retries 必须是非负整数")
+
         stop_reason = None
         processed_in_this_run = 0
 
@@ -835,15 +846,15 @@ def run_assessments(
                 nonlocal total_tokens_spent, unknown_usage, stop_reason
                 toks = 3000
                 is_unk = True
-                if res and res.usage and res.usage.get("total_tokens") is not None:
-                    toks = int(res.usage.get("total_tokens") or 0)
+                usage = UsageTotals().add(res) if res is not None else {}
+                rejected = getattr(res, "billing_state", None) == "rejected_before_inference"
+                if usage.get("total_tokens") is not None or rejected:
+                    toks = int(usage.get("total_tokens") or 0)
                     total_tokens_spent += (toks - 3000)
                     is_unk = False
-                elif res and res.ok:
-                    is_unk = True
-                    unknown_usage = True
+                else:
                     stop_reason = "usage_unknown"
-                    log(f"[警告] 响应缺少用量明细，保留有效判定但停止后续派发以防超额费用。")
+                    log("[警告] 请求用量未知，停止后续自动请求。")
 
                 unknown_usage = unknown_usage or is_unk
                 post_record = {
@@ -856,6 +867,9 @@ def run_assessments(
                     "ok": res.ok if res else False,
                     "http_status": res.http_status if res else None,
                     "reason_code": res.reason_code if res else None,
+                    "billing_state": getattr(res, "billing_state", None),
+                    "provider_error_code": getattr(res, "provider_error_code", None),
+                    "incompatible_parameter": getattr(res, "incompatible_parameter", None),
                     "usage": res.usage if res else None,
                     "tokens_charged": toks,
                     "unknown_usage": is_unk,
@@ -898,7 +912,7 @@ def run_assessments(
                         _persist_pre_call(inv_req_id, inv_model)
                         inv_start_t = time.monotonic()
                         try:
-                            res = call_model(c, sys_prompt, usr_prompt, response_format={"type": "json_object"})
+                            res = call_model(c, sys_prompt, usr_prompt, response_format=fmt, sleep=sleep)
                         except Exception as pool_err:
                             pre_rec = read_json(requests_dir / f"{inv_req_id}.json", {})
                             pre_rec["status"] = "failed"
@@ -910,13 +924,14 @@ def run_assessments(
                         _, toks, is_unk = _persist_post_call(inv_req_id, inv_model, res, inv_lat)
                         last_call_res = res
 
-                        if is_unk and (res and res.ok):
+                        if is_unk:
                             raise PoolStopped("usage_unknown", "响应缺少用量明细")
 
                         return res
 
                     try:
-                        call_res, _ = pool.run(sys_prompt, usr_prompt, "topic_filter", _invoke, max_attempts=1, sleep=sleep)
+                        call_res, _ = pool.run(sys_prompt, usr_prompt, "topic_filter", _invoke,
+                                               max_attempts=max_retries + 1, sleep=sleep)
                     except PoolStopped as pse:
                         stop_reason = pse.reason
                         log(f"模型池停止：{pse}")
@@ -939,7 +954,8 @@ def run_assessments(
                     _persist_pre_call(inv_req_id, used_model)
                     inv_start_t = time.monotonic()
                     try:
-                        call_res = call_model(single_cfg, sys_prompt, usr_prompt, response_format={"type": "json_object"}, sleep=sleep)
+                        fmt = resolve_response_format(single_cfg, "topic_filter")
+                        call_res = call_model(single_cfg, sys_prompt, usr_prompt, response_format=fmt, sleep=sleep)
                     except Exception as single_err:
                         pre_rec = read_json(requests_dir / f"{inv_req_id}.json", {})
                         pre_rec["status"] = "failed"
@@ -1965,7 +1981,8 @@ def main(argv: list[str] | None = None) -> int:
                 max_total_tokens=args.max_total_tokens,
                 max_total_requests=args.max_total_requests,
             )
-            safe_print(f"✅ 运行完成：完成 {prog['completed']}/{prog['total']}（命中 {prog['matched']} · 合规 {prog['no_match']} · 存疑 {prog['unknown']} · 失败 {prog['failed']}）")
+            label = "⚠️ 运行停止" if prog.get("stop_reason") else "本轮结束"
+            safe_print(f"{label}：完成 {prog['completed']}/{prog['total']}（命中 {prog['matched']} · 合规 {prog['no_match']} · 存疑 {prog['unknown']} · 失败 {prog['failed']}）")
             safe_print(f"   累计请求：{prog['requests']} 次 | 累计 Token：{prog['tokens']:,}")
             if prog.get("stop_reason"):
                 safe_print(f"   停止原因：{prog['stop_reason']}")

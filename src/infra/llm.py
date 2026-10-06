@@ -146,6 +146,30 @@ def apply_provider_error(result, data, config):
     result.error = '模型免费额度耗尽'
 
 
+def _http_error_detail(data: Any, body: str, api_key: str) -> str:
+    """保留短错误说明以诊断未识别响应，过滤认证信息与控制字符。"""
+    error = data.get("error", data) if isinstance(data, dict) else None
+    if isinstance(error, dict):
+        parts = [f"{name}={error[name]}" for name in ("code", "type", "message")
+                 if isinstance(error.get(name), str) and error[name].strip()]
+        detail = "; ".join(parts)
+    elif isinstance(error, str):
+        detail = error
+    else:
+        detail = body
+    if api_key:
+        detail = detail.replace(api_key, "[REDACTED]")
+    detail = re.sub(r"(?i)\bBearer\s+[^\s\"'<>;,]+", "Bearer [REDACTED]", detail)
+    detail = re.sub(r"\bsk-[A-Za-z0-9_-]+", "[REDACTED]", detail)
+    detail = re.sub(r"(?i)https?://[^\s\"'<>]+", "[URL]", detail)
+    detail = re.sub(r"(?i)\b(api[_-]?key|access[_-]?token|authorization)\b[\"']?\s*[:=]\s*[\"']?[^\s\"';,<>]+",
+                    r"\1=[REDACTED]", detail)
+    # 服务端文本仅作数据展示，不能注入终端控制序列。
+    detail = re.sub(r"\x1b\[[0-?]*[ -/]*[@-~]", "", detail)
+    detail = " ".join(re.sub(r"[\x00-\x1f\x7f-\x9f]", " ", detail).split())
+    return detail[:600]
+
+
 def validate_response_format(fmt: Any) -> list[str]:
     """校验 response_format 格式对象的合法性。"""
     if fmt is None:
@@ -376,12 +400,15 @@ def call_model(
                 status = response.status_code
                 result.http_status = status
                 if status >= 400:
-                    body = response.text[:300]
+                    body = response.text
                     result.error = f"HTTP {status}"
                     try:
                         error_data = response.json()
                     except (ValueError, TypeError):
                         error_data = None
+                    detail = _http_error_detail(error_data, body, key)
+                    if detail:
+                        result.error += f"：{detail}"
                     apply_provider_error(result, error_data, model_cfg)
                     if result.reason_code in ('QUOTA_EXHAUSTED', 'QUOTA_RESPONSE_CONFLICT', 'ACCOUNT_ERROR'):
                         result.latency_ms = int((time.monotonic() - started) * 1000)
@@ -390,7 +417,7 @@ def call_model(
                     if result.reason_code == REASON_MODEL_REQUEST_INCOMPATIBLE:
                         result.latency_ms = int((time.monotonic() - started) * 1000)
                         return result
-                    if status == 400 and any(keyword in body.lower() for keyword in ("response_format", "json_schema")):
+                    if status == 400 and any(keyword in body[:300].lower() for keyword in ("response_format", "json_schema")):
                         result.latency_ms = int((time.monotonic() - started) * 1000)
                         result.reason_code = REASON_RESPONSE_FORMAT_UNSUPPORTED
                         return result

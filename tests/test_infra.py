@@ -440,6 +440,33 @@ class ApiKeyResolutionTest(unittest.TestCase):
 
 class ModelDiagnosticsTest(unittest.TestCase):
     """LLM 调用异常与诊断信息安全。"""
+    @smoke
+    def test_unrecognized_http_error_preserves_redacted_detail_without_rotation(self):
+        from src.infra.llm import call_model
+        message = ('Unsupported mode for glm. key=actual-secret '
+                   'Bearer other-secret sk-hidden api_key=third-secret '
+                   'https://example.invalid/?token=hidden \x1b[31m' + 'x' * 800)
+        for body in ({"error": {"code": "new_code", "type": "new_type", "message": message}},
+                     {"code": "new_code", "message": message}, message):
+            with self.subTest(body_type=type(body).__name__):
+                response = Mock(status_code=400, text=body if isinstance(body, str) else json.dumps(body))
+                if isinstance(body, str):
+                    response.json.side_effect = ValueError("not JSON")
+                else:
+                    response.json.return_value = body
+                session = Mock()
+                session.post.return_value = response
+                result = call_model({"model": "glm-4.5", "provider": "dashscope",
+                    "endpoint": "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions"},
+                    "s", "u", api_key="actual-secret", session=session)
+                self.assertIn("Unsupported mode for glm", result.error)
+                self.assertEqual(result.reason_code, "MODEL_ERROR")
+                self.assertIsNone(result.billing_state)
+                self.assertEqual(session.post.call_count, 1)
+                self.assertLessEqual(len(result.error), 610)
+                for secret in ("actual-secret", "other-secret", "sk-hidden", "third-secret", "https://", "\x1b"):
+                    self.assertNotIn(secret, result.error)
+
     def test_length_is_non_retryable_sample_error_with_usage(self):
         from src.infra.llm import call_model
         usage = {"prompt_tokens": 120, "completion_tokens": 8000, "total_tokens": 8120,

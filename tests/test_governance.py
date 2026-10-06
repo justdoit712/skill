@@ -1130,6 +1130,103 @@ class ExistingCatalogFilterTest(unittest.TestCase):
         self.assertEqual(saved_req["model"], "m1")
         self.assertEqual(saved_req["tokens_charged"], 50)
 
+    def test_filter_uses_shared_pool_formats_rotation_and_rejection_accounting(self):
+        """真实传输解析接假 HTTP：参数拒绝、额度耗尽、空响应均走公共模型池。"""
+        from tools.filter_existing_catalog import prepare_run, run_assessments
+        from src.catalog.filter_rules import FilterRules
+
+        cfg = {
+            "provider": "dashscope",
+            "endpoint": "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions",
+            "auth": {"api_key": "test-key"},
+            "models": [
+                {"model": "incompatible", "request": {"response_format": "text"}},
+                {"model": "exhausted"},
+                {"model": "empty", "request": {"response_format": "text"}},
+                {"model": "working", "request": {"response_format": "json_object"}},
+            ],
+        }
+        (self.root / "config/models/model.json").write_text(json.dumps(cfg), encoding="utf-8")
+        batch = "shared-pool"
+        prepare_run(self.root, batch)
+        rules = FilterRules(self.rules_data)
+        valid = self._mock_topic_response(
+            rules.blocked_topics[0]["topic_id"], rules.blocked_topics[1]["topic_id"]
+        ).content
+        payloads = []
+
+        def post(url, **kwargs):
+            payload = json.loads(kwargs["data"])
+            payloads.append(payload)
+            model = payload["model"]
+            if model == "incompatible":
+                status, body = 400, {"error": {
+                    "code": "invalid_parameter_error", "param": "max_tokens",
+                    "message": "max_tokens must be in range",
+                }}
+            elif model == "exhausted":
+                status, body = 403, {"error": {"code": "AllocationQuota.FreeTierOnly"}}
+            else:
+                status, body = 200, {
+                    "choices": [{"finish_reason": "stop", "message": {
+                        "content": "" if model == "empty" else valid,
+                    }}],
+                    "usage": {"prompt_tokens": 40, "completion_tokens": 60},
+                }
+            response = Mock(status_code=status, text=json.dumps(body))
+            response.json.return_value = body
+            return response
+
+        sleeps = []
+        with patch("src.infra.llm.requests.Session.post", side_effect=post):
+            prog = run_assessments(self.root, batch, sleep=sleeps.append, log=lambda _: None)
+        self.assertEqual([p["model"] for p in payloads[:5]],
+                         ["incompatible", "exhausted", "empty", "empty", "working"])
+        self.assertEqual(payloads[0]["response_format"], {"type": "text"})
+        self.assertNotIn("response_format", payloads[1])
+        self.assertEqual(payloads[-1]["response_format"], {"type": "json_object"})
+        self.assertEqual(sleeps, [1])
+        self.assertEqual(prog["completed"], prog["total"])
+        self.assertIsNone(prog["stop_reason"])
+        self.assertEqual(prog["requests"], len(payloads))
+        self.assertEqual(prog["tokens"], (len(payloads) - 2) * 100)
+        records = [json.loads(p.read_text(encoding="utf-8")) for p in
+                   (self.root / "data/local/topic-filter" / batch / "requests").glob("*.json")]
+        rejected = [r for r in records if r["model"] in ("incompatible", "exhausted")]
+        self.assertEqual(len(rejected), 2)
+        self.assertTrue(all(r["tokens_charged"] == 0 and not r["unknown_usage"] for r in rejected))
+        self.assertTrue(all(r["billing_state"] == "rejected_before_inference" for r in rejected))
+
+    def test_filter_unknown_http_error_stops_before_retry_and_reports_reason(self):
+        """不明确的 400/503 不会被当成免费请求轮换；停止原因必须展示。"""
+        from tools.filter_existing_catalog import prepare_run, run_assessments, main
+        cfg = {
+            "provider": "dashscope",
+            "endpoint": "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions",
+            "auth": {"api_key": "test-key"},
+            "models": [{"model": "m1"}, {"model": "m2"}],
+        }
+        (self.root / "config/models/model.json").write_text(json.dumps(cfg), encoding="utf-8")
+        for status in (400, 503):
+            with self.subTest(status=status):
+                batch = f"unknown-http-{status}"
+                prepare_run(self.root, batch)
+                response = Mock(status_code=status, text='{"error":{"message":"unknown"}}')
+                response.json.return_value = {"error": {"message": "unknown"}}
+                with patch("src.infra.llm.requests.Session.post", return_value=response) as post:
+                    prog = run_assessments(self.root, batch, sleep=lambda _: None, log=lambda _: None)
+                self.assertEqual(post.call_count, 1)
+                self.assertEqual(prog["stop_reason"], "usage_unknown")
+                self.assertEqual(prog["completed"], 0)
+                self.assertEqual(prog["tokens"], 3000)
+                with patch("tools.filter_existing_catalog.run_assessments", return_value=prog), \
+                     patch("tools.filter_existing_catalog.safe_print") as output:
+                    main(["--root", str(self.root), "run", "--run-id", batch])
+                messages = "\n".join(call.args[0] for call in output.call_args_list)
+                self.assertIn("运行停止", messages)
+                self.assertIn("usage_unknown", messages)
+                self.assertNotIn("✅ 运行完成", messages)
+
     def test_defect3_unknown_usage_reservation_persists_across_restart(self):
         """[Defect 3] 测试未知用量预留在重启后持久化，不降为 0 且防止违规派发。"""
         from tools.filter_existing_catalog import prepare_run, run_assessments
@@ -1508,4 +1605,3 @@ class ExistingCatalogFilterTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-
