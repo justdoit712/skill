@@ -22,19 +22,26 @@ def response(data, tokens=100):
                            usage={"prompt_tokens": tokens - 20, "completion_tokens": 20, "total_tokens": tokens})
 
 
-def evaluated(match="none", path="SKILL.md", documentation="clear", tokens=100):
-    return response({"match": match, "documentation": documentation, "summary_zh": "organize",
-        "criteria_results": [{"criterion_id": "organize", "status": "supported" if match == "strong" else "unsupported",
-        "evidence": [{"source_path": path, "start_line": 1, "end_line": 1, "quote": "organize"}] if match == "strong" else []}]}, tokens)
+def evaluated(match="none", path="SKILL.md", documentation="clear", tokens=100, criterion_id="organize", quote="organize"):
+    return response({
+        "match": match, "documentation": documentation, "summary_zh": "organize",
+        "criteria_results": [{
+            "criterion_id": criterion_id, "status": "supported" if match == "strong" else "unsupported",
+            "evidence": [{"source_path": path, "start_line": 1, "end_line": 1, "quote": quote}] if match == "strong" else []
+        }]
+    }, tokens)
 
 
 def repo(n):
     return {"owner": "owner", "repo": f"r{n}", "url": f"https://github.com/owner/r{n}", "description": ""}
 
 
-def candidate(n, path="SKILL.md"):
-    return Candidate(skill_id=f"owner/r{n}:{path}", owner="owner", repo=f"r{n}", path=path,
-                     name=f"r{n}", url=f"https://github.com/owner/r{n}/blob/HEAD/{path}", repo_url=repo(n)["url"])
+def candidate(n, path="SKILL.md", owner="owner", desc=""):
+    return Candidate(
+        skill_id=f"{owner}/r{n}:{path}", owner=owner, repo=f"r{n}", path=path,
+        name=f"r{n}", description=desc,
+        url=f"https://github.com/{owner}/r{n}/blob/HEAD/{path}", repo_url=f"https://github.com/{owner}/r{n}"
+    )
 
 
 class RefillTest(unittest.TestCase):
@@ -374,8 +381,9 @@ class RefillTest(unittest.TestCase):
         self.search.assert_not_called()
 
     def test_invalid_round_count_is_rejected_before_model_call(self):
-        with self.assertRaises(ValueError):
-            self.run_find(max_rounds=0)
+        for bad in (0, -1):
+            with self.subTest(bad=bad), self.assertRaises(ValueError):
+                self.run_find(max_rounds=bad)
         self.model.assert_not_called()
 
     def test_cli_resume_does_not_replace_original_topic_with_runner_default(self):
@@ -482,43 +490,15 @@ BATCH_PLAN = {
 }
 
 
-def _batch_resp(data, tokens=100):
-    return ModelCallResult(
-        ok=True, content=json.dumps(data), attempts=1,
-        usage={"prompt_tokens": tokens - 20, "completion_tokens": 20, "total_tokens": tokens},
-    )
+_batch_resp = response
 
 
 def _batch_eval(match="none", path="SKILL.md", tokens=100):
-    return _batch_resp(
-        {
-            "match": match,
-            "documentation": "clear",
-            "summary_zh": "evaluation summary",
-            "criteria_results": [
-                {
-                    "criterion_id": "support",
-                    "status": "supported" if match == "strong" else "unsupported",
-                    "evidence": (
-                        [{"source_path": path, "start_line": 1, "end_line": 1, "quote": "emotional support"}]
-                        if match == "strong"
-                        else []
-                    ),
-                }
-            ],
-        },
-        tokens,
-    )
+    return evaluated(match=match, path=path, tokens=tokens, criterion_id="support", quote="emotional support")
 
 
 def _batch_cand(n, path="SKILL.md", desc=""):
-    return Candidate(
-        skill_id=f"test-owner/r{n}:{path}",
-        owner="test-owner", repo=f"r{n}", path=path,
-        name=f"r{n}", description=desc,
-        url=f"https://github.com/test-owner/r{n}/blob/main/{path}",
-        repo_url=f"https://github.com/test-owner/r{n}",
-    )
+    return candidate(n, path=path, owner="test-owner", desc=desc)
 
 
 class FinderBatchRefillTest(unittest.TestCase):
