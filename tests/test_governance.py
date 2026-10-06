@@ -1008,6 +1008,504 @@ class ExistingCatalogFilterTest(unittest.TestCase):
         self.assertEqual(prog["stop_reason"], "usage_unknown")
         self.assertGreaterEqual(prog["tokens"], 3000)
 
+    def test_defect1_interrupted_run_prior_status_offline_recovery_and_no_resend(self):
+        """[Defect 1] 测试中断续跑：优先恢复已存盘响应，未决请求停止自动重发。"""
+        from tools.filter_existing_catalog import prepare_run, run_assessments
+        from src.catalog.filter_rules import FilterRules
+        from src.infra.files import write_json_atomic
+
+        batch_id = "test-defect-01"
+        prepare_run(self.root, batch_id)
+        rules = FilterRules(self.rules_data)
+        topic_ecommerce = rules.blocked_topics[0]
+        topic_gym = rules.blocked_topics[1]
+
+        batch_dir = self.root / "data" / "local" / "topic-filter" / batch_id
+        results_dir = batch_dir / "results"
+        requests_dir = batch_dir / "requests"
+
+        targets_doc = json.loads((batch_dir / "targets.json").read_text(encoding="utf-8"))
+        # 将前两个标记为样本，其余标记为非样本
+        for idx, t in enumerate(targets_doc["targets"]):
+            t["is_sample"] = (idx < 2)
+        (batch_dir / "targets.json").write_text(json.dumps(targets_doc, ensure_ascii=False), encoding="utf-8")
+
+        t1, t2 = targets_doc["targets"][0], targets_doc["targets"][1]
+
+        # 场景 A: t1 处于 started 状态，且本地 requests 已有保存的有效响应
+        from tools.filter_existing_catalog import _task_hash
+        thash1 = _task_hash(batch_id, t1["skill_id"], t1["materials_fingerprint"], rules.fingerprint)
+        req_id1 = "req-done-001"
+        write_json_atomic(requests_dir / f"{req_id1}.json", {
+            "request_id": req_id1,
+            "task_hash": thash1,
+            "skill_id": t1["skill_id"],
+            "response_content": json.dumps({
+                "topic_assessments": [
+                    {"topic_id": topic_ecommerce["topic_id"], "result": "no_match", "evidence": "无关"},
+                    {"topic_id": topic_gym["topic_id"], "result": "no_match", "evidence": "无关"}
+                ]
+            }),
+            "tokens_charged": 100,
+        })
+        write_json_atomic(results_dir / f"{thash1}.json", {
+            "task_hash": thash1,
+            "skill_id": t1["skill_id"],
+            "status": "started",
+            "request_id": req_id1,
+        })
+
+        # 场景 B: t2 处于 started 状态，但缺少请求/响应记录
+        thash2 = _task_hash(batch_id, t2["skill_id"], t2["materials_fingerprint"], rules.fingerprint)
+        write_json_atomic(results_dir / f"{thash2}.json", {
+            "task_hash": thash2,
+            "skill_id": t2["skill_id"],
+            "status": "started",
+            "request_id": "req-missing-002",
+        })
+
+        # 重启样本续跑：断言不会发起任何新的模型调用
+        mock_caller = Mock(side_effect=AssertionError("不应产生任何新请求！"))
+        run_assessments(self.root, batch_id, sample_only=True, model_caller=mock_caller)
+
+        # t1 应已离线恢复为 completed
+        r1 = json.loads((results_dir / f"{thash1}.json").read_text(encoding="utf-8"))
+        self.assertEqual(r1["status"], "completed")
+        self.assertEqual(r1["result"], "no_match")
+
+        # t2 应被置为 needs_recovery，未决请求未被自动重发
+        r2 = json.loads((results_dir / f"{thash2}.json").read_text(encoding="utf-8"))
+        self.assertEqual(r2["status"], "needs_recovery")
+        mock_caller.assert_not_called()
+
+    def test_defect2_model_pool_accounting_and_invocation_budget(self):
+        """[Defect 2] 测试模型队列：在每次 _invoke 内检查预算并落盘，防止漏记与超额调用。"""
+        from tools.filter_existing_catalog import prepare_run, run_assessments
+        from src.infra.llm import ModelCallResult
+
+        batch_id = "test-defect-02"
+        # 构造含两个模型的队列配置
+        queue_model_cfg = {
+            "model_config_version": "1.0.0",
+            "provider": "dashscope",
+            "endpoint": "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions",
+            "auth": {"api_key": "test-key"},
+            "models": [
+                {"model": "m1"},
+                {"model": "m2"}
+            ]
+        }
+        (self.root / "config" / "models" / "model.json").write_text(
+            json.dumps(queue_model_cfg, ensure_ascii=False), encoding="utf-8"
+        )
+        prepare_run(self.root, batch_id)
+
+        invocations = []
+
+        def mock_call_model(cfg, sys_prompt, usr_prompt, **kwargs):
+            invocations.append(cfg["model"])
+            # m1 模拟额度耗尽，促使 ModelPool 尝试轮换
+            return ModelCallResult(
+                ok=False,
+                model=cfg["model"],
+                http_status=429,
+                reason_code="QUOTA_EXHAUSTED",
+                usage={"total_tokens": 50},
+                error="额度耗尽"
+            )
+
+        with patch("tools.filter_existing_catalog.call_model", side_effect=mock_call_model):
+            prog = run_assessments(self.root, batch_id, max_total_requests=1)
+
+        # 因为 max_total_requests=1，在 _invoke 门禁处拦截了对 m2 的调用
+        self.assertEqual(len(invocations), 1)
+        self.assertEqual(invocations[0], "m1")
+        self.assertEqual(prog["requests"], 1)
+        self.assertEqual(prog["tokens"], 50)
+
+        # 检查 requests 目录是否如实记录了 m1 的请求事实
+        req_files = list((self.root / "data" / "local" / "topic-filter" / batch_id / "requests").glob("*.json"))
+        self.assertEqual(len(req_files), 1)
+        saved_req = json.loads(req_files[0].read_text(encoding="utf-8"))
+        self.assertEqual(saved_req["model"], "m1")
+        self.assertEqual(saved_req["tokens_charged"], 50)
+
+    def test_defect3_unknown_usage_reservation_persists_across_restart(self):
+        """[Defect 3] 测试未知用量预留在重启后持久化，不降为 0 且防止违规派发。"""
+        from tools.filter_existing_catalog import prepare_run, run_assessments
+        from src.catalog.filter_rules import FilterRules
+
+        batch_id = "test-defect-03"
+        prepare_run(self.root, batch_id)
+        rules = FilterRules(self.rules_data)
+
+        # 轮次 1: 缺少 usage，收取 3000 Token 预留并停止
+        def caller_missing_usage(cfg, sys_prompt, usr_prompt, request_id):
+            return self._mock_topic_response(
+                rules.blocked_topics[0]["topic_id"], rules.blocked_topics[1]["topic_id"],
+                match_ecom=False, usage=None
+            )
+
+        prog1 = run_assessments(self.root, batch_id, model_caller=caller_missing_usage)
+        self.assertEqual(prog1["stop_reason"], "usage_unknown")
+        self.assertEqual(prog1["tokens"], 3000)
+
+        # 轮次 2: 重启续跑，设定上限恰为 3000 Token；重启后累计数应保持 3000，因预算不足停止，不调用下一条
+        mock_caller_never = Mock(side_effect=AssertionError("预算已满，绝不应继续调用！"))
+        prog2 = run_assessments(self.root, batch_id, max_total_tokens=3000, model_caller=mock_caller_never)
+        self.assertEqual(prog2["tokens"], 3000)
+        self.assertEqual(prog2["stop_reason"], "token_limit_exceeded")
+        mock_caller_never.assert_not_called()
+
+    def test_defect4_report_does_not_overwrite_manual_review_selection(self):
+        """[Defect 4] 测试重新生成报告保存 review-proposal.json，但不覆盖已有 review.json 人工选择。"""
+        from tools.filter_existing_catalog import prepare_run, run_assessments, render_report
+        from src.catalog.filter_rules import FilterRules
+
+        batch_id = "test-defect-04"
+        prepare_run(self.root, batch_id)
+        rules = FilterRules(self.rules_data)
+
+        def mock_caller(cfg, sys_prompt, usr_prompt, request_id):
+            is_ecom = "target/ecommerce:SKILL.md" in usr_prompt
+            is_retired = "retired/skill:SKILL.md" in usr_prompt
+            match = is_ecom or is_retired
+            quote = "电商" if is_retired else ("撰写电商商品详情与促销广告文案" if is_ecom else "")
+            return self._mock_topic_response(
+                rules.blocked_topics[0]["topic_id"], rules.blocked_topics[1]["topic_id"],
+                match_ecom=match, quote=quote, usage={"total_tokens": 100}
+            )
+
+        run_assessments(self.root, batch_id, model_caller=mock_caller)
+
+        # 1. 首次生成报告
+        render_report(self.root, batch_id)
+        batch_dir = self.root / "data" / "local" / "topic-filter" / batch_id
+        review_file = batch_dir / "review.json"
+        proposal_file = batch_dir / "review-proposal.json"
+        self.assertTrue(review_file.exists())
+        self.assertTrue(proposal_file.exists())
+
+        # 2. 模拟人工审核：只保留 1 项 (target/ecommerce)
+        review_doc = json.loads(review_file.read_text(encoding="utf-8"))
+        review_doc["selected_skill_ids"] = ["target/ecommerce:SKILL.md"]
+        review_file.write_text(json.dumps(review_doc, ensure_ascii=False), encoding="utf-8")
+
+        # 3. 再次生成报告：proposal 包含 2 项，但 review.json 依然保持人工选择的 1 项
+        render_report(self.root, batch_id)
+        proposal_after = json.loads(proposal_file.read_text(encoding="utf-8"))
+        review_after = json.loads(review_file.read_text(encoding="utf-8"))
+
+        self.assertEqual(len(proposal_after["selected_skill_ids"]), 2)
+        self.assertEqual(review_after["selected_skill_ids"], ["target/ecommerce:SKILL.md"])
+
+    def test_defect5_remaining_does_not_miss_unfinished_samples(self):
+        """[Defect 5] 测试 --remaining 会补齐此前因中断而未完成的样本。"""
+        from tools.filter_existing_catalog import prepare_run, run_assessments
+        from src.catalog.filter_rules import FilterRules
+
+        batch_id = "test-defect-05"
+        prepare_run(self.root, batch_id)
+        rules = FilterRules(self.rules_data)
+
+        # 人为将全部 4 个目标都标记为样本 (以便测试样本中断)
+        batch_dir = self.root / "data" / "local" / "topic-filter" / batch_id
+        targets_file = batch_dir / "targets.json"
+        targets_doc = json.loads(targets_file.read_text(encoding="utf-8"))
+        for t in targets_doc["targets"]:
+            t["is_sample"] = True
+        targets_file.write_text(json.dumps(targets_doc, ensure_ascii=False), encoding="utf-8")
+
+        def mock_caller(cfg, sys_prompt, usr_prompt, request_id):
+            return self._mock_topic_response(
+                rules.blocked_topics[0]["topic_id"], rules.blocked_topics[1]["topic_id"],
+                match_ecom=False, usage={"total_tokens": 100}
+            )
+
+        # 样本运行因请求上限仅完成 1 条
+        prog1 = run_assessments(self.root, batch_id, sample_only=True, max_total_requests=1, model_caller=mock_caller)
+        self.assertEqual(prog1["completed"], 1)
+
+        # 运行 --remaining：必须补齐剩余 3 条未完成的样本，使总完成数达到 4
+        prog2 = run_assessments(self.root, batch_id, remaining_only=True, max_total_requests=10, model_caller=mock_caller)
+        self.assertEqual(prog2["completed"], 4)
+
+    def test_defect6_plan_apply_validates_results_fingerprint(self):
+        """[Defect 6] 测试应用阶段强校验 review.json 的 results_fingerprint。"""
+        from tools.filter_existing_catalog import prepare_run, run_assessments, render_report, plan_apply
+        from src.catalog.filter_rules import FilterRules
+
+        batch_id = "test-defect-06"
+        prepare_run(self.root, batch_id)
+        rules = FilterRules(self.rules_data)
+
+        def mock_caller(cfg, sys_prompt, usr_prompt, request_id):
+            return self._mock_topic_response(
+                rules.blocked_topics[0]["topic_id"], rules.blocked_topics[1]["topic_id"],
+                match_ecom="target/ecommerce:SKILL.md" in usr_prompt,
+                quote="撰写电商商品详情与促销广告文案" if "target/ecommerce:SKILL.md" in usr_prompt else "",
+                usage={"total_tokens": 100}
+            )
+
+        run_assessments(self.root, batch_id, model_caller=mock_caller)
+        render_report(self.root, batch_id)
+
+        review_file = self.root / "data" / "local" / "topic-filter" / batch_id / "review.json"
+        review_doc = json.loads(review_file.read_text(encoding="utf-8"))
+
+        # 篡改结果指纹为过期指纹
+        review_doc["results_fingerprint"] = "expired_fingerprint_0000"
+        review_file.write_text(json.dumps(review_doc, ensure_ascii=False), encoding="utf-8")
+
+        with self.assertRaises(ValueError) as ctx:
+            plan_apply(self.root, batch_id, review_file)
+        self.assertIn("结果指纹", str(ctx.exception))
+
+    def test_defect7_cli_apply_is_idempotent(self):
+        """[Defect 7] 测试命令行重复执行 apply 具备幂等性（连续执行均返回退出码 0）。"""
+        from tools.filter_existing_catalog import prepare_run, run_assessments, render_report, main as cli_main
+        from src.catalog.filter_rules import FilterRules
+
+        batch_id = "test-defect-07"
+        prepare_run(self.root, batch_id)
+        rules = FilterRules(self.rules_data)
+
+        def mock_caller(cfg, sys_prompt, usr_prompt, request_id):
+            is_ecom = "target/ecommerce:SKILL.md" in usr_prompt
+            quote = "撰写电商商品详情与促销广告文案" if is_ecom else ""
+            return self._mock_topic_response(
+                rules.blocked_topics[0]["topic_id"], rules.blocked_topics[1]["topic_id"],
+                match_ecom=is_ecom, quote=quote, usage={"total_tokens": 100}
+            )
+
+        run_assessments(self.root, batch_id, model_caller=mock_caller)
+        render_report(self.root, batch_id)
+
+        # 首次 CLI 应用 -> 退出码 0
+        code1 = cli_main(["--root", str(self.root), "apply", "--run-id", batch_id, "--apply"])
+        self.assertEqual(code1, 0)
+
+        # 二次 CLI 应用 -> 退出码依然为 0（幂等成功，不误判状态冲突）
+        code2 = cli_main(["--root", str(self.root), "apply", "--run-id", batch_id, "--apply"])
+        self.assertEqual(code2, 0)
+
+    def test_defect8_execute_apply_recovery_from_snooze_write_interruption(self):
+        """[Defect 8] 测试应用阶段故障注入：写入 snooze 后中断，下次能基于预期后哈希正常继续。"""
+        from tools.filter_existing_catalog import prepare_run, run_assessments, render_report, plan_apply, execute_apply
+        from src.catalog.filter_rules import FilterRules
+        from src.infra.files import write_json_atomic
+
+        batch_id = "test-defect-08"
+        prepare_run(self.root, batch_id)
+        rules = FilterRules(self.rules_data)
+
+        def mock_caller(cfg, sys_prompt, usr_prompt, request_id):
+            is_snoozed = "snoozed/skill:SKILL.md" in usr_prompt
+            return self._mock_topic_response(
+                rules.blocked_topics[0]["topic_id"], rules.blocked_topics[1]["topic_id"],
+                match_ecom=is_snoozed, quote="专为健身房运营设计的会员与私教课程排班系统" if is_snoozed else "",
+                usage={"total_tokens": 100}
+            )
+
+        run_assessments(self.root, batch_id, model_caller=mock_caller)
+        render_report(self.root, batch_id)
+        review_file = self.root / "data" / "local" / "topic-filter" / batch_id / "review.json"
+        plan = plan_apply(self.root, batch_id, review_file)
+
+        # 故障注入：模拟 snooze.json 已写入磁盘，但进程中断，apply-manifest.json 停留在 prepared
+        snooze_path = self.root / "config" / "governance" / "snoozed.json"
+        sn_data = json.loads(snooze_path.read_text(encoding="utf-8"))
+        sn_data["snoozed"] = [s for s in sn_data.get("snoozed", []) if s.get("skill_id") not in set(plan["snoozes_to_remove"])]
+        write_json_atomic(snooze_path, sn_data)
+
+        manifest_file = self.root / "data" / "local" / "topic-filter" / batch_id / "apply-manifest.json"
+        write_json_atomic(manifest_file, {"run_id": batch_id, "phase": "prepared"})
+
+        # 执行 execute_apply：核对预期写入后摘要，顺利继续完成并成功离线同步
+        manifest = execute_apply(self.root, batch_id)
+        self.assertEqual(manifest["phase"], "completed")
+
+    def test_defect9_limitations_string_preserved(self):
+        """[Defect 9] 测试 limitations 为纯文本字符串时不被拆散为单个字符列表。"""
+        from tools.filter_existing_catalog import extract_materials, build_topic_request
+        from src.catalog.filter_rules import FilterRules
+
+        raw_entry = {
+            "skill_id": "test/lim:SKILL.md",
+            "name": "局限性测试技能",
+            "url": "https://example.com",
+            "summary_zh": "测试简述",
+            "limitations": "ABC",  # 字符串输入
+            "key_features": ["特性1"],
+        }
+        mat = extract_materials(raw_entry)
+        # 应提取为整段列表 ["ABC"]，而非 ["A", "B", "C"]
+        self.assertEqual(mat["limitations"], ["ABC"])
+
+        rules = FilterRules(self.rules_data)
+        _, usr_prompt = build_topic_request(rules, {"materials": mat, "skill_id": "test/lim:SKILL.md"})
+        self.assertIn("[limitations/0]: ABC", usr_prompt)
+        self.assertNotIn("[limitations/1]", usr_prompt)
+
+    def test_defect_new1_exception_pre_persists_request_and_budget_reservation(self):
+        """[Defect New 1] 测试请求异常时在调用前即持久化请求记录与预留费用，重启不漏记。"""
+        from tools.filter_existing_catalog import prepare_run, run_assessments
+        batch_id = "test-defect-new-01"
+        prepare_run(self.root, batch_id)
+
+        call_count = 0
+        def fail_caller(cfg, sys_prompt, usr_prompt, request_id):
+            nonlocal call_count
+            call_count += 1
+            raise ConnectionError("network dropped unexpectedly")
+
+        # 首次运行：上限 1 次，调用抛出异常
+        run_assessments(self.root, batch_id, max_total_requests=1, model_caller=fail_caller)
+        self.assertEqual(call_count, 1)
+
+        # 验证 requests/ 目录中已有落盘请求记录，记录了 3000 Token 与异常原因
+        req_files = list((self.root / "data" / "local" / "topic-filter" / batch_id / "requests").glob("*.json"))
+        self.assertEqual(len(req_files), 1)
+        r_doc = json.loads(req_files[0].read_text(encoding="utf-8"))
+        self.assertEqual(r_doc["tokens_charged"], 3000)
+        self.assertTrue(r_doc["unknown_usage"])
+        self.assertIn("network dropped", r_doc["error"])
+
+        # 二次运行（重启）：上限仍为 1 次，因已累计 1 次请求和 3000 Token，前置预算检查立即停止，绝不再次调用模型
+        prog2 = run_assessments(self.root, batch_id, max_total_requests=1, model_caller=fail_caller)
+        self.assertEqual(call_count, 1)  # 严格保持为 1，没有第二次尝试
+        self.assertEqual(prog2["requests"], 1)
+        self.assertEqual(prog2["tokens"], 3000)
+
+    def test_defect_new2_render_report_preserves_unchecked_state_in_html(self):
+        """[Defect New 2] 测试报告页面按已有审核选择初始化勾选状态，不强制全选覆盖。"""
+        from tools.filter_existing_catalog import prepare_run, run_assessments, render_report
+        from src.catalog.filter_rules import FilterRules
+
+        batch_id = "test-defect-new-02"
+        prepare_run(self.root, batch_id)
+        rules = FilterRules(self.rules_data)
+
+        def mock_caller(cfg, sys_prompt, usr_prompt, request_id):
+            is_ecom = "target/ecommerce:SKILL.md" in usr_prompt
+            is_retired = "retired/skill:SKILL.md" in usr_prompt
+            match = is_ecom or is_retired
+            quote = "电商" if is_retired else ("撰写电商商品详情与促销广告文案" if is_ecom else "")
+            return self._mock_topic_response(
+                rules.blocked_topics[0]["topic_id"], rules.blocked_topics[1]["topic_id"],
+                match_ecom=match, quote=quote, usage={"total_tokens": 100}
+            )
+
+        run_assessments(self.root, batch_id, model_caller=mock_caller)
+
+        # 1. 首次生成报告，默认选中 2 项
+        render_report(self.root, batch_id)
+        batch_dir = self.root / "data" / "local" / "topic-filter" / batch_id
+        review_file = batch_dir / "review.json"
+
+        # 2. 人工审核仅保留 1 项 (target/ecommerce)
+        review_doc = json.loads(review_file.read_text(encoding="utf-8"))
+        review_doc["selected_skill_ids"] = ["target/ecommerce:SKILL.md"]
+        review_file.write_text(json.dumps(review_doc, ensure_ascii=False), encoding="utf-8")
+
+        # 3. 再次生成报告：HTML 表格中 target/ecommerce 必须 checked，retired/skill 必须未勾选
+        report_html_path = render_report(self.root, batch_id)
+        html_text = Path(report_html_path).read_text(encoding="utf-8")
+
+        # 验证工具栏当前已选中为 1 项
+        self.assertIn('<strong id="selectedCount">1</strong> / 2 项', html_text)
+        # 验证行内 checkbox 状态
+        self.assertIn("value='target/ecommerce:SKILL.md' checked", html_text)
+        self.assertIn("value='retired/skill:SKILL.md'  onchange", html_text)
+        self.assertNotIn("value='retired/skill:SKILL.md' checked", html_text)
+
+    def test_defect_new3_fingerprint_includes_evidence_and_report_retains_old_fingerprint(self):
+        """[Defect New 3] 测试证据变动会改变结果指纹，且 render_report 不自动将旧 review.json 刷成最新。"""
+        from tools.filter_existing_catalog import prepare_run, run_assessments, render_report, plan_apply, compute_results_fingerprint
+        from src.catalog.filter_rules import FilterRules
+
+        batch_id = "test-defect-new-03"
+        prepare_run(self.root, batch_id)
+        rules = FilterRules(self.rules_data)
+
+        def mock_caller(cfg, sys_prompt, usr_prompt, request_id):
+            return self._mock_topic_response(
+                rules.blocked_topics[0]["topic_id"], rules.blocked_topics[1]["topic_id"],
+                match_ecom="target/ecommerce:SKILL.md" in usr_prompt,
+                quote="撰写电商商品详情与促销广告文案" if "target/ecommerce:SKILL.md" in usr_prompt else "",
+                usage={"total_tokens": 100}
+            )
+
+        run_assessments(self.root, batch_id, model_caller=mock_caller)
+        render_report(self.root, batch_id)
+
+        batch_dir = self.root / "data" / "local" / "topic-filter" / batch_id
+        results_dir = batch_dir / "results"
+        review_file = batch_dir / "review.json"
+        fp_before = compute_results_fingerprint(results_dir)
+
+        # 模拟仅修改其中一项的证据内容 (topic assessment evidence quote)
+        res_file = next(results_dir.glob("*.json"))
+        res_doc = json.loads(res_file.read_text(encoding="utf-8"))
+        if res_doc.get("topic_assessments"):
+            res_doc["topic_assessments"][0]["evidence_quote"] = "被修改的新证据引文"
+        else:
+            res_doc["error"] = "新错误标记"
+        res_file.write_text(json.dumps(res_doc, ensure_ascii=False), encoding="utf-8")
+
+        fp_after = compute_results_fingerprint(results_dir)
+        self.assertNotEqual(fp_before, fp_after)
+
+        # 再次执行 render_report：review.json 的结果指纹必须保留旧指纹，绝不自动更新为 fp_after
+        render_report(self.root, batch_id)
+        review_doc_after = json.loads(review_file.read_text(encoding="utf-8"))
+        self.assertEqual(review_doc_after["results_fingerprint"], fp_before)
+        self.assertNotEqual(review_doc_after["results_fingerprint"], fp_after)
+
+        # 尝试应用该旧审核清单：必须被拦截报错
+        with self.assertRaises(ValueError) as ctx:
+            plan_apply(self.root, batch_id, review_file)
+        self.assertIn("结果指纹", str(ctx.exception))
+
+    def test_defect_new4_apply_interrupted_tampered_overrides_rejected(self):
+        """[Defect New 4] 测试 exclusions_written 阶段若外部篡改 overrides.json，执行应用时必须立即拒绝。"""
+        from tools.filter_existing_catalog import prepare_run, run_assessments, render_report, plan_apply, execute_apply
+        from src.catalog.filter_rules import FilterRules
+        from src.infra.files import write_json_atomic
+
+        batch_id = "test-defect-new-04"
+        prepare_run(self.root, batch_id)
+        rules = FilterRules(self.rules_data)
+
+        def mock_caller(cfg, sys_prompt, usr_prompt, request_id):
+            return self._mock_topic_response(
+                rules.blocked_topics[0]["topic_id"], rules.blocked_topics[1]["topic_id"],
+                match_ecom="target/ecommerce:SKILL.md" in usr_prompt,
+                quote="撰写电商商品详情与促销广告文案" if "target/ecommerce:SKILL.md" in usr_prompt else "",
+                usage={"total_tokens": 100}
+            )
+
+        run_assessments(self.root, batch_id, model_caller=mock_caller)
+        render_report(self.root, batch_id)
+        review_file = self.root / "data" / "local" / "topic-filter" / batch_id / "review.json"
+        plan = plan_apply(self.root, batch_id, review_file)
+
+        # 模拟执行到达 exclusions_written 阶段
+        manifest_file = self.root / "data" / "local" / "topic-filter" / batch_id / "apply-manifest.json"
+        write_json_atomic(manifest_file, {"run_id": batch_id, "phase": "exclusions_written"})
+
+        # 外部篡改：从 overrides.json 删除了排除项或修改了内容，使其不等于预期写入后摘要
+        overrides_path = self.root / "config" / "governance" / "overrides.json"
+        ov_data = json.loads(overrides_path.read_text(encoding="utf-8"))
+        ov_data["manual_exclusions"] = []  # 篡改为空
+        write_json_atomic(overrides_path, ov_data)
+
+        # 再次执行应用：必须被锁内核验拦截，抛出 RuntimeError，禁止放行或返回 completed
+        with self.assertRaises(RuntimeError) as ctx:
+            execute_apply(self.root, batch_id)
+        self.assertIn("overrides.json 处于写入后阶段但哈希不匹配预期摘要", str(ctx.exception))
+
 
 if __name__ == "__main__":
     unittest.main()
+
