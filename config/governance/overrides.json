@@ -877,6 +877,626 @@
       "added_at": "2026-10-02",
       "reason": "用户屏蔽/删除",
       "skill_id": "skillmedev/skills:skills/variant-copy-scaler/SKILL.md"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/ad-copy-rewrite-free/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-c1ed2c；命中：广告文案违规体检、电商文案",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/market-sizing-tam-sam-som/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-c1ed2c；命中：创业融资",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:skills/imagegen-frontend-mobile/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-c1ed2c；命中：移动应用",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/gamified-app/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-c1ed2c；命中：移动应用",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/html-ppt-product-launch/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-c1ed2c；命中：b2b-sales",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/budget-pacing/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-c1ed2c；命中：获客成本优化",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/category-page-copywriter/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-c1ed2c；命中：内容营销、电商文案",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/channel-strategy/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-c1ed2c；命中：营销策略",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/closer-sales-script/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-c1ed2c；命中：销售脚本",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/fundraise-readiness-audit/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-c1ed2c；命中：创业指导",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/kpi-scoreboard-and-cadence/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-c1ed2c；命中：健身房管理",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/local-seo-playbook/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-c1ed2c；命中：seo优化",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/mobile-perf-profiler/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-c1ed2c；命中：移动开发",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/paid-acquisition-audit/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-c1ed2c；命中：付费获客、广告审计",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/prospecting-metrics/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-c1ed2c；命中：销售漏斗",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/safe-vs-priced-round/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-c1ed2c；命中：创业公司",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/sales-followup-cadence/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-c1ed2c；命中：b2b销售、销售跟进",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/segmentation-strategy/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-c1ed2c；命中：生命周期营销",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "anjon771/open-degine:design-templates/html-ppt-pitch-deck/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：fundraising-pitch",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "anjon771/open-degine:design-templates/html-ppt-zhangzara-bold-poster/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：融资路演",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "anjon771/open-degine:design-templates/ib-pitch-book/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：融资路演",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "anjon771/open-degine:plugins/_official/examples/fs-creative-voltage/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：融资路演",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "anjon771/open-degine:plugins/_official/examples/html-ppt-pitch-deck/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：融资路演",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "anjon771/open-degine:plugins/_official/examples/ib-pitch-book/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：fundraising-pitch",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "anjon771/open-degine:plugins/spec/examples/create-slides-pitch/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：融资路演",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:00-meta/business-assumption-stress-test/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：创业",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:02-engineering/codebase-to-wordpress-theme/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：seo",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/andreessen-vc-lens/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：startup",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/board-meeting-prep/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：融资路演",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/eeat-content-quality-auditor/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：seo",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/internal-linking-optimizer/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：seo",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/investor-materials-builder/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：创业",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/market-sizing-analyst/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：startup",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/schema-markup-builder/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：seo",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/serp-feature-analysis/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：seo",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/startup-financial-modeler/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：startup",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:06-creative/demo-video-generator/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：营销",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:09-verticals/marketing-claims-reviewer/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：marketing",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:design-templates/html-ppt-pitch-deck/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：fundraising-pitch",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:design-templates/html-ppt-zhangzara-bold-poster/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：融资路演",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:design-templates/ib-pitch-book/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：融资路演",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:plugins/_official/examples/fs-creative-voltage/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：融资路演",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:plugins/_official/examples/html-ppt-pitch-deck/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：融资路演",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:plugins/_official/examples/html-ppt-zhangzara-bold-poster/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：fundraising-pitch",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:skills/marketing-psychology/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：营销",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:design-templates/html-ppt-pitch-deck/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：fundraising-pitch",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:design-templates/html-ppt-zhangzara-bold-poster/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：fundraising-pitch",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:design-templates/ib-pitch-book/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：fundraising-pitch",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:plugins/_official/examples/fs-creative-voltage/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：fundraising-pitch",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:plugins/_official/examples/html-ppt-zhangzara-bold-poster/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：融资路演",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:plugins/_official/examples/ib-pitch-book/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：fundraising-pitch",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:design-templates/html-ppt-pitch-deck/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：融资路演",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:design-templates/html-ppt-zhangzara-bold-poster/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：融资路演",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:design-templates/ib-pitch-book/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：融资路演",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:plugins/_official/examples/fs-creative-voltage/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：fundraising-pitch",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:plugins/_official/examples/html-ppt-pitch-deck/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：fundraising-pitch",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/fs-creative-voltage/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：融资路演",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/html-ppt-pitch-deck/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：融资路演",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/html-ppt-zhangzara-bold-poster/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：fundraising-pitch",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/huashu-pentagram-grid/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：marketing",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/ib-pitch-book/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：fundraising-pitch",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/poster-hero/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：营销",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/case-study-builder/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：营销",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/content-brief/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：seo",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/fundraising-narrative/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：创业",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/internal-linking-mapper/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：seo",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/keyword-cluster-builder/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：seo",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/pitch-deck-builder/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：创业",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/search-intent-classifier/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：seo",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/seo-optimizer/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：seo",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/series-a-readiness/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：创业",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/serp-gap-analyzer/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：seo",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/show-notes-writer/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：seo",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "anjon771/open-degine:design-templates/hr-onboarding/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：hr",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "anjon771/open-degine:plugins/_official/examples/hr-onboarding/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：hr",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/hr-monthly-selfcheck-free/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：人力资源",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/payroll-check-free/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：hr",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/cfo-financial-advisor/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：融资规划",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/compensation-analysis/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：hr",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/interview-plan-builder/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：招聘",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/offer-letter-drafter/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：人力资源、录用通知、招聘",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/performance-review-builder/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：人力资源",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:07-productivity/company-policy-lookup/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：人力资源、员工手册",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:07-productivity/hr-partner-pro/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：人力资源、招聘",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:07-productivity/new-hire-onboarding-plan/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：人力资源",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:09-verticals/employment-contract-drafter/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：hr",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:09-verticals/funding-round-digest/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：融资轮次",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:09-verticals/investigation-memo-drafter/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：hr",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:design-templates/hr-onboarding/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：hr",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:design-templates/html-ppt-course-module/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：入职培训",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:plugins/_official/examples/hr-onboarding/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：hr",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:plugins/_official/examples/velar-luxury-real-estate/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：房地产",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:plugins/spec/examples/create-slides-pitch/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：融资",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:design-templates/hr-onboarding/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：hr",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:plugins/_official/examples/html-ppt-pitch-deck/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：融资",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:plugins/spec/examples/create-slides-pitch/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：融资ppt",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:design-templates/hr-onboarding/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：hr",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:plugins/_official/examples/hr-onboarding/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：hr",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "nexu-io/open-design:design-templates/hr-onboarding/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：hr",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "nexu-io/open-design:design-templates/html-ppt-zhangzara-playful/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：员工入职",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/hr-onboarding/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：hr",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/html-ppt-course-module/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：入职培训",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/velar-luxury-real-estate/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：房地产",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/pitch-deck-vc/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：融资",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/candidate-outreach-personalizer/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：招聘",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/cap-table-manager/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：融资模型",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/fundraise-closing-mechanics/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：融资",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/fundraise-team-hiring/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：风投融资",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/hiring-a-players-and-sops/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：hr、招聘流程",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/hiring-scorecard/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：招聘",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/interview-question-kit/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：招聘",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/investor-targeting/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：融资策划",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/job-description-writer/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：人力资源文档",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/offer-rejection-writer/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：录用信、拒绝信、招聘",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/performance-review-writer/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：人力资源",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/screening-rubric-builder/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：招聘",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/seller-lead-nurture/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：房地产营销、房源获取",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/term-sheet-explainer/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：融资条款解释",
+      "added_at": "2026-10-07"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/culture-index/skills/interpreting-culture-index/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：hiring",
+      "added_at": "2026-10-07"
+    },
+    {
+      "added_at": "2026-10-07",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/support-macro-library/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-07",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/thumbnail-concept/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-07",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/video-hook-writer/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-07",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/video-storyboard/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-07",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/vulnerability-triage/SKILL.md"
     }
   ]
 }
