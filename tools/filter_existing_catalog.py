@@ -1,22 +1,18 @@
 """存量目录黑名单一次性过滤维护工具。
 
-依据 docs/plans/2026-10-06-catalog-blacklist-filter-spec.md。
-提供存量目录黑名单筛选、审核报告生成与离线幂等应用能力。
+直接启动：按 blocked-tags.json 中的完整标签离线匹配，写入人工排除并同步页面。
 """
 
 from __future__ import annotations
 
 import argparse
 from copy import deepcopy
-from datetime import datetime
 import hashlib
 import html
 import json
-import math
 from pathlib import Path
 import re
 import sys
-import time
 from typing import Any, Callable
 from uuid import uuid4
 
@@ -25,27 +21,19 @@ ROOT = Path(__file__).resolve().parent.parent
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from src.catalog.filter_rules import FilterRules, load_filter_rules
+from src.catalog.filter_rules import FilterRules
 from src.catalog.favorites import get_manual_picks, load_favorites
 from src.catalog.maintenance import sync_config_offline
-from src.catalog.overrides import get_manual_exclusions, load_overrides, validate_overrides
-from src.catalog.snooze import get_active_snoozed, is_active_snooze, load_snooze, now_shanghai_date, validate_snooze
+from src.catalog.overrides import get_manual_exclusions, load_overrides
+from src.catalog.snooze import get_active_snoozed, load_snooze, now_shanghai_date
 from src.catalog.store import catalog_session
 from src.infra.files import file_lock, read_json, write_json_atomic
-from src.infra.llm import ModelCallResult, call_model
-from src.infra.model_config import load_model_config
-from src.infra.model_pool import ModelPool, PoolStopped
 from src.infra.owned import load_owned_config
-from src.shared.model_config import model_fingerprint
-from src.shared.output_contracts import resolve_response_format
 from src.shared.owned import is_skill_owned, normalize_owned_id
 from src.shared.runtime import now_local
-from src.shared.usage import UsageTotals
 
-TOOL_VERSION = "1.0.0"
-PROMPT_VERSION = "1.0.0"
-CONTRACT_VERSION = "1.0.0"
-MAX_MATERIAL_BYTES = 16384  # 16 KiB
+TOOL_VERSION = "2.0.0"
+MATCH_MODE = "exact_tags_v1"
 
 
 def safe_print(msg: str) -> None:
@@ -94,6 +82,8 @@ def _resolve_config_path(root: Path, filename: str, subdir: str) -> Path:
 
 
 def _get_run_dir(root: Path, run_id: str) -> Path:
+    if not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_-]{0,100}", run_id):
+        raise ValueError("批次 ID 仅允许字母、数字、下划线和连字符，长度 1～101")
     return root / "data" / "local" / "topic-filter" / run_id
 
 
@@ -108,7 +98,7 @@ def _normalize_string_list(val: Any) -> list[str]:
 
 
 def extract_materials(entry: dict[str, Any]) -> dict[str, Any]:
-    """从存量条目中提取用于主题合规审核的纯净材料。"""
+    """保留已有标签及供人工审核的目录描述。"""
     return {
         "name": str(entry.get("name") or "").strip(),
         "url": str(entry.get("url") or "").strip(),
@@ -125,47 +115,32 @@ def extract_materials(entry: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-def get_field_text(materials: dict[str, Any], field_path: str) -> str | None:
-    """按 field_path 解析材料中的纯文本以供引文比对。"""
-    if not field_path or not isinstance(field_path, str):
-        return None
-    field_path = field_path.strip()
-    if "/" in field_path:
-        parts = field_path.split("/")
-        top, idx_str = parts[0], parts[1]
-        val = materials.get(top)
-        if isinstance(val, list) and idx_str.isdigit():
-            idx = int(idx_str)
-            if 0 <= idx < len(val):
-                return str(val[idx])
-        return None
-    val = materials.get(field_path)
-    if isinstance(val, str):
-        return val
-    if isinstance(val, list):
-        return "\n".join(str(x) for x in val)
-    return None
+def load_tag_rules(path: Path) -> FilterRules:
+    """名单只包含实际标签，不做主题映射或关键词匹配。"""
+    data = json.loads(path.read_text(encoding="utf-8"))
+    tags = data.get("blocked_tags") if isinstance(data, dict) else None
+    if not isinstance(tags, list) or any(not isinstance(t, str) or not t.strip() for t in tags):
+        raise ValueError("blocked_tags 必须是非空字符串组成的数组")
+    names = sorted({tag.strip().casefold() for tag in tags})
+    return FilterRules({"blocked_topics": [{"name": name} for name in names]})
 
 
-# ----------------------------------------------------------------------
-# 1. 准备阶段 (Prepare)
-# ----------------------------------------------------------------------
+def require_tag_run(run_data: dict) -> None:
+    if run_data.get("match_mode") != MATCH_MODE:
+        raise ValueError("这是旧的模型筛选批次，请使用新的 run-id 执行 prepare；旧记录保留不变")
+
 
 def prepare_run(root_dir: str | Path, run_id: str | None = None) -> dict[str, Any]:
     """生成不可变批次快照：选择范围、校验规则与治理保护。"""
     root = Path(root_dir).resolve()
     run_id = run_id or f"topic-filter-{now_local().strftime('%Y%m%d')}-{uuid4().hex[:6]}"
     run_dir = _get_run_dir(root, run_id)
-    if run_dir.exists() and (run_dir / "run.json").exists():
-        raise ValueError(f"批次已存在且包含 run.json：{run_id}。请使用新批次 ID 或检查批次目录。")
-
-    run_dir.mkdir(parents=True, exist_ok=True)
-    (run_dir / "results").mkdir(exist_ok=True)
-    (run_dir / "requests").mkdir(exist_ok=True)
+    if run_dir.exists():
+        raise ValueError(f"批次目录已存在：{run_id}。请使用新批次 ID。")
 
     catalog_path = root / "data" / "catalog.json"
     public_catalog_path = root / "public" / "data" / "catalog.json"
-    filter_rules_path = _resolve_config_path(root, "filter-rules.json", "governance")
+    filter_rules_path = _resolve_config_path(root, "blocked-tags.json", "governance")
     favorites_path = _resolve_config_path(root, "favorites.json", "governance")
     overrides_path = _resolve_config_path(root, "overrides.json", "governance")
     snooze_path = _resolve_config_path(root, "snoozed.json", "governance")
@@ -179,9 +154,9 @@ def prepare_run(root_dir: str | Path, run_id: str | None = None) -> dict[str, An
         entries = catalog.get("entries") or []
 
         # 校验 filter rules
-        filter_rules = load_filter_rules(filter_rules_path)
+        filter_rules = load_tag_rules(filter_rules_path)
         if not filter_rules.has_evaluation_rules:
-            raise ValueError(f"主题屏蔽配置未定义有效主题或为空：{filter_rules_path}")
+            raise ValueError(f"标签黑名单为空，请先填写要屏蔽的现有标签：{filter_rules_path}")
 
         # 加载治理保护
         fav_data = load_favorites(favorites_path)
@@ -202,7 +177,7 @@ def prepare_run(root_dir: str | Path, run_id: str | None = None) -> dict[str, An
             except ValueError:
                 owned_ids.add(raw_sid)
 
-        # 离线页面投影与主目录一致性检查 (方案 §3.2)
+        # 离线页面投影与主目录一致性检查
         consistency_warnings: list[str] = []
         if public_catalog_path.exists():
             try:
@@ -220,10 +195,6 @@ def prepare_run(root_dir: str | Path, run_id: str | None = None) -> dict[str, An
                     )
             except Exception as e:
                 consistency_warnings.append(f"读取公共页面投影核验失败：{e}")
-
-        # 加载模型配置
-        model_cfg = load_model_config(root / "config")
-        model_fp = model_fingerprint(model_cfg)
 
         seen_ids = set()
         targets = []
@@ -273,7 +244,6 @@ def prepare_run(root_dir: str | Path, run_id: str | None = None) -> dict[str, An
                 snoozed_count += 1
 
             mat = extract_materials(entry)
-            raw_mat_bytes = len(_canonical_json(mat).encode("utf-8"))
             mat_fp = _sha256_hex(_canonical_json(mat))[:16]
 
             target_row = {
@@ -284,45 +254,11 @@ def prepare_run(root_dir: str | Path, run_id: str | None = None) -> dict[str, An
                 "is_snoozed": is_snoozed_item,
                 "materials": mat,
                 "materials_fingerprint": mat_fp,
-                "input_too_large": raw_mat_bytes > MAX_MATERIAL_BYTES,
-                "is_sample": False,
             }
             targets.append(target_row)
 
-        # 抽样分配 (分层抽样 50 条样本，固定种子保可复现)
         rec_targets = [t for t in targets if t["original_status"] == "recommended"]
         cand_targets = [t for t in targets if t["original_status"] == "candidate"]
-        rec_targets.sort(key=lambda t: t["skill_id"])
-        cand_targets.sort(key=lambda t: t["skill_id"])
-
-        sample_size = min(50, len(targets))
-        if sample_size > 0 and len(targets) > 0:
-            rec_sample_count = round(sample_size * (len(rec_targets) / len(targets)))
-            cand_sample_count = sample_size - rec_sample_count
-            if rec_sample_count > len(rec_targets):
-                rec_sample_count = len(rec_targets)
-                cand_sample_count = sample_size - rec_sample_count
-            if cand_sample_count > len(cand_targets):
-                cand_sample_count = len(cand_targets)
-                rec_sample_count = sample_size - cand_sample_count
-
-            # 等间距步长抽样
-            def _pick_stratified(lst: list, count: int) -> set[str]:
-                if count <= 0 or not lst:
-                    return set()
-                if count >= len(lst):
-                    return {x["skill_id"] for x in lst}
-                step = len(lst) / count
-                picked = set()
-                for i in range(count):
-                    idx = int(i * step)
-                    picked.add(lst[idx]["skill_id"])
-                return picked
-
-            sample_ids = _pick_stratified(rec_targets, rec_sample_count) | _pick_stratified(cand_targets, cand_sample_count)
-            for t in targets:
-                if t["skill_id"] in sample_ids:
-                    t["is_sample"] = True
 
         targets.sort(key=lambda t: t["skill_id"])
         targets_canonical = _canonical_json([
@@ -339,21 +275,20 @@ def prepare_run(root_dir: str | Path, run_id: str | None = None) -> dict[str, An
             "recommended_count": len(rec_targets),
             "candidate_count": len(cand_targets),
             "snoozed_count": snoozed_count,
-            "sample_50_count": sum(1 for t in targets if t["is_sample"]),
             "targets": targets,
         }
+        run_dir.mkdir(parents=True, exist_ok=False)
+        (run_dir / "results").mkdir()
         write_json_atomic(run_dir / "targets.json", targets_doc)
 
         run_doc = {
             "run_id": run_id,
             "created_at": now_local().isoformat(),
             "tool_version": TOOL_VERSION,
-            "prompt_version": PROMPT_VERSION,
-            "contract_version": CONTRACT_VERSION,
+            "match_mode": MATCH_MODE,
             "status": "prepared",
             "rules_fingerprint": filter_rules.fingerprint,
             "targets_fingerprint": targets_fp,
-            "model_fingerprint": model_fp,
             "config_paths": {
                 "catalog": str(catalog_path),
                 "public_catalog": str(public_catalog_path),
@@ -388,695 +323,68 @@ def prepare_run(root_dir: str | Path, run_id: str | None = None) -> dict[str, An
         "recommended_count": len(rec_targets),
         "candidate_count": len(cand_targets),
         "snoozed_count": snoozed_count,
-        "sample_50_count": sum(1 for t in targets if t["is_sample"]),
         "topics_count": len(filter_rules.blocked_topics),
         "excluded_summary": excluded_reasons,
     }
 
 
-# ----------------------------------------------------------------------
-# 2. 专用主题请求构造与响应核验
-# ----------------------------------------------------------------------
-
-def build_topic_request(filter_rules: FilterRules, target: dict[str, Any]) -> tuple[str, str]:
-    """构造专用的主题合规判定 Prompt。"""
-    mat = target["materials"]
-    topics_formatted = "\n".join([
-        f"- 主题ID: {t['topic_id']}\n  主题名称: {t['name']}\n  范围说明: {t.get('description') or '无额外说明'}"
-        for t in filter_rules.blocked_topics
-    ])
-
-    kf_text = "\n".join(f"  - [key_features/{idx}]: {f}" for idx, f in enumerate(mat.get("key_features") or [])) or "  (无)"
-    req_text = "\n".join(f"  - [example_requests/{idx}]: {r}" for idx, r in enumerate(mat.get("example_requests") or [])) or "  (无)"
-    lim_text = "\n".join(f"  - [limitations/{idx}]: {l}" for idx, l in enumerate(mat.get("limitations") or [])) or "  (无)"
-    tags_text = ", ".join(mat.get("tags") or []) or "无"
-
-    system_prompt = f"""你是一个 AI 技能（Skill）主要用途与主题黑名单合规评估器。
-你的唯一任务是判断目标技能的主要用途是否属于以下任一排除主题。绝不要重新评估技能的质量或可用性。
-
-【排除主题清单】
-{topics_formatted}
-
-【判定准则】
-1. 主要用途原则：只有当技能的核心用途或主要产出明确属于某个排除主题时，才判定为 "match"。
-2. 偶然提及不命中：技能若仅在示例、支持格式或附属说明中提及相关概念（例如通用代码助手提到可以写某领域的脚本），绝不能判定为 "match"，必须判定为 "no_match"。
-3. 材料不足判定：如果所提供的材料不足以断定主要用途，必须判定为 "unknown"。严禁仅凭技能名称主观猜测。
-4. 严格引文依据：判定为 "match" 时，必须提供原文片段（evidence_quote）与来源字段（evidence_source），并在 evidence 中给出简要依据说明。evidence_quote 必须完全字面存在于对应字段中！
-5. 输出格式：必须输出且仅输出合法 JSON 对象，对清单中的每个主题恰好包含一项评估结果：
-{{
-  "topic_assessments": [
-    {{
-      "topic_id": "<必须与上述主题ID完全一致>",
-      "result": "match" | "no_match" | "unknown",
-      "evidence_source": "<字段名，例如 summary_zh 或 key_features/0>",
-      "evidence_quote": "<引用的原文片段，match时必填>",
-      "evidence": "<简短依据说明>"
-    }}
-  ]
-}}"""
-
-    user_prompt = f"""【待评估技能材料】
-技能标识: {target['skill_id']}
-技能名称: {mat['name']}
-原仓库链接: {mat['url']}
-中文简述 [summary_zh]:
-{mat['summary_zh'] or '(无)'}
-
-核心特性 [key_features]:
-{kf_text}
-
-示例请求 [example_requests]:
-{req_text}
-
-局限性 [limitations]:
-{lim_text}
-
-主分类 [main_category]: {mat['main_category'] or '未分类'}
-标签 [tags]: {tags_text}
-
-请严格按 JSON 格式输出每个主题的合规判定："""
-
-    return system_prompt, user_prompt
-
-
-def validate_topic_response(
-    filter_rules: FilterRules,
-    target: dict[str, Any],
-    raw_content: str,
-) -> tuple[str, list[dict[str, Any]], str | None]:
-    """严格核验模型的主题判定响应并完成证据回溯验证。
-
-    返回: (skill_result, normalized_assessments, error_message)
-    其中 skill_result 为 "match", "no_match", "unknown", "failed"。
-    """
-    if not raw_content or not isinstance(raw_content, str) or not raw_content.strip():
-        return "failed", [], "响应正文为空"
-
-    text = raw_content.strip()
-    if text.startswith("```"):
-        text = re.sub(r"^```[a-zA-Z0-9_-]*\s*", "", text)
-        text = re.sub(r"\s*```$", "", text).strip()
-
-    try:
-        data = json.loads(text)
-    except Exception as exc:
-        return "failed", [], f"JSON 解析失败：{exc}"
-
-    if not isinstance(data, dict):
-        return "failed", [], "响应根结构不是 JSON 对象"
-
-    raw_assessments = data.get("topic_assessments")
-    if not isinstance(raw_assessments, list):
-        return "failed", [], "缺少 topic_assessments 数组"
-
-    grouped: dict[str, list[dict]] = {t["topic_id"]: [] for t in filter_rules.blocked_topics}
-    for item in raw_assessments:
-        if isinstance(item, dict):
-            tid = item.get("topic_id")
-            if isinstance(tid, str) and tid in grouped:
-                grouped[tid].append(item)
-
-    normalized: list[dict[str, Any]] = []
-    materials = target["materials"]
-
-    for t in filter_rules.blocked_topics:
-        tid = t["topic_id"]
-        items = grouped[tid]
-        if len(items) != 1:
-            normalized.append({
-                "topic_id": tid,
-                "topic_name": t["name"],
-                "result": "unknown",
-                "evidence_source": "",
-                "evidence_quote": "",
-                "evidence": f"主题评估结果缺失或重复项 (出现 {len(items)} 次)",
-            })
-            continue
-
-        item = items[0]
-        raw_res = str(item.get("result") or "").strip()
-        ev_src = str(item.get("evidence_source") or "").strip()
-        ev_quote = str(item.get("evidence_quote") or "").strip()
-        ev_note = str(item.get("evidence") or "").strip()
-
-        if raw_res not in ("match", "no_match", "unknown"):
-            normalized.append({
-                "topic_id": tid,
-                "topic_name": t["name"],
-                "result": "unknown",
-                "evidence_source": ev_src,
-                "evidence_quote": ev_quote,
-                "evidence": f"非法的判定枚举：{raw_res}",
-            })
-            continue
-
-        if raw_res == "match":
-            src_text = get_field_text(materials, ev_src)
-            quote_valid = False
-            if src_text and ev_quote and ev_quote in src_text:
-                quote_valid = True
-
-            if not quote_valid:
-                # 证据不合法，降级为 unknown 并记录诊断
-                normalized.append({
-                    "topic_id": tid,
-                    "topic_name": t["name"],
-                    "result": "unknown",
-                    "evidence_source": ev_src,
-                    "evidence_quote": ev_quote,
-                    "evidence": f"引文校验未通过（引文在字段 '{ev_src}' 中未字面匹配）：{ev_note}",
-                })
-                continue
-
-        normalized.append({
-            "topic_id": tid,
-            "topic_name": t["name"],
-            "result": raw_res,
-            "evidence_source": ev_src,
-            "evidence_quote": ev_quote,
-            "evidence": ev_note,
-        })
-
-    # 单条聚合逻辑 (Section 4.4)
-    if any(x["result"] == "match" for x in normalized):
-        skill_res = "match"
-    elif any(x["result"] == "unknown" for x in normalized):
-        skill_res = "unknown"
-    elif all(x["result"] == "no_match" for x in normalized):
-        skill_res = "no_match"
-    else:
-        skill_res = "unknown"
-
-    return skill_res, normalized, None
-
-
-# ----------------------------------------------------------------------
-# 3. 运行调度与记账 (Run Assessments)
-# ----------------------------------------------------------------------
-
 def _task_hash(run_id: str, skill_id: str, mat_fp: str, rules_fp: str) -> str:
-    seed = f"{run_id}|{skill_id}|{mat_fp}|{rules_fp}|{PROMPT_VERSION}|{CONTRACT_VERSION}"
-    return _sha256_hex(seed)[:16]
+    return _sha256_hex(f"{MATCH_MODE}|{run_id}|{skill_id}|{mat_fp}|{rules_fp}")[:16]
 
 
-def _is_target_completed(results_dir: Path, run_id: str, target: dict[str, Any], rules_fp: str) -> bool:
-    """检查目标是否已经存在终态评估记录（completed 或 failed）。"""
-    thash = _task_hash(run_id, target["skill_id"], target["materials_fingerprint"], rules_fp)
-    p = results_dir / f"{thash}.json"
-    if not p.exists():
-        return False
-    try:
-        doc = json.loads(p.read_text(encoding="utf-8"))
-        return doc.get("status") in ("completed", "failed")
-    except Exception:
-        return False
+def match_tags(rules: FilterRules, target: dict) -> tuple[str, list[dict]]:
+    tags = target["materials"].get("tags", [])
+    by_name = {tag.strip().casefold(): (i, tag) for i, tag in enumerate(tags) if tag.strip()}
+    assessments = []
+    for rule in rules.blocked_topics:
+        found = by_name.get(rule["name"].casefold())
+        assessments.append({
+            "topic_id": rule["topic_id"], "topic_name": rule["name"],
+            "result": "match" if found else ("no_match" if by_name else "unknown"),
+            "evidence_source": f"tags/{found[0]}" if found else "",
+            "evidence_quote": found[1] if found else "",
+            "evidence": "已有标签与黑名单完整匹配" if found else ("标签未命中" if by_name else "无标签，保留"),
+        })
+    result = "match" if any(a["result"] == "match" for a in assessments) else ("no_match" if by_name else "unknown")
+    return result, assessments
 
 
-def run_assessments(
-    root_dir: str | Path,
-    run_id: str,
-    *,
-    sample_only: bool = False,
-    remaining_only: bool = False,
-    max_total_tokens: int = 100000000,
-    max_total_requests: int = 10000,
-    model_caller: Callable[..., ModelCallResult] | None = None,
-    log: Callable[[str], None] = safe_print,
-    sleep: Callable[[float], None] = time.sleep,
-) -> dict[str, Any]:
-    """执行模型筛选评估，支持样本抽样试跑与全量断点续跑。"""
-    root = Path(root_dir).resolve()
-    run_dir = _get_run_dir(root, run_id)
-    if not (run_dir / "run.json").exists() or not (run_dir / "targets.json").exists():
-        raise FileNotFoundError(f"批次快照未就绪，请先执行 prepare：{run_id}")
-
-    lock_file = run_dir / ".batch.lock"
-    with file_lock(lock_file):
+def run_assessments(root_dir: str | Path, run_id: str) -> dict[str, Any]:
+    """离线扫描全部快照；重复执行保留已完成结果，无任何模型请求。"""
+    run_dir = _get_run_dir(Path(root_dir).resolve(), run_id)
+    if not (run_dir / "run.json").exists():
+        raise FileNotFoundError(f"请先执行 prepare：{run_id}")
+    require_tag_run(read_json(run_dir / "run.json"))
+    with file_lock(run_dir / ".batch.lock"):
         run_data = read_json(run_dir / "run.json")
-        targets_data = read_json(run_dir / "targets.json")
-        filter_rules = _reconstruct_filter_rules(run_data.get("blocked_topics", []))
-        targets: list[dict[str, Any]] = targets_data.get("targets", [])
-
-        # 校验规则与模型配置一致性
-        model_cfg = load_model_config(root / "config")
-        curr_model_fp = model_fingerprint(model_cfg)
-        if run_data.get("model_fingerprint") != curr_model_fp:
-            log(f"[提示] 当前生效模型配置与准备快照时指纹不同 ({curr_model_fp} vs {run_data.get('model_fingerprint')})。")
-
+        require_tag_run(run_data)
+        targets = read_json(run_dir / "targets.json")["targets"]
+        rules = _reconstruct_filter_rules(run_data["blocked_topics"])
+        if rules.fingerprint != run_data["rules_fingerprint"]:
+            raise ValueError("批次标签快照已变化，请重新 prepare")
+        for target in targets:
+            if _sha256_hex(_canonical_json(target["materials"]))[:16] != target["materials_fingerprint"]:
+                raise ValueError("批次材料快照已变化，请重新 prepare")
         results_dir = run_dir / "results"
-        requests_dir = run_dir / "requests"
         results_dir.mkdir(exist_ok=True)
-        requests_dir.mkdir(exist_ok=True)
-
-        # 筛选本次执行目标
-        if sample_only:
-            active_targets = [t for t in targets if t.get("is_sample")]
-        elif remaining_only:
-            # 筛选所有尚未完成的目标（包含非样本与未完成的样本）
-            active_targets = [
-                t for t in targets
-                if not _is_target_completed(results_dir, run_id, t, filter_rules.fingerprint)
-            ]
-        else:
-            active_targets = list(targets)
-
-        # 累计统计已消耗 Token 与请求数（持久化预留防丢失）
-        total_tokens_spent = 0
-        total_requests_made = 0
-        for req_p in requests_dir.glob("*.json"):
-            try:
-                rq = json.loads(req_p.read_text(encoding="utf-8"))
-                if "tokens_charged" in rq:
-                    spent = int(rq["tokens_charged"] or 0)
-                else:
-                    u = rq.get("usage") or {}
-                    tok = u.get("total_tokens")
-                    if tok is not None:
-                        spent = int(tok or 0)
-                    elif rq.get("unknown_usage") or (rq.get("ok") and tok is None):
-                        spent = 3000
-                    else:
-                        spent = 0
-                total_tokens_spent += spent
-                total_requests_made += 1
-            except Exception:
-                pass
-
-        log(f"批次 #{run_id} 开始运行：待选目标 {len(active_targets)} 条；累计已请求 {total_requests_made}/{max_total_requests}，累计已消耗 {total_tokens_spent:,}/{max_total_tokens:,} Token。")
-
-        # 初始化调度器
-        is_queue = "models" in model_cfg
-        pool = None
-        if is_queue:
-            pool = ModelPool(model_cfg, root, log=log)
-
-        # 与主程序共用本地重试配置；实际 HTTP 请求仍逐次持久化和检查预算。
-        settings_path = root / "config" / "runners" / "local-run.json"
-        if not settings_path.exists():
-            settings_path = root / "config" / "local-run.json"
-        raw_settings = read_json(settings_path, {})
-        settings = raw_settings.get("settings", raw_settings)
-        max_retries = settings.get("max_retries", 5)
-        if type(max_retries) is not int or max_retries < 0:
-            raise ValueError("max_retries 必须是非负整数")
-
-        stop_reason = None
-        processed_in_this_run = 0
-
-        for target in active_targets:
-            sid = target["skill_id"]
-            thash = _task_hash(run_id, sid, target["materials_fingerprint"], filter_rules.fingerprint)
-            task_res_path = results_dir / f"{thash}.json"
-
-            # 1. 检查是否已完成或未决
-            if task_res_path.exists():
-                try:
-                    prior = json.loads(task_res_path.read_text(encoding="utf-8"))
-                    prior_status = prior.get("status")
-                    if prior_status == "completed":
-                        continue
-                    if prior_status in ("started", "needs_recovery"):
-                        # 检查是否有未决请求记录可离线恢复
-                        req_id = prior.get("request_id")
-                        rq_doc = None
-                        if req_id and (requests_dir / f"{req_id}.json").exists():
-                            try:
-                                rq_doc = json.loads((requests_dir / f"{req_id}.json").read_text(encoding="utf-8"))
-                            except Exception:
-                                pass
-                        if not rq_doc:
-                            # 尝试按 task_hash 检索 requests 记录
-                            for rp in requests_dir.glob("*.json"):
-                                try:
-                                    doc = json.loads(rp.read_text(encoding="utf-8"))
-                                    if doc.get("task_hash") == thash and doc.get("response_content"):
-                                        rq_doc = doc
-                                        req_id = doc.get("request_id")
-                                        break
-                                except Exception:
-                                    pass
-
-                        resp_content = rq_doc.get("response_content") if rq_doc else None
-                        if resp_content:
-                            skill_res, assessments, err = validate_topic_response(filter_rules, target, resp_content)
-                            prior["status"] = "completed" if err is None else "failed"
-                            prior["result"] = skill_res if err is None else None
-                            prior["topic_assessments"] = assessments
-                            prior["error"] = err
-                            prior["request_id"] = req_id
-                            write_json_atomic(task_res_path, prior)
-                            log(f"【离线恢复成功】{sid} -> {skill_res}")
-                            continue
-                        else:
-                            # 缺少响应：未决请求必须停止自动重发，保持/置为 needs_recovery
-                            if prior_status != "needs_recovery":
-                                prior["status"] = "needs_recovery"
-                                prior["error"] = prior.get("error") or "进程中断，缺少响应记录，待人工处置"
-                                write_json_atomic(task_res_path, prior)
-                            log(f"【未决任务需处理】{sid} 处于 needs_recovery 且无有效响应，停止自动重发。")
-                            continue
-                    if prior_status == "failed":
-                        # 默认保留失败，不无限制重试
-                        continue
-                except Exception:
-                    pass
-            else:
-                # 检查 requests_dir 是否已有存盘响应
-                recovered = False
-                for rp in requests_dir.glob("*.json"):
-                    try:
-                        doc = json.loads(rp.read_text(encoding="utf-8"))
-                        if doc.get("task_hash") == thash and doc.get("response_content"):
-                            skill_res, assessments, err = validate_topic_response(filter_rules, target, doc["response_content"])
-                            rec_doc = {
-                                "task_hash": thash,
-                                "skill_id": sid,
-                                "status": "completed" if err is None else "failed",
-                                "result": skill_res if err is None else None,
-                                "topic_assessments": assessments,
-                                "error": err,
-                                "request_id": doc.get("request_id"),
-                                "completed_at": now_local().isoformat(),
-                            }
-                            write_json_atomic(task_res_path, rec_doc)
-                            log(f"【离线恢复成功】{sid} -> {skill_res}")
-                            recovered = True
-                            break
-                    except Exception:
-                        pass
-                if recovered:
-                    continue
-
-            # 材料超限标记处理
-            if target.get("input_too_large"):
-                too_large_doc = {
-                    "task_hash": thash,
-                    "skill_id": sid,
-                    "status": "completed",
-                    "result": "unknown",
-                    "error": "input_too_large",
-                    "topic_assessments": [
-                        {"topic_id": t["topic_id"], "topic_name": t["name"], "result": "unknown", "evidence": "材料体积超过 16 KiB 上限，跳过"}
-                        for t in filter_rules.blocked_topics
-                    ],
-                    "completed_at": now_local().isoformat(),
-                }
-                write_json_atomic(task_res_path, too_large_doc)
-                continue
-
-            # 2. 预算预留与派发约束
-            estimated_reserve = 3000
-            if total_tokens_spent + estimated_reserve > max_total_tokens:
-                stop_reason = "token_limit_exceeded"
-                log(f"达到批次累计 Token 上限 ({total_tokens_spent:,} + {estimated_reserve} > {max_total_tokens:,})，停止派发。")
-                break
-            if total_requests_made + 1 > max_total_requests:
-                stop_reason = "request_limit_exceeded"
-                log(f"达到批次累计请求次数上限 ({total_requests_made + 1} > {max_total_requests})，停止派发。")
-                break
-
-            # 3. 构造请求
-            sys_prompt, usr_prompt = build_topic_request(filter_rules, target)
-            request_id = uuid4().hex[:12]
-
-            started_doc = {
-                "task_hash": thash,
-                "skill_id": sid,
-                "status": "started",
-                "request_id": request_id,
-                "started_at": now_local().isoformat(),
-            }
-
-            # 4. 执行单次请求
-            call_res = None
-            used_model = model_cfg.get("model", "unknown")
-            last_call_res = None
-            unknown_usage = False
-            dispatched_this_target = False
-
-            def _persist_pre_call(inv_req_id: str, inv_model: str) -> dict[str, Any]:
-                nonlocal total_requests_made, total_tokens_spent, dispatched_this_target
-                dispatched_this_target = True
-                started_doc["request_id"] = inv_req_id
-                write_json_atomic(task_res_path, started_doc)
-
-                pre_record = {
-                    "request_id": inv_req_id,
-                    "task_hash": thash,
-                    "skill_id": sid,
-                    "model": inv_model,
-                    "status": "in_flight",
-                    "ok": False,
-                    "http_status": None,
-                    "reason_code": "IN_FLIGHT",
-                    "usage": None,
-                    "tokens_charged": 3000,
-                    "unknown_usage": True,
-                    "response_content": None,
-                    "error": "请求已发出，尚未返回或异常中断",
-                    "dispatched_at": now_local().isoformat(),
-                    "recorded_at": now_local().isoformat(),
-                }
-                write_json_atomic(requests_dir / f"{inv_req_id}.json", pre_record)
-                total_requests_made += 1
-                total_tokens_spent += 3000
-                return pre_record
-
-            def _persist_post_call(inv_req_id: str, inv_model: str, res: Any, lat_s: float):
-                nonlocal total_tokens_spent, unknown_usage, stop_reason
-                toks = 3000
-                is_unk = True
-                usage = UsageTotals().add(res) if res is not None else {}
-                rejected = getattr(res, "billing_state", None) == "rejected_before_inference"
-                if usage.get("total_tokens") is not None or rejected:
-                    toks = int(usage.get("total_tokens") or 0)
-                    total_tokens_spent += (toks - 3000)
-                    is_unk = False
-                else:
-                    stop_reason = "usage_unknown"
-                    log("[警告] 请求用量未知，停止后续自动请求。")
-
-                unknown_usage = unknown_usage or is_unk
-                post_record = {
-                    "request_id": inv_req_id,
-                    "task_hash": thash,
-                    "skill_id": sid,
-                    "model": inv_model,
-                    "status": "completed" if (res and res.ok) else "failed",
-                    "latency_seconds": lat_s,
-                    "ok": res.ok if res else False,
-                    "http_status": res.http_status if res else None,
-                    "reason_code": res.reason_code if res else None,
-                    "billing_state": getattr(res, "billing_state", None),
-                    "provider_error_code": getattr(res, "provider_error_code", None),
-                    "incompatible_parameter": getattr(res, "incompatible_parameter", None),
-                    "usage": res.usage if res else None,
-                    "tokens_charged": toks,
-                    "unknown_usage": is_unk,
-                    "response_content": res.content if res else None,
-                    "error": res.error if res else ("" if res and res.ok else "无响应"),
-                    "recorded_at": now_local().isoformat(),
-                }
-                write_json_atomic(requests_dir / f"{inv_req_id}.json", post_record)
-                return post_record, toks, is_unk
-
-            try:
-                if model_caller is not None:
-                    inv_req_id = request_id
-                    used_model = model_cfg.get("model", "test-model")
-                    _persist_pre_call(inv_req_id, used_model)
-                    start_t = time.monotonic()
-                    try:
-                        call_res = model_caller(model_cfg, sys_prompt, usr_prompt, request_id=inv_req_id)
-                    except Exception as caller_err:
-                        pre_rec = read_json(requests_dir / f"{inv_req_id}.json", {})
-                        pre_rec["status"] = "failed"
-                        pre_rec["error"] = f"请求异常中断：{caller_err}"
-                        write_json_atomic(requests_dir / f"{inv_req_id}.json", pre_rec)
-                        raise
-                    latency_s = round(time.monotonic() - start_t, 3)
-                    _persist_post_call(inv_req_id, used_model, call_res, latency_s)
-
-                elif is_queue and pool is not None:
-                    def _invoke(c, fmt, ctx):
-                        nonlocal used_model, stop_reason, last_call_res
-                        if total_tokens_spent + estimated_reserve > max_total_tokens:
-                            raise PoolStopped("token_limit_exceeded", f"达到批次累计 Token 上限 ({total_tokens_spent} + {estimated_reserve} > {max_total_tokens})")
-                        if total_requests_made + 1 > max_total_requests:
-                            raise PoolStopped("request_limit_exceeded", f"达到批次累计请求次数上限 ({total_requests_made + 1} > {max_total_requests})")
-
-                        inv_req_id = ctx.get("request_id") or uuid4().hex[:12]
-                        inv_model = c.get("model", "unknown")
-                        used_model = inv_model
-
-                        _persist_pre_call(inv_req_id, inv_model)
-                        inv_start_t = time.monotonic()
-                        try:
-                            res = call_model(c, sys_prompt, usr_prompt, response_format=fmt, sleep=sleep)
-                        except Exception as pool_err:
-                            pre_rec = read_json(requests_dir / f"{inv_req_id}.json", {})
-                            pre_rec["status"] = "failed"
-                            pre_rec["error"] = f"请求异常中断：{pool_err}"
-                            write_json_atomic(requests_dir / f"{inv_req_id}.json", pre_rec)
-                            raise
-                        inv_lat = round(time.monotonic() - inv_start_t, 3)
-
-                        _, toks, is_unk = _persist_post_call(inv_req_id, inv_model, res, inv_lat)
-                        last_call_res = res
-
-                        if is_unk:
-                            raise PoolStopped("usage_unknown", "响应缺少用量明细")
-
-                        return res
-
-                    try:
-                        call_res, _ = pool.run(sys_prompt, usr_prompt, "topic_filter", _invoke,
-                                               max_attempts=max_retries + 1, sleep=sleep)
-                    except PoolStopped as pse:
-                        stop_reason = pse.reason
-                        log(f"模型池停止：{pse}")
-                        call_res = last_call_res
-                        if pse.reason != "usage_unknown":
-                            if dispatched_this_target:
-                                started_doc["status"] = "needs_recovery"
-                                write_json_atomic(task_res_path, started_doc)
-                            else:
-                                if task_res_path.exists():
-                                    task_res_path.unlink(missing_ok=True)
-                            break
-
-                else:
-                    single_cfg = deepcopy(model_cfg)
-                    single_cfg.setdefault("request", {})["max_attempts"] = 1
-                    used_model = single_cfg.get("model", "unknown")
-                    inv_req_id = request_id
-
-                    _persist_pre_call(inv_req_id, used_model)
-                    inv_start_t = time.monotonic()
-                    try:
-                        fmt = resolve_response_format(single_cfg, "topic_filter")
-                        call_res = call_model(single_cfg, sys_prompt, usr_prompt, response_format=fmt, sleep=sleep)
-                    except Exception as single_err:
-                        pre_rec = read_json(requests_dir / f"{inv_req_id}.json", {})
-                        pre_rec["status"] = "failed"
-                        pre_rec["error"] = f"请求异常中断：{single_err}"
-                        write_json_atomic(requests_dir / f"{inv_req_id}.json", pre_rec)
-                        raise
-                    latency_s = round(time.monotonic() - inv_start_t, 3)
-                    _persist_post_call(inv_req_id, used_model, call_res, latency_s)
-
-            except PoolStopped as pse:
-                stop_reason = pse.reason
-                log(f"模型池停止：{pse}")
-                call_res = last_call_res
-                if pse.reason != "usage_unknown":
-                    if dispatched_this_target:
-                        started_doc["status"] = "needs_recovery"
-                        write_json_atomic(task_res_path, started_doc)
-                    else:
-                        if task_res_path.exists():
-                            task_res_path.unlink(missing_ok=True)
-                    break
-            except Exception as exc:
-                if dispatched_this_target:
-                    started_doc["status"] = "needs_recovery"
-                    started_doc["error"] = str(exc)
-                    write_json_atomic(task_res_path, started_doc)
-                else:
-                    if task_res_path.exists():
-                        task_res_path.unlink(missing_ok=True)
-                log(f"请求异常未决：{sid} - {exc}")
-                stop_reason = "unexpected_error"
-                break
-
-            # 6. 核验并写回结果
-            if call_res and call_res.ok and call_res.content:
-                skill_res, assessments, val_err = validate_topic_response(filter_rules, target, call_res.content)
-                final_doc = {
-                    "task_hash": thash,
-                    "skill_id": sid,
-                    "status": "completed" if val_err is None else "failed",
-                    "result": skill_res if val_err is None else None,
-                    "topic_assessments": assessments,
-                    "error": val_err,
-                    "model": used_model,
-                    "request_id": started_doc.get("request_id", request_id),
-                    "completed_at": now_local().isoformat(),
-                }
-                write_json_atomic(task_res_path, final_doc)
-                processed_in_this_run += 1
-                log(f"[{processed_in_this_run}] #{sid} -> {skill_res} ({used_model})")
-            else:
-                err_msg = call_res.error if call_res else "网络或模型请求失败"
-                fail_doc = {
-                    "task_hash": thash,
-                    "skill_id": sid,
-                    "status": "failed",
-                    "result": None,
-                    "error": err_msg,
-                    "model": used_model,
-                    "request_id": started_doc.get("request_id", request_id),
-                    "completed_at": now_local().isoformat(),
-                }
-                write_json_atomic(task_res_path, fail_doc)
-                log(f"[{processed_in_this_run}] #{sid} -> FAILED: {err_msg}")
-
-            if unknown_usage or (stop_reason in ("usage_unknown", "token_limit_exceeded", "request_limit_exceeded")):
-                break
-
-        # 7. 汇总并更新 run.json
-        comp_count = 0
-        matched_count = 0
-        no_match_count = 0
-        unknown_count = 0
-        failed_count = 0
-        needs_rec_count = 0
-
-        for r_file in results_dir.glob("*.json"):
-            try:
-                rd = json.loads(r_file.read_text(encoding="utf-8"))
-                st = rd.get("status")
-                rs = rd.get("result")
-                if st == "completed":
-                    comp_count += 1
-                    if rs == "match":
-                        matched_count += 1
-                    elif rs == "no_match":
-                        no_match_count += 1
-                    elif rs == "unknown":
-                        unknown_count += 1
-                elif st == "failed":
-                    failed_count += 1
-                elif st == "needs_recovery":
-                    needs_rec_count += 1
-            except Exception:
-                pass
-
-        run_data["progress"] = {
-            "total": len(targets),
-            "completed": comp_count,
-            "matched": matched_count,
-            "no_match": no_match_count,
-            "unknown": unknown_count,
-            "failed": failed_count,
-            "needs_recovery": needs_rec_count,
-            "requests": total_requests_made,
-            "tokens": total_tokens_spent,
-            "stop_reason": stop_reason,
-        }
-        if comp_count == len(targets):
-            run_data["status"] = "all_completed"
-        elif comp_count > 0:
-            run_data["status"] = "in_progress"
-
+        progress = dict(total=len(targets), completed=0, matched=0, no_match=0,
+                        unknown=0, failed=0, needs_recovery=0, requests=0, tokens=0)
+        for target in targets:
+            task_hash = _task_hash(run_id, target["skill_id"], target["materials_fingerprint"], rules.fingerprint)
+            path = results_dir / f"{task_hash}.json"
+            result, assessments = match_tags(rules, target)
+            expected = {"task_hash": task_hash, "skill_id": target["skill_id"],
+                        "status": "completed", "result": result, "topic_assessments": assessments}
+            prior = read_json(path) if path.exists() else {}
+            if any(prior.get(key) != value for key, value in expected.items()):
+                write_json_atomic(path, {**expected, "completed_at": now_local().isoformat()})
+            progress["completed"] += 1
+            progress["matched" if result == "match" else result] += 1
+        run_data["progress"] = progress
+        run_data["status"] = "completed"
         write_json_atomic(run_dir / "run.json", run_data)
+        return progress
 
-    return run_data["progress"]
-
-
-# ----------------------------------------------------------------------
-# 4. 审核报告生成 (Render Report)
-# ----------------------------------------------------------------------
 
 def compute_results_fingerprint(results_dir: Path) -> str:
     """计算当前 results 目录下所有任务结果的集合指纹（涵盖状态、判定结果、主题明细与证据）。"""
@@ -1119,6 +427,7 @@ def render_report(root_dir: str | Path, run_id: str) -> str:
         raise FileNotFoundError(f"批次快照未就绪：{run_id}")
 
     run_data = read_json(run_dir / "run.json")
+    require_tag_run(run_data)
     targets_data = read_json(run_dir / "targets.json")
     targets_map = {t["skill_id"]: t for t in targets_data.get("targets", [])}
 
@@ -1193,7 +502,7 @@ def render_report(root_dir: str | Path, run_id: str) -> str:
         except Exception:
             persisted_selected = set(default_review.get("selected_skill_ids") or [])
 
-    # 分区统计与逐主题统计 (方案 §8.2)
+    # 分区统计与逐标签统计
     rec_removed_count = sum(1 for m in matched_items if m["original_status"] == "recommended")
     cand_removed_count = sum(1 for m in matched_items if m["original_status"] == "candidate")
     snoozed_matched_count = sum(1 for m in matched_items if m.get("is_snoozed"))
@@ -1260,7 +569,7 @@ def render_report(root_dir: str | Path, run_id: str) -> str:
         <tr>
           <td><strong>{_esc(item.get('name', item['skill_id']))}</strong> ({_esc(item['skill_id'])})</td>
           <td><span class='badge badge-status'>{_esc(item.get('status'))}</span></td>
-          <td><small style='color:#cf222e;'>{_esc(item.get('error') or '请求异常未决，需离线恢复或 resolve')}</small></td>
+          <td><small style='color:#cf222e;'>{_esc(item.get('error') or '筛选未完成，请重新执行 run')}</small></td>
         </tr>
         """)
 
@@ -1270,7 +579,7 @@ def render_report(root_dir: str | Path, run_id: str) -> str:
         <tr>
           <td><strong>{_esc(item.get('name', item['skill_id']))}</strong> ({_esc(item['skill_id'])})</td>
           <td>{_esc(item.get('original_status'))}</td>
-          <td><small>尚未调度评估</small></td>
+          <td><small>尚未筛选</small></td>
         </tr>
         """)
 
@@ -1341,22 +650,22 @@ def render_report(root_dir: str | Path, run_id: str) -> str:
 
   <div class="stats-grid">
     <div class="stat-card"><div class="stat-val">{len(targets_map)}</div>目标总数</div>
-    <div class="stat-card"><div class="stat-val">{progress.get('completed', 0)}</div>已评估完成</div>
+    <div class="stat-card"><div class="stat-val">{progress.get('completed', 0)}</div>已筛选完成</div>
     <div class="stat-card"><div class="stat-val match">{len(matched_items)}</div>命中黑名单 (去重)</div>
     <div class="stat-card"><div class="stat-val match">{rec_removed_count} / {cand_removed_count}</div>推荐移除 / 候选移除</div>
     <div class="stat-card"><div class="stat-val">{snoozed_matched_count}</div>冷冻命中项</div>
-    <div class="stat-card"><div class="stat-val unknown">{len(unknown_items)}</div>存疑 (Unknown)</div>
-    <div class="stat-card"><div class="stat-val">{len(no_match_items)}</div>未命中合规</div>
+    <div class="stat-card"><div class="stat-val unknown">{len(unknown_items)}</div>无标签，保留</div>
+    <div class="stat-card"><div class="stat-val">{len(no_match_items)}</div>未命中</div>
     <div class="stat-card"><div class="stat-val">{len(failed_items)}</div>失败/需恢复</div>
-    <div class="stat-card"><div class="stat-val">{progress.get('tokens', 0):,}</div>累计消耗 Token</div>
+    <div class="stat-card"><div class="stat-val">{progress.get('tokens', 0):,}</div>模型调用 Token（始终为 0）</div>
   </div>
 
   <div style="margin: 16px 0; padding: 12px; background: #f6f8fa; border-radius: 6px; border: 1px solid #d0d7de;">
-    <strong>逐主题命中统计：</strong> {topic_badges_summary or '暂无命中'}
+    <strong>逐标签命中统计：</strong> {topic_badges_summary or '暂无命中'}
   </div>
 
   <h2>1. 命中黑名单待排除技能清单（已按审核选择勾选，共 {len(matched_items)} 条）</h2>
-  <p>以下技能主要用途被判定明确命中黑名单主题。请审核引文与解释；如发现误判，取消对应勾选即可。</p>
+  <p>以下技能的已有标签与黑名单完整匹配。请核对命中标签；不想屏蔽的条目可取消勾选。</p>
 
   <div class="toolbar">
     <div>
@@ -1372,7 +681,7 @@ def render_report(root_dir: str | Path, run_id: str) -> str:
       <tr>
         <th style="width: 40px; text-align: center;">选择</th>
         <th style="width: 250px;">技能信息</th>
-        <th style="width: 180px;">命中主题</th>
+        <th style="width: 180px;">命中标签</th>
         <th style="width: 380px;">证据回溯与解释</th>
         <th>原中文简述</th>
       </tr>
@@ -1382,8 +691,8 @@ def render_report(root_dir: str | Path, run_id: str) -> str:
     </tbody>
   </table>
 
-  <h2>2. 存疑/材料不足技能清单 ({len(unknown_items)} 条)</h2>
-  <p>材料不足以断定或引文核验未通过，将自动在原目录保留，不执行屏蔽。</p>
+  <h2>2. 无标签技能清单 ({len(unknown_items)} 条)</h2>
+  <p>没有可匹配的标签，保留原目录状态。</p>
   <table>
     <thead>
       <tr>
@@ -1398,7 +707,7 @@ def render_report(root_dir: str | Path, run_id: str) -> str:
   </table>
 
   <h2>3. 失败与需恢复项目清单 ({len(failed_items)} 条)</h2>
-  <p>执行中遇到网络中断、未决状态或解析异常的条目。默认保留，可使用 resolve 命令人工处理。</p>
+  <p>未完成的条目保留原状态，可重新执行 run 完成离线筛选。</p>
   <table>
     <thead>
       <tr>
@@ -1418,9 +727,9 @@ def render_report(root_dir: str | Path, run_id: str) -> str:
     <tbody>{"".join(pending_rows_html)}</tbody>
   </table>''' if pending_items else ''}
 
-  <h2>5. 未命中合规技能抽查 ({len(no_match_items)} 条)</h2>
+  <h2>5. 未命中技能抽查 ({len(no_match_items)} 条)</h2>
   <details>
-    <summary>展开查看全部 {len(no_match_items)} 条合规未命中项以供抽查（点击展开）</summary>
+    <summary>展开查看全部 {len(no_match_items)} 条未命中项以供抽查（点击展开）</summary>
     <table>
       <thead>
         <tr>
@@ -1430,7 +739,7 @@ def render_report(root_dir: str | Path, run_id: str) -> str:
         </tr>
       </thead>
       <tbody>
-        {''.join(no_match_rows_html) if no_match_rows_html else "<tr><td colspan='3' style='text-align:center;'>无合规项目</td></tr>"}
+        {''.join(no_match_rows_html) if no_match_rows_html else "<tr><td colspan='3' style='text-align:center;'>无未命中项目</td></tr>"}
       </tbody>
     </table>
   </details>
@@ -1507,6 +816,7 @@ def plan_apply(
 
     review_data = read_json(review_file)
     run_data = read_json(run_dir / "run.json")
+    require_tag_run(run_data)
     targets_data = read_json(run_dir / "targets.json")
 
     # 1. 强校验 review 与批次身份绑定
@@ -1538,7 +848,7 @@ def plan_apply(
     if illegal_selected:
         raise ValueError(f"review.json 包含未命中或非法的技能 ID：{', '.join(sorted(illegal_selected))}")
 
-    # 确保当前批次所有目标均已进入终态 (方案 §9.1)
+    # 确保当前批次所有目标均已进入终态
     results_map: dict[str, dict] = {}
     for p in results_dir.glob("*.json"):
         try:
@@ -1557,7 +867,7 @@ def plan_apply(
     if unfinished_targets:
         raise ValueError(
             f"当前批次尚有 {len(unfinished_targets)} 条目标未进入终态（未完成、运行中或需恢复），禁止执行应用！\n"
-            f"请先完成运行或使用 resolve 命令解决未决任务（例如: {unfinished_targets[0]}）。"
+            f"请重新执行 run 完成离线筛选（例如: {unfinished_targets[0]}）。"
         )
 
     # 2. 持锁核对当前目录与治理配置
@@ -1606,7 +916,7 @@ def plan_apply(
                 conflicts.append({"skill_id": sid, "reason": "not_in_catalog", "message": "该技能已从主目录中消失"})
                 continue
 
-            # 校验送审材料是否仍与快照一致 (方案 §9.2)
+            # 校验送审材料是否仍与快照一致
             target_meta = next((t for t in targets_data.get("targets", []) if t["skill_id"] == sid), None)
             if target_meta:
                 curr_mat = extract_materials(entry)
@@ -1639,11 +949,11 @@ def plan_apply(
                 conflicts.append({"skill_id": sid, "reason": "owned_conflict", "message": "该技能为官方已收录资产，受保护禁止排除"})
                 continue
 
-            # 命中主题名称
+            # 命中标签名称
             res_item = valid_matches[sid]
             matched_names = [ta["topic_name"] for ta in res_item.get("topic_assessments", []) if ta.get("result") == "match"]
-            topics_desc = "、".join(matched_names) or "合规黑名单"
-            reason_str = f"存量主题过滤；批次 {run_id}；命中：{topics_desc}"
+            topics_desc = "、".join(matched_names) or "标签黑名单"
+            reason_str = f"存量标签过滤；批次 {run_id}；命中：{topics_desc}"
 
             # 冷冻冲突排查
             if sid in active_snoozes or any(s.get("skill_id") == sid for s in existing_snoozes):
@@ -1665,7 +975,7 @@ def plan_apply(
                 "added_at": today_str,
             })
 
-        # 预先计算应用生效后的预期文件内容与摘要 (方案 §9.3)
+        # 预先计算应用生效后的预期文件内容与摘要
         if snoozes_to_remove:
             expected_snoozed_list = [s for s in existing_snoozes if s.get("skill_id") not in snoozes_to_remove]
             expected_sn_data = deepcopy(sn_data)
@@ -1737,6 +1047,7 @@ def execute_apply(
     """执行实际的治理名单写入与离线目录同步，具备断点续写与幂等性保障。"""
     root = Path(root_dir).resolve()
     run_dir = _get_run_dir(root, run_id)
+    require_tag_run(read_json(run_dir / "run.json"))
     manifest_file = run_dir / "apply-manifest.json"
 
     # 1. 优先检查是否此前已完成应用（幂等快速返回）
@@ -1866,78 +1177,63 @@ def execute_apply(
     return manifest
 
 
-# ----------------------------------------------------------------------
-# 6. 未决任务处理 (Resolve)
-# ----------------------------------------------------------------------
-
-def resolve_task(
-    root_dir: str | Path,
-    run_id: str,
-    skill_id: str,
-    action: str,
-    reason: str,
-) -> dict[str, Any]:
-    """明确处理中断或未决任务，不伪造模型结果。"""
+def filter_and_apply(root_dir: str | Path) -> int:
+    """一键把命中标签的条目加入人工排除；整个过程不需交互。"""
     root = Path(root_dir).resolve()
-    run_dir = _get_run_dir(root, run_id)
-    targets_data = read_json(run_dir / "targets.json")
-    filter_rules = _reconstruct_filter_rules(read_json(run_dir / "run.json").get("blocked_topics", []))
+    with catalog_session(root / "data"):
+        # 上次若已开始写入，先用原计划完成同步，再筛选最新目录。
+        batches = root / "data/local/topic-filter"
+        for manifest_path in sorted(batches.glob("*/apply-manifest.json")):
+            manifest = read_json(manifest_path)
+            if manifest.get("phase") == "completed":
+                continue
+            previous = read_json(manifest_path.parent / "run.json")
+            if previous.get("automatic") and previous.get("match_mode") == MATCH_MODE:
+                execute_apply(root, previous["run_id"])
 
-    target = next((t for t in targets_data.get("targets", []) if t["skill_id"] == skill_id), None)
-    if not target:
-        raise ValueError(f"批次快照中未找到技能：{skill_id}")
+        rules = load_tag_rules(_resolve_config_path(root, "blocked-tags.json", "governance"))
+        if not rules.has_evaluation_rules:
+            safe_print("标签黑名单为空，无需过滤。")
+            return 0
 
-    thash = _task_hash(run_id, skill_id, target["materials_fingerprint"], filter_rules.fingerprint)
-    task_res_path = run_dir / "results" / f"{thash}.json"
-    if not task_res_path.exists():
-        raise FileNotFoundError(f"该技能结果文件不存在：{thash}.json")
+        prepared = prepare_run(root)
+        run_id = prepared["run_id"]
+        run_dir = Path(prepared["run_dir"])
+        run_data = read_json(run_dir / "run.json")
+        run_data["automatic"] = True
+        write_json_atomic(run_dir / "run.json", run_data)
+        progress = run_assessments(root, run_id)
+        selected = []
+        for path in (run_dir / "results").glob("*.json"):
+            result = read_json(path)
+            if result.get("result") == "match":
+                selected.append(result["skill_id"])
+        review_path = run_dir / "review.json"
+        write_json_atomic(review_path, {
+            "run_id": run_id,
+            "rules_fingerprint": run_data["rules_fingerprint"],
+            "targets_fingerprint": run_data["targets_fingerprint"],
+            "results_fingerprint": compute_results_fingerprint(run_dir / "results"),
+            "selected_skill_ids": sorted(selected),
+        })
+        plan_apply(root, run_id, review_path)
+        execute_apply(root, run_id)
+        safe_print(f"过滤完成：{progress['matched']} 个技能已加入人工排除名单，页面已同步，刷新前端即可。")
+        return progress["matched"]
 
-    record = json.loads(task_res_path.read_text(encoding="utf-8"))
-    if action == "close_as_retained":
-        record["status"] = "completed"
-        record["result"] = "unknown"
-        record["resolution"] = {
-            "action": "close_as_retained",
-            "reason": reason,
-            "resolved_at": now_local().isoformat(),
-        }
-        write_json_atomic(task_res_path, record)
-    elif action == "retry":
-        record["status"] = "pending"
-        record["resolution"] = {
-            "action": "retry",
-            "reason": reason,
-            "resolved_at": now_local().isoformat(),
-        }
-        write_json_atomic(task_res_path, record)
-    else:
-        raise ValueError(f"不支持的操作：{action}")
-
-    return record
-
-
-# ----------------------------------------------------------------------
-# CLI 入口
-# ----------------------------------------------------------------------
 
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description="存量目录黑名单一次性过滤工具")
+    parser = argparse.ArgumentParser(description="直接启动即可按标签过滤、加入人工排除并同步页面；全程不调用 AI")
     parser.add_argument("--root", default=str(ROOT), help="项目根目录（默认自动检测）")
-    subparsers = parser.add_subparsers(dest="subcommand", required=True)
+    subparsers = parser.add_subparsers(dest="subcommand")
 
     # prepare
     p_prep = subparsers.add_parser("prepare", help="准备批次快照（离线，无模型调用）")
     p_prep.add_argument("--run-id", default=None, help="批次 ID（省略则自动生成）")
 
     # run
-    p_run = subparsers.add_parser("run", help="执行模型筛选评估")
+    p_run = subparsers.add_parser("run", help="按已有标签全量离线筛选，不调用模型")
     p_run.add_argument("--run-id", required=True, help="批次 ID")
-    g_mode = p_run.add_mutually_exclusive_group()
-    g_mode.add_argument("--sample", nargs="?", const=50, type=int, help="样本抽样数量（例如 50）")
-    g_mode.add_argument("--sample-only", action="store_true", help="仅执行样本抽样评估")
-    g_mode.add_argument("--remaining", action="store_true", help="全量续跑剩余目标")
-    p_run.add_argument("--max-total-tokens", type=int, default=100000000, help="批次累计 Token 上限")
-    p_run.add_argument("--max-total-requests", type=int, default=10000, help="批次累计请求次数上限")
 
     # report
     p_rep = subparsers.add_parser("report", help="生成离线 HTML 审核报告与 review.json")
@@ -1948,44 +1244,29 @@ def main(argv: list[str] | None = None) -> int:
     p_app.add_argument("--run-id", required=True, help="批次 ID")
     p_app.add_argument("--review", default=None, help="review.json 路径（省略时自动定位到批次目录下的 review.json）")
     g_app = p_app.add_mutually_exclusive_group()
-    g_app.add_argument("--dry-run", action="store_true", help="仅预览变更，不写入文件（默认）")
+    g_app.add_argument("--dry-run", action="store_true", help="仅保存预览计划，不修改目录和屏蔽名单（默认）")
     g_app.add_argument("--apply", action="store_true", help="执行实际写入与离线目录同步")
-
-    # resolve
-    p_res = subparsers.add_parser("resolve", help="处理中断或未决任务")
-    p_res.add_argument("--run-id", required=True, help="批次 ID")
-    p_res.add_argument("--skill-id", required=True, help="目标技能 ID")
-    p_res.add_argument("--action", choices=["close_as_retained", "retry"], required=True, help="处理动作")
-    p_res.add_argument("--reason", required=True, help="操作原因")
 
     args = parser.parse_args(argv)
     root = Path(args.root).resolve()
 
     try:
-        if args.subcommand == "prepare":
+        if args.subcommand is None:
+            filter_and_apply(root)
+            return 0
+
+        elif args.subcommand == "prepare":
             res = prepare_run(root, args.run_id)
             safe_print(f"✅ 快照准备成功：批次 #{res['run_id']}")
-            safe_print(f"   目标技能：{res['total_targets']} 条（推荐 {res['recommended_count']} · 候选 {res['candidate_count']} · 冷冻中 {res['snoozed_count']} · 50条样本标记 {res['sample_50_count']}）")
-            safe_print(f"   主题清单：{res['topics_count']} 个排除主题")
+            safe_print(f"   目标技能：{res['total_targets']} 条（推荐 {res['recommended_count']} · 候选 {res['candidate_count']} · 冷冻中 {res['snoozed_count']}）")
+            safe_print(f"   标签黑名单：{res['topics_count']} 个标签")
             safe_print(f"   保护排除：已排除 {res['excluded_summary']['manual_excluded']} · 已收藏 {res['excluded_summary']['favorited']} · 已收录 {res['excluded_summary']['owned']}")
             safe_print(f"   快照目录：{res['run_dir']}")
             return 0
 
         elif args.subcommand == "run":
-            sample_only = bool(args.sample is not None or args.sample_only)
-            prog = run_assessments(
-                root,
-                args.run_id,
-                sample_only=sample_only,
-                remaining_only=args.remaining,
-                max_total_tokens=args.max_total_tokens,
-                max_total_requests=args.max_total_requests,
-            )
-            label = "⚠️ 运行停止" if prog.get("stop_reason") else "本轮结束"
-            safe_print(f"{label}：完成 {prog['completed']}/{prog['total']}（命中 {prog['matched']} · 合规 {prog['no_match']} · 存疑 {prog['unknown']} · 失败 {prog['failed']}）")
-            safe_print(f"   累计请求：{prog['requests']} 次 | 累计 Token：{prog['tokens']:,}")
-            if prog.get("stop_reason"):
-                safe_print(f"   停止原因：{prog['stop_reason']}")
+            prog = run_assessments(root, args.run_id)
+            safe_print(f"离线筛选完成：{prog['completed']}/{prog['total']}（命中 {prog['matched']} · 未命中 {prog['no_match']} · 无标签 {prog['unknown']}）")
             return 0
 
         elif args.subcommand == "report":
@@ -1995,6 +1276,7 @@ def main(argv: list[str] | None = None) -> int:
             return 0
 
         elif args.subcommand == "apply":
+            require_tag_run(read_json(_get_run_dir(root, args.run_id) / "run.json"))
             is_apply = bool(args.apply)
             manifest_file = _get_run_dir(root, args.run_id) / "apply-manifest.json"
             if is_apply and manifest_file.exists():
@@ -2029,11 +1311,6 @@ def main(argv: list[str] | None = None) -> int:
                     sr = manifest["sync_result"]
                     safe_print(f"   已完成离线目录同步：主索引 {sr['catalog_path']} · 页面数据 {sr['page_path']}")
                 return 0
-
-        elif args.subcommand == "resolve":
-            rec = resolve_task(root, args.run_id, args.skill_id, args.action, args.reason)
-            safe_print(f"✅ 任务状态已更新：{args.skill_id} -> {rec['status']}")
-            return 0
 
     except Exception as exc:
         safe_print(f"❌ 执行失败（{type(exc).__name__}）：{exc}")
