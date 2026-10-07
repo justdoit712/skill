@@ -3,10 +3,10 @@
   "rules_version": "1.3.0",
   "generated_at": "2026-10-06T16:09:58.858295+08:00",
   "counts": {
-    "excluded": 1086,
-    "candidate": 2380,
-    "recommended": 1394,
-    "pending": 2
+    "recommended": 1309,
+    "candidate": 2293,
+    "manual": 50,
+    "excluded": 1210
   },
   "entries": [
     {
@@ -4144,8 +4144,10 @@
       ],
       "limitations": "不能用于临床心理评估或诊断，不能作为招聘/解雇的唯一依据，仅适用于 Culture Index 评估",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-20T16:59:36+00:00",
       "last_checked": "2026-09-24T17:19:01.942279+08:00",
       "content_changed_at": null,
@@ -4159,12 +4161,7 @@
       "manual_note": null,
       "evaluation_rules_version": "1.0.1",
       "last_evaluation_id": null,
-      "evaluated_at": null,
-      "snooze": {
-        "snoozed_at": "2026-09-26",
-        "expires_at": "2027-02-23",
-        "reason": "用户暂不关注"
-      }
+      "evaluated_at": null
     },
     {
       "skill_id": "trailofbits/skills:plugins/devcontainer-setup/skills/devcontainer-setup/SKILL.md",
@@ -14974,9 +14971,10 @@
       "dependencies_declared": [],
       "limitations": "仅生成草稿，需人工审核发送；不涉及多触点序列设计或职位描述撰写；不提供法律建议。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-29T14:02:21.532589+08:00",
@@ -15028,12 +15026,7 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/candidate-outreach-personalizer/SKILL.md|sha256:7804bf3811f58ee5a23d7dbc574f0a30|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-29T14:02:21.529580+08:00",
-      "snooze": {
-        "snoozed_at": "2026-10-02",
-        "expires_at": "2027-03-01",
-        "reason": "用户暂不关注"
-      }
+      "evaluated_at": "2026-09-29T14:02:21.529580+08:00"
     },
     {
       "skill_id": "skillmedev/skills:skills/cap-table-manager/SKILL.md",
@@ -15066,9 +15059,10 @@
       "dependencies_declared": [],
       "limitations": "需要用户自行提供准确的融资条款和当前股权结构数据；结果为基于假设的估算。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-29T14:02:36.995267+08:00",
@@ -15122,12 +15116,7 @@
         ]
       },
       "last_evaluation_id": "skillmedev/skills:skills/cap-table-manager/SKILL.md|sha256:2cbc19b81ccad4026226cd05ca584192|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-29T14:02:36.990269+08:00",
-      "snooze": {
-        "snoozed_at": "2026-10-02",
-        "expires_at": "2027-03-01",
-        "reason": "用户暂不关注"
-      }
+      "evaluated_at": "2026-09-29T14:02:36.990269+08:00"
     },
     {
       "skill_id": "skillmedev/skills:skills/carousel-scripter/SKILL.md",
@@ -15253,9 +15242,10 @@
       "dependencies_declared": [],
       "limitations": "依赖于能够获取客户采访权限或现有沟通记录；若无法获得量化数据则降级为证言收集。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-29T14:04:22.878762+08:00",
@@ -15307,12 +15297,7 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/case-study-builder/SKILL.md|sha256:5734f7246f349b5f7167ae730d972e4e|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-29T14:04:22.875221+08:00",
-      "snooze": {
-        "snoozed_at": "2026-10-02",
-        "expires_at": "2027-03-01",
-        "reason": "用户暂不关注"
-      }
+      "evaluated_at": "2026-09-29T14:04:22.875221+08:00"
     },
     {
       "skill_id": "skillmedev/skills:skills/category-page-copywriter/SKILL.md",
@@ -15345,9 +15330,10 @@
       "dependencies_declared": [],
       "limitations": "仅适用于电商分类页，不适用于独立营销落地页或单品详情页",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-29T14:05:16.462165+08:00",
@@ -16410,9 +16396,10 @@
       "dependencies_declared": [],
       "limitations": "依赖定价对接",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-10-01T05:43:15.707611+08:00",
@@ -20751,7 +20738,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/eda-playbook/SKILL.md|sha256:019290627f728f3403568a4509a7ff04|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-01T08:22:03.509436+08:00"
+      "evaluated_at": "2026-10-01T08:22:03.509436+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-07",
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/economic-analysis/SKILL.md",
@@ -23628,8 +23620,10 @@
       "dependencies_declared": [],
       "limitations": "仅提供融资叙事框架，不涉及融资阶段的判断或价值评估",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-10-01T08:35:30.619004+08:00",
       "content_changed_at": null,
@@ -23680,12 +23674,7 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/fundraising-narrative/SKILL.md|sha256:5568f59aa8741a07f0f28fcb900a901d|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-01T08:35:30.606996+08:00",
-      "snooze": {
-        "snoozed_at": "2026-10-02",
-        "expires_at": "2027-03-01",
-        "reason": "用户暂不关注"
-      }
+      "evaluated_at": "2026-10-01T08:35:30.606996+08:00"
     },
     {
       "skill_id": "skillmedev/skills:skills/funnel-analysis/SKILL.md",
@@ -25528,8 +25517,10 @@
       "dependencies_declared": [],
       "limitations": "未提供具体岗位示例、表单模板文件或自动化实现，仅描述流程与规则。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-29T16:33:55.023433+08:00",
       "content_changed_at": null,
@@ -25580,12 +25571,7 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/hiring-scorecard/SKILL.md|sha256:5ac6a205d708096020d93cbd6b629dab|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-29T16:33:55.020948+08:00",
-      "snooze": {
-        "snoozed_at": "2026-10-02",
-        "expires_at": "2027-03-01",
-        "reason": "用户暂不关注"
-      }
+      "evaluated_at": "2026-09-29T16:33:55.020948+08:00"
     },
     {
       "skill_id": "skillmedev/skills:skills/icon-system/SKILL.md",
@@ -26616,9 +26602,10 @@
       "dependencies_declared": [],
       "limitations": "依赖现有URL清单，无法设计新集群结构",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-10-01T08:44:07.518062+08:00",
@@ -26879,9 +26866,10 @@
       "dependencies_declared": [],
       "limitations": "需预先准备能力指标体系，非法律文书替代品",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-10-01T08:45:19.084746+08:00",
@@ -27516,8 +27504,10 @@
       "dependencies_declared": [],
       "limitations": "未提供可直接套用的 JD 模板或示例输出；需要雇主提供角色简报、职级标准和薪酬带宽，否则部分关键内容只能标记缺失并转交负责人。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-29T17:05:43.493851+08:00",
       "content_changed_at": null,
@@ -27568,12 +27558,7 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/job-description-writer/SKILL.md|sha256:8be2c0269498a044bc3626f385c071a9|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-29T17:05:43.492374+08:00",
-      "snooze": {
-        "snoozed_at": "2026-10-02",
-        "expires_at": "2027-03-01",
-        "reason": "用户暂不关注"
-      }
+      "evaluated_at": "2026-09-29T17:05:43.492374+08:00"
     },
     {
       "skill_id": "skillmedev/skills:skills/job-interview-prep/SKILL.md",
@@ -27976,8 +27961,10 @@
       ],
       "limitations": "未说明具体工具或数据来源获取方式；不处理单查询意图标签、页面类型推荐、内链与锚文本选择。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-29T17:13:00.759741+08:00",
       "content_changed_at": null,
@@ -28028,12 +28015,7 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/keyword-cluster-builder/SKILL.md|sha256:081596f4dd4b8beae12611c075f0b923|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-29T17:13:00.757737+08:00",
-      "snooze": {
-        "snoozed_at": "2026-10-02",
-        "expires_at": "2027-03-01",
-        "reason": "用户暂不关注"
-      }
+      "evaluated_at": "2026-09-29T17:13:00.757737+08:00"
     },
     {
       "skill_id": "skillmedev/skills:skills/kinetic-typography/SKILL.md",
@@ -28162,8 +28144,10 @@
       ],
       "limitations": "面向健身房场景的经营指标管理；CAC、LTV 等财务模型需依赖其他技能，且不处理流失修复或销售转化具体执行。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-29T17:16:05.862857+08:00",
       "content_changed_at": null,
@@ -28214,12 +28198,7 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/kpi-scoreboard-and-cadence/SKILL.md|sha256:e64e49c111bf2ecc70360df3d8ed3bdd|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-29T17:16:05.859997+08:00",
-      "snooze": {
-        "snoozed_at": "2026-10-02",
-        "expires_at": "2027-03-01",
-        "reason": "用户暂不关注"
-      }
+      "evaluated_at": "2026-09-29T17:16:05.859997+08:00"
     },
     {
       "skill_id": "skillmedev/skills:skills/kubernetes-basics/SKILL.md",
@@ -31611,9 +31590,10 @@
       ],
       "limitations": "仅适用于原生/Flutter/Compose移动应用，排除网页性能问题",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-10-01T08:58:14.117791+08:00",
@@ -32893,8 +32873,10 @@
       "dependencies_declared": [],
       "limitations": "草稿需人工审核，薪资等关键信息必须从薪酬负责人获取，不能由模型生成。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-10-02T13:13:51.193423+08:00",
       "content_changed_at": null,
@@ -33619,9 +33601,10 @@
       ],
       "limitations": "未声明所需广告平台或数据处理工具；依赖用户准备完整投放数据；默认毛利率假设需标注为猜测，可能影响盈亏平衡判断。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-29T19:44:51.345739+08:00",
@@ -33761,7 +33744,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/pandas-expert/SKILL.md|sha256:d7c8b3cd0593ff8f99862abab379e903|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-02T13:14:58.427952+08:00"
+      "evaluated_at": "2026-10-02T13:14:58.427952+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-07",
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/partition-planner/SKILL.md",
@@ -33886,9 +33874,10 @@
       "dependencies_declared": [],
       "limitations": "偏向管理指南而非自动化工具，执行仍依赖经理的投入时间；未提及跨文化或语言适配；未提供可直接复用的模板文件。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-10-02T13:15:11.024605+08:00",
@@ -34114,7 +34103,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/pii-scrubber/SKILL.md|sha256:afc0d0072a0f5919c0cdfc2776666a0e|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-02T13:15:52.644919+08:00"
+      "evaluated_at": "2026-10-02T13:15:52.644919+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-07",
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/pitch-deck-builder/SKILL.md",
@@ -34154,9 +34148,10 @@
       ],
       "limitations": "依赖多个未提供的关联技能；未给出实际模板文件、示例输出或验收方法；主要面向融资演示场景而非通用 PPT 制作。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-29T19:52:21.417957+08:00",
@@ -36107,7 +36102,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/prospect-list-builder/SKILL.md|sha256:b486b56e36e892c8669eacfae631fb09|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-02T13:17:01.395475+08:00"
+      "evaluated_at": "2026-10-02T13:17:01.395475+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-07",
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/prototype-spec/SKILL.md",
@@ -36194,7 +36194,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/prototype-spec/SKILL.md|sha256:46469632a6e7faafad592142cd1681bc|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-02T13:17:19.278062+08:00"
+      "evaluated_at": "2026-10-02T13:17:19.278062+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-07",
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/prospecting-metrics/SKILL.md",
@@ -36231,9 +36236,10 @@
       ],
       "limitations": "基准转化率仅为粗略行业范围且未给出处；脚本运行环境版本未说明；不包含实际邮件撰写、序列设计或送达率修复能力。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-30T08:52:15.132585+08:00",
@@ -38421,7 +38427,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/research-readout/SKILL.md|sha256:78ce44c656010d53c2aadab8959a3dc8|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-02T13:18:31.176780+08:00"
+      "evaluated_at": "2026-10-02T13:18:31.176780+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-07",
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/responsive-spec/SKILL.md",
@@ -38507,7 +38518,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/responsive-spec/SKILL.md|sha256:7f427952d8bf98daa2a9acf691c86b1d|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-02T13:18:03.165325+08:00"
+      "evaluated_at": "2026-10-02T13:18:03.165325+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-07",
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/resume-reviewer/SKILL.md",
@@ -38685,7 +38701,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/resume-writer/SKILL.md|sha256:a410035c8272bceb1b62446d38f0ec2e|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-02T13:18:48.116654+08:00"
+      "evaluated_at": "2026-10-02T13:18:48.116654+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-07",
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/retainer-economics-calculator/SKILL.md",
@@ -39997,9 +40018,10 @@
       ],
       "limitations": "未声明司法辖区适用性、法律意见边界或外部数据来源；引用了其他技能但未说明是否必需或可独立使用。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-30T09:48:33.416066+08:00",
@@ -40178,9 +40200,10 @@
       "dependencies_declared": [],
       "limitations": "未说明具体 CRM 或工具依赖；不适用于会前冷启动外联、冷邮件撰写或共享里程碑关单结构。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-30T09:50:35.009567+08:00",
@@ -40414,7 +40437,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/scope-creep-defense/SKILL.md|sha256:928f9c82c90ceec081bcc01acf9c55b5|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-30T09:54:27.389506+08:00"
+      "evaluated_at": "2026-09-30T09:54:27.389506+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-07",
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/screencast-capture/SKILL.md",
@@ -40543,9 +40571,10 @@
       "dependencies_declared": [],
       "limitations": "仅适用于面试前的简历/申请材料筛选，不能用于面试环节评分；需人工判断，不自动晋级或淘汰。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-10-02T13:20:18.319033+08:00",
@@ -40631,9 +40660,10 @@
       "dependencies_declared": [],
       "limitations": "未说明如何获取实时SERP数据；若无法检查实际搜索结果，只能基于关键词措辞进行标注并需声明为猜测。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-30T09:56:44.408376+08:00",
@@ -40997,9 +41027,10 @@
       "dependencies_declared": [],
       "limitations": "方法论依赖团队的产品事件埋点与执行能力，未提供具体的工具实现或代码，分群效果需结合实际数据验证。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-10-02T13:21:10.960871+08:00",
@@ -41086,9 +41117,10 @@
       "dependencies_declared": [],
       "limitations": "未说明执行审计所需的抓取、SERP 或性能测试工具；不适用于站点级关键词聚类或全站内链架构。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-30T10:03:18.505801+08:00",
@@ -41181,8 +41213,10 @@
       ],
       "limitations": "未说明具体 CRM、数据源、自动化平台或地区法律适配；模板中的市场数字需要人工或外部数据填充。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-30T10:04:31.989895+08:00",
       "content_changed_at": null,
@@ -41355,9 +41389,10 @@
       "dependencies_declared": [],
       "limitations": "依赖用户提供真实且可对账的内部数据；基准阈值随市场变动，非一成不变；评估结果不构成投资或法律建议。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-10-02T13:21:55.214844+08:00",
@@ -41495,7 +41530,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/sev-triage/SKILL.md|sha256:3237e6f71ac9b2e8b492c0db24b814f6|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-02T13:22:46.592196+08:00"
+      "evaluated_at": "2026-10-02T13:22:46.592196+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-07",
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/serp-gap-analyzer/SKILL.md",
@@ -41529,9 +41569,10 @@
       "dependencies_declared": [],
       "limitations": "需要用户提供3-5个排名URL，不能凭空分析；仅适用于发布前草稿，不适用于已排名但内容衰减的页面审查或关键词聚类。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-10-02T13:22:56.634930+08:00",
@@ -41624,8 +41665,10 @@
       ],
       "limitations": "需要转录或详细大纲作为基础输入，不能凭空生成；不负责将内容进一步加工为视频片段或社交媒体帖子。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-10-02T13:23:30.242939+08:00",
       "content_changed_at": null,
@@ -41723,8 +41766,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-07",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -41808,8 +41856,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-07",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -41896,8 +41949,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-07",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -42475,7 +42533,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/slide-deck-builder/SKILL.md|sha256:b9d702a9f70d9d972cc85d29746487fa|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-02T13:26:07.293165+08:00"
+      "evaluated_at": "2026-10-02T13:26:07.293165+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-07",
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/soc2-evidence-helper/SKILL.md",
@@ -42651,7 +42714,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/social-caption-writer/SKILL.md|sha256:cf2cf7ada94c9e58ae1369be3a120fb3|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-02T06:45:36.663322+08:00"
+      "evaluated_at": "2026-10-02T06:45:36.663322+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-07",
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/social-hook-generator/SKILL.md",
@@ -42737,7 +42805,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/social-hook-generator/SKILL.md|sha256:e16e6ce44d2e247ca58deb79b3c1b052|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-02T13:27:13.057691+08:00"
+      "evaluated_at": "2026-10-02T13:27:13.057691+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-07",
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/social-content-calendar/SKILL.md",
@@ -42916,7 +42989,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/sound-and-music-sync/SKILL.md|sha256:f1b62c03f929c6cecf3ca804e6e68a2e|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-02T13:27:56.257739+08:00"
+      "evaluated_at": "2026-10-02T13:27:56.257739+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-07",
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/social-video-formatter/SKILL.md",
@@ -43008,7 +43086,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/social-video-formatter/SKILL.md|sha256:e8cb1379bdcf9ba8ba93ab7e603b654b|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-02T06:48:46.614277+08:00"
+      "evaluated_at": "2026-10-02T06:48:46.614277+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-07",
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/space-earth-science/SKILL.md",
@@ -43268,7 +43351,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/speech-writer/SKILL.md|sha256:2878165f1361c0df2dea246588a76e8f|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-02T13:28:33.915747+08:00"
+      "evaluated_at": "2026-10-02T13:28:33.915747+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-07",
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/spreadsheet-model-builder/SKILL.md",
@@ -43354,7 +43442,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/spreadsheet-model-builder/SKILL.md|sha256:a87585141bbc3c6ed21aab30bed339e6|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-02T13:29:29.639268+08:00"
+      "evaluated_at": "2026-10-02T13:29:29.639268+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-07",
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/sprint-planning/SKILL.md",
@@ -43440,7 +43533,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/sprint-planning/SKILL.md|sha256:fe1c39a5ffc861e5c9ecfc400f95f96c|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-02T13:29:47.170940+08:00"
+      "evaluated_at": "2026-10-02T13:29:47.170940+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-07",
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/sprint-retro-facilitator/SKILL.md",
@@ -43706,7 +43804,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "getsentry/skills:skills/secret-serialization/SKILL.md|sha256:fcff1bc1e5f38bdbe9dccccd21a39846|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-01T01:36:34.856357+08:00"
+      "evaluated_at": "2026-10-01T01:36:34.856357+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-07",
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "gauss314/skills:skills/backtesting/SKILL.md",
@@ -43761,8 +43864,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-07",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -43892,7 +44000,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "expo/skills:plugins/expo/skills/expo-skill-feedback/SKILL.md|sha256:beb2cee5d8649ce1c95db5adaca42e75|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-01T04:52:06.083907+08:00"
+      "evaluated_at": "2026-10-01T04:52:06.083907+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-07",
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "gauss314/skills:skills/barchart/SKILL.md",
@@ -44399,8 +44512,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-07",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -45120,8 +45238,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-07",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -46503,8 +46626,10 @@
       "dependencies_declared": [],
       "limitations": "未说明具体广告平台集成方式，依赖手动数据录入或API对接实现",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-01T05:36:53.624106+08:00",
       "content_changed_at": null,
@@ -46587,9 +46712,10 @@
       "dependencies_declared": [],
       "limitations": "依赖用户提供准确的财务数据（如ACV、CAC），部分评估需依赖外部工具执行。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-01T05:37:50.780849+08:00",
@@ -46813,7 +46939,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/client-comms-cadence/SKILL.md|sha256:68af0ba946b01ff05b5d877a1f680762|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-01T05:40:27.621728+08:00"
+      "evaluated_at": "2026-10-01T05:40:27.621728+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-07",
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/clinical-summary/SKILL.md",
@@ -46932,9 +47063,10 @@
       "dependencies_declared": [],
       "limitations": "该技能依赖于评估当前搜索结果（例如用于词计数推导），因此执行者应确保访问搜索引擎并提供输入目标关键词。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-01T05:47:49.953647+08:00",
@@ -47420,7 +47552,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/framework-upgrader/SKILL.md|sha256:a4661cc165545de4b766ccc7968856a6|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-01T08:32:51.566840+08:00"
+      "evaluated_at": "2026-10-01T08:32:51.566840+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-07",
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/fundraise-closing-mechanics/SKILL.md",
@@ -47451,8 +47588,10 @@
       "dependencies_declared": [],
       "limitations": "未提供代码或实操性文件",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-01T08:33:46.219112+08:00",
       "content_changed_at": null,
@@ -47537,8 +47676,10 @@
       "dependencies_declared": [],
       "limitations": "依赖用户输入大量企业数据（指标、叙述、法律财务文件）。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-01T08:34:54.936480+08:00",
       "content_changed_at": null,
@@ -47622,9 +47763,10 @@
       "dependencies_declared": [],
       "limitations": "材料未说明该技能适用地区与行业细化限制",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-01T08:35:17.252196+08:00",
@@ -47878,8 +48020,10 @@
       "dependencies_declared": [],
       "limitations": "仅针对健身房场景，不提供通用招聘模板；SOP和成本计算需人工调整；依赖Node环境运行脚本但未明确说明兼容性。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-01T08:42:41.541282+08:00",
       "content_changed_at": null,
@@ -47962,9 +48106,10 @@
       "dependencies_declared": [],
       "limitations": "依赖衔接CRM工具未具体说明",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-01T08:47:08.357977+08:00",
@@ -48230,8 +48375,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-07",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -48476,9 +48626,10 @@
       "dependencies_declared": [],
       "limitations": "技能依赖外部技能模块实现完整方案；仅适用本地商家；行动效果显现需90天",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-01T08:53:57.103596+08:00",
@@ -49136,7 +49287,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/stakeholder-update/SKILL.md|sha256:a2b1a604b6bf00d614ec51c0737c99e1|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-02T06:50:14.787702+08:00"
+      "evaluated_at": "2026-10-02T06:50:14.787702+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-07",
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/statement-of-work-writer/SKILL.md",
@@ -49224,7 +49380,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/statement-of-work-writer/SKILL.md|sha256:fadd0444a3c85cf95fe35cf425b0da0f|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-02T06:51:56.053802+08:00"
+      "evaluated_at": "2026-10-02T06:51:56.053802+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-07",
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/status-page-update/SKILL.md",
@@ -49403,7 +49564,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/stock-photo-api/SKILL.md|sha256:6f7a5fa7ea7669e5908b656a586fe85c|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-02T06:52:54.806636+08:00"
+      "evaluated_at": "2026-10-02T06:52:54.806636+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-07",
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/stock-photo-finder/SKILL.md",
@@ -49579,7 +49745,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/story-structure-architect/SKILL.md|sha256:87a06bbbe8bff15cd00ed04734ce178d|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-02T06:54:09.867258+08:00"
+      "evaluated_at": "2026-10-02T06:54:09.867258+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-07",
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/strangler-fig-planner/SKILL.md",
@@ -49665,7 +49836,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/strangler-fig-planner/SKILL.md|sha256:f51836d1bc4eb4af16483c548930609b|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-02T06:54:40.663531+08:00"
+      "evaluated_at": "2026-10-02T06:54:40.663531+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-07",
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/strength-training-plan/SKILL.md",
@@ -49843,7 +50019,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/stripe-integration/SKILL.md|sha256:f9af4da3c38c18507a7192b074f3314a|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-02T06:57:20.895022+08:00"
+      "evaluated_at": "2026-10-02T06:57:20.895022+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-07",
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/student-feedback-writer/SKILL.md",
@@ -49929,7 +50110,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/student-feedback-writer/SKILL.md|sha256:148d6f4473fdbd93c1a590e04ca2cc44|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-02T06:59:10.165490+08:00"
+      "evaluated_at": "2026-10-02T06:59:10.165490+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-07",
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/supabase-expert/SKILL.md",
@@ -50058,8 +50244,10 @@
       "dependencies_declared": [],
       "limitations": "未提供具体宏文本示例；需用户自有工单分类数据与品牌语气指南配合；未声明适用平台或帮助台工具",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-02T07:01:39.154206+08:00",
       "content_changed_at": null,
@@ -50284,7 +50472,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/survey-designer/SKILL.md|sha256:c578ed930c8aea4ce8c0e67fb0cfcbfe|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-02T07:03:39.735344+08:00"
+      "evaluated_at": "2026-10-02T07:03:39.735344+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-07",
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/swift-ui/SKILL.md",
@@ -50462,7 +50655,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/tdd-expert/SKILL.md|sha256:f48baffa426d4125b2b3aecfdb40e68c|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-02T07:09:44.614130+08:00"
+      "evaluated_at": "2026-10-02T07:09:44.614130+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-07",
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/tax-optimization/SKILL.md",
@@ -50634,7 +50832,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/tech-debt-prioritizer/SKILL.md|sha256:0cc042921cd72fc3eb905b435dc964c0|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-02T07:13:56.474838+08:00"
+      "evaluated_at": "2026-10-02T07:13:56.474838+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-07",
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/technical-spec/SKILL.md",
@@ -50679,8 +50882,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-07",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -50754,9 +50962,10 @@
       "dependencies_declared": [],
       "limitations": "市场标准与常见区间（如期权池 15-20% 常见、10-15% 可辩护）为经验性断言，未引用数据来源或时间；材料自述为教育而非法律建议，正式文件需专业律师审阅；反制策略与股权建模需转交同仓库其他技能（term-sheet-negotiation、cap-table-manager），本技能不含这些功能。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "NEEDS_VERIFICATION"
+        "NEEDS_VERIFICATION",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-02T07:16:53.988943+08:00",
@@ -50895,7 +51104,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/terms-of-service/SKILL.md|sha256:3fd0a605c89c852bd3d4244737e2703d|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-02T07:18:23.722434+08:00"
+      "evaluated_at": "2026-10-02T07:18:23.722434+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-07",
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/terraform-expert/SKILL.md",
@@ -50986,7 +51200,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/terraform-expert/SKILL.md|sha256:7b4f18a50aa9699001f0161a863bab18|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-02T07:19:31.135303+08:00"
+      "evaluated_at": "2026-10-02T07:19:31.135303+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-07",
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/test-data-builder/SKILL.md",
@@ -51077,7 +51296,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/test-data-builder/SKILL.md|sha256:1483096b1d6756c121bbf3bf0e4de92d|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-02T07:20:32.594853+08:00"
+      "evaluated_at": "2026-10-02T07:20:32.594853+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-07",
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/test-placeholder-data/SKILL.md",
@@ -51168,7 +51392,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/test-placeholder-data/SKILL.md|sha256:97e86f30e1f3377446fecf0f7b67a32f|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-02T07:21:12.044399+08:00"
+      "evaluated_at": "2026-10-02T07:21:12.044399+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-07",
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/testimonial-capture-interview/SKILL.md",
@@ -51342,7 +51571,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/threat-model-stride/SKILL.md|sha256:e915451fbc175b370042769d44de9a65|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-02T07:24:37.610910+08:00"
+      "evaluated_at": "2026-10-02T07:24:37.610910+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-07",
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/thumbnail-concept/SKILL.md",
@@ -51375,8 +51609,10 @@
       "dependencies_declared": [],
       "limitations": "纯文本指导型技能，不生成实际图片文件；CTR 相关经验规则（如三类高表现情绪、120px 可读性）为设计启发，未附数据来源；引用的配套技能（video-hook-writer、youtube-script-writer、social-video-formatter）不在本材料内。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-02T07:25:37.584543+08:00",
       "content_changed_at": null,
@@ -51561,8 +51797,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-07",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -51691,7 +51932,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/typescript-strict/SKILL.md|sha256:1c53164110c9169f2f3bb226507b82bd|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-02T07:31:21.412278+08:00"
+      "evaluated_at": "2026-10-02T07:31:21.412278+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-07",
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/typography-system/SKILL.md",
@@ -51777,7 +52023,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/typography-system/SKILL.md|sha256:15aa95fe8351efc63d2379994ea5ff1d|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-02T07:31:44.139782+08:00"
+      "evaluated_at": "2026-10-02T07:31:44.139782+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-07",
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/usability-test-plan/SKILL.md",
@@ -51863,7 +52114,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/usability-test-plan/SKILL.md|sha256:48e7237403f6b2bf69cb3fa4f8506042|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-02T07:32:34.000120+08:00"
+      "evaluated_at": "2026-10-02T07:32:34.000120+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-07",
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/user-flow-mapper/SKILL.md",
@@ -51909,8 +52165,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-07",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -52036,7 +52297,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/user-persona/SKILL.md|sha256:f30b04e0a10d418c9d4c56674b2440e5|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-02T07:34:52.072655+08:00"
+      "evaluated_at": "2026-10-02T07:34:52.072655+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-07",
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/ux-writing-audit/SKILL.md",
@@ -52126,7 +52392,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/ux-writing-audit/SKILL.md|sha256:4a2ccbfb6db4aa1fac8f19bd7cad6960|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-02T07:35:58.703195+08:00"
+      "evaluated_at": "2026-10-02T07:35:58.703195+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-07",
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/vercel-firewall-and-botid/SKILL.md",
@@ -52220,7 +52491,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/vercel-firewall-and-botid/SKILL.md|sha256:f7722dca0263f78d6d3ec50188a0eca9|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-02T07:37:54.960826+08:00"
+      "evaluated_at": "2026-10-02T07:37:54.960826+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-07",
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/video-hook-writer/SKILL.md",
@@ -52256,8 +52532,10 @@
       "dependencies_declared": [],
       "limitations": "仅覆盖前3秒钩子，后续脚本结构需配合其他技能；要求创作者能一句话说清视频 payoff；钩子公式有效性等断言未附数据来源，实际效果依赖创作者A/B测试。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-02T07:38:29.164278+08:00",
       "content_changed_at": null,
@@ -52347,8 +52625,10 @@
       ],
       "limitations": "只输出规划（节拍表、镜头清单、JSON 场景计划），不生成动画代码；实际搭建与渲染依赖配套的 remotion-setup/remotion-compose/remotion-render 技能包；未声明操作系统或平台兼容性。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-02T07:39:45.932206+08:00",
       "content_changed_at": null,
@@ -52527,8 +52807,10 @@
       ],
       "limitations": "需要漏洞清单、暴露面图、部署版本与配置、修复容量等内部信息作为输入，缺少暴露面图时需粗略构建并标注为猜测；材料明确不适用于未上线设计的威胁枚举、生产环境正在被利用的事件响应及代码本身的安全审查（指向其他技能处理）。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-02T07:41:19.844312+08:00",
       "content_changed_at": null,
@@ -52665,7 +52947,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/visual-hierarchy/SKILL.md|sha256:578e6b2c89c565d8507386374c8e6ccc|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-02T07:41:23.918738+08:00"
+      "evaluated_at": "2026-10-02T07:41:23.918738+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-07",
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/weather-climate/SKILL.md",
@@ -52755,7 +53042,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/weather-climate/SKILL.md|sha256:6a0f92ccb2b2ecc03e3c0eb5e5a2dc24|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-02T07:43:23.708857+08:00"
+      "evaluated_at": "2026-10-02T07:43:23.708857+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-07",
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/web-performance/SKILL.md",
@@ -59323,8 +59615,10 @@
       "dependencies_declared": [],
       "limitations": "仅包含视觉风格规范，未提供内容结构、文案撰写或具体软件操作指南。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-02T11:34:06.671552+08:00",
       "content_changed_at": null,
@@ -75748,9 +76042,10 @@
       ],
       "limitations": "免费版仅标注违禁词，不提供改写、替换建议或批量处理；不判断整体违法性或事实真实性，结果需人工复核。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-02T10:09:51+00:00",
       "last_checked": "2026-10-02T18:31:27.759812+08:00",
@@ -84654,9 +84949,10 @@
       ],
       "limitations": "免费版仅包含3类核对，不包含加班费、福利费等完整档检查；需本地准备JSON格式材料；存在匿名统计上报行为。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-02T10:09:51+00:00",
       "last_checked": "2026-10-02T19:24:36.551130+08:00",
@@ -89355,8 +89651,10 @@
       "dependencies_declared": [],
       "limitations": "仅支持文本格式输入（需从Excel复制），不进行.xlsx文件读取；不包含个税校验、社保基数核对及异常值提示；运行时会向第三方服务端发送匿名统计信息。",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-02T10:09:51+00:00",
       "last_checked": "2026-10-02T19:51:49.453225+08:00",
       "content_changed_at": null,
@@ -103620,9 +103918,10 @@
       "dependencies_declared": [],
       "limitations": "需配合DESIGN.md使用，具体依赖环境未明示",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-03T09:20:24.212178+08:00",
@@ -106457,9 +106756,10 @@
       "dependencies_declared": [],
       "limitations": "仅适用于希望呈现温暖、独立风格的场景，不适合需要机构可信度的正式场合。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-03T20:40:18.355110+08:00",
@@ -115953,9 +116253,10 @@
       ],
       "limitations": "仅限单文件 HTML 输出，不支持响应式断点，必须严格遵循设计令牌与布局规范。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-03T21:19:11.169083+08:00",
@@ -116329,9 +116630,10 @@
       "dependencies_declared": [],
       "limitations": "需要外部 DESIGN.md 文件作为输入；输出为静态 HTML 原型，非可执行应用。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-03T21:21:24.155247+08:00",
@@ -117358,9 +117660,10 @@
       ],
       "limitations": "需手动处理资源文件路径以避免 404 错误；依赖上游 MIT 许可协议保留。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-03T21:27:13.974124+08:00",
@@ -117453,8 +117756,10 @@
       ],
       "limitations": "依赖外部 DESIGN.md 文件和 accessibility-baseline craft，未说明具体获取方式。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-03T21:27:15.998058+08:00",
       "content_changed_at": null,
@@ -118020,9 +118325,10 @@
       ],
       "limitations": "需要正确处理相对路径引用（模板中的../../../assets/路径在复制到项目后需要重写），否则演示文稿无法正常激活和导航",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-03T21:29:21.378884+08:00",
@@ -118116,9 +118422,10 @@
       ],
       "limitations": "需手动修复资源路径或内联代码，依赖上游 MIT 许可组件。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-03T21:29:41.219403+08:00",
@@ -119068,9 +119375,10 @@
       ],
       "limitations": "不适合需要每页传达密集信息的deck，布局围绕少量大声明设计",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-03T21:32:26.336338+08:00",
@@ -122140,9 +122448,10 @@
       "dependencies_declared": [],
       "limitations": "需要用户自行准备真实数据内容，演示文稿需基于 example.html 模板修改而非从头设计",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-03T21:38:55.515707+08:00",
@@ -122531,9 +122840,10 @@
       "dependencies_declared": [],
       "limitations": "需要 OpenDesign 设计系统（DESIGN.md），可选 financial data MCPs 用于实时数据",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-03T21:39:56.090499+08:00",
@@ -124994,8 +125304,10 @@
       "dependencies_declared": [],
       "limitations": "作为模板技能，需要配合设计工具或浏览器查看效果",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-03T21:45:32.653170+08:00",
       "content_changed_at": null,
@@ -126581,9 +126893,10 @@
       ],
       "limitations": "需要从example.html种子文件开始修改，不建议重新发明视觉语言",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-03T21:49:20.136708+08:00",
@@ -158134,9 +158447,10 @@
       "dependencies_declared": [],
       "limitations": "依赖使用者主动提供具体、可证伪的假设；反向证据质量取决于用户检索能力或外部数据可得性；未声明模型调用所需权限、网络访问或计算资源；下行建模与敏感度分析需用户自行填充参数与逻辑",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-03T23:14:14.782825+08:00",
@@ -167676,9 +167990,10 @@
       ],
       "limitations": "不适用于纯静态托管、无需接入 WordPress CMS 或允许重排版改类名的场景；产物需经真实校验、测试与人工评审",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-03T23:44:47.409549+08:00",
@@ -193623,9 +193938,10 @@
       ],
       "limitations": "需要用户自行准备Python运行环境；脚本具体实现未提供，实际可复现性依赖上游仓库完整度；评估框架基于特定风投理念，可能不适用于所有创业场景",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T00:49:22.118654+08:00",
@@ -194299,8 +194615,10 @@
       "dependencies_declared": [],
       "limitations": "需配合实际财务数据源使用，本身不提供数据连接；mock board需真人配合演练效果最佳；未覆盖纯财务模型搭建场景",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T00:52:29.490906+08:00",
       "content_changed_at": null,
@@ -195065,9 +195383,10 @@
       "dependencies_declared": [],
       "limitations": "依赖用户提供的公司财务数据，未声明 Python 版本及依赖库要求；脚本工具仅为引用路径，实际功能需验证；不适用于日常记账/报税等常规财务事务",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T00:54:29.469562+08:00",
@@ -195644,9 +195963,10 @@
       "dependencies_declared": [],
       "limitations": "不抓取权威薪酬数据库，无连接器时依赖公开数据+用户上下文；不做HRIS写操作、个税社保核算；不替代法律/税务专业意见；薪酬数据仅本次会话内分析",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T00:56:00.236188+08:00",
@@ -197545,9 +197865,10 @@
       "dependencies_declared": [],
       "limitations": "不适用于内容创作/改写、技术SEO诊断、结构化数据实现、站点级权威审计；视频/图片为主的内容需先确认是否进入审计；站点级项（外链画像等）缺数据时标N/A",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T01:01:27.964221+08:00",
@@ -198987,9 +199308,10 @@
       "dependencies_declared": [],
       "limitations": "需用户自备爬虫数据或sitemap；不处理内容创作决策、整站URL重设计、结构化数据标记；依赖人工执行链接增删。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T01:05:51.122611+08:00",
@@ -199081,9 +199403,10 @@
       "dependencies_declared": [],
       "limitations": "不适用于面试官打分偏差校准与历史数据分析（需用 interview-system-designer）、求职者备战（需用 interview-job-coach）、属地劳动法合规裁决",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T01:06:26.936016+08:00",
@@ -199264,8 +199587,10 @@
       "dependencies_declared": [],
       "limitations": "不适用于内部经营分析、产品文档或无融资目的的财务记账；需要用户自行提供真实业务数据",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T01:07:18.956727+08:00",
       "content_changed_at": null,
@@ -200302,9 +200627,10 @@
       "dependencies_declared": [],
       "limitations": "不抓取真实行业数据，数据需用户提供；不做竞品财务尽调或最终事实背书；价值理论法依赖用户提供的客户访谈与定价调研输入",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T01:10:46.449366+08:00",
@@ -200391,8 +200717,10 @@
       "dependencies_declared": [],
       "limitations": "不抓取真实行业数据，需用户提供或另行检索；不做竞品财务尽调、公司估值或M&A分析；不替代真实客户访谈与定价调研；外部数据需经fact-checking核验",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T01:11:32.336597+08:00",
       "content_changed_at": null,
@@ -201087,8 +201415,10 @@
       ],
       "limitations": "需人工提供或追问补齐薪酬数据；不处理候选人筛选、JD撰写、入职手续、薪酬带宽体系设计",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T01:13:46.540280+08:00",
       "content_changed_at": null,
@@ -202035,8 +202365,10 @@
       ],
       "limitations": "不处理 PIP 起草、薪酬数值核算、法律合规裁决；依赖外部数据时需手动补充占位符",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T01:16:48.811240+08:00",
       "content_changed_at": null,
@@ -203752,9 +204084,10 @@
       "dependencies_declared": [],
       "limitations": "依赖外部验证工具（Google Rich Results Test、Schema.org Validator）；本地脚本schema_validator.py未提供实际代码；数千页规模化批量打标需配合programmatic-seo技能",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T01:21:42.804769+08:00",
@@ -204990,9 +205323,10 @@
       ],
       "limitations": "不生成文章/落地页文案，不做技术SEO体检或Schema部署，无SEO工具时需用户提供SERP数据",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T01:25:19.170987+08:00",
@@ -206153,8 +206487,10 @@
       "dependencies_declared": [],
       "limitations": "不替代会计做账报税；不自动抓取行业基准数据；需人工核实具体数字；无明确商业模式前需先补齐输入",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T01:28:03.561049+08:00",
       "content_changed_at": null,
@@ -207661,9 +207997,10 @@
       ],
       "limitations": "不适用于剪辑已有视频素材、真人实拍或纯静态图文海报；依赖 playwright、edge-tts、ffmpeg 三个外部工具，缺失时需手动降级执行",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T01:37:27.123724+08:00",
@@ -211745,9 +212082,10 @@
       "dependencies_declared": [],
       "limitations": "增强模式依赖知识库和HRIS连接器，未接入时只能基于用户粘贴的手册内容作答；不替代正式法律/合规裁定，不用于撰写或修订政策本身。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T02:31:24.005504+08:00",
@@ -212857,8 +213195,10 @@
       "dependencies_declared": [],
       "limitations": "不提供正式法律意见；高风险或跨境事项须转交本地律师；缺少必要输入时可能产出不完整内容；产出不替代环境内验证或专家评审",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T02:43:20.523411+08:00",
       "content_changed_at": null,
@@ -213516,8 +213856,10 @@
       "dependencies_declared": [],
       "limitations": "不处理薪酬谈判、劳动合同/合规裁决与法律意见；不替代 HRIS/IT 工单系统；连接器增强功能依赖外部系统接入，未接入时仅生成占位符模板",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T02:50:27.329767+08:00",
       "content_changed_at": null,
@@ -229682,9 +230024,10 @@
       ],
       "limitations": "源模板默认美国at-will与EEO框架，面向中国大陆等法域时必须按当地法律改写解除、试用期、经济补偿等条款；产出仅为草案模板，不构成法律意见，须经合格律师/法务定稿。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T11:20:01.408777+08:00",
@@ -231097,9 +231440,10 @@
       ],
       "limitations": "需已配置S&P Global Capital IQ MCP；仅生成单页PPTX，不适用于深度个股研报或多页报告；依赖Capital IQ数据源，缺数据时需回退处理。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T11:23:17.287405+08:00",
@@ -233290,8 +233634,10 @@
       ],
       "limitations": "不替律师作处分决定；不保证特权成立；需律师主导调查；缺关键来源时仅警告不强行定稿；使用者非律师时需额外注解",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T11:27:35.373844+08:00",
       "content_changed_at": null,
@@ -236190,8 +236536,10 @@
       ],
       "limitations": "需要外部法律检索工具支持；不能替代正式法律意见；非律师不得批准发布；无法核实当前标准时需标记交律师核验",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T11:32:41.611882+08:00",
       "content_changed_at": null,
@@ -273112,9 +273460,10 @@
       ],
       "limitations": "依赖外部 DESIGN.md 文件及设计系统规范，独立运行受限",
       "license": null,
-      "status": "recommended",
+      "status": "excluded",
       "reason_codes": [
-        "MISSING_DEPENDENCY"
+        "MISSING_DEPENDENCY",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-04T17:15:18.129900+08:00",
@@ -274100,10 +274449,11 @@
       ],
       "limitations": "核心创作规则（content/audience checklist, token rules）存储于上游 master skill 文档，本文件未包含",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
         "INCOMPLETE_INSTRUCTIONS",
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-04T17:30:43.536537+08:00",
@@ -274915,9 +275265,10 @@
       ],
       "limitations": "不适用于高密度信息展示，必须保留原有设计系统（字体、配色、布局）",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-04T17:37:05.652339+08:00",
@@ -277516,8 +277867,10 @@
       "dependencies_declared": [],
       "limitations": "依赖用户提供的财务数据准确性，未声明基础渲染环境要求",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-04T17:46:06.126628+08:00",
       "content_changed_at": null,
@@ -285571,8 +285924,10 @@
       ],
       "limitations": "设计系统锁定，禁止修改核心舞台系统、导航脚本或设计tokens；仅支持固定1920×1080画布",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-04T18:12:38.767274+08:00",
       "content_changed_at": null,
@@ -287371,8 +287726,10 @@
       ],
       "limitations": "依赖上游仓库的资产文件，在新项目中使用时需手动处理相对路径 404 问题（通过复制重写或内联）。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-04T18:19:28.903823+08:00",
       "content_changed_at": null,
@@ -288624,8 +288981,10 @@
       ],
       "limitations": "布局围绕少量大字号声明设计，不适合需要每页展示密集信息的幻灯片。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-04T18:23:10.810617+08:00",
       "content_changed_at": null,
@@ -292148,9 +292507,10 @@
       ],
       "limitations": "依赖 OpenDesign 框架运行，导出能力受限于 daemon 支持；无实时金融数据源时需手动提供或标记假设。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-04T18:35:06.088021+08:00",
@@ -303558,8 +303918,10 @@
       "dependencies_declared": [],
       "limitations": "未声明运行环境或特殊依赖；仅输出HTML格式",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-04T19:13:14.937470+08:00",
       "content_changed_at": null,
@@ -319849,9 +320211,10 @@
       ],
       "limitations": "依赖未详细说明的 DESIGN.md 和设计系统规范。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-04T20:02:26.693785+08:00",
@@ -320036,8 +320399,10 @@
       ],
       "limitations": "依赖上游 html-ppt 技能的规则，且需要手动处理静态资源路径以避免 404 错误。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-04T20:02:51.586906+08:00",
       "content_changed_at": null,
@@ -320401,9 +320766,10 @@
       ],
       "limitations": "依赖主技能 html-ppt 的规则，需手动处理共享运行时的路径或内联",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-04T20:04:25.213873+08:00",
@@ -321763,8 +322129,10 @@
       ],
       "limitations": "不适合需要在单页幻灯片中传达高密度信息的场景（Avoid for: Decks that need to communicate dense information per slide）。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-04T20:07:49.380435+08:00",
       "content_changed_at": null,
@@ -324526,8 +324894,10 @@
       ],
       "limitations": "依赖 OpenDesign 运行环境及设计系统；示例数据为虚构，需用户替换真实数据；未提供 OpenDesign 的具体安装或配置指南。",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-04T20:22:54.488117+08:00",
       "content_changed_at": null,
@@ -332654,8 +333024,10 @@
       ],
       "limitations": "设计系统锁定，不允许引入规格外的颜色或字体；固定 1920×1080 画布，无响应式断点；需从 example.html 出发复制内容，不可重写舞台系统或导航脚本",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-04T21:16:22.845266+08:00",
       "content_changed_at": null,
@@ -333641,8 +334013,10 @@
       ],
       "limitations": "依赖 DESIGN.md 设计规范文件；未说明具体运行环境或工具要求",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-04T21:24:55.160147+08:00",
       "content_changed_at": null,
@@ -334277,8 +334651,10 @@
       ],
       "limitations": "核心制作规则需参考上游 html-ppt 主技能的 SKILL.md；需手动处理模板复制后的资源路径依赖问题。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-04T21:27:43.464824+08:00",
       "content_changed_at": null,
@@ -335615,8 +335991,10 @@
       "dependencies_declared": [],
       "limitations": "布局围绕少量大号声明构建，不适合每页信息密集的 Deck；需保持设计系统一致性，不得混用其他模板布局",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-04T21:33:26.287963+08:00",
       "content_changed_at": null,
@@ -342521,8 +342899,10 @@
       ],
       "limitations": "设计风格固定，不允许修改核心动画和视觉语言",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-05T06:19:11.774171+08:00",
       "content_changed_at": null,
@@ -349595,8 +349975,10 @@
       "dependencies_declared": [],
       "limitations": "未说明具体技术依赖和运行环境",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-05T06:32:42.542922+08:00",
       "content_changed_at": null,
@@ -357869,9 +358251,10 @@
       "dependencies_declared": [],
       "limitations": "仅生成图像，不包含代码实现功能",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-05T06:44:39.010600+08:00",
@@ -358480,9 +358863,10 @@
       "dependencies_declared": [],
       "limitations": "缺少实质内容，完全依赖外部资源",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-05T06:45:32.649736+08:00",
@@ -366014,9 +366398,10 @@
       ],
       "limitations": "依赖外部 DESIGN.md 文件，脱离该环境可能无法完整执行第一步",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "MISSING_DEPENDENCY"
+        "MISSING_DEPENDENCY",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-05T08:43:16.766294+08:00",
@@ -366559,9 +366944,10 @@
       ],
       "limitations": "依赖上游仓库资源，需手动配置路径；核心创作规则位于外部主技能文件。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-05T08:51:34.175316+08:00",
@@ -367789,9 +368175,10 @@
       "dependencies_declared": [],
       "limitations": "不适合需要每页传达密集信息的幻灯片，布局围绕少量大语句而非详细段落构建。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-05T09:03:03.905943+08:00",
@@ -370598,9 +370985,10 @@
       "dependencies_declared": [],
       "limitations": "材料未声明运行环境或特殊工具依赖；输出为讨论材料，不构成投资建议；依赖用户提供或获取准确的财务数据。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-05T09:13:38.636474+08:00",
@@ -378504,9 +378892,10 @@
       ],
       "limitations": "设计系统被锁定，不允许引入规范外的颜色、字体或样式；输出为单文件HTML，无构建步骤；未声明浏览器兼容性。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-05T09:28:52.985173+08:00",
@@ -379672,9 +380061,10 @@
       "dependencies_declared": [],
       "limitations": "材料未提供具体的验收或验证方法，也未声明特殊依赖。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-05T09:31:28.292383+08:00",
@@ -380286,9 +380676,10 @@
       "dependencies_declared": [],
       "limitations": "需要复制和处理多个文件，路径重写可能复杂；未声明特殊依赖或运行环境。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-05T09:32:32.851751+08:00",
@@ -384600,8 +384991,10 @@
       ],
       "limitations": "依赖 OpenDesign 平台环境；需手动处理数据来源真实性；仅生成讨论材料而非投资建议；需遵守保密协议。",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-05T09:53:24.621637+08:00",
       "content_changed_at": null,
@@ -393085,8 +393478,10 @@
       "dependencies_declared": [],
       "limitations": "仅输出HTML格式，未提供其他格式（如PPTX/PDF）转换支持；依赖用户补充公司核心信息。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-05T12:51:15.517050+08:00",
       "content_changed_at": null,
@@ -408953,8 +409348,10 @@
       ],
       "limitations": "需要依赖 active DESIGN.md 和特定的 design_system 才能完整运行。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-05T13:44:59.126492+08:00",
       "content_changed_at": null,
@@ -409489,8 +409886,10 @@
       ],
       "limitations": "依赖上游 html-ppt 主技能的规则与资产文件，需手动处理资源相对路径或内联代码以确保独立运行。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-05T13:45:58.792092+08:00",
       "content_changed_at": null,
@@ -410744,8 +411143,10 @@
       ],
       "limitations": "不适合需要每页传达密集信息的演示文稿，布局围绕少量大标题设计而非详细段落。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-05T13:48:24.710128+08:00",
       "content_changed_at": null,
@@ -413411,8 +413812,10 @@
       ],
       "limitations": "引用的模板和参考文件（如template.html, compliance.md）未在材料中直接提供，需依赖完整仓库文件才能实际运行。",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-05T13:53:32.217395+08:00",
       "content_changed_at": null,
@@ -421111,9 +421514,10 @@
       ],
       "limitations": "仅限特定视觉风格（Creative Voltage），需基于上游 example.html 修改；内容为静态 HTML，无动态数据交互能力。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-06T00:11:25.860112+08:00",
@@ -422484,9 +422888,10 @@
       "dependencies_declared": [],
       "limitations": "依赖上游存在有效的 DESIGN.md 文件以读取设计系统规范；输出为 HTML 格式，可能需要浏览器查看。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-06T00:19:02.065107+08:00",
@@ -423115,9 +423520,10 @@
       ],
       "limitations": "依赖上游html-ppt主技能及特定目录结构；需手动处理CSS/JS资源路径以避免404错误。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-06T00:22:18.404178+08:00",
@@ -432445,6 +432851,66 @@
         "from": "recommended",
         "reason": "用户收藏",
         "skill_id": "skillmedev/skills:skills/second-brain/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-07",
+        "from": "recommended",
+        "reason": "用户收藏",
+        "skill_id": "gauss314/skills:skills/backtesting/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-07",
+        "from": "recommended",
+        "reason": "用户收藏",
+        "skill_id": "gauss314/skills:skills/finnhub/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-07",
+        "from": "recommended",
+        "reason": "用户收藏",
+        "skill_id": "gauss314/skills:skills/marketscreener/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-07",
+        "from": "recommended",
+        "reason": "用户收藏",
+        "skill_id": "skillmedev/skills:skills/side-project-launch/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-07",
+        "from": "recommended",
+        "reason": "用户收藏",
+        "skill_id": "skillmedev/skills:skills/skill-auditor/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-07",
+        "from": "recommended",
+        "reason": "用户收藏",
+        "skill_id": "skillmedev/skills:skills/skill-author/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-07",
+        "from": "recommended",
+        "reason": "用户收藏",
+        "skill_id": "skillmedev/skills:skills/journal-framework/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-07",
+        "from": "recommended",
+        "reason": "用户收藏",
+        "skill_id": "skillmedev/skills:skills/technical-spec/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-07",
+        "from": "recommended",
+        "reason": "用户收藏",
+        "skill_id": "skillmedev/skills:skills/tweet-thread-builder/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-07",
+        "from": "recommended",
+        "reason": "用户收藏",
+        "skill_id": "skillmedev/skills:skills/user-flow-mapper/SKILL.md"
       }
     ]
   },
@@ -433327,6 +433793,626 @@
         "added_at": "2026-10-02",
         "reason": "用户屏蔽/删除",
         "skill_id": "skillmedev/skills:skills/variant-copy-scaler/SKILL.md"
+      },
+      {
+        "skill_id": "chenqg618/compliance-skills:skills/ad-copy-rewrite-free/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-c1ed2c；命中：广告文案违规体检、电商文案",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:05-business/market-sizing-tam-sam-som/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-c1ed2c；命中：创业融资",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "hiktan44/open-design-app:skills/imagegen-frontend-mobile/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-c1ed2c；命中：移动应用",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "nexu-io/open-design:plugins/_official/examples/gamified-app/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-c1ed2c；命中：移动应用",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "nexu-io/open-design:plugins/_official/examples/html-ppt-product-launch/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-c1ed2c；命中：b2b-sales",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/budget-pacing/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-c1ed2c；命中：获客成本优化",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/category-page-copywriter/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-c1ed2c；命中：内容营销、电商文案",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/channel-strategy/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-c1ed2c；命中：营销策略",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/closer-sales-script/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-c1ed2c；命中：销售脚本",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/fundraise-readiness-audit/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-c1ed2c；命中：创业指导",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/kpi-scoreboard-and-cadence/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-c1ed2c；命中：健身房管理",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/local-seo-playbook/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-c1ed2c；命中：seo优化",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/mobile-perf-profiler/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-c1ed2c；命中：移动开发",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/paid-acquisition-audit/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-c1ed2c；命中：付费获客、广告审计",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/prospecting-metrics/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-c1ed2c；命中：销售漏斗",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/safe-vs-priced-round/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-c1ed2c；命中：创业公司",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/sales-followup-cadence/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-c1ed2c；命中：b2b销售、销售跟进",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/segmentation-strategy/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-c1ed2c；命中：生命周期营销",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "anjon771/open-degine:design-templates/html-ppt-pitch-deck/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：fundraising-pitch",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "anjon771/open-degine:design-templates/html-ppt-zhangzara-bold-poster/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：融资路演",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "anjon771/open-degine:design-templates/ib-pitch-book/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：融资路演",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "anjon771/open-degine:plugins/_official/examples/fs-creative-voltage/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：融资路演",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "anjon771/open-degine:plugins/_official/examples/html-ppt-pitch-deck/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：融资路演",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "anjon771/open-degine:plugins/_official/examples/ib-pitch-book/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：fundraising-pitch",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "anjon771/open-degine:plugins/spec/examples/create-slides-pitch/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：融资路演",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:00-meta/business-assumption-stress-test/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：创业",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:02-engineering/codebase-to-wordpress-theme/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：seo",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:05-business/andreessen-vc-lens/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：startup",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:05-business/board-meeting-prep/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：融资路演",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:05-business/eeat-content-quality-auditor/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：seo",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:05-business/internal-linking-optimizer/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：seo",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:05-business/investor-materials-builder/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：创业",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:05-business/market-sizing-analyst/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：startup",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:05-business/schema-markup-builder/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：seo",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:05-business/serp-feature-analysis/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：seo",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:05-business/startup-financial-modeler/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：startup",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:06-creative/demo-video-generator/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：营销",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:09-verticals/marketing-claims-reviewer/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：marketing",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "hiktan44/open-design-app:design-templates/html-ppt-pitch-deck/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：fundraising-pitch",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "hiktan44/open-design-app:design-templates/html-ppt-zhangzara-bold-poster/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：融资路演",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "hiktan44/open-design-app:design-templates/ib-pitch-book/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：融资路演",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "hiktan44/open-design-app:plugins/_official/examples/fs-creative-voltage/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：融资路演",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "hiktan44/open-design-app:plugins/_official/examples/html-ppt-pitch-deck/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：融资路演",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "hiktan44/open-design-app:plugins/_official/examples/html-ppt-zhangzara-bold-poster/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：fundraising-pitch",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "hiktan44/open-design-app:skills/marketing-psychology/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：营销",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "jalbarrang/open-design:design-templates/html-ppt-pitch-deck/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：fundraising-pitch",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "jalbarrang/open-design:design-templates/html-ppt-zhangzara-bold-poster/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：fundraising-pitch",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "jalbarrang/open-design:design-templates/ib-pitch-book/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：fundraising-pitch",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "jalbarrang/open-design:plugins/_official/examples/fs-creative-voltage/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：fundraising-pitch",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "jalbarrang/open-design:plugins/_official/examples/html-ppt-zhangzara-bold-poster/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：融资路演",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "jalbarrang/open-design:plugins/_official/examples/ib-pitch-book/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：fundraising-pitch",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "moussakhalale-lang/open-design:design-templates/html-ppt-pitch-deck/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：融资路演",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "moussakhalale-lang/open-design:design-templates/html-ppt-zhangzara-bold-poster/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：融资路演",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "moussakhalale-lang/open-design:design-templates/ib-pitch-book/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：融资路演",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "moussakhalale-lang/open-design:plugins/_official/examples/fs-creative-voltage/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：fundraising-pitch",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "moussakhalale-lang/open-design:plugins/_official/examples/html-ppt-pitch-deck/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：fundraising-pitch",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "nexu-io/open-design:plugins/_official/examples/fs-creative-voltage/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：融资路演",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "nexu-io/open-design:plugins/_official/examples/html-ppt-pitch-deck/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：融资路演",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "nexu-io/open-design:plugins/_official/examples/html-ppt-zhangzara-bold-poster/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：fundraising-pitch",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "nexu-io/open-design:plugins/_official/examples/huashu-pentagram-grid/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：marketing",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "nexu-io/open-design:plugins/_official/examples/ib-pitch-book/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：fundraising-pitch",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "nexu-io/open-design:plugins/_official/examples/poster-hero/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：营销",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/case-study-builder/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：营销",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/content-brief/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：seo",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/fundraising-narrative/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：创业",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/internal-linking-mapper/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：seo",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/keyword-cluster-builder/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：seo",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/pitch-deck-builder/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：创业",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/search-intent-classifier/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：seo",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/seo-optimizer/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：seo",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/series-a-readiness/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：创业",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/serp-gap-analyzer/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：seo",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/show-notes-writer/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-0199f2；命中：seo",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "anjon771/open-degine:design-templates/hr-onboarding/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：hr",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "anjon771/open-degine:plugins/_official/examples/hr-onboarding/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：hr",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "chenqg618/compliance-skills:skills/hr-monthly-selfcheck-free/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：人力资源",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "chenqg618/compliance-skills:skills/payroll-check-free/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：hr",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:05-business/cfo-financial-advisor/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：融资规划",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:05-business/compensation-analysis/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：hr",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:05-business/interview-plan-builder/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：招聘",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:05-business/offer-letter-drafter/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：人力资源、录用通知、招聘",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:05-business/performance-review-builder/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：人力资源",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:07-productivity/company-policy-lookup/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：人力资源、员工手册",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:07-productivity/hr-partner-pro/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：人力资源、招聘",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:07-productivity/new-hire-onboarding-plan/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：人力资源",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:09-verticals/employment-contract-drafter/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：hr",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:09-verticals/funding-round-digest/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：融资轮次",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:09-verticals/investigation-memo-drafter/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：hr",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "hiktan44/open-design-app:design-templates/hr-onboarding/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：hr",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "hiktan44/open-design-app:design-templates/html-ppt-course-module/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：入职培训",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "hiktan44/open-design-app:plugins/_official/examples/hr-onboarding/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：hr",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "hiktan44/open-design-app:plugins/_official/examples/velar-luxury-real-estate/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：房地产",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "hiktan44/open-design-app:plugins/spec/examples/create-slides-pitch/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：融资",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "jalbarrang/open-design:design-templates/hr-onboarding/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：hr",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "jalbarrang/open-design:plugins/_official/examples/html-ppt-pitch-deck/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：融资",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "jalbarrang/open-design:plugins/spec/examples/create-slides-pitch/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：融资ppt",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "moussakhalale-lang/open-design:design-templates/hr-onboarding/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：hr",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "moussakhalale-lang/open-design:plugins/_official/examples/hr-onboarding/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：hr",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "nexu-io/open-design:design-templates/hr-onboarding/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：hr",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "nexu-io/open-design:design-templates/html-ppt-zhangzara-playful/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：员工入职",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "nexu-io/open-design:plugins/_official/examples/hr-onboarding/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：hr",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "nexu-io/open-design:plugins/_official/examples/html-ppt-course-module/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：入职培训",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "nexu-io/open-design:plugins/_official/examples/velar-luxury-real-estate/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：房地产",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/pitch-deck-vc/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：融资",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/candidate-outreach-personalizer/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：招聘",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/cap-table-manager/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：融资模型",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/fundraise-closing-mechanics/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：融资",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/fundraise-team-hiring/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：风投融资",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/hiring-a-players-and-sops/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：hr、招聘流程",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/hiring-scorecard/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：招聘",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/interview-question-kit/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：招聘",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/investor-targeting/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：融资策划",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/job-description-writer/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：人力资源文档",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/offer-rejection-writer/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：录用信、拒绝信、招聘",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/performance-review-writer/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：人力资源",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/screening-rubric-builder/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：招聘",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/seller-lead-nurture/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：房地产营销、房源获取",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/term-sheet-explainer/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：融资条款解释",
+        "added_at": "2026-10-07"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/culture-index/skills/interpreting-culture-index/SKILL.md",
+        "reason": "存量标签过滤；批次 topic-filter-20261007-e3edab；命中：hiring",
+        "added_at": "2026-10-07"
+      },
+      {
+        "added_at": "2026-10-07",
+        "reason": "用户屏蔽/删除",
+        "skill_id": "skillmedev/skills:skills/support-macro-library/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-07",
+        "reason": "用户屏蔽/删除",
+        "skill_id": "skillmedev/skills:skills/thumbnail-concept/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-07",
+        "reason": "用户屏蔽/删除",
+        "skill_id": "skillmedev/skills:skills/video-hook-writer/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-07",
+        "reason": "用户屏蔽/删除",
+        "skill_id": "skillmedev/skills:skills/video-storyboard/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-07",
+        "reason": "用户屏蔽/删除",
+        "skill_id": "skillmedev/skills:skills/vulnerability-triage/SKILL.md"
       }
     ]
   },
@@ -433779,13 +434865,6 @@
       },
       {
         "skill_id": "trailofbits/skills:plugins/code-improver/tests/fixtures/pr-review-toolkit/skills/review-pr/SKILL.md",
-        "snoozed_at": "2026-09-26",
-        "expires_at": "2027-02-23",
-        "days": 150,
-        "reason": "用户暂不关注"
-      },
-      {
-        "skill_id": "trailofbits/skills:plugins/culture-index/skills/interpreting-culture-index/SKILL.md",
         "snoozed_at": "2026-09-26",
         "expires_at": "2027-02-23",
         "days": 150,
@@ -434264,28 +435343,7 @@
         "days": 150,
         "expires_at": "2027-03-01",
         "reason": "用户暂不关注",
-        "skill_id": "skillmedev/skills:skills/candidate-outreach-personalizer/SKILL.md",
-        "snoozed_at": "2026-10-02"
-      },
-      {
-        "days": 150,
-        "expires_at": "2027-03-01",
-        "reason": "用户暂不关注",
-        "skill_id": "skillmedev/skills:skills/cap-table-manager/SKILL.md",
-        "snoozed_at": "2026-10-02"
-      },
-      {
-        "days": 150,
-        "expires_at": "2027-03-01",
-        "reason": "用户暂不关注",
         "skill_id": "skillmedev/skills:skills/carousel-scripter/SKILL.md",
-        "snoozed_at": "2026-10-02"
-      },
-      {
-        "days": 150,
-        "expires_at": "2027-03-01",
-        "reason": "用户暂不关注",
-        "skill_id": "skillmedev/skills:skills/case-study-builder/SKILL.md",
         "snoozed_at": "2026-10-02"
       },
       {
@@ -434370,13 +435428,6 @@
         "expires_at": "2027-03-01",
         "reason": "用户暂不关注",
         "skill_id": "skillmedev/skills:skills/job-application/SKILL.md",
-        "snoozed_at": "2026-10-02"
-      },
-      {
-        "days": 150,
-        "expires_at": "2027-03-01",
-        "reason": "用户暂不关注",
-        "skill_id": "skillmedev/skills:skills/kpi-scoreboard-and-cadence/SKILL.md",
         "snoozed_at": "2026-10-02"
       },
       {
@@ -434565,13 +435616,6 @@
         "days": 150,
         "expires_at": "2027-03-01",
         "reason": "用户暂不关注",
-        "skill_id": "skillmedev/skills:skills/fundraising-narrative/SKILL.md",
-        "snoozed_at": "2026-10-02"
-      },
-      {
-        "days": 150,
-        "expires_at": "2027-03-01",
-        "reason": "用户暂不关注",
         "skill_id": "skillmedev/skills:skills/graphql-schema/SKILL.md",
         "snoozed_at": "2026-10-02"
       },
@@ -434580,13 +435624,6 @@
         "expires_at": "2027-03-01",
         "reason": "用户暂不关注",
         "skill_id": "skillmedev/skills:skills/gtd-system/SKILL.md",
-        "snoozed_at": "2026-10-02"
-      },
-      {
-        "days": 150,
-        "expires_at": "2027-03-01",
-        "reason": "用户暂不关注",
-        "skill_id": "skillmedev/skills:skills/hiring-scorecard/SKILL.md",
         "snoozed_at": "2026-10-02"
       },
       {
@@ -434607,13 +435644,6 @@
         "days": 150,
         "expires_at": "2027-03-01",
         "reason": "用户暂不关注",
-        "skill_id": "skillmedev/skills:skills/job-description-writer/SKILL.md",
-        "snoozed_at": "2026-10-02"
-      },
-      {
-        "days": 150,
-        "expires_at": "2027-03-01",
-        "reason": "用户暂不关注",
         "skill_id": "skillmedev/skills:skills/job-interview-prep/SKILL.md",
         "snoozed_at": "2026-10-02"
       },
@@ -434622,13 +435652,6 @@
         "expires_at": "2027-03-01",
         "reason": "用户暂不关注",
         "skill_id": "skillmedev/skills:skills/kb-article-writer/SKILL.md",
-        "snoozed_at": "2026-10-02"
-      },
-      {
-        "days": 150,
-        "expires_at": "2027-03-01",
-        "reason": "用户暂不关注",
-        "skill_id": "skillmedev/skills:skills/keyword-cluster-builder/SKILL.md",
         "snoozed_at": "2026-10-02"
       },
       {
@@ -434854,6 +435877,321 @@
         "reason": "用户暂不关注",
         "skill_id": "skillmedev/skills:skills/saas-pricing/SKILL.md",
         "snoozed_at": "2026-10-02"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注",
+        "skill_id": "expo/skills:plugins/expo/skills/expo-skill-feedback/SKILL.md",
+        "snoozed_at": "2026-10-07"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注",
+        "skill_id": "getsentry/skills:skills/secret-serialization/SKILL.md",
+        "snoozed_at": "2026-10-07"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/client-comms-cadence/SKILL.md",
+        "snoozed_at": "2026-10-07"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/eda-playbook/SKILL.md",
+        "snoozed_at": "2026-10-07"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/framework-upgrader/SKILL.md",
+        "snoozed_at": "2026-10-07"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/pandas-expert/SKILL.md",
+        "snoozed_at": "2026-10-07"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/pii-scrubber/SKILL.md",
+        "snoozed_at": "2026-10-07"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/prospect-list-builder/SKILL.md",
+        "snoozed_at": "2026-10-07"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/prototype-spec/SKILL.md",
+        "snoozed_at": "2026-10-07"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/research-readout/SKILL.md",
+        "snoozed_at": "2026-10-07"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/responsive-spec/SKILL.md",
+        "snoozed_at": "2026-10-07"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/resume-writer/SKILL.md",
+        "snoozed_at": "2026-10-07"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/scope-creep-defense/SKILL.md",
+        "snoozed_at": "2026-10-07"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/slide-deck-builder/SKILL.md",
+        "snoozed_at": "2026-10-07"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/social-caption-writer/SKILL.md",
+        "snoozed_at": "2026-10-07"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/social-hook-generator/SKILL.md",
+        "snoozed_at": "2026-10-07"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/social-video-formatter/SKILL.md",
+        "snoozed_at": "2026-10-07"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/speech-writer/SKILL.md",
+        "snoozed_at": "2026-10-07"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/spreadsheet-model-builder/SKILL.md",
+        "snoozed_at": "2026-10-07"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/sprint-planning/SKILL.md",
+        "snoozed_at": "2026-10-07"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/sev-triage/SKILL.md",
+        "snoozed_at": "2026-10-07"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/sound-and-music-sync/SKILL.md",
+        "snoozed_at": "2026-10-07"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/stakeholder-update/SKILL.md",
+        "snoozed_at": "2026-10-07"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/statement-of-work-writer/SKILL.md",
+        "snoozed_at": "2026-10-07"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/stock-photo-api/SKILL.md",
+        "snoozed_at": "2026-10-07"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/story-structure-architect/SKILL.md",
+        "snoozed_at": "2026-10-07"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/strangler-fig-planner/SKILL.md",
+        "snoozed_at": "2026-10-07"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/stripe-integration/SKILL.md",
+        "snoozed_at": "2026-10-07"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/student-feedback-writer/SKILL.md",
+        "snoozed_at": "2026-10-07"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/survey-designer/SKILL.md",
+        "snoozed_at": "2026-10-07"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/tdd-expert/SKILL.md",
+        "snoozed_at": "2026-10-07"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/tech-debt-prioritizer/SKILL.md",
+        "snoozed_at": "2026-10-07"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/terms-of-service/SKILL.md",
+        "snoozed_at": "2026-10-07"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/terraform-expert/SKILL.md",
+        "snoozed_at": "2026-10-07"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/test-data-builder/SKILL.md",
+        "snoozed_at": "2026-10-07"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/test-placeholder-data/SKILL.md",
+        "snoozed_at": "2026-10-07"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/threat-model-stride/SKILL.md",
+        "snoozed_at": "2026-10-07"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/typescript-strict/SKILL.md",
+        "snoozed_at": "2026-10-07"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/typography-system/SKILL.md",
+        "snoozed_at": "2026-10-07"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/usability-test-plan/SKILL.md",
+        "snoozed_at": "2026-10-07"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/user-persona/SKILL.md",
+        "snoozed_at": "2026-10-07"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/ux-writing-audit/SKILL.md",
+        "snoozed_at": "2026-10-07"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/vercel-firewall-and-botid/SKILL.md",
+        "snoozed_at": "2026-10-07"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/visual-hierarchy/SKILL.md",
+        "snoozed_at": "2026-10-07"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-06",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/weather-climate/SKILL.md",
+        "snoozed_at": "2026-10-07"
       }
     ]
   },
