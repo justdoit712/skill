@@ -10,7 +10,7 @@
     "key_ref": "bailian"
   },
   "request": {
-    "timeout_seconds": 600,
+    "timeout_seconds": 120,
     "max_attempts": 2,
     "temperature": 0,
     "response_format": "json_object"
