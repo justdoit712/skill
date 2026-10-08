@@ -8,6 +8,7 @@ from __future__ import annotations
 import json
 import os
 import re
+import threading
 import time
 from dataclasses import dataclass, field
 from typing import Any
@@ -36,7 +37,7 @@ def validate_model_config(config: dict) -> list[str]:
         return ["模型 endpoint 必须是有效的 HTTP(S) 地址"]
     return []
 
-DEFAULT_TIMEOUT_SECONDS = 600.0
+DEFAULT_TIMEOUT_SECONDS = 120.0
 DEFAULT_MAX_ATTEMPTS = 2
 RETRYABLE_STATUS = frozenset({408, 429, 500, 502, 503, 504})
 REASON_MODEL_ERROR = "MODEL_ERROR"
@@ -317,6 +318,7 @@ def call_model(
     response_format: Any = None,
     session: requests.Session | None = None,
     sleep=time.sleep,
+    log: Any = None,
 ) -> ModelCallResult:
     """通用 OpenAI 兼容传输通道：
 
@@ -382,6 +384,18 @@ def call_model(
             result.error_type = None
             result.http_status = None
             result.error = None
+            stop_ticker = threading.Event()
+            target_model = model_cfg.get("model") or "未知模型"
+            def ticker():
+                waited = 0
+                interval = 15
+                while not stop_ticker.wait(interval):
+                    waited += interval
+                    if log is not None:
+                        log(f"[等待响应] {target_model}：已等待 {waited} 秒...")
+
+            ticker_thread = threading.Thread(target=ticker, daemon=True)
+            ticker_thread.start()
             try:
                 response = sess.post(
                     model_cfg.get("endpoint"),
@@ -398,6 +412,9 @@ def call_model(
                 result.latency_ms = int((time.monotonic() - started) * 1000)
                 result.reason_code = REASON_NETWORK_ERROR
                 return result
+            finally:
+                stop_ticker.set()
+                ticker_thread.join()
 
             try:
                 status = response.status_code
@@ -439,7 +456,14 @@ def call_model(
                                     result.retry_after = None
                     if status in RETRYABLE_STATUS and attempt < max_attempts:
                         response.close()
-                        sleep(min(2.0 ** (attempt - 1), 8.0))
+                        if status == 429 and result.retry_after is not None:
+                            if result.retry_after > 10:
+                                result.latency_ms = int((time.monotonic() - started) * 1000)
+                                result.reason_code = "RATE_LIMIT"
+                                return result
+                            sleep(float(result.retry_after))
+                        else:
+                            sleep(min(2.0 ** (attempt - 1), 8.0))
                         continue
                     result.latency_ms = int((time.monotonic() - started) * 1000)
                     if status == 429:

@@ -297,7 +297,7 @@ class ModelPool:
                    for c in self._configs)
 
     def run(self, system, user, stage, invoke, *, stage_limit=None, max_attempts=None, sleep=lambda seconds: None,
-            validate_result=None, max_models_per_candidate=3):
+            validate_result=None, max_models_per_candidate=3, on_request_update=None):
         """invoke owns before/after persistence and budget; one invocation = one HTTP attempt."""
         excluded, attempts, selected, tries, empty_tries = set(), [], None, 0, 0
         switch_reason = None
@@ -309,10 +309,16 @@ class ModelPool:
                 cfg = self.select(excluded)
             except PoolStopped as exc:
                 if exc.reason == 'input_limit_mismatch':
+                    # Keep the actual failure when requests were made. A later
+                    # capacity skip or pre-inference rejection must not replace
+                    # a format/truncation failure with an input-limit diagnosis.
+                    for previous in reversed(attempts):
+                        if previous.billing_state != 'rejected_before_inference':
+                            return previous, attempts
                     failed_res = ModelCallResult(
                         ok=False,
                         reason_code='CANDIDATE_NO_CAPABLE_MODEL',
-                        error='当前候选超出所有可用模型输入上限或已被排除',
+                        error='当前候选超出所有可用模型输入上限',
                         requested_model=selected,
                     )
                     return failed_res, attempts
@@ -365,6 +371,7 @@ class ModelPool:
 
             if result.reason_code == 'QUOTA_EXHAUSTED':
                 self.exhaust(cfg, result)
+                excluded.add(cfg['model'])
                 continue
             if result.reason_code == 'QUOTA_RESPONSE_CONFLICT':
                 raise PoolStopped('quota_response_conflict', '额度拒绝与实际用量冲突，已记账并停止')
@@ -374,6 +381,7 @@ class ModelPool:
                 if result.billing_state != 'rejected_before_inference':
                     raise PoolStopped('usage_unknown', '模型参数拒绝用量未确认，停止自动轮换')
                 self.skip_incompatible(cfg, result)
+                excluded.add(cfg['model'])
                 continue
             if result.reason_code == REASON_RESPONSE_EMPTY:
                 if UsageTotals().add(result)['total_tokens'] is None:
@@ -384,16 +392,28 @@ class ModelPool:
                     sleep(min(2 ** (tries - 1), 8))
                     continue
                 self.cooldown(cfg, result)
+                excluded.add(cfg['model'])
                 if attempted_inference_models >= max_models_per_candidate:
                     return result, attempts
                 continue
             if (result.reason_code in ('NETWORK_ERROR', 'TIMEOUT', 'SERVER_ERROR', 'RATE_LIMIT')
                     or (result.http_status is not None and result.http_status in (408, 429, 500, 502, 503, 504))):
+                is_rate_limit = (result.reason_code == 'RATE_LIMIT' or result.http_status == 429)
+                retry_after = getattr(result, 'retry_after', None)
+                if is_rate_limit and retry_after is not None and retry_after > 10:
+                    self.cooldown(cfg, result, duration=retry_after)
+                    excluded.add(cfg['model'])
+                    if attempted_inference_models >= max_models_per_candidate:
+                        return result, attempts
+                    continue
+
                 if tries < limit:
+                    delay = retry_after if (is_rate_limit and retry_after is not None) else min(2 ** (tries - 1), 8)
                     self.log(f'模型请求临时异常（{result.reason_code or result.http_status}），重试 {tries}/{limit}：{selected}')
-                    sleep(min(2 ** (tries - 1), 8))
+                    sleep(delay)
                     continue
                 self.cooldown(cfg, result)
+                excluded.add(cfg['model'])
                 if attempted_inference_models >= max_models_per_candidate:
                     return result, attempts
                 continue
@@ -411,8 +431,11 @@ class ModelPool:
                         result.ok = False
                         result.reason_code = 'OUTPUT_FORMAT_INVALID'
                         result.error = err_detail.get('error') if isinstance(err_detail, dict) else str(err_detail or '模型输出格式或结构不合法')
+                        result.error_kind = err_detail.get('error_kind') if isinstance(err_detail, dict) else 'OUTPUT_FORMAT_INVALID'
                         result.parsed_data = None
                         excluded.add(cfg['model'])
+                        if on_request_update is not None:
+                            on_request_update(result)
                         self.log(f'模型输出校验未通过，排除该模型并切换：{cfg["model"]}（{result.error}）')
                         if attempted_inference_models >= max_models_per_candidate:
                             return result, attempts

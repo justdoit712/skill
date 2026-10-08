@@ -454,15 +454,108 @@ class ModelPoolTest(unittest.TestCase):
                 return False, None, {"error": "JSON parse error"}
             return True, {"parsed": True}, None
 
+        updates = []
+        def on_update(res):
+            updates.append(res)
+
         pool = ModelPool(raw, self.root / 'val-test', authoritative=False)
         result, calls = pool.run('s', 'u', 'catalog_assessment',
                                  lambda cfg, fmt, ctx: call_model(cfg, 's', 'u', api_key='fake', session=session, response_format=fmt),
-                                 validate_result=validate)
+                                 validate_result=validate,
+                                 on_request_update=on_update)
         self.assertTrue(result.ok)
         self.assertEqual([c.requested_model for c in calls], ['model-a', 'model-b'])
         self.assertEqual(result.parsed_data, {"parsed": True})
         self.assertEqual(calls[0].usage.get('total_tokens'), 12)
         self.assertEqual(calls[1].usage.get('total_tokens'), 18)
+        self.assertEqual(len(updates), 1)
+        self.assertEqual(updates[0].reason_code, 'OUTPUT_FORMAT_INVALID')
+
+    def test_candidate_exhaustion_preserves_output_failure(self):
+        from src.infra.llm import ModelCallResult
+        from src.catalog.failure_policy import classify_result
+        for reason in ('OUTPUT_FORMAT_INVALID', 'LENGTH_EXCEEDED'):
+            for small_last in (False, True):
+                with self.subTest(reason=reason, small_last=small_last):
+                    raw = {'provider': 'dashscope',
+                           'endpoint': 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions',
+                           'models': ['model-a', {'model': 'model-b', 'limits': {
+                               'max_input_bytes': 1 if small_last else 262144}}]}
+                    pool = ModelPool(raw, self.root, authoritative=False)
+                    def invoke(cfg, fmt, context):
+                        return ModelCallResult(
+                            ok=reason == 'OUTPUT_FORMAT_INVALID',
+                            content='invalid json', http_status=200,
+                            reason_code=None if reason == 'OUTPUT_FORMAT_INVALID' else reason,
+                            finish_reason='length' if reason == 'LENGTH_EXCEEDED' else 'stop',
+                            requested_model=cfg['model'], usage={'total_tokens': 12})
+                    result, attempts = pool.run(
+                        'system', 'user', 'catalog_assessment', invoke,
+                        validate_result=lambda *_: (False, None, {'error': 'invalid JSON'}))
+                    self.assertEqual(len(attempts), 1 if small_last else 2)
+                    self.assertIs(result, attempts[-1])
+                    self.assertEqual(result.reason_code, reason)
+                    self.assertEqual(result.usage['total_tokens'], 12)
+                    decision = classify_result({'ok': False, 'call': result,
+                                                'reason_code': result.reason_code})
+                    self.assertEqual(decision.is_format_error, reason == 'OUTPUT_FORMAT_INVALID')
+                    self.assertEqual(decision.is_length_exceeded, reason == 'LENGTH_EXCEEDED')
+
+    def test_candidate_input_limit_makes_no_request(self):
+        from src.catalog.failure_policy import classify_result
+        raw = {'provider': 'dashscope',
+               'endpoint': 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions',
+               'models': ['model-a', 'model-b'], 'limits': {'max_input_bytes': 1}}
+        pool = ModelPool(raw, self.root, authoritative=False)
+        invoke = Mock(side_effect=AssertionError('Oversized input must not be sent'))
+        result, attempts = pool.run('system', 'user', 'catalog_assessment', invoke)
+        invoke.assert_not_called()
+        self.assertEqual(attempts, [])
+        self.assertEqual(result.reason_code, 'CANDIDATE_NO_CAPABLE_MODEL')
+        decision = classify_result({'ok': False, 'call': result,
+                                    'reason_code': result.reason_code})
+        self.assertFalse(decision.is_service_failure)
+
+    def test_cooldown_excludes_failed_model_for_candidate(self):
+        from src.infra.llm import call_model
+        raw = {'provider': 'dashscope',
+               'endpoint': 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions',
+               'models': ['model-a', 'model-b', 'model-c'], 'request': {'max_attempts': 1}}
+        session = Mock()
+        session.post.side_effect = [
+            Mock(status_code=500, text="err", json=Mock(side_effect=ValueError())),
+            Mock(status_code=500, text="err", json=Mock(side_effect=ValueError())),
+            Mock(status_code=200, json=Mock(return_value={'usage': {'total_tokens': 10},
+                'choices': [{'finish_reason': 'stop', 'message': {'content': '{"ok":true}'}}]})),
+        ]
+        pool = ModelPool(raw, self.root / 'loop-test', authoritative=False)
+        result, calls = pool.run('s', 'u', 'catalog_assessment',
+                                 lambda cfg, fmt, ctx: call_model(cfg, 's', 'u', api_key='fake', session=session, response_format=fmt))
+        self.assertTrue(result.ok)
+        # model-a failed -> cooled down & excluded -> model-b failed -> cooled down & excluded -> model-c succeeded
+        self.assertEqual([c.requested_model for c in calls], ['model-a', 'model-b', 'model-c'])
+
+    def test_rate_limit_retry_after_cooldown_and_rotate(self):
+        from src.infra.llm import call_model
+        raw = {'provider': 'dashscope',
+               'endpoint': 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions',
+               'models': ['model-a', 'model-b'], 'request': {'max_attempts': 2}}
+        session = Mock()
+        resp_429 = Mock(status_code=429, text="Rate limit exceeded", headers={"Retry-After": "60"}, json=Mock(side_effect=ValueError()))
+        session.post.side_effect = [
+            resp_429,
+            Mock(status_code=200, json=Mock(return_value={'usage': {'total_tokens': 10},
+                'choices': [{'finish_reason': 'stop', 'message': {'content': '{"ok":true}'}}]})),
+        ]
+        pool = ModelPool(raw, self.root / 'rate-limit-test', authoritative=False)
+        result, calls = pool.run('s', 'u', 'catalog_assessment',
+                                 lambda cfg, fmt, ctx: call_model(cfg, 's', 'u', api_key='fake', session=session, response_format=fmt))
+        self.assertTrue(result.ok)
+        self.assertEqual([c.requested_model for c in calls], ['model-a', 'model-b'])
+        self.assertEqual(calls[0].retry_after, 60)
+        state = pool.inspect()
+        cooldowns = state.get('cooldown_models', {})
+        self.assertTrue(any(v.get('reason_code') == 'RATE_LIMIT' for v in cooldowns.values()))
 
 
 @smoke
