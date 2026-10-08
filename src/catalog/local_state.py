@@ -550,6 +550,9 @@ def init_local_state(
         if blockers:
             stop_causes.add(STOP_USAGE_UNKNOWN)
             report['recovery_blockers'] = blockers
+            sample = blockers[0].split('|')[0].split(':')[-1]
+            log(f"[安全拦截] 检测到 {len(blockers)} 条上次异常中断时处于发送中的请求（如 {sample}）。")
+            log("为防重复扣费已暂停；若无需核对，可执行 python tools/run_local.py --reset-recovery 一键重置。")
 
     state = LocalCollection(
         root=root, local=local, settings=settings, cfg=cfg, discover_fn=discover_fn,

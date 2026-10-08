@@ -728,8 +728,25 @@ def main(argv=None, *, root: Path | None = None) -> int:
     parser.add_argument("--enable-normalized-cache", action="store_true", help="启用受限规范化缓存复用（仅在明确验证换行等价且证据完全核验时复用）")
     parser.add_argument("--enable-batch-prioritization", action="store_true", help="启用小批次材料准备与正文分级排序（含 20%% 防饥饿配额）")
     parser.add_argument("--pool-watermark", type=int, help="候选池待处理数量低于此水位线时自动增量补水（已弃用）")
+    parser.add_argument("--reset-recovery", action="store_true", help="重置上次异常中断在途的待核查记录为待评估状态")
     args = parser.parse_args(argv)
     log = lambda message: print(message, flush=True)
+
+    if args.reset_recovery:
+        from .budget import BudgetLedger
+        ledger = BudgetLedger.load(root / 'data' / 'local' / 'state', cap=1, max_attempts=6)
+        count = 0
+        for eid in list(ledger.reserved):
+            rec = ledger.get(eid)
+            if rec and rec.get('status') == 'needs_recovery':
+                rec['status'] = 'reserved'
+                rec['error'] = None
+                rec['requests'] = []
+                rec['attempts'] = 0
+                ledger.save_record(eid, rec)
+                count += 1
+        log(f"已重置 {count} 条上次中断在途的待恢复记录为待评估状态。")
+        return 0
 
     if args.recover_catalog:
         from .maintenance import recover_completed_results
@@ -848,7 +865,7 @@ def main(argv=None, *, root: Path | None = None) -> int:
             'access_denied': '访问凭据失效或权限不足',
             'resume_state_invalid': '恢复状态冲突',
             'request_config_error': '模型请求配置错误',
-            'usage_unknown': '响应用量未知，停止自动重试',
+            'usage_unknown': '存在在途/中断未决请求，已暂停以防重复计费（运行 --reset-recovery 可一键重置）',
             'interrupted': '用户中断运行',
             'storage_error': '持久化存储故障',
         }.get(primary, f'未知停止原因: {primary}')
