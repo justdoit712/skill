@@ -48,6 +48,7 @@ REASON_MODEL_REQUEST_INCOMPATIBLE = "MODEL_REQUEST_INCOMPATIBLE"
 INCOMPATIBLE_PARAMETERS = frozenset({
     'enable_thinking', 'max_tokens', 'max_completion_tokens',
     'response_format', 'json_schema', 'temperature', 'system_role',
+    'stream',
 })
 
 
@@ -220,6 +221,8 @@ class ModelCallResult:
     requested_model: str | None = None
     returned_model: str | None = None
     model_config_fingerprint: str | None = None
+    retry_after: int | None = None
+    parsed_data: Any = None
 
     @property
     def reasoning_tokens(self) -> int:
@@ -421,12 +424,32 @@ def call_model(
                         result.latency_ms = int((time.monotonic() - started) * 1000)
                         result.reason_code = REASON_RESPONSE_FORMAT_UNSUPPORTED
                         return result
+                    if status == 429:
+                        retry_hdr = response.headers.get("Retry-After")
+                        if retry_hdr:
+                            if retry_hdr.strip().isdigit():
+                                result.retry_after = int(retry_hdr.strip())
+                            else:
+                                try:
+                                    import email.utils
+                                    from datetime import datetime, timezone
+                                    pdt = email.utils.parsedate_to_datetime(retry_hdr)
+                                    result.retry_after = max(1, int((pdt - datetime.now(timezone.utc)).total_seconds()))
+                                except Exception:
+                                    result.retry_after = None
                     if status in RETRYABLE_STATUS and attempt < max_attempts:
                         response.close()
                         sleep(min(2.0 ** (attempt - 1), 8.0))
                         continue
                     result.latency_ms = int((time.monotonic() - started) * 1000)
-                    result.reason_code = REASON_MODEL_ERROR
+                    if status == 429:
+                        result.reason_code = "RATE_LIMIT"
+                    elif status == 408:
+                        result.reason_code = "TIMEOUT"
+                    elif 500 <= status < 600:
+                        result.reason_code = "SERVER_ERROR"
+                    else:
+                        result.reason_code = REASON_MODEL_ERROR
                     return result
                 data = response.json()
             finally:

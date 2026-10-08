@@ -365,6 +365,105 @@ class ModelPoolTest(unittest.TestCase):
                 if pool is not None:
                     self.assertFalse(pool.inspect().get('incompatible_models'))
 
+    def test_stream_incompatible_rotates_and_marks_incompatible(self):
+        from src.infra.llm import call_model
+        raw = {'provider': 'dashscope',
+               'endpoint': 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions',
+               'models': ['model-a', 'model-b'], 'request': {'response_format': 'json_object'}}
+        stream_err = {
+            'error': {
+                'code': 'invalid_parameter_error',
+                'type': 'invalid_request_error',
+                'message': 'This model only support stream mode, please enable the stream parameter to access the model.',
+            }
+        }
+        session = Mock()
+        session.post.side_effect = [
+            Mock(status_code=400, text=json.dumps(stream_err), json=Mock(return_value=stream_err)),
+            Mock(status_code=200, json=Mock(return_value={'usage': {'total_tokens': 15},
+                'choices': [{'finish_reason': 'stop', 'message': {'content': '{"ok":true}'}}]})),
+        ]
+        pool = ModelPool(raw, self.root / 'stream-test', authoritative=False)
+        result, calls = pool.run('s', 'u', 'catalog_assessment',
+                                 lambda cfg, fmt, ctx: call_model(cfg, 's', 'u', api_key='fake', session=session, response_format=fmt))
+        self.assertTrue(result.ok)
+        self.assertEqual([c.requested_model for c in calls], ['model-a', 'model-b'])
+        self.assertEqual(calls[0].incompatible_parameter, 'stream')
+        self.assertEqual(calls[0].billing_state, 'rejected_before_inference')
+        state = pool.inspect()
+        incomp = state.get('incompatible_models', {})
+        self.assertTrue(any(v.get('parameter') == 'stream' for v in incomp.values()))
+
+    def test_transient_failures_cooldown_and_rotate(self):
+        from src.infra.llm import call_model
+        raw = {'provider': 'dashscope',
+               'endpoint': 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions',
+               'models': ['model-a', 'model-b'], 'request': {'max_attempts': 2}}
+        session = Mock()
+        session.post.side_effect = [
+            Mock(status_code=500, text="Internal Server Error", json=Mock(side_effect=ValueError("not JSON"))),
+            Mock(status_code=500, text="Internal Server Error", json=Mock(side_effect=ValueError("not JSON"))),
+            Mock(status_code=200, json=Mock(return_value={'usage': {'total_tokens': 20},
+                'choices': [{'finish_reason': 'stop', 'message': {'content': '{"ok":true}'}}]})),
+        ]
+        pool = ModelPool(raw, self.root / 'transient-test', authoritative=False)
+        result, calls = pool.run('s', 'u', 'catalog_assessment',
+                                 lambda cfg, fmt, ctx: call_model(cfg, 's', 'u', api_key='fake', session=session, response_format=fmt))
+        self.assertTrue(result.ok)
+        self.assertEqual([c.requested_model for c in calls], ['model-a', 'model-a', 'model-b'])
+        self.assertEqual(calls[0].reason_code, 'SERVER_ERROR')
+        state = pool.inspect()
+        cooldowns = state.get('cooldown_models', {})
+        self.assertTrue(any(v.get('reason_code') == 'SERVER_ERROR' for v in cooldowns.values()))
+
+    def test_local_cooldown_respects_expiry(self):
+        from datetime import datetime, timedelta, timezone
+        from src.infra.llm import ModelCallResult
+        raw = {'provider': 'dashscope',
+               'endpoint': 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions',
+               'models': ['model-a', 'model-b']}
+        now_time = datetime(2026, 10, 8, 12, 0, 0, tzinfo=timezone.utc)
+        pool = ModelPool(raw, self.root / 'expiry-test', authoritative=False, now=lambda: now_time)
+        m1 = pool.select()
+        self.assertEqual(m1['model'], 'model-a')
+
+        res = ModelCallResult(ok=False, reason_code='NETWORK_ERROR')
+        pool.cooldown(m1, res, duration=300)
+
+        # Before expiry: model-a is in cooldown, selects model-b
+        self.assertEqual(pool.select()['model'], 'model-b')
+
+        # After expiry: model-a becomes available again
+        now_time = now_time + timedelta(seconds=301)
+        self.assertEqual(pool.select()['model'], 'model-a')
+
+    def test_output_validation_failure_rotates_model_and_preserves_usage(self):
+        from src.infra.llm import call_model
+        raw = {'provider': 'dashscope',
+               'endpoint': 'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions',
+               'models': ['model-a', 'model-b']}
+        session = Mock()
+        session.post.side_effect = [
+            Mock(status_code=200, json=Mock(return_value={'usage': {'total_tokens': 12},
+                'choices': [{'finish_reason': 'stop', 'message': {'content': 'invalid json output'}}]})),
+            Mock(status_code=200, json=Mock(return_value={'usage': {'total_tokens': 18},
+                'choices': [{'finish_reason': 'stop', 'message': {'content': '{"parsed": true}'}}]})),
+        ]
+        def validate(result, cfg):
+            if "invalid" in (result.content or ""):
+                return False, None, {"error": "JSON parse error"}
+            return True, {"parsed": True}, None
+
+        pool = ModelPool(raw, self.root / 'val-test', authoritative=False)
+        result, calls = pool.run('s', 'u', 'catalog_assessment',
+                                 lambda cfg, fmt, ctx: call_model(cfg, 's', 'u', api_key='fake', session=session, response_format=fmt),
+                                 validate_result=validate)
+        self.assertTrue(result.ok)
+        self.assertEqual([c.requested_model for c in calls], ['model-a', 'model-b'])
+        self.assertEqual(result.parsed_data, {"parsed": True})
+        self.assertEqual(calls[0].usage.get('total_tokens'), 12)
+        self.assertEqual(calls[1].usage.get('total_tokens'), 18)
+
 
 @smoke
 class ApiKeyResolutionTest(unittest.TestCase):
