@@ -289,11 +289,13 @@ def _evaluate_with_pool(state: LocalCollection, candidate: Any, text: str, eid: 
             state.model_pool.failure = 'storage_error'
             raise PoolStopped('storage_error', str(exc)) from exc
 
+    model_req_cfg = (state.cfg.get('model') or {}).get('request') or {}
+    pool_max_attempts = model_req_cfg.get('max_attempts')
     result = state.evaluate_fn(
         candidate, text, model_cfg=state.cfg['model'],
         rules=state.cfg['rules'], taxonomy=state.cfg['taxonomy'], sleep=state.sleep,
         on_request=on_request, pending_evaluation=record.get('pending_evaluation'),
-        model_pool=state.model_pool, pool_max_attempts=state.max_attempts,
+        model_pool=state.model_pool, pool_max_attempts=pool_max_attempts,
         **_topic_evaluation_options(state, candidate),
     )
     checkpoint = state.ledger.get(eid)
@@ -921,6 +923,6 @@ def process_candidate(state: LocalCollection, item: Any) -> bool:
 
     state.save()
     state.log(f"新增推荐 {state.report['new_recommended']}/{state.settings['target_recommended']}；输入 {state.usage.prompt_tokens:,}，输出 {state.usage.completion_tokens:,}，合计 {state.usage.total_tokens:,} Token。")
-    if state.report['stop_reason']:
+    if state.report.get('stop_reason'):
         return False
     return True

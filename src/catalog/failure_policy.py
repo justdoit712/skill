@@ -187,8 +187,8 @@ def classify_result(result: dict[str, Any]) -> ClassificationDecision:
 
     # 4. 模型输出格式异常 (JSON 解码错误、结构检验失败)
     if (
-        error_kind in (ERROR_KIND_OUTPUT_JSON_INVALID, ERROR_KIND_OUTPUT_SCHEMA_INVALID)
-        or reason_code == REASON_PARSE_ERROR
+        error_kind in (ERROR_KIND_OUTPUT_JSON_INVALID, ERROR_KIND_OUTPUT_SCHEMA_INVALID, "OUTPUT_FORMAT_INVALID")
+        or reason_code in (REASON_PARSE_ERROR, "OUTPUT_FORMAT_INVALID")
     ):
         effective_error_kind = error_kind or ERROR_KIND_LEGACY_PARSE_UNKNOWN
         return ClassificationDecision(

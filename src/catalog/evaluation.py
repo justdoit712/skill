@@ -428,9 +428,30 @@ def evaluate(
                 calls.append(response)
                 on_request('after', 'assessment', response)
                 return response
+            def validate_assessment(res, effective_cfg):
+                if not (res.content or "").strip() and res.finish_reason != "length":
+                    return False, None, {"error": "模型正常结束但未提供有效正文", "error_kind": ERROR_KIND_RESPONSE_EMPTY}
+                try:
+                    ev = parse_evaluation(
+                        res.content or "",
+                        rules, candidate.content_fingerprint, taxonomy,
+                        filter_rules=filter_rules,
+                    )
+                    if not (filter_rules and filter_rules.has_evaluation_rules):
+                        ev.pop("topic_filter_audit", None)
+                        ev.pop("topic_assessments", None)
+                    if enabled(rules):
+                        ev = check_quality(ev, text, rules)
+                    return True, ev, None
+                except OutputJsonError as exc:
+                    return False, None, {"error": str(exc), "error_kind": ERROR_KIND_OUTPUT_JSON_INVALID}
+                except (OutputSchemaError, ValueError) as exc:
+                    return False, None, {"error": str(exc), "error_kind": getattr(exc, "error_kind", ERROR_KIND_OUTPUT_SCHEMA_INVALID)}
+
             try:
                 call, _ = model_pool.run(system, user, assessment_contract, invoke,
-                                         max_attempts=pool_max_attempts, sleep=sleep)
+                                         max_attempts=pool_max_attempts, sleep=sleep,
+                                         validate_result=validate_assessment)
             except PoolStopped as exc:
                 return {'ok': False, 'evaluation': None, 'call': calls[-1] if calls else None,
                         'calls': calls, 'stage': 'assessment', 'reason_code':
@@ -454,7 +475,7 @@ def evaluate(
                 "calls": calls,
                 "stage": "assessment",
                 "reason_code": call.reason_code or REASON_MODEL_ERROR,
-                "error_kind": getattr(call, "reason_code", None) or REASON_MODEL_ERROR,
+                "error_kind": getattr(call, "error_kind", None) or getattr(call, "reason_code", None) or REASON_MODEL_ERROR,
                 "error": call.error,
             }
         if not (call.content or "").strip() and call.finish_reason != "length":
@@ -469,43 +490,45 @@ def evaluate(
                 "error": "模型正常结束但未提供有效正文",
             }
 
-    try:
-        evaluation = parse_evaluation(
-            json.dumps(pending_evaluation, ensure_ascii=False) if pending_evaluation is not None else call.content or "",
-            rules, candidate.content_fingerprint, taxonomy,
-            filter_rules=filter_rules if pending_evaluation is None else None,
-        )
-        if pending_evaluation is not None and "topic_filter_audit" not in evaluation:
-            # 旧初评没有主题判断；续跑不得把旧响应贴上当前配置后重新判断。
-            evaluation["topic_filter_audit"] = build_topic_filter_audit(FilterRules(), None)
-        elif pending_evaluation is None and not (filter_rules and filter_rules.has_evaluation_rules):
-            # 无主题的普通调用不接受模型自行声明的治理审计。
-            evaluation.pop("topic_filter_audit", None)
-            evaluation.pop("topic_assessments", None)
-        if enabled(rules):
-            evaluation = check_quality(evaluation, text, rules)
-    except OutputJsonError as exc:
-        return {
-            "ok": False,
-            "evaluation": None,
-            "call": call,
-            "calls": calls,
-            "stage": "assessment",
-            "reason_code": REASON_PARSE_ERROR,
-            "error_kind": ERROR_KIND_OUTPUT_JSON_INVALID,
-            "error": str(exc),
-        }
-    except (OutputSchemaError, ValueError) as exc:
-        return {
-            "ok": False,
-            "evaluation": None,
-            "call": call,
-            "calls": calls,
-            "stage": "assessment",
-            "reason_code": REASON_PARSE_ERROR,
-            "error_kind": getattr(exc, "error_kind", ERROR_KIND_OUTPUT_SCHEMA_INVALID),
-            "error": str(exc),
-        }
+    evaluation = getattr(call, "parsed_data", None) if pending_evaluation is None else None
+    if evaluation is None:
+        try:
+            evaluation = parse_evaluation(
+                json.dumps(pending_evaluation, ensure_ascii=False) if pending_evaluation is not None else call.content or "",
+                rules, candidate.content_fingerprint, taxonomy,
+                filter_rules=filter_rules if pending_evaluation is None else None,
+            )
+            if pending_evaluation is not None and "topic_filter_audit" not in evaluation:
+                # 旧初评没有主题判断；续跑不得把旧响应贴上当前配置后重新判断。
+                evaluation["topic_filter_audit"] = build_topic_filter_audit(FilterRules(), None)
+            elif pending_evaluation is None and not (filter_rules and filter_rules.has_evaluation_rules):
+                # 无主题的普通调用不接受模型自行声明的治理审计。
+                evaluation.pop("topic_filter_audit", None)
+                evaluation.pop("topic_assessments", None)
+            if enabled(rules):
+                evaluation = check_quality(evaluation, text, rules)
+        except OutputJsonError as exc:
+            return {
+                "ok": False,
+                "evaluation": None,
+                "call": call,
+                "calls": calls,
+                "stage": "assessment",
+                "reason_code": REASON_PARSE_ERROR,
+                "error_kind": ERROR_KIND_OUTPUT_JSON_INVALID,
+                "error": str(exc),
+            }
+        except (OutputSchemaError, ValueError) as exc:
+            return {
+                "ok": False,
+                "evaluation": None,
+                "call": call,
+                "calls": calls,
+                "stage": "assessment",
+                "reason_code": REASON_PARSE_ERROR,
+                "error_kind": getattr(exc, "error_kind", ERROR_KIND_OUTPUT_SCHEMA_INVALID),
+                "error": str(exc),
+            }
 
     if enabled(rules):
         evaluation["quality_audit"]["review_status"] = "single_pass"

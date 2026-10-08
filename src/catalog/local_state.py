@@ -411,6 +411,36 @@ class LocalCollection:
         return entry
 
 
+def repair_stale_running_reports(local: Path, log: Callable = lambda _: None) -> None:
+    """进程启动时核对旧运行状态并修复遗留的 running 报告。"""
+    latest_path = local / "latest-run.json"
+    if not latest_path.exists():
+        return
+    try:
+        data = json.loads(latest_path.read_text(encoding="utf-8"))
+        if isinstance(data, dict) and data.get("status") == "running":
+            data["status"] = "interrupted"
+            if not data.get("stop_reason"):
+                data["stop_reason"] = "interrupted"
+            data["updated_at"] = now_local().isoformat()
+            write_json_atomic(latest_path, data)
+            rep_path = Path(data.get("report_path") or "")
+            if rep_path.exists():
+                try:
+                    rep_data = json.loads(rep_path.read_text(encoding="utf-8"))
+                    if isinstance(rep_data, dict) and rep_data.get("status") == "running":
+                        rep_data["status"] = "interrupted"
+                        if not rep_data.get("stop_reason"):
+                            rep_data["stop_reason"] = "interrupted"
+                        rep_data["updated_at"] = now_local().isoformat()
+                        write_json_atomic(rep_path, rep_data)
+                except Exception:
+                    pass
+            log("检测到遗留的运行中报告，已修复为中断状态：" + str(data.get("run_id")))
+    except Exception:
+        pass
+
+
 def init_local_state(
     root: Path,
     local: Path,
@@ -427,6 +457,7 @@ def init_local_state(
     expand_fn: Any = None,
 ) -> LocalCollection:
     """初始化 LocalCollection 运行上下文对象及相关账本/报告容器。"""
+    repair_stale_running_reports(local, log)
     run_dir = local / 'runs' / run_id
     usage = UsageTotals()
     max_retries = settings.get('max_retries', 5)

@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "node --test \"tests/frontend/*.test.mjs\"",
+    "test": "node --test tests/frontend",
     "test:smoke": ".\\.venv\\Scripts\\python.exe tools/run_tests.py --smoke",
     "test:py": ".\\.venv\\Scripts\\python.exe tools/run_tests.py"
   }

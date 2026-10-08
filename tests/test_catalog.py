@@ -985,6 +985,85 @@ class RepoBatchAndCheckpointRecoveryTest(unittest.TestCase):
         self.assertEqual(expanded, ["repo", "other"])
         self.assertTrue(reconcile_batch_and_repositories(ds, path, pool, set(), set(), set()))
 
+    def test_repair_stale_running_reports_fixes_interrupted_run(self):
+        import json
+        from src.catalog.local_state import repair_stale_running_reports
+        from src.infra.files import write_json_atomic
+        local = self.root / "stale_report_test"
+        local.mkdir(parents=True, exist_ok=True)
+        run_dir = local / "runs" / "test-run"
+        run_dir.mkdir(parents=True, exist_ok=True)
+        rep = {"run_id": "test-run", "status": "running", "report_path": str(run_dir / "report.json")}
+        write_json_atomic(local / "latest-run.json", rep)
+        write_json_atomic(run_dir / "report.json", rep)
+
+        repair_stale_running_reports(local)
+
+        fixed_latest = json.loads((local / "latest-run.json").read_text(encoding="utf-8"))
+        self.assertEqual(fixed_latest["status"], "interrupted")
+        self.assertEqual(fixed_latest["stop_reason"], "interrupted")
+
+        fixed_rep = json.loads((run_dir / "report.json").read_text(encoding="utf-8"))
+        self.assertEqual(fixed_rep["status"], "interrupted")
+        self.assertEqual(fixed_rep["stop_reason"], "interrupted")
+
+    def test_candidate_failure_isolates_and_does_not_halt_pool_run(self):
+        from types import SimpleNamespace
+        from unittest.mock import Mock
+        from src.catalog.local_candidate import process_candidate
+        from src.catalog.pool import CandidatePool, PoolItem, save_pool
+        from src.catalog.models import Candidate
+        from src.catalog.prescreen import PrescreenConfig
+        from src.infra.files import write_json_atomic
+        from src.catalog.budget import BudgetLedger
+
+        local = self.root / "candidate_isolation"
+        local.mkdir(parents=True, exist_ok=True)
+        pool_path = local / "pool.json"
+        c1 = Candidate(skill_id="o/r:a", owner="o", repo="r", path="a/SKILL.md", url="https://github.com/o/r/blob/HEAD/a/SKILL.md", name="s1")
+        c2 = Candidate(skill_id="o/r:b", owner="o", repo="r", path="b/SKILL.md", url="https://github.com/o/r/blob/HEAD/b/SKILL.md", name="s2")
+        item1 = PoolItem(candidate=c1, seq=1, status="pending")
+        item2 = PoolItem(candidate=c2, seq=2, status="pending")
+        pool = CandidatePool(items=[item1, item2])
+        save_pool(pool_path, pool)
+
+        ledger = BudgetLedger.load(local / "state", cap=1, max_attempts=2)
+        state = SimpleNamespace(
+            root=self.root, local=local, pool=pool, pool_path=pool_path,
+            ledger=ledger, owned_ids=set(), skipped_owned_ids=set(),
+            active_snoozed=set(), manual_exclusions=set(), manual_picks=set(),
+            settings={"target_recommended": 10, "max_total_tokens": 100000, "max_format_failures_without_valid_result": 5, "max_consecutive_failures": 5},
+            report={"new_recommended": 0, "budget_tokens": 0, "evaluations": 0, "checked": 0,
+                    "not_skill_files": 0, "prescreen_excluded": 0, "fetch_failed": 0, "static_skipped": 0,
+                    "cached": 0, "failed_evaluations": 0, "skipped_output_format": 0, "skipped_length_exceeded": 0,
+                    "blocked_records": 0, "blocked_new": 0, "calls": [], "models_used": [], "stop_causes": [], "stop_reason": None},
+            cfg={"model": {"provider": "dashscope", "endpoint": "https://example.test", "model": "test-m",
+                           "request": {"max_attempts": 2}, "auth": {"api_key": "fake"}},
+                 "rules": {"rules_version": "v1"}, "taxonomy": {}, "prescreen": PrescreenConfig(domain_names={"dev": "开发"}, manual_exclusions=set())},
+            stop_causes=set(), consecutive_failures=0, format_failures=0, max_format_failures=5, max_attempts=2,
+            active_eid=None, active_call=None, unknown_reserve=0, pending_items=[item1, item2],
+            evaluated_skill_ids=set(), entries={},
+            fetch_fn=lambda url, **kw: SimpleNamespace(ok=True, text="---\nname: skill\n---\nbody", truncated=False),
+            log=lambda msg: None, save=lambda: None, sleep=lambda s: None,
+            model_pool=Mock(),
+            usage=SimpleNamespace(prompt_tokens=0, completion_tokens=0, total_tokens=0),
+        )
+
+        call_mock = SimpleNamespace(ok=False, requested_model="test-m", billing_state=None,
+                                    attempts=1, usage={"total_tokens": 50}, reason_code="OUTPUT_FORMAT_INVALID",
+                                    http_status=200, error="Invalid format", error_type=None, latency_ms=10)
+        state.evaluate_fn = Mock(return_value={
+            "ok": False, "evaluation": None, "call": call_mock, "calls": [call_mock],
+            "stage": "assessment", "reason_code": "OUTPUT_FORMAT_INVALID",
+            "error_kind": "OUTPUT_FORMAT_INVALID", "error": "Invalid format",
+        })
+
+        cont = process_candidate(state, item1)
+        self.assertTrue(cont, "单条候选失败不得中止后续候选处理")
+        self.assertIsNone(state.report.get("stop_reason"), "单条候选失败不得设置全局 stop_reason")
+        self.assertEqual(item1.status, "blocked", "格式校验失败候选应持久化为 blocked")
+        self.assertEqual(state.report["skipped_output_format"], 1)
+
 
 if __name__ == "__main__":
     unittest.main()
