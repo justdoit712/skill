@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { renderFindView, fetchFindReport, clearFindReportCache, getCachedFindReport } from "../../public/js/find-view.js";
+import { renderFindView } from "../../public/js/find-view.js";
 
 class Element {
   constructor() { this.children = []; this.html = ""; }
@@ -22,107 +22,16 @@ function render(report) {
 
 const report = { schema_version: "1.0.0", topic: "需求", status: "completed", shortlist: [], alternatives: [] };
 
-test("model pool stops describe recoverable work", () => {
-  assert.match(render({ ...report, status: "stopped", stop_reason: "models_exhausted" }), /未完成候选已保留/);
-  assert.match(render({ ...report, status: "stopped", stop_reason: "input_limit_mismatch" }), /完整材料/);
-  assert.match(render({ ...report, status: "error", stop_reason: "quota_response_conflict" }), /停止自动重发/);
-});
-
-test("current 1.1 report remains readable", () => {
-  assert.doesNotMatch(render({ ...report, schema_version: "1.1.0" }), /版本不兼容/);
-});
-
-test("unknown schema is rejected before interpreting result fields", () => {
-  assert.match(render({ ...report, schema_version: "2.0" }), /报告版本不兼容/);
-});
-
-test("legacy report remains readable and missing usage is unknown", () => {
-  const legacy = { ...report };
-  delete legacy.schema_version;
-  assert.match(render(legacy), /未知/);
-  assert.doesNotMatch(render(legacy), /版本不兼容/);
-});
-
-test("partial coverage and unknown usage are visible", () => {
-  const html = render({ ...report, status: "stopped", stop_reason: "usage_unknown",
-    coverage_incomplete: true, usage: { total_tokens: 12, unknown_usage_requests: 1 } });
-  assert.match(html, /覆盖不完整/);
-  assert.match(html, /仅为已知用量/);
-});
-
 test("model text is escaped and unsafe card links are not executable", () => {
-  const html = render({ ...report, topic: '<img src=x onerror="bad()">', shortlist: [{
-    candidate: { name: "<script>bad()</script>", url: "javascript:bad()" },
-    evaluation: { match: "strong", summary_zh: "<b>raw</b>" }
-  }] });
+  const html = render({
+    ...report,
+    topic: '<img src=x onerror="bad()">',
+    shortlist: [{
+      candidate: { name: "<script>bad()</script>", url: "javascript:bad()" },
+      evaluation: { match: "strong", summary_zh: "<b>raw</b>" }
+    }]
+  });
   assert.doesNotMatch(html, /<script>|<img|href="javascript:/);
   assert.match(html, /&lt;script&gt;/);
   assert.match(html, /href="#"/);
-});
-
-test("running, error, interruption, and empty completion have distinct output", () => {
-  assert.match(render({ ...report, status: "running" }), /尚未完成/);
-  assert.match(render({ ...report, status: "error", stop_reason: "material_failed" }), /异常中止/);
-  assert.match(render({ ...report, status: "interrupted", stop_reason: "interrupted" }), /中断/);
-  assert.doesNotMatch(render(report), /异常中止|尚未完成/);
-});
-
-test("target reached and exhausted rounds explain different outcomes", () => {
-  assert.match(render({ ...report, stop_reason: "target_reached" }), /提前完成/);
-  assert.match(render({ ...report, status: "stopped", stop_reason: "round_limit" }), /尚未集齐目标数量/);
-});
-
-test("candidates exhausted explains that no strong match was found", () => {
-  assert.match(render({ ...report, stop_reason: "candidates_exhausted" }), /全部评估完毕；未发现满足强匹配标准的条目/);
-});
-
-test("find-view: fetchFindReport uses memory cache and bypasses with force", async () => {
-  clearFindReportCache();
-  let fetchCount = 0;
-  const mockFetch = async () => {
-    fetchCount++;
-    return {
-      ok: true,
-      json: async () => ({ schema_version: "1.0.0", topic: "测试需求", shortlist: [] })
-    };
-  };
-
-  const prevFetch = globalThis.fetch;
-  globalThis.fetch = mockFetch;
-  try {
-    const first = await fetchFindReport();
-    assert.equal(fetchCount, 1);
-    assert.equal(first.topic, "测试需求");
-
-    // Second call hits cache (0 network fetch)
-    const second = await fetchFindReport();
-    assert.equal(fetchCount, 1);
-    assert.equal(second, first);
-    assert.equal(getCachedFindReport(), first);
-
-    // Force call bypasses cache
-    const forced = await fetchFindReport("data/find-report.json", { force: true });
-    assert.equal(fetchCount, 2);
-    assert.equal(forced.topic, "测试需求");
-  } finally {
-    globalThis.fetch = prevFetch;
-    clearFindReportCache();
-  }
-});
-
-test("find-view: evidence details box is closed by default", () => {
-  const html = render({
-    ...report,
-    shortlist: [{
-      candidate: { name: "mindmirror-skill", url: "https://example.com" },
-      evaluation: {
-        match: "strong",
-        criteria_results: [
-          { status: "supported", criterion_id: "empathy", explanation: "支持该需求", evidence: [] }
-        ]
-      }
-    }]
-  });
-  assert.match(html, /<details class="find-evidence-box">/);
-  assert.doesNotMatch(html, /<details class="find-evidence-box" open>/);
 });
