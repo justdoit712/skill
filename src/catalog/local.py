@@ -827,8 +827,11 @@ def main(argv=None, *, root: Path | None = None) -> int:
 
     log(f"目标 {settings['target_recommended']} 个新增推荐，上限 {settings['max_total_tokens']:,} Token，每批仓库上限 {settings.get('batch_repo_limit', DEFAULT_BATCH_REPO_LIMIT)} 个。")
     log(f"网络及临时 HTTP 错误最多重连 {settings.get('max_retries', 5)} 次，尝试次数会保存。")
-    if not os.environ.get('GITHUB_TOKEN'):
-        log("未设置 GITHUB_TOKEN；GitHub 限流可能导致本轮候选不足，可在 PyCharm 的环境变量中设置。")
+    from src.infra.github import resolve_github_token
+    if not resolve_github_token():
+        log("未设置 GITHUB_TOKEN；GitHub 限流可能导致本轮候选不足，可在 config/secrets.local.json 或环境变量中设置。")
+    else:
+        log("已加载 GitHub 凭据（Token 已生效，已解除匿名频控限制）。")
 
     report = run_local(root, settings, cfg=cfg)
 

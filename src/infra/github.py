@@ -51,9 +51,24 @@ def _retry_after_seconds(headers) -> float:
     return max(d for d in delays if math.isfinite(d))
 
 
-def apply_github_auth(session: requests.Session) -> bool:
-    """若环境变量中存在 GITHUB_TOKEN 则注入 Bearer 认证头。"""
+def resolve_github_token() -> str:
     token = (os.environ.get(GITHUB_TOKEN_ENV) or "").strip()
+    if token:
+        return token
+    try:
+        from src.infra.llm import load_secrets
+        secrets = load_secrets()
+        token = (secrets.get("github_token") or secrets.get("github") or "").strip()
+        if token:
+            return token
+    except Exception:
+        pass
+    return ""
+
+
+def apply_github_auth(session: requests.Session) -> bool:
+    """若环境变量或 secrets.local.json 中存在 GITHUB_TOKEN 则注入 Bearer 认证头。"""
+    token = resolve_github_token()
     if token:
         session.headers["Authorization"] = f"Bearer {token}"
         return True
