@@ -312,7 +312,7 @@ def _expand_search_queries(state: LocalCollection) -> list[dict[str, str]]:
         cfg.setdefault("request", {})["max_attempts"] = 1
         try:
             result = call_model(cfg, system, user, api_key=resolve_api_key(cfg),
-                                response_format=fmt, sleep=state.sleep)
+                                response_format=fmt, sleep=state.sleep, log=getattr(state, "log", None))
         except BaseException:
             state.usage.record_unknown_request()
             state.report["unknown_usage_reserved_tokens"] += reserve

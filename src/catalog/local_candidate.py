@@ -257,6 +257,28 @@ def _evaluate_with_pool(state: LocalCollection, candidate: Any, text: str, eid: 
                 state.active_eid = None
                 raise PoolStopped('storage_error', str(exc)) from exc
             return True
+        if event in ('update', 'format_error'):
+            call = state.active_call
+            if call:
+                call['status'] = 'failed'
+                call['reason_code'] = getattr(request_call, 'reason_code', 'OUTPUT_FORMAT_INVALID')
+                call['error_kind'] = getattr(request_call, 'error_kind', 'OUTPUT_FORMAT_INVALID')
+                call['is_sample_error'] = True
+                if isinstance(call.get('response'), dict):
+                    call['response']['ok'] = False
+                    call['response']['reason_code'] = getattr(request_call, 'reason_code', 'OUTPUT_FORMAT_INVALID')
+                    call['response']['error'] = getattr(request_call, 'error', None)
+                checkpoint = state.ledger.get(eid)
+                if checkpoint and checkpoint.get('requests'):
+                    checkpoint['requests'][-1] = dict(call)
+                    try:
+                        state.ledger.save_record(eid, checkpoint)
+                        state.save()
+                    except OSError as exc:
+                        state.model_pool.failure = 'storage_error'
+                        raise PoolStopped('storage_error', str(exc)) from exc
+            return True
+
         decision = classify_result({'ok': request_call.ok, 'call': request_call})
         _record_request_usage(state, request_call, retryable=decision.retryable)
         call = state.active_call
@@ -296,6 +318,7 @@ def _evaluate_with_pool(state: LocalCollection, candidate: Any, text: str, eid: 
         rules=state.cfg['rules'], taxonomy=state.cfg['taxonomy'], sleep=state.sleep,
         on_request=on_request, pending_evaluation=record.get('pending_evaluation'),
         model_pool=state.model_pool, pool_max_attempts=pool_max_attempts,
+        log=getattr(state, 'log', None),
         **_topic_evaluation_options(state, candidate),
     )
     checkpoint = state.ledger.get(eid)
@@ -871,6 +894,21 @@ def process_candidate(state: LocalCollection, item: Any) -> bool:
         _record_blocked_candidate(state, seq, block_info)
         state.stop_causes.add(STOP_REQUEST_CONFIG_ERROR)
         state.log(f"[停止] 请求配置错误 (HTTP {decision.http_status})，已停止运行。")
+
+    elif decision.category == 'candidate_no_capable_model':
+        block_info = _build_block_info(
+            eid, 'CANDIDATE_NO_CAPABLE_MODEL',
+            decision=decision,
+            result=result,
+            model=state.cfg['model'].get('model'),
+            model_config_version=state.cfg['model'].get('model_config_version'),
+        )
+        _record_blocked_candidate(state, seq, block_info)
+        state.consecutive_failures, state.format_failures = update_failure_counters(
+            result, decision, state.consecutive_failures, state.format_failures
+        )
+        state.report['failed_evaluations'] += 1
+        state.log(f"[输入超限] #{seq} {candidate.skill_id}：超出所有可用模型输入上限，已保存 blocked。")
 
     elif not result.get('pending_evaluation'):
         state.report['failed_evaluations'] += 1

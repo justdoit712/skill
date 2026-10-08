@@ -24,6 +24,7 @@ REASON_ACCESS_DENIED = "ACCESS_DENIED"
 REASON_REQUEST_CONFIG_ERROR = "REQUEST_CONFIG_ERROR"
 REASON_NETWORK_ERROR = "NETWORK_ERROR"
 REASON_MODEL_ERROR = "MODEL_ERROR"
+REASON_CANDIDATE_NO_CAPABLE_MODEL = "CANDIDATE_NO_CAPABLE_MODEL"
 
 # 候选动作常量 (§3.3)
 ACTION_DONE = "done"
@@ -236,7 +237,21 @@ def classify_result(result: dict[str, Any]) -> ClassificationDecision:
             retryable=True,
         )
 
-    # 7. 其他模型异常 / 正常结束无正文
+    # 7. 候选超出所有模型输入上限（候选级属性，非模型/服务故障）
+    if reason_code == "CANDIDATE_NO_CAPABLE_MODEL":
+        return ClassificationDecision(
+            action=ACTION_BLOCKED,
+            category="candidate_no_capable_model",
+            reason_code="CANDIDATE_NO_CAPABLE_MODEL",
+            error_kind=error_kind or "CANDIDATE_NO_CAPABLE_MODEL",
+            stage=stage,
+            http_status=http_status,
+            block_reason="CANDIDATE_NO_CAPABLE_MODEL",
+            is_service_failure=False,
+            retryable=False,
+        )
+
+    # 8. 其他模型异常 / 正常结束无正文
     if reason_code == ERROR_KIND_RESPONSE_EMPTY:
         return ClassificationDecision(action=ACTION_RETRY, category='model_failure',
                                       reason_code=ERROR_KIND_RESPONSE_EMPTY, error_kind=ERROR_KIND_RESPONSE_EMPTY,

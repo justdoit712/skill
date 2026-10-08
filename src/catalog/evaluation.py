@@ -393,6 +393,7 @@ def evaluate(
     model_pool=None,
     pool_max_attempts=None,
     filter_rules: FilterRules | None = None,
+    log=None,
 ) -> dict:
     """对单个候选进行单轮评估，保留质量检查与程序引用核验。
 
@@ -414,6 +415,7 @@ def evaluate(
             from src.infra.model_pool import PoolStopped
             if on_request is None:
                 raise ValueError('模型池必须提供持久化请求回调')
+            effective_log = getattr(model_pool, 'log', None) or log
             def invoke(effective, fmt, context):
                 context['stage'] = STAGE_CATALOG_ASSESSMENT
                 context['reserved_tokens'] = (len((system + user).encode('utf-8')) + 1024
@@ -422,7 +424,7 @@ def evaluate(
                 if on_request('before', 'assessment', context) is False:
                     raise PoolStopped('token_limit')
                 response = call_model(effective, system, user, api_key=api_key,
-                                      response_format=fmt, session=session, sleep=sleep)
+                                      response_format=fmt, session=session, sleep=sleep, log=effective_log)
                 response.requested_model = effective['model']
                 response.model_config_fingerprint = context['model_config_fingerprint']
                 calls.append(response)
@@ -448,10 +450,15 @@ def evaluate(
                 except (OutputSchemaError, ValueError) as exc:
                     return False, None, {"error": str(exc), "error_kind": getattr(exc, "error_kind", ERROR_KIND_OUTPUT_SCHEMA_INVALID)}
 
+            def on_request_update(res):
+                if on_request is not None:
+                    on_request('update', 'assessment', res)
+
             try:
                 call, _ = model_pool.run(system, user, assessment_contract, invoke,
                                          max_attempts=pool_max_attempts, sleep=sleep,
-                                         validate_result=validate_assessment)
+                                         validate_result=validate_assessment,
+                                         on_request_update=on_request_update)
             except PoolStopped as exc:
                 return {'ok': False, 'evaluation': None, 'call': calls[-1] if calls else None,
                         'calls': calls, 'stage': 'assessment', 'reason_code':
@@ -463,7 +470,7 @@ def evaluate(
             if on_request is not None:
                 on_request("before", "assessment", None)
             fmt = resolve_response_format(model_cfg, assessment_contract)
-            call = call_model(model_cfg, system, user, api_key=api_key, response_format=fmt, session=session, sleep=sleep)
+            call = call_model(model_cfg, system, user, api_key=api_key, response_format=fmt, session=session, sleep=sleep, log=log)
             calls.append(call)
             if on_request is not None:
                 on_request("after", "assessment", call)

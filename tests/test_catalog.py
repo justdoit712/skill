@@ -417,6 +417,17 @@ class FailurePolicyTest(unittest.TestCase):
         self.assertEqual(decision.action, ACTION_LENGTH_EXCEEDED)
         self.assertTrue(decision.is_length_exceeded)
 
+    def test_classify_candidate_no_capable_model(self):
+        from src.catalog.failure_policy import update_failure_counters
+        result = {"ok": False, "reason_code": "CANDIDATE_NO_CAPABLE_MODEL", "error": "超出上限"}
+        decision = classify_result(result)
+        self.assertEqual(decision.category, "candidate_no_capable_model")
+        self.assertEqual(decision.block_reason, "CANDIDATE_NO_CAPABLE_MODEL")
+        self.assertFalse(decision.is_service_failure)
+        self.assertFalse(decision.retryable)
+        cons, fmt = update_failure_counters(result, decision, 2, 0)
+        self.assertEqual(cons, 2)  # 不增加服务故障计数，不触发整轮停止
+
 
 @smoke
 class BudgetLedgerTest(unittest.TestCase):
