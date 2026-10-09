@@ -2,6 +2,2315 @@
   "category": "UI 设计风格",
   "schema_version": "1.0.0",
   "updated_at": "2026-10-09",
+  "total": 74,
   "description": "收录 UI 设计风格、界面美学与前端交互规范等特定品种的 AI Agent Skill 元数据（不下载代码，仅存 JSON）",
-  "entries": []
+  "entries": [
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/academic-paper/SKILL.md",
+      "name": "academic-paper",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/academic-paper/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "提供学术论文视觉风格规范，包括配色、排版、布局和动画，用于学术报告、研究分享、会议论文展示等场景。",
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "tags": [
+        "设计指南",
+        "视觉风格",
+        "学术论文",
+        "配色",
+        "排版"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "缺少具体实现代码、动画参数、模板或验收标准；未说明适用平台/工具。",
+      "example_requests": [
+        "为学术报告页面套用论文白、墨黑标题和蓝色链接的配色与排版规范",
+        "按单栏或双栏布局生成学术风格的研究分享展示页，包含图表编号和图注"
+      ],
+      "key_features": [
+        "提供学术风格具体色值和渐变背景",
+        "规定衬线正文与无衬线标题的排版方式",
+        "列出学术报告、会议论文展示等适用场景"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/amber-aurora/SKILL.md",
+      "name": "amber-aurora",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/amber-aurora/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "该技能定义 amber-aurora 国风暖色渐变视觉规范，用于文创发布、节日企划等场景的配色、排版、布局与动效设计。",
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "tags": [
+        "UI 设计风格",
+        "国风",
+        "配色规范",
+        "视觉指南",
+        "产品与设计"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "主要是文本风格规范，未提供实现代码、组件、具体平台适配或验收方法；落地依赖设计者自行实现。",
+      "example_requests": [
+        "按 amber-aurora 风格设计一个国风节日企划页面，包含紫橙渐变和天云水布局。",
+        "为文创品牌发布制作暖棕紫到蜜橙的视觉规范，并列出不要的冷色和硬朗几何。"
+      ],
+      "key_features": [
+        "低饱和暖棕紫到高饱和暖蜜橙的垂直渐变",
+        "天—云—水三段式布局与半透明米白卡片",
+        "ease-in-out 0.8s–1.5s 的温柔黄昏感动效"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/arctic-cool/SKILL.md",
+      "name": "arctic-cool",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/arctic-cool/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "该技能提供北极冷视觉风格规范，适用于商业分析、金融数据展示和季度汇报等数据导向界面设计。",
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "tags": [
+        "界面设计",
+        "视觉规范",
+        "数据展示",
+        "配色指南",
+        "动画建议"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "未提供具体实现代码、组件规范、动画依赖、技术栈适配和平台兼容性说明。",
+      "example_requests": [
+        "为季度商业分析报告界面应用北极冷配色与卡片式布局",
+        "按冰蓝渐变、无衬线字体和 counter-up 动画制作数据展示页面"
+      ],
+      "key_features": [
+        "冰蓝渐变配色与卡片式数据布局",
+        "面向商业分析、金融数据展示和季度汇报",
+        "包含动画建议与视觉禁忌规则"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/aurora/SKILL.md",
+      "name": "aurora",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/aurora/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "一种专为封面、CTA 和结语页设计的极光主题视觉风格指南，含配色、排版、布局及动画建议，适用于提升页面首尾视觉冲击力。",
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "tags": [
+        "视觉设计",
+        "UI/UX",
+        "封面设计"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "仅限于视觉风格指导，不包含代码实现或自动化生成能力；需人工配合前端技术落地",
+      "example_requests": [
+        "为活动开幕页设计一个极光风格封面，要求标题居中、配色使用深靛+青蓝渐变",
+        "制作一个结语页，用极光背景+模糊文字提升最后一眼的惊艳感"
+      ],
+      "key_features": [
+        "提供具体 CSS 颜色值与渐变公式，便于复现",
+        "限定适用场景（封面/CTA/结语）与禁用情形，避免误用",
+        "包含三种基础动画（blur-in、gradient-flow、shimmer-sweep），可直接集成"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/bauhaus/SKILL.md",
+      "name": "bauhaus",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/bauhaus/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "提供包豪斯几何构成风格的UI设计规范，包括配色、排版、布局及动画建议。",
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "tags": [
+        "UI设计",
+        "视觉风格",
+        "包豪斯",
+        "前端样式"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "仅包含设计规范，未提供具体代码实现或组件库。",
+      "example_requests": [
+        "请按照包豪斯风格生成一个产品发布页面的CSS代码",
+        "设计一个具有强烈视觉张力的几何风格卡片组件"
+      ],
+      "key_features": [
+        "包豪斯几何构成风格",
+        "红黄蓝三原色配色方案",
+        "不对称布局与网格对齐"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/blue-white-chart/SKILL.md",
+      "name": "blue-white-chart",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/blue-white-chart/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "提供一套蓝白商务风格的PPT图表设计规范，涵盖配色、字体、排版、图表类型与动画，适用于企业经营分析、营销复盘等专业汇报场景。",
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "tags": [
+        "PPT设计",
+        "商务风格",
+        "可视化规范"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "仅提供设计规范，未说明具体实现工具（如PowerPoint/Figma），需用户自行适配；无交互或自动化能力",
+      "example_requests": [
+        "制作一份企业季度销售数据看板，要求蓝白配色、网格化布局、数据卡片突出核心指标",
+        "为战略规划会议准备一页PPT，包含环形图+流程图+结论条，风格需理性有序"
+      ],
+      "key_features": [
+        "系统化蓝白商务配色体系，含主色/辅色/背景/文字各层级HEX值",
+        "结构化排版指南：16:9画布、模块分区、对齐系统与留白控制",
+        "适配多种商业图表类型（折线图/矩阵表/年度闭环图等）及克制动画效果"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/blueprint/SKILL.md",
+      "name": "blueprint",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/blueprint/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "该技能定义了“蓝图”视觉风格，包含具体的配色方案、排版规则、布局特征及适用场景，主要用于系统架构图或技术方案的界面设计。",
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "tags": [
+        "UI设计",
+        "视觉风格",
+        "配色方案",
+        "架构图"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "动画名称（如 path-draw）未提供具体实现代码或依赖库说明。",
+      "example_requests": [
+        "为我的系统架构图应用蓝图风格",
+        "根据蓝图风格生成 CSS 代码"
+      ],
+      "key_features": [
+        "提供精确的十六进制配色与渐变背景代码",
+        "定义等宽字体与网格底纹的排版规范",
+        "明确列出视觉设计的禁忌事项（如禁用暖色）"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/burgundy-premium/SKILL.md",
+      "name": "burgundy-premium",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/burgundy-premium/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "该技能定义了一套基于勃艮第红、玫瑰金和黑色的高级感视觉设计规范，包含详细的配色值、排版字重、装饰元素及动画节奏，适用于奢侈品包装、高端汇报等需要体现沉稳奢华气质的设计场景。",
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "tags": [
+        "UI设计",
+        "配色方案",
+        "视觉规范",
+        "高端风格"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "仅适用于特定风格（勃艮第红高级感），不适用于其他设计风格；缺乏代码实现示例。",
+      "example_requests": [
+        "请根据勃艮第红高级感配色规范，设计一张高端化妆品品牌的宣传海报。",
+        "使用 burgundy-premium 风格生成一个年终总结 PPT 的封面页。"
+      ],
+      "key_features": [
+        "提供具体的勃艮第红、玫瑰金、黑色等十六进制色值",
+        "规定字体字重、间距及几何无衬线字体风格",
+        "定义克制且精致的装饰元素与动画节奏"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/catppuccin-latte/SKILL.md",
+      "name": "catppuccin-latte",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/catppuccin-latte/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "提供 Catppuccin Latte 风格的前端界面设计规范，包含具体配色、排版、布局及动画建议，适用于开发者友好的技术文档或展示页面。",
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "tags": [
+        "UI设计",
+        "前端规范",
+        "配色方案",
+        "开发者主题"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "仅提供了设计规范，未提供可直接复用的 CSS 代码文件或组件库实现。",
+      "example_requests": [
+        "请根据 Catppuccin Latte 规范设计一个开源项目介绍页面",
+        "提供 Catppuccin Latte 风格的背景色和卡片边框色值"
+      ],
+      "key_features": [
+        "提供精确的 Hex 和 RGBA 配色方案",
+        "定义了适合开发者场景的排版和布局原则",
+        "列出了具体的 CSS 动画类名建议"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/catppuccin-mocha/SKILL.md",
+      "name": "catppuccin-mocha",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/catppuccin-mocha/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "该技能提供了 Catppuccin Mocha 深色主题的详细 UI 设计规范，包括配色代码、排版原则、布局策略及动画建议，适用于开发者工具或技术演示界面的设计。",
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "tags": [
+        "UI设计",
+        "主题风格",
+        "CSS",
+        "Catppuccin",
+        "深色模式"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "仅包含设计规范，不包含可执行代码或配置文件。",
+      "example_requests": [
+        "应用 Catppuccin Mocha 风格设计一个代码编辑器界面",
+        "根据规范生成深色主题的 CSS 样式"
+      ],
+      "key_features": [
+        "提供具体的十六进制颜色值和渐变参数",
+        "定义了排版、布局和动画规范",
+        "明确了适用场景与设计禁忌"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/children-warm-orange/SKILL.md",
+      "name": "children-warm-orange",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/children-warm-orange/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "提供儿童节主题的暖橙风格视觉设计规范，涵盖配色、排版、插画、布局及动画参数，适用于节日海报或活动页面设计。",
+      "main_category": {
+        "id": "content",
+        "name": "内容创作"
+      },
+      "tags": [
+        "视觉设计",
+        "配色方案",
+        "UI规范",
+        "节日主题"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "未指定具体的实现技术栈，需用户自行适配到 CSS、Figma 或其他设计工具。",
+      "example_requests": [
+        "请根据儿童暖橙风格生成一个活动海报的 CSS 样式",
+        "提供儿童节主题页面的配色方案和字体建议"
+      ],
+      "key_features": [
+        "详细的十六进制配色方案",
+        "具体的动画缓动函数与参数",
+        "明确的视觉风格禁忌与规范"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/chinese-cream-blossom/SKILL.md",
+      "name": "chinese-cream-blossom",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/chinese-cream-blossom/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "该技能提供了一套基于中国传统米白与樱粉的国风视觉风格指南，包含详细的配色、排版、插画、布局及动画规范，适用于女性品牌、婚庆及美妆等温柔雅致的设计场景。",
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "tags": [
+        "视觉设计",
+        "UI风格",
+        "国风",
+        "配色指南",
+        "排版规范"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "仅适用于追求温柔、雅致、内敛国风氛围的设计项目，不适合科技、工业或暗黑风格场景。",
+      "example_requests": [
+        "请根据'chinese-cream-blossom'风格指南，为一场春季美妆发布会设计PPT封面配色和排版。",
+        "帮我检查这个网页设计是否符合'chinese-cream-blossom'的视觉规范，特别是颜色和动画部分。"
+      ],
+      "key_features": [
+        "提供精确的十六进制配色方案（樱粉、宣纸米等）",
+        "详细的排版与字体建议（思源宋体、行楷等）",
+        "明确的视觉禁忌与适用场景指南"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/chinese-fresh-trio/SKILL.md",
+      "name": "chinese-fresh-trio",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/chinese-fresh-trio/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "该技能提供了一套基于翠绿、湖蓝、米白三色的现代国风视觉设计规范，涵盖配色、排版、布局及动画建议，适用于品牌视觉和数据报告设计。",
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "tags": [
+        "UI设计",
+        "视觉规范",
+        "国风",
+        "配色方案",
+        "排版指南"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "未提供具体字体文件的下载链接或授权信息，实施时需自行确保字体版权合规。",
+      "example_requests": [
+        "应用 chinese-fresh-trio 风格设计一个数据报告页面",
+        "根据该规范生成一组品牌视觉配色方案"
+      ],
+      "key_features": [
+        "明确的中国传统三色配色方案（含HEX值）",
+        "涵盖排版、布局、动画的具体设计规则",
+        "针对现代国风场景的视觉风格指南"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/chinese-ink-landscape/SKILL.md",
+      "name": "chinese-ink-landscape",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/chinese-ink-landscape/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "提供中式山水画风格的视觉设计规范，包含配色、排版、布局及动画建议，适用于文化、地产等场景的设计开发。",
+      "main_category": {
+        "id": "content",
+        "name": "内容创作"
+      },
+      "tags": [
+        "视觉设计",
+        "风格指南",
+        "中式美学",
+        "UI规范"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "需用户自行准备特定字体（如方正清刻本悦宋），且未提供具体的代码实现示例。",
+      "example_requests": [
+        "根据中式山水画风格指南设计一个文化讲座的PPT模板",
+        "应用青黛蓝和暖沙米配色方案开发一个东方美学风格的网页"
+      ],
+      "key_features": [
+        "提供具体的中式山水画配色色值",
+        "包含排版、布局及动画的详细规范",
+        "明确列出不适合该风格的视觉元素"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/chinese-pastel-spring/SKILL.md",
+      "name": "chinese-pastel-spring",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/chinese-pastel-spring/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "提供一套基于中国传统春季节庆的UI/UX设计规范，包含具体的配色方案、排版、插画元素及动画建议。适用于国风品牌、春季节庆或新品发布页面的视觉设计。",
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "tags": [
+        "UI设计",
+        "视觉规范",
+        "中国风",
+        "配色方案",
+        "前端样式"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "依赖特定字体（如方正清刻本悦宋）可能涉及版权或安装问题；未指定具体技术栈实现方式。",
+      "example_requests": [
+        "根据 chinese-pastel-spring 风格，生成一个春季节庆活动落地页的配色和布局方案。",
+        "使用嫩柳绿和桃花粉为主色，设计一个国风美妆产品的详情页视觉规范。"
+      ],
+      "key_features": [
+        "明确定义嫩柳绿与桃花粉为主色的中国传统配色体系",
+        "提供具体的排版、插画意象（桃花、柳条）及动画参数规范",
+        "针对春季节庆、国风品牌等特定场景的视觉氛围营造指南"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/chinese-porcelain-rose/SKILL.md",
+      "name": "chinese-porcelain-rose",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/chinese-porcelain-rose/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "提供基于中国传统色“凝脂”与“杨妃”的国风视觉设计规范，包含配色、排版、插画及动画指导，适用于文化遗产、高端礼品等场景的界面或平面设计。",
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "tags": [
+        "UI设计",
+        "视觉规范",
+        "国风",
+        "配色方案",
+        "平面设计"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "仅适用于追求特定国风视觉效果的场景，字体可用性依赖本地环境。",
+      "example_requests": [
+        "根据chinese-porcelain-rose风格设计一个茶叶品牌的首页配色方案",
+        "应用凝脂与杨妃主色，生成一份国风PPT模板的排版规范"
+      ],
+      "key_features": [
+        "基于中国传统色“凝脂”与“杨妃”的特定配色方案",
+        "涵盖排版、插画、布局及动画的全方位视觉规范",
+        "强调温润、典雅、内敛的国风美学特征"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/classic-duo-blue/SKILL.md",
+      "name": "classic-duo-blue",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/classic-duo-blue/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "提供名为 classic-duo-blue 的视觉设计规范，包含深海蓝与暖米黄的配色方案、衬线字体排版、古典意象装饰及布局动画指南，适用于高端品牌或学术报告场景。",
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "tags": [
+        "UI设计",
+        "配色方案",
+        "视觉规范",
+        "排版指南"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "仅包含静态设计规范，未提供具体的代码实现或组件库支持；字体依赖未声明。",
+      "example_requests": [
+        "请按照 classic-duo-blue 规范设计一个年度报告的封面",
+        "生成符合 classic-duo-blue 配色和排版要求的 CSS 代码"
+      ],
+      "key_features": [
+        "深海蓝与暖米黄双色对比配色",
+        "衬线字体与古典纹样装饰规范",
+        "明确的布局分区与动画参数"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/cobalt-sunshine/SKILL.md",
+      "name": "cobalt-sunshine",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/cobalt-sunshine/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "提供'钴蓝阳光'（Cobalt Sunshine）风格的 PPT/演示文稿设计规范，包含配色、排版、布局及动画建议，适用于活力与专业并重的场景。",
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "tags": [
+        "UI设计",
+        "PPT风格",
+        "配色指南",
+        "视觉规范"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "仅适用于追求高对比、活力风格的演示文稿，可能不适用于严肃或极简风格需求。",
+      "example_requests": [
+        "帮我生成一份符合 cobalt-sunshine 风格的 PPT 配色方案",
+        "根据 cobalt-sunshine 规范调整演示文稿的标题字体和背景色"
+      ],
+      "key_features": [
+        "明黄与钴蓝高饱和互补色撞色设计",
+        "包含具体的 CSS 动画参数和排版规则",
+        "明确列出适用场景与设计禁忌"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/corporate-clean/SKILL.md",
+      "name": "corporate-clean",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/corporate-clean/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "提供企业级商务场景的视觉设计规范，包含配色、排版、布局及动画建议，适用于董事会汇报、B2B演示等专业场合。",
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "tags": [
+        "UI设计",
+        "视觉规范",
+        "商务风格",
+        "配色方案"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "未声明适用的具体技术栈或设计工具平台",
+      "example_requests": [
+        "为董事会汇报设计一套专业可靠的PPT视觉风格",
+        "根据企业洁净规范调整B2B销售演示页面的配色和布局"
+      ],
+      "key_features": [
+        "企业级双色系统（海军蓝+蓝色）",
+        "规整卡片式布局与严格对齐",
+        "针对商务场景的动画与禁忌规范"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/cream-pastel/SKILL.md",
+      "name": "cream-pastel",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/cream-pastel/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "提供一套奶油色系温柔高级风的视觉设计规范，涵盖配色、排版、装饰及动画细节，适用于家居、美妆、慢生活等主题的PPT或演示文稿设计。",
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "tags": [
+        "PPT设计",
+        "视觉规范",
+        "配色方案",
+        "排版指南",
+        "演示文稿"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "未指定具体的设计工具或文件格式支持，仅作为通用视觉风格指南。",
+      "example_requests": [
+        "根据奶油色系规范设计一页家居生活主题的PPT",
+        "提取抹茶绿和暖灰绿的色值用于品牌视觉设计"
+      ],
+      "key_features": [
+        "明确指定低饱和高明度的奶油色系配色方案",
+        "提供具体的字体、圆角、阴影及植物线稿装饰规范",
+        "定义ease-out动画参数以营造温柔有呼吸感的氛围"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/cyberpunk-neon/SKILL.md",
+      "name": "cyberpunk-neon",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/cyberpunk-neon/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "该技能提供了一套完整的赛博朋克霓虹视觉风格指南，包括配色、排版、布局和动画建议，适用于黑客马拉松、科技展示等需要营造未来感的场景。",
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "tags": [
+        "UI设计",
+        "前端样式",
+        "赛博朋克",
+        "视觉规范"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "仅包含视觉风格规范，未提供具体实现代码库或框架依赖说明，需用户自行结合前端技术栈实现。",
+      "example_requests": [
+        "根据赛博朋克霓虹风格指南，为我的黑客马拉松活动页面生成CSS样式代码",
+        "请按照此风格定义，设计一个带有故障效果的未来主义UI组件"
+      ],
+      "key_features": [
+        "提供具体的霓虹配色方案与CSS渐变代码",
+        "定义故障效果与不对称布局等视觉特征",
+        "明确适用场景与设计禁忌"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/dopamine-clash/SKILL.md",
+      "name": "dopamine-clash",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/dopamine-clash/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "提供一套面向Z世代受众的高饱和多巴胺撞色PPT设计规范，涵盖配色、排版、插画、布局与动画，适用于品牌发布、潮牌营销等年轻化场景。",
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "tags": [
+        "视觉设计",
+        "PPT风格",
+        "青年文化"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "仅提供设计规范，无代码/工具实现；需用户自行在设计软件中落地；未说明是否适配具体工具（如PowerPoint、Figma、Canva）。",
+      "example_requests": [
+        "为校园招新活动设计一份高饱和撞色风格的PPT大纲",
+        "按淡紫-亮绿-玫粉三色体系生成一个节日促销海报配色方案"
+      ],
+      "key_features": [
+        "提供具体Hex色值与比例克制原则，避免刺眼",
+        "整合字体搭配、混排策略与几何装饰元素，增强潮流感",
+        "定义动态入场方式（cubic-bezier弹跳缓动+滑入/缩放）"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/dracula/SKILL.md",
+      "name": "dracula",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/dracula/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "Dracula 是一套经典暗黑系代码配色方案指南，提供配色、排版、布局与动画建议，适用于技术分享、教学及开源演示等需要突出代码视觉表现力的场景。",
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "tags": [
+        "界面设计",
+        "代码展示",
+        "视觉规范"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "仅提供视觉风格规范，未包含实现脚本或工具；依赖具体编辑器/终端/IDE 的主题支持；无跨平台兼容性说明",
+      "example_requests": [
+        "为技术演讲准备一个使用 Dracula 配色的 PPT 模板",
+        "在终端中配置 Dracula 主题并用于代码高亮显示"
+      ],
+      "key_features": [
+        "提供精确配色参数（如 #ff79c6 荧光粉、#bd93f9 薰衣草紫）",
+        "涵盖排版、布局、动画等多维度视觉规范",
+        "明确适配场景与禁用项，降低误用风险"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/dreamy-pink-gradient/SKILL.md",
+      "name": "dreamy-pink-gradient",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/dreamy-pink-gradient/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "提供梦幻粉色渐变视觉风格的设计规范，包含配色、排版、装饰及动画细节，适用于女性时尚、音乐等特定场景。",
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "tags": [
+        "UI设计",
+        "配色方案",
+        "视觉风格",
+        "设计规范"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "仅包含设计规范，未提供代码实现或具体工具脚本。",
+      "example_requests": [
+        "应用 dreamy-pink-gradient 风格设计一个音乐播放器界面",
+        "根据该规范生成一个女性时尚品牌的着陆页配色方案"
+      ],
+      "key_features": [
+        "提供精确的粉色系渐变配色方案",
+        "包含排版、装饰、布局和动画的具体规范",
+        "明确适用场景与设计禁忌"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/dreamy-romance/SKILL.md",
+      "name": "dreamy-romance",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/dreamy-romance/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "一套针对PPT、品牌故事等场景的梦幻浪漫视觉风格规范，涵盖配色、排版、插画、动画与布局细节，旨在营造温柔治愈的诗意氛围。",
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "tags": [
+        "视觉设计",
+        "PPT美化",
+        "品牌调性"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "纯视觉规范，无代码/脚本实现；依赖设计师手动执行；未说明适配具体工具（如PowerPoint、Figma）",
+      "example_requests": [
+        "制作一份情人节主题婚礼策划PPT，要求使用雾紫+樱花粉主色调并带星光闪烁动画",
+        "为一款治愈系香水品牌设计宣传页，需体现奶油白底+柔光阴影+花瓣装饰"
+      ],
+      "key_features": [
+        "提供雾紫/樱花粉/星空蓝/奶油白四色体系及具体HEX值",
+        "包含字体选择、字号行距、留白比例等排版参数",
+        "定义梦幻动画节奏（如ease-out 0.8s–1.4s）与元素行为（光晕呼吸、花瓣twinkle）"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/editorial-serif/SKILL.md",
+      "name": "editorial-serif",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/editorial-serif/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "该技能定义了杂志衬线风格的视觉规范，包括配色、排版和布局，适用于品牌故事或长文演讲等需要叙事感的场景。",
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "tags": [
+        "视觉设计",
+        "排版规范",
+        "配色方案"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "未声明具体实现技术栈",
+      "example_requests": [
+        "应用杂志衬线风格设计一个品牌故事页面",
+        "为长文演讲PPT配置杂志衬线风格的配色和排版"
+      ],
+      "key_features": [
+        "奶油色渐变背景与深褐焦棕配色体系",
+        "衬线标题搭配无衬线正文的经典杂志编排",
+        "强调首行缩进与留白节奏的叙事性布局"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/engineering-whiteprint/SKILL.md",
+      "name": "engineering-whiteprint",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/engineering-whiteprint/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "提供“工程白图”视觉风格指南，适用于系统设计、API文档等技术文档，强调等宽字体、网格布局及海军蓝配色以体现工程严谨性。",
+      "main_category": {
+        "id": "docs",
+        "name": "文档办公"
+      },
+      "tags": [
+        "视觉设计",
+        "文档风格",
+        "UI规范",
+        "技术文档"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "仅提供视觉规范，不包含具体代码实现或组件库集成指南。",
+      "example_requests": [
+        "使用工程白图风格设计一个API文档页面",
+        "为架构白皮书应用等宽字体和网格布局规范"
+      ],
+      "key_features": [
+        "海军蓝与钢灰配色方案",
+        "强制等宽字体与网格布局",
+        "适用于技术文档的严谨视觉风格"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/glassmorphism/SKILL.md",
+      "name": "glassmorphism",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/glassmorphism/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "提供磨砂玻璃（Glassmorphism）风格的设计规范，包括配色、排版、布局与动画，适用于高端产品展示与设计系统构建。",
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "tags": [
+        "UI设计",
+        "视觉风格",
+        "CSS技巧"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "未说明浏览器兼容性要求（如 backdrop-filter 在 IE 不支持），未提供代码实现或工具集成指南",
+      "example_requests": [
+        "设计一个高端产品发布会页面，使用磨砂玻璃卡片与多色渐变背景",
+        "为品牌官网首页添加符合 Apple 风格的模糊卡片组件"
+      ],
+      "key_features": [
+        "提供精确配色方案：深墨、石板灰、柔紫、青蓝及三段渐变背景",
+        "强调 backdrop-filter 实现文字与背景对比，避免实色底",
+        "定义典型动画效果：blur-in、shimmer-sweep、gradient-flow"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/gold-ivory/SKILL.md",
+      "name": "gold-ivory",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/gold-ivory/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "提供一套名为“gold-ivory”的高级质感视觉设计风格指南，包含具体的配色、排版、装饰、布局及动画规范，适用于奢华品牌、高端地产等PPT或视觉设计场景。",
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "tags": [
+        "视觉设计",
+        "PPT风格",
+        "设计指南",
+        "配色方案"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "仅适用于特定视觉风格的设计指导，不涉及代码实现或具体工具操作。",
+      "example_requests": [
+        "请根据gold-ivory风格指南，为高端香水品牌设计一套PPT视觉规范。",
+        "帮我提取gold-ivory风格中的主色和辅助色色值。"
+      ],
+      "key_features": [
+        "提供具体的配色方案（如鎏金棕 #7A4E1D、象牙白 #E8DCC8）。",
+        "详细规定排版、插画、布局与动画的设计规范。",
+        "明确列出适用场景（如奢华品牌发布、高端地产）及设计禁忌。"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/gradient-cosmic/SKILL.md",
+      "name": "gradient-cosmic",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/gradient-cosmic/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "这是一个以深邃星空与金色光芒为灵感的视觉风格指南，涵盖配色、排版、动画与布局规范，适用于影视、艺术展览等需要史诗感与梦幻氛围的设计项目。",
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "tags": [
+        "视觉设计",
+        "风格指南",
+        "品牌视觉"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "仅提供设计规范，未附带实现代码或模板文件；依赖使用者自行在设计工具中落地；无跨平台兼容性声明。",
+      "example_requests": [
+        "为年度品牌发布会设计海报，要求采用深靛蓝+金橙对比风格",
+        "制作一个以银河与烟火为主题的音乐MV片头，需遵循该风格规范"
+      ],
+      "key_features": [
+        "提供精确十六进制配色方案及使用场景说明",
+        "涵盖从标题到引文的完整排版层级规范",
+        "包含动画节奏与时长建议，支持动态内容适配"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/gruvbox-dark/SKILL.md",
+      "name": "gruvbox-dark",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/gruvbox-dark/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "这是一份 Gruvbox 暗色风格的前端/界面设计指南，提供具体的配色参数、排版规则和动画建议，适用于终端美学、DevOps 演示等场景。",
+      "main_category": {
+        "id": "dev",
+        "name": "编程开发"
+      },
+      "tags": [
+        "UI设计",
+        "前端样式",
+        "Gruvbox",
+        "终端美学"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "仅适用于特定视觉风格，需结合具体前端框架实现。",
+      "example_requests": [
+        "应用 Gruvbox 暗色风格设计一个终端界面",
+        "提供 Gruvbox 风格的 CSS 背景渐变代码"
+      ],
+      "key_features": [
+        "提供精确的 HEX 色值和 CSS 渐变参数",
+        "定义终端美学排版与动画规范",
+        "明确适用场景与设计禁忌"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/hand-drawn-autumn/SKILL.md",
+      "name": "hand-drawn-autumn",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/hand-drawn-autumn/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "该技能提供了一套“手绘秋日旅行手账”的视觉风格指南，详细规定了配色方案、排版规则、插画元素及动画参数，适用于需要营造温暖、童趣氛围的UI或平面设计场景。",
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "tags": [
+        "UI设计",
+        "视觉风格",
+        "配色指南",
+        "动画规范",
+        "排版"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "仅包含视觉风格规范，未提供具体的代码实现或资产文件。",
+      "example_requests": [
+        "根据手绘秋日旅行手账风格生成CSS配色变量",
+        "描述一个符合该风格的主页布局结构"
+      ],
+      "key_features": [
+        "提供具体的Hex颜色代码与情绪对应关系",
+        "定义非对称自由布局与手账装饰元素",
+        "规定动画时长与缓动函数以模拟手绘感"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/handdrawn-watercolor/SKILL.md",
+      "name": "handdrawn-watercolor",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/handdrawn-watercolor/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "该技能提供手绘水彩绘本风格规范，用于制作面向青少年、心理成长和教育科普类的温暖型 PPT。",
+      "main_category": {
+        "id": "docs",
+        "name": "文档办公"
+      },
+      "tags": [
+        "PPT",
+        "视觉风格",
+        "手绘水彩",
+        "排版规范",
+        "动画建议"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "未提供 PPT 模板、具体制作步骤、工具依赖或验证示例。",
+      "example_requests": [
+        "为教育科普内容制作温暖型 PPT，采用手绘水彩绘本风格",
+        "将现有 PPT 调整为低饱和暖色、手写标题和留白布局"
+      ],
+      "key_features": [
+        "低饱和暖色与海洋浅蓝配色方案",
+        "手绘水彩插画与柔和排版规范",
+        "适合温暖型 PPT 的场景建议"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/healing-color-card/SKILL.md",
+      "name": "healing-color-card",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/healing-color-card/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "该技能是一套基于情绪疗愈理念的视觉设计指南，提供三主色及配套配色、排版、动画与布局规范，适用于心理健康、冥想类APP及女性/母婴品牌界面设计。",
+      "main_category": {
+        "id": "mental_health",
+        "name": "心理健康"
+      },
+      "tags": [
+        "视觉设计",
+        "情绪疗愈",
+        "UI/UX指南"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "纯设计规范类技能，不包含可执行代码或自动化功能；需人工实现于设计工具或前端开发中。",
+      "example_requests": [
+        "为一款情绪记录APP设计疗愈风首页配色与排版",
+        "制作一张以薄荷绿为主色调的冥想引导卡片"
+      ],
+      "key_features": [
+        "提供精确到RGB值的疗愈系配色方案",
+        "整合排版、动画、插画等多维度设计规范",
+        "明确区分适合/不适合的视觉元素，降低误用风险"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/indigo-lotus/SKILL.md",
+      "name": "indigo-lotus",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/indigo-lotus/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "提供“青莲碧蓝”梦幻国风视觉风格指南，涵盖配色、排版、布局及动画参数，适用于文化讲座或艺术展览等场景。",
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "tags": [
+        "UI设计",
+        "视觉规范",
+        "国风",
+        "配色方案"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "仅适用于特定视觉风格场景，需结合具体技术栈实现。",
+      "example_requests": [
+        "应用青莲碧蓝国风规范设计一个诗词分享页面",
+        "根据 indigo-lotus 风格生成 CSS 配色变量"
+      ],
+      "key_features": [
+        "紫蓝渐变营造黄昏海天意境",
+        "水墨晕染云层与星光点缀",
+        "半透明白底毛玻璃布局"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/industrial-kaizen/SKILL.md",
+      "name": "industrial-kaizen",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/industrial-kaizen/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "该技能是一套面向商务报表场景的表格视觉设计规范，规定了配色、排版、布局与动画等细节，适用于经营分析、KPI看板等需要高密度、高可读性数据呈现的设计任务。",
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "tags": [
+        "商务报表",
+        "视觉规范",
+        "表格设计",
+        "UI/UX指南"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "仅提供视觉设计规则，不包含实现工具或代码；需配合前端/设计工具落地；未说明是否支持响应式或多端适配",
+      "example_requests": [
+        "为季度销售复盘制作一张符合工业精益风格的表格，要求KPI横栏右对齐数字、表头全大写、无彩色装饰",
+        "设计一份运营数据看板，使用暖白底+暖灰分隔线+深墨标题线，确保所有数字按个位/小数点严格对齐"
+      ],
+      "key_features": [
+        "纯表格视觉语言，零插画/图标/渐变，强调信息密度与可读性平衡",
+        "精确到像素级的排版规范，含tabular-nums数字对齐、行距/字距/圆角等量化指标",
+        "结构化布局模板：顶部标题区+KPI横栏+主表格区+页脚，适配各类经营数据汇报"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/ink-wash-jiangnan/SKILL.md",
+      "name": "ink-wash-jiangnan",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/ink-wash-jiangnan/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "提供中国传统水墨画与江南水乡风格的视觉设计规范，包括配色、排版、装饰及动画指南，适用于文化类内容创作。",
+      "main_category": {
+        "id": "content",
+        "name": "内容创作"
+      },
+      "tags": [
+        "视觉设计",
+        "中国风",
+        "水墨画",
+        "UI/UX",
+        "风格指南"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "仅适用于东方意境、文化类或特定审美需求场景，不适合现代科技感或高饱和度商业风格。",
+      "example_requests": [
+        "根据水墨江南风格设计一个端午节文化宣传海报。",
+        "应用 ink-wash-jiangnan 风格规范编写一个网页的 CSS 样式。"
+      ],
+      "key_features": [
+        "提供具体的十六进制配色方案（宣纸米白、浓墨、朱砂红等）。",
+        "定义核心视觉意象（拱桥、乌篷船、垂柳等）及装饰元素。",
+        "包含排版、布局、动画及适合场景的详细指导。"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/japanese-minimal/SKILL.md",
+      "name": "japanese-minimal",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/japanese-minimal/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "提供日式极简主义的设计风格指南，包含具体的配色方案、排版原则及动画建议，适用于品牌升级或禅意叙事场景。",
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "tags": [
+        "UI设计",
+        "极简主义",
+        "视觉规范",
+        "前端样式"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "仅包含视觉风格参数，未提供具体组件代码实现或响应式适配细节。",
+      "example_requests": [
+        "帮我设计一个日式极简风格的产品发布页面，重点突出留白和朱红点缀。",
+        "根据日式极简规范，调整现有页面的背景渐变和卡片边框颜色。"
+      ],
+      "key_features": [
+        "提供精确的HEX色值与背景渐变参数",
+        "强调极致留白与单一强调色原则",
+        "包含具体的动画类型建议（blur-in, path-draw）"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/macaron-mist/SKILL.md",
+      "name": "macaron-mist",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/macaron-mist/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "提供马卡龙柔雾甜梦风 PPT 视觉风格规范，包含配色、排版、装饰、布局、动画和适用场景。适合用于甜品、婚礼、儿童内容等柔和少女风演示设计。",
+      "main_category": {
+        "id": "docs",
+        "name": "文档办公"
+      },
+      "tags": [
+        "PPT",
+        "视觉风格",
+        "设计指南",
+        "配色",
+        "排版"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "未提供具体 PPT 模板、代码实现、素材获取方式或效果示例，实际落地依赖用户所用工具与设计素材。",
+      "example_requests": [
+        "为甜品品牌 PPT 应用马卡龙柔雾风配色和圆形卡片布局。",
+        "按薄荷绿、粉珊瑚、薰衣草紫设计少女风演示版式。"
+      ],
+      "key_features": [
+        "柔雾低饱和配色与字体规则",
+        "圆形甜点卡片布局和柔和动画",
+        "明确适用场景与风格禁忌"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/magazine-bold/SKILL.md",
+      "name": "magazine-bold",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/magazine-bold/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "提供杂志大字风格的视觉设计规范，包括配色、排版、布局及动画建议，适用于专栏文章、封面故事等场景。",
+      "main_category": {
+        "id": "content",
+        "name": "内容创作"
+      },
+      "tags": [
+        "设计规范",
+        "排版",
+        "视觉风格"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "未提供具体动画代码实现，需用户自行结合前端技术栈实现",
+      "example_requests": [
+        "帮我设计一个杂志大字风格的 PPT 模板",
+        "生成一个奶油色背景的杂志排版 CSS 代码"
+      ],
+      "key_features": [
+        "奶油色三段渐变背景与深棕焦糖配色",
+        "超大衬线标题与宽松行距排版",
+        "杂志式双栏或单栏大图布局"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/memphis-pop/SKILL.md",
+      "name": "memphis-pop",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/memphis-pop/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "孟菲斯波普风格的前端UI设计规范，包含配色、排版、布局及动画建议，适用于年轻化和创意类网页设计。",
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "tags": [
+        "UI设计",
+        "前端开发",
+        "视觉风格",
+        "CSS"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "未提供实现特定动画效果的技术栈细节或代码示例。",
+      "example_requests": [
+        "根据孟菲斯波普风格生成一个着陆页的CSS样式",
+        "列出孟菲斯波普风格的配色方案和布局原则"
+      ],
+      "key_features": [
+        "提供具体的HEX颜色值和渐变代码",
+        "定义不对称布局与几何装饰元素",
+        "明确适用场景与设计禁忌"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/midcentury/SKILL.md",
+      "name": "midcentury",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/midcentury/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "提供世纪中叶现代风格（Mid-Century Modern）的UI设计指南，包含具体配色、排版、布局及动画建议，适用于复古或经典美学场景。",
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "tags": [
+        "UI设计",
+        "配色方案",
+        "风格指南",
+        "前端样式"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "仅适用于追求世纪中叶美学风格的场景，若需现代科技感或冷色调设计则不适用。",
+      "example_requests": [
+        "根据世纪中叶风格指南生成一个家居展示页面的CSS",
+        "列出Mid-Century Modern风格的推荐配色方案"
+      ],
+      "key_features": [
+        "提供具体的十六进制色值与CSS渐变代码",
+        "明确定义排版、布局与动画的设计原则",
+        "包含针对该风格的负面约束（不要做什么）"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/minimal-white/SKILL.md",
+      "name": "minimal-white",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/minimal-white/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "该技能提供极简白视觉风格规范，适用于内部汇报、技术评审、严肃话题讨论和工作坊等需要内容聚焦的界面或演示设计场景。",
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "tags": [
+        "视觉规范",
+        "界面设计",
+        "演示设计",
+        "极简风格",
+        "设计指南"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "材料只给出风格原则和参数，未提供具体实现代码、组件库、设计工具适配说明或验收示例。",
+      "example_requests": [
+        "按极简白规范设计一份内部汇报页面，包含配色、排版和布局要求。",
+        "检查这个演示风格是否符合极简白，并指出违反不要项的地方。"
+      ],
+      "key_features": [
+        "纯白到浅灰背景与克制蓝色强调",
+        "大留白、文字层级和精确对齐",
+        "限定动画与明确禁止项"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/mint-fresh/SKILL.md",
+      "name": "mint-fresh",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/mint-fresh/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "这是一个用于制作清新自然风格 PPT 的设计规范指南，提供了具体的配色方案、排版规则、布局建议及动画参数。",
+      "main_category": {
+        "id": "docs",
+        "name": "文档办公"
+      },
+      "tags": [
+        "PPT设计",
+        "配色指南",
+        "视觉规范",
+        "清新风格"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "仅适用于演示文稿或相关视觉设计场景，未提供代码实现细节。",
+      "example_requests": [
+        "请根据 mint-fresh 风格指南，为一页介绍有机食品的 PPT 生成设计建议。",
+        "提取 mint-fresh 风格的主色和辅助色 HEX 代码。"
+      ],
+      "key_features": [
+        "提供具体的薄荷绿系配色方案（含 HEX 值）",
+        "详细的排版、布局与动画参数规范",
+        "明确适用场景与设计禁忌"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/mountain-green-literary/SKILL.md",
+      "name": "mountain-green-literary",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/mountain-green-literary/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "该技能提供“山野文艺绘本风”的详细视觉设计规范，涵盖配色、排版、插画意象及布局，适用于创作具有自然、诗意和童年野趣的夏日主题视觉内容。",
+      "main_category": {
+        "id": "content",
+        "name": "内容创作"
+      },
+      "tags": [
+        "视觉风格",
+        "设计指南",
+        "插画",
+        "排版",
+        "配色"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "仅适用于特定美学风格的创作，不适用于其他风格；未提供具体的代码实现或AI提示词模板，需用户自行转化为具体工具指令。",
+      "example_requests": [
+        "请根据山野文艺绘本风，生成一张以深绿山峦和亮黄草地为背景的夏日海报描述。",
+        "帮我检查这个设计是否符合'不要大片蓝天主导'和'粗笔手写大字'的风格要求。"
+      ],
+      "key_features": [
+        "指定深绿与亮黄为主色调的配色方案",
+        "强调粗笔手写标题与竖排诗句的排版对比",
+        "定义'奔跑小孩背影'与'层次山峦'的核心插画意象"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/neo-brutalism/SKILL.md",
+      "name": "neo-brutalism",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/neo-brutalism/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "新野兽派风格设计指南，提供配色、排版、布局、动画规则，适用于创业路演、创意比稿等需要强烈视觉态度的场景。",
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "tags": [
+        "设计风格",
+        "UI 设计",
+        "新野兽派",
+        "视觉规范"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "仅描述风格规则，未提供代码实现或设计工具集成。",
+      "example_requests": [
+        "设计一个创业路演 PPT 页面，应用新野兽派风格",
+        "用新野兽派风格制作创意比稿的卡片布局"
+      ],
+      "key_features": [
+        "具体配色方案（色值、渐变、阴影参数）",
+        "排版与布局规则（粗犷字体、卡片排列、空隙）",
+        "明确适用场景与禁忌"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/neon-haze/SKILL.md",
+      "name": "neon-haze",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/neon-haze/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "一套赛博朋克风格的PPT/视觉设计规范，含深蓝紫主色调、霓虹光斑、未来感排版与动画，适用于科技产品发布、游戏宣发等场景。",
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "tags": [
+        "视觉设计",
+        "PPT风格",
+        "赛博朋克"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "纯视觉风格指南，无代码实现或模板文件；需用户自行在设计工具中落地",
+      "example_requests": [
+        "制作一个赛博朋克主题的AI产品发布PPT",
+        "为音乐节企划设计一张霓虹氛围海报"
+      ],
+      "key_features": [
+        "深蓝紫主背景 + 霓虹色斑柔光晕染，营造赛博梦境氛围",
+        "严格指定字体组合（思源黑体 Heavy + JetBrains Mono）强化科技调性",
+        "提供动画节奏参数（ease-out 0.6s–1.2s）与视觉动效细节"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/news-broadcast/SKILL.md",
+      "name": "news-broadcast",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/news-broadcast/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "提供新闻播报风格的视觉设计规范，包括配色、排版、布局和动画，适用于突发新闻、数据发布等需要权威感和紧迫感的场景。",
+      "main_category": {
+        "id": "content",
+        "name": "内容创作"
+      },
+      "tags": [
+        "UI设计",
+        "视觉规范",
+        "新闻风格",
+        "排版指南"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "仅包含视觉风格描述，未提供具体代码实现或跨平台适配说明。",
+      "example_requests": [
+        "生成一个新闻播报风格的 React 组件，使用指定的红色系配色和左侧红色竖条布局。",
+        "根据新闻播报风格指南，调整 PPT 模板的字体和颜色以体现权威感。"
+      ],
+      "key_features": [
+        "红色系权威配色方案",
+        "左侧红色竖条标志性布局",
+        "大写无衬线字体与紧凑排版"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/nord/SKILL.md",
+      "name": "nord",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/nord/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "一种北欧极简风格的设计规范，包含配色、排版、布局与动画规则，适用于技术文档、云产品发布等需传达沉静、克制气质的场景。",
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "tags": [
+        "视觉设计",
+        "极简主义",
+        "技术文档"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "未说明是否为独立可部署组件（如 CSS 库、Figma 主题或 VS Code 扩展），依赖信息缺失可能导致集成困难；仅提供设计原则，无实现代码或模板",
+      "example_requests": [
+        "为技术架构文档设计一套深色系极简风格界面",
+        "制作一场云产品发布会PPT，要求采用冰蓝与钢蓝为主色调"
+      ],
+      "key_features": [
+        "提供精确的色彩值（如 #88c0d0 冰蓝、radial-gradient 深灰蓝背景）",
+        "定义排版规则：无衬线字体、宽松行距、轻中等字重",
+        "涵盖动画类型（fade-up、stagger-list、path-draw）与适用场景清单"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/olive-elegant/SKILL.md",
+      "name": "olive-elegant",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/olive-elegant/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "定义深橄榄绿与奶白绿的高级稳重视觉风格，包括配色、排版、装饰、布局和动画，适用于品牌发布、杂志企划等界面设计场景。",
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "tags": [
+        "视觉设计",
+        "配色规范",
+        "界面风格",
+        "品牌设计",
+        "排版"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "未提供可执行代码、组件模板或具体平台适配；未说明字体、纹样素材的授权与来源；未声明运行环境依赖。",
+      "example_requests": [
+        "为高端杂志企划设计一套深橄榄绿与奶白绿的视觉规范。",
+        "为奢华品牌发布页面定义配色、排版和动画风格。"
+      ],
+      "key_features": [
+        "深橄榄绿 #4A5D34 与奶白绿 #E5E0D0 配色",
+        "衬线标题与无衬线正文的古典排版",
+        "金色细线、古典纹样和沉稳动画规范"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/orange-sea/SKILL.md",
+      "name": "orange-sea",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/orange-sea/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "该技能提供一套海边黄昏治愈风视觉设计规范，适用于需要温暖清新风格的界面、内容或演示设计场景。",
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "tags": [
+        "视觉风格",
+        "设计规范",
+        "配色",
+        "排版",
+        "治愈风"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "未说明具体实现平台、设计工具或代码依赖，仅提供风格规范。",
+      "example_requests": [
+        "按晴空蓝、柔杏白、落日橙设计海边黄昏治愈风页面配色。",
+        "为旅行户外内容设计温柔治愈的布局、插画和动画风格。"
+      ],
+      "key_features": [
+        "提供主辅色及强调色的具体 HEX 配色。",
+        "规定无衬线字体、大圆角卡片和留白布局。",
+        "包含治愈风动画参数与适用场景。"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/oriental-poetic-illustration/SKILL.md",
+      "name": "oriental-poetic-illustration",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/oriental-poetic-illustration/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "该技能提供东方禅意插画风格规范，用于禅修、文学、节气、品牌发布会等视觉内容的配色、排版、布局与动画设计。",
+      "main_category": {
+        "id": "content",
+        "name": "内容创作"
+      },
+      "tags": [
+        "插画",
+        "视觉风格",
+        "东方美学",
+        "配色",
+        "排版",
+        "动画"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "未提供具体实现代码、字体可用性、工具依赖、平台兼容性和验收方法。",
+      "example_requests": [
+        "按东方禅意插画风格设计一张节气文化海报",
+        "为禅修冥想品牌发布会制定视觉风格规范"
+      ],
+      "key_features": [
+        "东方禅意插画基调与诗意留白",
+        "提供配色、排版、布局与动画规范",
+        "适合禅修、文学、节气等场景"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/palace-ink-red/SKILL.md",
+      "name": "palace-ink-red",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/palace-ink-red/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "该技能提供一套完整的沉稳新中式高级视觉设计规范，涵盖配色、字体、布局、组件、图形与动画，适用于传统文化、品牌提案等高端PPT场景。",
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "tags": [
+        "视觉设计",
+        "PPT模板",
+        "新中式"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "仅提供视觉规范，未包含可直接复用的代码或模板文件；动画依赖特定库，未说明兼容性及集成方式。",
+      "example_requests": [
+        "制作一份以故宫文化为主题的PPT封面，要求沉稳厚重、有东方力量感",
+        "为品牌提案设计一套新中式配色方案并输出视觉规范文档"
+      ],
+      "key_features": [
+        "提供故宫墨红#8C3232等精确色值及使用场景",
+        "定义厚重黑体标题与中等字重正文的字体组合方案",
+        "推荐Anime.js实现庄重稳定的入场动画节奏"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/pitch-deck-vc/SKILL.md",
+      "name": "pitch-deck-vc",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/pitch-deck-vc/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "该技能提供了一套针对融资路演（Pitch Deck）的视觉风格指南，包括配色、排版、布局和动画建议，旨在帮助创业者制作高说服力的演示文稿。",
+      "main_category": {
+        "id": "docs",
+        "name": "文档办公"
+      },
+      "tags": [
+        "PPT",
+        "融资",
+        "视觉设计",
+        "路演"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "仅包含视觉风格规范，未提供内容结构、文案撰写或具体软件操作指南。",
+      "example_requests": [
+        "根据 pitch-deck-vc 风格生成 PPT 配色方案",
+        "为种子轮路演设计一页展示核心增长数据的幻灯片"
+      ],
+      "key_features": [
+        "提供具体的十六进制配色代码",
+        "强调大留白与单信息页布局",
+        "针对投资人视角的视觉优化"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/premium-color-blocking/SKILL.md",
+      "name": "premium-color-blocking",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/premium-color-blocking/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "提供高级撞色风格的视觉设计规范，包含配色、排版、布局及动画参数，适用于品牌发布、时尚潮流等场景。",
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "tags": [
+        "视觉设计",
+        "配色规范",
+        "排版指南",
+        "UI设计"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "未声明字体文件依赖及具体设计工具支持情况。",
+      "example_requests": [
+        "使用高级撞色风格设计一个品牌发布页面的视觉规范",
+        "根据撞色风格指南调整产品界面的配色和排版"
+      ],
+      "key_features": [
+        "暖橙冷墨强对峙配色规范",
+        "杂志版式布局与几何无衬线排版",
+        "干脆利落的动画缓动参数"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/rainbow-gradient/SKILL.md",
+      "name": "rainbow-gradient",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/rainbow-gradient/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "提供“彩虹渐变”UI风格的设计规范，包含配色方案、排版、布局及动画建议，适用于节日或庆祝类界面设计。",
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "tags": [
+        "UI设计",
+        "CSS",
+        "风格指南"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "仅包含视觉规范，未提供具体的代码实现示例或组件库。",
+      "example_requests": [
+        "根据彩虹渐变规范设计一个产品里程碑页面",
+        "提供彩虹渐变风格的CSS配色代码"
+      ],
+      "key_features": [
+        "具体配色方案",
+        "动画与布局建议",
+        "适用场景定义"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/retro-tv/SKILL.md",
+      "name": "retro-tv",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/retro-tv/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "提供一套复古电视（CRT）风格的设计规范，包括配色、排版、布局与动画，适用于怀旧叙事、复古品牌故事等需要营造八十年代氛围的界面场景。",
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "tags": [
+        "视觉设计",
+        "复古风格",
+        "UI规范"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "仅提供设计规范，未说明具体技术实现方式；需用户自行集成到项目中；无跨平台兼容性声明",
+      "example_requests": [
+        "为一篇八零年代回忆录文章设计复古电视风格排版",
+        "制作一个怀旧主题的个人网站主页，采用暖黄扫描线效果"
+      ],
+      "key_features": [
+        "提供完整的CRT复古配色方案（含HEX值与渐变）",
+        "定义复古排版规则：等宽/衬线字体+像素感标题",
+        "包含布局与动画建议：圆角卡片+扫描线+typewriter/fade-up/glitch-in"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/rose-pine/SKILL.md",
+      "name": "rose-pine",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/rose-pine/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "这是一个 rose-pine 暗紫玫瑰粉视觉风格规范，用于为技术分享、创意编程展示或设计系统页面提供配色、排版、布局和动画参考。",
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "tags": [
+        "视觉风格",
+        "界面设计",
+        "配色规范",
+        "暗色主题"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "主要是视觉风格规范，未提供可运行代码、动画实现细节或跨平台兼容性说明。",
+      "example_requests": [
+        "为技术分享页面应用 rose-pine 暗紫玫瑰粉视觉风格",
+        "按 rose-pine 规范设计一个创意编程展示页的配色和布局"
+      ],
+      "key_features": [
+        "提供具体暗紫玫瑰粉配色与径向渐变",
+        "规定排版、布局与动画风格",
+        "明确适合场景与禁止项"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/sakura-soft-healing/SKILL.md",
+      "name": "sakura-soft-healing",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/sakura-soft-healing/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "这是一份樱花季慢生活绘本风的设计规范，详细规定了莫兰迪低饱和配色、柔和排版、静谧插画与缓动动画等要素，适用于文创产品、社交媒体配图及生活方式品牌视觉统一。",
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "tags": [
+        "视觉设计",
+        "风格规范",
+        "文创设计"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "仅提供设计原则与风格指引，不包含具体实现工具或代码；需用户结合设计软件或前端技术落地；未说明是否适配移动端/印刷输出等具体场景。",
+      "example_requests": [
+        "设计一张春日赏樱主题的明信片，要求用莫兰迪粉绿蓝配色并保持留白",
+        "为一篇散文配图，需体现'时间慢下来'的氛围，符合樱花季绘本风"
+      ],
+      "key_features": [
+        "提供精确到十六进制的莫兰迪配色体系（如浅米粉#F7E7DD）",
+        "明确区分'要'与'不要'，避免常见风格误区（如高饱和、粗重字体）",
+        "整合配色、排版、插画、动画四维度，形成完整视觉语言系统"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/sharp-mono/SKILL.md",
+      "name": "sharp-mono",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/sharp-mono/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "该技能提供“锐利黑白”UI 视觉风格规范，用于高对比界面、演讲或品牌态度展示等设计场景。",
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "tags": [
+        "UI设计",
+        "视觉风格",
+        "黑白高对比",
+        "界面规范",
+        "品牌展示"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "缺少具体实现代码、组件示例和验收标准；未声明平台兼容性与依赖。",
+      "example_requests": [
+        "用锐利黑白风格设计一个品牌态度声明页面",
+        "为创意比稿制作高对比黑白视觉方案"
+      ],
+      "key_features": [
+        "纯黑、深灰、浅灰无彩色配色，硬边框与硬阴影",
+        "Archivo Black 或粗黑体，大标题与极端黑白对比",
+        "对角线切割、不对称网格布局，适合宣言式展示"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/soft-pastel/SKILL.md",
+      "name": "soft-pastel",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/soft-pastel/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "该技能提供柔和马卡龙界面视觉风格规范，适用于产品发布、面向消费者展示、亲子教育等需要温柔调性的页面设计。",
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "tags": [
+        "界面设计",
+        "视觉风格",
+        "配色规范",
+        "UI 指南",
+        "马卡龙风格"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "材料只给出风格原则和少量具体色值、动画名称，缺少完整 CSS/组件模板、响应式细节、可访问性说明和验证方法。",
+      "example_requests": [
+        "按柔和马卡龙风格设计一个产品发布页面",
+        "为亲子教育展示页应用三色渐变和圆角卡片规范"
+      ],
+      "key_features": [
+        "暖黄、粉红、浅蓝三色渐变配色",
+        "圆角卡片与柔光无边框布局",
+        "明确柔和调性的禁用项"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/solarized-light/SKILL.md",
+      "name": "solarized-light",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/solarized-light/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "一款基于 Solarized 色彩理论设计的浅色主题，专为长时间阅读与教学场景优化，强调低眩光与视觉舒适；适用于文档排版、教学PPT或知识分享界面的设计参考。",
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "tags": [
+        "UI设计",
+        "视觉舒适",
+        "教学界面"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "仅提供视觉规范描述，无具体实现方式或代码模板；需用户自行集成至项目中；未说明是否兼容主流编辑器或框架。",
+      "example_requests": [
+        "为技术文档选择一种低眩光的浅色主题，确保读者能持续阅读8小时以上",
+        "设计一个教学课件页面，要求背景为暖黄渐变、文字对比度适中、动画柔和"
+      ],
+      "key_features": [
+        "基于色彩科学计算的暖黄渐变背景，模拟旧纸张质感",
+        "明确的配色方案（深青标题、石板青正文、蓝/青强调色）",
+        "强调视觉舒适而非视觉冲击，适配长时间专注场景"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/song-rain-poetic/SKILL.md",
+      "name": "song-rain-poetic",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/song-rain-poetic/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "该技能提供一套“宋雨诗意”新中式视觉风格规范，涵盖配色、排版、插画、布局和动画。适合用于生活美学、茶道、节气文化、文学分享或宋代美学相关页面与内容设计。",
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "tags": [
+        "视觉风格",
+        "新中式",
+        "配色指南",
+        "排版规范",
+        "设计指南",
+        "内容创作"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "仅描述视觉风格，不提供具体实现代码、组件库、验收标准、平台兼容性或跨媒介落地细节。",
+      "example_requests": [
+        "为宋代美学讲座页面设计“宋雨诗意”视觉方案",
+        "为生活美学品牌首页应用雨雾蓝、嫩芽绿和暖黄的留白排版"
+      ],
+      "key_features": [
+        "三色交融的宋韵配色体系",
+        "雨丝、青瓦、芭蕉等诗意视觉意象",
+        "强调留白、极缓淡入和雨丝动画"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/splash-abstract/SKILL.md",
+      "name": "splash-abstract",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/splash-abstract/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "该技能定义 splash-abstract 多巴胺泼墨视觉风格，提供配色、排版、装饰、布局和动画规范，适用于创意品牌、潮流活动、新品发布等视觉设计场景。",
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "tags": [
+        "视觉风格",
+        "配色",
+        "界面设计",
+        "海报",
+        "动画",
+        "品牌设计"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "未提供具体实现代码、工具依赖、平台兼容性或验收标准，仅能作为视觉风格指南使用。",
+      "example_requests": [
+        "为新品发布活动制作海报，采用橙红、品红、紫罗兰、青绿、亮蓝的多巴胺泼墨风格。",
+        "设计年轻人社群页面，使用粗体无衬线标题、彩色信息块和弹入动画。"
+      ],
+      "key_features": [
+        "提供五色泼墨配色方案",
+        "规定排版、装饰、布局与动画规则",
+        "适合创意品牌、潮流活动、新品发布等场景"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/starlight-fireworks/SKILL.md",
+      "name": "starlight-fireworks",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/starlight-fireworks/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "该技能提供“星辉烟火”视觉风格规范，规定配色、排版、插画、布局、动画和适用场景，适合制作诗意、梦幻、二元对立风格的海报、书封、品牌视觉或壁纸设计。",
+      "main_category": {
+        "id": "content",
+        "name": "内容创作"
+      },
+      "tags": [
+        "视觉风格",
+        "配色规范",
+        "海报设计",
+        "品牌视觉",
+        "动画规范"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "未说明适用设计工具、输出格式、动画实现方式、平台兼容性或验收标准；内容偏视觉规范，不直接提供可执行代码。",
+      "example_requests": [
+        "按照一半星河一半烟火的视觉规范设计一张诗歌海报。",
+        "用深海军蓝和暖焰橙对角分界风格设计独立咖啡馆宣传页。"
+      ],
+      "key_features": [
+        "深海军蓝与暖焰橙对角分界",
+        "星空烟火粒子与剪影布局",
+        "梦幻淡入与柔和转场动画"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/starry-dust/SKILL.md",
+      "name": "starry-dust",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/starry-dust/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "提供“星屑柔光童话风”的视觉设计规范，涵盖配色、排版、装饰及动画建议，适用于儿童、少女品牌或梦幻主题的设计场景。",
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "tags": [
+        "UI设计",
+        "视觉规范",
+        "风格指南"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "依赖特定字体资源（如方正筑紫圆、思源柔黑）的可用性；仅为静态风格指南，不包含代码实现。",
+      "example_requests": [
+        "请根据星屑柔光童话风规范，设计一个生日派对邀请函的配色方案",
+        "为一款治愈系插画App设计首页布局，需符合梦幻呼吸感要求"
+      ],
+      "key_features": [
+        "提供具体十六进制色值与字体建议",
+        "定义童话式自由布局与棉花糖质感卡片",
+        "指定梦幻动画缓动参数与元素入场效果"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/summer-warm-color/SKILL.md",
+      "name": "summer-warm-color",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/summer-warm-color/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "该技能定义一套晴朗夏日绘本风视觉规范，用于制作儿童、亲子、教育、夏日休闲等主题的插画、海报或温暖型 PPT。",
+      "main_category": {
+        "id": "content",
+        "name": "内容创作"
+      },
+      "tags": [
+        "视觉风格",
+        "插画",
+        "配色",
+        "海报",
+        "PPT"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "仅包含视觉风格规则，未提供具体代码实现、素材文件、示例成品或验收标准。",
+      "example_requests": [
+        "制作夏日儿童绘本风海报",
+        "生成夏日暖色治愈 PPT 视觉规范"
+      ],
+      "key_features": [
+        "提供完整色值与情绪规则",
+        "规定三段式布局与留白",
+        "包含动画时长与缓动参数"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/sunset-warm/SKILL.md",
+      "name": "sunset-warm",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/sunset-warm/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "「日落暖」是一个 UI 视觉风格指南，定义了以橘色、珊瑚、琥珀为主的暖色调配色方案、排版规则及动画建议，适用于生活方式、庆祝等正向情绪场景的设计。",
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "tags": [
+        "UI设计",
+        "配色方案",
+        "视觉风格",
+        "CSS指南"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "仅包含视觉风格规范，未提供具体前端代码实现或组件库示例。",
+      "example_requests": [
+        "请按照「日落暖」风格生成一个庆祝页面的 CSS 样式",
+        "使用日落暖配色方案设计一个奖项展示卡片"
+      ],
+      "key_features": [
+        "提供精确的十六进制配色值与渐变参数",
+        "定义暖色调下的排版与布局规范",
+        "明确适用场景与禁忌事项"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/swiss-grid/SKILL.md",
+      "name": "swiss-grid",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/swiss-grid/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "瑞士国际主义风格网页/UI设计指南，提供严格的配色、排版和布局规范。",
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "tags": [
+        "UI设计",
+        "风格指南",
+        "排版规范"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "仅适用于特定设计风格，通用性受限。",
+      "example_requests": [
+        "按瑞士风格生成一个设计分享页面",
+        "应用瑞士网格配色规范到当前项目"
+      ],
+      "key_features": [
+        "12栏网格布局规范",
+        "精确配色与字号定义",
+        "明确的设计禁忌清单"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/terminal-green/SKILL.md",
+      "name": "terminal-green",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/terminal-green/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "terminal-green 是终端绿黑客美学视觉风格指南，规定配色、等宽排版、终端式布局和动画建议。适合 CLI 工具展示、黑客马拉松、安全演讲等需要终端氛围的界面或内容设计场景。",
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "tags": [
+        "视觉风格",
+        "界面设计",
+        "终端美学",
+        "配色规范",
+        "动画建议"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "未提供具体实现代码、组件库、动画实现方式、平台兼容说明或验收示例。",
+      "example_requests": [
+        "用终端绿风格设计一个 CLI 工具介绍页面",
+        "按终端美学给出黑客马拉松展示页配色和排版建议"
+      ],
+      "key_features": [
+        "提供终端绿完整配色值",
+        "强调等宽字体和终端布局",
+        "给出 typewriter、neon-glow、glitch-in 动画建议"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/tokyo-night/SKILL.md",
+      "name": "tokyo-night",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/tokyo-night/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "tokyo-night 提供一套面向程序员审美场景的暗色视觉风格规范，包括配色、排版、布局、动画和禁忌。适用于技术分享、开发者 Meetup、基础设施演讲或深夜编程直播等视觉呈现。",
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "tags": [
+        "视觉风格",
+        "暗色主题",
+        "配色规范",
+        "排版指南",
+        "界面设计",
+        "技术分享"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "未说明具体应用平台、组件库或生成工具；仅给出风格规则，没有示例实现或验收标准。",
+      "example_requests": [
+        "为技术分享幻灯片应用 tokyo-night 暗色风格",
+        "按 tokyo-night 配色和布局设计开发者 Meetup 页面"
+      ],
+      "key_features": [
+        "提供具体暗色配色与背景渐变",
+        "包含排版、布局和动画规则",
+        "明确适合技术分享与深夜编程场景"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/vaporwave/SKILL.md",
+      "name": "vaporwave",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/vaporwave/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "蒸汽波视觉风格技能，提供配色、排版、布局、动画和适用场景，用于制作怀旧迷幻风格的界面、演示或视觉内容。",
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "tags": [
+        "视觉风格",
+        "界面设计",
+        "蒸汽波",
+        "配色",
+        "美学",
+        "产品与设计"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "未提供动画具体实现、完整代码、验收清单、平台兼容性或依赖声明。",
+      "example_requests": [
+        "用蒸汽波风格设计一个音乐分享页面",
+        "为怀旧文化演讲制作蒸汽波风格幻灯片"
+      ],
+      "key_features": [
+        "提供蒸汽波配色与深紫到青蓝渐变规则",
+        "规定半透明卡片、柔和边框和迷幻布局",
+        "列出音乐分享、潮流艺术展示等适用场景"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/xiaohongshu-white/SKILL.md",
+      "name": "xiaohongshu-white",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/xiaohongshu-white/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "该技能提供小红书“白”风格的视觉设计规范，包含配色方案、排版规则、布局建议与动画类型，适用于生活方式类图文笔记创作，强调干净、温暖、有质感的视觉表达。",
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "tags": [
+        "视觉设计",
+        "排版规范",
+        "小红书风格"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "仅提供设计规范，未说明具体实现方式（如CSS/JS/设计工具集成），缺乏可执行步骤或模板；非独立工具或脚本，需结合其他平台/工具落地",
+      "example_requests": [
+        "按小红书白风格设计一篇美妆产品推荐图文",
+        "为旅行日记页面制定配色与排版方案"
+      ],
+      "key_features": [
+        "提供小红书标志性暖红+白底配色方案及渐变背景定义",
+        "强调衬线标题与无衬线正文组合的排版逻辑",
+        "涵盖卡片布局、圆角处理与三类基础动画效果"
+      ],
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/y2k-chrome/SKILL.md",
+      "name": "y2k-chrome",
+      "url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/y2k-chrome/SKILL.md",
+      "repo_url": "https://github.com/sdcxb/codem",
+      "author": "sdcxb",
+      "summary_zh": "提供 Y2K 铬金属未来主义视觉风格规范，包含配色、排版、布局、动画和适用场景，适合界面或品牌视觉设计参考。",
+      "main_category": {
+        "id": "product",
+        "name": "产品与设计"
+      },
+      "tags": [
+        "界面设计",
+        "视觉风格",
+        "Y2K",
+        "配色规范",
+        "设计指南"
+      ],
+      "status": "special",
+      "source_type": null,
+      "limitations": "只提供风格原则和动画名称，未提供实现代码、具体动画参数、示例或验收方法；未声明依赖与平台兼容性。",
+      "example_requests": [
+        "按 Y2K 铬风格设计一个千禧怀旧主题页面",
+        "为时尚品牌展示页面选择配色和排版规范"
+      ],
+      "key_features": [
+        "银色铬金属渐变配色规范",
+        "大圆角半透明卡片布局",
+        "适合千禧怀旧与时尚品牌展示"
+      ],
+      "added_at": "2026-10-09"
+    }
+  ]
 }
