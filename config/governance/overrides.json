@@ -1497,6 +1497,1736 @@
       "added_at": "2026-10-07",
       "reason": "用户屏蔽/删除",
       "skill_id": "skillmedev/skills:skills/vulnerability-triage/SKILL.md"
+    },
+    {
+      "skill_id": "anbeime/skill:skills/ecommerce-copywriter/ecommerce-copywriter/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：电商文案",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "anbeime/skill:skills/ecommerce-video-marketing/ecommerce-video-marketing/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：视频脚本",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "anbeime/skill:skills/ppt-roadshow-generator/ppt-roadshow-generator/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "anjon771/open-degine:design-templates/html-ppt-presenter-mode-reveal/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt、演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "anjon771/open-degine:design-templates/html-ppt-tech-sharing/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "anjon771/open-degine:design-templates/html-ppt-xhs-pastel-card/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "anjon771/open-degine:design-templates/html-ppt-zhangzara-8-bit-orbit/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "anjon771/open-degine:design-templates/html-ppt-zhangzara-blue-professional/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "anjon771/open-degine:design-templates/html-ppt-zhangzara-capsule/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "anjon771/open-degine:design-templates/html-ppt-zhangzara-cartesian/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "anjon771/open-degine:design-templates/html-ppt-zhangzara-creative-mode/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "anjon771/open-degine:design-templates/html-ppt-zhangzara-daisy-days/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "anjon771/open-degine:design-templates/html-ppt-zhangzara-editorial-tri-tone/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "anjon771/open-degine:design-templates/html-ppt-zhangzara-grove/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "anjon771/open-degine:design-templates/html-ppt-zhangzara-peoples-platform/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "anjon771/open-degine:design-templates/html-ppt-zhangzara-pin-and-paper/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "anjon771/open-degine:design-templates/html-ppt-zhangzara-pink-script/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "anjon771/open-degine:design-templates/html-ppt-zhangzara-signal/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "anjon771/open-degine:design-templates/html-ppt-zhangzara-soft-editorial/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "anjon771/open-degine:design-templates/html-ppt-zhangzara-stencil-tablet/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "anjon771/open-degine:design-templates/html-ppt-zhangzara-vellum/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "anjon771/open-degine:design-templates/kami-deck/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "anjon771/open-degine:design-templates/replit-deck/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "anjon771/open-degine:design-templates/simple-deck/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "anjon771/open-degine:plugins/_official/examples/fs-editorial-forest/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "anjon771/open-degine:plugins/_official/examples/hps-academic-paper/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "anjon771/open-degine:plugins/_official/examples/hps-memphis-pop/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "anjon771/open-degine:plugins/_official/examples/hps-y2k-chrome/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "anjon771/open-degine:plugins/_official/examples/html-ppt-course-module/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "anjon771/open-degine:plugins/_official/examples/html-ppt-obsidian-claude-gradient/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "anjon771/open-degine:plugins/_official/examples/html-ppt-presenter-mode-reveal/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "anjon771/open-degine:plugins/_official/examples/html-ppt-taste-brutalist/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "anjon771/open-degine:plugins/_official/examples/html-ppt-tech-sharing/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "anjon771/open-degine:plugins/_official/examples/html-ppt-xhs-pastel-card/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "anjon771/open-degine:plugins/_official/examples/html-ppt-xhs-white-editorial/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "anjon771/open-degine:plugins/_official/examples/html-ppt-zhangzara-8-bit-orbit/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "anjon771/open-degine:plugins/_official/examples/html-ppt-zhangzara-biennale-yellow/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "anjon771/open-degine:plugins/_official/examples/html-ppt-zhangzara-block-frame/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "anjon771/open-degine:plugins/_official/examples/html-ppt-zhangzara-blue-professional/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "anjon771/open-degine:plugins/_official/examples/html-ppt-zhangzara-capsule/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "anjon771/open-degine:plugins/_official/examples/html-ppt-zhangzara-cartesian/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "anjon771/open-degine:plugins/_official/examples/html-ppt-zhangzara-creative-mode/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "anjon771/open-degine:plugins/_official/examples/html-ppt-zhangzara-daisy-days/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "anjon771/open-degine:plugins/_official/examples/html-ppt-zhangzara-grove/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "anjon771/open-degine:plugins/_official/examples/html-ppt-zhangzara-long-table/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "anjon771/open-degine:plugins/_official/examples/html-ppt-zhangzara-neo-grid-bold/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "anjon771/open-degine:plugins/_official/examples/html-ppt-zhangzara-peoples-platform/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "anjon771/open-degine:plugins/_official/examples/html-ppt-zhangzara-pin-and-paper/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "anjon771/open-degine:plugins/_official/examples/html-ppt-zhangzara-raw-grid/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "anjon771/open-degine:plugins/_official/examples/html-ppt-zhangzara-retro-windows/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "anjon771/open-degine:plugins/_official/examples/html-ppt-zhangzara-retro-zine/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "anjon771/open-degine:plugins/_official/examples/html-ppt-zhangzara-soft-editorial/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "anjon771/open-degine:skills/frontend-slides/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "aurora-ember-bio-lab/splatstudio:design-templates/html-ppt-pitch-deck/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：fundraising、fundraising-pitch",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "aurora-ember-bio-lab/splatstudio:design-templates/html-ppt-zhangzara-bold-poster/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：fundraising、fundraising-pitch",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "aurora-ember-bio-lab/splatstudio:design-templates/html-ppt-zhangzara-playful/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "aurora-ember-bio-lab/splatstudio:design-templates/ib-pitch-book/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：fundraising、fundraising-pitch",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "aurora-ember-bio-lab/splatstudio:design-templates/mobile-app/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：移动应用",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "aurora-ember-bio-lab/splatstudio:plugins/_official/examples/frontend-slides/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "aurora-ember-bio-lab/splatstudio:plugins/_official/examples/fs-notebook-tabs/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "aurora-ember-bio-lab/splatstudio:plugins/_official/examples/hps-academic-paper/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "aurora-ember-bio-lab/splatstudio:plugins/_official/examples/html-ppt-course-module/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：员工入职",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "aurora-ember-bio-lab/splatstudio:plugins/_official/examples/html-ppt-graphify-dark-graph/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "aurora-ember-bio-lab/splatstudio:plugins/_official/examples/html-ppt-knowledge-arch-blueprint/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "aurora-ember-bio-lab/splatstudio:plugins/_official/examples/html-ppt-presenter-mode-reveal/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "aurora-ember-bio-lab/splatstudio:plugins/_official/examples/html-ppt-taste-brutalist/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "aurora-ember-bio-lab/splatstudio:plugins/_official/examples/html-ppt-zhangzara-8-bit-orbit/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "aurora-ember-bio-lab/splatstudio:plugins/_official/examples/html-ppt-zhangzara-blue-professional/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "aurora-ember-bio-lab/splatstudio:plugins/_official/examples/html-ppt-zhangzara-capsule/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "aurora-ember-bio-lab/splatstudio:plugins/_official/examples/html-ppt-zhangzara-cartesian/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "aurora-ember-bio-lab/splatstudio:plugins/_official/examples/html-ppt-zhangzara-creative-mode/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "aurora-ember-bio-lab/splatstudio:plugins/_official/examples/html-ppt-zhangzara-grove/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "aurora-ember-bio-lab/splatstudio:plugins/_official/examples/html-ppt-zhangzara-long-table/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "aurora-ember-bio-lab/splatstudio:plugins/_official/examples/html-ppt-zhangzara-retro-zine/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "aurora-ember-bio-lab/splatstudio:plugins/_official/examples/html-ppt-zhangzara-scatterbrain/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "aurora-ember-bio-lab/splatstudio:plugins/_official/examples/html-ppt-zhangzara-signal/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "aurora-ember-bio-lab/splatstudio:plugins/_official/examples/html-ppt-zhangzara-soft-editorial/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "aurora-ember-bio-lab/splatstudio:plugins/_official/examples/html-ppt-zhangzara-studio/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "aurora-ember-bio-lab/splatstudio:plugins/_official/examples/html-ppt/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "aurora-ember-bio-lab/splatstudio:plugins/_official/examples/huashu-keynote-black/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "aurora-ember-bio-lab/splatstudio:plugins/_official/examples/huashu-slides/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "aurora-ember-bio-lab/splatstudio:plugins/_official/examples/ib-pitch-book/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：融资路演",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "aurora-ember-bio-lab/splatstudio:plugins/_official/examples/kami-deck/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/viral-script-free/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：短视频脚本",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:01-documents/content-humanizer/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：内容营销",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:01-documents/pptx-document-processing/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:02-engineering/expo-router-native-ui/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：移动开发",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:02-engineering/flutter-expert/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：移动开发",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:02-engineering/ios-swiftui-developer/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：移动开发",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:02-engineering/react-native-architecture/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：移动开发",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/ad-creative-generator/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：营销",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/ai-answer-engine-seo/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：marketing、seo",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/ai-search-seo/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：seo",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/analytics-tracking-setup/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：营销",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/backlink-profile-analyzer/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：seo",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/buyer-persona-builder/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：营销",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/cmo-marketing-advisor/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：marketing",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/content-emotional-arc-design/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：营销",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/content-engine-strategist/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：seo",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/content-marketing-strategist/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：seo、内容营销",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/content-strategy-planner/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：marketing、seo",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/conversion-copywriter/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：marketing",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/email-sequence-designer/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：生命周期营销",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/free-tool-marketing-strategy/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：seo",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/ib-pitch-deck-builder/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/landing-page-copywriting/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：营销",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/linkedin-profile-optimizer/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：marketing、seo",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/marketing-analytics-tracker/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：marketing",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/marketing-copy-editor/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：营销",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/marketing-psychology/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：marketing",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/paid-ad-creative/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：marketing",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/paid-ads-strategist/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：marketing",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/people-analytics-report/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：hr",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/platform-native-content-engine/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：marketing",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/popup-modal-cro/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：营销",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/product-launch-strategy/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：marketing",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/product-marketing-gtm-strategy/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：marketing",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/programmatic-seo-builder/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：marketing、seo",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/psychology-conversion-copy/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：营销",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/recruiting-pipeline-tracker/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：人力资源、招聘",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/saas-marketing-ideas/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：marketing",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/seo-audit/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：seo",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/seo-content-gap-analysis/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：seo",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/seo-content-refresher/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：seo",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/seo-content-writer/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：marketing、seo",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/seo-entity-optimizer/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：seo",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/seo-image-generator/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：seo",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/seo-keyword-research/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：marketing、seo",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/seo-meta-tags-optimizer/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：seo",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/seo-performance-reporter/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：seo",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/seo-rank-tracker/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：seo",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/seo-site-architecture/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：seo",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/seo-traffic-drop-forensics/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：seo",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/social-media-content-creator/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：营销",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/social-media-performance-analyzer/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：marketing",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/social-share-card-hardener/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：seo",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/wechat-official-account-growth/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：内容营销",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/xiaohongshu-content-strategy/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：营销",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:07-productivity/interview-system-designer/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：hiring",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "fslong520/aiskill:pptx/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt、演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "fslong520/aiskill:雀影/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：视频脚本",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "ganmu191/aigc:skills/nanobanana-ppt-visualizer/nanobanana-ppt-visualizer/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt、演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "ganmu191/aigc:skills/ppt-generator/ppt-generator/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:design-templates/html-ppt-hermes-cyber-terminal/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt、演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:design-templates/html-ppt-knowledge-arch-blueprint/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:design-templates/html-ppt-presenter-mode-reveal/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:design-templates/html-ppt-taste-brutalist/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt、演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:design-templates/html-ppt-taste-editorial/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:design-templates/html-ppt-tech-sharing/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:design-templates/html-ppt-weekly-report/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:design-templates/html-ppt-xhs-pastel-card/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:design-templates/html-ppt-xhs-white-editorial/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:design-templates/html-ppt-zhangzara-8-bit-orbit/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt、演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:design-templates/html-ppt-zhangzara-biennale-yellow/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:design-templates/html-ppt-zhangzara-block-frame/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:design-templates/html-ppt-zhangzara-blue-professional/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt、演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:design-templates/html-ppt-zhangzara-capsule/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:design-templates/html-ppt-zhangzara-cartesian/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt、演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:design-templates/html-ppt-zhangzara-daisy-days/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt、演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:design-templates/html-ppt-zhangzara-editorial-tri-tone/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:design-templates/html-ppt-zhangzara-grove/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt、演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:design-templates/html-ppt-zhangzara-pin-and-paper/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:design-templates/html-ppt-zhangzara-pink-script/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:design-templates/html-ppt-zhangzara-vellum/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:design-templates/html-ppt/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:design-templates/kami-deck/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:design-templates/replit-deck/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:design-templates/simple-deck/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:design-templates/weekly-update/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:plugins/_official/examples/deck-open-slide-canvas/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:plugins/_official/examples/deck-swiss-international/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:plugins/_official/examples/frontend-slides/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:plugins/_official/examples/html-ppt-graphify-dark-graph/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:plugins/_official/examples/html-ppt-zhangzara-block-frame/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:plugins/_official/examples/html-ppt-zhangzara-cartesian/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:plugins/_official/examples/html-ppt-zhangzara-pin-and-paper/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:plugins/_official/examples/html-ppt-zhangzara-retro-windows/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:plugins/_official/examples/html-ppt-zhangzara-sakura-chroma/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:plugins/_official/examples/html-ppt-zhangzara-soft-editorial/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt、演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:plugins/_official/examples/html-ppt-zhangzara-studio/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:plugins/_official/examples/html-ppt-zhangzara-vellum/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt、演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:plugins/_official/examples/html-ppt/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt、演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:plugins/_official/examples/huashu-golden-circle/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:plugins/_official/examples/huashu-slides/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:plugins/_official/examples/huashu-sparkline-arc/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:plugins/_official/examples/kami-deck/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:plugins/_official/examples/replit-deck/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:plugins/_official/examples/ve-terminal-mono/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:plugins/community/humanize-ppt/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:skills/deck-guizang-editorial/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:skills/deck-swiss-international/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:skills/frontend-slides/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:skills/pptx/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:design-templates/html-ppt-presenter-mode-reveal/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:design-templates/html-ppt-taste-brutalist/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:design-templates/html-ppt-taste-editorial/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:design-templates/html-ppt-zhangzara-block-frame/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:plugins/_official/examples/hps-y2k-chrome/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:plugins/_official/examples/html-ppt-course-module/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:plugins/_official/examples/html-ppt-graphify-dark-graph/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:plugins/_official/examples/html-ppt-hermes-cyber-terminal/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:plugins/_official/examples/html-ppt-obsidian-claude-gradient/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:plugins/_official/examples/html-ppt-taste-brutalist/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:plugins/_official/examples/html-ppt-taste-editorial/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:plugins/_official/examples/html-ppt-testing-safety-alert/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:plugins/_official/examples/html-ppt-xhs-white-editorial/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:plugins/_official/examples/html-ppt-zhangzara-biennale-yellow/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:plugins/_official/examples/html-ppt-zhangzara-blue-professional/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt、演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:plugins/_official/examples/html-ppt-zhangzara-capsule/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt、演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:plugins/_official/examples/html-ppt-zhangzara-cartesian/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt、演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:plugins/_official/examples/html-ppt-zhangzara-creative-mode/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:plugins/_official/examples/html-ppt-zhangzara-daisy-days/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:plugins/_official/examples/html-ppt-zhangzara-editorial-tri-tone/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:plugins/_official/examples/html-ppt-zhangzara-grove/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:plugins/_official/examples/html-ppt-zhangzara-long-table/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:plugins/_official/examples/html-ppt-zhangzara-mat/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:plugins/_official/examples/html-ppt-zhangzara-neo-grid-bold/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:plugins/_official/examples/html-ppt-zhangzara-peoples-platform/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:plugins/_official/examples/html-ppt-zhangzara-pin-and-paper/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:plugins/_official/examples/html-ppt-zhangzara-pink-script/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt、演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:plugins/_official/examples/html-ppt-zhangzara-playful/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:plugins/_official/examples/html-ppt-zhangzara-raw-grid/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:plugins/_official/examples/html-ppt-zhangzara-retro-windows/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:plugins/_official/examples/html-ppt-zhangzara-sakura-chroma/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:plugins/_official/examples/html-ppt-zhangzara-scatterbrain/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:plugins/_official/examples/html-ppt-zhangzara-signal/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt、演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:plugins/_official/examples/html-ppt-zhangzara-studio/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:plugins/_official/examples/html-ppt-zhangzara-vellum/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:plugins/_official/examples/html-ppt/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:plugins/_official/examples/huashu-luxe-whitespace/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:plugins/_official/examples/kami-deck/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:plugins/_official/examples/ppt-keynote/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:plugins/_official/examples/ve-midnight-editorial/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:plugins/community/humanize-ppt/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:skills/html-ppt-retro-quarterly-review/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt、演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:skills/ppt-keynote/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:skills/pptx/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:skills/slides/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt、演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:design-templates/guizang-ppt/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:design-templates/html-ppt-course-module/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:design-templates/html-ppt-hermes-cyber-terminal/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:design-templates/html-ppt-knowledge-arch-blueprint/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:design-templates/html-ppt-obsidian-claude-gradient/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:design-templates/html-ppt-presenter-mode-reveal/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt、演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:design-templates/html-ppt-taste-editorial/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:design-templates/html-ppt-tech-sharing/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:design-templates/html-ppt-weekly-report/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:design-templates/html-ppt-xhs-pastel-card/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:design-templates/html-ppt-xhs-white-editorial/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:design-templates/html-ppt-zhangzara-8-bit-orbit/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:design-templates/html-ppt-zhangzara-block-frame/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt、演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:design-templates/html-ppt-zhangzara-blue-professional/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:design-templates/html-ppt-zhangzara-cartesian/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:design-templates/html-ppt-zhangzara-creative-mode/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:design-templates/html-ppt-zhangzara-daisy-days/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt、演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:design-templates/html-ppt-zhangzara-editorial-tri-tone/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt、演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:design-templates/html-ppt-zhangzara-grove/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:design-templates/html-ppt-zhangzara-long-table/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:design-templates/html-ppt-zhangzara-mat/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:design-templates/html-ppt-zhangzara-neo-grid-bold/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:design-templates/html-ppt-zhangzara-peoples-platform/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:design-templates/html-ppt-zhangzara-pin-and-paper/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:design-templates/html-ppt-zhangzara-pink-script/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:design-templates/html-ppt-zhangzara-playful/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt、演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:design-templates/html-ppt-zhangzara-raw-grid/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt、演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:design-templates/html-ppt-zhangzara-retro-windows/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt、演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:design-templates/html-ppt-zhangzara-retro-zine/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt、演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:design-templates/html-ppt-zhangzara-sakura-chroma/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt、演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:design-templates/html-ppt-zhangzara-scatterbrain/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:design-templates/html-ppt-zhangzara-signal/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:design-templates/html-ppt-zhangzara-soft-editorial/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt、演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:design-templates/html-ppt-zhangzara-studio/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:design-templates/html-ppt/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt、演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:design-templates/kami-deck/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:design-templates/replit-deck/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:plugins/_official/examples/deck-swiss-international/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:plugins/_official/examples/html-ppt-taste-brutalist/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:plugins/_official/examples/html-ppt-zhangzara-8-bit-orbit/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:plugins/_official/examples/html-ppt-zhangzara-retro-windows/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:plugins/_official/examples/ppt-keynote/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:plugins/_official/examples/pptx-html-fidelity-audit/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:plugins/community/humanize-ppt/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:skills/screenshots-marketing/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：营销",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "nexu-io/open-design:design-templates/html-ppt-pitch-deck/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：fundraising-pitch",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "nexu-io/open-design:design-templates/html-ppt-product-launch/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：b2b-sales",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "nexu-io/open-design:design-templates/html-ppt-zhangzara-block-frame/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "nexu-io/open-design:design-templates/html-ppt-zhangzara-pink-script/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "nexu-io/open-design:design-templates/html-ppt-zhangzara-raw-grid/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "nexu-io/open-design:design-templates/html-ppt-zhangzara-retro-zine/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "nexu-io/open-design:design-templates/html-ppt-zhangzara-scatterbrain/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "nexu-io/open-design:design-templates/html-ppt-zhangzara-studio/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/fs-electric-studio/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：b2b-sales",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/html-ppt-zhangzara-biennale-yellow/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/html-ppt-zhangzara-cobalt-grid/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：b2b-sales",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/huashu-bento-insight/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：b2b-sales",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/community/humanize-ppt/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/card-xiaohongshu/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：营销",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/deck-swiss-international/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：marketing",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/poster-hero/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：营销",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/ppt-keynote/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：营销",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/pptx-generator/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/pptx/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt、演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/slides/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt、演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "nexu-io/open-design:tools/release/tests/fixtures/catalog/design-templates/deck-one/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/products/oh-my-ppt-chart/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/products/oh-my-ppt-data-anim/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/products/oh-my-ppt-layout/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/products/oh-my-ppt-source-reading/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/products/standard-4-3-layout-skill/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt、演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/products/vertical-3-4-layout-skill/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/cream-pastel/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/handdrawn-watercolor/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/macaron-mist/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/summer-warm-color/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/slide-deck-builder/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/youtube-script-writer/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：视频脚本",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:design-templates/hr-onboarding/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：hr",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:design-templates/html-ppt-hermes-cyber-terminal/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:design-templates/html-ppt-knowledge-arch-blueprint/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:design-templates/html-ppt-presenter-mode-reveal/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:design-templates/html-ppt-tech-sharing/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:design-templates/html-ppt-testing-safety-alert/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt、演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:design-templates/html-ppt-weekly-report/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:design-templates/html-ppt-zhangzara-8-bit-orbit/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:design-templates/html-ppt-zhangzara-biennale-yellow/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:design-templates/html-ppt-zhangzara-cartesian/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:design-templates/html-ppt-zhangzara-cobalt-grid/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：b2b销售、演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:design-templates/html-ppt-zhangzara-daisy-days/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:design-templates/html-ppt-zhangzara-grove/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:design-templates/html-ppt-zhangzara-playful/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:design-templates/html-ppt-zhangzara-retro-zine/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:design-templates/html-ppt-zhangzara-soft-editorial/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:design-templates/html-ppt-zhangzara-stencil-tablet/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:design-templates/html-ppt-zhangzara-studio/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:design-templates/html-ppt-zhangzara-vellum/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:design-templates/html-ppt/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:design-templates/simple-deck/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt、演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:design-templates/social-carousel/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：营销",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:plugins/_official/examples/deck-swiss-international/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:plugins/_official/examples/hps-memphis-pop/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:plugins/_official/examples/hps-retro-tv/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:plugins/_official/examples/html-ppt-taste-brutalist/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:plugins/_official/examples/ib-pitch-book/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：fundraising、fundraising-pitch",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:plugins/community/humanize-ppt/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：演示文稿",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:skills/imagegen-frontend-mobile/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：移动应用",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:skills/pptx-generator/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
+      "added_at": "2026-10-09"
     }
   ]
 }
