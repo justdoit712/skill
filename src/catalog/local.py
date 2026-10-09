@@ -1,4 +1,4 @@
-"""本地按推荐数量收集；复用采集、筛选、决策与索引，不改 Actions 周额度。
+"""本地按推荐数量收集；复用采集、筛选、决策与索引，使用独立本地账本与任务预算。
 
 拆解为模块化协同：
 - local_state: LocalCollection 运行状态、检查点落盘与报告渲染
@@ -710,25 +710,25 @@ def run_local(
 def main(argv=None, *, root: Path | None = None) -> int:
     """本地收集命令行入口。"""
     root = Path(root or Path(__file__).resolve().parents[2]).resolve()
-    parser = argparse.ArgumentParser(description="本地收集 50 个推荐 Skill，并显示 Token 消耗")
+    parser = argparse.ArgumentParser(description="按配置目标本地收集推荐 Skill，并显示 Token 消耗")
     parser.add_argument("--recover-catalog", action="store_true", help="离线恢复已完成评估与页面，不调用模型")
     parser.add_argument("--check", action="store_true", help="仅本地预检：不联网、不调用模型、不写运行数据")
     parser.add_argument("--batch-repos", type=int, help="每个新批次最多分配的不同仓库数 N，默认 1000")
     parser.add_argument("--target", type=int, help="本次新增推荐目标")
     parser.add_argument("--max-tokens", type=int, help="输入加输出的本次 Token 上限")
     parser.add_argument("--max-evaluations", "--max-evals", dest="max_evaluations", type=int, help="可选：本次最多评估多少条")
-    parser.add_argument("--max-retries", type=int, help="首次失败后的最多重连次数，默认 5")
+    parser.add_argument("--max-retries", type=int, help="本地任务重试配置，默认 5；模型队列另读 request.max_attempts")
     parser.add_argument("--max-format-failures", type=int, help="距上次有效评估允许的最大连续格式异常数，默认 10")
-    parser.add_argument("--limit-queries", type=int, help="查询上限")
-    parser.add_argument("--expand-limit", type=int, help="单仓库展开上限")
-    parser.add_argument("--sync-config", action="store_true", help="纯离线重建：无需模型凭据与网络，将 config/*.json 同步到 data 与 public/data")
+    parser.add_argument("--limit-queries", type=int, help="本次启动使用的不同搜索查询数上限；0 表示仅处理已有队列与种子来源")
+    parser.add_argument("--expand-limit", type=int, help="本次启动展开的不同仓库数上限")
+    parser.add_argument("--sync-config", action="store_true", help="纯离线重建：无需模型凭据与网络，将治理配置同步到 data 与 public/data")
     parser.add_argument("--enrich-catalog", action="store_true", help="离线结构化增强：从现有数据中提取形态、示例请求与亮点，不修改原中文简述")
     parser.add_argument("--refresh-pool", action="store_true", help="重新搜索并重建候选池，保留超长跳过标记")
     parser.add_argument("--enable-static-skip", action="store_true", help="启用静态规则明确空壳占位跳过（避免调用模型）")
     parser.add_argument("--enable-normalized-cache", action="store_true", help="启用受限规范化缓存复用（仅在明确验证换行等价且证据完全核验时复用）")
     parser.add_argument("--enable-batch-prioritization", action="store_true", help="启用小批次材料准备与正文分级排序（含 20%% 防饥饿配额）")
-    parser.add_argument("--pool-watermark", type=int, help="候选池待处理数量低于此水位线时自动增量补水（已弃用）")
-    parser.add_argument("--reset-recovery", action="store_true", help="重置上次异常中断在途的待核查记录为待评估状态")
+    parser.add_argument("--pool-watermark", type=int, help="已弃用的兼容参数；当前按仓库批次与持久化游标推进")
+    parser.add_argument("--reset-recovery", action="store_true", help="批量重置待恢复记录并清空请求明细及尝试数；后续可能重复计费，详见运行说明第 5 节")
     args = parser.parse_args(argv)
     log = lambda message: print(message, flush=True)
 
@@ -843,7 +843,7 @@ def main(argv=None, *, root: Path | None = None) -> int:
         return 0
 
     log(f"目标 {settings['target_recommended']} 个新增推荐，上限 {settings['max_total_tokens']:,} Token，每批仓库上限 {settings.get('batch_repo_limit', DEFAULT_BATCH_REPO_LIMIT)} 个。")
-    log(f"网络及临时 HTTP 错误最多重连 {settings.get('max_retries', 5)} 次，尝试次数会保存。")
+    log(f"本地 max_retries={settings.get('max_retries', 5)}；模型队列另按 request.max_attempts 和轮换规则处理，实际请求逐条记账。")
     from src.infra.github import resolve_github_token
     if not resolve_github_token():
         log("未设置 GITHUB_TOKEN；GitHub 限流可能导致本轮候选不足，可在 config/secrets.local.json 或环境变量中设置。")
@@ -865,7 +865,7 @@ def main(argv=None, *, root: Path | None = None) -> int:
             'access_denied': '访问凭据失效或权限不足',
             'resume_state_invalid': '恢复状态冲突',
             'request_config_error': '模型请求配置错误',
-            'usage_unknown': '存在在途/中断未决请求，已暂停以防重复计费（运行 --reset-recovery 可一键重置）',
+            'usage_unknown': '存在在途/中断未决请求，已暂停以防重复计费；请先核对请求记录，恢复方式见运行说明第 5 节',
             'interrupted': '用户中断运行',
             'storage_error': '持久化存储故障',
         }.get(primary, f'未知停止原因: {primary}')

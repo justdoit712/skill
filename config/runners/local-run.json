@@ -10,5 +10,5 @@
   "max_retries": 5,
   "pool_watermark": 20,
   "pool_max_age_days": 7,
-  "note": "本地手动运行：采用分批抓取与断点恢复机制。batch_repo_limit 为每个新批次最多分配的不同仓库数 N（默认 1000）；目标 target_recommended 为本次新增推荐数 M（默认 500）；输入与输出合计上限 100M Token；未知用量的失败请求另预留估算预算。网络错误及临时 HTTP 错误最多重试 5 次，尝试次数持久化。搜索游标与批次断点保存于 data/local/state/discovery.json，pool_watermark 已弃用。Actions 周额度仍为 50。"
+  "note": "本地手动运行：采用分批抓取与断点恢复机制。batch_repo_limit 为每个新批次最多分配的不同仓库数 N（默认 1000）；目标 target_recommended 为本次新增推荐数 M（默认 500）；输入与输出合计上限 100M Token；未知用量的失败请求另预留估算预算。max_retries 设置本地任务重试上限；模型队列另读 request.max_attempts，逐请求保存用量与轮换事实。搜索游标与批次断点保存于 data/local/state/discovery.json，pool_watermark 已弃用。当前仅本地运行，不使用历史 Actions 每周 50 个名额的任务限额。"
 }

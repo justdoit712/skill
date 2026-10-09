@@ -1,4 +1,4 @@
-"""在 PyCharm 中右键 Run 即可；参数在 config/local-run.json 中修改。"""
+"""在 PyCharm 中右键 Run 即可；参数在 config/runners/local-run.json 中修改。"""
 
 from pathlib import Path
 import sys

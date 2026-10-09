@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Local Skills - 50 recommended" type="PythonConfigurationType" factoryName="Python">
+  <configuration default="false" name="Local Skills" type="PythonConfigurationType" factoryName="Python">
     <module name="skill" />
     <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tools/run_local.py" />
     <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />

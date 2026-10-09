@@ -1,12 +1,12 @@
 <#
-    Local entry point: discover -> prescreen -> reserve quota -> evaluate -> build index.
+    Local entry point: wrapper for tools/run_local.py; persists local discovery, evaluation and reports.
 
     Usage (run from the repo root, or just press Run in PyCharm):
-        .\scripts\run-local.ps1                  # 3 evaluation slots (safe trial)
+        .\scripts\run-local.ps1                  # at most 3 candidate evaluations (paid model calls)
         .\scripts\run-local.ps1 -Limit 50        # at most 50 candidate evaluations
         .\scripts\run-local.ps1 -DryRun          # config check only: no model call, no ledger write
 
-    Runbook and result checks: docs/运行说明.md
+    Runbook and result checks: see the documentation links in README.md
     NOTE: this file is intentionally ASCII-only. Windows PowerShell 5.1 reads .ps1 as ANSI,
     so non-ASCII source bytes would break parsing. Chinese messages are decoded at runtime.
 #>
@@ -26,23 +26,23 @@ function Get-Msg([string]$b64) {
 }
 
 $M = @{
-    Usage1     = 'ICAgIC5cc2NyaXB0c1xydW4tbG9jYWwucHMxICAgICAgICAgICAgICAjIDMg5Liq5ZCN6aKd6K+V5rC0'
-    Usage2     = 'ICAgIC5cc2NyaXB0c1xydW4tbG9jYWwucHMxIC1MaW1pdCA1MCAgICAjIOi3kea7oeS4gOWRqOmineW6pg=='
+    Usage1     = 'ICAgIC5cc2NyaXB0c1xydW4tbG9jYWwucHMxICAgICAgICAgICAgICAgICAgIyDmnIDlpJror4TkvLAgMyDkuKrlgJnpgInvvIzkvJrosIPnlKjmqKHlnos='
+    Usage2     = 'ICAgIC5cc2NyaXB0c1xydW4tbG9jYWwucHMxIC1MaW1pdCA1MCAgICAgICAgIyDmnIDlpJror4TkvLAgNTAg5Liq5YCZ6YCJ77yM5LiN5piv5o6o6I2Q55uu5qCH'
     Usage3     = 'ICAgIC5cc2NyaXB0c1xydW4tbG9jYWwucHMxIC1EcnlSdW4gICAgICAjIOWPquS9k+ajgO+8muS4jeiBlOe9keaKk+WPluOAgeS4jeiwg+aooeWei+OAgeS4jeWGmei0puacrA=='
     NoVenv     = '5om+5LiN5Yiw6Jma5ouf546v5aKD77ya'
     Setup1     = '6K+35YWI5Yib5bu65bm25a6J6KOF5L6d6LWW77ya'
-    NoToken1   = '5o+Q56S677ya5pyq6K6+572uIEdJVEhVQl9UT0tFTuOAgkdpdEh1YiDmnKrorqTor4HpmZDmtYHkuLogY29yZSA2MC/lsI/ml7bjgIFzZWFyY2ggMTAv5YiG6ZKf77yM'
-    NoToken2   = 'ICAgICAg4oCc5bGV5byA5Yiw5YW35L2T5oqA6IO94oCd5Lya6KKr6ZmQ5rWB5oyh5L2P5LiA6YOo5YiG44CC6ZyA6KaB5pe25YWI5omn6KGM77ya'
-    Warn1      = '5rOo5oSP77ya5pys5qyh5Lya55yf5a6e6LCD55So5qih5Z6L44CC5oyJIMKnNy4zIOavj+i9ruacgOWkmiA='
-    Warn2      = 'IOS4quWQjemine+8jOWksei0peS5n+WNoOWQjemineOAgg=='
+    NoToken1   = '5o+Q56S677ya546v5aKD5Y+Y6YeP5pyq6K6+572uIEdJVEhVQl9UT0tFTu+8m+eoi+W6j+i/mOS8muivu+WPluacrOWcsOWvhumSpeaYoOWwhOS4reeahCBnaXRodWJfdG9rZW4g5oiWIGdpdGh1YuOAgg=='
+    NoToken2   = 'ICAgICAg5Lik5aSE6YO95pyq6YWN572u5pe25L2/55So5pyq6K6k6K+B6K6/6Zeu77yM5Y+v6IO95Y+X5Yiw6ZmQ5rWB77yb546v5aKD5Y+Y6YeP56S65L6L77ya'
+    Warn1      = '5rOo5oSP77ya5pys5qyh5Lya6IGU572R5bm26LCD55So5qih5Z6L77yM5YCZ6YCJ6K+E5Lyw5LiK6ZmQ5Li6IA=='
+    Warn2      = '77yb5o6o6I2Q55uu5qCH6K+75Y+W5pys5Zyw6YWN572u77yM6YeN6K+V5ZKM6L2u5o2i5Y+v6IO95aKe5Yqg5a6e6ZmF6K+35rGC5pWw44CC'
     Done1      = '5a6M5oiQ44CC5p+l55yL57uT5p6c77ya'
     Done2      = 'ICDmlbDmja7ntKLlvJUgICBkYXRhXGNhdGFsb2cuanNvbg=='
-    Done3      = 'ICDlkajmiqUgICAgICAgZGF0YVxyZXBvcnRzXA=='
+    Done3      = 'ICDov5DooYzmiqXlkYogICAgIGRhdGFcbG9jYWxccnVuc1zvvIjmnIDmlrDmkZjopoHop4EgZGF0YVxsb2NhbFxsYXRlc3QtcnVuLmpzb27vvIk='
     Done4      = 'ICDpobXpnaLmlbDmja4gICBwdWJsaWNcZGF0YVxjYXRhbG9nLmpzb24='
     Done5      = 'ICDlho3miafooYwgLlxzY3JpcHRzXHByZXZpZXcucHMxIOWPr+WcqOa1j+iniOWZqOmHjOeci+ebruW9lQ=='
     Fail1      = '6L+Q6KGM5pyq5oiQ5Yqf77yI6YCA5Ye656CBIA=='
     Fail2      = '77yJ44CC5bi46KeB5Y6f5Zug77ya'
-    Fail3      = 'ICDCtyDmqKHlnovlh63mja7nvLrlpLHvvIzmiJbku6PnkIbmlq3lvIDvvIhjb25maWdcbW9kZWwubG9jYWwuanNvbiAvIOezu+e7n+S7o+eQhu+8iQ=='
+    Fail3      = 'ICDCtyDmqKHlnovlh63mja7nvLrlpLHmiJbov57mjqXlpLHotKXvvJrmo4Dmn6UgY29uZmlnL21vZGVscy8g5LiL55qE55Sf5pWI6YWN572u44CB5a+G6ZKl5p2l5rqQ5Y+K5Luj55CG'
     Fail4      = 'ICDCtyDnvZHnu5zlpLHotKXvvJrmjInorr7orqHkv53nlZnkuIrmrKHmnInmlYjmlbDmja7vvIzkuI3lgZrmibnph4/liKDpmaQ='
     Fail5      = 'ICDCtyDlhajpg6jmnaXmupDlpLHotKXkuJTml7LmnInntKLlvJXpnZ7nqbrml7bkuLvliqjkuK3mraLvvIzpgb/lhY3muIXnqbrnm67lvZU='
 }
@@ -61,7 +61,7 @@ if (-not (Test-Path $PYTHONPATH)) {
 
 $runArgs = @("tools/run_local.py", "--max-evaluations", "$Limit")
 if ($DryRun) {
-    # requirement 7.3: dry_run does not touch the ledger, the model, git or the deployment
+    # Local precheck only: no network, model call or runtime data write
     $runArgs += @("--check")
 }
 if ($Fetch -gt 0) { $runArgs += @("--expand-limit", "$Fetch") }

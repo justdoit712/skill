@@ -1,10 +1,10 @@
 r"""测试运行器：支持分层运行（日常冒烟 vs 全量回归）。
 
 用法：
-    # 运行日常核心冒烟测试（约 10 项，1 秒内完成）：
+    # 运行日常核心冒烟测试（数量和耗时以实际输出为准）：
     .\.venv\Scripts\python.exe tools/run_tests.py --smoke
 
-    # 运行全量单元测试（约 32 项）：
+    # 运行全量单元测试：
     .\.venv\Scripts\python.exe tools/run_tests.py
 
     # 详细模式与首次失败即停：
@@ -46,7 +46,7 @@ def filter_suite(suite: unittest.TestSuite, predicate) -> unittest.TestSuite:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="本地单元测试分层运行器")
-    parser.add_argument("-s", "--smoke", action="store_true", help="仅运行日常核心冒烟测试（约 10 项）")
+    parser.add_argument("-s", "--smoke", action="store_true", help="仅运行标记为 smoke 的日常核心测试")
     parser.add_argument("-v", "--verbose", action="store_true", help="显示每个测试方法的详细结果")
     parser.add_argument("-f", "--failfast", action="store_true", help="遇到第一个失败立即停止")
     parser.add_argument("-p", "--pattern", default="test_*.py", help="测试文件匹配模式 (默认: test_*.py)")
