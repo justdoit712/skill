@@ -3227,6 +3227,56 @@
       "skill_id": "techtrader86/open-design-zunobot:skills/pptx-generator/SKILL.md",
       "reason": "存量标签过滤；批次 topic-filter-20261009-9ab817；命中：ppt",
       "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:plugins/_official/examples/html-ppt-zhangzara-biennale-yellow/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-e756d3；命中：ppt设计",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:design-templates/html-ppt-taste-brutalist/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-e756d3；命中：ppt设计",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/html-ppt-taste-brutalist/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-e756d3；命中：ppt设计",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/html-ppt-taste-editorial/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-e756d3；命中：ppt设计",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/products/square-1-1-layout-skill/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-e756d3；命中：ppt布局",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/products/vertical-9-16-layout-skill/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-e756d3；命中：ppt布局",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/blue-white-chart/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-e756d3；命中：ppt设计",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/mint-fresh/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-e756d3；命中：ppt设计",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:design-templates/html-ppt-taste-brutalist/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-e756d3；命中：ppt设计",
+      "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:skills/html-ppt-retro-quarterly-review/SKILL.md",
+      "reason": "存量标签过滤；批次 topic-filter-20261009-e756d3；命中：ppt设计",
+      "added_at": "2026-10-09"
     }
   ]
 }
