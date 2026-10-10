@@ -2,7 +2,7 @@
   "model_config_version": "1.0.0",
   "provider_id": "bailian",
   "provider": "dashscope",
-  "name": "阿里云百炼平台 (9模型自动轮换池)",
+  "name": "阿里云百炼平台 (6模型自动轮换池)",
   "endpoint": "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions",
   "auth": {
     "type": "bearer",
@@ -22,14 +22,11 @@
     "max_total_tokens_per_run": 100000000
   },
   "models": [
-    "qwen-max",
-    "qwen-plus-0112",
-    "qwen-coder-plus",
-    "qwen-turbo",
-    "qwen-plus-2025-01-25",
-    "qwen-coder-turbo",
-    "qwen-plus-2025-04-28",
-    "qwen-long-2025-01-25",
-    "qwen-plus-1220"
+    "qwen3.8-max-0902",
+    "qwen3.8-27b",
+    "deepseek-v4.1-flash",
+    "deepseek-v4-pro-0813",
+    "kimi-k3",
+    "deepseek-v4-flash-0731"
   ]
 }
