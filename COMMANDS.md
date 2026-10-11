@@ -10,22 +10,8 @@
 # 一键本地静态网页预览（自动选择空闲端口并打开浏览器）
 .\scripts\preview.ps1
 
-# 原生 Python 静态服务预览
-.\.venv\Scripts\python.exe -m http.server 8000 --bind 127.0.0.1 --directory public
-
-# 本地运行环境与配置预检（不联网、不调用模型、不写数据）
-.\.venv\Scripts\python.exe tools/run_local.py --check
-
 # 启动本地采集与评估任务
 .\.venv\Scripts\python.exe tools/run_local.py
-# 或使用 PowerShell 包装脚本：
-.\scripts\run-local.ps1
-
-# 离线同步配置与页面索引（无需模型凭据与网络）
-.\.venv\Scripts\python.exe tools/run_local.py --sync-config
-
-# 离线恢复已完成评估与页面（不调用模型）
-.\.venv\Scripts\python.exe tools/run_local.py --recover-catalog
 ```
 
 ---
@@ -67,20 +53,3 @@
 .\.venv\Scripts\python.exe tools/find_skill.py --rebuild-report "data/local/find-skills/<运行目录>" --publish-snapshot
 ```
 
----
-
-## 4. 候选池与治理工具 (Governance & Pool)
-
-```powershell
-# 候选池离线比对（dry-run 预检）
-.\.venv\Scripts\python.exe tools/manage_pool.py reconcile --dry-run
-
-# 候选池离线比对并应用修正
-.\.venv\Scripts\python.exe tools/manage_pool.py reconcile --apply
-
-# 查看当前已收录条目列表
-.\.venv\Scripts\python.exe tools/manage_owned.py --list
-
-# 离线标签与规则清洗（不调用 AI）
-.\.venv\Scripts\python.exe tools/filter_existing_catalog.py report
-```
