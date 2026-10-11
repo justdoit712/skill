@@ -299,6 +299,10 @@ def save_and_render(
         lines.append(f"- 特定专区跳过：{report['skipped_special']}")
     if report.get("skipped_owned"):
         lines.append(f"- 已收录跳过：{report['skipped_owned']}")
+    if report.get("topic_filtered"):
+        lines.append(
+            f"- 主题屏蔽跳过：{report['topic_filtered']} 条（抓取前：{report.get('topic_filtered_pre_fetch', 0)}，抓取后：{report.get('topic_filtered_post_fetch', 0)}）"
+        )
     if report.get('models_used'):
         lines.append('- 实际请求模型：' + '、'.join(report['models_used']))
     lines.append(f"- 超长跳过候选：{report.get('skipped_length_exceeded', 0)} 条（超过单条输出 Token 上限）")
@@ -538,6 +542,9 @@ def init_local_state(
         'skipped_special': 0,
         'skipped_owned': 0,
         'skipped_length_exceeded': 0,
+        'topic_filtered': 0,
+        'topic_filtered_pre_fetch': 0,
+        'topic_filtered_post_fetch': 0,
         'recommendations': [],
         'calls': [],
         'stop_causes': [],

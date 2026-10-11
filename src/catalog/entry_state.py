@@ -294,6 +294,20 @@ def update_entry(
         entry["quality_summary"] = previous.get("quality_summary")
         entry["last_evaluation_id"] = previous.get("last_evaluation_id")
         entry["evaluated_at"] = previous.get("evaluated_at")
+    # 持久化提前排除与主题过滤审计依据
+    decision_dict = event.decision or {}
+    if decision_dict.get("topic_filter_local"):
+        entry["topic_filter_local"] = decision_dict["topic_filter_local"]
+    elif previous.get("topic_filter_local"):
+        entry["topic_filter_local"] = previous["topic_filter_local"]
+
+    if decision_dict.get("topic_filter_audit"):
+        entry["topic_filter_audit"] = decision_dict["topic_filter_audit"]
+    elif eval_dict.get("topic_filter_audit"):
+        entry["topic_filter_audit"] = eval_dict["topic_filter_audit"]
+    elif previous.get("topic_filter_audit"):
+        entry["topic_filter_audit"] = previous["topic_filter_audit"]
+
     return entry
 
 
