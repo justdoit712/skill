@@ -25,6 +25,15 @@ from src.catalog.models import Candidate, PrescreenResult
 from src.catalog.overrides import apply_manual_overrides_to_entry
 from src.shared.owned import OWNED_SCHEMA_VERSION, OwnedPatchConflictError, apply_owned_patch
 from tests import smoke
+from src.catalog.filter_rules import (
+    FilterRules,
+    _rules_from_audit,
+    build_topic_filter_audit,
+    filter_new_evaluation,
+    load_filter_rules,
+    match_local_filter_rules,
+    validate_filter_rules,
+)
 
 
 class GovernanceTest(unittest.TestCase):
@@ -142,6 +151,342 @@ class GovernanceTest(unittest.TestCase):
             self.assertTrue(found["manual_pick"])
             self.assertEqual(found["manual_note"]["reason"], "keep")
 
+    @smoke
+    def test_filter_rules_300_schema_and_validation(self):
+        """统一黑名单 3.0.0 规范校验：支持 keywords、local_match，拦截非法字段与重复项。"""
+        valid_cfg = {
+            "filter_rules_version": "3.0.0",
+            "blocked_topics": [
+                {
+                    "name": "Excel 基础文档处理",
+                    "description": "通用 Excel 处理，保留财务建模",
+                    "keywords": ["Excel", "xlsx"],
+                    "local_match": {
+                        "names": ["excel", "xlsx"],
+                        "purpose_phrases": ["通用电子表格处理"],
+                        "preserve_phrases": ["财务建模", "financial modeling"],
+                    },
+                }
+            ],
+        }
+        self.assertEqual(validate_filter_rules(valid_cfg), [])
+
+        dup_name = {
+            "blocked_topics": [
+                {"name": "Excel 基础文档处理"},
+                {"name": "excel 基础文档处理"},
+            ]
+        }
+        self.assertTrue(any("重复" in err for err in validate_filter_rules(dup_name)))
+
+        dup_kw = {
+            "blocked_topics": [
+                {"name": "Topic A", "keywords": ["kw1", "KW1"]},
+            ]
+        }
+        self.assertTrue(any("重复" in err for err in validate_filter_rules(dup_kw)))
+
+        illegal_lm = {
+            "blocked_topics": [
+                {"name": "Topic A", "local_match": {"unknown_field": []}},
+            ]
+        }
+        self.assertTrue(any("未识别的字段" in err for err in validate_filter_rules(illegal_lm)))
+
+    @smoke
+    def test_local_filter_rules_matching_contract(self):
+        """本地无 I/O 保守匹配契约：三条件约束、专业保留保护、含糊不删。"""
+        rules = FilterRules({
+            "filter_rules_version": "3.0.0",
+            "blocked_topics": [
+                {
+                    "name": "Excel 基础文档处理",
+                    "description": "主要用于 Excel 基础处理，保留财务建模",
+                    "keywords": ["Excel", "xlsx"],
+                    "local_match": {
+                        "names": ["excel", "xlsx", "excel-tools"],
+                        "purpose_phrases": ["通用电子表格处理", "Excel 文档读写与格式转换"],
+                        "preserve_phrases": ["财务建模", "统计分析", "financial modeling"],
+                    },
+                },
+                {
+                    "name": "PDF 基础处理",
+                    "description": "主要用于 PDF 拆分合并等通用处理，保留合同分析",
+                    "keywords": ["pdf"],
+                    "local_match": {
+                        "names": ["pdf", "pdf-tools"],
+                        "purpose_phrases": ["通用 PDF 处理", "PDF 拆分与合并"],
+                        "preserve_phrases": ["合同分析", "contract analysis"],
+                    },
+                },
+            ],
+        })
+
+        # 1. 明确通用工具命中
+        res = match_local_filter_rules(
+            rules,
+            name="owner/repo:skills/excel-tools/SKILL.md",
+            summary="这是一个用于通用电子表格处理的脚本",
+        )
+        self.assertEqual(res["result"], "match")
+        self.assertEqual(res["matched_topic_name"], "Excel 基础文档处理")
+        self.assertEqual(res["matched_name"], "excel-tools")
+
+        # 2. 只有标签，无自身用途摘要 -> unknown（不排除）
+        res = match_local_filter_rules(
+            rules,
+            name="excel",
+            summary="",
+            materials={"tags": ["Excel", "XLSX"]},
+        )
+        self.assertEqual(res["result"], "unknown")
+
+        # 3. 包含保留词：财务建模 -> unknown（严禁误删）
+        res = match_local_filter_rules(
+            rules,
+            name="excel",
+            summary="用于通用电子表格处理，并支持企业级财务建模分析",
+        )
+        self.assertEqual(res["result"], "unknown")
+        self.assertIn("专业用途保留短语", res["reason"])
+
+        # 4. 英文保留词边界匹配：financial modeling
+        res = match_local_filter_rules(
+            rules,
+            name="excel",
+            summary="A tool for Excel 文档读写与格式转换 with financial modeling capabilities",
+        )
+        self.assertEqual(res["result"], "unknown")
+
+        # 5. 名称不完全匹配：excel-financial-modeling 不应被 excel 命中
+        res = match_local_filter_rules(
+            rules,
+            name="excel-financial-modeling",
+            summary="通用电子表格处理",
+        )
+        self.assertEqual(res["result"], "no_match")
+
+        # 6. PDF 基础拆分合并命中
+        res = match_local_filter_rules(
+            rules,
+            name="pdf-tools",
+            summary="提供通用 PDF 处理及 PDF 拆分与合并功能",
+        )
+        self.assertEqual(res["result"], "match")
+        self.assertEqual(res["matched_topic_name"], "PDF 基础处理")
+
+        # 7. PDF 专业合同分析保护
+        res = match_local_filter_rules(
+            rules,
+            name="pdf-tools",
+            summary="通用 PDF 处理，专业合同分析工具",
+        )
+        self.assertEqual(res["result"], "unknown")
+
+    @smoke
+    def test_filter_rules_fingerprint_idempotency_from_audit(self):
+        """规则快照重建幂等性：空 keywords/local_match 与完整配置重建后指纹绝对一致。"""
+        raw_config = {
+            "filter_rules_version": "3.0.0",
+            "blocked_topics": [
+                {"name": "No Optional Fields Topic", "description": "无可选字段"},
+                {"name": "Empty Lists Topic", "description": "空列表", "keywords": [], "local_match": {}},
+                {
+                    "name": "Full Topic",
+                    "description": "完整字段",
+                    "keywords": ["full", "complete"],
+                    "local_match": {
+                        "names": ["full"],
+                        "purpose_phrases": ["full purpose"],
+                        "preserve_phrases": ["full preserve"],
+                    },
+                },
+            ],
+        }
+        rules = FilterRules(raw_config)
+        assessments = [{"topic_id": rules.blocked_topics[2]["topic_id"], "result": "match", "evidence": "hit"}]
+        audit = build_topic_filter_audit(rules, assessments)
+
+        reconstructed = _rules_from_audit(audit)
+        self.assertIsNotNone(reconstructed)
+        self.assertEqual(reconstructed.fingerprint, rules.fingerprint)
+
+        # 确保 filter_new_evaluation 依据重建后的规则成功工作
+        ev = {"topic_filter_audit": audit}
+        decision = filter_new_evaluation({"decision": "candidate"}, ev, rules)
+        self.assertEqual(decision["decision"], "excluded")
+        self.assertIn("Full Topic", decision["blocked_topics"])
+
+    @smoke
+    def test_negation_and_secondary_context_handling(self):
+        """子串匹配上下文检测：否定词与次要用途修饰判定为 unknown，不予排除。"""
+        rules = FilterRules({
+            "blocked_topics": [
+                {
+                    "name": "Excel 基础文档处理",
+                    "local_match": {
+                        "names": ["excel"],
+                        "purpose_phrases": ["通用电子表格处理"],
+                    },
+                }
+            ]
+        })
+        # 1. 否定词修饰：不支持
+        res_neg = match_local_filter_rules(rules, name="excel", summary="本项目不支持通用电子表格处理，仅作为特定计算器")
+        self.assertEqual(res_neg["result"], "unknown")
+        self.assertIn("否定或次要修饰", res_neg["reason"])
+
+        # 2. 否定词修饰：并非 / does not
+        res_neg2 = match_local_filter_rules(rules, name="excel", summary="This tool does not perform 通用电子表格处理")
+        self.assertEqual(res_neg2["result"], "unknown")
+
+        # 3. 次要用途修饰：仅顺带
+        res_sec = match_local_filter_rules(rules, name="excel", summary="主要用于财务估值，仅顺带提供通用电子表格处理功能")
+        self.assertEqual(res_sec["result"], "unknown")
+        self.assertIn("否定或次要修饰", res_sec["reason"])
+
+        # 4. 次要用途修饰：仅作为辅助
+        res_sec2 = match_local_filter_rules(rules, name="excel", summary="聚焦于资产定价，通用电子表格处理仅作为辅助手段")
+        self.assertEqual(res_sec2["result"], "unknown")
+
+        # 5. 肯定主陈述：正常命中 match
+        res_pos = match_local_filter_rules(rules, name="excel", summary="用于通用电子表格处理与格式转换")
+        self.assertEqual(res_pos["result"], "match")
+
+    @smoke
+    def test_post_fetch_materials_text_protection(self):
+        """抓取后专业用途保护检查正文 text：正文中含有 preserve_phrases 触发保护。"""
+        rules = FilterRules({
+            "blocked_topics": [
+                {
+                    "name": "Excel 基础文档处理",
+                    "local_match": {
+                        "names": ["excel"],
+                        "purpose_phrases": ["通用电子表格处理"],
+                        "preserve_phrases": ["财务建模", "现金流折现"],
+                    },
+                }
+            ]
+        })
+        # 正文包含保留词“现金流折现”
+        full_text = "# Excel Skill\n\n这是一个用于通用电子表格处理的模块。\n\n## 高级功能\n本工具深度支持企业财务建模与现金流折现分析。"
+        res = match_local_filter_rules(
+            rules,
+            name="excel",
+            summary="通用电子表格处理",
+            materials={"text": full_text},
+            stage="post_fetch",
+        )
+        self.assertEqual(res["result"], "unknown")
+        self.assertIn("专业用途保留短语", res["reason"])
+
+    @smoke
+    def test_collection_subskill_isolation_and_evidence_persistence(self):
+        """合集子目录技能隔离与提前排除依据持久化。"""
+        rules = FilterRules({
+            "blocked_topics": [
+                {
+                    "name": "Word 基础文档处理",
+                    "local_match": {
+                        "names": ["docx"],
+                        "purpose_phrases": ["Word 文档处理"],
+                    },
+                }
+            ]
+        })
+        sub_cand = Candidate(
+            skill_id="owner/repo:skills/docx/SKILL.md",
+            owner="owner",
+            repo="repo",
+            name="docx",
+            path="skills/docx/SKILL.md",
+            description="Awesome tools including Word 文档处理 and other utilities",  # 仓库简介
+        )
+        # 子目录技能在抓取前不可泄露仓库简介
+        from src.catalog.local_candidate import is_collection_subskill
+        self.assertTrue(is_collection_subskill(sub_cand.path))
+        pre_summary = "" if is_collection_subskill(sub_cand.path) else sub_cand.description
+        res_pre = match_local_filter_rules(rules, name=sub_cand.name, summary=pre_summary, stage="pre_fetch")
+        self.assertEqual(res_pre["result"], "unknown")  # 不在抓取前误杀
+
+        # 验证提前排除依据持久化至 entry
+        local_match = {
+            "result": "match",
+            "matched_topic_id": rules.blocked_topics[0]["topic_id"],
+            "matched_topic_name": "Word 基础文档处理",
+            "matched_name": "docx",
+            "matched_phrase": "Word 文档处理",
+            "matched_purpose": "Word 文档处理",
+            "stage": "post_fetch",
+        }
+        audit = build_topic_filter_audit(rules, [{"topic_id": local_match["matched_topic_id"], "result": "match", "evidence": "Word 文档处理"}])
+        event = EntryUpdateEvent(
+            kind="fresh_evaluation",
+            decision={
+                "decision": "excluded",
+                "reason_codes": ["TOPIC_FILTERED"],
+                "topic_filter_local": local_match,
+                "topic_filter_audit": audit,
+            },
+        )
+        entry = update_entry(None, sub_cand, event)
+        self.assertEqual(entry["status"], "excluded")
+        self.assertIn("TOPIC_FILTERED", entry["reason_codes"])
+        self.assertEqual(entry.get("topic_filter_local"), local_match)
+        self.assertEqual(entry.get("topic_filter_audit"), audit)
+
+    @smoke
+    def test_formal_filter_rules_cover_actual_samples(self):
+        """正式 filter-rules.json 正确覆盖真实存量清理样例。"""
+        formal_rules = load_filter_rules()
+        self.assertTrue(formal_rules.has_evaluation_rules)
+
+        # 样例 1: docx
+        res1 = match_local_filter_rules(
+            formal_rules,
+            name="docx",
+            summary="创建、编辑和分析Word文档，支持修订跟踪、批注和格式化，适用于设计简报和文案文档",
+        )
+        self.assertEqual(res1["result"], "match")
+        self.assertEqual(res1["matched_topic_name"], "Word 基础文档处理")
+
+        # 样例 2: docx 元数据
+        res2 = match_local_filter_rules(
+            formal_rules,
+            name="docx",
+            summary="这是一个用于在 OpenDesign 中注册和发现 Word 文档处理技能的元数据条目，指向 Anthropic 官方的 docx 技能包",
+        )
+        self.assertEqual(res2["result"], "match")
+        self.assertEqual(res2["matched_topic_name"], "Word 基础文档处理")
+
+        # 样例 3: doc
+        res3 = match_local_filter_rules(
+            formal_rules,
+            name="doc",
+            summary="通过OpenAI文档技能读写编辑.docx文档，保持格式和布局保真，适用于文档处理场景",
+        )
+        self.assertEqual(res3["result"], "match")
+        self.assertEqual(res3["matched_topic_name"], "Word 基础文档处理")
+
+        # 样例 4: minimax-docx
+        res4 = match_local_filter_rules(
+            formal_rules,
+            name="minimax-docx",
+            summary="声称提供专业DOCX文档创建与编辑功能，适用场景包括品牌报告、提案等文档生产，但缺乏实际指导",
+        )
+        self.assertEqual(res4["result"], "match")
+        self.assertEqual(res4["matched_topic_name"], "Word 基础文档处理")
+
+        # 样例 5: pdf
+        res5 = match_local_filter_rules(
+            formal_rules,
+            name="pdf",
+            summary="处理 PDF 文件：文本提取、PDF 创建和表单处理，适用于新闻稿、品牌单页文件和可打印设计成果",
+        )
+        self.assertEqual(res5["result"], "match")
+        self.assertEqual(res5["matched_topic_name"], "PDF 基础处理")
+
 
 if __name__ == "__main__":
     unittest.main()
+
