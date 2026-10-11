@@ -10,6 +10,7 @@
 
 from __future__ import annotations
 
+from copy import deepcopy
 import json
 from pathlib import Path
 import tempfile
@@ -79,7 +80,7 @@ class CatalogTest(unittest.TestCase):
             ],
         }
         write_json_atomic(self.root / "data/catalog.json", self.initial_cat)
-        write_json_atomic(self.root / "public/data/catalog.json", build_page_data(self.initial_cat))
+        write_json_atomic(self.root / "public/data/catalog.json", build_page_data(self.initial_cat, special_ids=set()))
 
     def tearDown(self):
         self.tmp.cleanup()
@@ -265,6 +266,135 @@ class CatalogTest(unittest.TestCase):
         self.assertIsNone(state.report.get("stop_reason"), "单条候选失败不得设置全局 stop_reason")
         self.assertEqual(item1.status, "blocked", "格式校验失败候选应持久化为 blocked")
         self.assertEqual(state.report["skipped_output_format"], 1)
+
+    @smoke
+    def test_special_skills_do_not_block_pool_or_batch(self):
+        """存量池和活动批次中的专区 pending 不阻塞调度，也不触发正文抓取。"""
+        from src.catalog.batch import DiscoveryState
+
+        special = Candidate(skill_id="special/repo:SKILL.md", owner="special", repo="repo",
+                            path="SKILL.md", url="https://github.com/special/repo/blob/HEAD/SKILL.md")
+        normal = Candidate(skill_id="normal/repo:SKILL.md", owner="normal", repo="repo",
+                           path="SKILL.md", url="https://github.com/normal/repo/blob/HEAD/SKILL.md")
+        cfg = load_all_config(ROOT / "config")
+        cfg["model"] = {"model": "fake", "endpoint": "https://fake", "auth": {"api_key": "fake"}}
+        options = {"target_recommended": 2, "max_total_tokens": 100000,
+                   "max_consecutive_failures": 3, "parallel_evaluation": False}
+
+        for active in (False, True):
+            for mixed in (False, True):
+                with self.subTest(active_batch=active, mixed=mixed):
+                    root = self.root / f"special-{active}-{mixed}"
+                    write_json_atomic(root / "special-skills/test.json", {"entries": [{"skill_id": special.skill_id}]})
+                    candidates = [special, normal] if mixed else [special]
+                    pool_path = root / "data/local/pool.json"
+                    save_pool(pool_path, create_pool_from_candidates(candidates))
+                    discovery = DiscoveryState()
+                    if active:
+                        discovery.repository_index = {
+                            f"{c.owner}/{c.repo}": {"owner": c.owner, "repo": c.repo,
+                                "expanded": True, "skill_paths": [c.path]}
+                            for c in candidates
+                        }
+                        discovery.active_batch = {"batch_id": 1, "stage": "evaluating",
+                            "repositories": list(discovery.repository_index),
+                            "skill_ids": [c.skill_id for c in candidates]}
+
+                    def process(state, item):
+                        self.assertEqual(item.candidate.skill_id, normal.skill_id)
+                        item.status = "done"
+                        return True
+
+                    # 回归时有限失败，避免漏传名单使测试本身陷入无限循环。
+                    log_calls = []
+                    def log(message):
+                        log_calls.append(message)
+                        if len(log_calls) > 20:
+                            raise RuntimeError("candidate loop did not make progress")
+
+                    external = Mock(side_effect=AssertionError("unexpected network/model call"))
+                    with patch("src.catalog.local.init_or_migrate_discovery_state", return_value=discovery), \
+                         patch("src.catalog.local.acquire_next_repo_batch", return_value=None) as acquire, \
+                         patch("src.catalog.local._expand_search_queries", return_value=[]), \
+                         patch("src.catalog.local.process_candidate", side_effect=process) as process_mock:
+                        report = run_local(root, options, cfg=cfg, fetch_fn=external, evaluate_fn=external,
+                            discover_fn=external, search_fn=external, expand_fn=external, log=log, sleep=lambda _: None)
+
+                    self.assertEqual(report["stop_reason"], "candidates_exhausted", report.get("error_message"))
+                    self.assertEqual(report["skipped_special"], 1)
+                    self.assertEqual(report["pending_breakdown"]["actionable"], 0)
+                    self.assertEqual(process_mock.call_count, int(mixed))
+                    external.assert_not_called()
+                    acquire.assert_called_once()
+                    self.assertIsNone(discovery.active_batch)
+                    if active:
+                        self.assertEqual(len(discovery.completed_batches), 1)
+                        self.assertTrue(discovery.repository_index["special/repo"]["processed"])
+                    saved_pool = load_pool(pool_path)
+                    self.assertEqual(saved_pool.items[0].status, "pending")
+                    actionable, _ = saved_pool.count_actionable(set(), set(), set(), special_ids=set())
+                    self.assertEqual(actionable, 1, "解除专区后，原 pending 仍应可处理")
+
+    def test_special_skills_exclusion_in_catalog_and_projection(self):
+        """专区技能与主数据库严格互斥：写入与投影过滤专区技能，候选处理直接跳过。"""
+        from src.catalog.store import write_catalog
+
+        # 1. 验证写入主库和生成公开投影时严格剔除专区技能
+        cat = deepcopy(self.initial_cat)
+        special_entry = dict(cat["entries"][0])
+        special_entry.update({
+            "skill_id": "github:special/test-skill",
+            "name": "Special Skill",
+            "url": "https://github.com/special/test-skill",
+            "repo_url": "https://github.com/special/test-skill",
+        })
+        cat["entries"].append(special_entry)
+        special_ids = {"special/test-skill"}
+        data_path = self.root / "data/catalog.json"
+        public_path = self.root / "public/data/catalog.json"
+
+        write_catalog(cat, data_path=data_path, public_path=public_path, special_ids=special_ids)
+
+        saved_cat = read_json(data_path)
+        saved_page = read_json(public_path)
+
+        cat_skill_ids = {e["skill_id"] for e in saved_cat["entries"]}
+        self.assertNotIn("special/test-skill", cat_skill_ids)
+        self.assertNotIn("github:special/test-skill", cat_skill_ids)
+
+        page_skill_ids = {e["skill_id"] for e in saved_page["recommended"] + saved_page["candidates"] + saved_page["manual"]}
+        self.assertNotIn("special/test-skill", page_skill_ids)
+        self.assertNotIn("github:special/test-skill", page_skill_ids)
+
+        self.assertEqual(saved_cat["counts"]["recommended"], 1)
+        self.assertEqual(saved_page["counts"]["recommended"], 1)
+
+        # 2. 验证候选分类与候选处理直接命中跳过，0 token 消耗
+        from src.catalog.pool import classify_pending_candidate, REASON_SPECIAL
+        cand = Candidate(
+            skill_id="special/another-skill",
+            owner="special",
+            repo="another-skill",
+            path="SKILL.md",
+            url="https://github.com/special/another-skill",
+            name="Another Special",
+        )
+        is_act, reason = classify_pending_candidate(cand, set(), set(), set(), special_ids={"special/another-skill"})
+        self.assertFalse(is_act)
+        self.assertEqual(reason, REASON_SPECIAL)
+
+        special_item = PoolItem(candidate=cand, seq=1, status="pending")
+        dummy_state = SimpleNamespace(
+            special_ids={"special/another-skill"},
+            skipped_special_ids=set(),
+            report={"skipped_special": 0},
+            log=lambda msg: None,
+            save=lambda: None,
+        )
+        cont = process_candidate(dummy_state, special_item)
+        self.assertTrue(cont)
+        self.assertIn("special/another-skill", dummy_state.skipped_special_ids)
+        self.assertEqual(dummy_state.report["skipped_special"], 1)
 
 
 if __name__ == "__main__":
