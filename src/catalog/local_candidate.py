@@ -54,7 +54,13 @@ from .failure_policy import (
     resolve_primary_stop_reason,
     update_failure_counters,
 )
-from .filter_rules import eligible_for_topic_filter, filter_new_evaluation
+from .filter_rules import (
+    build_topic_filter_audit,
+    eligible_for_topic_filter,
+    extract_frontmatter_description,
+    filter_new_evaluation,
+    match_local_filter_rules,
+)
 from .local_state import (
     LocalCollection,
     _read,
@@ -528,6 +534,17 @@ def _evaluate_with_retries(state: LocalCollection, candidate: Any, text: str, ei
     return result
 
 
+def is_collection_subskill(path: str | None) -> bool:
+    """判断候选路径是否属于合集仓库子目录（非单技能根目录）。"""
+    if not path:
+        return False
+    norm = str(path).replace("\\", "/").strip("/")
+    parts = [p for p in norm.split("/") if p]
+    if len(parts) > 1 and parts[-1].lower() in ("skill.md", "readme.md"):
+        return True
+    return len(parts) > 1
+
+
 def process_candidate(state: LocalCollection, item: Any) -> bool:
     """按标准 6 步受控流程评估单个候选条目。"""
     candidate = item.candidate
@@ -584,6 +601,43 @@ def process_candidate(state: LocalCollection, item: Any) -> bool:
         state.save()
         return True
 
+    # 抓取前统一规则本地判定（pre_fetch）
+    filter_rules = state.cfg.get("filter_rules")
+    if eligible_for_topic_filter(
+        filter_rules, state.entries.get(candidate.skill_id),
+        previously_evaluated=candidate.skill_id in state.evaluated_skill_ids,
+    ):
+        is_subskill = is_collection_subskill(candidate.path)
+        pre_summary = "" if is_subskill else (candidate.description or "")
+        local_match = match_local_filter_rules(
+            filter_rules,
+            name=candidate.name or candidate.path,
+            summary=pre_summary,
+            stage="pre_fetch",
+        )
+        if local_match.get("result") == "match":
+            topic_name = local_match.get("matched_topic_name", "")
+            state.log(f"[主题屏蔽-抓取前] #{seq} {candidate.skill_id}：主要用途属于 {topic_name}，跳过正文抓取与模型评估。")
+            state.report["topic_filtered"] = state.report.get("topic_filtered", 0) + 1
+            state.report["topic_filtered_pre_fetch"] = state.report.get("topic_filtered_pre_fetch", 0) + 1
+            audit = build_topic_filter_audit(
+                filter_rules,
+                [{"topic_id": local_match["matched_topic_id"], "result": "match", "evidence": local_match.get("matched_purpose", "")}],
+            )
+            outcome = {
+                "decision": "excluded",
+                "reason_codes": ["TOPIC_FILTERED"],
+                "topic_filtered": True,
+                "topic_filter_local": local_match,
+                "topic_filter_audit": audit,
+                "blocked_topics": [topic_name],
+            }
+            state.publish(candidate, pres, outcome)
+            update_candidate_status(state.pool, seq, POOL_STATUS_EXCLUDED)
+            save_pool(state.pool_path, state.pool)
+            state.save()
+            return True
+
     state.log(f"检查 #{seq}（本轮进度 {state.report['checked']}/{len(state.pending_items)}，全池 {len(state.pool)}）：{candidate.skill_id}")
 
     # 3. 内容抓取与校验
@@ -627,6 +681,45 @@ def process_candidate(state: LocalCollection, item: Any) -> bool:
         save_pool(state.pool_path, state.pool)
         state.save()
         return True
+
+    # 抓取后模型调用前统一规则本地判定（post_fetch）
+    if eligible_for_topic_filter(
+        filter_rules, state.entries.get(candidate.skill_id),
+        previously_evaluated=candidate.skill_id in state.evaluated_skill_ids,
+    ):
+        is_subskill = is_collection_subskill(candidate.path)
+        fm_name, fm_desc = extract_frontmatter_description(text)
+        skill_name = fm_name or candidate.name or candidate.path
+        purpose_summary = fm_desc or ("" if is_subskill else (candidate.description or ""))
+        local_match = match_local_filter_rules(
+            filter_rules,
+            name=skill_name,
+            summary=purpose_summary,
+            materials={"text": text, "description": fm_desc},
+            stage="post_fetch",
+        )
+        if local_match.get("result") == "match":
+            topic_name = local_match.get("matched_topic_name", "")
+            state.log(f"[主题屏蔽-抓取后] #{seq} {candidate.skill_id}：主要用途属于 {topic_name}，跳过模型评估。")
+            state.report["topic_filtered"] = state.report.get("topic_filtered", 0) + 1
+            state.report["topic_filtered_post_fetch"] = state.report.get("topic_filtered_post_fetch", 0) + 1
+            audit = build_topic_filter_audit(
+                filter_rules,
+                [{"topic_id": local_match["matched_topic_id"], "result": "match", "evidence": local_match.get("matched_purpose", "")}],
+            )
+            outcome = {
+                "decision": "excluded",
+                "reason_codes": ["TOPIC_FILTERED"],
+                "topic_filtered": True,
+                "topic_filter_local": local_match,
+                "topic_filter_audit": audit,
+                "blocked_topics": [topic_name],
+            }
+            state.publish(candidate, pres, outcome)
+            update_candidate_status(state.pool, seq, POOL_STATUS_EXCLUDED)
+            save_pool(state.pool_path, state.pool)
+            state.save()
+            return True
 
     # 5. 历史结果检查（人工收藏、精确缓存、受限规范化缓存）
     eid = evaluation_id(candidate, state.cfg['model'], state.cfg['rules'])

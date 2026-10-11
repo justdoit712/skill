@@ -1,6 +1,6 @@
 """存量目录黑名单一次性过滤维护工具。
 
-直接启动：按 blocked-tags.json 中的完整标签离线匹配，写入人工排除并同步页面。
+直接启动：按统一规则 filter-rules.json 与保守本地用途匹配，写入人工排除并同步页面。
 """
 
 from __future__ import annotations
@@ -21,7 +21,11 @@ ROOT = Path(__file__).resolve().parent.parent
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from src.catalog.filter_rules import FilterRules
+from src.catalog.filter_rules import (
+    FilterRules,
+    load_filter_rules,
+    match_local_filter_rules,
+)
 from src.catalog.favorites import get_manual_picks, load_favorites
 from src.catalog.maintenance import sync_config_offline
 from src.catalog.overrides import get_manual_exclusions, load_overrides
@@ -32,8 +36,8 @@ from src.infra.owned import load_owned_config
 from src.shared.owned import is_skill_owned, normalize_owned_id
 from src.shared.runtime import now_local
 
-TOOL_VERSION = "2.0.0"
-MATCH_MODE = "exact_tags_v1"
+TOOL_VERSION = "3.0.0"
+MATCH_MODE = "local_match_v2"
 
 
 def safe_print(msg: str) -> None:
@@ -59,11 +63,19 @@ def _sha256_hex(content: str) -> str:
 
 
 def _reconstruct_filter_rules(blocked_topics: list[dict[str, Any]]) -> FilterRules:
-    clean = [
-        {"name": t["name"], "description": t.get("description", "")}
-        for t in blocked_topics
-        if isinstance(t, dict) and "name" in t
-    ]
+    clean = []
+    for t in blocked_topics:
+        if not (isinstance(t, dict) and "name" in t):
+            continue
+        obj = {
+            "name": t["name"],
+            "description": t.get("description", ""),
+        }
+        if "keywords" in t and isinstance(t["keywords"], list) and t["keywords"]:
+            obj["keywords"] = t["keywords"]
+        if "local_match" in t and isinstance(t["local_match"], dict) and t["local_match"]:
+            obj["local_match"] = t["local_match"]
+        clean.append(obj)
     return FilterRules({"blocked_topics": clean})
 
 
@@ -116,18 +128,17 @@ def extract_materials(entry: dict[str, Any]) -> dict[str, Any]:
 
 
 def load_tag_rules(path: Path) -> FilterRules:
-    """名单只包含实际标签，不做主题映射或关键词匹配。"""
-    data = json.loads(path.read_text(encoding="utf-8"))
-    tags = data.get("blocked_tags") if isinstance(data, dict) else None
-    if not isinstance(tags, list) or any(not isinstance(t, str) or not t.strip() for t in tags):
-        raise ValueError("blocked_tags 必须是非空字符串组成的数组")
-    names = sorted({tag.strip().casefold() for tag in tags})
-    return FilterRules({"blocked_topics": [{"name": name} for name in names]})
+    """统一黑名单规则加载器（直接读取 filter-rules.json）。"""
+    return load_filter_rules(path)
 
 
 def require_tag_run(run_data: dict) -> None:
-    if run_data.get("match_mode") != MATCH_MODE:
-        raise ValueError("这是旧的模型筛选批次，请使用新的 run-id 执行 prepare；旧记录保留不变")
+    mode = run_data.get("match_mode")
+    if mode != MATCH_MODE:
+        raise ValueError(
+            f"检测到批次匹配模式为 {mode}，与当前统一模式 {MATCH_MODE} 不兼容。\n"
+            f"旧批次已隔离保护，请使用新的 run-id 执行 prepare；旧记录保留不变。"
+        )
 
 
 def prepare_run(root_dir: str | Path, run_id: str | None = None) -> dict[str, Any]:
@@ -140,7 +151,7 @@ def prepare_run(root_dir: str | Path, run_id: str | None = None) -> dict[str, An
 
     catalog_path = root / "data" / "catalog.json"
     public_catalog_path = root / "public" / "data" / "catalog.json"
-    filter_rules_path = _resolve_config_path(root, "blocked-tags.json", "governance")
+    filter_rules_path = _resolve_config_path(root, "filter-rules.json", "governance")
     favorites_path = _resolve_config_path(root, "favorites.json", "governance")
     overrides_path = _resolve_config_path(root, "overrides.json", "governance")
     snooze_path = _resolve_config_path(root, "snoozed.json", "governance")
@@ -156,7 +167,7 @@ def prepare_run(root_dir: str | Path, run_id: str | None = None) -> dict[str, An
         # 校验 filter rules
         filter_rules = load_tag_rules(filter_rules_path)
         if not filter_rules.has_evaluation_rules:
-            raise ValueError(f"标签黑名单为空，请先填写要屏蔽的现有标签：{filter_rules_path}")
+            raise ValueError(f"主题黑名单为空，请先在配置中维护主题黑名单：{filter_rules_path}")
 
         # 加载治理保护
         fav_data = load_favorites(favorites_path)
@@ -333,19 +344,44 @@ def _task_hash(run_id: str, skill_id: str, mat_fp: str, rules_fp: str) -> str:
 
 
 def match_tags(rules: FilterRules, target: dict) -> tuple[str, list[dict]]:
-    tags = target["materials"].get("tags", [])
-    by_name = {tag.strip().casefold(): (i, tag) for i, tag in enumerate(tags) if tag.strip()}
-    assessments = []
-    for rule in rules.blocked_topics:
-        found = by_name.get(rule["name"].casefold())
-        assessments.append({
-            "topic_id": rule["topic_id"], "topic_name": rule["name"],
-            "result": "match" if found else ("no_match" if by_name else "unknown"),
-            "evidence_source": f"tags/{found[0]}" if found else "",
-            "evidence_quote": found[1] if found else "",
-            "evidence": "已有标签与黑名单完整匹配" if found else ("标签未命中" if by_name else "无标签，保留"),
-        })
-    result = "match" if any(a["result"] == "match" for a in assessments) else ("no_match" if by_name else "unknown")
+    mat = target.get("materials", {})
+    name = target.get("name") or mat.get("name", "")
+    summary = mat.get("summary_zh", "")
+    match_res = match_local_filter_rules(
+        rules,
+        name=name,
+        summary=summary,
+        materials=mat,
+        stage="offline_catalog",
+    )
+    result = match_res.get("result", "no_match")
+    if result == "match":
+        assessments = [{
+            "topic_id": match_res.get("matched_topic_id", ""),
+            "topic_name": match_res.get("matched_topic_name", ""),
+            "result": "match",
+            "evidence_source": "materials/summary_zh",
+            "evidence_quote": match_res.get("matched_purpose", ""),
+            "evidence": f"命中了基础用途短语：{match_res.get('matched_phrase', '')}（规则：{match_res.get('matched_topic_name')}）",
+        }]
+    elif result == "unknown":
+        assessments = [{
+            "topic_id": "",
+            "topic_name": "",
+            "result": "unknown",
+            "evidence_source": "",
+            "evidence_quote": "",
+            "evidence": match_res.get("reason", "用途摘要缺失或命中专业用途保留，无法在离线环境下确认通用排除，保留"),
+        }]
+    else:
+        assessments = [{
+            "topic_id": "",
+            "topic_name": "",
+            "result": "no_match",
+            "evidence_source": "",
+            "evidence_quote": "",
+            "evidence": "未命中本地排除规则",
+        }]
     return result, assessments
 
 
@@ -661,7 +697,7 @@ def render_report(root_dir: str | Path, run_id: str) -> str:
   </div>
 
   <div style="margin: 16px 0; padding: 12px; background: #f6f8fa; border-radius: 6px; border: 1px solid #d0d7de;">
-    <strong>逐标签命中统计：</strong> {topic_badges_summary or '暂无命中'}
+    <strong>逐主题命中统计：</strong> {topic_badges_summary or '暂无命中'}
   </div>
 
   <h2>1. 命中黑名单待排除技能清单（已按审核选择勾选，共 {len(matched_items)} 条）</h2>
@@ -952,8 +988,8 @@ def plan_apply(
             # 命中标签名称
             res_item = valid_matches[sid]
             matched_names = [ta["topic_name"] for ta in res_item.get("topic_assessments", []) if ta.get("result") == "match"]
-            topics_desc = "、".join(matched_names) or "标签黑名单"
-            reason_str = f"存量标签过滤；批次 {run_id}；命中：{topics_desc}"
+            topics_desc = "、".join(matched_names) or "主题黑名单"
+            reason_str = f"存量黑名单过滤；批次 {run_id}；命中：{topics_desc}"
 
             # 冷冻冲突排查
             if sid in active_snoozes or any(s.get("skill_id") == sid for s in existing_snoozes):
@@ -1191,7 +1227,7 @@ def filter_and_apply(root_dir: str | Path) -> int:
             if previous.get("automatic") and previous.get("match_mode") == MATCH_MODE:
                 execute_apply(root, previous["run_id"])
 
-        rules = load_tag_rules(_resolve_config_path(root, "blocked-tags.json", "governance"))
+        rules = load_tag_rules(_resolve_config_path(root, "filter-rules.json", "governance"))
         if not rules.has_evaluation_rules:
             safe_print("标签黑名单为空，无需过滤。")
             return 0

@@ -48,6 +48,7 @@ from .discovery import discover, github_search
 from src.infra.github import list_skill_paths
 from .evaluation import evaluate, resolve_api_key
 from .entry_state import STATUS_RECOMMENDED
+from .filter_rules import eligible_for_topic_filter, match_local_filter_rules
 from .failure_policy import (
     STOP_CANDIDATES_EXHAUSTED,
     STOP_EVALUATION_LIMIT,
@@ -268,6 +269,21 @@ def _evaluate_candidate_items(state: LocalCollection, items: list[PoolItem]) -> 
             for it in chunk:
                 cand = it.candidate
                 if cand.skill_id not in state.batch_materials and cand.path.split('/')[-1] == 'SKILL.md':
+                    filter_rules = state.cfg.get("filter_rules")
+                    if eligible_for_topic_filter(
+                        filter_rules, state.entries.get(cand.skill_id),
+                        previously_evaluated=cand.skill_id in state.evaluated_skill_ids,
+                    ):
+                        is_sub = bool(cand.path and "/" in cand.path.replace("\\", "/").strip("/"))
+                        pre_summary = "" if is_sub else (cand.description or "")
+                        pre_match = match_local_filter_rules(
+                            filter_rules,
+                            name=cand.name or cand.path,
+                            summary=pre_summary,
+                            stage="pre_fetch",
+                        )
+                        if pre_match.get("result") == "match":
+                            continue
                     if '/blob/' not in cand.url:
                         cand.url = f'https://github.com/{cand.owner}/{cand.repo}/blob/HEAD/{cand.path}'
                     u = cand.url.replace('https://github.com/', 'https://raw.githubusercontent.com/', 1).replace('/blob/', '/', 1)
