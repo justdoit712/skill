@@ -124,6 +124,7 @@ class FinderRunState:
                 "queries_executed": [], "repos_discovered": 0,
                 "candidates_found": 0, "expansions": [], "skipped": [],
                 "skipped_owned": 0, "skipped_owned_ids": [],
+                "skipped_special": 0, "skipped_special_ids": [],
             },
             "environment": {
                 "schema_version": FINDER_REPORT_SCHEMA_VERSION,

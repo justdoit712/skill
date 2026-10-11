@@ -442,6 +442,7 @@ def execute_find_skill(
     expand_and_collect_candidates_fn: Any = None,
     search_github_repos_fn: Any = None,
     owned_ids: set[str] | list[str] | None = None,
+    special_ids: set[str] | list[str] | None = None,
     max_clarification_turns: int | None = None,
     input_fn: Any = input,
     resume_dir: Path | str | None = None,
@@ -452,6 +453,7 @@ def execute_find_skill(
     """定向查找全流程执行主函数。"""
     from src.infra.llm import validate_model_config
     from src.infra.owned import load_owned_ids
+    from src.infra.special_skills import load_special_skill_ids
 
     if retry_failed_searches and resume_dir is None:
         raise ValueError("重新尝试失败搜索必须配合 --resume 使用")
@@ -464,6 +466,10 @@ def execute_find_skill(
         )
     if owned_ids is None:
         owned_ids = load_owned_ids(root / "config")
+    if special_ids is None:
+        special_ids = load_special_skill_ids(root_dir=root)
+    else:
+        special_ids = set(special_ids)
     run_cfg = load_finder_run_config(root / "config")
     resumed = False
     prev_report = {}
@@ -678,6 +684,8 @@ def execute_find_skill(
                 run_rounds_kwargs = {}
                 if _supports_kwarg(run_rounds, "enable_active_reflection"):
                     run_rounds_kwargs["enable_active_reflection"] = params["enable_active_reflection"]
+                if _supports_kwarg(run_rounds, "special_ids"):
+                    run_rounds_kwargs["special_ids"] = special_ids
                 eval_fn = _evaluate_candidates
                 reason = run_rounds(
                     state,

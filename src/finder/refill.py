@@ -8,6 +8,7 @@ import time
 
 from src.shared.models import Candidate
 from src.shared.owned import is_skill_owned
+from src.shared.special_skills import is_special_skill, normalize_special_skill_id
 from .plan import build_reflection_prompt, parse_reflection_queries, PLAN_MAX_OUTPUT_TOKENS
 from .search import schedule_candidates_fairly, _round_robin_merge_repos
 
@@ -19,13 +20,35 @@ EXPAND_INTERLEAVE_REPOS = 5
 CONSECUTIVE_ZERO_BATCHES_FOR_REFLECTION = 2
 
 
+def _record_special_skips(search, skill_ids):
+    """新发现与恢复队列共用规范化、去重后的跳过事实。"""
+    ids = {normalize_special_skill_id(sid) for sid in search.get("skipped_special_ids", [])}
+    ids.update(normalize_special_skill_id(sid) for sid in skill_ids)
+    skipped = []
+    special_records = {}
+    for record in search.get("skipped", []):
+        if record.get("code") == "special":
+            sid = normalize_special_skill_id(record["skill_id"])
+            ids.add(sid)
+            special_records.setdefault(sid, {**record, "skill_id": sid})
+        else:
+            skipped.append(record)
+    search["skipped_special_ids"] = sorted(ids)
+    search["skipped_special"] = len(ids)
+    search["skipped"] = skipped + [
+        special_records.get(sid, {"skill_id": sid, "code": "special"})
+        for sid in sorted(ids)
+    ]
+
+
 def initialize_search(state):
     report = state.report
     search = report["search"]
     defaults = {"current_round": 0, "rounds_history": [], "query_cursors": {},
                 "repository_queue": [], "discovered_repo_urls": [], "candidate_queue": [],
                 "discovered_skill_ids": [], "processed_skill_ids": [], "consecutive_failures": 0,
-                "query_yield": {}, "skill_discovery_sources": {}}
+                "query_yield": {}, "skill_discovery_sources": {},
+                "skipped_owned_ids": [], "skipped_special_ids": [], "skipped": []}
     for key, value in defaults.items():
         search.setdefault(key, value)
     completed = {e["candidate"]["skill_id"] for e in report["evaluations"]}
@@ -232,7 +255,7 @@ def _search_pages(state, current, queries, search_fn, sleep, log):
     return None
 
 
-def _expand_pending(state, current, expand, owned_ids, sleep, log, max_repos: int = 20):
+def _expand_pending(state, current, expand, owned_ids, sleep, log, max_repos: int = 20, special_ids: set[str] | None = None):
     search = state.report["search"]
     pending_repos = [r for r in search["repository_queue"] if r["state"] == "pending"]
     if not pending_repos:
@@ -293,9 +316,11 @@ def _expand_pending(state, current, expand, owned_ids, sleep, log, max_repos: in
                     "note": "边际新增计数受执行顺序影响",
                 })["marginal_skills"] += 1
 
-            if is_skill_owned(candidate.skill_id, owned_ids):
-                search["skipped_owned_ids"].append(candidate.skill_id)
-                search["skipped"].append({"skill_id": candidate.skill_id, "code": "owned"})
+            if is_special_skill(candidate.skill_id, special_ids):
+                _record_special_skips(search, [candidate.skill_id])
+            elif is_skill_owned(candidate.skill_id, owned_ids):
+                search.setdefault("skipped_owned_ids", []).append(candidate.skill_id)
+                search.setdefault("skipped", []).append({"skill_id": candidate.skill_id, "code": "owned"})
             else:
                 cand_dict = asdict(candidate)
                 rel_info = score_candidate_relevance(candidate, terms)
@@ -304,12 +329,13 @@ def _expand_pending(state, current, expand, owned_ids, sleep, log, max_repos: in
                 search["candidate_queue"].append(cand_dict)
         search["discovered_skill_ids"] = sorted(seen)
         search["candidates_found"] = len(seen)
-        search["skipped_owned"] = len(search["skipped_owned_ids"])
+        search["skipped_owned"] = len(search.get("skipped_owned_ids", []))
+        search["skipped_special"] = len(search.get("skipped_special_ids", []))
         state.save()
     return None
 
 
-def run_rounds(state, cfg, api_key, transport, search_fn, expand, fetch, evaluate, owned_ids, sleep, log, enable_active_reflection: bool = False):
+def run_rounds(state, cfg, api_key, transport, search_fn, expand, fetch, evaluate, owned_ids, sleep, log, enable_active_reflection: bool = False, special_ids: set[str] | None = None):
     initialize_search(state)
     report, search = state.report, state.report["search"]
     while True:
@@ -371,12 +397,16 @@ def run_rounds(state, cfg, api_key, transport, search_fn, expand, fetch, evaluat
             done = set(search["processed_skill_ids"])
             from src.shared.models import Candidate
             valid_keys = set(Candidate.__dataclass_fields__.keys())
+            pending = [c for c in search["candidate_queue"] if c["skill_id"] not in done]
+            _record_special_skips(search, [
+                c["skill_id"] for c in pending if is_special_skill(c["skill_id"], special_ids)
+            ])
             queue = [Candidate(**{k: v for k, v in c.items() if k in valid_keys})
-                     for c in search["candidate_queue"] if c["skill_id"] not in done]
+                     for c in pending if not is_special_skill(c["skill_id"], special_ids)]
 
             # 1. 若候选队列为空但有待展开仓库，首先展开一批待展开仓库
             if not queue and any(r["state"] == "pending" for r in search["repository_queue"]):
-                reason = _expand_pending(state, current, expand, owned_ids, sleep, log, max_repos=20)
+                reason = _expand_pending(state, current, expand, owned_ids, sleep, log, max_repos=20, special_ids=special_ids)
                 if reason:
                     return reason
                 continue
@@ -426,7 +456,7 @@ def run_rounds(state, cfg, api_key, transport, search_fn, expand, fetch, evaluat
 
                 # 4. 批次间隙穿插展开待展开仓库
                 if any(r["state"] == "pending" for r in search["repository_queue"]):
-                    reason = _expand_pending(state, current, expand, owned_ids, sleep, log, max_repos=EXPAND_INTERLEAVE_REPOS)
+                    reason = _expand_pending(state, current, expand, owned_ids, sleep, log, max_repos=EXPAND_INTERLEAVE_REPOS, special_ids=special_ids)
                     if reason:
                         return reason
                 continue
