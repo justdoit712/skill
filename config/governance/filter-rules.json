@@ -1,61 +1,404 @@
 {
-  "filter_rules_version": "2.0.0",
+  "filter_rules_version": "3.0.0",
   "_comment": [
-    "只屏蔽以后的新条目，已有收藏、推荐和候选不受影响。",
+    "统一内容黑名单：主目录自动采集与临时存量过滤共用该规则，定向查找(Finder)不读取。",
     "【添加位置】在下面 blocked_topics 列表中新增一个对象。",
-    "name 必填：写你不想要的内容主题，例如 游戏开发。",
-    "description 可选：名称不够清楚时，再补充范围说明。",
-    "最简单的新增项：{\"name\": \"游戏开发\"}。",
-    "相邻对象用逗号分隔；删除一项即可取消该主题。",
-    "清空为 [] 即关闭主题屏蔽，不恢复已排除条目。",
-    "在首次 AI 评估中判断主要用途，同类表达也算。",
-    "仅顺带提到或判断不清楚时，保留原评估结论。"
+    "name 必填：用户可读的屏蔽主题名称，例如 游戏开发。",
+    "description 可选：说明主要用途及保留边界，供正常 AI 评估使用。",
+    "keywords 可选：中英文别名和格式词，仅提供线索，不能单独触发排除。",
+    "local_match 可选：纯本地保守早挡条件（names 完整匹配、purpose_phrases 明确基础用途、preserve_phrases 专业保留）。",
+    "缺少 local_match 时仅交由首次 AI 评估判断；含糊或信息不足时绝不在本地强行排除。"
   ],
   "blocked_topics": [
     {
       "name": "手机 App",
-      "description": "主要用于手机应用开发、发布或运营，含 Android、iOS、Expo、App Store。"
+      "description": "主要用于手机应用开发、发布或运营，含 Android、iOS、Expo、App Store。",
+      "keywords": [
+        "手机应用",
+        "移动开发",
+        "移动应用",
+        "Android",
+        "iOS",
+        "Expo",
+        "App Store",
+        "mobile app"
+      ]
     },
     {
       "name": "营销推广与获客增长",
-      "description": "主要用于营销策划、广告投放、SEO、社交媒体推广、获客或用户增长，含用户激活、留存提升和流失用户召回。"
+      "description": "主要用于营销策划、广告投放、SEO、社交媒体推广、获客或用户增长，含用户激活、留存提升和流失用户召回。",
+      "keywords": [
+        "SEO优化",
+        "SEO",
+        "付费获客",
+        "获客成本优化",
+        "营销策略",
+        "生命周期营销",
+        "营销",
+        "marketing",
+        "growth hacking"
+      ]
     },
     {
-      "name": "B2B销售"
+      "name": "B2B销售",
+      "description": "主要用于面向企业客户的B2B销售沟通、客户拜访与商务谈判。",
+      "keywords": [
+        "b2b-sales",
+        "B2B销售",
+        "企业销售"
+      ]
     },
     {
-      "name": "销售流程"
+      "name": "销售流程",
+      "description": "主要用于销售漏斗推进、商机阶段流转、客户线索跟进与销售管线管理。",
+      "keywords": [
+        "销售漏斗",
+        "销售跟进",
+        "销售管线",
+        "sales funnel",
+        "sales pipeline"
+      ]
     },
     {
-      "name": "健身房运营"
+      "name": "健身房运营",
+      "description": "主要用于健身房客户管理、团操与私教排课、会籍卡销售及健身房日常运营。",
+      "keywords": [
+        "健身房管理",
+        "健身房运营",
+        "gym management"
+      ]
     },
     {
       "name": "电商文案",
-      "description": "主要用于电商商品详情、促销广告、带货话术或产品上架文案编写。"
+      "description": "主要用于电商商品详情、促销广告、带货话术或产品上架文案编写。",
+      "keywords": [
+        "电商文案",
+        "商品详情文案",
+        "带货话术",
+        "e-commerce copywriting"
+      ]
     },
     {
       "name": "内容营销",
-      "description": "主要用于自媒体内容营销、种草软文、公众号营销文章或品牌营销内容创作。"
+      "description": "主要用于自媒体内容营销、种草软文、公众号营销文章或品牌营销内容创作。",
+      "keywords": [
+        "内容营销",
+        "自媒体软文",
+        "种草软文",
+        "content marketing"
+      ]
     },
     {
       "name": "销售脚本",
-      "description": "主要用于电销话术、销售沟通脚本、推销促单对白或销售异议应对流程。"
+      "description": "主要用于电销话术、销售沟通脚本、推销促单对白或销售异议应对流程。",
+      "keywords": [
+        "销售脚本",
+        "电销话术",
+        "推销对白",
+        "sales script"
+      ]
     },
     {
       "name": "广告审计",
-      "description": "主要用于广告投放效果审计、广告合规性审核、广告素材审查或投放成本与作弊流量分析。"
+      "description": "主要用于广告投放效果审计、广告合规性审核、广告素材审查或投放成本与作弊流量分析。",
+      "keywords": [
+        "广告审计",
+        "广告文案违规体检",
+        "广告合规审查",
+        "ad audit"
+      ]
     },
     {
       "name": "创业公司",
-      "description": "主要用于初创企业设立、商业计划书(BP)撰写、股权分配、融资路演、创业团队搭建或初创公司运营管理。"
+      "description": "主要用于初创企业设立、商业计划书(BP)撰写、股权分配、融资路演、创业团队搭建或初创公司运营管理。",
+      "keywords": [
+        "创业指导",
+        "创业融资",
+        "融资路演",
+        "fundraising-pitch",
+        "创业",
+        "startup",
+        "融资",
+        "fundraising",
+        "风投融资",
+        "融资PPT",
+        "融资条款解释",
+        "融资模型",
+        "融资策划",
+        "融资规划",
+        "融资轮次"
+      ]
     },
     {
       "name": "视频脚本",
-      "description": "主要用于短视频、口播、影视、短剧、宣传片或分镜脚本撰写与镜头画面设计。"
+      "description": "主要用于短视频、口播、影视、短剧、宣传片或分镜脚本撰写与镜头画面设计。",
+      "keywords": [
+        "短视频脚本",
+        "分镜脚本",
+        "视频脚本",
+        "video script",
+        "screenplay"
+      ]
     },
     {
-      "name": "PPT",
-      "description": "主要用于演示文稿、PPT设计、幻灯片制作、排版与画面布局、Keynote演示设计或演讲汇报PPT。"
+      "name": "PPT 基础制作",
+      "description": "主要用于通用演示文稿设计、PPT幻灯片制作、模板排版与画面布局、Keynote设计。保留技术报告展示、架构讲解、学术汇报等具备实质专业技术内容的演示文稿设计。",
+      "keywords": [
+        "PPT",
+        "演示文稿",
+        "PPT布局",
+        "幻灯片布局",
+        "PPT设计",
+        "keynote",
+        "slides",
+        "presentation"
+      ],
+      "local_match": {
+        "names": [
+          "ppt",
+          "slides",
+          "presentation",
+          "powerpoint",
+          "keynote",
+          "ppt-design"
+        ],
+        "purpose_phrases": [
+          "通用演示文稿设计",
+          "PPT 幻灯片制作与布局",
+          "幻灯片排版与设计",
+          "演示文稿制作",
+          "presentation slides generator"
+        ],
+        "preserve_phrases": [
+          "技术报告",
+          "系统架构",
+          "架构设计",
+          "学术汇报",
+          "论文汇报",
+          "technical report",
+          "system architecture",
+          "academic presentation"
+        ]
+      }
+    },
+    {
+      "name": "Word 基础文档处理",
+      "description": "主要用于 Word/docx/doc 的通用创建、读取、编辑、排版、格式转换或模板填充。保留法务合同起草、学术论文写作、技术规范撰写等专业用途，即使使用 Word。",
+      "keywords": [
+        "Word",
+        "docx",
+        "doc",
+        "文字处理",
+        "word document"
+      ],
+      "local_match": {
+        "names": [
+          "word",
+          "docx",
+          "doc",
+          "word-tools",
+          "word-document",
+          "minimax-docx"
+        ],
+        "purpose_phrases": [
+          "通用文档处理",
+          "Word 文档读写与格式转换",
+          "Word 文档生成与排版",
+          "读取和编辑 Word 文件",
+          "读取和编辑 Word 文档",
+          "Word 文档处理",
+          "Word文档处理",
+          "DOCX 文档处理",
+          "DOCX文档处理",
+          "Word 文档创建、编辑与分析",
+          "创建、编辑和分析Word文档",
+          "创建、编辑和分析 Word 文档",
+          "文档创建、编辑与分析",
+          "DOCX文档创建与编辑",
+          "DOCX 文档创建与编辑",
+          "读写编辑.docx文档",
+          "读写编辑 docx",
+          "word document editing",
+          "word document processing",
+          "create and edit word documents"
+        ],
+        "preserve_phrases": [
+          "法务合同",
+          "合同审查",
+          "论文写作",
+          "技术规范",
+          "contract review",
+          "legal contract",
+          "academic writing",
+          "technical specification"
+        ]
+      }
+    },
+    {
+      "name": "Excel 基础文档处理",
+      "description": "主要用于 Excel/xlsx/xls 的通用创建、读取、编辑、格式排版、转换或模板填充。保留财务建模、统计分析、业务预测等专业用途，即使使用 Excel。",
+      "keywords": [
+        "Excel",
+        "xlsx",
+        "xls",
+        "电子表格",
+        "spreadsheet"
+      ],
+      "local_match": {
+        "names": [
+          "excel",
+          "xlsx",
+          "xls",
+          "excel-tools",
+          "sheet",
+          "spreadsheet"
+        ],
+        "purpose_phrases": [
+          "通用电子表格处理",
+          "Excel 文档读写与格式转换",
+          "读取和编辑 Excel 文件",
+          "读取和编辑 Excel 表格",
+          "Excel 文件读写与编辑",
+          "电子表格读写",
+          "Excel表格处理",
+          "Excel电子表格处理",
+          "Excel 数据处理与表格操作",
+          "excel spreadsheet",
+          "read and write excel",
+          "excel spreadsheet manipulation"
+        ],
+        "preserve_phrases": [
+          "财务建模",
+          "统计分析",
+          "业务预测",
+          "数据建模",
+          "financial modeling",
+          "statistical analysis",
+          "forecasting",
+          "data modeling"
+        ]
+      }
+    },
+    {
+      "name": "PDF 基础处理",
+      "description": "主要用于 PDF 文件的通用拆分、合并、页面抽取、旋转、格式转换、添加水印等基础文档操作。保留以 PDF 为输入的合同分析、学术文献研究、专业图纸解析等深度专业用途。",
+      "keywords": [
+        "PDF",
+        "pdf-tools",
+        "pdf-split",
+        "pdf-merge"
+      ],
+      "local_match": {
+        "names": [
+          "pdf",
+          "pdf-tools",
+          "pdf-split",
+          "pdf-merge",
+          "pdf-converter",
+          "minimax-pdf"
+        ],
+        "purpose_phrases": [
+          "通用 PDF 处理",
+          "PDF 拆分与合并",
+          "PDF 页面抽取与转换",
+          "PDF 文档基础操作",
+          "处理 PDF 文件",
+          "处理 PDF",
+          "处理PDF文件",
+          "PDF 文本提取",
+          "PDF 文本提取、创建及表单处理",
+          "PDF 文本提取与表单处理",
+          "split and merge pdf",
+          "pdf text extraction",
+          "pdf document manipulation"
+        ],
+        "preserve_phrases": [
+          "合同分析",
+          "文献研究",
+          "图纸解析",
+          "论文阅读",
+          "contract analysis",
+          "literature review",
+          "drawing analysis",
+          "research paper"
+        ]
+      }
+    },
+    {
+      "name": "招聘与人力资源",
+      "description": "主要用于企业招聘流程、HR管理、录用通知、员工入职培训、员工手册或人事档案管理等招聘与人力资源事务。",
+      "keywords": [
+        "招聘",
+        "HR",
+        "人力资源",
+        "招聘流程",
+        "hiring",
+        "人力资源文档",
+        "录用信",
+        "拒绝信",
+        "录用通知",
+        "员工入职",
+        "入职培训",
+        "员工手册",
+        "recruitment",
+        "human resources",
+        "talent acquisition"
+      ],
+      "local_match": {
+        "names": [
+          "recruitment",
+          "hiring",
+          "hr-tools",
+          "hr"
+        ],
+        "purpose_phrases": [
+          "招聘与人力资源管理",
+          "招聘流程与入职管理",
+          "员工入职与培训",
+          "hiring and recruitment"
+        ],
+        "preserve_phrases": [
+          "技术面试考题生成",
+          "代码能力评估",
+          "技术能力模型",
+          "technical interview",
+          "coding assessment"
+        ]
+      }
+    },
+    {
+      "name": "房地产",
+      "description": "主要用于房地产买卖、房产中介、房源获取、楼盘营销推广或物业销售等房地产商业运营。",
+      "keywords": [
+        "房地产营销",
+        "房地产",
+        "房源获取",
+        "楼盘销售",
+        "房产中介",
+        "real estate",
+        "property"
+      ],
+      "local_match": {
+        "names": [
+          "real-estate",
+          "property-tools",
+          "property"
+        ],
+        "purpose_phrases": [
+          "房地产营销与房源管理",
+          "房产租售与中介服务",
+          "real estate property management"
+        ],
+        "preserve_phrases": [
+          "建筑设计",
+          "城市规划",
+          "土木工程",
+          "建筑物理",
+          "architectural design",
+          "urban planning",
+          "civil engineering"
+        ]
+      }
     }
   ]
 }
