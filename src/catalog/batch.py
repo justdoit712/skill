@@ -640,10 +640,12 @@ def reconcile_batch_and_repositories(
     active_snoozed: set[str],
     manual_exclusions: set[str] | dict,
     owned_ids: set[str],
+    *,
+    special_ids: set[str],
 ) -> bool:
     """对账当前批次及仓库的完成状态。
 
-    “已处理”定义：展开已确认，且该仓库的所有 Skill 均具有终态（done/excluded/fetch_failed等）或政策跳过（snoozed/excluded/owned）。
+    “已处理”定义：展开已确认，且该仓库的所有 Skill 均具有终态（done/excluded/fetch_failed等）或政策跳过（special/snoozed/excluded/owned）。
     若当前批次的所有候选均已对账完成，则将 active_batch 归档至 completed_batches，返回 True；否则返回 False。
     """
     batch = discovery_state.active_batch
@@ -679,7 +681,9 @@ def reconcile_batch_and_repositories(
             if st in POOL_TERMINAL_STATUSES:
                 continue
             # 检查政策跳过
-            is_act, _ = classify_pending_candidate(sid, active_snoozed, manual_exclusions, owned_ids)
+            is_act, _ = classify_pending_candidate(
+                sid, active_snoozed, manual_exclusions, owned_ids, special_ids=special_ids,
+            )
             if not is_act:
                 continue
             all_skills_resolved = False
@@ -697,7 +701,9 @@ def reconcile_batch_and_repositories(
         st = pool_status_map.get(sid, STATUS_PENDING)
         if st in POOL_TERMINAL_STATUSES:
             continue
-        is_act, _ = classify_pending_candidate(sid, active_snoozed, manual_exclusions, owned_ids)
+        is_act, _ = classify_pending_candidate(
+            sid, active_snoozed, manual_exclusions, owned_ids, special_ids=special_ids,
+        )
         if not is_act:
             continue
         all_batch_skills_resolved = False

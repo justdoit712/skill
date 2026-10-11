@@ -23,6 +23,8 @@ from src.infra.http import fetch_text
 from src.shared.materials import validate_document
 from src.shared.model_config import material_fetch_limit
 from src.shared.owned import is_skill_owned
+from src.shared.special_skills import is_special_skill, normalize_special_skill_id
+from src.infra.special_skills import load_special_skill_ids
 from src.shared.runtime import is_test_environment, now_local
 from src.shared.usage import UsageTotals
 from src.shared.versions import STATIC_HEURISTIC_VERSION, build_config_fingerprint
@@ -83,6 +85,7 @@ from .parallel import TwoCandidateScheduler
 from .pool import (
     CandidatePool,
     PoolItem,
+    REASON_SPECIAL,
     STATUS_BLOCKED,
     STATUS_DONE,
     STATUS_LENGTH_EXCEEDED,
@@ -130,11 +133,14 @@ def prepare_pool(
     blocked_skips = {it.candidate.skill_id: it for it in previous_pool.items
                      if it.status == STATUS_BLOCKED} if previous_pool else {}
 
+    special_ids = load_special_skill_ids(root_dir=root)
+
     def count_actionable(p) -> int:
         return sum(
             1
             for it in p.items
             if it.status == POOL_STATUS_PENDING
+            and not is_special_skill(it.candidate.skill_id, special_ids)
             and it.candidate.skill_id not in active_snoozed
             and it.candidate.skill_id not in manual_exclusions
             and not is_skill_owned(it.candidate.skill_id, owned_ids)
@@ -209,10 +215,46 @@ def prepare_pool(
     return pool
 
 
+def _select_actionable_items(state: LocalCollection, items: list[PoolItem]) -> list[PoolItem]:
+    """筛选本轮可处理项；政策跳过保持 pending，并统一记录专区跳过数。"""
+    actionable = []
+    for item in items:
+        if item.status != POOL_STATUS_PENDING:
+            continue
+        is_actionable, reason = classify_pending_candidate(
+            item.candidate.skill_id,
+            state.active_snoozed,
+            state.manual_exclusions,
+            state.owned_ids,
+            special_ids=state.special_ids,
+        )
+        if is_actionable:
+            actionable.append(item)
+        elif reason == REASON_SPECIAL:
+            state.skipped_special_ids.add(normalize_special_skill_id(item.candidate.skill_id))
+    state.report["skipped_special"] = len(state.skipped_special_ids)
+    return actionable
+
+
 def _evaluate_candidate_items(state: LocalCollection, items: list[PoolItem]) -> bool:
     """按小批次切分并在批内排序，调度并发或串行评估条目。返回 True 表示该组处理完毕，False 表示触发停止原因。"""
     if not items:
         return True
+
+    # 在分批、正文预抓取、静态分层和调度之前，先过滤输入 items 中的专区候选
+    filtered_items: list[PoolItem] = []
+    for it in items:
+        sid = it.candidate.skill_id
+        if is_special_skill(sid, state.special_ids):
+            state.skipped_special_ids.add(normalize_special_skill_id(sid))
+            state.report["skipped_special"] = len(state.skipped_special_ids)
+        else:
+            filtered_items.append(it)
+
+    if not filtered_items:
+        return True
+    items = filtered_items
+
     enable_batch_prioritization = bool(
         state.settings.get('enable_batch_prioritization', False)
         or state.settings.get('enable_static_skip', False)
@@ -498,16 +540,7 @@ def _collect(
 
             # 2. 如果当前没有活动批次，优先消耗已有候选池中的存量可处理候选
             if state.discovery_state.active_batch is None:
-                actionable_items = [
-                    it for it in state.pool.items
-                    if it.status == POOL_STATUS_PENDING
-                    and classify_pending_candidate(
-                        it.candidate.skill_id,
-                        state.active_snoozed,
-                        state.manual_exclusions,
-                        state.owned_ids,
-                    )[0]
-                ]
+                actionable_items = _select_actionable_items(state, state.pool.items)
                 if actionable_items:
                     state.log(f"发现已有候选池中有 {len(actionable_items)} 个可处理候选，优先评估存量工作...")
                     completed = _evaluate_candidate_items(state, actionable_items)
@@ -577,17 +610,10 @@ def _collect(
                     state.save()
 
                 batch_skill_ids = set(active.get("skill_ids") or [])
-                batch_actionable = [
+                batch_actionable = _select_actionable_items(state, [
                     it for it in state.pool.items
                     if it.candidate.skill_id in batch_skill_ids
-                    and it.status == POOL_STATUS_PENDING
-                    and classify_pending_candidate(
-                        it.candidate.skill_id,
-                        state.active_snoozed,
-                        state.manual_exclusions,
-                        state.owned_ids,
-                    )[0]
-                ]
+                ])
                 if batch_actionable:
                     state.log(f"批次 #{active_id}：评估 {len(batch_actionable)} 个可处理 Skill（本次新增推荐 {state.report['new_recommended']}/{target_recommended}）...")
                     completed = _evaluate_candidate_items(state, batch_actionable)
@@ -601,6 +627,7 @@ def _collect(
                     state.active_snoozed,
                     state.manual_exclusions,
                     state.owned_ids,
+                    special_ids=state.special_ids,
                 )
                 state.save()
                 if batch_finished:

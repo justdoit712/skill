@@ -20,6 +20,7 @@ import re
 from typing import Any
 from src.infra.files import write_json_atomic
 from src.shared.owned import is_skill_owned
+from src.shared.special_skills import is_special_skill
 from src.shared.runtime import now_local
 from .dedupe import dedupe
 from .models import Candidate
@@ -54,6 +55,7 @@ POOL_TERMINAL_STATUSES = frozenset({
     STATUS_STATIC_SKIPPED,
 })
 
+REASON_SPECIAL = "special"
 REASON_SNOOZED = "snoozed"
 REASON_MANUAL_EXCLUDED = "manual_excluded"
 REASON_OWNED = "owned"
@@ -64,16 +66,20 @@ def classify_pending_candidate(
     active_snoozed: set[str],
     manual_exclusions: set[str] | dict,
     owned_ids: set[str],
+    special_ids: set[str] | None = None,
 ) -> tuple[bool, str | None]:
     """对处于 pending 状态的候选进行有效性判断，给出互斥主原因。
 
     统一优先级：
-    1. active_snoozed -> (False, "snoozed")
-    2. manual_exclusions -> (False, "manual_excluded")
-    3. owned_ids -> (False, "owned")
-    4. 其余 -> (True, None)
+    1. special_ids -> (False, "special") （优先于 owned、snoozed 等原因判断）
+    2. active_snoozed -> (False, "snoozed")
+    3. manual_exclusions -> (False, "manual_excluded")
+    4. owned_ids -> (False, "owned")
+    5. 其余 -> (True, None)
     """
     sid = candidate.skill_id if hasattr(candidate, "skill_id") else str(candidate)
+    if is_special_skill(sid, special_ids):
+        return False, REASON_SPECIAL
     if sid in active_snoozed:
         return False, REASON_SNOOZED
     if sid in manual_exclusions:
@@ -128,9 +134,11 @@ class CandidatePool:
         active_snoozed: set[str],
         manual_exclusions: set[str] | dict,
         owned_ids: set[str],
+        special_ids: set[str] | None = None,
     ) -> tuple[int, dict[str, int]]:
         """返回 (有效可处理数, 各跳过原因统计字典)。"""
         counts = {
+            REASON_SPECIAL: 0,
             REASON_SNOOZED: 0,
             REASON_MANUAL_EXCLUDED: 0,
             REASON_OWNED: 0,
@@ -139,7 +147,7 @@ class CandidatePool:
         for item in self.items:
             if item.status == STATUS_PENDING:
                 is_act, reason = classify_pending_candidate(
-                    item.candidate, active_snoozed, manual_exclusions, owned_ids
+                    item.candidate, active_snoozed, manual_exclusions, owned_ids, special_ids=special_ids
                 )
                 if is_act:
                     actionable += 1

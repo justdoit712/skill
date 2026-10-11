@@ -15,6 +15,8 @@ from .index import CatalogContext, build_catalog
 from .store import catalog_task, write_catalog, recover_catalog_projections
 from .enrich import enrich_entry
 from src.infra.files import read_json
+from src.infra.special_skills import load_special_skill_ids
+from src.shared.special_skills import filter_out_special_skills
 
 
 @catalog_task
@@ -145,7 +147,9 @@ def recover_completed_results(root_dir: str | Path = ".") -> dict:
     apply_snooze_overrides(values, catalog.get("snoozed"))
     if restored:
         updated = build_catalog(values, context=context, favorites=catalog.get("favorites"), overrides=catalog.get("overrides"), snoozed=catalog.get("snoozed"), owned=catalog.get("owned"))
-        write_catalog(updated, data_path=data / "catalog.json", public_path=root / "public" / "data" / "catalog.json")
+        from src.infra.special_skills import load_special_skill_ids
+        special_ids = load_special_skill_ids(root_dir=root)
+        write_catalog(updated, data_path=data / "catalog.json", public_path=root / "public" / "data" / "catalog.json", special_ids=special_ids)
     else:
         recover_catalog_projections(root)
     # Publish first. Any pool failure remains visible and the operation can be replayed.
@@ -241,6 +245,13 @@ def sync_config_to_catalog(
     # 已收录技能可能已从主索引隐藏，仍是可信的收藏身份，拆分配置不能丢掉它们。
     owned_cfg = load_owned_config(owned_file)
     known_skill_ids.update(item["skill_id"] for item in owned_cfg.get("items", []))
+
+    # 载入特定品种专区 ID 集合，保留其身份合法性
+    from src.infra.special_skills import load_special_skill_ids
+    from src.shared.special_skills import filter_out_special_skills
+
+    special_ids = load_special_skill_ids(root_dir=root)
+    known_skill_ids.update(special_ids)
     # 历史人工策略可能指向已不在主索引中的技能；认可已提交的身份，不放行新拼写错误。
     for saved_config, collection in (
         (catalog.get("favorites") or {}, "manual_picks"),
@@ -283,12 +294,16 @@ def sync_config_to_catalog(
     # 应用活跃冷冻（自动清理非活跃的残留 snooze）
     apply_snooze_overrides(entries, snooze_cfg)
 
+    # 物理剔除已归入特定专区的条目，并显式赋回 entries
+    entries, purged_special_count = filter_out_special_skills(entries, special_ids)
+    catalog["entries"] = entries
+
     catalog["favorites"] = favorites
     catalog["overrides"] = overrides
     catalog["snoozed"] = snooze_cfg
     catalog["owned"] = owned_cfg
 
-    # 重新计算各分类统计
+    # 基于保留条目重新计算各分类统计
     rec = sum(1 for e in entries if e.get("status") == "recommended" and not e.get("manual_pick"))
     cand = sum(1 for e in entries if e.get("status") == "candidate" and not e.get("manual_pick"))
     manual = sum(1 for e in entries if e.get("manual_pick"))
@@ -300,11 +315,13 @@ def sync_config_to_catalog(
         "excluded": excl,
     }
 
-    manifest = write_catalog(catalog, data_path=data_file, public_path=public_file)
+    manifest = write_catalog(catalog, data_path=data_file, public_path=public_file, special_ids=special_ids)
     manifest["counts"]["excluded"] = excl
     active_snoozed_count = len(get_active_snoozed(snooze_cfg))
     manifest["active_snoozed"] = active_snoozed_count
     manifest["owned_count"] = len(owned_cfg.get("items", []))
+    manifest["purged_special"] = purged_special_count
+    manifest["special_count"] = len(special_ids)
     return manifest
 
 
@@ -323,6 +340,9 @@ def enrich_catalog(root: Path | str) -> dict[str, Any]:
 
     catalog = json.loads(catalog_file.read_text(encoding="utf-8"))
     raw_entries = catalog.get("entries", [])
+
+    special_ids = load_special_skill_ids(root_dir=root_path)
+    raw_entries, _ = filter_out_special_skills(raw_entries, special_ids)
 
     enriched_entries: list[dict] = []
     with_summary = 0
@@ -356,7 +376,7 @@ def enrich_catalog(root: Path | str) -> dict[str, Any]:
         owned=catalog.get("owned"),
     )
 
-    write_catalog(new_catalog, data_path=catalog_file, public_path=public_file)
+    write_catalog(new_catalog, data_path=catalog_file, public_path=public_file, special_ids=special_ids)
 
     return {
         "total": len(enriched_entries),

@@ -17,6 +17,8 @@ from src.infra.files import write_json_atomic, write_text_atomic
 from src.shared.materials import primary_material_bundle
 from src.shared.metrics import build_run_metrics
 from src.shared.owned import is_skill_owned
+from src.shared.special_skills import is_special_skill
+from src.infra.special_skills import load_special_skill_ids
 from src.shared.runtime import now_local
 from src.shared.usage import UsageTotals
 from src.shared.versions import (
@@ -202,6 +204,7 @@ def save_and_render(
     active_snoozed: set[str] | None = None,
     manual_exclusions: set[str] | dict | None = None,
     discovery_state: Any = None,
+    special_ids: set[str] | None = None,
 ) -> None:
     """落盘运行报告、可读 Markdown 以及目录差异报告。"""
     report["usage"] = usage.snapshot()
@@ -221,10 +224,12 @@ def save_and_render(
             active_snoozed or set(),
             manual_exclusions or set(),
             owned_set,
+            special_ids=special_ids,
         )
         report["pending_breakdown"] = {
             "total_pending": pool.pending_count,
             "actionable": actionable_count,
+            "special": skip_breakdown.get("special", 0),
             "snoozed": skip_breakdown.get("snoozed", 0),
             "manual_excluded": skip_breakdown.get("manual_excluded", 0),
             "owned": skip_breakdown.get("owned", 0),
@@ -290,6 +295,8 @@ def save_and_render(
             lines.append(f"- 活动批次：{ab.get('batch_id')}（阶段：{ab.get('stage')}，仓库数：{len(ab.get('repositories', []))}）")
         if discovery_state.expansion_history:
             lines.append(f"- 检索扩词：已执行 {len(discovery_state.expansion_history)} 轮分类内关键词扩展")
+    if report.get("skipped_special"):
+        lines.append(f"- 特定专区跳过：{report['skipped_special']}")
     if report.get("skipped_owned"):
         lines.append(f"- 已收录跳过：{report['skipped_owned']}")
     if report.get('models_used'):
@@ -378,6 +385,8 @@ class LocalCollection:
     pending_items: Any
     owned_ids: Any
     skipped_owned_ids: Any
+    special_ids: set[str] = field(default_factory=set)
+    skipped_special_ids: set[str] = field(default_factory=set)
     format_failures: int = 0
     max_format_failures: int = 10
     stop_causes: set = field(default_factory=set)
@@ -397,6 +406,7 @@ class LocalCollection:
             baseline=self.baseline, dirty=self.dirty, run_id=self.run_id,
             cfg=self.cfg, owned_ids=self.owned_ids, active_snoozed=self.active_snoozed,
             manual_exclusions=self.manual_exclusions, discovery_state=self.discovery_state,
+            special_ids=self.special_ids,
         )
 
     def publish(self, candidate, pres, outcome=None, upstream_status="ok") -> dict:
@@ -465,8 +475,15 @@ def init_local_state(
     max_format_failures = settings.get('max_format_failures_without_valid_result', 10)
     manual_picks = get_manual_picks(cfg.get('favorites') or cfg.get('overrides') or {})
     manual_exclusions = get_manual_exclusions(cfg.get('overrides') or {})
+    special_ids = load_special_skill_ids(root_dir=root)
+    skipped_special_ids = set()
     baseline = _read(root / 'data' / 'catalog.json', {'entries': []})
-    entries = index_by_id(baseline.get('entries') or [])
+    filtered_baseline_entries = [
+        e for e in (baseline.get('entries') or [])
+        if not is_special_skill(e.get('skill_id', ''), special_ids)
+    ]
+    baseline['entries'] = filtered_baseline_entries
+    entries = index_by_id(filtered_baseline_entries)
     for e in entries.values():
         apply_manual_overrides_to_entry(e, manual_picks, manual_exclusions)
     old_recommended = {
@@ -518,6 +535,7 @@ def init_local_state(
         'new_recommended': 0,
         'failed_requests': 0,
         'unknown_usage_reserved_tokens': 0,
+        'skipped_special': 0,
         'skipped_owned': 0,
         'skipped_length_exceeded': 0,
         'recommendations': [],
@@ -566,6 +584,7 @@ def init_local_state(
         active_eid=None, active_call=None, unknown_reserve=0,
         max_attempts=max_attempts, max_retries=max_retries, pending_items=[],
         owned_ids=owned_ids, skipped_owned_ids=skipped_owned_ids,
+        special_ids=special_ids, skipped_special_ids=skipped_special_ids,
         search_fn=search_fn, expand_fn=expand_fn,
     )
     if cfg.get("filter_rules") and cfg["filter_rules"].has_evaluation_rules:

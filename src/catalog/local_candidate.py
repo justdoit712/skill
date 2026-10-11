@@ -22,6 +22,7 @@ from src.shared.normalization import (
     normalized_content_fingerprint,
 )
 from src.shared.owned import is_skill_owned
+from src.shared.special_skills import is_special_skill, normalize_special_skill_id
 from src.shared.runtime import now_local
 from src.shared.usage import recompute_usage_from_calls
 from src.shared.versions import LLM_OUTPUT_CONTRACT_VERSION
@@ -533,6 +534,16 @@ def process_candidate(state: LocalCollection, item: Any) -> bool:
     seq = item.seq
 
     # 1. 资格与停止边界检查
+    special_ids = getattr(state, "special_ids", None)
+    if is_special_skill(candidate.skill_id, special_ids):
+        if hasattr(state, "skipped_special_ids"):
+            if isinstance(state.skipped_special_ids, set):
+                state.skipped_special_ids.add(normalize_special_skill_id(candidate.skill_id))
+            elif isinstance(state.skipped_special_ids, list):
+                state.skipped_special_ids.append(normalize_special_skill_id(candidate.skill_id))
+        if hasattr(state, "report") and isinstance(state.report, dict):
+            state.report["skipped_special"] = len(state.skipped_special_ids) if hasattr(state, "skipped_special_ids") else 1
+        return True
     if is_skill_owned(candidate.skill_id, state.owned_ids):
         state.skipped_owned_ids.add(candidate.skill_id)
         state.report["skipped_owned"] = len(state.skipped_owned_ids)

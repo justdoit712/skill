@@ -17,6 +17,7 @@ from pathlib import Path
 
 from src.shared.owned import build_public_owned_projection, is_skill_owned, normalize_owned_id
 from src.shared.schema import normalize_skill_type, normalize_string_list
+from src.shared.special_skills import is_special_skill
 from .decide import (
     DECISION_CANDIDATE,
     DECISION_EXCLUDED,
@@ -230,7 +231,28 @@ def build_catalog(
 
 
 
-def build_page_data(catalog: dict) -> dict:
+def _filter_projection_collection(data: Any, special_ids: set[str]) -> Any:
+    """过滤公开治理配置投影中归属于特定专区的条目。"""
+    if not data or not special_ids:
+        return data
+    if isinstance(data, list):
+        return [
+            it for it in data
+            if not (isinstance(it, dict) and is_special_skill(it.get("skill_id", ""), special_ids))
+        ]
+    if isinstance(data, dict):
+        res = dict(data)
+        for k, v in list(res.items()):
+            if isinstance(v, list):
+                res[k] = [
+                    it for it in v
+                    if not (isinstance(it, dict) and is_special_skill(it.get("skill_id", ""), special_ids))
+                ]
+        return res
+    return data
+
+
+def build_page_data(catalog: dict, *, special_ids: set[str]) -> dict:
     """由索引生成页面数据（§6：默认展示推荐区，支持候选区与收藏区切换）。"""
     manual: list[dict] = []
     recommended: list[dict] = []
@@ -240,7 +262,7 @@ def build_page_data(catalog: dict) -> dict:
     failed = 0
     category_counts: dict[str, int] = {}
 
-    owned_cfg = catalog.get("owned") or {}
+    owned_cfg = _filter_projection_collection(catalog.get("owned") or {}, special_ids)
     owned_items = owned_cfg.get("items") or []
     owned_ids: set[str] = set()
     for item in owned_items:
@@ -253,6 +275,10 @@ def build_page_data(catalog: dict) -> dict:
 
     for entry in catalog.get("entries", []):
         entry_id = entry.get("skill_id") or ""
+        # 严格互斥：在任何分区与计数判定前过滤特定专区条目
+        if is_special_skill(entry_id, special_ids):
+            continue
+
         if is_skill_owned(entry_id, owned_ids):
             orig_partition = "manual" if entry.get("manual_pick") else (
                 "recommended" if entry.get("status") == STATUS_RECOMMENDED else (
@@ -304,13 +330,13 @@ def build_page_data(catalog: dict) -> dict:
         "owned_entries": owned_entries,
     }
     if catalog.get("favorites"):
-        res["favorites"] = catalog["favorites"]
+        res["favorites"] = _filter_projection_collection(catalog["favorites"], special_ids)
     if catalog.get("overrides"):
-        res["overrides"] = catalog["overrides"]
+        res["overrides"] = _filter_projection_collection(catalog["overrides"], special_ids)
     if catalog.get("snoozed"):
-        res["snoozed"] = catalog["snoozed"]
+        res["snoozed"] = _filter_projection_collection(catalog["snoozed"], special_ids)
     if catalog.get("owned"):
-        res["owned"] = build_public_owned_projection(catalog["owned"])
+        res["owned"] = build_public_owned_projection(owned_cfg)
     return res
 
 

@@ -49,11 +49,25 @@ def catalog_task(function):
     return guarded
 
 
-def write_catalog(catalog, *, data_path, public_path):
+def write_catalog(catalog, *, data_path, public_path, special_ids: set[str]):
     from .index import build_page_data
+    from src.shared.special_skills import filter_out_special_skills
     data, public = Path(data_path), Path(public_path)
     with catalog_session(data.parent):
-        page = build_page_data(catalog)
+        if "entries" in catalog and special_ids:
+            filtered_entries, _ = filter_out_special_skills(catalog["entries"], special_ids)
+            catalog["entries"] = filtered_entries
+            rec = sum(1 for e in filtered_entries if e.get("status") == "recommended" and not e.get("manual_pick"))
+            cand = sum(1 for e in filtered_entries if e.get("status") == "candidate" and not e.get("manual_pick"))
+            manual = sum(1 for e in filtered_entries if e.get("manual_pick"))
+            excl = sum(1 for e in filtered_entries if e.get("status") == "excluded")
+            catalog["counts"] = {
+                "recommended": rec,
+                "candidate": cand,
+                "manual": manual,
+                "excluded": excl,
+            }
+        page = build_page_data(catalog, special_ids=special_ids)
         write_json_atomic(data, catalog)
         # If this fails, the committed source remains sufficient to rebuild.
         # public 页面面向 GitHub Pages 静态分发，采用 indent=None 紧凑压缩以减少传输开销
@@ -64,27 +78,31 @@ def write_catalog(catalog, *, data_path, public_path):
                 "counts": page["counts"], "generated_at": catalog.get("generated_at")}
 
 
-def mutate_catalog(root_dir, mutator_fn, *, data_dir=None, public_dir=None, timeout=0):
+def mutate_catalog(root_dir, mutator_fn, *, data_dir=None, public_dir=None, timeout=0, special_ids=None):
+    from src.infra.special_skills import load_special_skill_ids
     root = Path(root_dir)
     data = Path(data_dir) if data_dir else root / "data"
     public = Path(public_dir) if public_dir else root / "public"
+    target_special_ids = special_ids if special_ids is not None else load_special_skill_ids(root_dir=root)
     with catalog_session(data, timeout=timeout):
         current = read_json(data / "catalog.json", default={"entries": []})
         updated = mutator_fn(current)
-        write_catalog(updated, data_path=data / "catalog.json", public_path=public / "data" / "catalog.json")
+        write_catalog(updated, data_path=data / "catalog.json", public_path=public / "data" / "catalog.json", special_ids=target_special_ids)
         return updated
 
 
 def recover_catalog_projections(root_dir, *, data_dir=None, public_dir=None):
     from .index import build_page_data
+    from src.infra.special_skills import load_special_skill_ids
     root = Path(root_dir)
     data = Path(data_dir) if data_dir else root / "data"
     public = Path(public_dir) if public_dir else root / "public"
+    special_ids = load_special_skill_ids(root_dir=root)
     with catalog_session(data):
         source = data / "catalog.json"
         if not source.exists():
             return False
-        expected = build_page_data(read_json(source))
+        expected = build_page_data(read_json(source), special_ids=special_ids)
         target = public / "data" / "catalog.json"
         try:
             current = read_json(target)
