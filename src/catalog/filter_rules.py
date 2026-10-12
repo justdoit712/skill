@@ -254,6 +254,16 @@ def _has_negation_or_secondary_context(phrase: str, text: str) -> bool:
         is_negated = bool(
             re.search(rf"{neg_words}\s*$", pre_window, re.IGNORECASE)
             or re.search(rf"{neg_words}", pre_window[-15:], re.IGNORECASE)
+            # 后置谓语也可能否定用途；只看同一分句，避免把下一句的限制
+            # （例如“文档处理。不支持图片编辑”）误当成对当前用途的否定。
+            or re.search(
+                r"^\s*(?:(?:功能|能力|用途|操作|服务)\s*)?"
+                r"(?:(?:并)?不(?:是|在|属|支持|提供|包含|适用|作为|用于)|并非|非主要|无法|不能|未实现)"
+                r"|^\s*(?:(?:is|are|was|were)\s+(?:not\b|unsupported\b|unavailable\b)"
+                r"|(?:isn't|aren't|wasn't|weren't)\b)",
+                post_window,
+                re.IGNORECASE,
+            )
         )
         is_secondary = bool(
             re.search(rf"{sec_words}\s*$", pre_window, re.IGNORECASE)

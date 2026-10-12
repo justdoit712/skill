@@ -26,17 +26,17 @@ from src.catalog.filter_rules import (
     load_filter_rules,
     match_local_filter_rules,
 )
-from src.catalog.favorites import get_manual_picks, load_favorites
+from src.catalog.favorites import get_manual_picks, load_favorites, validate_favorites
 from src.catalog.maintenance import sync_config_offline
-from src.catalog.overrides import get_manual_exclusions, load_overrides
-from src.catalog.snooze import get_active_snoozed, load_snooze, now_shanghai_date
+from src.catalog.overrides import get_manual_exclusions, load_overrides, validate_overrides
+from src.catalog.snooze import get_active_snoozed, load_snooze, now_shanghai_date, validate_snooze
 from src.catalog.store import catalog_session
 from src.infra.files import file_lock, read_json, write_json_atomic
 from src.infra.owned import load_owned_config
 from src.shared.owned import is_skill_owned, normalize_owned_id
 from src.shared.runtime import now_local
 
-TOOL_VERSION = "3.0.0"
+TOOL_VERSION = "3.0.1"
 MATCH_MODE = "local_match_v2"
 
 
@@ -265,6 +265,8 @@ def prepare_run(root_dir: str | Path, run_id: str | None = None) -> dict[str, An
                 "is_snoozed": is_snoozed_item,
                 "materials": mat,
                 "materials_fingerprint": mat_fp,
+                "last_evaluation_id": entry.get("last_evaluation_id"),
+                "content_fingerprint": entry.get("content_fingerprint"),
             }
             targets.append(target_row)
 
@@ -838,6 +840,66 @@ def render_report(root_dir: str | Path, run_id: str) -> str:
 # 5. 应用阶段：预览、多文件写入与离线同步 (Apply)
 # ----------------------------------------------------------------------
 
+def _file_digest(path: Path) -> str | None:
+    return _sha256_hex(path.read_text(encoding="utf-8")) if path.exists() else None
+
+
+def _check_config_paths(root: Path, run_data: dict) -> None:
+    for key, filename in (("favorites", "favorites.json"), ("owned", "owned-skills.json"),
+                          ("overrides", "overrides.json"), ("snooze", "snoozed.json")):
+        if _resolve_config_path(root, filename, "governance") != Path(run_data["config_paths"][key]):
+            raise ValueError(f"权威配置路径已变化：{filename}，请重新准备批次")
+
+
+def _validate_apply_configs(root: Path, catalog: dict, favorites: dict,
+                            overrides: dict, snooze: dict, owned: dict) -> None:
+    """在内存中复用同步入口的治理校验，不让校验器补默认值改变计划摘要。"""
+    from src.infra.special_skills import load_special_skill_ids
+
+    known = {e["skill_id"] for e in catalog.get("entries", []) if e.get("skill_id")}
+    known.update(item["skill_id"] for item in owned.get("items", []))
+    known.update(load_special_skill_ids(root_dir=root))
+    for key, collection in (("favorites", "manual_picks"), ("overrides", "manual_picks"),
+                            ("overrides", "manual_exclusions"), ("snoozed", "snoozed")):
+        saved = catalog.get(key) or {}
+        items = saved if isinstance(saved, list) else saved.get(collection, [])
+        known.update(item["skill_id"] for item in items if item.get("skill_id"))
+    fav, ov, sn = deepcopy(favorites), deepcopy(overrides), deepcopy(snooze)
+    errors = validate_favorites(fav, known) + validate_overrides(ov, known)
+    if errors:
+        raise ValueError("治理配置校验失败：" + "；".join(errors))
+    picks, exclusions = set(get_manual_picks(fav)), set(get_manual_exclusions(ov))
+    if picks & exclusions:
+        raise ValueError("收藏与排除冲突：" + "；".join(sorted(picks & exclusions)))
+    errors = validate_snooze(sn, known_skill_ids=known, active_pick_ids=picks,
+                             active_exclusion_ids=exclusions)
+    if errors:
+        raise ValueError("冷冻配置校验失败：" + "；".join(errors))
+
+
+def _check_apply_targets(run_dir: Path, plan: dict, catalog: dict, favorites: dict,
+                         owned: dict, *, exclusions_written: bool) -> None:
+    targets = {t["skill_id"]: t for t in read_json(run_dir / "targets.json")["targets"]}
+    entries = {e["skill_id"]: e for e in catalog.get("entries", [])}
+    picks = get_manual_picks(favorites)
+    owned_ids = {item["skill_id"] for item in owned.get("items", [])}
+    for item in plan["to_add"] + plan["to_reactivate"]:
+        sid = item["skill_id"]
+        entry, target = entries.get(sid), targets.get(sid)
+        if not entry or not target:
+            raise ValueError(f"应用目标已消失或不在快照中：{sid}")
+        if sid in picks or entry.get("manual_pick") or is_skill_owned(sid, owned_ids):
+            raise ValueError(f"应用目标已被收藏或收录，禁止排除：{sid}")
+        allowed = ("recommended", "candidate", "excluded") if exclusions_written else ("recommended", "candidate")
+        if entry.get("status") not in allowed:
+            raise ValueError(f"应用目标状态已变化：{sid}")
+        if _sha256_hex(_canonical_json(extract_materials(entry)))[:16] != target["materials_fingerprint"]:
+            raise ValueError(f"应用目标材料已变化：{sid}")
+        for key in ("last_evaluation_id", "content_fingerprint"):
+            if key in target and entry.get(key) != target[key]:
+                raise ValueError(f"应用目标版本已变化：{sid} ({key})")
+
+
 def plan_apply(
     root_dir: str | Path,
     run_id: str,
@@ -914,6 +976,9 @@ def plan_apply(
     owned_path = Path(run_data["config_paths"]["owned"])
 
     with catalog_session(catalog_path.parent):
+        if (run_dir / "apply-manifest.json").exists():
+            raise ValueError("批次已开始应用，禁止覆盖原计划；请使用 --apply 继续原事务")
+        _check_config_paths(root, run_data)
         catalog = json.loads(catalog_path.read_text(encoding="utf-8"))
         entries_map = {e["skill_id"]: e for e in catalog.get("entries", []) if e.get("skill_id")}
 
@@ -1012,6 +1077,8 @@ def plan_apply(
             })
 
         # 预先计算应用生效后的预期文件内容与摘要
+        expected_sn_data = deepcopy(sn_data)
+        expected_ov_data = deepcopy(ov_data)
         if snoozes_to_remove:
             expected_snoozed_list = [s for s in existing_snoozes if s.get("skill_id") not in snoozes_to_remove]
             expected_sn_data = deepcopy(sn_data)
@@ -1019,7 +1086,7 @@ def plan_apply(
             expected_sn_text = json.dumps(expected_sn_data, ensure_ascii=False, indent=2)
             expected_sn_hash = _sha256_hex(expected_sn_text)
         else:
-            expected_sn_hash = _sha256_hex(snooze_path.read_text(encoding="utf-8"))
+            expected_sn_hash = _file_digest(snooze_path)
 
         if to_add or to_reactivate:
             expected_ov_exclusions = deepcopy(existing_exclusions)
@@ -1044,11 +1111,18 @@ def plan_apply(
             expected_ov_text = json.dumps(expected_ov_data, ensure_ascii=False, indent=2)
             expected_ov_hash = _sha256_hex(expected_ov_text)
         else:
-            expected_ov_hash = _sha256_hex(overrides_path.read_text(encoding="utf-8"))
+            expected_ov_hash = _file_digest(overrides_path)
+
+        _validate_apply_configs(root, catalog, fav_data, expected_ov_data, expected_sn_data, owned_cfg)
 
         plan_doc = {
+            "plan_version": 2,
             "run_id": run_id,
             "review_file": str(review_file),
+            "review_fingerprint": _sha256_hex(_canonical_json(review_data)),
+            "results_fingerprint": curr_results_fp,
+            "targets_digest": _file_digest(run_dir / "targets.json"),
+            "selected_skill_ids": sorted(selected_ids),
             "generated_at": now_local().isoformat(),
             "selected_count": len(selected_ids),
             "to_add_count": len(to_add),
@@ -1062,13 +1136,14 @@ def plan_apply(
             "already_active_excluded": already_active_excluded,
             "snoozes_to_remove": sorted(list(snoozes_to_remove)),
             "files_before_digests": {
-                "overrides": _sha256_hex(overrides_path.read_text(encoding="utf-8")),
-                "snooze": _sha256_hex(snooze_path.read_text(encoding="utf-8")),
+                "overrides": _file_digest(overrides_path),
+                "snooze": _file_digest(snooze_path),
             },
             "files_expected_after_digests": {
                 "overrides": expected_ov_hash,
                 "snooze": expected_sn_hash,
             },
+            "files_after_contents": {"overrides": expected_ov_data, "snooze": expected_sn_data},
         }
         write_json_atomic(run_dir / "apply-plan.json", plan_doc)
 
@@ -1079,138 +1154,99 @@ def execute_apply(
     root_dir: str | Path,
     run_id: str,
     log: Callable[[str], None] = safe_print,
+    *,
+    review_path: str | Path | None = None,
 ) -> dict[str, Any]:
-    """执行实际的治理名单写入与离线目录同步，具备断点续写与幂等性保障。"""
+    """持锁验证并执行固定计划；恢复只使用 manifest 保存的原事务。"""
     root = Path(root_dir).resolve()
     run_dir = _get_run_dir(root, run_id)
-    require_tag_run(read_json(run_dir / "run.json"))
-    manifest_file = run_dir / "apply-manifest.json"
-
-    # 1. 优先检查是否此前已完成应用（幂等快速返回）
-    if manifest_file.exists():
-        manifest = read_json(manifest_file)
-        if manifest.get("phase") == "completed":
-            log(f"批次 #{run_id} 此前已完成应用，幂等返回无需重复写入。")
-            return manifest
-    else:
-        manifest = {
-            "run_id": run_id,
-            "phase": "prepared",
-            "started_at": now_local().isoformat(),
-        }
-        write_json_atomic(manifest_file, manifest)
-
-    plan_file = run_dir / "apply-plan.json"
-    if not plan_file.exists():
-        raise FileNotFoundError(f"未找到 apply-plan.json，请先执行预览：{run_id}")
-
-    plan = read_json(plan_file)
-    if plan.get("conflicts_count", 0) > 0:
-        raise RuntimeError(f"存在 {plan.get('conflicts_count')} 项冲突，禁止执行应用！请核对后重新生成审核选择。")
-
     run_data = read_json(run_dir / "run.json")
+    require_tag_run(run_data)
     catalog_path = Path(run_data["config_paths"]["catalog"])
-    overrides_path = Path(run_data["config_paths"]["overrides"])
-    snooze_path = Path(run_data["config_paths"]["snooze"])
-
-    before_hashes = plan.get("files_before_digests") or {}
-    expected_after_hashes = plan.get("files_expected_after_digests") or {}
+    manifest_file = run_dir / "apply-manifest.json"
+    plan_file = run_dir / "apply-plan.json"
+    phases = ["prepared", "snooze_written", "exclusions_written", "catalog_synced", "completed"]
 
     with catalog_session(catalog_path.parent):
-        curr_ov_hash = _sha256_hex(overrides_path.read_text(encoding="utf-8"))
-        curr_sn_hash = _sha256_hex(snooze_path.read_text(encoding="utf-8"))
-
-        # 严格在锁内核对文件摘要 (Issue 4)
-        # 核对 snooze.json:
-        if manifest.get("phase") == "prepared":
-            if curr_sn_hash == expected_after_hashes.get("snooze"):
-                # 中断自愈：磁盘已写入预期内容但 manifest 尚未推进
-                manifest["phase"] = "snooze_written"
-                manifest["snooze_written_at"] = manifest.get("snooze_written_at") or now_local().isoformat()
-                write_json_atomic(manifest_file, manifest)
-            elif curr_sn_hash != before_hashes.get("snooze"):
-                raise RuntimeError("snoozed.json 文件哈希与生成计划时不同，检测到外部并发修改，停止应用！")
+        manifest = read_json(manifest_file) if manifest_file.exists() else None
+        if manifest and manifest.get("phase") == "completed":
+            log(f"批次 #{run_id} 此前已完成应用，幂等返回无需重复写入。")
+            return manifest
+        if manifest:
+            if "plan" not in manifest:
+                raise ValueError("旧版中断事务缺少固定计划，不能自动续写；请保留记录并人工核对")
+            plan = manifest["plan"]
+            if plan_file.exists() and read_json(plan_file) != plan:
+                raise ValueError("应用计划已被修改，禁止与原事务混用")
         else:
-            # 已进入 snooze_written 及后续阶段，必须严格保持预期写入后摘要，任何修改均视为外部篡改
-            if curr_sn_hash != expected_after_hashes.get("snooze"):
-                raise RuntimeError("snoozed.json 处于写入后阶段但哈希不匹配预期摘要，检测到外部并发修改或异常篡改，停止应用！")
+            if not plan_file.exists():
+                raise FileNotFoundError(f"未找到 apply-plan.json，请先执行预览：{run_id}")
+            plan = read_json(plan_file)
+        if plan.get("plan_version") != 2 or plan.get("run_id") != run_id:
+            raise ValueError("应用计划版本或批次不匹配，请重新执行预览")
+        if plan.get("conflicts_count", 0):
+            raise ValueError("应用计划存在冲突，请修正后重新执行预览")
+        if manifest and manifest.get("phase") not in phases:
+            raise ValueError("应用进度无效，停止恢复")
 
-        # 核对 overrides.json:
-        if manifest.get("phase") in ("prepared", "snooze_written"):
-            if curr_ov_hash == expected_after_hashes.get("overrides"):
-                # 中断自愈：磁盘已写入预期内容但 manifest 尚未推进
-                manifest["phase"] = "exclusions_written"
-                manifest["exclusions_written_at"] = manifest.get("exclusions_written_at") or now_local().isoformat()
-                write_json_atomic(manifest_file, manifest)
-            elif curr_ov_hash != before_hashes.get("overrides"):
-                raise RuntimeError("overrides.json 文件哈希与生成计划时不同，检测到外部并发修改，停止应用！")
-        else:
-            # 已进入 exclusions_written 及后续阶段，必须严格保持预期写入后摘要，任何修改均视为外部篡改
-            if curr_ov_hash != expected_after_hashes.get("overrides"):
-                raise RuntimeError("overrides.json 处于写入后阶段但哈希不匹配预期摘要，检测到外部并发修改或异常篡改，停止应用！")
-        # 阶段 1: 移除冷冻冲突
-        if manifest.get("phase") in ("prepared",):
-            snoozes_to_remove = set(plan.get("snoozes_to_remove") or [])
-            if snoozes_to_remove:
-                sn_data = load_snooze(snooze_path)
-                original_snoozed = sn_data.get("snoozed") or []
-                filtered_snoozed = [s for s in original_snoozed if s.get("skill_id") not in snoozes_to_remove]
-                sn_data["snoozed"] = filtered_snoozed
-                write_json_atomic(snooze_path, sn_data)
+        # 首次应用绑定已审核的结果；恢复使用原事务选择，不重新读取默认审核文件。
+        if not manifest or review_path is not None:
+            review_file = Path(review_path) if review_path is not None else Path(plan["review_file"])
+            review = read_json(review_file)
+            if _sha256_hex(_canonical_json(review)) != plan["review_fingerprint"]:
+                raise ValueError("审核选择已变化，请重新执行预览；已开始的事务不能更换选择")
+        if _file_digest(run_dir / "targets.json") != plan["targets_digest"]:
+            raise ValueError("目标快照已变化，禁止应用")
+        if compute_results_fingerprint(run_dir / "results") != plan["results_fingerprint"]:
+            raise ValueError("判定结果已变化，禁止应用旧计划")
+        _check_config_paths(root, run_data)
 
-            manifest["phase"] = "snooze_written"
-            manifest["snooze_written_at"] = now_local().isoformat()
+        paths = {key: Path(run_data["config_paths"][key]) for key in ("snooze", "overrides")}
+        before, after = plan["files_before_digests"], plan["files_expected_after_digests"]
+        payloads = plan["files_after_contents"]
+        current = {key: _file_digest(path) for key, path in paths.items()}
+        phase = manifest["phase"] if manifest else "prepared"
+        for key, written_phase in (("snooze", "snooze_written"), ("overrides", "exclusions_written")):
+            allowed = (after[key],) if phases.index(phase) >= phases.index(written_phase) else (before[key], after[key])
+            if current[key] not in allowed:
+                raise ValueError(f"{paths[key].name} 与原计划摘要不符，检测到外部修改，停止应用")
+            if before[key] != after[key]:
+                expected = _sha256_hex(json.dumps(payloads[key], ensure_ascii=False, indent=2))
+                if expected != after[key]:
+                    raise ValueError(f"计划文件内容与摘要不符：{key}")
+            elif paths[key].exists() and read_json(paths[key]) != payloads[key]:
+                raise ValueError(f"计划中的未修改配置与当前内容不符：{key}")
+
+        catalog = read_json(catalog_path)
+        favorites = load_favorites(Path(run_data["config_paths"]["favorites"]))
+        owned = load_owned_config(Path(run_data["config_paths"]["owned"]))
+        _check_apply_targets(run_dir, plan, catalog, favorites, owned,
+                             exclusions_written=current["overrides"] == after["overrides"])
+        _validate_apply_configs(root, catalog, favorites, payloads["overrides"], payloads["snooze"], owned)
+
+        # 全部校验通过后才创建事务；失败的预检不留下会阻塞一键入口的半成品。
+        if not manifest:
+            manifest = {"run_id": run_id, "phase": "prepared", "started_at": now_local().isoformat(),
+                        "plan": deepcopy(plan)}
             write_json_atomic(manifest_file, manifest)
 
-        # 阶段 2: 写入 overrides 人工排除名单
-        if manifest.get("phase") == "snooze_written":
-            ov_data = load_overrides(overrides_path)
-            existing_exclusions = list(ov_data.get("manual_exclusions") or [])
+        for key, written_phase in (("snooze", "snooze_written"), ("overrides", "exclusions_written")):
+            if current[key] != after[key]:
+                write_json_atomic(paths[key], payloads[key])
+            if phases.index(manifest["phase"]) < phases.index(written_phase):
+                manifest["phase"] = written_phase
+                manifest[written_phase + "_at"] = now_local().isoformat()
+                write_json_atomic(manifest_file, manifest)
 
-            # 重新激活退休项
-            reactivate_map = {item["skill_id"]: item for item in plan.get("to_reactivate") or []}
-            for ex in existing_exclusions:
-                sid = ex.get("skill_id")
-                if sid in reactivate_map:
-                    ex.pop("retired_at", None)
-                    ex["reason"] = reactivate_map[sid]["reason"]
-                    ex["added_at"] = reactivate_map[sid]["added_at"]
-
-            # 新增项
-            to_add_list = plan.get("to_add") or []
-            existing_ids = {e.get("skill_id") for e in existing_exclusions}
-            for item in to_add_list:
-                if item["skill_id"] not in existing_ids:
-                    existing_exclusions.append({
-                        "skill_id": item["skill_id"],
-                        "reason": item["reason"],
-                        "added_at": item["added_at"],
-                    })
-                    existing_ids.add(item["skill_id"])
-
-            ov_data["manual_exclusions"] = existing_exclusions
-            write_json_atomic(overrides_path, ov_data)
-
-            manifest["phase"] = "exclusions_written"
-            manifest["exclusions_written_at"] = now_local().isoformat()
-            write_json_atomic(manifest_file, manifest)
-
-        # 阶段 3: 执行离线目录同步
-        if manifest.get("phase") == "exclusions_written":
-            sync_res = sync_config_offline(root)
+        if manifest["phase"] == "exclusions_written":
+            manifest["sync_result"] = sync_config_offline(root)
             manifest["phase"] = "catalog_synced"
-            manifest["sync_result"] = sync_res
-            manifest["completed_at"] = now_local().isoformat()
             write_json_atomic(manifest_file, manifest)
-
-        manifest["files_after_digests"] = {
-            "overrides": _sha256_hex(overrides_path.read_text(encoding="utf-8")),
-            "snooze": _sha256_hex(snooze_path.read_text(encoding="utf-8")),
-        }
+        manifest["files_after_digests"] = {key: _file_digest(path) for key, path in paths.items()}
         manifest["phase"] = "completed"
+        manifest["completed_at"] = now_local().isoformat()
         write_json_atomic(manifest_file, manifest)
-
-    return manifest
+        return manifest
 
 
 def filter_and_apply(root_dir: str | Path) -> int:
@@ -1314,19 +1350,9 @@ def main(argv: list[str] | None = None) -> int:
         elif args.subcommand == "apply":
             require_tag_run(read_json(_get_run_dir(root, args.run_id) / "run.json"))
             is_apply = bool(args.apply)
-            manifest_file = _get_run_dir(root, args.run_id) / "apply-manifest.json"
-            if is_apply and manifest_file.exists():
-                existing_manifest = read_json(manifest_file)
-                if existing_manifest.get("phase") == "completed":
-                    safe_print(f"🎉 批次 #{args.run_id} 此前已应用完成（幂等返回）。阶段: completed")
-                    if existing_manifest.get("sync_result"):
-                        sr = existing_manifest["sync_result"]
-                        safe_print(f"   已完成离线目录同步：主索引 {sr.get('catalog_path')} · 页面数据 {sr.get('page_path')}")
-                    return 0
-
             review_file = Path(args.review).resolve() if args.review else (_get_run_dir(root, args.run_id) / "review.json")
-            plan = plan_apply(root, args.run_id, review_file)
             if not is_apply:
+                plan = plan_apply(root, args.run_id, review_file)
                 safe_print(f"📋 变更预览（Dry Run）：批次 #{args.run_id}")
                 safe_print(f"   待处理选择：{plan['selected_count']} 条")
                 safe_print(f"   拟新增排除：{plan['to_add_count']} 条")
@@ -1341,7 +1367,7 @@ def main(argv: list[str] | None = None) -> int:
                     safe_print("   ✨ 校验通过，无冲突。如需真正写入，请追加 --apply 参数执行。")
                 return 0
             else:
-                manifest = execute_apply(root, args.run_id)
+                manifest = execute_apply(root, args.run_id, review_path=args.review)
                 safe_print(f"🎉 变更应用完成！阶段: {manifest['phase']}")
                 if manifest.get("sync_result"):
                     sr = manifest["sync_result"]

@@ -9,10 +9,12 @@
 from __future__ import annotations
 
 import copy
+from contextlib import contextmanager
 from dataclasses import asdict
 import json
 from pathlib import Path
 import tempfile
+import time
 from types import SimpleNamespace
 import unittest
 from unittest.mock import patch
@@ -353,6 +355,20 @@ class GovernanceTest(unittest.TestCase):
         res_pos = match_local_filter_rules(rules, name="excel", summary="用于通用电子表格处理与格式转换")
         self.assertEqual(res_pos["result"], "match")
 
+        for summary in (
+            "通用电子表格处理不在本技能支持范围内，主要用于语法检查",
+            "通用电子表格处理功能不提供",
+            "通用电子表格处理并非主要用途",
+            "通用电子表格处理 is not supported; this tool checks syntax",
+            "通用电子表格处理 isn't available",
+        ):
+            with self.subTest(summary=summary):
+                self.assertEqual(match_local_filter_rules(rules, name="excel", summary=summary)["result"], "unknown")
+        # 后一句否定其他能力，不能推翻前一句明确的主要用途。
+        self.assertEqual(match_local_filter_rules(
+            rules, name="excel", summary="通用电子表格处理。不支持图片编辑。"
+        )["result"], "match")
+
     @smoke
     def test_post_fetch_materials_text_protection(self):
         """抓取后专业用途保护检查正文 text：正文中含有 preserve_phrases 触发保护。"""
@@ -485,6 +501,169 @@ class GovernanceTest(unittest.TestCase):
         )
         self.assertEqual(res5["result"], "match")
         self.assertEqual(res5["matched_topic_name"], "PDF 基础处理")
+
+
+class CatalogFilterApplyTest(unittest.TestCase):
+    """维护入口仍在使用期间，保留预检零写入与事务恢复两项守门测试。"""
+
+    def setUp(self):
+        network = patch("socket.socket.connect", side_effect=AssertionError("unexpected network"))
+        network.start()
+        self.addCleanup(network.stop)
+
+    @staticmethod
+    @contextmanager
+    def _temporary_directory():
+        temporary = tempfile.TemporaryDirectory()
+        try:
+            yield temporary.name
+        finally:
+            # Windows 的文件索引/扫描器可能短暂延迟删除完成；不吞掉最终清理失败。
+            for attempt in range(5):
+                try:
+                    temporary.cleanup()
+                    break
+                except OSError as exc:
+                    if exc.winerror not in (5, 32, 145) or attempt == 4:
+                        raise
+                    time.sleep(0.05 * (attempt + 1))
+
+    def _batch(self, root):
+        from tools import filter_existing_catalog as tool
+        self.tool = tool
+        sid = "demo/repo:skills/docx/SKILL.md"
+        cfg = root / "config/governance"
+        candidate = Candidate(sid, "demo", "repo", name="docx")
+        entry = update_entry(None, candidate, EntryUpdateEvent(
+            kind="fresh_evaluation", evaluation={"summary_zh": "Word 文档处理"},
+            decision={"decision": "candidate"}, evaluation_id="original"))
+        tool.write_json_atomic(root / "data/catalog.json", build_catalog([entry], context=CatalogContext()))
+        for filename, data in {
+            "favorites.json": {"manual_picks": []},
+            "owned-skills.json": {"schema_version": "1.0.0", "items": []},
+            "overrides.json": {"manual_exclusions": []},
+            "snoozed.json": {"snoozed": [{"skill_id": sid, "snoozed_at": "2026-01-01", "expires_at": "2099-01-01"}]},
+            "filter-rules.json": {"blocked_topics": [{"name": "Word", "local_match": {
+                "names": ["docx"], "purpose_phrases": ["Word 文档处理"]}}]},
+        }.items():
+            tool.write_json_atomic(cfg / filename, data)
+        prepared = tool.prepare_run(root, "test-run")
+        run = Path(prepared["run_dir"])
+        self.assertEqual(tool.run_assessments(root, "test-run")["matched"], 1)
+        tool.render_report(root, "test-run")
+        return tool, cfg, run, sid
+
+    @staticmethod
+    def _business_files(root):
+        return {str(p.relative_to(root)): p.read_bytes()
+                for directory in (root / "config", root / "public", root / "data")
+                for p in directory.rglob("*.json") if "local" not in p.relative_to(root).parts}
+
+    @smoke
+    def test_preflight_rejects_changes_without_business_writes(self):
+        for resume in (False, True):
+            for change in ("favorite", "owned", "entry_pick", "version", "material"):
+                with self.subTest(resume=resume, change=change), self._temporary_directory() as tmp:
+                    root = Path(tmp)
+                    tool, cfg, run, sid = self._batch(root)
+                    tool.plan_apply(root, "test-run", run / "review.json")
+                    if resume:
+                        original_write = tool.write_json_atomic
+                        def fail_exclusion(path, data):
+                            if Path(path) == cfg / "overrides.json":
+                                raise OSError("injected interruption")
+                            original_write(path, data)
+                        with patch.object(tool, "write_json_atomic", side_effect=fail_exclusion):
+                            with self.assertRaises(OSError):
+                                tool.execute_apply(root, "test-run")
+                    if change == "favorite":
+                        tool.write_json_atomic(cfg / "favorites.json", {"manual_picks": [
+                            {"skill_id": sid, "reason": "keep", "added_at": "2026-10-01"}]})
+                    elif change == "owned":
+                        tool.write_json_atomic(cfg / "owned-skills.json", {"schema_version": "1.0.0", "items": [
+                            {"skill_id": sid, "name": "docx", "added_at": "2026-10-01"}]})
+                    else:
+                        catalog = tool.read_json(root / "data/catalog.json")
+                        field, value = {"entry_pick": ("manual_pick", True), "version": ("last_evaluation_id", "new"),
+                                        "material": ("summary_zh", "new purpose")}[change]
+                        catalog["entries"][0][field] = value
+                        tool.write_json_atomic(root / "data/catalog.json", catalog)
+                    before = self._business_files(root)
+                    with self.assertRaises(ValueError), patch.object(tool, "sync_config_offline") as sync:
+                        tool.execute_apply(root, "test-run")
+                    sync.assert_not_called()
+                    self.assertEqual(self._business_files(root), before)
+                    self.assertEqual((run / "apply-manifest.json").exists(), resume)
+
+        for invalid_file, data in (
+            ("overrides.json", {"manual_exclusions": [{"skill_id": "other/repo", "reason": "old", "added_at": "bad-date"}]}),
+            ("favorites.json", {"manual_picks": [{"skill_id": "other/repo", "reason": "keep", "added_at": "2026-10-01"}]}),
+            ("snoozed.json", {"snoozed": [{"skill_id": "other/repo", "snoozed_at": "bad-date"}]}),
+        ):
+            with self.subTest(invalid_file=invalid_file), self._temporary_directory() as tmp:
+                root = Path(tmp)
+                tool, cfg, run, sid = self._batch(root)
+                tool.write_json_atomic(cfg / invalid_file, data)
+                before = self._business_files(root)
+                with self.assertRaises(ValueError):
+                    tool.plan_apply(root, "test-run", run / "review.json")
+                self.assertEqual(self._business_files(root), before)
+                self.assertFalse((run / "apply-manifest.json").exists())
+
+    def test_cli_preserves_preview_and_recovers_original_transaction(self):
+        from src.catalog import store
+        for failure in ("missing_plan", "review_changed", "config_changed", "snooze", "overrides", "page", "catalog_synced"):
+            with self.subTest(failure=failure), self._temporary_directory() as tmp:
+                root = Path(tmp)
+                tool, cfg, run, sid = self._batch(root)
+                command = ["--root", str(root), "apply", "--run-id", "test-run", "--apply"]
+                if failure != "missing_plan":
+                    tool.plan_apply(root, "test-run", run / "review.json")
+                plan_before = (run / "apply-plan.json").read_bytes() if failure != "missing_plan" else None
+                if failure == "review_changed":
+                    review = tool.read_json(run / "review.json")
+                    review["selected_skill_ids"] = []
+                    tool.write_json_atomic(run / "review.json", review)
+                if failure == "config_changed":
+                    tool.write_json_atomic(cfg / "overrides.json", {"manual_exclusions": [], "note": "changed"})
+                if failure in ("missing_plan", "review_changed", "config_changed"):
+                    before = self._business_files(root)
+                    with patch.object(tool, "plan_apply", side_effect=AssertionError("must not replan")):
+                        self.assertEqual(tool.main(command), 1)
+                    self.assertEqual(self._business_files(root), before)
+                    self.assertFalse((run / "apply-manifest.json").exists())
+                    if plan_before is not None:
+                        self.assertEqual((run / "apply-plan.json").read_bytes(), plan_before)
+                    continue
+
+                original_write = tool.write_json_atomic
+                def interrupted_write(path, data, **kwargs):
+                    original_write(path, data, **kwargs)
+                    if (failure in ("snooze", "overrides") and Path(path) == cfg / ("snoozed.json" if failure == "snooze" else "overrides.json")
+                            or failure == "page" and Path(path) == root / "data/catalog.json"
+                            or failure == "catalog_synced" and Path(path) == run / "apply-manifest.json" and data.get("phase") == "catalog_synced"):
+                        raise OSError("injected write interruption")
+                with patch.object(tool, "write_json_atomic", side_effect=interrupted_write), patch.object(store, "write_json_atomic", side_effect=interrupted_write):
+                    with self.assertRaises(OSError):
+                        tool.execute_apply(root, "test-run")
+                with self.assertRaises(ValueError):
+                    tool.plan_apply(root, "test-run", run / "review.json")
+                # 默认审核文件后来发生变化也不能重写已经开始的事务选择。
+                review = tool.read_json(run / "review.json")
+                review["selected_skill_ids"] = []
+                tool.write_json_atomic(run / "review.json", review)
+                with patch.object(tool, "plan_apply", side_effect=AssertionError("must not replan")):
+                    self.assertEqual(tool.main(command), 0)
+                self.assertEqual((run / "apply-plan.json").read_bytes(), plan_before)
+                self.assertEqual(tool.read_json(run / "apply-manifest.json")["phase"], "completed")
+                self.assertEqual([x["skill_id"] for x in tool.read_json(cfg / "overrides.json")["manual_exclusions"]], [sid])
+                self.assertEqual(tool.read_json(cfg / "snoozed.json")["snoozed"], [])
+                self.assertEqual(tool.read_json(root / "data/catalog.json")["entries"][0]["status"], "excluded")
+                page = tool.read_json(root / "public/data/catalog.json")
+                self.assertEqual(page["recommended"] + page["candidates"], [])
+                before = self._business_files(root)
+                self.assertEqual(tool.main(command), 0)
+                self.assertEqual(self._business_files(root), before)
 
 
 if __name__ == "__main__":
