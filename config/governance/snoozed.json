@@ -1767,6 +1767,125 @@
       "reason": "用户暂不关注",
       "skill_id": "skillmedev/skills:skills/weather-climate/SKILL.md",
       "snoozed_at": "2026-10-07"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-12",
+      "reason": "用户暂不关注",
+      "skill_id": "cat-xierluo/legal-skills:skills/agent-email/SKILL.md",
+      "snoozed_at": "2026-10-13"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-12",
+      "reason": "用户暂不关注",
+      "skill_id": "cat-xierluo/legal-skills:skills/apple-smart-schedule/SKILL.md",
+      "snoozed_at": "2026-10-13"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-12",
+      "reason": "用户暂不关注",
+      "skill_id": "cat-xierluo/legal-skills:skills/article2book/SKILL.md",
+      "snoozed_at": "2026-10-13"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-12",
+      "reason": "用户暂不关注",
+      "skill_id": "fslong520/aiskill:EduVid/SKILL.md",
+      "snoozed_at": "2026-10-13"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-12",
+      "reason": "用户暂不关注",
+      "skill_id": "fslong520/aiskill:GESP作业/SKILL.md",
+      "snoozed_at": "2026-10-13"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-12",
+      "reason": "用户暂不关注",
+      "skill_id": "fslong520/aiskill:docx/SKILL.md",
+      "snoozed_at": "2026-10-13"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-12",
+      "reason": "用户暂不关注",
+      "skill_id": "fslong520/aiskill:math-analysis/SKILL.md",
+      "snoozed_at": "2026-10-13"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-12",
+      "reason": "用户暂不关注",
+      "skill_id": "fslong520/aiskill:命题工坊/SKILL.md",
+      "snoozed_at": "2026-10-13"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-12",
+      "reason": "用户暂不关注",
+      "skill_id": "fslong520/aiskill:搬题姬/SKILL.md",
+      "snoozed_at": "2026-10-13"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-12",
+      "reason": "用户暂不关注",
+      "skill_id": "fslong520/aiskill:炽风/SKILL.md",
+      "snoozed_at": "2026-10-13"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-12",
+      "reason": "用户暂不关注",
+      "skill_id": "fslong520/aiskill:课后反馈/SKILL.md",
+      "snoozed_at": "2026-10-13"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-12",
+      "reason": "用户暂不关注",
+      "skill_id": "sdcxb/codem:src/core/skills/pre-push-checks/SKILL.md",
+      "snoozed_at": "2026-10-13"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-12",
+      "reason": "用户暂不关注",
+      "skill_id": "sdcxb/codem:src/core/skills/trim-cot-leakage/SKILL.md",
+      "snoozed_at": "2026-10-13"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-12",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/status-page-update/SKILL.md",
+      "snoozed_at": "2026-10-13"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-12",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/web-performance/SKILL.md",
+      "snoozed_at": "2026-10-13"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-12",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/webhook-receiver-hardener/SKILL.md",
+      "snoozed_at": "2026-10-13"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-12",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/wikipedia-style/SKILL.md",
+      "snoozed_at": "2026-10-13"
     }
   ]
 }

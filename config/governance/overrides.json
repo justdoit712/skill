@@ -3277,6 +3277,281 @@
       "skill_id": "techtrader86/open-design-zunobot:skills/html-ppt-retro-quarterly-review/SKILL.md",
       "reason": "存量标签过滤；批次 topic-filter-20261009-e756d3；命中：ppt设计",
       "added_at": "2026-10-09"
+    },
+    {
+      "skill_id": "anbeime/skill:skills/pdf-processing-pro/pdf-processing-pro/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-f004b4；命中：PDF 基础处理",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "anjon771/open-degine:skills/minimax-pdf/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-f004b4；命中：PDF 基础处理",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "anjon771/open-degine:skills/pdf/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-f004b4；命中：PDF 基础处理",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "cat-xierluo/legal-skills:skills/img2pdf/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-f004b4；命中：PDF 基础处理",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "cat-xierluo/legal-skills:skills/pdf-organizer/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-f004b4；命中：PDF 基础处理",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "cat-xierluo/legal-skills:skills/pdf-processor/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-f004b4；命中：PDF 基础处理",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:01-documents/interactive-pdf-viewer/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-f004b4；命中：PDF 基础处理",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:01-documents/pdf-form-filler/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-f004b4；命中：PDF 基础处理",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:01-documents/pdf-processing-toolkit/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-f004b4；命中：PDF 基础处理",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "fslong520/aiskill:pdf/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-f004b4；命中：PDF 基础处理",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "ganmu191/aigc:skills/pdf-processing-pro/pdf-processing-pro/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-f004b4；命中：PDF 基础处理",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:skills/minimax-pdf/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-f004b4；命中：PDF 基础处理",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:skills/pdf/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-f004b4；命中：PDF 基础处理",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:skills/minimax-pdf/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-f004b4；命中：PDF 基础处理",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/minimax-pdf/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-f004b4；命中：PDF 基础处理",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/pdf/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-f004b4；命中：PDF 基础处理",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:skills/minimax-pdf/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-f004b4；命中：PDF 基础处理",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "anbeime/skill:skills/legal-assistant-skills-main/contract-review/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-c3fc9b；命中：法律实务与诉讼专利",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "anjon771/open-degine:skills/docx/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-c3fc9b；命中：Word 基础文档处理",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "cat-xierluo/legal-skills:skills/case-dashboard/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-c3fc9b；命中：法律实务与诉讼专利",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "cat-xierluo/legal-skills:skills/code2patent/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-c3fc9b；命中：法律实务与诉讼专利",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "cat-xierluo/legal-skills:skills/contract-copilot/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-c3fc9b；命中：法律实务与诉讼专利",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "cat-xierluo/legal-skills:skills/course-generator/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-c3fc9b；命中：法律实务与诉讼专利",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "cat-xierluo/legal-skills:skills/cross-agent-coordination/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-c3fc9b；命中：法律实务与诉讼专利",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "cat-xierluo/legal-skills:skills/elements-complaint-generator/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-c3fc9b；命中：法律实务与诉讼专利",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "cat-xierluo/legal-skills:skills/legal-case-analysis/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-c3fc9b；命中：法律实务与诉讼专利",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "cat-xierluo/legal-skills:skills/legal-client-brief/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-c3fc9b；命中：法律实务与诉讼专利",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "cat-xierluo/legal-skills:skills/legal-harness-init/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-c3fc9b；命中：法律实务与诉讼专利",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "cat-xierluo/legal-skills:skills/legal-proposal-generator/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-c3fc9b；命中：法律实务与诉讼专利",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "cat-xierluo/legal-skills:skills/legal-qa-extractor/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-c3fc9b；命中：法律实务与诉讼专利",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "cat-xierluo/legal-skills:skills/legal-skill-alignment/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-c3fc9b；命中：法律实务与诉讼专利",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "cat-xierluo/legal-skills:skills/legal-text-format/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-c3fc9b；命中：法律实务与诉讼专利",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "cat-xierluo/legal-skills:skills/legal-visualization/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-c3fc9b；命中：法律实务与诉讼专利",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "cat-xierluo/legal-skills:skills/moot-court/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-c3fc9b；命中：法律实务与诉讼专利",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "cat-xierluo/legal-skills:skills/new-case/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-c3fc9b；命中：法律实务与诉讼专利",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "cat-xierluo/legal-skills:skills/opc-legal-counsel/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-c3fc9b；命中：法律实务与诉讼专利",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "cat-xierluo/legal-skills:skills/patent-download/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-c3fc9b；命中：法律实务与诉讼专利",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "cat-xierluo/legal-skills:skills/trademark-assistant/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-c3fc9b；命中：法律实务与诉讼专利",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "cat-xierluo/legal-skills:skills/yuandian-law-search/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-c3fc9b；命中：法律实务与诉讼专利",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:09-verticals/nda-triage-reviewer/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-c3fc9b；命中：法律实务与诉讼专利",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:09-verticals/saas-subscription-agreement-review/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-c3fc9b；命中：法律实务与诉讼专利",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:skills/docx/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-c3fc9b；命中：Word 基础文档处理",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:skills/docx/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-c3fc9b；命中：Word 基础文档处理",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/docx/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-c3fc9b；命中：Word 基础文档处理",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/employment-contract/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-c3fc9b；命中：法律实务与诉讼专利",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/patent-prior-art/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-c3fc9b；命中：法律实务与诉讼专利",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:skills/doc/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-c3fc9b；命中：Word 基础文档处理",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:skills/docx/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-c3fc9b；命中：Word 基础文档处理",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:skills/minimax-docx/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-c3fc9b；命中：Word 基础文档处理",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "cat-xierluo/legal-skills:skills/git-workflow/SKILL.md",
+      "reason": "用户屏蔽/删除",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "cat-xierluo/legal-skills:skills/invoice-organizer/SKILL.md",
+      "reason": "用户屏蔽/删除",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "cat-xierluo/legal-skills:skills/lecture-review/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-b88d9c；命中：法律实务与诉讼专利",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "cat-xierluo/legal-skills:skills/legal-ai-course-editor/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-b88d9c；命中：法律实务与诉讼专利",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "cat-xierluo/legal-skills:skills/legal-industry-report/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-b88d9c；命中：法律实务与诉讼专利",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "cat-xierluo/legal-skills:skills/legal-ocr/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-b88d9c；命中：法律实务与诉讼专利",
+      "added_at": "2026-10-13"
     }
   ]
 }

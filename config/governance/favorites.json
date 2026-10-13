@@ -326,6 +326,138 @@
       "from": "recommended",
       "reason": "用户收藏",
       "skill_id": "skillmedev/skills:skills/user-flow-mapper/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-13",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "cat-xierluo/legal-skills:skills/dingtalk-minutes/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-13",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "cat-xierluo/legal-skills:skills/douyin-batch-download/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-13",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "fslong520/aiskill:AI读书/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-13",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "fslong520/aiskill:Agnes画影/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-13",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "fslong520/aiskill:cosprompt/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-13",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "fslong520/aiskill:file_reader/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-13",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "fslong520/aiskill:make_plan/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-13",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "fslong520/aiskill:news/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-13",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "fslong520/aiskill:qiaomu-ai-prd/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-13",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "fslong520/aiskill:textlogo/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-13",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "fslong520/aiskill:tldraw-offline/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-13",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "fslong520/aiskill:像素绘/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-13",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "fslong520/aiskill:定时任务/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-13",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/products/red-layout-skill/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-13",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "sdcxb/codem:src/core/skills/archify/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-13",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "sdcxb/codem:src/core/skills/conversation-to-prompt/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-13",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "sdcxb/codem:src/core/skills/interactive/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-13",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "sdcxb/codem:src/core/skills/mermaid-diagram/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-13",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "sdcxb/codem:src/core/skills/prose-standard/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-13",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "sdcxb/codem:src/core/skills/skill-creator/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-13",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "skillmedev/skills:skills/websocket-expert/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-13",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "weaxs/stock-analysis-plugin:skills/growth-quality/SKILL.md"
     }
   ]
 }
