@@ -458,6 +458,31 @@
       "from": "recommended",
       "reason": "用户收藏",
       "skill_id": "weaxs/stock-analysis-plugin:skills/growth-quality/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-13",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "cat-xierluo/legal-skills:skills/skill-lint/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-13",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "cat-xierluo/legal-skills:skills/skill-manager/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-13",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "cat-xierluo/legal-skills:skills/skill-publish-sync/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-13",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "cat-xierluo/legal-skills:skills/universal-media-downloader/SKILL.md"
     }
   ]
 }
+

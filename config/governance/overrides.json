@@ -3552,6 +3552,51 @@
       "skill_id": "cat-xierluo/legal-skills:skills/legal-ocr/SKILL.md",
       "reason": "存量黑名单过滤；批次 topic-filter-20261013-b88d9c；命中：法律实务与诉讼专利",
       "added_at": "2026-10-13"
+    },
+    {
+      "added_at": "2026-10-13",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "2710074390-cyber/medagentwork-skill:skills/medagentwork/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-13",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "cat-xierluo/legal-skills:skills/multi-agent-orchestration/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-13",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "cat-xierluo/legal-skills:skills/multica-skill-update/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-13",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "cat-xierluo/legal-skills:skills/subtree-publish/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-13",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "cat-xierluo/legal-skills:skills/svg-article-illustrator/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-13",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "cat-xierluo/legal-skills:skills/svg-book-illustrator/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-13",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "cat-xierluo/legal-skills:skills/video-compressor/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-13",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "cat-xierluo/legal-skills:skills/wechat-article-fetch/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-13",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "chenqg618/compliance-skills:skills/accrual-expense-check-free/SKILL.md"
     }
   ]
-}
+}

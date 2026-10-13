@@ -1886,6 +1886,35 @@
       "reason": "用户暂不关注",
       "skill_id": "skillmedev/skills:skills/wikipedia-style/SKILL.md",
       "snoozed_at": "2026-10-13"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-12",
+      "reason": "用户暂不关注",
+      "skill_id": "cat-xierluo/legal-skills:skills/local-asr/SKILL.md",
+      "snoozed_at": "2026-10-13"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-12",
+      "reason": "用户暂不关注",
+      "skill_id": "cat-xierluo/legal-skills:skills/md2word/SKILL.md",
+      "snoozed_at": "2026-10-13"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-12",
+      "reason": "用户暂不关注",
+      "skill_id": "cloudflare/skills:skills/basin/SKILL.md",
+      "snoozed_at": "2026-10-13"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-12",
+      "reason": "用户暂不关注",
+      "skill_id": "dtsola/xiaoyaoclaw-web-clipper:SKILL.md",
+      "snoozed_at": "2026-10-13"
     }
   ]
 }
+
