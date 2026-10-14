@@ -482,7 +482,90 @@
       "from": "recommended",
       "reason": "用户收藏",
       "skill_id": "cat-xierluo/legal-skills:skills/universal-media-downloader/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-14",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "iflytek/skillhub:builtin-skills/skills/ai-claim-checker/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-14",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "iflytek/skillhub:builtin-skills/skills/decision-matrix/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-14",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "iflytek/skillhub:builtin-skills/skills/study-strategy-selector/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-14",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "iflytek/skillhub:builtin-skills/skills/time-blocking-scheduler/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-14",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "iflytek/skillhub:builtin-skills/skills/weather/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-14",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "nexu-io/open-design:design-templates/meeting-notes/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-14",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "nexu-io/open-design:design-templates/orbit-gmail/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-14",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "nexu-io/open-design:design-templates/sprite-animation/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-14",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "nexu-io/open-design:design-templates/tweaks/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-14",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "nexu-io/open-design:design-templates/wireframe-annotated/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-14",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/codex-interactive-capability-map/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-14",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "othmanadi/planning-with-files:.gemini/skills/planning-with-files/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-14",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "othmanadi/planning-with-files:.pi/skills/planning-with-files/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-14",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "othmanadi/planning-with-files:skills/i18n/planning-with-files-zht/SKILL.md"
     }
   ]
 }
-

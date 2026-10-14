@@ -3597,6 +3597,1406 @@
       "added_at": "2026-10-13",
       "reason": "用户屏蔽/删除",
       "skill_id": "chenqg618/compliance-skills:skills/accrual-expense-check-free/SKILL.md"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/accrued-expense-amortization-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/ad-agency-rebate-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/advance-receipt-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/agency-monthly-close-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/agri-purchase-invoice-deduction-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/ap-aging-plan-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/ap-factoring-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/ap-provisional-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/ap-reconciliation-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/ar-aging-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/asset-disposal-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/asset-impairment-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/audit-adjustment-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/audit-adjustment-pack-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/autoshop-parts-labor-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/award-contract-consistency-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：招投标合规与工程成本核对",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/bad-debt-provision-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/bank-acceptance-bill-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/bank-loan-interest-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/bank-reconciliation-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/bid-comparison-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：招投标合规与工程成本核对",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/bid-deposit-refund-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：招投标合规与工程成本核对",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/bidcheckup-batch-compliance-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：招投标合规与工程成本核对",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/bidguard-quote-audit-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：招投标合规与工程成本核对",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/bom-consumption-variance-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/bonus-pool-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/budget-variance-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/cargo-insurance-claim-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/cash-count-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/cash-flow-variance-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/chain-store-settlement-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/chemical-inventory-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/cip-capitalization-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：招投标合规与工程成本核对",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/cip-transfer-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/cit-adjustment-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/cit-prepay-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/clinic-revenue-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/collusionscreen-collusion-screening-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：招投标合规与工程成本核对",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/commission-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/compliance-expiry-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/consignment-settlement-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/construction-material-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/construction-monthly-selfcheck-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/construction-output-value-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/construction-wage-special-account-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/contract-asset-liability-aging-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/contract-consistency-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/contract-fulfillment-cost-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/contract-performance-bond-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：招投标合规与工程成本核对",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/cost-allocation-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/cost-inventory-pack-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/courier-settlement-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/cross-border-ad-fee-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/cutoff-test-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/deferred-tax-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/department-budget-execution-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/depreciation-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/disability-fund-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/discount-interest-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/doc-compliance-pack-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/drg-settlement-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/driver-freight-settlement-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/ecom-platform-pack-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/ecom-return-refund-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/ecommerce-monthly-selfcheck-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/ecommerce-refund-settlement-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/environmental-tax-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/equipment-maintenance-cost-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/equity-method-investment-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/expense-compliance-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/export-fx-collection-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/export-monthly-selfcheck-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/export-rebate-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/export-rebate-doc-consistency-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/export-tax-refund-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/factory-overhead-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/fee-budget-pack-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/finance-monthly-selfcheck-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/fixed-asset-count-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/fleet-fuel-cost-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/foreign-trade-pack-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/franchise-deposit-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/franchise-royalty-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/freight-loss-claim-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/freight-reconciliation-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/fresh-loss-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/fx-settlement-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/goodwill-impairment-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/gov-subsidy-deferred-income-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/group-finance-monthly-selfcheck-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/group-intercompany-reconciliation-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/guarantee-letter-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/hazwaste-manifest-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/hotel-night-audit-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/housing-fund-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/hr-statutory-pack-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/iit-annual-settlement-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/iit-withholding-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/import-duty-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/industry-vertical-pack-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/input-vat-deduction-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/installment-rate-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/instrument-calibration-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/insurance-agency-fee-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/insurance-commission-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/intangible-amortization-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/inventory-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/inventory-cost-flow-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/inventory-count-variance-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/inventory-provision-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/inventory-scrap-approval-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/invoice-consistency-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/invoice-usage-stock-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/ip-annuity-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/lab-sample-retention-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/labor-cost-allocation-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/land-appreciation-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/late-fee-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/lease-deferred-pack-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/lease-liability-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/lease-rent-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/lesson-hour-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/live-commerce-commission-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/logistics-fuel-card-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/logistics-storage-fee-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/long-term-amortization-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/low-value-consumables-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/maintenance-fund-payment-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/mall-concession-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/manufacturing-monthly-selfcheck-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/manufacturing-ops-pack-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/material-cost-variance-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/material-usage-loss-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/medical-consumable-markup-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/medical-insurance-denial-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/membership-liability-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/mold-amortization-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/non-recurring-gain-loss-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/oem-rebate-policy-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/ota-commission-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/outsourced-processing-fee-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/overdue-interest-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/overtime-pay-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/owner-supplied-material-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：招投标合规与工程成本核对",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/paid-in-capital-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/payment-fee-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/payroll-hr-pack-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/payroll-payable-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/payroll-payment-bank-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/payroll-withholding-reconcile-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/penalty-settlement-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/petty-cash-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/piece-rate-wage-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/platform-settlement-aging-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/platform-settlement-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/prepaid-card-consumption-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/prepayment-offset-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/procurement-payable-pack-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/production-yield-scrap-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/progress-output-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/progress-payment-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/project-billing-collection-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/project-evm-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/project-material-transfer-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/project-settlement-pack-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：招投标合规与工程成本核对",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/promo-subsidy-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/property-energy-apportion-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/property-fee-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/property-maintenance-fund-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/property-public-income-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/property-tax-land-use-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/property-utility-apportionment-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/purchase-rebate-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/rd-auxiliary-ledger-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/rd-capitalization-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/rd-expense-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/receivable-collection-plan-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/recon-receivables-pack-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/recruitment-agency-fee-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/related-party-fund-occupation-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/related-party-transaction-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/rent-collection-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/rent-deposit-refund-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/restaurant-daily-sales-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/restaurant-food-cost-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/retail-member-points-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/retention-money-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：招投标合规与工程成本核对",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/revenue-recognition-pack-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/royalty-settlement-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/saas-revenue-recognition-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/saas-usage-billing-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/saas-vendor-invoice-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/safety-production-fee-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/safety-training-record-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/sales-commission-tier-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/sales-rebate-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/scrap-sale-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/share-based-payment-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/shared-cost-pack-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/sku-profit-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/social-insurance-base-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/social-insurance-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/software-license-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/software-outsource-milestone-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/stamp-duty-base-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/store-gross-margin-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/store-sales-report-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/store-transfer-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/subcontract-settlement-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/subcontractor-qualification-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：招投标合规与工程成本核对",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/subsidy-acceptance-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/surtax-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/takeout-commission-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/tax-incentive-eligibility-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/tax-invoice-void-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/tax-monthly-selfcheck-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/tax-risk-benefit-pack-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/tax-risk-indicator-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/teacher-hour-pay-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/tenderaudit-full-compliance-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：招投标合规与工程成本核对",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/three-way-match-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/ticket-revenue-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/training-hour-consumption-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/travel-standard-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/travel-toll-pack-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/treasury-bill-pack-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/trial-balance-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/tuition-refund-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/union-reserve-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/utility-allocation-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/utility-meter-reading-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/utility-tier-billing-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/vat-burden-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/vat-deduction-addon-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/vat-filing-reconcile-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/vat-input-transfer-out-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/vehicle-insurance-amortization-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/warehouse-fee-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/warehouse-inventory-turnover-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/warehouse-storage-fee-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/wastewater-fee-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/waybill-pod-cod-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/welfare-limit-check-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：财务核算与对账审计",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/rfp-response-writer/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-614ea0；命中：招投标合规与工程成本核对",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "anbeime/skill:skills/product-marketing-copywriter/product-marketing-copywriter/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-e40157；命中：商业广告与营销推广",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "anbeime/skill:skills/viral-video-copywriting/viral-video-copywriting/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-e40157；命中：商业广告与营销推广",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "anjon771/open-degine:design-templates/audio-jingle/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-e40157；命中：商业广告与营销推广",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "anjon771/open-degine:skills/creative-director/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-e40157；命中：商业广告与营销推广",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "aurora-ember-bio-lab/splatstudio:plugins/_official/video-templates/frame-play-mode/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-e40157；命中：商业广告与营销推广",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "chenqg618/compliance-skills:skills/adcheckup-content-compliance-free/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-e40157；命中：商业广告与营销推广",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:plugins/_official/video-templates/frame-play-mode/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-e40157；命中：商业广告与营销推广",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:plugins/spec/examples/create-image-campaign/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-e40157；命中：商业广告与营销推广",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:skills/creative-director/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-e40157；命中：商业广告与营销推广",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:plugins/_official/video-templates/frame-play-mode/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-e40157；命中：商业广告与营销推广",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:design-templates/audio-jingle/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-e40157；命中：商业广告与营销推广",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "nexu-io/open-design:design-templates/audio-jingle/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-e40157；命中：商业广告与营销推广",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/audio-jingle/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-e40157；命中：商业广告与营销推广",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/video-templates/frame-play-mode/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-e40157；命中：商业广告与营销推广",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/spec/examples/create-image-campaign/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-e40157；命中：商业广告与营销推广",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/ad-creative/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-e40157；命中：商业广告与营销推广",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/copywriting/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-e40157；命中：商业广告与营销推广",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/creative-director/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-e40157；命中：商业广告与营销推广",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/marketing-psychology/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-e40157；命中：商业广告与营销推广",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/screenshots-marketing/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-e40157；命中：商业广告与营销推广",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/stock-photo-finder/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-e40157；命中：商业广告与营销推广",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:design-templates/audio-jingle/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-e40157；命中：商业广告与营销推广",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:plugins/_official/examples/audio-jingle/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-e40157；命中：商业广告与营销推广",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:skills/creative-director/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-e40157；命中：商业广告与营销推广",
+      "added_at": "2026-10-13"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:skills/marketing-psychology/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261013-e40157；命中：商业广告与营销推广",
+      "added_at": "2026-10-13"
+    },
+    {
+      "added_at": "2026-10-14",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "chenqg618/compliance-skills:skills/contract-comparison-free/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-14",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "iflytek/skillhub:.agents/skills/dev-workflow/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-14",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "iflytek/skillhub:.agents/skills/frontend-conventions/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-14",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "iflytek/skillhub:.agents/skills/pr-submission/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-14",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "nexu-io/open-design:design-templates/docs-page/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-14",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "nexu-io/open-design:design-templates/guizang-ppt/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-14",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "nexu-io/open-design:design-templates/replit-deck/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-14",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "nexu-io/open-design:design-templates/webgl-experience/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-14",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "nexu-io/open-design:design-templates/worker-visualizer/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-14",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "nexu-io/open-design:plugins/_official/atoms/design-extract/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-14",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "nexu-io/open-design:plugins/_official/atoms/patch-edit/SKILL.md"
     }
   ]
-}
+}

@@ -1914,7 +1914,146 @@
       "reason": "用户暂不关注",
       "skill_id": "dtsola/xiaoyaoclaw-web-clipper:SKILL.md",
       "snoozed_at": "2026-10-13"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-13",
+      "reason": "用户暂不关注",
+      "skill_id": "iflytek/skillhub:.agents/skills/api-and-namespace-design/SKILL.md",
+      "snoozed_at": "2026-10-14"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-13",
+      "reason": "用户暂不关注",
+      "skill_id": "iflytek/skillhub:builtin-skills/skills/daily-standup-journal/SKILL.md",
+      "snoozed_at": "2026-10-14"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-13",
+      "reason": "用户暂不关注",
+      "skill_id": "iflytek/skillhub:builtin-skills/skills/documentation-writer/SKILL.md",
+      "snoozed_at": "2026-10-14"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-13",
+      "reason": "用户暂不关注",
+      "skill_id": "iflytek/skillhub:builtin-skills/skills/frontend-design/SKILL.md",
+      "snoozed_at": "2026-10-14"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-13",
+      "reason": "用户暂不关注",
+      "skill_id": "iflytek/skillhub:builtin-skills/skills/ledger-tasks-yylo/SKILL.md",
+      "snoozed_at": "2026-10-14"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-13",
+      "reason": "用户暂不关注",
+      "skill_id": "iflytek/skillhub:builtin-skills/skills/plugin-scanner/SKILL.md",
+      "snoozed_at": "2026-10-14"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-13",
+      "reason": "用户暂不关注",
+      "skill_id": "nexu-io/open-design:.claude/skills/od-contribute/SKILL.md",
+      "snoozed_at": "2026-10-14"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-13",
+      "reason": "用户暂不关注",
+      "skill_id": "nexu-io/open-design:design-templates/contact-widget/SKILL.md",
+      "snoozed_at": "2026-10-14"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-13",
+      "reason": "用户暂不关注",
+      "skill_id": "nexu-io/open-design:design-templates/invoice/SKILL.md",
+      "snoozed_at": "2026-10-14"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-13",
+      "reason": "用户暂不关注",
+      "skill_id": "nexu-io/open-design:design-templates/kanban-board/SKILL.md",
+      "snoozed_at": "2026-10-14"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-13",
+      "reason": "用户暂不关注",
+      "skill_id": "nexu-io/open-design:design-templates/mobile-onboarding/SKILL.md",
+      "snoozed_at": "2026-10-14"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-13",
+      "reason": "用户暂不关注",
+      "skill_id": "nexu-io/open-design:design-templates/motion-frames/SKILL.md",
+      "snoozed_at": "2026-10-14"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-13",
+      "reason": "用户暂不关注",
+      "skill_id": "nexu-io/open-design:plugins/_official/atoms/code-import/SKILL.md",
+      "snoozed_at": "2026-10-14"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-13",
+      "reason": "用户暂不关注",
+      "skill_id": "nexu-io/open-design:plugins/_official/atoms/critique-theater/SKILL.md",
+      "snoozed_at": "2026-10-14"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-13",
+      "reason": "用户暂不关注",
+      "skill_id": "nexu-io/open-design:plugins/_official/atoms/direction-picker/SKILL.md",
+      "snoozed_at": "2026-10-14"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-13",
+      "reason": "用户暂不关注",
+      "skill_id": "nexu-io/open-design:plugins/_official/atoms/handoff/SKILL.md",
+      "snoozed_at": "2026-10-14"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-13",
+      "reason": "用户暂不关注",
+      "skill_id": "nexu-io/open-design:plugins/_official/atoms/token-map/SKILL.md",
+      "snoozed_at": "2026-10-14"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-13",
+      "reason": "用户暂不关注",
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/dashboard/SKILL.md",
+      "snoozed_at": "2026-10-14"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-13",
+      "reason": "用户暂不关注",
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/digital-eguide/SKILL.md",
+      "snoozed_at": "2026-10-14"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-13",
+      "reason": "用户暂不关注",
+      "skill_id": "vercel-labs/skills:.factory/workflows/pr-labeling/skills/pr-labeling/SKILL.md",
+      "snoozed_at": "2026-10-14"
     }
   ]
 }
-
