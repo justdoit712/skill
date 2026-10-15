@@ -3,10 +3,10 @@
   "rules_version": "1.3.0",
   "generated_at": "2026-10-09T21:10:54.373701+08:00",
   "counts": {
-    "recommended": 631,
-    "candidate": 1300,
+    "recommended": 610,
+    "candidate": 1269,
     "manual": 84,
-    "excluded": 1662
+    "excluded": 1714
   },
   "entries": [
     {
@@ -12759,8 +12759,10 @@
       "dependencies_declared": [],
       "limitations": "依赖客户关键指标、历史数据和已沟通坏消息等输入；相邻技能未提供，完整客户沟通闭环需额外材料。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-29T11:44:37.635392+08:00",
       "content_changed_at": null,
@@ -12811,12 +12813,7 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/agency-monthly-report/SKILL.md|sha256:b3d91568106aee55e93ef4385c57776f|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-29T11:44:37.633268+08:00",
-      "snooze": {
-        "snoozed_at": "2026-09-29",
-        "expires_at": "2027-02-26",
-        "reason": "用户暂不关注"
-      }
+      "evaluated_at": "2026-09-29T11:44:37.633268+08:00"
     },
     {
       "skill_id": "skillmedev/skills:skills/agency-positioning/SKILL.md",
@@ -13031,8 +13028,10 @@
       "dependencies_declared": [],
       "limitations": "引用多个相邻技能作为输入或后续流程，但未说明这些材料是否必须获取；示例围绕特定代理机构场景，迁移到其他业务模式需自行调整。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-29T11:50:12.948961+08:00",
       "content_changed_at": null,
@@ -13083,12 +13082,7 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/agency-qbr-upsell/SKILL.md|sha256:e3f42948aedac4d691424dd072e38b4c|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-29T11:50:12.946951+08:00",
-      "snooze": {
-        "snoozed_at": "2026-09-29",
-        "expires_at": "2027-02-26",
-        "reason": "用户暂不关注"
-      }
+      "evaluated_at": "2026-09-29T11:50:12.946951+08:00"
     },
     {
       "skill_id": "skillmedev/skills:skills/alert-tuning/SKILL.md",
@@ -15906,9 +15900,10 @@
       "dependencies_declared": [],
       "limitations": "仅限简短周报场景，不适用于长格式咨询报告",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-10-01T05:41:23.336702+08:00",
@@ -18198,9 +18193,10 @@
       "dependencies_declared": [],
       "limitations": "材料未提供CSAT/NPS原始数据采集接口的引导方法，须具备已收集好的评论数据集",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-10-01T08:12:00.085522+08:00",
@@ -18376,8 +18372,10 @@
       ],
       "limitations": "需Python环境及lifetimes库，非合同业务需额外概率模型",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-10-01T08:13:32.523650+08:00",
       "content_changed_at": null,
@@ -18551,9 +18549,10 @@
       "dependencies_declared": [],
       "limitations": "未申明依赖；需用户相信已配备客户相关系统数据（如销售与客户经理系统）；仅提供方法论指导，实际运用依赖用户资源组织水平。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-10-01T08:13:55.337306+08:00",
@@ -19362,9 +19361,10 @@
       "dependencies_declared": [],
       "limitations": "需前置客户访谈数据输入；不包含实景演练指导",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-10-01T08:17:21.427966+08:00",
@@ -21522,8 +21522,10 @@
       "dependencies_declared": [],
       "limitations": "未声明特定平台兼容性，但作为纯文本生成指南，不依赖特定环境。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-29T15:15:24.972699+08:00",
       "content_changed_at": null,
@@ -21574,12 +21576,7 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/escalation-summary/SKILL.md|sha256:bcdfec5060f7e8aff7faadec3b08f38d|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-29T15:15:24.970688+08:00",
-      "snooze": {
-        "snoozed_at": "2026-10-02",
-        "expires_at": "2027-03-01",
-        "reason": "用户暂不关注"
-      }
+      "evaluated_at": "2026-09-29T15:15:24.970688+08:00"
     },
     {
       "skill_id": "skillmedev/skills:skills/executive-summary/SKILL.md",
@@ -21702,9 +21699,10 @@
       "dependencies_declared": [],
       "limitations": "专注于现有客户扩展，不适用于定价层级设计或客户流失挽回",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-10-01T08:24:57.682712+08:00",
@@ -23217,8 +23215,10 @@
       "dependencies_declared": [],
       "limitations": "未声明所需工具或运行环境；与同系列技能的依赖关系未明确；案例为示例性说明，未提供外部验证。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-29T15:44:29.298324+08:00",
       "content_changed_at": null,
@@ -23269,12 +23269,7 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/freelance-positioning/SKILL.md|sha256:a50ea9ca3321455efb707305de889eeb|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-29T15:44:29.298324+08:00",
-      "snooze": {
-        "snoozed_at": "2026-10-02",
-        "expires_at": "2027-03-01",
-        "reason": "用户暂不关注"
-      }
+      "evaluated_at": "2026-09-29T15:44:29.298324+08:00"
     },
     {
       "skill_id": "skillmedev/skills:skills/fundraising-narrative/SKILL.md",
@@ -27552,8 +27547,10 @@
       "dependencies_declared": [],
       "limitations": "未声明运行环境、工具依赖或与具体工单系统的集成方式；明确不适用于从零撰写用户面向的 how-to 指南。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-29T17:12:01.067149+08:00",
       "content_changed_at": null,
@@ -27604,12 +27601,7 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/kb-article-writer/SKILL.md|sha256:c3ec54a660beb881ef36beb6e1f75c8d|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-29T17:12:01.065122+08:00",
-      "snooze": {
-        "snoozed_at": "2026-10-02",
-        "expires_at": "2027-03-01",
-        "reason": "用户暂不关注"
-      }
+      "evaluated_at": "2026-09-29T17:12:01.065122+08:00"
     },
     {
       "skill_id": "skillmedev/skills:skills/keyword-cluster-builder/SKILL.md",
@@ -29464,8 +29456,10 @@
       "dependencies_declared": [],
       "limitations": "不生成实际邮件/推送文案，需配合 email-drip-builder 等下游技能；触发条件依赖产品已埋点事件，未埋点事件只能标记为埋点缺口；缺少各阶段流失数据时地图须标记为 unvalidated。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-29T18:32:42.973140+08:00",
       "content_changed_at": null,
@@ -29516,12 +29510,7 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/lifecycle-journey-map/SKILL.md|sha256:e824adb7113e0fbdfe95022f17af4cbf|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-29T18:32:42.970126+08:00",
-      "snooze": {
-        "snoozed_at": "2026-10-02",
-        "expires_at": "2027-03-01",
-        "reason": "用户暂不关注"
-      }
+      "evaluated_at": "2026-09-29T18:32:42.970126+08:00"
     },
     {
       "skill_id": "skillmedev/skills:skills/linear-workflow/SKILL.md",
@@ -35639,8 +35628,10 @@
       ],
       "limitations": "指导性技能，不执行实际数据拉取或与CRM系统交互；需配合具体工具和已有ICP定义。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-10-02T13:17:01.406423+08:00",
       "content_changed_at": null,
@@ -35691,12 +35682,7 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/prospect-list-builder/SKILL.md|sha256:b486b56e36e892c8669eacfae631fb09|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-02T13:17:01.395475+08:00",
-      "snooze": {
-        "snoozed_at": "2026-10-07",
-        "expires_at": "2027-03-06",
-        "reason": "用户暂不关注"
-      }
+      "evaluated_at": "2026-10-02T13:17:01.395475+08:00"
     },
     {
       "skill_id": "skillmedev/skills:skills/prospecting-metrics/SKILL.md",
@@ -36581,8 +36567,10 @@
       ],
       "limitations": "依赖未提供的相邻技能进行价格底线计算与后续定位、销售补充；未声明适用行业、地区或法律税务细节，且明确不是财务建议。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-30T09:04:32.607050+08:00",
       "content_changed_at": null,
@@ -36633,12 +36621,7 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/raise-your-rates-playbook/SKILL.md|sha256:9b662e6070eea0ba5eb6156ed94101da|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-30T09:04:32.605564+08:00",
-      "snooze": {
-        "snoozed_at": "2026-10-02",
-        "expires_at": "2027-03-01",
-        "reason": "用户暂不关注"
-      }
+      "evaluated_at": "2026-09-30T09:04:32.605564+08:00"
     },
     {
       "skill_id": "skillmedev/skills:skills/rate-limit-handler/SKILL.md",
@@ -37124,8 +37107,10 @@
       "dependencies_declared": [],
       "limitations": "未声明运行平台或工具依赖；提到 support-ticket-reply 与 csat-root-cause 但未说明是否必须配合使用；涉及法律、监管或争议合同情形需升级至管理层或法务，技能本身不提供法律建议。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-30T09:12:53.141134+08:00",
       "content_changed_at": null,
@@ -37176,12 +37161,7 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/refund-deescalation/SKILL.md|sha256:af0ff693536309d98eac5ccfd0dd272d|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-30T09:12:53.138705+08:00",
-      "snooze": {
-        "snoozed_at": "2026-10-02",
-        "expires_at": "2027-03-01",
-        "reason": "用户暂不关注"
-      }
+      "evaluated_at": "2026-09-30T09:12:53.138705+08:00"
     },
     {
       "skill_id": "skillmedev/skills:skills/regex-master/SKILL.md",
@@ -38231,8 +38211,10 @@
       ],
       "limitations": "示例基于虚构代理机构；未跟踪工时需标注为猜测；不适用于自由职业者个人定价，也不替代会计或税务处理。",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-30T09:29:48.521782+08:00",
       "content_changed_at": null,
@@ -38320,8 +38302,10 @@
       ],
       "limitations": "模型将税费和福利等视为目标收入内部因素，需会计或税务专业人士复核；未声明 Node 版本，且结果依赖用户输入的工时、收入和成本假设。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-30T09:32:02.296938+08:00",
       "content_changed_at": null,
@@ -38372,12 +38356,7 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/retainer-pricing-calculator/SKILL.md|sha256:646f1d494731becb31a5ae6bd3839756|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-30T09:32:02.294800+08:00",
-      "snooze": {
-        "snoozed_at": "2026-10-02",
-        "expires_at": "2027-03-01",
-        "reason": "用户暂不关注"
-      }
+      "evaluated_at": "2026-09-30T09:32:02.294800+08:00"
     },
     {
       "skill_id": "skillmedev/skills:skills/retention-and-churn-killer/SKILL.md",
@@ -38684,9 +38663,10 @@
       "dependencies_declared": [],
       "limitations": "不适用于产品内转化漏斗诊断或财务建模；假设组织已拥有CRM和数据栈，未提供具体工具集成细节。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-10-02T13:19:31.631048+08:00",
@@ -39600,9 +39580,10 @@
       ],
       "limitations": "假设定位、信息层级和竞争情报已存在；不适用于自助式无销售代表场景、单一 battlecard、发布排期或发布日执行；未声明 Python 版本和平台兼容性。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-30T09:50:01.698400+08:00",
@@ -39779,9 +39760,10 @@
       "dependencies_declared": [],
       "limitations": "未声明运行平台或工具依赖；需要用户提供发现笔记、客户痛点数字、干系人和范围选项等输入，否则只能生成带猜测标注的内容。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-30T09:52:49.987953+08:00",
@@ -39874,8 +39856,10 @@
       ],
       "limitations": "明确不用于撰写合同条款；若没有已签署 SOW，该技能只能从后续请求开始应用，约束力会显著下降。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-30T09:54:27.391836+08:00",
       "content_changed_at": null,
@@ -39926,12 +39910,7 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/scope-creep-defense/SKILL.md|sha256:928f9c82c90ceec081bcc01acf9c55b5|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-30T09:54:27.389506+08:00",
-      "snooze": {
-        "snoozed_at": "2026-10-07",
-        "expires_at": "2027-03-06",
-        "reason": "用户暂不关注"
-      }
+      "evaluated_at": "2026-09-30T09:54:27.389506+08:00"
     },
     {
       "skill_id": "skillmedev/skills:skills/screencast-capture/SKILL.md",
@@ -46200,8 +46179,10 @@
       ],
       "limitations": "未声明 retainer-economics-calculator 等依赖的实现；仅提供框架而非可直接运行工具",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-01T05:39:50.647426+08:00",
       "content_changed_at": null,
@@ -46285,8 +46266,10 @@
       "dependencies_declared": [],
       "limitations": "依赖相关工具（如retainer economics）可能存在限制；实战可行性需检验。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-01T05:40:27.642608+08:00",
       "content_changed_at": null,
@@ -46337,12 +46320,7 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/client-comms-cadence/SKILL.md|sha256:68af0ba946b01ff05b5d877a1f680762|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-01T05:40:27.621728+08:00",
-      "snooze": {
-        "snoozed_at": "2026-10-07",
-        "expires_at": "2027-03-06",
-        "reason": "用户暂不关注"
-      }
+      "evaluated_at": "2026-10-01T05:40:27.621728+08:00"
     },
     {
       "skill_id": "skillmedev/skills:skills/clinical-summary/SKILL.md",
@@ -47939,9 +47917,10 @@
       ],
       "limitations": "依赖外部Review管理系统触发推荐请求",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-01T08:53:35.794584+08:00",
@@ -48112,9 +48091,10 @@
       "dependencies_declared": [],
       "limitations": "明确不适用于健身房或SaaS订阅制企业，依赖用户准确输入业务数据",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-01T08:55:13.934559+08:00",
@@ -159207,8 +159187,10 @@
       ],
       "limitations": "不替代律师审核高额或复杂交易、上市公司、并购、强监管行业；不处理诉讼、出庭、出具法律意见书；不涉及税务/合规审计；需用户自行提供当事方信息、金额、日期等具体数据",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T00:57:58.584776+08:00",
       "content_changed_at": null,
@@ -159570,8 +159552,10 @@
       "dependencies_declared": [],
       "limitations": "不执行实际修复或发送客户邮件，仅负责打包升级；需配合工单系统/CRM/聊天工具使用以汇集上下文",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T00:58:58.361748+08:00",
       "content_changed_at": null,
@@ -159662,9 +159646,10 @@
       ],
       "limitations": "仅支持静态JSON输入，不支持实时数据或CRM直连；收入估算为近似值，阈值需按行业校准。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-09T14:30:20.417753+08:00",
@@ -159753,9 +159738,10 @@
       ],
       "limitations": "未声明具体实现依赖与运行环境，需自行准备浏览器或API访问权限；样本偏差与最小样本量需人工校正。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-09T14:30:36.016967+08:00",
@@ -159842,9 +159828,10 @@
       ],
       "limitations": "仅产出草稿，发送前需人工核验",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-09T14:31:10.690727+08:00",
@@ -161256,9 +161243,10 @@
       ],
       "limitations": "需每周手动更新，陈旧数据会降低价值；不包含估值建模、尽调清单或法律文书功能。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-09T14:42:55.734680+08:00",
@@ -162195,9 +162183,10 @@
       "dependencies_declared": [],
       "limitations": "需已有字段级流失数据或先完成埋点；不适用于账号注册、弹窗内表单或页面本身问题场景",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-09T14:46:42.859872+08:00",
@@ -162467,9 +162456,10 @@
       "dependencies_declared": [],
       "limitations": "需自行收集并购记录、基金信息等数据，未提供数据源；仅适用于卖方视角，不涵盖买方尽调或估值",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-09T14:47:31.357587+08:00",
@@ -162654,9 +162644,10 @@
       ],
       "limitations": "不替代法律文书起草、税务筹划落地或上市公司合规申报",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-09T15:05:08.658359+08:00",
@@ -164204,9 +164195,10 @@
       ],
       "limitations": "不适用于具体法律文书起草、详细财务建模或上市合规申报",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-09T15:09:56.172134+08:00",
@@ -165893,9 +165885,10 @@
       ],
       "limitations": "不适用于非销售场景的纯会议记录、实时录音转写或CRM自动写入",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-09T15:14:20.192522+08:00",
@@ -168631,9 +168624,10 @@
       ],
       "limitations": "未声明具体平台兼容性和依赖细节。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-09T16:55:28.520260+08:00",
@@ -169387,9 +169381,10 @@
       ],
       "limitations": "依赖于外部工具如日历连接器和CRM系统；未明确声明平台兼容性",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-09T16:57:26.242263+08:00",
@@ -174505,9 +174500,10 @@
       ],
       "limitations": "不适用于单笔一次性任务或无需阶段化推进的简单待办。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-09T17:14:04.480398+08:00",
@@ -176978,9 +176974,10 @@
       ],
       "limitations": "需要 Rube MCP 连接，不适用于本地 SQL 数据库",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-09T17:17:22.301892+08:00",
@@ -177430,8 +177427,10 @@
       ],
       "limitations": "需要结合具体的支持平台（如 Zendesk、Intercom）才能自动拉取工单上下文，否则需用户手动提供源材料。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T03:05:12.294140+08:00",
       "content_changed_at": null,
@@ -187955,9 +187954,10 @@
       "dependencies_declared": [],
       "limitations": "未声明具体数据来源接口、未说明与投资组合管理系统的集成方式、未提供自动化数据拉取能力，需手动输入或配合其他工具使用",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T11:12:42.817478+08:00",
@@ -188049,9 +188049,10 @@
       ],
       "limitations": "不处理具体选股择时、不执行实际调仓下单、不用于已结束会议的纪要整理；需要用户自行输入客户数据和业绩数据。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T11:12:59.503119+08:00",
@@ -188901,9 +188902,10 @@
       ],
       "limitations": "不提供正式法律意见，所有结论须经合格法律专业人士复核；不适用于起草合同、单纯NDA速审、雇佣合同起草；缺少经律师审定的playbook时不得判绿；超长合同（50+页）需分阶段评审",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T11:14:26.686375+08:00",
@@ -189767,8 +189769,10 @@
       ],
       "limitations": "不替代律师判定阻断项或签发可交割证明；不实际取同意、递申报或起草文件；监管/MAC/同意规则需调研一手来源，不可凭记忆假设。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T11:16:10.749921+08:00",
       "content_changed_at": null,
@@ -210253,8 +210257,10 @@
       ],
       "limitations": "需依赖外部 MCP 连接；不提供法律意见，报告需法务核验",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T12:17:36.221701+08:00",
       "content_changed_at": null,
@@ -239858,8 +239864,10 @@
       "dependencies_declared": [],
       "limitations": "未指定具体的连接器或数据源系统，初始状态依赖模拟数据",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-04T19:12:34.506964+08:00",
       "content_changed_at": null,
@@ -257174,8 +257182,10 @@
       "dependencies_declared": [],
       "limitations": "缺少具体实现细节和示例",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-05T06:32:25.669847+08:00",
       "content_changed_at": null,
@@ -273800,8 +273810,10 @@
       "dependencies_declared": [],
       "limitations": "仅提供生成规范与检查清单，未附带实际HTML模板代码；需后续手动接入数据连接器。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-05T12:50:01.792689+08:00",
       "content_changed_at": null,
@@ -293579,8 +293591,10 @@
       "dependencies_declared": [],
       "limitations": "依赖外部连接器获取真实数据，当前使用模拟数据。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-08T21:38:20.537835+08:00",
       "content_changed_at": null,
@@ -304560,8 +304574,10 @@
       "dependencies_declared": [],
       "limitations": "依赖源系统或代理数据未说明具体实现，未提供模板HTML示例",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-09T01:42:33.562261+08:00",
       "content_changed_at": null,
@@ -322871,8 +322887,10 @@
       "dependencies_declared": [],
       "limitations": "未声明依赖，可能影响适用性",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-09T19:01:30.959111+08:00",
       "content_changed_at": null,
@@ -332423,6 +332441,266 @@
         "skill_id": "aurora-ember-bio-lab/splatstudio:plugins/community/hallmark/SKILL.md",
         "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
         "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/agency-monthly-report/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/agency-qbr-upsell/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/client-status-reporting/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/csat-root-cause/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/customer-analytics/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/customer-success-qbr/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/demo-script/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/escalation-summary/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/expansion-revenue/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/freelance-positioning/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/kb-article-writer/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/lifecycle-journey-map/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/prospect-list-builder/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/raise-your-rates-playbook/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/refund-deescalation/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/retainer-economics-calculator/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/retainer-pricing-calculator/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/revenue-operations/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/sales-enablement-kit/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/sales-proposal-writer/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/scope-creep-defense/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/client-churn-save/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/client-comms-cadence/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/local-referral-engine/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/local-unit-economics/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:05-business/contract-proposal-writer/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:05-business/customer-escalation-packager/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:05-business/customer-health-scorer/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:05-business/customer-research-synthesizer/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:05-business/customer-response-drafter/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:05-business/ib-deal-tracker/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:05-business/lead-form-cro/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:05-business/ma-buyer-list/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:05-business/ma-playbook/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:05-business/pe-dd-checklist/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:05-business/sales-call-summary/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:05-business/support-ticket-triage/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:05-business/weekly-external-call-brief/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:07-productivity/deal-pipeline-tracker/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:07-productivity/salesforce-automation/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:07-productivity/support-kb-article-writer/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:09-verticals/client-performance-report/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:09-verticals/client-review-prep/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:09-verticals/contract-playbook-review/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:09-verticals/deal-closing-checklist/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:09-verticals/vendor-agreement-status-checker/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "jalbarrang/open-design:plugins/spec/examples/create-live-artifact-ops/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "hiktan44/open-design-app:plugins/spec/examples/create-live-artifact-ops/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "anjon771/open-degine:plugins/spec/examples/create-live-artifact-ops/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "moussakhalale-lang/open-design:plugins/spec/examples/create-live-artifact-ops/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "techtrader86/open-design-zunobot:plugins/spec/examples/create-live-artifact-ops/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "aurora-ember-bio-lab/splatstudio:plugins/spec/examples/create-live-artifact-ops/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+        "added_at": "2026-10-15"
       }
     ],
     "blocked_topics": [
@@ -333574,6 +333852,37 @@
           "design-tokens",
           "ui-kit"
         ]
+      },
+      {
+        "name": "客户沟通、商业销售与顾问交付",
+        "description": "主要用于自由职业者与咨询顾问的对客沟通与交付（客户周报、客户状态报告、Retainer 预留金与定价测算、提价谈判手册、定位声明）、客户业务复盘与汇报（QBR 季度业务回顾、客户复盘会议准备、客户业绩报告）、B2B 销售与商务提案（销售提案与 SOW 撰写、销售演示脚本、潜客线索名单管理）、客户服务与客诉支持（愤怒客户安抚与退款降级、工单升级摘要、客服帮助中心与知识库文章沉淀、客户满意度 CSAT/NPS 归因分析），以及客户成功与生命周期运营。保留纯软件工程架构中的客户端开发（API Client、HTTP Client、Redis Client、客户端 SDK）、基础设施运维状态页、通用团队协作与研发管理。",
+        "keywords": [
+          "客户沟通",
+          "客户周报",
+          "客户状态报告",
+          "客户汇报",
+          "客户提案",
+          "客户成功",
+          "客户服务",
+          "客户满意度",
+          "客户留存",
+          "客诉处理",
+          "退款处理",
+          "销售提案",
+          "销售线索",
+          "潜在客户",
+          "自由职业定价",
+          "预留金",
+          "保留金",
+          "工单分诊",
+          "client-status",
+          "client-reporting",
+          "customer-success",
+          "sales-proposal",
+          "retainer",
+          "QBR",
+          "SOW"
+        ]
       }
     ]
   },
@@ -334158,20 +334467,6 @@
         "reason": "用户暂不关注"
       },
       {
-        "skill_id": "skillmedev/skills:skills/agency-monthly-report/SKILL.md",
-        "snoozed_at": "2026-09-29",
-        "expires_at": "2027-02-26",
-        "days": 150,
-        "reason": "用户暂不关注"
-      },
-      {
-        "skill_id": "skillmedev/skills:skills/agency-qbr-upsell/SKILL.md",
-        "snoozed_at": "2026-09-29",
-        "expires_at": "2027-02-26",
-        "days": 150,
-        "reason": "用户暂不关注"
-      },
-      {
         "days": 150,
         "expires_at": "2027-02-26",
         "reason": "用户暂不关注",
@@ -334259,13 +334554,6 @@
         "days": 150,
         "expires_at": "2027-03-01",
         "reason": "用户暂不关注",
-        "skill_id": "skillmedev/skills:skills/escalation-summary/SKILL.md",
-        "snoozed_at": "2026-10-02"
-      },
-      {
-        "days": 150,
-        "expires_at": "2027-03-01",
-        "reason": "用户暂不关注",
         "skill_id": "skillmedev/skills:skills/fiction-scene-writer/SKILL.md",
         "snoozed_at": "2026-10-02"
       },
@@ -334274,13 +334562,6 @@
         "expires_at": "2027-03-01",
         "reason": "用户暂不关注",
         "skill_id": "skillmedev/skills:skills/fitness-program/SKILL.md",
-        "snoozed_at": "2026-10-02"
-      },
-      {
-        "days": 150,
-        "expires_at": "2027-03-01",
-        "reason": "用户暂不关注",
-        "skill_id": "skillmedev/skills:skills/freelance-positioning/SKILL.md",
         "snoozed_at": "2026-10-02"
       },
       {
@@ -334518,13 +334799,6 @@
         "days": 150,
         "expires_at": "2027-03-01",
         "reason": "用户暂不关注",
-        "skill_id": "skillmedev/skills:skills/lifecycle-journey-map/SKILL.md",
-        "snoozed_at": "2026-10-02"
-      },
-      {
-        "days": 150,
-        "expires_at": "2027-03-01",
-        "reason": "用户暂不关注",
         "skill_id": "skillmedev/skills:skills/linear-workflow/SKILL.md",
         "snoozed_at": "2026-10-02"
       },
@@ -334714,13 +334988,6 @@
         "days": 150,
         "expires_at": "2027-03-01",
         "reason": "用户暂不关注",
-        "skill_id": "skillmedev/skills:skills/kb-article-writer/SKILL.md",
-        "snoozed_at": "2026-10-02"
-      },
-      {
-        "days": 150,
-        "expires_at": "2027-03-01",
-        "reason": "用户暂不关注",
         "skill_id": "skillmedev/skills:skills/meal-planner/SKILL.md",
         "snoozed_at": "2026-10-02"
       },
@@ -334861,21 +335128,7 @@
         "days": 150,
         "expires_at": "2027-03-01",
         "reason": "用户暂不关注",
-        "skill_id": "skillmedev/skills:skills/raise-your-rates-playbook/SKILL.md",
-        "snoozed_at": "2026-10-02"
-      },
-      {
-        "days": 150,
-        "expires_at": "2027-03-01",
-        "reason": "用户暂不关注",
         "skill_id": "skillmedev/skills:skills/rate-limit-handler/SKILL.md",
-        "snoozed_at": "2026-10-02"
-      },
-      {
-        "days": 150,
-        "expires_at": "2027-03-01",
-        "reason": "用户暂不关注",
-        "skill_id": "skillmedev/skills:skills/refund-deescalation/SKILL.md",
         "snoozed_at": "2026-10-02"
       },
       {
@@ -334910,13 +335163,6 @@
         "days": 150,
         "expires_at": "2027-03-01",
         "reason": "用户暂不关注",
-        "skill_id": "skillmedev/skills:skills/retainer-pricing-calculator/SKILL.md",
-        "snoozed_at": "2026-10-02"
-      },
-      {
-        "days": 150,
-        "expires_at": "2027-03-01",
-        "reason": "用户暂不关注",
         "skill_id": "skillmedev/skills:skills/runbook-writer/SKILL.md",
         "snoozed_at": "2026-10-02"
       },
@@ -334939,13 +335185,6 @@
         "expires_at": "2027-03-06",
         "reason": "用户暂不关注",
         "skill_id": "getsentry/skills:skills/secret-serialization/SKILL.md",
-        "snoozed_at": "2026-10-07"
-      },
-      {
-        "days": 150,
-        "expires_at": "2027-03-06",
-        "reason": "用户暂不关注",
-        "skill_id": "skillmedev/skills:skills/client-comms-cadence/SKILL.md",
         "snoozed_at": "2026-10-07"
       },
       {
@@ -334980,13 +335219,6 @@
         "days": 150,
         "expires_at": "2027-03-06",
         "reason": "用户暂不关注",
-        "skill_id": "skillmedev/skills:skills/prospect-list-builder/SKILL.md",
-        "snoozed_at": "2026-10-07"
-      },
-      {
-        "days": 150,
-        "expires_at": "2027-03-06",
-        "reason": "用户暂不关注",
         "skill_id": "skillmedev/skills:skills/prototype-spec/SKILL.md",
         "snoozed_at": "2026-10-07"
       },
@@ -335002,13 +335234,6 @@
         "expires_at": "2027-03-06",
         "reason": "用户暂不关注",
         "skill_id": "skillmedev/skills:skills/resume-writer/SKILL.md",
-        "snoozed_at": "2026-10-07"
-      },
-      {
-        "days": 150,
-        "expires_at": "2027-03-06",
-        "reason": "用户暂不关注",
-        "skill_id": "skillmedev/skills:skills/scope-creep-defense/SKILL.md",
         "snoozed_at": "2026-10-07"
       },
       {
