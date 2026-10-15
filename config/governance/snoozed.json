@@ -19,13 +19,6 @@
       "reason": "用户暂不关注"
     },
     {
-      "skill_id": "vercel-labs/agent-skills:skills/vercel-optimize/SKILL.md",
-      "snoozed_at": "2026-09-24",
-      "expires_at": "2027-02-21",
-      "days": 150,
-      "reason": "用户暂不关注"
-    },
-    {
       "skill_id": "cloudflare/skills:skills/cloudflare-one/SKILL.md",
       "snoozed_at": "2026-09-24",
       "expires_at": "2027-02-21",
@@ -89,13 +82,6 @@
       "reason": "用户暂不关注"
     },
     {
-      "skill_id": "cloudflare/skills:skills/nextjs-on-cloudflare/SKILL.md",
-      "snoozed_at": "2026-09-24",
-      "expires_at": "2027-02-21",
-      "days": 150,
-      "reason": "用户暂不关注"
-    },
-    {
       "skill_id": "cloudflare/skills:skills/sandbox-next/SKILL.md",
       "snoozed_at": "2026-09-24",
       "expires_at": "2027-02-21",
@@ -139,13 +125,6 @@
     },
     {
       "skill_id": "cloudflare/skills:skills/sandbox-migrate-to-next/SKILL.md",
-      "snoozed_at": "2026-09-24",
-      "expires_at": "2027-02-21",
-      "days": 150,
-      "reason": "用户暂不关注"
-    },
-    {
-      "skill_id": "cloudflare/skills:skills/web-perf/SKILL.md",
       "snoozed_at": "2026-09-24",
       "expires_at": "2027-02-21",
       "days": 150,
@@ -418,13 +397,6 @@
       "reason": "用户暂不关注"
     },
     {
-      "skill_id": "cloudflare/skills:skills/turnstile-spin/SKILL.md",
-      "snoozed_at": "2026-09-26",
-      "expires_at": "2027-02-23",
-      "days": 150,
-      "reason": "用户暂不关注"
-    },
-    {
       "skill_id": "trailofbits/skills:plugins/building-secure-contracts/skills/audit-prep-assistant/SKILL.md",
       "snoozed_at": "2026-09-26",
       "expires_at": "2027-02-23",
@@ -551,13 +523,6 @@
       "reason": "用户暂不关注"
     },
     {
-      "skill_id": "vercel-labs/agent-skills:skills/composition-patterns/SKILL.md",
-      "snoozed_at": "2026-09-26",
-      "expires_at": "2027-02-23",
-      "days": 150,
-      "reason": "用户暂不关注"
-    },
-    {
       "skill_id": "google-labs-code/stitch-skills:plugins/stitch-build/skills/react-native/SKILL.md",
       "snoozed_at": "2026-09-26",
       "expires_at": "2027-02-23",
@@ -621,13 +586,6 @@
       "reason": "用户暂不关注"
     },
     {
-      "skill_id": "skillmedev/skills:skills/agency-positioning/SKILL.md",
-      "snoozed_at": "2026-09-29",
-      "expires_at": "2027-02-26",
-      "days": 150,
-      "reason": "用户暂不关注"
-    },
-    {
       "skill_id": "skillmedev/skills:skills/agency-qbr-upsell/SKILL.md",
       "snoozed_at": "2026-09-29",
       "expires_at": "2027-02-26",
@@ -645,21 +603,7 @@
       "days": 150,
       "expires_at": "2027-02-26",
       "reason": "用户暂不关注",
-      "skill_id": "google-labs-code/stitch-skills:plugins/stitch-design/skills/extract-static-html/SKILL.md",
-      "snoozed_at": "2026-09-29"
-    },
-    {
-      "days": 150,
-      "expires_at": "2027-02-26",
-      "reason": "用户暂不关注",
       "skill_id": "google-labs-code/stitch-skills:plugins/stitch-design/skills/manage-design-system/SKILL.md",
-      "snoozed_at": "2026-09-29"
-    },
-    {
-      "days": 150,
-      "expires_at": "2027-02-26",
-      "reason": "用户暂不关注",
-      "skill_id": "google-labs-code/stitch-skills:plugins/stitch-design/skills/upload-to-stitch/SKILL.md",
       "snoozed_at": "2026-09-29"
     },
     {
@@ -702,13 +646,6 @@
       "expires_at": "2027-02-26",
       "reason": "用户暂不关注",
       "skill_id": "getsentry/skills:skills/create-branch/SKILL.md",
-      "snoozed_at": "2026-09-29"
-    },
-    {
-      "days": 150,
-      "expires_at": "2027-02-26",
-      "reason": "用户暂不关注",
-      "skill_id": "google-labs-code/stitch-skills:plugins/stitch-design/skills/code-to-design/SKILL.md",
       "snoozed_at": "2026-09-29"
     },
     {
@@ -1093,20 +1030,6 @@
       "days": 150,
       "expires_at": "2027-03-01",
       "reason": "用户暂不关注",
-      "skill_id": "skillmedev/skills:skills/vercel-deploy-pipeline/SKILL.md",
-      "snoozed_at": "2026-10-02"
-    },
-    {
-      "days": 150,
-      "expires_at": "2027-03-01",
-      "reason": "用户暂不关注",
-      "skill_id": "skillmedev/skills:skills/vercel-env-management/SKILL.md",
-      "snoozed_at": "2026-10-02"
-    },
-    {
-      "days": 150,
-      "expires_at": "2027-03-01",
-      "reason": "用户暂不关注",
       "skill_id": "skillmedev/skills:skills/cross-platform-reformatter/SKILL.md",
       "snoozed_at": "2026-10-02"
     },
@@ -1394,13 +1317,6 @@
       "days": 150,
       "expires_at": "2027-03-01",
       "reason": "用户暂不关注",
-      "skill_id": "skillmedev/skills:skills/redline-annotation/SKILL.md",
-      "snoozed_at": "2026-10-02"
-    },
-    {
-      "days": 150,
-      "expires_at": "2027-03-01",
-      "reason": "用户暂不关注",
       "skill_id": "skillmedev/skills:skills/refund-deescalation/SKILL.md",
       "snoozed_at": "2026-10-02"
     },
@@ -1416,13 +1332,6 @@
       "expires_at": "2027-03-01",
       "reason": "用户暂不关注",
       "skill_id": "skillmedev/skills:skills/regulatory-scan/SKILL.md",
-      "snoozed_at": "2026-10-02"
-    },
-    {
-      "days": 150,
-      "expires_at": "2027-03-01",
-      "reason": "用户暂不关注",
-      "skill_id": "skillmedev/skills:skills/remotion-compose/SKILL.md",
       "snoozed_at": "2026-10-02"
     },
     {
@@ -1528,13 +1437,6 @@
       "expires_at": "2027-03-06",
       "reason": "用户暂不关注",
       "skill_id": "skillmedev/skills:skills/research-readout/SKILL.md",
-      "snoozed_at": "2026-10-07"
-    },
-    {
-      "days": 150,
-      "expires_at": "2027-03-06",
-      "reason": "用户暂不关注",
-      "skill_id": "skillmedev/skills:skills/responsive-spec/SKILL.md",
       "snoozed_at": "2026-10-07"
     },
     {
@@ -1702,13 +1604,6 @@
       "days": 150,
       "expires_at": "2027-03-06",
       "reason": "用户暂不关注",
-      "skill_id": "skillmedev/skills:skills/test-placeholder-data/SKILL.md",
-      "snoozed_at": "2026-10-07"
-    },
-    {
-      "days": 150,
-      "expires_at": "2027-03-06",
-      "reason": "用户暂不关注",
       "skill_id": "skillmedev/skills:skills/threat-model-stride/SKILL.md",
       "snoozed_at": "2026-10-07"
     },
@@ -1745,13 +1640,6 @@
       "expires_at": "2027-03-06",
       "reason": "用户暂不关注",
       "skill_id": "skillmedev/skills:skills/ux-writing-audit/SKILL.md",
-      "snoozed_at": "2026-10-07"
-    },
-    {
-      "days": 150,
-      "expires_at": "2027-03-06",
-      "reason": "用户暂不关注",
-      "skill_id": "skillmedev/skills:skills/vercel-firewall-and-botid/SKILL.md",
       "snoozed_at": "2026-10-07"
     },
     {
@@ -1870,13 +1758,6 @@
       "days": 150,
       "expires_at": "2027-03-12",
       "reason": "用户暂不关注",
-      "skill_id": "skillmedev/skills:skills/web-performance/SKILL.md",
-      "snoozed_at": "2026-10-13"
-    },
-    {
-      "days": 150,
-      "expires_at": "2027-03-12",
-      "reason": "用户暂不关注",
       "skill_id": "skillmedev/skills:skills/webhook-receiver-hardener/SKILL.md",
       "snoozed_at": "2026-10-13"
     },
@@ -1934,13 +1815,6 @@
       "expires_at": "2027-03-13",
       "reason": "用户暂不关注",
       "skill_id": "iflytek/skillhub:builtin-skills/skills/documentation-writer/SKILL.md",
-      "snoozed_at": "2026-10-14"
-    },
-    {
-      "days": 150,
-      "expires_at": "2027-03-13",
-      "reason": "用户暂不关注",
-      "skill_id": "iflytek/skillhub:builtin-skills/skills/frontend-design/SKILL.md",
       "snoozed_at": "2026-10-14"
     },
     {
@@ -2010,21 +1884,7 @@
       "days": 150,
       "expires_at": "2027-03-13",
       "reason": "用户暂不关注",
-      "skill_id": "nexu-io/open-design:plugins/_official/atoms/critique-theater/SKILL.md",
-      "snoozed_at": "2026-10-14"
-    },
-    {
-      "days": 150,
-      "expires_at": "2027-03-13",
-      "reason": "用户暂不关注",
       "skill_id": "nexu-io/open-design:plugins/_official/atoms/direction-picker/SKILL.md",
-      "snoozed_at": "2026-10-14"
-    },
-    {
-      "days": 150,
-      "expires_at": "2027-03-13",
-      "reason": "用户暂不关注",
-      "skill_id": "nexu-io/open-design:plugins/_official/atoms/handoff/SKILL.md",
       "snoozed_at": "2026-10-14"
     },
     {
@@ -2088,27 +1948,6 @@
       "expires_at": "2027-03-14",
       "reason": "用户暂不关注",
       "skill_id": "nexu-io/open-design:plugins/_official/scenarios/od-design-refine/SKILL.md",
-      "snoozed_at": "2026-10-15"
-    },
-    {
-      "days": 150,
-      "expires_at": "2027-03-14",
-      "reason": "用户暂不关注",
-      "skill_id": "nexu-io/open-design:plugins/_official/scenarios/od-nextjs-export/SKILL.md",
-      "snoozed_at": "2026-10-15"
-    },
-    {
-      "days": 150,
-      "expires_at": "2027-03-14",
-      "reason": "用户暂不关注",
-      "skill_id": "nexu-io/open-design:plugins/_official/scenarios/od-react-export/SKILL.md",
-      "snoozed_at": "2026-10-15"
-    },
-    {
-      "days": 150,
-      "expires_at": "2027-03-14",
-      "reason": "用户暂不关注",
-      "skill_id": "nexu-io/open-design:plugins/_official/scenarios/od-vue-export/SKILL.md",
       "snoozed_at": "2026-10-15"
     },
     {

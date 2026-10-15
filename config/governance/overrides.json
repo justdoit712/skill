@@ -5052,6 +5052,1441 @@
       "added_at": "2026-10-15",
       "reason": "用户屏蔽/删除",
       "skill_id": "nexu-io/open-design:skills/agent-browser/SKILL.md"
+    },
+    {
+      "skill_id": "vercel-labs/agent-skills:skills/composition-patterns/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "vercel-labs/agent-skills:skills/vercel-optimize/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "cloudflare/skills:skills/nextjs-on-cloudflare/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "cloudflare/skills:skills/turnstile-spin/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "cloudflare/skills:skills/web-perf/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "google-labs-code/stitch-skills:plugins/stitch-design/skills/code-to-design/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "google-labs-code/stitch-skills:plugins/stitch-design/skills/extract-static-html/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "google-labs-code/stitch-skills:plugins/stitch-design/skills/upload-to-stitch/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/agency-positioning/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/vercel-deploy-pipeline/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/vercel-env-management/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/vercel-edge-and-isr/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/redline-annotation/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/remotion-compose/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/responsive-spec/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/test-placeholder-data/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/vercel-firewall-and-botid/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/web-performance/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "iflytek/skillhub:.agents/skills/code-conventions/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "iflytek/skillhub:.agents/skills/testing-and-ci/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "iflytek/skillhub:builtin-skills/skills/frontend-design/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:design-templates/critique/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:design-templates/email-marketing/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:design-templates/eng-runbook/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:design-templates/social-carousel/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/atoms/critique-theater/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/atoms/handoff/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/email-marketing/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/social-carousel/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/waitlist-page/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/scenarios/od-figma-migration/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/scenarios/od-nextjs-export/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/scenarios/od-react-export/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/scenarios/od-vue-export/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/scenarios/od-web-effect-extractor/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/community/atelier-zero-image-generation-prompt-pack-mrrxpegw/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/community/design-system-source-context-mr0bb87z/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/community/hallmark/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/spec/examples/deploy-vercel-static/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/spec/examples/export-nextjs-handoff/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/artifacts-builder/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/emil-design-eng/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/figma-generate-library/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/figma-implement-design/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/frontend-design/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/frontend-dev/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/frontend-skill/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/gsap-core/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/gsap-frameworks/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/gsap-performance/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/gsap-plugins/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/gsap-react/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/gsap-scrolltrigger/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/gsap-timeline/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/gsap-utils/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/image-to-code-skill/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/imagegen-frontend-mobile/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/imagegen-frontend-web/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/impeccable-design-polish/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/remotion/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/shadcn-ui/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/swiftui-design/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/threejs/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/web-artifacts-builder/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/web-clone/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/wpds/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "anbeime/skill:skills/frontend-design/frontend-design/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "anbeime/skill:skills/web-design-analyzer/web-design-analyzer/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:00-meta/rsvp-speed-reader/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:01-documents/codebase-to-prd/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:01-documents/wiki-to-vitepress-site/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:02-engineering/algolia-search-integration/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:02-engineering/android-ui-verification/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:02-engineering/angularjs-to-angular-migration/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:02-engineering/astro-content-sites/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:02-engineering/browser-extension-builder/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:02-engineering/chrome-extension-mv3/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:02-engineering/convex-reactive-backend/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:02-engineering/frontend-design/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:02-engineering/i18n-localization-patterns/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:02-engineering/magic-ui-component-generator/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:02-engineering/makepad-rust-ui/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:02-engineering/modern-angular-expert/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:02-engineering/nextjs-supabase-auth/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:02-engineering/playwright-e2e-testing/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:02-engineering/progressive-web-app/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:02-engineering/react-flow-node-graph-architect/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:02-engineering/react-state-management/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:02-engineering/realtime-support-chat-widget/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:02-engineering/screen-reader-a11y-testing/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:02-engineering/scroll-driven-web-experience/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:02-engineering/shadcn-ui-components/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:02-engineering/sveltekit-fullstack/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:02-engineering/tailwind-css-patterns/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:02-engineering/tanstack-query/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:02-engineering/threejs-3d-web/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:02-engineering/trpc-typesafe-api/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:02-engineering/typescript-advanced-types/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:02-engineering/wcag-22-audit-patterns/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:02-engineering/web-artifacts-builder/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:02-engineering/web-component-design/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:02-engineering/webapp-testing/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:02-engineering/zod-schema-validation/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:04-ai/llm-app-production-patterns/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:06-creative/animejs-web-animation/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:06-creative/d3js-data-viz/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:06-creative/design-dev-handoff/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:06-creative/design-spells-microinteractions/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:06-creative/glsl-shader-programming/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:06-creative/high-end-visual-design/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:06-creative/industrial-brutalist-ui/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:06-creative/minimalist-editorial-ui/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:06-creative/podcast-audio-generation/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:06-creative/spline-3d-web-integration/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:06-creative/stitch-design-system-taste/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:06-creative/stitch-iterative-build-loop/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:06-creative/ui-design-system-builder/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:08-security/html-injection-testing/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:10-platform/go-rod-browser-automation/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "ganmu191/aigc:skills/frontend-design/frontend-design/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "ganmu191/aigc:skills/web-design-analyzer/web-design-analyzer/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:design-templates/critique/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:plugins/_official/examples/critique/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:plugins/_official/examples/hr-onboarding/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:plugins/_official/examples/orbit-github/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:plugins/_official/examples/orbit-linear/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:plugins/_official/examples/orbit-notion/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:plugins/_official/examples/team-okrs/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:plugins/_official/scenarios/od-nextjs-export/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:plugins/_official/scenarios/od-react-export/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:plugins/_official/scenarios/od-vue-export/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:plugins/_official/scenarios/od-web-effect-extractor/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:plugins/community/agent-skill-principal-ui-ux-architect-motion-choreographer-awwwards-tier-mqu4mbbj/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:plugins/community/atelier-zero-image-generation-prompt-pack-mrrxpegw/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:plugins/community/hallmark/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:plugins/spec/examples/export-nextjs-handoff/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:skills/artifacts-builder/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:skills/doc-kami-parchment/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:skills/emil-design-eng/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:skills/export-download-debugging/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:skills/figma-generate-library/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:skills/figma-implement-design/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:skills/frontend-design/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:skills/frontend-dev/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:skills/frontend-skill/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:skills/gsap-core/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:skills/gsap-frameworks/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:skills/gsap-performance/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:skills/gsap-plugins/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:skills/gsap-react/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:skills/gsap-scrolltrigger/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:skills/gsap-timeline/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:skills/gsap-utils/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:skills/image-to-code-skill/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:skills/imagegen-frontend-web/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:skills/impeccable-design-polish/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:skills/library-curator/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:skills/review-animations/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:skills/threejs/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:skills/web-clone/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:design-templates/critique/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:design-templates/eng-runbook/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:design-templates/gamified-app/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:design-templates/orbit-github/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:plugins/_official/examples/doc-kami-parchment/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:plugins/_official/examples/waitlist-page/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:plugins/_official/scenarios/od-nextjs-export/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:plugins/_official/scenarios/od-react-export/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:plugins/_official/scenarios/od-vue-export/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:plugins/community/atelier-zero-image-generation-prompt-pack-mrrxpegw/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:plugins/community/hallmark/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:plugins/spec/examples/export-nextjs-handoff/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:skills/artifacts-builder/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:skills/emil-design-eng/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:skills/figma-generate-library/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:skills/frontend-design/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:skills/frontend-dev/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:skills/frontend-skill/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:skills/gsap-frameworks/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:skills/gsap-core/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:skills/gsap-plugins/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:skills/gsap-performance/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:skills/gsap-react/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:skills/gsap-scrolltrigger/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:skills/gsap-timeline/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:skills/gsap-utils/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:skills/image-to-code-skill/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:skills/imagegen-frontend-web/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:skills/impeccable-design-polish/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:skills/multi-agent-swarm/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:skills/remotion/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:skills/research-decision-room/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:skills/review-animations/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:skills/web-clone/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "anjon771/open-degine:design-templates/critique/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "anjon771/open-degine:plugins/_official/examples/team-okrs/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "anjon771/open-degine:plugins/_official/scenarios/od-figma-migration/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "anjon771/open-degine:plugins/_official/scenarios/od-nextjs-export/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "anjon771/open-degine:plugins/_official/scenarios/od-react-export/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "anjon771/open-degine:plugins/_official/scenarios/od-vue-export/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "anjon771/open-degine:plugins/_official/scenarios/od-web-effect-extractor/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "anjon771/open-degine:plugins/community/agent-skill-principal-ui-ux-architect-motion-choreographer-awwwards-tier-mqu4mbbj/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "anjon771/open-degine:plugins/community/design-system-source-context-mr0bb87z/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "anjon771/open-degine:plugins/spec/examples/export-nextjs-handoff/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "anjon771/open-degine:skills/artifacts-builder/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "anjon771/open-degine:skills/doc-kami-parchment/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "anjon771/open-degine:skills/emil-design-eng/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "anjon771/open-degine:skills/emilkowalski-motion/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "anjon771/open-degine:skills/frontend-design/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "anjon771/open-degine:skills/frontend-skill/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "anjon771/open-degine:skills/gsap-core/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "anjon771/open-degine:skills/gsap-frameworks/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "anjon771/open-degine:skills/gsap-plugins/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "anjon771/open-degine:skills/gsap-performance/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "anjon771/open-degine:skills/gsap-scrolltrigger/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "anjon771/open-degine:skills/gsap-react/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "anjon771/open-degine:skills/gsap-timeline/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "anjon771/open-degine:skills/gsap-utils/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "anjon771/open-degine:skills/image-to-code-skill/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "anjon771/open-degine:skills/imagegen-frontend-web/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "anjon771/open-degine:skills/impeccable-design-polish/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "anjon771/open-degine:skills/remotion/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "anjon771/open-degine:skills/review-animations/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "anjon771/open-degine:skills/threejs/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "anjon771/open-degine:skills/web-clone/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "anjon771/open-degine:skills/web-design-guidelines/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:design-templates/critique/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:design-templates/gamified-app/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:design-templates/orbit-linear/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:design-templates/orbit-notion/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:design-templates/pm-spec/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:design-templates/team-okrs/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:plugins/_official/atoms/design-extract/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:plugins/_official/examples/codex-interactive-capability-map/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:plugins/_official/examples/critique/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:plugins/_official/examples/orbit-github/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:plugins/_official/examples/orbit-linear/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/component-api-design/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "oooxoxooo/prdcarft:skills/prd-workflow/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "oooxoxooo/prdcarft:skills/prd-workflow/skills/ui-ux-pro-max/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:02-engineering/accessibility-wcag-audit/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:plugins/_official/scenarios/od-nextjs-export/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:plugins/_official/scenarios/od-react-export/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:plugins/_official/scenarios/od-vue-export/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:plugins/_official/scenarios/od-web-effect-extractor/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:plugins/community/agent-skill-principal-ui-ux-architect-motion-choreographer-awwwards-tier-mqu4mbbj/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:plugins/spec/examples/export-nextjs-handoff/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:skills/artifacts-builder/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:skills/research-decision-room/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:skills/shadcn-ui/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:skills/swiftui-design/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:skills/threejs/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:skills/web-artifacts-builder/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:skills/web-clone/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:plugins/_official/atoms/design-extract/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:plugins/_official/examples/doc-kami-parchment/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:plugins/_official/examples/gamified-app/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:plugins/_official/examples/waitlist-page/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:plugins/spec/examples/export-nextjs-handoff/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:skills/artifacts-builder/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:skills/emil-design-eng/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:skills/export-download-debugging/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:skills/frontend-design/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:skills/frontend-dev/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:skills/frontend-skill/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:skills/gsap-core/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:skills/gsap-frameworks/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:skills/gsap-plugins/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:skills/gsap-performance/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:skills/gsap-react/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:skills/gsap-scrolltrigger/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:skills/gsap-timeline/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:skills/gsap-utils/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:skills/imagegen-frontend-web/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:skills/impeccable-design-polish/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:skills/remotion/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:skills/shadcn-ui/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:skills/stitch-skill/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:skills/swiftui-design/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:skills/web-clone/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:skills/web-artifacts-builder/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "aurora-ember-bio-lab/splatstudio:plugins/_official/scenarios/od-react-export/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "aurora-ember-bio-lab/splatstudio:plugins/_official/scenarios/od-vue-export/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "aurora-ember-bio-lab/splatstudio:plugins/_official/scenarios/od-web-effect-extractor/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "aurora-ember-bio-lab/splatstudio:plugins/community/agent-skill-principal-ui-ux-architect-motion-choreographer-awwwards-tier-mqu4mbbj/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "aurora-ember-bio-lab/splatstudio:plugins/community/atelier-zero-image-generation-prompt-pack-mrrxpegw/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "aurora-ember-bio-lab/splatstudio:plugins/spec/examples/export-nextjs-handoff/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
+      "added_at": "2026-10-15"
     }
   ],
   "blocked_topics": [
@@ -5071,7 +6506,7 @@
     },
     {
       "name": "商业广告与营销推广",
-      "description": "主要用于商业广告投放、广告法与违禁词合规、广告文案与创意生成、社交媒体广告视频与配乐制作、营销策划、SEO、获客或用户增长。保留通用的前端网页开发、通用技术写作与普通音视频处理工具。",
+      "description": "主要用于商业广告投放、广告法与违禁词合规、广告文案与创意生成、社交媒体广告视频与配乐制作、营销策划、SEO、获客或用户增长。保留通用技术写作与普通音视频处理工具。",
       "keywords": [
         "商业广告",
         "广告文案",
@@ -6145,6 +7580,37 @@
           "三维建模"
         ]
       }
+    },
+    {
+      "name": "前端开发与 Web 界面工程",
+      "description": "主要用于现代 Web 前端开发、前端框架与全栈路由（React、Vue、Next.js、Nuxt、Svelte、Angular、Astro）、UI 组件库与样式系统（Tailwind CSS、shadcn/ui、Ant Design）、Web 动效与 3D 渲染（GSAP、Three.js、WebGL）、UI 界面设计稿切图与转代码（Figma 转代码、OpenDesign、截图转代码、Handoff 交付），以及前端工程化构建与打包（Vite、Webpack）。保留纯后端 API 开发、系统底层架构、移动端原生开发与通用数据分析。",
+      "keywords": [
+        "前端开发",
+        "Web前端",
+        "前端框架",
+        "React",
+        "Vue",
+        "Next.js",
+        "Nuxt",
+        "Svelte",
+        "Angular",
+        "Astro",
+        "Tailwind",
+        "TailwindCSS",
+        "CSS",
+        "GSAP",
+        "Three.js",
+        "Threejs",
+        "WebGL",
+        "shadcn",
+        "Figma",
+        "组件库",
+        "切图",
+        "设计稿转代码",
+        "设计交付",
+        "Web动画",
+        "frontend"
+      ]
     }
   ]
 }
