@@ -3,10 +3,10 @@
   "rules_version": "1.3.0",
   "generated_at": "2026-10-09T21:10:54.373701+08:00",
   "counts": {
-    "recommended": 604,
-    "candidate": 1258,
-    "manual": 84,
-    "excluded": 1731
+    "recommended": 602,
+    "candidate": 1222,
+    "manual": 94,
+    "excluded": 1730
   },
   "entries": [
     {
@@ -11516,485 +11516,6 @@
       "evaluated_at": "2026-10-01T01:44:49.614870+08:00"
     },
     {
-      "skill_id": "gauss314/skills:skills/alpaca-trading/SKILL.md",
-      "name": "alpaca-trading",
-      "url": "https://github.com/gauss314/skills/blob/HEAD/skills/alpaca-trading/SKILL.md",
-      "repo_url": "https://github.com/gauss314/skills",
-      "author": "gauss314",
-      "summary_zh": "该条目介绍如何通过 Alpaca Trading API 查询账户、管理资产与持仓、提交或取消订单，并支持期权、加密货币、Paper 与 Live 交易。因包含真实资金实盘下单核心能力，不适合作为可收录技能。",
-      "skill_type": "reference",
-      "example_requests": [
-        "查询 Alpaca 账户的购买力、现金和组合价值",
-        "通过 Alpaca API 提交 AAPL 市价买单"
-      ],
-      "key_features": [
-        "覆盖账户、资产、订单、持仓与 Watchlists",
-        "提供 Paper 与 Live 两套 Base URL",
-        "包含订单类型、TIF、错误码与速率限制说明"
-      ],
-      "main_category": {
-        "id": "finance",
-        "name": "金融与投资"
-      },
-      "candidate_domains": [],
-      "tags": [
-        "Alpaca",
-        "交易API",
-        "订单管理",
-        "持仓查询",
-        "实盘交易"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "Alpaca API keys",
-        "alpaca-py",
-        "Python",
-        "Alpaca Trading API",
-        "WebSocket（可选，用于实时更新）"
-      ],
-      "limitations": "材料包含真实资金实盘下单能力；脚本目录 ./scripts/ 未提供内容；未说明市场数据供应商、地区准入、费用、风险披露或合规限制。",
-      "license": null,
-      "status": "excluded",
-      "reason_codes": [
-        "LIVE_TRADING"
-      ],
-      "first_seen": "2026-09-24T09:09:16+00:00",
-      "last_checked": "2026-10-01T01:45:54.500554+08:00",
-      "content_changed_at": null,
-      "content_fingerprint": "sha256:c2abaea1fc3864a3e6856f6f24bc60e5",
-      "source_type": "community_list",
-      "upstream_status": "ok",
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
-      "evaluation_rules_version": "1.3.0",
-      "quality_summary": {
-        "review_status": "single_pass",
-        "checks": {
-          "scope_match": {
-            "value": "fail",
-            "evidence": "材料明确描述为 Alpaca Trading API，包含 paper trading 与 live trading，并给出提交、取消、替换订单、平仓等实盘交易操作，命中 LIVE_TRADING 硬性排除。",
-            "informational": false
-          },
-          "purpose_clarity": {
-            "value": "pass",
-            "evidence": "说明用途为通过 Alpaca API 进行股票、加密货币、期权交易，覆盖账户、资产、订单、持仓、市场时间、组合历史、Watchlists 与 WebSocket 更新等具体场景。",
-            "informational": false
-          },
-          "instruction_completeness": {
-            "value": "pass",
-            "evidence": "提供认证配置、SDK 安装、订单类型、TIF、示例代码、错误处理、速率限制和脚本入口，足以理解其做法与价值；但脚本目录内容未提供，作为限制记录。",
-            "informational": false
-          },
-          "evidence_traceability": {
-            "value": "pass",
-            "evidence": "上游描述与实际 SKILL.md 内容一致，均围绕 Alpaca Trading API 的订单、持仓、账户、paper/live 交易展开。",
-            "informational": false
-          },
-          "dependency_transparency": {
-            "value": "pass",
-            "evidence": "声明需要 Alpaca API keys、Python SDK alpaca-py、paper/live Base URLs，并提示使用环境变量；未说明脚本目录内文件细节，但不影响关键运行条件判断。",
-            "informational": false
-          },
-          "risk_review": {
-            "value": "fail",
-            "evidence": "材料包含不可分割的实盘下单核心功能，且明确支持 live trading 与真实资金订单，触发 LIVE_TRADING 排除。",
-            "informational": false
-          }
-        },
-        "verification_note": "材料提供示例代码、脚本调用命令、错误码表和 paper/live 对比，并建议先在 paper 环境测试；未提供验收清单或实测结果。",
-        "blocking_reasons": []
-      },
-      "last_evaluation_id": "gauss314/skills:skills/alpaca-trading/SKILL.md|sha256:c2abaea1fc3864a3e6856f6f24bc60e5|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-01T01:45:54.484607+08:00"
-    },
-    {
-      "skill_id": "gauss314/skills:skills/bcra-macro/SKILL.md",
-      "name": "bcra-macro",
-      "url": "https://github.com/gauss314/skills/blob/HEAD/skills/bcra-macro/SKILL.md",
-      "repo_url": "https://github.com/gauss314/skills",
-      "author": "gauss314",
-      "summary_zh": "该技能提供阿根廷央行 BCRA 货币统计 API 的查询参考，覆盖储备、汇率、利率、货币供应和通胀等宏观序列，适合金融研究、宏观数据抓取与 API 集成场景。",
-      "skill_type": "reference",
-      "example_requests": [
-        "查询阿根廷央行的国际储备历史数据",
-        "获取阿根廷比索兑美元汇率和利率序列"
-      ],
-      "key_features": [
-        "覆盖 638 个阿根廷国家级宏观序列",
-        "提供端点、过滤参数与分页策略",
-        "列出储备、汇率、利率、M1/M2/M3、通胀等常用变量"
-      ],
-      "main_category": {
-        "id": "finance",
-        "name": "金融与投资"
-      },
-      "candidate_domains": [
-        "finance"
-      ],
-      "tags": [
-        "宏观数据",
-        "API查询",
-        "央行统计",
-        "金融研究",
-        "阿根廷"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "requests",
-        "pandas"
-      ],
-      "limitations": "材料未正式声明运行环境或依赖版本；引用的 VARIABLES.md 未提供，无法核验完整 638 个变量清单；API 为 best-effort，无正式 SLA。",
-      "license": null,
-      "status": "candidate",
-      "reason_codes": [],
-      "first_seen": "2026-09-24T09:09:16+00:00",
-      "last_checked": "2026-10-01T04:56:26.077481+08:00",
-      "content_changed_at": null,
-      "content_fingerprint": "sha256:7fbbcbb8ecf6a841b82cb4d1786ae256",
-      "source_type": "community_list",
-      "upstream_status": "ok",
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
-      "evaluation_rules_version": "1.3.0",
-      "quality_summary": {
-        "review_status": "single_pass",
-        "checks": {
-          "scope_match": {
-            "value": "pass",
-            "evidence": "条目是阿根廷央行宏观统计 API 的查询参考与用法说明，属于金融与投资领域的宏观数据获取与研究辅助；未命中硬性排除项。",
-            "informational": false
-          },
-          "purpose_clarity": {
-            "value": "pass",
-            "evidence": "明确说明用于查询 BCRA 货币统计 API 的宏观变量，包括储备、汇率、利率、M1/M2/M3、通胀、CER、UVA 等，并给出典型使用场景与示例代码。",
-            "informational": false
-          },
-          "instruction_completeness": {
-            "value": "pass",
-            "evidence": "提供端点、参数、分页限制、三种分页策略、常用变量 ID、类别与货币代码，以及技术注意事项，足以理解如何使用该 API。",
-            "informational": false
-          },
-          "evidence_traceability": {
-            "value": "pass",
-            "evidence": "上游介绍称覆盖 638 个宏观序列并给出 API 用法；正文与之一致，列出 Base URL、端点、参数、分页策略和常用变量。",
-            "informational": false
-          },
-          "dependency_transparency": {
-            "value": "unknown",
-            "evidence": "材料说明无需认证、CORS 开放、API 地址与分页限制，并给出 Python 示例；但未正式声明运行环境或依赖包版本，示例隐含 requests/pandas。",
-            "informational": true
-          },
-          "risk_review": {
-            "value": "pass",
-            "evidence": "所读材料为公开官方 API 查询说明，未见凭据外传、实盘下单、临床决策或排除领域内容；也未发现改变评估规则的可疑指令。",
-            "informational": false
-          }
-        },
-        "verification_note": "材料提供 Python 示例、端点参数表、分页策略与常用变量 ID；未提供自动化测试或验收清单。",
-        "blocking_reasons": []
-      },
-      "last_evaluation_id": "gauss314/skills:skills/bcra-macro/SKILL.md|sha256:7fbbcbb8ecf6a841b82cb4d1786ae256|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-01T04:56:26.062519+08:00",
-      "snooze": {
-        "snoozed_at": "2026-10-02",
-        "expires_at": "2027-03-01",
-        "reason": "用户暂不关注"
-      }
-    },
-    {
-      "skill_id": "gauss314/skills:skills/data912/SKILL.md",
-      "name": "data912",
-      "url": "https://github.com/gauss314/skills/blob/HEAD/skills/data912/SKILL.md",
-      "repo_url": "https://github.com/gauss314/skills",
-      "author": "gauss314",
-      "summary_zh": "Data912是一个提供阿根廷金融市场（股票、债券、汇率等）实时和历史数据的API工具，适用于金融数据分析和量化研究场景。",
-      "skill_type": "tool_script",
-      "example_requests": [
-        "查询阿根廷股票GGAL的历史OHLC数据",
-        "获取USD MEP和CCL的实时隐含汇率"
-      ],
-      "key_features": [
-        "提供阿根廷股市、债市及汇率的实时数据",
-        "支持历史OHLC数据和波动率指标下载",
-        "无需认证，有明确的速率限制说明"
-      ],
-      "main_category": {
-        "id": "finance",
-        "name": "金融与投资"
-      },
-      "candidate_domains": [],
-      "tags": [
-        "金融数据",
-        "阿根廷市场",
-        "API集成"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "requests",
-        "pandas"
-      ],
-      "limitations": "仅覆盖阿根廷市场及部分美国ADRs；非严格实时（20秒刷新）；需遵守120次/分钟的速率限制。",
-      "license": null,
-      "status": "recommended",
-      "reason_codes": [],
-      "first_seen": "2026-09-24T09:09:16+00:00",
-      "last_checked": "2026-10-01T05:01:23.447547+08:00",
-      "content_changed_at": null,
-      "content_fingerprint": "sha256:3ae933791d363b3979bf85e5f273015f",
-      "source_type": "community_list",
-      "upstream_status": "ok",
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "manual_pick": true,
-      "manual_note": {
-        "added_at": "2026-09-29",
-        "reason": "用户收藏",
-        "from": "recommended",
-        "auto_status": "recommended"
-      },
-      "evaluation_rules_version": "1.3.0",
-      "quality_summary": {
-        "review_status": "single_pass",
-        "checks": {
-          "scope_match": {
-            "value": "pass",
-            "evidence": "材料明确提供阿根廷金融市场（股票、债券、MEP/CCL汇率等）的实时和历史数据API，属于金融与投资领域的研究与策略辅助工具。",
-            "informational": false
-          },
-          "purpose_clarity": {
-            "value": "pass",
-            "evidence": "旨在解决获取阿根廷市场金融数据的问题，提供实时价格、历史OHLC及波动率数据，适合量化研究或数据监控场景。",
-            "informational": false
-          },
-          "instruction_completeness": {
-            "value": "pass",
-            "evidence": "提供了完整的Base URL、Live/Historical/Volatility端点列表、Python请求示例、CSV下载脚本命令及Rate Limit说明，足以理解其用法。",
-            "informational": false
-          },
-          "evidence_traceability": {
-            "value": "pass",
-            "evidence": "介绍与内容一致，所有功能描述均有对应的代码示例或表格支持。",
-            "informational": false
-          },
-          "dependency_transparency": {
-            "value": "unknown",
-            "evidence": "依赖外部API `data912.com`，未声明本地运行环境的具体版本要求（如Python版本），但核心功能为调用API，不影响基本价值判断。",
-            "informational": true
-          },
-          "risk_review": {
-            "value": "pass",
-            "evidence": "无风险行为，仅为数据查询接口，不涉及实盘交易或敏感凭据外传。",
-            "informational": false
-          }
-        },
-        "verification_note": "材料提供了Python代码示例和Shell脚本命令用于验证数据获取，但未提供具体的验收标准或测试用例。",
-        "blocking_reasons": []
-      },
-      "last_evaluation_id": "gauss314/skills:skills/data912/SKILL.md|sha256:3ae933791d363b3979bf85e5f273015f|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-29T11:02:06.471464+08:00"
-    },
-    {
-      "skill_id": "gauss314/skills:skills/finviz/SKILL.md",
-      "name": "finviz",
-      "url": "https://github.com/gauss314/skills/blob/HEAD/skills/finviz/SKILL.md",
-      "repo_url": "https://github.com/gauss314/skills",
-      "author": "gauss314",
-      "summary_zh": "该技能通过抓取 Finviz 公开网页获取美股基本面、技术面、内幕交易、新闻等数据，适用于投研数据收集与筛选辅助。",
-      "skill_type": "tool_script",
-      "example_requests": [
-        "获取 AAPL 的基本面和技术指标数据",
-        "把 MSFT 的 Finviz 数据保存为 JSON"
-      ],
-      "key_features": [
-        "抓取 Finviz 美股基本面与技术指标",
-        "支持多 ticker 与 JSON 输出",
-        "明确提示无官方 API 与限速要求"
-      ],
-      "main_category": {
-        "id": "finance",
-        "name": "金融与投资"
-      },
-      "candidate_domains": [],
-      "tags": [
-        "美股数据",
-        "网页抓取",
-        "基本面",
-        "技术面",
-        "投研辅助"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "requests",
-        "beautifulsoup4"
-      ],
-      "limitations": "未提供脚本源码与 screener 具体实现；数据时间、更新频率和字段稳定性未说明；依赖 Finviz 网页结构，可能因站点变化失效；商业使用需自行核对服务条款。",
-      "license": null,
-      "status": "candidate",
-      "reason_codes": [],
-      "first_seen": "2026-09-24T09:09:16+00:00",
-      "last_checked": "2026-10-01T05:09:57.547170+08:00",
-      "content_changed_at": null,
-      "content_fingerprint": "sha256:57a687921223a32ce8fa377dfa4b4730",
-      "source_type": "community_list",
-      "upstream_status": "ok",
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
-      "evaluation_rules_version": "1.3.0",
-      "quality_summary": {
-        "review_status": "single_pass",
-        "checks": {
-          "scope_match": {
-            "value": "pass",
-            "evidence": "材料描述为抓取美股基本面、技术面、内幕交易、新闻与筛选器数据的工具，直接服务金融与投资领域，未命中硬性排除项。",
-            "informational": false
-          },
-          "purpose_clarity": {
-            "value": "pass",
-            "evidence": "说明用于从 Finviz 获取美股数据，覆盖基本面、技术面、insider trading、news 与 screener，并给出典型命令，用途具体。",
-            "informational": false
-          },
-          "instruction_completeness": {
-            "value": "pass",
-            "evidence": "提供依赖安装命令、脚本路径、命令行参数示例、字段列表和目录结构，足以理解其做法与价值；未提供脚本源码细节可作为限制。",
-            "informational": false
-          },
-          "evidence_traceability": {
-            "value": "pass",
-            "evidence": "上游介绍与 SKILL.md 内容一致：均说明无官方 API、通过 requests+BeautifulSoup 抓取 Finviz 页面，并列出可提取字段与使用方式。",
-            "informational": false
-          },
-          "dependency_transparency": {
-            "value": "pass",
-            "evidence": "明确声明需要 Python 依赖 requests 与 beautifulsoup4，并提示无官方 API、需限速、页面结构可能变化；这些足以判断运行条件与适用风险。",
-            "informational": false
-          },
-          "risk_review": {
-            "value": "unknown",
-            "evidence": "材料明确提示无官方 API、需遵守 Finviz 服务条款与限速，且网页结构变化可能破坏脚本；未见凭据外传或实盘下单，但抓取第三方网站的合规性仍需用户自行确认。",
-            "informational": false
-          }
-        },
-        "verification_note": "材料提供命令行使用示例，如按 ticker 获取完整数据、仅获取基本面、输出 JSON、批量 ticker 与新闻条数；未提供验收标准或测试数据。",
-        "blocking_reasons": []
-      },
-      "last_evaluation_id": "gauss314/skills:skills/finviz/SKILL.md|sha256:57a687921223a32ce8fa377dfa4b4730|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-01T05:09:57.533493+08:00",
-      "snooze": {
-        "snoozed_at": "2026-10-02",
-        "expires_at": "2027-03-01",
-        "reason": "用户暂不关注"
-      }
-    },
-    {
-      "skill_id": "gauss314/skills:skills/sec-data/SKILL.md",
-      "name": "sec-data",
-      "url": "https://github.com/gauss314/skills/blob/HEAD/skills/sec-data/SKILL.md",
-      "repo_url": "https://github.com/gauss314/skills",
-      "author": "gauss314",
-      "summary_zh": "sec-data 通过 secfi 和 SEC EDGAR XBRL API 获取上市公司财务报表数据，支持 US-GAAP 与 IFRS，并输出 JSON/CSV。适用于美股及外国发行人财务研究、报表整理和基础财务指标提取。",
-      "skill_type": "tool_script",
-      "example_requests": [
-        "获取 AAPL 的全部财务报表数据",
-        "下载 GGAL 的 IFRS 利润表和现金流量表"
-      ],
-      "key_features": [
-        "从 SEC EDGAR 获取三大财务报表",
-        "支持 US-GAAP 与 IFRS 自动映射",
-        "输出 JSON/CSV 并计算 FCF"
-      ],
-      "main_category": {
-        "id": "finance",
-        "name": "金融与投资"
-      },
-      "candidate_domains": [],
-      "tags": [
-        "SEC EDGAR",
-        "财务报表",
-        "XBRL",
-        "数据获取",
-        "US-GAAP",
-        "IFRS"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "secfi",
-        "pandas",
-        "requests",
-        "SEC EDGAR API",
-        "有效 User-Agent 邮箱"
-      ],
-      "limitations": "仅覆盖向 SEC 申报的公司；需要网络访问 SEC API 并配置 User-Agent；材料未提供完整脚本源码或验收测试。",
-      "license": null,
-      "status": "recommended",
-      "reason_codes": [],
-      "first_seen": "2026-09-24T09:09:16+00:00",
-      "last_checked": "2026-10-01T05:23:17.798910+08:00",
-      "content_changed_at": null,
-      "content_fingerprint": "sha256:e5d6d3a5dedcc7b703d62e058850f011",
-      "source_type": "community_list",
-      "upstream_status": "ok",
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "manual_pick": true,
-      "manual_note": {
-        "added_at": "2026-09-29",
-        "reason": "用户收藏",
-        "from": "recommended",
-        "auto_status": "recommended"
-      },
-      "evaluation_rules_version": "1.3.0",
-      "quality_summary": {
-        "review_status": "single_pass",
-        "checks": {
-          "scope_match": {
-            "value": "pass",
-            "evidence": "技能围绕 SEC EDGAR 财务报表数据获取，属于金融与投资领域的研究和策略辅助数据工具，未命中硬性排除项。",
-            "informational": false
-          },
-          "purpose_clarity": {
-            "value": "pass",
-            "evidence": "明确说明用于从 SEC EDGAR 获取上市公司利润表、资产负债表、现金流量表，并支持 US-GAAP 与 IFRS，场景具体。",
-            "informational": false
-          },
-          "instruction_completeness": {
-            "value": "pass",
-            "evidence": "提供安装依赖、CLI 示例、参数表、输出文件说明、常见错误与认证要求，足以理解其做法与价值。",
-            "informational": false
-          },
-          "evidence_traceability": {
-            "value": "pass",
-            "evidence": "描述中的核心能力与正文脚本用法、端点、税项映射、输出文件一致。",
-            "informational": false
-          },
-          "dependency_transparency": {
-            "value": "pass",
-            "evidence": "声明依赖 secfi，并说明 pandas、requests 随 secfi 安装；还说明需要有效 User-Agent 访问 SEC 接口。",
-            "informational": false
-          },
-          "risk_review": {
-            "value": "pass",
-            "evidence": "所读材料未见凭据外传、实盘下单或明显可疑行为；包含邮箱用于 User-Agent，但未显示外传凭据或执行危险操作。",
-            "informational": false
-          }
-        },
-        "verification_note": "材料提供 AAPL 与 GGAL 的测试输出示例、CLI 命令和常见错误排查，但未提供可复现验收脚本或测试清单。",
-        "blocking_reasons": []
-      },
-      "last_evaluation_id": "gauss314/skills:skills/sec-data/SKILL.md|sha256:e5d6d3a5dedcc7b703d62e058850f011|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-29T11:25:12.097295+08:00"
-    },
-    {
       "skill_id": "skillmedev/skills:skills/1on1-agenda/SKILL.md",
       "name": "1on1-agenda",
       "url": "https://github.com/skillmedev/skills/blob/HEAD/skills/1on1-agenda/SKILL.md",
@@ -12993,7 +12514,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/agent-orchestration/SKILL.md|sha256:27330cde2d28bb98dfdba9b398a3c43b|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-01T05:28:17.474437+08:00"
+      "evaluated_at": "2026-10-01T05:28:17.474437+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-15",
+        "expires_at": "2027-03-14",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/agency-qbr-upsell/SKILL.md",
@@ -15150,7 +14676,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/causal-inference/SKILL.md|sha256:4990e91ad329a338ab6df5d559e014de|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-29T14:05:56.782104+08:00"
+      "evaluated_at": "2026-09-29T14:05:56.782104+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-15",
+        "expires_at": "2027-03-14",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/changelog-generator/SKILL.md",
@@ -15776,7 +15307,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/claims-verifier/SKILL.md|sha256:dfb0b50e5c8f9808cac97811f492be09|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-01T05:39:22.738560+08:00"
+      "evaluated_at": "2026-10-01T05:39:22.738560+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-15",
+        "expires_at": "2027-03-14",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/clickhouse-analytics/SKILL.md",
@@ -16484,7 +16020,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/cold-email-deliverability/SKILL.md|sha256:e922402d475497edb68a6b6679631f06|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-01T05:43:30.974534+08:00"
+      "evaluated_at": "2026-10-01T05:43:30.974534+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-15",
+        "expires_at": "2027-03-14",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/color-accessibility/SKILL.md",
@@ -16968,8 +16509,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-15",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -17095,7 +16641,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/conflict-resolution/SKILL.md|sha256:dad41062c4849c32d11cc3d1f9f025b7|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-01T05:47:27.939882+08:00"
+      "evaluated_at": "2026-10-01T05:47:27.939882+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-15",
+        "expires_at": "2027-03-14",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/connection-pool-tuner/SKILL.md",
@@ -17456,7 +17007,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/contract-test-writer/SKILL.md|sha256:e1dfd53508f657109fb969c3faa7512e|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-01T08:10:56.132919+08:00"
+      "evaluated_at": "2026-10-01T08:10:56.132919+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-15",
+        "expires_at": "2027-03-14",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/course-outline-architect/SKILL.md",
@@ -17898,7 +17454,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/coverage-gap-finder/SKILL.md|sha256:5bf4e790ad4ad98e1dade38846fcb36f|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-01T08:11:00.814674+08:00"
+      "evaluated_at": "2026-10-01T08:11:00.814674+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-15",
+        "expires_at": "2027-03-14",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/creator-content-calendar/SKILL.md",
@@ -18161,7 +17722,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/crisis-comms-external/SKILL.md|sha256:15c4d2713b628eb532662fbf5281913c|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-01T08:12:11.984389+08:00"
+      "evaluated_at": "2026-10-01T08:12:11.984389+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-15",
+        "expires_at": "2027-03-14",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/csat-root-cause/SKILL.md",
@@ -19326,7 +18892,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/deep-research/SKILL.md|sha256:83c884dd71901a5c4d17b967a9809e82|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-01T08:16:28.500979+08:00"
+      "evaluated_at": "2026-10-01T08:16:28.500979+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-15",
+        "expires_at": "2027-03-14",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/demo-script/SKILL.md",
@@ -19948,7 +19519,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/differentiated-instruction/SKILL.md|sha256:0bc1032580f442daa53e4b6e0928eb4b|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-01T08:19:10.342841+08:00"
+      "evaluated_at": "2026-10-01T08:19:10.342841+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-15",
+        "expires_at": "2027-03-14",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/docker-compose-wizard/SKILL.md",
@@ -20035,7 +19611,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/docker-compose-wizard/SKILL.md|sha256:a50932540553d3cb880159b3c967e434|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-01T08:20:03.703595+08:00"
+      "evaluated_at": "2026-10-01T08:20:03.703595+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-15",
+        "expires_at": "2027-03-14",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/document-template-system/SKILL.md",
@@ -20248,7 +19829,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/e2e-scenario-author/SKILL.md|sha256:2678295604373b9c6d7229cf9ed708e5|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-01T08:20:57.567280+08:00"
+      "evaluated_at": "2026-10-01T08:20:57.567280+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-15",
+        "expires_at": "2027-03-14",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/due-diligence-checklist/SKILL.md",
@@ -20335,7 +19921,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/due-diligence-checklist/SKILL.md|sha256:cb300f0d9557e4481fa1404f612e88a7|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-01T08:20:43.738921+08:00"
+      "evaluated_at": "2026-10-01T08:20:43.738921+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-15",
+        "expires_at": "2027-03-14",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/eda-playbook/SKILL.md",
@@ -20471,8 +20062,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-15",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -21041,7 +20637,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/emergency-fund-planner/SKILL.md|sha256:46e4826376bdf7ef3f35322be705741d|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-01T08:22:38.005286+08:00"
+      "evaluated_at": "2026-10-01T08:22:38.005286+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-15",
+        "expires_at": "2027-03-14",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/eng-status-rollup/SKILL.md",
@@ -21175,8 +20776,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-15",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -21883,8 +21489,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-15",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -22013,7 +21624,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/experiment-tracking/SKILL.md|sha256:a98b967c4051cd72c6e42ecfcf8eb601|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-01T08:26:20.467486+08:00"
+      "evaluated_at": "2026-10-01T08:26:20.467486+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-15",
+        "expires_at": "2027-03-14",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/explain-plan-reader/SKILL.md",
@@ -22063,8 +21679,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-15",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -22147,8 +21768,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-15",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -22233,8 +21859,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-15",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -22724,7 +22355,12 @@
         ]
       },
       "last_evaluation_id": "skillmedev/skills:skills/financial-statement-builder/SKILL.md|sha256:871cf4355af11a04105607a35b172473|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-01T08:29:45.775277+08:00"
+      "evaluated_at": "2026-10-01T08:29:45.775277+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-15",
+        "expires_at": "2027-03-14",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/fitness-program/SKILL.md",
@@ -25029,8 +24665,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-15",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -25518,7 +25159,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/idempotency-enforcer/SKILL.md|sha256:5c1b94df347a1f9eb5ccd2c106f1d0d1|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-01T08:43:18.285897+08:00"
+      "evaluated_at": "2026-10-01T08:43:18.285897+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-15",
+        "expires_at": "2027-03-14",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/icp-persona-builder/SKILL.md",
@@ -26425,7 +26071,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/interview-debrief-synthesizer/SKILL.md|sha256:294e960a294460a4a4bb820558e73234|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-01T08:44:05.355897+08:00"
+      "evaluated_at": "2026-10-01T08:44:05.355897+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-15",
+        "expires_at": "2027-03-14",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/interview-guide-builder/SKILL.md",
@@ -27419,7 +27070,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/jtbd-extractor/SKILL.md|sha256:0c3a0190e6c433f1f18aa779a3fb7499|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-01T08:49:06.607239+08:00"
+      "evaluated_at": "2026-10-01T08:49:06.607239+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-15",
+        "expires_at": "2027-03-14",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/kafka-pipelines/SKILL.md",
@@ -27923,8 +27579,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-15",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -28287,8 +27948,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-15",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -28938,8 +28604,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-15",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -29026,8 +28697,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-15",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -29335,7 +29011,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/launch-plan-sequencer/SKILL.md|sha256:c4584956f830411b057e13651bf8d35c|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-01T08:53:04.284636+08:00"
+      "evaluated_at": "2026-10-01T08:53:04.284636+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-15",
+        "expires_at": "2027-03-14",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/lesson-plan-builder/SKILL.md",
@@ -31682,7 +31363,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/moodboard-builder/SKILL.md|sha256:99108aed4ca8264005bf633b3e326a71|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-29T19:11:27.499691+08:00"
+      "evaluated_at": "2026-09-29T19:11:27.499691+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-15",
+        "expires_at": "2027-03-14",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/motion-color-and-light/SKILL.md",
@@ -32047,7 +31733,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/mutation-test-runner/SKILL.md|sha256:ff5350cc7bbb02b7c44959e3a4b354e9|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-02T13:13:08.126289+08:00"
+      "evaluated_at": "2026-10-02T13:13:08.126289+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-15",
+        "expires_at": "2027-03-14",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/n-plus-one-hunter/SKILL.md",
@@ -33226,7 +32917,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/pagination-and-sync-engineer/SKILL.md|sha256:ab885180cbb7598aabeefcafc1a58aa6|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-02T13:14:34.367310+08:00"
+      "evaluated_at": "2026-10-02T13:14:34.367310+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-15",
+        "expires_at": "2027-03-14",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/paid-acquisition-audit/SKILL.md",
@@ -34405,7 +34101,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/postmortem-writer/SKILL.md|sha256:cbd0a3899752c77a8584c3ab4eab0687|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-29T20:01:57.306377+08:00"
+      "evaluated_at": "2026-09-29T20:01:57.306377+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-15",
+        "expires_at": "2027-03-14",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/power-bi-dax/SKILL.md",
@@ -34444,9 +34145,10 @@
       ],
       "limitations": "未明确声明工具版本、运行环境或依赖的必要性；性能诊断部分依赖 Power BI 分析工具与 DAX Studio。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-29T20:03:14.861761+08:00",
@@ -38080,7 +37782,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/resume-reviewer/SKILL.md|sha256:fdbdc0b2627c693bfab2857d5123a56f|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-30T09:25:54.585247+08:00"
+      "evaluated_at": "2026-09-30T09:25:54.585247+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-15",
+        "expires_at": "2027-03-14",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/resume-writer/SKILL.md",
@@ -38537,7 +38244,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/revenue-modeling/SKILL.md|sha256:ea6a62ae1bbeec7f2add3e434f426cec|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-30T09:35:47.607441+08:00"
+      "evaluated_at": "2026-09-30T09:35:47.607441+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-15",
+        "expires_at": "2027-03-14",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/retirement-projection/SKILL.md",
@@ -38587,8 +38299,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-15",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -39446,7 +39163,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/salary-negotiation/SKILL.md|sha256:51319c0234d324781de1cc1e66737ab5|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-30T09:47:39.080103+08:00"
+      "evaluated_at": "2026-09-30T09:47:39.080103+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-15",
+        "expires_at": "2027-03-14",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/safe-vs-priced-round/SKILL.md",
@@ -40003,7 +39725,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/screencast-capture/SKILL.md|sha256:ad02f16cb2345ab1498308a75974ba60|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-30T09:54:59.395842+08:00"
+      "evaluated_at": "2026-09-30T09:54:59.395842+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-15",
+        "expires_at": "2027-03-14",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/screening-rubric-builder/SKILL.md",
@@ -40370,7 +40097,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/secrets-hygiene/SKILL.md|sha256:7f0653bc4c5db1d6f426f3d828f4ef8e|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-02T13:21:00.730117+08:00"
+      "evaluated_at": "2026-10-02T13:21:00.730117+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-15",
+        "expires_at": "2027-03-14",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/secure-code-review/SKILL.md",
@@ -40821,7 +40553,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/sermon-writer/SKILL.md|sha256:b6f1057cdbcb54596667741e329b71e0|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-30T10:05:49.965933+08:00"
+      "evaluated_at": "2026-09-30T10:05:49.965933+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-15",
+        "expires_at": "2027-03-14",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/series-a-readiness/SKILL.md",
@@ -41549,7 +41286,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/skill-description-writer/SKILL.md|sha256:1cfa48f7f5d5d8e8d97aea12cd1776b5|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-30T10:22:36.443875+08:00"
+      "evaluated_at": "2026-09-30T10:22:36.443875+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-15",
+        "expires_at": "2027-03-14",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/skill-pack-curator/SKILL.md",
@@ -41725,7 +41467,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/skill-tester/SKILL.md|sha256:f9cb28b9330d02e952d4161a7a55e723|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-02T13:26:14.540408+08:00"
+      "evaluated_at": "2026-10-02T13:26:14.540408+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-15",
+        "expires_at": "2027-03-14",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/skillme/SKILL.md",
@@ -41912,7 +41659,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/sleep-optimizer/SKILL.md|sha256:c8cbf6e5ac43314fef6be467173dd052|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-30T10:28:42.485687+08:00"
+      "evaluated_at": "2026-09-30T10:28:42.485687+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-15",
+        "expires_at": "2027-03-14",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/soc2-evidence-helper/SKILL.md",
@@ -42000,7 +41752,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/soc2-evidence-helper/SKILL.md|sha256:607136095c80fb4e90fb17e6de6e11f1|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-02T13:26:50.989326+08:00"
+      "evaluated_at": "2026-10-02T13:26:50.989326+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-15",
+        "expires_at": "2027-03-14",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/social-caption-writer/SKILL.md",
@@ -42272,7 +42029,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/social-content-calendar/SKILL.md|sha256:2ece2cb8ef70a8dc6ce70f436ddf2d1c|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-02T06:47:05.223948+08:00"
+      "evaluated_at": "2026-10-02T06:47:05.223948+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-15",
+        "expires_at": "2027-03-14",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/sound-and-music-sync/SKILL.md",
@@ -43186,107 +42948,6 @@
       }
     },
     {
-      "skill_id": "gauss314/skills:skills/backtesting/SKILL.md",
-      "name": "backtesting",
-      "url": "https://github.com/gauss314/skills/blob/HEAD/skills/backtesting/SKILL.md",
-      "repo_url": "https://github.com/gauss314/skills",
-      "author": "gauss314",
-      "summary_zh": "面向量化研究的 Python 回测与验证框架，提供风险绩效比率、指标、事件驱动回测、组合优化、前瞻模拟和压力测试。适合策略研究、回测评估与模型验证场景。",
-      "skill_type": "tool_script",
-      "example_requests": [
-        "用 SPY 收益数据计算 30+ 风险与绩效比率",
-        "对 SMA 交叉策略做事件驱动回测和参数扫描"
-      ],
-      "key_features": [
-        "30+ numpy 向量化风险/绩效比率",
-        "事件驱动回测引擎与多种内置策略",
-        "Johnson SU + copula 前瞻模拟与压力测试"
-      ],
-      "main_category": {
-        "id": "finance",
-        "name": "金融与投资"
-      },
-      "candidate_domains": [
-        "dev",
-        "finance"
-      ],
-      "tags": [
-        "回测",
-        "量化研究",
-        "风险指标",
-        "组合优化",
-        "模拟"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "numpy",
-        "pandas",
-        "scipy.stats",
-        "statsmodels (optional)",
-        "pytest (for full validation suite)"
-      ],
-      "limitations": "参考文档为西班牙语且未随材料提供；未明确说明数据偏差、样本外验证局限和适用市场边界；平台兼容性未声明。",
-      "license": null,
-      "status": "recommended",
-      "reason_codes": [],
-      "first_seen": "2026-09-30T12:30:27+00:00",
-      "last_checked": "2026-10-01T01:48:26.427597+08:00",
-      "content_changed_at": null,
-      "content_fingerprint": "sha256:237c7a3e596909e5ca2e61e3ed474f02",
-      "source_type": "community_list",
-      "upstream_status": "ok",
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "manual_pick": true,
-      "manual_note": {
-        "added_at": "2026-10-07",
-        "reason": "用户收藏",
-        "from": "recommended",
-        "auto_status": "recommended"
-      },
-      "evaluation_rules_version": "1.3.0",
-      "quality_summary": {
-        "review_status": "single_pass",
-        "checks": {
-          "scope_match": {
-            "value": "pass",
-            "evidence": "材料描述为量化研究回测框架，包含风险/绩效比率、指标、事件驱动回测、组合优化与验证，直接属于金融与投资的研究和策略辅助范围；未见实盘下单核心功能。",
-            "informational": false
-          },
-          "purpose_clarity": {
-            "value": "pass",
-            "evidence": "明确说明实现五阶段回测方法论，并提供比率计算、指标、回测引擎、前瞻模拟、walk-forward、压力测试与基本面分析等具体能力，适合量化研究与策略回测场景。",
-            "informational": false
-          },
-          "instruction_completeness": {
-            "value": "pass",
-            "evidence": "提供文件地图、CLI 命令示例、库调用示例、依赖表和验证命令，足以理解主要用法与价值；参考文档未提供不构成核心理解障碍。",
-            "informational": false
-          },
-          "evidence_traceability": {
-            "value": "pass",
-            "evidence": "上游描述中的30+比率、10类指标、事件驱动引擎、Johnson SU+copula 前瞻模拟、walk-forward、压力测试、基本面分析均与正文功能列表、文件地图和命令示例一致。",
-            "informational": false
-          },
-          "dependency_transparency": {
-            "value": "pass",
-            "evidence": "明确列出必需依赖 numpy、pandas、scipy.stats，可选 statsmodels，并说明完整验证需 pytest；未声明平台但不影响判断适用条件。",
-            "informational": false
-          },
-          "risk_review": {
-            "value": "pass",
-            "evidence": "所读材料为回测与模拟工具说明，未见凭据外传、实盘下单、临床决策或诱导性风险内容；未发现需要排除的可疑行为。",
-            "informational": false
-          }
-        },
-        "verification_note": "材料提供 Quick Start CLI 示例、库调用示例、4 级验证套件命令（py scripts/validate.py）和 18 个 pytest 测试说明；未实际运行验证。",
-        "blocking_reasons": []
-      },
-      "last_evaluation_id": "gauss314/skills:skills/backtesting/SKILL.md|sha256:237c7a3e596909e5ca2e61e3ed474f02|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-01T01:48:26.411281+08:00"
-    },
-    {
       "skill_id": "expo/skills:plugins/expo/skills/expo-skill-feedback/SKILL.md",
       "name": "expo-skill-feedback",
       "url": "https://github.com/expo/skills/blob/HEAD/plugins/expo/skills/expo-skill-feedback/SKILL.md",
@@ -43380,2066 +43041,6 @@
         "expires_at": "2027-03-06",
         "reason": "用户暂不关注"
       }
-    },
-    {
-      "skill_id": "gauss314/skills:skills/barchart/SKILL.md",
-      "name": "barchart",
-      "url": "https://github.com/gauss314/skills/blob/HEAD/skills/barchart/SKILL.md",
-      "repo_url": "https://github.com/gauss314/skills",
-      "author": "gauss314",
-      "summary_zh": "通过抓取 Barchart 静态 HTML 获取美股及全球 ADR 的延迟行情、基本面、分析师评级、盈利预测、财务报表与公司简介，适合金融研究和基本面分析辅助。",
-      "skill_type": "tool_script",
-      "example_requests": [
-        "查询 AAPL 的报价和基本面数据",
-        "获取 GGAL 的季度利润表、资产负债表和现金流明细"
-      ],
-      "key_features": [
-        "无需 API key，仅依赖 requests",
-        "覆盖约 3 万+美股符号及全球 ADR",
-        "支持行情、基本面、财报、分析师与内部交易数据"
-      ],
-      "main_category": {
-        "id": "finance",
-        "name": "金融与投资"
-      },
-      "candidate_domains": [],
-      "tags": [
-        "股票数据",
-        "基本面分析",
-        "Barchart",
-        "数据抓取",
-        "金融研究"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "requests"
-      ],
-      "limitations": "数据延迟 15-20 分钟，非实时；依赖 Barchart 静态 HTML，AngularJS 客户端渲染的数据不可用；未说明平台兼容性与网站变更后的稳定性。",
-      "license": null,
-      "status": "candidate",
-      "reason_codes": [],
-      "first_seen": "2026-09-30T12:30:27+00:00",
-      "last_checked": "2026-10-01T04:55:27.293832+08:00",
-      "content_changed_at": null,
-      "content_fingerprint": "sha256:165207e1958b2057943419424ba01fcc",
-      "source_type": "community_list",
-      "upstream_status": "ok",
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
-      "evaluation_rules_version": "1.3.0",
-      "quality_summary": {
-        "review_status": "single_pass",
-        "checks": {
-          "scope_match": {
-            "value": "pass",
-            "evidence": "提供股票行情、基本面、分析师评级、盈利预测与财务报表数据抓取，属于金融与投资领域的研究和策略辅助工具，未命中硬性排除项。",
-            "informational": false
-          },
-          "purpose_clarity": {
-            "value": "pass",
-            "evidence": "明确说明用于从 Barchart 抓取美股及全球 ADR 的报价、基本面、内部交易、分析师评级、盈利预测、财务摘要、三大报表明细与公司简介，适用于金融研究/分析场景。",
-            "informational": false
-          },
-          "instruction_completeness": {
-            "value": "pass",
-            "evidence": "包含安装命令、脚本名、CLI 用法、多个 flag 示例、输出字段示例、端点说明与限制说明，足以理解其做法与价值。",
-            "informational": false
-          },
-          "evidence_traceability": {
-            "value": "pass",
-            "evidence": "上游描述与 SKILL.md 内容一致：均说明通过静态 HTML scraping 获取 Barchart 股票数据，无需 API key，延迟 15-20 分钟，覆盖约 3 万+美股符号及全球 ADR。",
-            "informational": false
-          },
-          "dependency_transparency": {
-            "value": "pass",
-            "evidence": "明确声明依赖为 pip install requests，并说明无需 API key；同时说明静态 HTML 抓取限制与部分 AngularJS 渲染数据不可用。",
-            "informational": false
-          },
-          "risk_review": {
-            "value": "pass",
-            "evidence": "所读材料为金融数据抓取脚本说明，未见凭据外传、实盘下单、临床决策、恶意命令或改变评估规则等风险内容。",
-            "informational": false
-          }
-        },
-        "verification_note": "材料提供了多个 CLI 示例、输出样例、字段表和端点说明，可作为验证方式；未提供自动化测试或验收清单。",
-        "blocking_reasons": []
-      },
-      "last_evaluation_id": "gauss314/skills:skills/barchart/SKILL.md|sha256:165207e1958b2057943419424ba01fcc|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-01T04:55:27.278789+08:00"
-    },
-    {
-      "skill_id": "gauss314/skills:skills/byma/SKILL.md",
-      "name": "byma",
-      "url": "https://github.com/gauss314/skills/blob/HEAD/skills/byma/SKILL.md",
-      "repo_url": "https://github.com/gauss314/skills",
-      "author": "gauss314",
-      "summary_zh": "用于从阿根廷 BYMA 公共市场数据 API 获取股票、CEDEARs、债券、期权、指数等面板行情、历史 OHLCV 和债券技术档案的命令行数据工具，适合阿根廷证券市场数据查询与研究。",
-      "skill_type": "tool_script",
-      "example_requests": [
-        "获取 BYMA 领涨股面板行情",
-        "查询 AL30 债券的历史 OHLCV 数据"
-      ],
-      "key_features": [
-        "覆盖 BYMA 股票、债券、期权、指数等面板",
-        "支持历史 OHLCV 与债券技术档案查询",
-        "无需 API key 的公共数据接口封装"
-      ],
-      "main_category": {
-        "id": "finance",
-        "name": "金融与投资"
-      },
-      "candidate_domains": [],
-      "tags": [
-        "市场数据",
-        "阿根廷证券",
-        "BYMA",
-        "历史行情",
-        "债券资料"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "BYMA 公共 API：open.bymadata.com.ar",
-        "Python 脚本 scripts/fetch_byma.py",
-        "网络访问",
-        "TLS/SSL 证书兼容，材料提到可能需处理 certifi 证书链或使用 verify=False"
-      ],
-      "limitations": "未提供脚本源码和具体 Python 依赖；API 无官方文档且端点可能变化；数据延迟约 15 分钟；使用 verify=False 存在 SSL 验证风险；需遵守 BYMA 使用条款和限频。",
-      "license": null,
-      "status": "candidate",
-      "reason_codes": [
-        "MISSING_DEPENDENCY",
-        "NEEDS_VERIFICATION"
-      ],
-      "first_seen": "2026-09-30T12:30:27+00:00",
-      "last_checked": "2026-10-01T04:58:51.188091+08:00",
-      "content_changed_at": null,
-      "content_fingerprint": "sha256:ca29b65290bc92f843d6f88e4ca3dff0",
-      "source_type": "community_list",
-      "upstream_status": "ok",
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
-      "evaluation_rules_version": "1.3.0",
-      "quality_summary": {
-        "review_status": "single_pass",
-        "checks": {
-          "scope_match": {
-            "value": "pass",
-            "evidence": "材料描述为从 BYMA 公共 API 获取阿根廷市场股票、CEDEARs、债券、期权、指数等行情与历史数据，属于金融与投资领域的研究与策略辅助数据工具。",
-            "informational": false
-          },
-          "purpose_clarity": {
-            "value": "pass",
-            "evidence": "明确说明用于提取 BYMA 市场数据，覆盖面板行情、历史 OHLCV、指数和债券技术档案，并给出典型命令与适用场景。",
-            "informational": false
-          },
-          "instruction_completeness": {
-            "value": "pass",
-            "evidence": "提供了脚本入口、命令示例、参数、端点表、符号约定、返回字段、错误码和限频建议，足以理解其做法与价值；未提供脚本源码但 SKILL.md 已说明核心用法。",
-            "informational": false
-          },
-          "evidence_traceability": {
-            "value": "pass",
-            "evidence": "介绍中的功能与正文命令、端点表和字段说明一致；核心能力有原文支持。",
-            "informational": false
-          },
-          "dependency_transparency": {
-            "value": "unknown",
-            "evidence": "材料说明依赖 BYMA 公共 API、网络访问、Python 脚本调用，并提到 certifi/SSL 证书问题和 verify=False；但未列出脚本运行所需的具体 Python 依赖或平台要求，未提供脚本源码。该缺口影响用户判断运行条件，属关键信息不完整。",
-            "informational": false
-          },
-          "risk_review": {
-            "value": "unknown",
-            "evidence": "材料明确说明脚本使用 verify=False 跳过 SSL 证书链验证，虽解释为兼容 BYMA 证书且连接仍加密，但属于可被中间人攻击利用的安全风险点；另称公共 API 无官方文档、端点可能变化。未见凭据外传、实盘下单或排除领域行为。",
-            "informational": false
-          }
-        },
-        "verification_note": "材料提供了大量命令示例、端点表、返回字段和错误码，并称 10 个公共端点已验证；未提供实际输出样例、测试或验收方法。",
-        "blocking_reasons": []
-      },
-      "last_evaluation_id": "gauss314/skills:skills/byma/SKILL.md|sha256:ca29b65290bc92f843d6f88e4ca3dff0|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-01T04:58:51.176834+08:00"
-    },
-    {
-      "skill_id": "gauss314/skills:skills/cafci/SKILL.md",
-      "name": "cafci",
-      "url": "https://github.com/gauss314/skills/blob/HEAD/skills/cafci/SKILL.md",
-      "repo_url": "https://github.com/gauss314/skills",
-      "author": "gauss314",
-      "summary_zh": "通过 CAFCI 公开数据查询阿根廷共同基金的目录、每日净值与规模、收益档案和持仓组合，适合基金筛选、比较和研究辅助。",
-      "skill_type": "tool_script",
-      "example_requests": [
-        "查询阿根廷 Money Market 基金按规模排名前 20",
-        "生成某只阿根廷共同基金的完整档案和持仓组合"
-      ],
-      "key_features": [
-        "覆盖 1152 只基金和 4615 个类别",
-        "支持目录、每日快照、基金档案与持仓查询",
-        "本地每日缓存与 openpyxl 解析 XLSX"
-      ],
-      "main_category": {
-        "id": "finance",
-        "name": "金融与投资"
-      },
-      "candidate_domains": [],
-      "tags": [
-        "基金数据",
-        "阿根廷市场",
-        "CAFCI",
-        "数据查询",
-        "投资研究"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "openpyxl",
-        "CAFCI 公开数据端点",
-        "defuddle.md 外部代理"
-      ],
-      "limitations": "依赖无官方文档的公开 API，端点可能变化；数据有延迟；持仓仅披露前约 14 项资产；未提供脚本源码与 REFERENCE.md 内容。",
-      "license": null,
-      "status": "candidate",
-      "reason_codes": [],
-      "first_seen": "2026-09-30T12:30:27+00:00",
-      "last_checked": "2026-10-01T04:59:00.570268+08:00",
-      "content_changed_at": null,
-      "content_fingerprint": "sha256:d40496a25156c24f3d35ca1670dd0f9f",
-      "source_type": "community_list",
-      "upstream_status": "ok",
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
-      "evaluation_rules_version": "1.3.0",
-      "quality_summary": {
-        "review_status": "single_pass",
-        "checks": {
-          "scope_match": {
-            "value": "pass",
-            "evidence": "提供阿根廷共同基金公开数据查询、快照、基金档案与持仓组合，属于金融与投资领域的研究与策略辅助。",
-            "informational": false
-          },
-          "purpose_clarity": {
-            "value": "pass",
-            "evidence": "明确用于查询阿根廷共同基金的目录、每日 VCP/资产规模/涨跌幅、单基金收益档案和持仓组合，场景具体。",
-            "informational": false
-          },
-          "instruction_completeness": {
-            "value": "pass",
-            "evidence": "给出脚本入口、命令示例、参数、缓存机制、端点表、返回字段和工作流，足以理解做法与价值。",
-            "informational": false
-          },
-          "evidence_traceability": {
-            "value": "pass",
-            "evidence": "介绍中的 1152 fondos、4615 clases、四数据源、无 API key、脚本命令与实际 SKILL.md 内容一致。",
-            "informational": false
-          },
-          "dependency_transparency": {
-            "value": "pass",
-            "evidence": "声明需要 openpyxl、使用公开无文档 API、外部代理 defuddle.md、缓存目录与请求间隔建议；未声明平台但不影响判断。",
-            "informational": false
-          },
-          "risk_review": {
-            "value": "pass",
-            "evidence": "材料未见凭据外传、实盘下单或违规内容；包含数据延迟、端点可能变化和不保证未来收益的提示。",
-            "informational": false
-          }
-        },
-        "verification_note": "材料提供命令示例、输出字段、缓存路径、错误码与建议工作流；未提供自动化测试或验收清单。",
-        "blocking_reasons": []
-      },
-      "last_evaluation_id": "gauss314/skills:skills/cafci/SKILL.md|sha256:d40496a25156c24f3d35ca1670dd0f9f|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-01T04:59:00.555112+08:00"
-    },
-    {
-      "skill_id": "gauss314/skills:skills/cboe-data/SKILL.md",
-      "name": "cboe-data",
-      "url": "https://github.com/gauss314/skills/blob/HEAD/skills/cboe-data/SKILL.md",
-      "repo_url": "https://github.com/gauss314/skills",
-      "author": "gauss314",
-      "summary_zh": "通过 CBOE 公开端点获取延迟指数、股票、期货、期权链和市场统计数据的命令行技能，适合金融市场研究、行情观察和期权数据分析场景。",
-      "skill_type": "tool_script",
-      "example_requests": [
-        "查询 _VIX 的延迟报价和 30 日隐含波动率",
-        "获取 AAPL 的完整期权链及 Greeks 数据"
-      ],
-      "key_features": [
-        "无需 API key 获取 CBOE 公开延迟数据",
-        "覆盖指数、股票、VX 期货、期权链与市场摘要",
-        "支持保存 JSON、静默输出和多个市场参数"
-      ],
-      "main_category": {
-        "id": "finance",
-        "name": "金融与投资"
-      },
-      "candidate_domains": [],
-      "tags": [
-        "市场数据",
-        "CBOE",
-        "期权",
-        "期货",
-        "行情查询",
-        "金融研究"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "Python",
-        "网络访问 CBOE 公开端点"
-      ],
-      "limitations": "数据为延迟数据且端点非官方公开免费 API，可能随时变化；脚本本体与参考文档未提供，Python 依赖库和版本未说明；需遵守服务条款和请求频率建议。",
-      "license": null,
-      "status": "candidate",
-      "reason_codes": [],
-      "first_seen": "2026-09-30T12:30:27+00:00",
-      "last_checked": "2026-10-01T05:01:19.497813+08:00",
-      "content_changed_at": null,
-      "content_fingerprint": "sha256:4f8e7a1571f4e830acc1d3b5446eaf54",
-      "source_type": "community_list",
-      "upstream_status": "ok",
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
-      "evaluation_rules_version": "1.3.0",
-      "quality_summary": {
-        "review_status": "single_pass",
-        "checks": {
-          "scope_match": {
-            "value": "pass",
-            "evidence": "技能提供从 CBOE 公开端点获取延迟行情、期货、期权链和市场统计的脚本，属于金融与投资领域的研究和策略辅助数据获取，不命中硬性排除。",
-            "informational": false
-          },
-          "purpose_clarity": {
-            "value": "pass",
-            "evidence": "明确说明用于通过 CBOE 公开 API 获取指数、股票、期货、期权和市场摘要数据，适用场景包括查询延迟报价、历史波动率、期权链、最活跃合约等。",
-            "informational": false
-          },
-          "instruction_completeness": {
-            "value": "pass",
-            "evidence": "提供了命令行用法、多个子命令示例、端点列表、字段说明、参数标志和错误处理说明，足以理解其做法与价值；脚本本体未提供但属于一般文档缺口。",
-            "informational": false
-          },
-          "evidence_traceability": {
-            "value": "pass",
-            "evidence": "上游描述与 SKILL.md 内容一致：描述称获取 CBOE 延迟数据、VX 期货、图表、最活跃、市场摘要、符号查询、期货产品且无需 API key；正文逐项给出命令与端点。",
-            "informational": false
-          },
-          "dependency_transparency": {
-            "value": "unknown",
-            "evidence": "材料显示需要 Python 和可访问 CBOE 公开端点的网络环境，但未列出 Python 版本、依赖库或运行环境；脚本文件未提供，无法确认具体依赖。",
-            "informational": true
-          },
-          "risk_review": {
-            "value": "pass",
-            "evidence": "所读材料为市场数据获取脚本说明，未见凭据外传、实盘下单、临床决策或提示注入等明显风险；材料中无要求改变评估规则的内容。",
-            "informational": false
-          }
-        },
-        "verification_note": "材料提供大量命令示例、端点表和字段说明，但未提供脚本文件内容、运行结果或验收方法；无法在本次材料中实测。",
-        "blocking_reasons": []
-      },
-      "last_evaluation_id": "gauss314/skills:skills/cboe-data/SKILL.md|sha256:4f8e7a1571f4e830acc1d3b5446eaf54|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-01T05:01:19.485469+08:00"
-    },
-    {
-      "skill_id": "gauss314/skills:skills/companiesmarketcap/SKILL.md",
-      "name": "companiesmarketcap",
-      "url": "https://github.com/gauss314/skills/blob/HEAD/skills/companiesmarketcap/SKILL.md",
-      "repo_url": "https://github.com/gauss314/skills",
-      "author": "gauss314",
-      "summary_zh": "用于抓取 CompaniesMarketCap 的金融排名、股票历史市值和ETF持仓的命令行脚本，适合金融数据收集与研究辅助场景。",
-      "skill_type": "tool_script",
-      "example_requests": [
-        "获取按市值排名的公司列表",
-        "查询NVDA的历史市值数据"
-      ],
-      "key_features": [
-        "支持12项金融排名指标",
-        "无需API key，使用公开CSV下载",
-        "支持股票历史市值与ETF持仓抓取"
-      ],
-      "main_category": {
-        "id": "finance",
-        "name": "金融与投资"
-      },
-      "candidate_domains": [],
-      "tags": [
-        "金融数据抓取",
-        "公司排名",
-        "股票市值",
-        "ETF持仓",
-        "命令行工具"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "requests",
-        "beautifulsoup4"
-      ],
-      "limitations": "未提供脚本实际内容、示例输出和详细参考文档；目标站点无官方API，使用需遵守服务条款并自行控制请求频率。",
-      "license": null,
-      "status": "candidate",
-      "reason_codes": [],
-      "first_seen": "2026-09-30T12:30:27+00:00",
-      "last_checked": "2026-10-01T05:01:20.701959+08:00",
-      "content_changed_at": null,
-      "content_fingerprint": "sha256:463be0ec12eb2e33e05e2d4b8e487ee6",
-      "source_type": "community_list",
-      "upstream_status": "ok",
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
-      "evaluation_rules_version": "1.3.0",
-      "quality_summary": {
-        "review_status": "single_pass",
-        "checks": {
-          "scope_match": {
-            "value": "pass",
-            "evidence": "属于金融与投资领域的数据抓取工具，用于获取公司市值、财务排名、股票历史市值和ETF持仓，直接服务金融与投资主分类；未命中硬性排除项。",
-            "informational": false
-          },
-          "purpose_clarity": {
-            "value": "pass",
-            "evidence": "明确说明用于抓取 CompaniesMarketCap 的金融排名、股票历史市值和ETF持仓，并给出命令行使用场景，具备实际价值。",
-            "informational": false
-          },
-          "instruction_completeness": {
-            "value": "pass",
-            "evidence": "提供安装命令、脚本路径、多个命令示例、参数表、指标表和输出选项，足以理解其做法与价值；更详细文档被指向但未提供，不构成核心理解阻断。",
-            "informational": false
-          },
-          "evidence_traceability": {
-            "value": "pass",
-            "evidence": "上游描述与正文一致：描述称可抓取排名、股票历史和ETF持仓且无需API key，正文同样说明通过公开CSV下载实现，并列出脚本与命令。",
-            "informational": false
-          },
-          "dependency_transparency": {
-            "value": "pass",
-            "evidence": "声明安装依赖 requests 与 beautifulsoup4，并说明使用公开CSV端点、无需API key，同时提示速率限制；未声明操作系统等更细环境，但不影响判断核心价值。",
-            "informational": false
-          },
-          "risk_review": {
-            "value": "pass",
-            "evidence": "材料未见明显可疑行为；提示遵守目标站点服务条款并实施速率限制。抓取公开站点数据可能存在合规边界，但当前材料未显示明确违规。",
-            "informational": false
-          }
-        },
-        "verification_note": "材料提供了命令示例和输出选项，但未提供示例输出、验收标准或验证方法；详细文档指向 references/REFERENCE.md，未在本次材料中提供。",
-        "blocking_reasons": []
-      },
-      "last_evaluation_id": "gauss314/skills:skills/companiesmarketcap/SKILL.md|sha256:463be0ec12eb2e33e05e2d4b8e487ee6|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-01T05:01:20.687557+08:00"
-    },
-    {
-      "skill_id": "gauss314/skills:skills/finnhub/SKILL.md",
-      "name": "finnhub",
-      "url": "https://github.com/gauss314/skills/blob/HEAD/skills/finnhub/SKILL.md",
-      "repo_url": "https://github.com/gauss314/skills",
-      "author": "gauss314",
-      "summary_zh": "Finnhub 金融数据 API 使用指南，说明如何获取 API Key、调用报价、公司资料、新闻、earnings 等端点，并区分免费与付费能力。适合股票、外汇和加密货币数据查询与研究辅助。",
-      "skill_type": "reference",
-      "example_requests": [
-        "查询 AAPL 的实时股价和公司资料",
-        "获取某家公司最近两周的新闻"
-      ],
-      "key_features": [
-        "覆盖报价、公司资料、新闻、earnings 等金融数据",
-        "明确标注免费与 Premium 端点差异",
-        "提供 Python 调用示例与脚本入口"
-      ],
-      "main_category": {
-        "id": "finance",
-        "name": "金融与投资"
-      },
-      "candidate_domains": [],
-      "tags": [
-        "金融数据",
-        "API",
-        "股票",
-        "外汇",
-        "加密货币",
-        "新闻"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "Finnhub API Key",
-        "Python requests 示例",
-        "网络访问"
-      ],
-      "limitations": "免费计划端点较有限；脚本文件与 references/ENDPOINTS.md 未在本次材料中提供，无法核验完整脚本内容；免费端点政策可能变化。",
-      "license": null,
-      "status": "recommended",
-      "reason_codes": [],
-      "first_seen": "2026-09-30T12:30:27+00:00",
-      "last_checked": "2026-10-01T05:04:35.420668+08:00",
-      "content_changed_at": null,
-      "content_fingerprint": "sha256:d3f7a041a99af080ed68db13d12923d4",
-      "source_type": "community_list",
-      "upstream_status": "ok",
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "manual_pick": true,
-      "manual_note": {
-        "added_at": "2026-10-07",
-        "reason": "用户收藏",
-        "from": "recommended",
-        "auto_status": "recommended"
-      },
-      "evaluation_rules_version": "1.3.0",
-      "quality_summary": {
-        "review_status": "single_pass",
-        "checks": {
-          "scope_match": {
-            "value": "pass",
-            "evidence": "材料描述为金融数据 API 使用技能，覆盖股票、外汇、加密货币、基本面与新闻，属于金融与投资领域，未命中硬性排除项。",
-            "informational": false
-          },
-          "purpose_clarity": {
-            "value": "pass",
-            "evidence": "说明用于通过 Finnhub API 获取实时报价、公司资料、新闻、earnings、指标等，并明确免费与付费端点差异，适合金融数据查询与研究场景。",
-            "informational": false
-          },
-          "instruction_completeness": {
-            "value": "pass",
-            "evidence": "提供注册获取 API Key、认证方式、速率限制、多个 Python 调用示例、脚本列表与免费/付费端点覆盖表，足以理解做法与价值。",
-            "informational": false
-          },
-          "evidence_traceability": {
-            "value": "pass",
-            "evidence": "上游描述与实际内容一致：均为 Finnhub 金融数据 API 指南，且实际内容进一步说明免费端点限制、认证、示例与脚本。",
-            "informational": false
-          },
-          "dependency_transparency": {
-            "value": "unknown",
-            "evidence": "材料声明需要 Finnhub API Key、HTTP 请求环境，示例使用 Python requests，并提示环境变量；但未提供脚本文件内容，无法确认脚本依赖是否完整。",
-            "informational": true
-          },
-          "risk_review": {
-            "value": "pass",
-            "evidence": "所读材料为 API 使用指南，未见凭据外传、实盘下单、临床决策或排除领域内容；还明确提醒不要硬编码 API key。",
-            "informational": false
-          }
-        },
-        "verification_note": "材料提供 Python 示例请求、脚本列表与免费/付费端点表，并称基于 2026 年 6 月免费 API key 实测；未提供脚本文件内容或验收结果。",
-        "blocking_reasons": []
-      },
-      "last_evaluation_id": "gauss314/skills:skills/finnhub/SKILL.md|sha256:d3f7a041a99af080ed68db13d12923d4|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-01T05:04:35.408433+08:00"
-    },
-    {
-      "skill_id": "gauss314/skills:skills/fred-macro/SKILL.md",
-      "name": "fred-macro",
-      "url": "https://github.com/gauss314/skills/blob/HEAD/skills/fred-macro/SKILL.md",
-      "repo_url": "https://github.com/gauss314/skills",
-      "author": "gauss314",
-      "summary_zh": "该技能介绍如何通过美联储 FRED API 获取美国宏观经济时间序列数据，适合宏观研究、金融数据抓取和经济指标查询场景。",
-      "skill_type": "reference",
-      "example_requests": [
-        "下载 2020 年以来的美国 GDP 数据",
-        "搜索与 inflation 相关的 FRED 宏观序列"
-      ],
-      "key_features": [
-        "覆盖 840,000+ 条 FRED 宏观时间序列",
-        "提供 Python 请求与 pandas 处理示例",
-        "列出常用宏观指标系列与端点用法"
-      ],
-      "main_category": {
-        "id": "finance",
-        "name": "金融与投资"
-      },
-      "candidate_domains": [
-        "finance"
-      ],
-      "tags": [
-        "宏观经济",
-        "FRED API",
-        "数据获取",
-        "研究辅助",
-        "美国经济指标"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "FRED API Key",
-        "Python requests",
-        "pandas"
-      ],
-      "limitations": "引用的脚本与 SERIES_REFERENCE.md 未提供；数据更新时间、脚本依赖和运行环境未完整说明；材料主要为西班牙语。",
-      "license": null,
-      "status": "candidate",
-      "reason_codes": [],
-      "first_seen": "2026-09-30T12:30:27+00:00",
-      "last_checked": "2026-10-01T05:09:05.477905+08:00",
-      "content_changed_at": null,
-      "content_fingerprint": "sha256:3e81775da4427504f15a9324e1cf02c5",
-      "source_type": "community_list",
-      "upstream_status": "ok",
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
-      "evaluation_rules_version": "1.3.0",
-      "quality_summary": {
-        "review_status": "single_pass",
-        "checks": {
-          "scope_match": {
-            "value": "pass",
-            "evidence": "条目提供 FRED 宏观经济数据 API 的查询与下载方法，属于金融与投资领域的宏观数据获取与研究辅助，不命中硬性排除项。",
-            "informational": false
-          },
-          "purpose_clarity": {
-            "value": "pass",
-            "evidence": "明确说明用于访问美联储经济数据，覆盖 GDP、CPI、利率、就业、M2、VIX、国债等宏观序列，适合宏观经济研究与数据获取场景。",
-            "informational": false
-          },
-          "instruction_completeness": {
-            "value": "pass",
-            "evidence": "包含 API Key 获取、端点列表、响应格式、Python 示例、rate limit、常用系列与最佳实践，足以理解其做法与价值；引用的脚本和参考文件未提供但不影响核心说明理解。",
-            "informational": false
-          },
-          "evidence_traceability": {
-            "value": "pass",
-            "evidence": "上游介绍称免费 FRED 宏观数据 API，正文同样描述官方 API、840K+ 序列、端点与 Python 调用方式，介绍与实际内容一致。",
-            "informational": false
-          },
-          "dependency_transparency": {
-            "value": "unknown",
-            "evidence": "声明需要 FRED API Key、网络访问，示例使用 Python requests/pandas；但未提供脚本实际依赖、运行环境或引用文件内容。该缺口不阻断判断核心价值。",
-            "informational": true
-          },
-          "risk_review": {
-            "value": "pass",
-            "evidence": "所读材料为公开宏观数据 API 使用指南，未见凭据外传、实盘下单、临床决策或其他明显可疑行为；材料中提示不要硬编码 API Key。",
-            "informational": false
-          }
-        },
-        "verification_note": "材料提供 Python 调用示例、端点说明和响应格式示例，但未提供脚本实际运行结果、验收方法或引用文件内容。",
-        "blocking_reasons": []
-      },
-      "last_evaluation_id": "gauss314/skills:skills/fred-macro/SKILL.md|sha256:3e81775da4427504f15a9324e1cf02c5|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-01T05:09:05.460119+08:00"
-    },
-    {
-      "skill_id": "gauss314/skills:skills/google-finance/SKILL.md",
-      "name": "google-finance",
-      "url": "https://github.com/gauss314/skills/blob/HEAD/skills/google-finance/SKILL.md",
-      "repo_url": "https://github.com/gauss314/skills",
-      "author": "gauss314",
-      "summary_zh": "该技能通过非官方 Google Finance batchexecute RPC 获取股票行情、分钟/日线 OHLC、财务、分析师意见、指数与行业热图，适合个人研究、原型和本地回测数据准备，不适合生产交易或公开数据服务。",
-      "skill_type": "tool_script",
-      "example_requests": [
-        "查询 AAPL:NASDAQ 的实时报价和完整公司信息",
-        "获取 GGAL:BCBA 的日线历史、分析师评级和新闻快照"
-      ],
-      "key_features": [
-        "无需 API key 调用 Google Finance 内部 batchexecute",
-        "支持 1 分钟/5 分钟日内 OHLC 与约 6 个月日线",
-        "覆盖财务、分析师意见、全球指数与行业热图"
-      ],
-      "main_category": {
-        "id": "finance",
-        "name": "金融与投资"
-      },
-      "candidate_domains": [],
-      "tags": [
-        "金融数据",
-        "行情获取",
-        "非官方API",
-        "CLI工具",
-        "研究原型"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "Python 脚本 scripts/fetch_gfinance.py",
-        "网络访问 Google Finance batchexecute 端点",
-        "HTTP 请求依赖（材料中提及 requests 错误处理）"
-      ],
-      "limitations": "使用非官方逆向 RPC，可能随时失效或触发限流；响应为位置数组，字段变动可能导致错误解析；材料明确不建议用于生产交易、公开数据服务、高请求量或数据再分发；引用文档和脚本正文未提供。",
-      "license": null,
-      "status": "candidate",
-      "reason_codes": [
-        "NEEDS_VERIFICATION"
-      ],
-      "first_seen": "2026-09-30T12:30:27+00:00",
-      "last_checked": "2026-10-01T05:13:09.092472+08:00",
-      "content_changed_at": null,
-      "content_fingerprint": "sha256:db595953738078136972e06b9dfd9ffa",
-      "source_type": "community_list",
-      "upstream_status": "ok",
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
-      "evaluation_rules_version": "1.3.0",
-      "quality_summary": {
-        "review_status": "single_pass",
-        "checks": {
-          "scope_match": {
-            "value": "pass",
-            "evidence": "材料描述的是通过 Google Finance 内部 RPC 获取行情、财务、分析师、指数等金融数据，属于金融与投资领域的研究与策略辅助，未命中硬性排除项。",
-            "informational": false
-          },
-          "purpose_clarity": {
-            "value": "pass",
-            "evidence": "明确说明用于获取 Google Finance 数据，覆盖 quote、OHLC、financials、earnings、analyst recommendations、indices、sectors 等，并给出适用与不适用场景。",
-            "informational": false
-          },
-          "instruction_completeness": {
-            "value": "pass",
-            "evidence": "提供 Quick start、19 种 CLI 模式、符号格式、输出参数、错误处理与限制说明，足以理解做法与价值；引用的参考文档未提供但不影响核心理解。",
-            "informational": false
-          },
-          "evidence_traceability": {
-            "value": "pass",
-            "evidence": "上游介绍与实际 SKILL.md 内容一致，均指向通过 batchexecute 获取 Google Finance 数据的脚本与文档。",
-            "informational": false
-          },
-          "dependency_transparency": {
-            "value": "unknown",
-            "evidence": "材料显示需要 Python 脚本、网络访问、requests 类 HTTP 调用和 Google Finance 非官方端点，但未提供脚本依赖清单、运行环境版本或实际脚本文件；这些缺口不阻断理解用途，但影响生产适用判断。",
-            "informational": true
-          },
-          "risk_review": {
-            "value": "unknown",
-            "evidence": "材料明确使用非官方内部 RPC、绕过 consent cookies、逆向工程端点，并提示可能违反服务条款、IP 封禁和不稳定风险；未见凭据外传或实盘下单，但合规与稳定性需复核。",
-            "informational": false
-          }
-        },
-        "verification_note": "材料提供多个 CLI 示例命令、输出选项和参考文档入口，但未提供实际脚本内容、运行结果或验收方法；引用的 LIMITATIONS、COOKBOOK 等文件未在本次材料中给出。",
-        "blocking_reasons": []
-      },
-      "last_evaluation_id": "gauss314/skills:skills/google-finance/SKILL.md|sha256:db595953738078136972e06b9dfd9ffa|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-01T05:13:09.080645+08:00"
-    },
-    {
-      "skill_id": "gauss314/skills:skills/historyofmarket/SKILL.md",
-      "name": "historyofmarket",
-      "url": "https://github.com/gauss314/skills/blob/HEAD/skills/historyofmarket/SKILL.md",
-      "repo_url": "https://github.com/gauss314/skills",
-      "author": "gauss314",
-      "summary_zh": "该技能通过 historyofmarket.com 的公开 API 访问美股指数、估值、回撤、成分股和宏观历史数据，并提供重建指数成分与板块轮动分析的脚本，适合金融市场历史研究与策略辅助。",
-      "skill_type": "reference",
-      "example_requests": [
-        "查询 S&P 500 的历史 Shiller CAPE 数据",
-        "重建 2020-01-01 的 Nasdaq 100 成分股"
-      ],
-      "key_features": [
-        "88 个美股历史数据 JSON 端点",
-        "CAPE、回撤原因与驱动分解数据",
-        "指数历史成分重建脚本"
-      ],
-      "main_category": {
-        "id": "finance",
-        "name": "金融与投资"
-      },
-      "candidate_domains": [],
-      "tags": [
-        "金融数据",
-        "市场历史",
-        "API",
-        "指数研究",
-        "宏观数据"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "historyofmarket.com 公开 API",
-        "curl 或等效 HTTP 客户端",
-        "Python 运行脚本"
-      ],
-      "limitations": "未说明脚本依赖、Python 版本、数据更新频率与数据质量验证方法；金融回测或研究限制未充分说明。",
-      "license": null,
-      "status": "candidate",
-      "reason_codes": [],
-      "first_seen": "2026-09-30T12:30:27+00:00",
-      "last_checked": "2026-10-01T05:13:26.475854+08:00",
-      "content_changed_at": null,
-      "content_fingerprint": "sha256:e781d298f21c6121f2e04dde7b56de1b",
-      "source_type": "community_list",
-      "upstream_status": "ok",
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
-      "evaluation_rules_version": "1.3.0",
-      "quality_summary": {
-        "review_status": "single_pass",
-        "checks": {
-          "scope_match": {
-            "value": "pass",
-            "evidence": "提供美股指数与宏观历史数据的公开 API 访问与脚本，直接服务金融与投资领域的数据查询与研究辅助。",
-            "informational": false
-          },
-          "purpose_clarity": {
-            "value": "pass",
-            "evidence": "明确说明用于访问 historyofmarket.com 的 88 个美国市场历史数据集，覆盖估值、回撤、成分股、宏观等研究场景。",
-            "informational": false
-          },
-          "instruction_completeness": {
-            "value": "pass",
-            "evidence": "给出数据覆盖表、示例 curl 端点、脚本用途与命令行用法，以及参考文档和文件结构，足以理解做法与价值。",
-            "informational": false
-          },
-          "evidence_traceability": {
-            "value": "pass",
-            "evidence": "SKILL.md 描述与正文中的 API、数据集、脚本和参考文档一致，核心功能有原文支持。",
-            "informational": false
-          },
-          "dependency_transparency": {
-            "value": "unknown",
-            "evidence": "说明无需 API key、CORS 自由，并列出 curl 与 Python 脚本；但未提供脚本运行依赖、Python 版本或网络环境要求，未影响核心判断。",
-            "informational": true
-          },
-          "risk_review": {
-            "value": "pass",
-            "evidence": "材料为公开金融历史数据访问说明，未见凭据外传、实盘下单、临床决策或越权指令等明显风险。",
-            "informational": false
-          }
-        },
-        "verification_note": "材料提供多个 curl 示例端点和脚本命令行用法，可用于验证数据访问与脚本用途；未提供验收标准或输出样例。",
-        "blocking_reasons": []
-      },
-      "last_evaluation_id": "gauss314/skills:skills/historyofmarket/SKILL.md|sha256:e781d298f21c6121f2e04dde7b56de1b|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-01T05:13:26.460130+08:00"
-    },
-    {
-      "skill_id": "gauss314/skills:skills/investing/SKILL.md",
-      "name": "investing",
-      "url": "https://github.com/gauss314/skills/blob/HEAD/skills/investing/SKILL.md",
-      "repo_url": "https://github.com/gauss314/skills",
-      "author": "gauss314",
-      "summary_zh": "通过解析 Investing.com 公开 HTML 获取股票、商品、指数、外汇、ETF 和加密货币的报价、历史 OHLCV 及基本面数据，适合金融数据查询与研究辅助。",
-      "skill_type": "tool_script",
-      "example_requests": [
-        "查询黄金当前报价并保存为 JSON",
-        "获取苹果公司利润表和财务比率"
-      ],
-      "key_features": [
-        "无需 API key，解析 Investing.com 公开 HTML",
-        "支持报价、历史、财务报表、分红与盈利数据",
-        "明确声明需使用 curl_cffi 绕过 Cloudflare TLS 检测"
-      ],
-      "main_category": {
-        "id": "finance",
-        "name": "金融与投资"
-      },
-      "candidate_domains": [],
-      "tags": [
-        "金融数据",
-        "网页抓取",
-        "行情查询",
-        "基本面数据",
-        "Investing.com"
-      ],
-      "platform_declared": "Windows/Mac/Linux（针对 curl_cffi wheels 的说明）",
-      "dependencies_declared": [
-        "curl_cffi"
-      ],
-      "limitations": "依赖 Cloudflare 绕过方式，可能随时失效或被封 IP；数据有延迟；历史数据默认分页较少；未提供脚本与参考文档正文；抓取第三方网站的合规性需自行评估。",
-      "license": null,
-      "status": "candidate",
-      "reason_codes": [
-        "NEEDS_VERIFICATION"
-      ],
-      "first_seen": "2026-09-30T12:30:27+00:00",
-      "last_checked": "2026-10-01T05:17:47.365499+08:00",
-      "content_changed_at": null,
-      "content_fingerprint": "sha256:e6f92310b40b26df808c85c2bc9dff2f",
-      "source_type": "community_list",
-      "upstream_status": "ok",
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
-      "evaluation_rules_version": "1.3.0",
-      "quality_summary": {
-        "review_status": "single_pass",
-        "checks": {
-          "scope_match": {
-            "value": "pass",
-            "evidence": "技能用于从 Investing.com 抓取行情、历史、基本面等金融数据，属于金融与投资领域的研究与策略辅助数据获取，不命中硬性排除项。",
-            "informational": false
-          },
-          "purpose_clarity": {
-            "value": "pass",
-            "evidence": "明确说明用于提取 Investing.com 的报价、历史 OHLCV、财务、分红、盈利和公司资料，适合金融数据查询场景。",
-            "informational": false
-          },
-          "instruction_completeness": {
-            "value": "pass",
-            "evidence": "提供安装依赖、命令示例、模式表、参数、输出 JSON 结构、限制与注意事项，足以理解用法与价值。",
-            "informational": false
-          },
-          "evidence_traceability": {
-            "value": "pass",
-            "evidence": "介绍中的 HTML scrape、无 API key、curl_cffi 依赖、quote/historical/financials 等模式与正文一致，引用支持核心功能。",
-            "informational": false
-          },
-          "dependency_transparency": {
-            "value": "pass",
-            "evidence": "明确声明必须安装 curl_cffi，说明 Cloudflare 反爬、速率限制、可能封 IP 与数据延迟；未提供脚本内容但不影响判断依赖条件。",
-            "informational": false
-          },
-          "risk_review": {
-            "value": "unknown",
-            "evidence": "材料明确通过 HTML 抓取并绕过 Cloudflare TLS 指纹检测，同时提示遵守服务条款；未见凭据外传或实盘下单，但抓取第三方网站的合规与稳定性存在需复核疑点。",
-            "informational": false
-          }
-        },
-        "verification_note": "材料提供命令示例、输出 JSON 示例、速率限制与故障说明，但未提供可复现的验收测试或脚本内容；引用文件 fetch_investing.py 与 REFERENCE.md 未在材料中展开。",
-        "blocking_reasons": []
-      },
-      "last_evaluation_id": "gauss314/skills:skills/investing/SKILL.md|sha256:e6f92310b40b26df808c85c2bc9dff2f|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-01T05:17:47.351692+08:00"
-    },
-    {
-      "skill_id": "gauss314/skills:skills/indec/SKILL.md",
-      "name": "indec",
-      "url": "https://github.com/gauss314/skills/blob/HEAD/skills/indec/SKILL.md",
-      "repo_url": "https://github.com/gauss314/skills",
-      "author": "gauss314",
-      "summary_zh": "用于通过阿根廷官方时间序列 API 获取 INDEC、BCRA 等机构的宏观与社会经济数据，支持通胀、汇率、工资、储备等指标查询及服务端变换与聚合。适合阿根廷宏观研究、经济数据分析和指标监控场景。",
-      "skill_type": "tool_script",
-      "example_requests": [
-        "查询阿根廷最近12个月的IPC数据",
-        "把阿根廷每日汇率聚合为月度收盘价"
-      ],
-      "key_features": [
-        "覆盖约4250条阿根廷官方宏观与社会时间序列",
-        "无需认证或 API key，调用官方公开数据接口",
-        "支持服务端同比、年初至今变化与时间聚合"
-      ],
-      "main_category": {
-        "id": "finance",
-        "name": "金融与投资"
-      },
-      "candidate_domains": [],
-      "tags": [
-        "宏观经济",
-        "阿根廷",
-        "时间序列",
-        "官方数据",
-        "CLI 工具"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "apis.datos.gob.ar/series 公开 API",
-        "scripts/fetch_indec.py 脚本",
-        "Python 运行环境（由命令 `py` 暗示，未明确版本）"
-      ],
-      "limitations": "单次请求最多1000个数据点；--last 与 --sort/--limit/--offset 不兼容；混合频率多系列需显式聚合；存在停更系列与官方数据发布滞后；脚本依赖与运行环境未完整说明。",
-      "license": null,
-      "status": "candidate",
-      "reason_codes": [],
-      "first_seen": "2026-09-30T12:30:27+00:00",
-      "last_checked": "2026-10-01T05:17:47.512369+08:00",
-      "content_changed_at": null,
-      "content_fingerprint": "sha256:df831068318aadb253276b790501e6a5",
-      "source_type": "community_list",
-      "upstream_status": "ok",
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
-      "evaluation_rules_version": "1.3.0",
-      "quality_summary": {
-        "review_status": "single_pass",
-        "checks": {
-          "scope_match": {
-            "value": "pass",
-            "evidence": "技能围绕阿根廷宏观与社会经济时间序列数据获取，属于金融与投资领域的研究与策略辅助数据工具；未见实盘下单、临床决策或凭据外传等排除项。",
-            "informational": false
-          },
-          "purpose_clarity": {
-            "value": "pass",
-            "evidence": "明确说明用于通过官方 Series de Tiempo API 获取 INDEC、BCRA、经济部等机构的宏观与社会指标，并给出通胀、汇率、工资、储备等具体场景。",
-            "informational": false
-          },
-          "instruction_completeness": {
-            "value": "pass",
-            "evidence": "提供 Quick start 命令、19 个 CLI 模式、主要 flags、典型用例、限制说明和参考文档结构，足以理解其做法与价值；未提供的脚本细节不构成核心理解障碍。",
-            "informational": false
-          },
-          "evidence_traceability": {
-            "value": "pass",
-            "evidence": "上游介绍与实际 SKILL.md 内容一致：均描述为阿根廷官方时间序列 API 封装，覆盖约4250系列、无需认证、支持服务端变换与时间聚合。",
-            "informational": false
-          },
-          "dependency_transparency": {
-            "value": "unknown",
-            "evidence": "材料声明使用公开 HTTP API、无需 API key，并给出 `py scripts/fetch_indec.py` 命令，暗示需要 Python 与脚本文件；但未明确 Python 版本、依赖包、网络要求或运行环境。该缺口不阻断理解价值，但影响适用条件判断。",
-            "informational": true
-          },
-          "risk_review": {
-            "value": "pass",
-            "evidence": "所读材料为公开宏观数据查询说明，未见凭据收集、外传、实盘下单、临床决策或规避安全控制等可疑行为；对上游不可信内容未见需要执行的指令。",
-            "informational": false
-          }
-        },
-        "verification_note": "材料提供多个 bash/CLI 示例命令与用例，如查询 IPC、EMAE、汇率、搜索系列、组合多系列；未提供验收标准、测试输出或脚本实际运行结果。",
-        "blocking_reasons": []
-      },
-      "last_evaluation_id": "gauss314/skills:skills/indec/SKILL.md|sha256:df831068318aadb253276b790501e6a5|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-01T05:17:47.499252+08:00"
-    },
-    {
-      "skill_id": "gauss314/skills:skills/macrotrends/SKILL.md",
-      "name": "macrotrends",
-      "url": "https://github.com/gauss314/skills/blob/HEAD/skills/macrotrends/SKILL.md",
-      "repo_url": "https://github.com/gauss314/skills",
-      "author": "gauss314",
-      "summary_zh": "抓取Macrotrends网站的上市公司历史财务数据，包括财务报表、比率、员工数等内容，适用于金融分析和研究",
-      "skill_type": "tool_script",
-      "example_requests": [
-        "获取苹果公司15年间的完整财务报表",
-        "下载英伟达最新季度利润表"
-      ],
-      "key_features": [
-        "覆盖美国三大交易所+ADRs",
-        "支持年度与季度数据",
-        "内置超过6500种股票代码"
-      ],
-      "main_category": {
-        "id": "finance",
-        "name": "金融与投资"
-      },
-      "candidate_domains": [
-        "finance"
-      ],
-      "tags": [
-        "数据采集",
-        "财务分析"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "requests",
-        "beautifulsoup4"
-      ],
-      "limitations": "网页结构变化可能导致脚本失效；需遵守Macrotrends服务条款",
-      "license": null,
-      "status": "candidate",
-      "reason_codes": [],
-      "first_seen": "2026-09-30T12:30:27+00:00",
-      "last_checked": "2026-10-01T05:18:19.154919+08:00",
-      "content_changed_at": null,
-      "content_fingerprint": "sha256:1387a301b1666dc71e3bd7ddea87cfa0",
-      "source_type": "community_list",
-      "upstream_status": "ok",
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
-      "evaluation_rules_version": "1.3.0",
-      "quality_summary": {
-        "review_status": "single_pass",
-        "checks": {
-          "scope_match": {
-            "value": "pass",
-            "evidence": "材料描述金融数据抓取，属于金融与投资领域；金融属于收录范围",
-            "informational": false
-          },
-          "purpose_clarity": {
-            "value": "pass",
-            "evidence": "明确解决获取上市公司财务数据的实际问题；提供了具体使用场景和示例命令",
-            "informational": false
-          },
-          "instruction_completeness": {
-            "value": "pass",
-            "evidence": "提供安装、快速使用步骤、flags解释和常见错误处理",
-            "informational": false
-          },
-          "evidence_traceability": {
-            "value": "pass",
-            "evidence": "描述与示例命令一致",
-            "informational": false
-          },
-          "dependency_transparency": {
-            "value": "pass",
-            "evidence": "明确声明依赖requests和beautifulsoup4",
-            "informational": false
-          },
-          "risk_review": {
-            "value": "pass",
-            "evidence": "无凭据外传、临床诊断或交易下单行为",
-            "informational": false
-          }
-        },
-        "verification_note": "提供示例命令和使用说明；数据准确性依赖第三方网站的HTML结构",
-        "blocking_reasons": []
-      },
-      "last_evaluation_id": "gauss314/skills:skills/macrotrends/SKILL.md|sha256:1387a301b1666dc71e3bd7ddea87cfa0|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-01T05:18:19.140705+08:00"
-    },
-    {
-      "skill_id": "gauss314/skills:skills/mae/SKILL.md",
-      "name": "mae",
-      "url": "https://github.com/gauss314/skills/blob/HEAD/skills/mae/SKILL.md",
-      "repo_url": "https://github.com/gauss314/skills",
-      "author": "gauss314",
-      "summary_zh": "提供阿根廷金融市场（MAE）数据的脚本工具，支持获取固收、外汇、期货、回购等资产的实时与历史数据，适用于金融研究场景",
-      "skill_type": "tool_script",
-      "example_requests": [
-        "获取阿根廷固收资产（Renta Fija）当日前10名概览",
-        "查询特定日期范围内的外汇（FOREX）历史数据"
-      ],
-      "key_features": [
-        "支持17种公开市场数据端点覆盖固收/衍生品",
-        "自动处理延迟数据和API限制",
-        "提供JSON输出和多种查询参数"
-      ],
-      "main_category": {
-        "id": "finance",
-        "name": "金融与投资"
-      },
-      "candidate_domains": [],
-      "tags": [
-        "市场数据",
-        "投资研究"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "Python"
-      ],
-      "limitations": "未提供脚本实际代码；延迟数据未说明精度规则；Windows 终端字符编码问题",
-      "license": null,
-      "status": "candidate",
-      "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
-      ],
-      "first_seen": "2026-09-30T12:30:27+00:00",
-      "last_checked": "2026-10-01T05:19:29.137350+08:00",
-      "content_changed_at": null,
-      "content_fingerprint": "sha256:1e519e09601b40ab2968349227d08b9e",
-      "source_type": "community_list",
-      "upstream_status": "ok",
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
-      "evaluation_rules_version": "1.3.0",
-      "quality_summary": {
-        "review_status": "single_pass",
-        "checks": {
-          "scope_match": {
-            "value": "pass",
-            "evidence": "Material 中描述了获取阿根廷金融市场数据的技能，属于金融与投资领域",
-            "informational": false
-          },
-          "purpose_clarity": {
-            "value": "pass",
-            "evidence": "技能详细说明了支持的各种金融数据类型和用途，提供了具体的使用示例",
-            "informational": false
-          },
-          "instruction_completeness": {
-            "value": "unknown",
-            "evidence": "核心脚本 fetch_mae.py 的描述存在，但未提供完整内容；REFERENCE.md 被引用但未包含在材料中",
-            "informational": false
-          },
-          "evidence_traceability": {
-            "value": "unknown",
-            "evidence": "SKILL.md 内容与表格中列出的功能和使用细节一致；程序未能核实所引原文与行号。",
-            "informational": false
-          },
-          "dependency_transparency": {
-            "value": "pass",
-            "evidence": "依赖只声明需要 Python 环境；公开 API 无 API key 要求",
-            "informational": false
-          },
-          "risk_review": {
-            "value": "pass",
-            "evidence": "材料中未发现凭证窃取、实盘交易等风险行为",
-            "informational": false
-          }
-        },
-        "verification_note": "提供了命令示例但不包含输出样例；缺少 REFERENCE.md 等引用文件验证",
-        "blocking_reasons": []
-      },
-      "last_evaluation_id": "gauss314/skills:skills/mae/SKILL.md|sha256:1e519e09601b40ab2968349227d08b9e|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-01T05:19:29.118598+08:00"
-    },
-    {
-      "skill_id": "gauss314/skills:skills/marketscreener/SKILL.md",
-      "name": "marketscreener",
-      "url": "https://github.com/gauss314/skills/blob/HEAD/skills/marketscreener/SKILL.md",
-      "repo_url": "https://github.com/gauss314/skills",
-      "author": "gauss314",
-      "summary_zh": "MarketScreener金融数据爬虫，支持免费获取全球股票、ADRs的财报会议记录、行情、公司资料、财务数据、分析师共识等数据，适用于金融研究和个人投资者。",
-      "skill_type": "tool_script",
-      "example_requests": [
-        "获取阿根廷ADR公司GGAL的最新财报会议记录前500字",
-        "查询苹果公司（AAPL）的股票价格和涨跌幅"
-      ],
-      "key_features": [
-        "无需API密钥或注册即可爬取数据",
-        "支持全球超过20,000家股票、ADRs和ETF数据",
-        "提供多种金融数据类型如财报、估值、分析师共识等"
-      ],
-      "main_category": {
-        "id": "finance",
-        "name": "金融与投资"
-      },
-      "candidate_domains": [],
-      "tags": [
-        "金融数据",
-        "爬虫工具",
-        "股票研究"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [],
-      "limitations": "金融数据年限有限（如超过3年的财务数据需要付费）；不包括债券和外汇/加密货币数据；需遵守爬虫频率限制防止IP封锁。",
-      "license": null,
-      "status": "recommended",
-      "reason_codes": [],
-      "first_seen": "2026-09-30T12:30:27+00:00",
-      "last_checked": "2026-10-01T05:20:01.783398+08:00",
-      "content_changed_at": null,
-      "content_fingerprint": "sha256:e22f955669d796f92914079bb5ee59e9",
-      "source_type": "community_list",
-      "upstream_status": "ok",
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "manual_pick": true,
-      "manual_note": {
-        "added_at": "2026-10-07",
-        "reason": "用户收藏",
-        "from": "recommended",
-        "auto_status": "recommended"
-      },
-      "evaluation_rules_version": "1.3.0",
-      "quality_summary": {
-        "review_status": "single_pass",
-        "checks": {
-          "scope_match": {
-            "value": "pass",
-            "evidence": "material indicates it is a financial data scraping tool for stock-related information, which falls under the 'finance' category.",
-            "informational": false
-          },
-          "purpose_clarity": {
-            "value": "pass",
-            "evidence": "specific functions like scraping earnings transcripts, stock quotes, profiles, financials, etc., without requiring API keys are clearly stated with practical examples.",
-            "informational": false
-          },
-          "instruction_completeness": {
-            "value": "pass",
-            "evidence": "usage examples (lines 65-92), available scripts (lines 98-102), and practices (lines 105-112) provide sufficient guidance on implementation and limitations.",
-            "informational": false
-          },
-          "evidence_traceability": {
-            "value": "pass",
-            "evidence": "description aligns with demonstrated scraping capabilities, supported by examples of accessing free data without registration.",
-            "informational": false
-          },
-          "dependency_transparency": {
-            "value": "unknown",
-            "evidence": "material mentions scraping via HTML parsing with BeautifulSoup and using browser User-Agents, but does not explicitly list Python dependencies or environment requirements.",
-            "informational": true
-          },
-          "risk_review": {
-            "value": "pass",
-            "evidence": "material provides scraping best practices to avoid blocks and does not suggest credential exfiltration or live trading risks.",
-            "informational": false
-          }
-        },
-        "verification_note": "The material includes code examples for using the scripts and describes ethical scraping practices; no explicit validation method is mentioned.",
-        "blocking_reasons": []
-      },
-      "last_evaluation_id": "gauss314/skills:skills/marketscreener/SKILL.md|sha256:e22f955669d796f92914079bb5ee59e9|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-01T05:20:01.769847+08:00"
-    },
-    {
-      "skill_id": "gauss314/skills:skills/marketwatch/SKILL.md",
-      "name": "marketwatch",
-      "url": "https://github.com/gauss314/skills/blob/HEAD/skills/marketwatch/SKILL.md",
-      "repo_url": "https://github.com/gauss314/skills",
-      "author": "gauss314",
-      "summary_zh": "MarketWatch金融数据爬虫脚本，用于获取股票实时报价、财务报表、SEC文件等投资研究数据",
-      "skill_type": "tool_script",
-      "example_requests": [
-        "获取AAPL公司实时报价和公司概要",
-        "获取MSFT公司年度利润表"
-      ],
-      "key_features": [
-        "无须API密钥的公开数据爬取",
-        "支持多类金融数据包括报价/财务报表/期权链",
-        "自动处理反爬机制（Datadome）"
-      ],
-      "main_category": {
-        "id": "finance",
-        "name": "金融与投资"
-      },
-      "candidate_domains": [],
-      "tags": [
-        "金融数据爬取"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "requests",
-        "beautifulsoup4"
-      ],
-      "limitations": "需遵守MarketWatch服务条款；HTML结构变更可能导致脚本失效",
-      "license": null,
-      "status": "candidate",
-      "reason_codes": [],
-      "first_seen": "2026-09-30T12:30:27+00:00",
-      "last_checked": "2026-10-01T05:20:35.068316+08:00",
-      "content_changed_at": null,
-      "content_fingerprint": "sha256:37df436cb3b7037998702f7cd10c6482",
-      "source_type": "community_list",
-      "upstream_status": "ok",
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
-      "evaluation_rules_version": "1.3.0",
-      "quality_summary": {
-        "review_status": "single_pass",
-        "checks": {
-          "scope_match": {
-            "value": "pass",
-            "evidence": "材料描述 scraping de MarketWatch 获取金融数据，属于金融投资领域主分类",
-            "informational": false
-          },
-          "purpose_clarity": {
-            "value": "pass",
-            "evidence": "材料明确说明获取实时报价、财务报表、SEC文件等金融数据，有具体应用场景",
-            "informational": false
-          },
-          "instruction_completeness": {
-            "value": "pass",
-            "evidence": "材料提供安装说明、命令行示例和使用说明，足以理解核心能力",
-            "informational": false
-          },
-          "evidence_traceability": {
-            "value": "pass",
-            "evidence": "所有功能在命令行说明中有对应实现引用",
-            "informational": false
-          },
-          "dependency_transparency": {
-            "value": "pass",
-            "evidence": "材料明确声明依赖 requests 和 beautifulsoup4，并说明运行环境为 Python",
-            "informational": false
-          },
-          "risk_review": {
-            "value": "pass",
-            "evidence": "未见凭据外传行为；虽涉及反爬绕过，但作为数据获取工具未见明确违规",
-            "informational": false
-          }
-        },
-        "verification_note": "材料提供完整命令行使用示例和输出字段说明",
-        "blocking_reasons": []
-      },
-      "last_evaluation_id": "gauss314/skills:skills/marketwatch/SKILL.md|sha256:37df436cb3b7037998702f7cd10c6482|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-01T05:20:35.051607+08:00"
-    },
-    {
-      "skill_id": "gauss314/skills:skills/morningstar/SKILL.md",
-      "name": "morningstar",
-      "url": "https://github.com/gauss314/skills/blob/HEAD/skills/morningstar/SKILL.md",
-      "repo_url": "https://github.com/gauss314/skills",
-      "author": "gauss314",
-      "summary_zh": "通过逆向工程接口批量下载Morningstar全球股票数据，支持53个市场（10万+标的）的33个字段查询与导出，适用于金融研究场景。",
-      "skill_type": "tool_script",
-      "example_requests": [
-        "下载阿根廷股市（XBUE）全部数据到CSV文件",
-        "搜索纳斯达克上市的苹果公司股票信息"
-      ],
-      "key_features": [
-        "无需API密钥访问Morningstar数据",
-        "覆盖53个市场（102K+标的）",
-        "支持字段筛选与多格式导出"
-      ],
-      "main_category": {
-        "id": "finance",
-        "name": "金融与投资"
-      },
-      "candidate_domains": [],
-      "tags": [
-        "股票数据",
-        "金融研究"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "Python",
-        "requests"
-      ],
-      "limitations": "非官方接口存在法律与稳定性风险；部分字段名称仅返回英文；未提供数据更新时间信息。",
-      "license": null,
-      "status": "candidate",
-      "reason_codes": [],
-      "first_seen": "2026-09-30T12:30:27+00:00",
-      "last_checked": "2026-10-01T05:21:26.651545+08:00",
-      "content_changed_at": null,
-      "content_fingerprint": "sha256:2759486576b1132bf768f8740b07f78a",
-      "source_type": "community_list",
-      "upstream_status": "ok",
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
-      "evaluation_rules_version": "1.3.0",
-      "quality_summary": {
-        "review_status": "single_pass",
-        "checks": {
-          "scope_match": {
-            "value": "pass",
-            "evidence": "该技能提供股市数据下载功能，属于金融与投资领域，且未命中硬性排除规则。",
-            "informational": false
-          },
-          "purpose_clarity": {
-            "value": "pass",
-            "evidence": "材料明确说明该技能用于通过逆向工程接口下载Morningstar的全球股票数据库（53个市场、10万+标的），列出具体功能如搜索、批量下载、指定字段导出等，具有实际价值。",
-            "informational": false
-          },
-          "instruction_completeness": {
-            "value": "pass",
-            "evidence": "脚本提供完整使用示例（如命令行调用方式）、参数说明和输出格式示例，足以理解操作方法和核心功能；技术细节在REFERENCE.md补充（但未包含在本次材料中，不影响基础判断）。",
-            "informational": false
-          },
-          "evidence_traceability": {
-            "value": "pass",
-            "evidence": "材料描述的功能（如批量下载、指定字段）均在脚本参数和示例输出中体现",
-            "informational": false
-          },
-          "dependency_transparency": {
-            "value": "pass",
-            "evidence": "材料明确声明依赖Python和requests库（pip install requests），且无特殊环境要求",
-            "informational": false
-          },
-          "risk_review": {
-            "value": "unknown",
-            "evidence": "该技能通过逆向工程获取非官方API，存在法律合规风险，但未观察到凭据外传等主动违规行为；是否违反Morningstar服务条款需用户自行判断。",
-            "informational": false
-          }
-        },
-        "verification_note": "材料提供命令行输出示例（JSON/CSV格式），但未包含自动化测试或数据准确性验证方法。",
-        "blocking_reasons": []
-      },
-      "last_evaluation_id": "gauss314/skills:skills/morningstar/SKILL.md|sha256:2759486576b1132bf768f8740b07f78a|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-01T05:21:26.641823+08:00"
-    },
-    {
-      "skill_id": "gauss314/skills:skills/nasdaq-data/SKILL.md",
-      "name": "nasdaq-data",
-      "url": "https://github.com/gauss314/skills/blob/HEAD/skills/nasdaq-data/SKILL.md",
-      "repo_url": "https://github.com/gauss314/skills",
-      "author": "gauss314",
-      "summary_zh": "使用合法API内部脚本从Nasdaq提取股票、ETF及期权等市场的完整金融数据，适用于金融数据研究",
-      "skill_type": "tool_script",
-      "example_requests": [
-        "获取NVDA公司信息与股价历史",
-        "查询腾讯等公司机构持股情况"
-      ],
-      "key_features": [
-        "从Nasdaq提取股票、期权、ETF等金融数据",
-        "支持财务报表、分红派息、新闻资讯等19种数据类别",
-        "附带详细文档说明"
-      ],
-      "main_category": {
-        "id": "finance",
-        "name": "金融与投资"
-      },
-      "candidate_domains": [],
-      "tags": [
-        "股票",
-        "数据爬取"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "requests"
-      ],
-      "limitations": "依赖Nasdaq内部非官方接口，可能存在随时无法访问；不保证数据完全正确",
-      "license": null,
-      "status": "candidate",
-      "reason_codes": [],
-      "first_seen": "2026-09-30T12:30:27+00:00",
-      "last_checked": "2026-10-01T05:21:32.052525+08:00",
-      "content_changed_at": null,
-      "content_fingerprint": "sha256:b87fb7e0b2d18cebeb0f63a8b42546e2",
-      "source_type": "community_list",
-      "upstream_status": "ok",
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
-      "evaluation_rules_version": "1.3.0",
-      "quality_summary": {
-        "review_status": "single_pass",
-        "checks": {
-          "scope_match": {
-            "value": "pass",
-            "evidence": "材料明确说明是提取金融相关数据（如股票、ETF、期权等金融产品数据），属于金融与投资主分类",
-            "informational": false
-          },
-          "purpose_clarity": {
-            "value": "pass",
-            "evidence": "技能描述具体，如提取Nasdaq的股票信息、做空比例、财务报表等，并有用法示例，具有明确价值",
-            "informational": false
-          },
-          "instruction_completeness": {
-            "value": "pass",
-            "evidence": "提供脚本具体用法、命令示例及参数说明，足以使用者快速应用",
-            "informational": false
-          },
-          "evidence_traceability": {
-            "value": "pass",
-            "evidence": "技能介绍与提供脚本功能一致，如描述了对股票等各种金融数据抓取的能力",
-            "informational": false
-          },
-          "dependency_transparency": {
-            "value": "pass",
-            "evidence": "声明依赖 requests 库，并写入代码环境依赖",
-            "informational": false
-          },
-          "risk_review": {
-            "value": "pass",
-            "evidence": "材料中未见凭据外传、实盘交易等明确禁止行为，且附有法律警告遵守服务条款及速率限制",
-            "informational": false
-          }
-        },
-        "verification_note": "材料中提供了多个脚本用法示例，用户可借助这些命令进行本地运行验证",
-        "blocking_reasons": [
-          "领域检查：材料未提供回测功能说明，无风险限制陈述，也未明确提供数据来源的准确性或实效性依据"
-        ]
-      },
-      "last_evaluation_id": "gauss314/skills:skills/nasdaq-data/SKILL.md|sha256:b87fb7e0b2d18cebeb0f63a8b42546e2|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-01T05:21:32.036227+08:00"
-    },
-    {
-      "skill_id": "gauss314/skills:skills/option-pricing/SKILL.md",
-      "name": "option-pricing",
-      "url": "https://github.com/gauss314/skills/blob/HEAD/skills/option-pricing/SKILL.md",
-      "repo_url": "https://github.com/gauss314/skills",
-      "author": "gauss314",
-      "summary_zh": "用于欧式和美式期权定价的工具，支持9种方法（如Black-Scholes、二叉树等），适用于回测和金融分析场景。",
-      "skill_type": "tool_script",
-      "example_requests": [
-        "计算Black-Scholes欧式期权价格（S=100, K=100, T=0.25, r=0.05, sigma=0.20）",
-        "计算美式期权隐含波动率（给定市场价格8.50）"
-      ],
-      "key_features": [
-        "O(1)闭式定价方法（如BS、BAW）",
-        "高性能设计（BS达800k ops/sec）",
-        "包含希腊值计算和隐含波动率求解"
-      ],
-      "main_category": {
-        "id": "finance",
-        "name": "金融与投资"
-      },
-      "candidate_domains": [],
-      "tags": [
-        "期权定价",
-        "回测工具"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "Python",
-        "numpy"
-      ],
-      "limitations": "不支持路径依赖期权（如亚式、障碍期权）和离散股息模型；未实现多资产定价",
-      "license": null,
-      "status": "candidate",
-      "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
-      ],
-      "first_seen": "2026-09-30T12:30:27+00:00",
-      "last_checked": "2026-10-01T05:23:12.731754+08:00",
-      "content_changed_at": null,
-      "content_fingerprint": "sha256:f301d764fc9aad58a7d01c2d536b563f",
-      "source_type": "community_list",
-      "upstream_status": "ok",
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
-      "evaluation_rules_version": "1.3.0",
-      "quality_summary": {
-        "review_status": "single_pass",
-        "checks": {
-          "scope_match": {
-            "value": "pass",
-            "evidence": "技能提供金融衍生品（期权）定价工具，属于金融与投资主分类下的研究和策略辅助范围。未命中硬性排除项。",
-            "informational": false
-          },
-          "purpose_clarity": {
-            "value": "pass",
-            "evidence": "材料明确说明了解决期权定价问题，适用于回测和分析场景，提供了具体方法和示例。",
-            "informational": false
-          },
-          "instruction_completeness": {
-            "value": "pass",
-            "evidence": "提供了详细的命令行使用示例、参数说明和API调用方式（第25-403行），足以理解核心功能的使用。",
-            "informational": false
-          },
-          "evidence_traceability": {
-            "value": "unknown",
-            "evidence": "材料中的功能描述（如定价方法、性能指标）与示例和实现细节一致。；程序未能核实所引原文与行号。",
-            "informational": false
-          },
-          "dependency_transparency": {
-            "value": "pass",
-            "evidence": "明确声明仅依赖Python和numpy（第10行），未声明其他特殊依赖或平台限制。",
-            "informational": false
-          },
-          "risk_review": {
-            "value": "pass",
-            "evidence": "未发现与收录范围冲突的功能或可疑行为；明确声明不包含实盘交易（仅限回测）和健康领域无关。",
-            "informational": false
-          }
-        },
-        "verification_note": "提供validate模式（第72-73行）和资产文件validation_cases.json用于验证定价准确性",
-        "blocking_reasons": []
-      },
-      "last_evaluation_id": "gauss314/skills:skills/option-pricing/SKILL.md|sha256:f301d764fc9aad58a7d01c2d536b563f|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-01T05:23:12.718421+08:00"
-    },
-    {
-      "skill_id": "gauss314/skills:skills/portfolio/SKILL.md",
-      "name": "portfolio",
-      "url": "https://github.com/gauss314/skills/blob/HEAD/skills/portfolio/SKILL.md",
-      "repo_url": "https://github.com/gauss314/skills",
-      "author": "gauss314",
-      "summary_zh": "提供金融投资组合优化的三种方法：Markowitz均值方差优化、Black-Litterman模型及分层风险平价（HRP）与嵌套集群优化（NCO）。适用于金融研究和策略辅助。",
-      "skill_type": "tool_script",
-      "example_requests": [
-        "计算随机的投资组合并绘制有效前沿",
-        "使用Black-Litterman模型结合CAPM先验收益和投资者观点"
-      ],
-      "key_features": [
-        "仅使用numpy、pandas、scipy实现核心算法",
-        "支持命令行操作并提供多种优化模式",
-        "自含测试和验证文件"
-      ],
-      "main_category": {
-        "id": "finance",
-        "name": "金融与投资"
-      },
-      "candidate_domains": [],
-      "tags": [
-        "投资组合优化"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "numpy",
-        "pandas",
-        "scipy"
-      ],
-      "limitations": "实际金融应用需结合专业分析，示例基于模拟数据。",
-      "license": null,
-      "status": "candidate",
-      "reason_codes": [],
-      "first_seen": "2026-09-30T12:30:27+00:00",
-      "last_checked": "2026-10-01T05:23:14.733903+08:00",
-      "content_changed_at": null,
-      "content_fingerprint": "sha256:0ad591366259bc637522536c14a1f0f0",
-      "source_type": "community_list",
-      "upstream_status": "ok",
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
-      "evaluation_rules_version": "1.3.0",
-      "quality_summary": {
-        "review_status": "single_pass",
-        "checks": {
-          "scope_match": {
-            "value": "pass",
-            "evidence": "Portfolio optimization skills fall under Finance, a category explicitly included in §3.1.",
-            "informational": false
-          },
-          "purpose_clarity": {
-            "value": "pass",
-            "evidence": "The skill provides specific methods for portfolio optimization such as Markowitz, Black-Litterman, and HRP/NCO, and details their problem-solving applications in finance.",
-            "informational": false
-          },
-          "instruction_completeness": {
-            "value": "pass",
-            "evidence": "SKILL.md includes CLI examples and library usage code snippets demonstrating how to execute and understand each optimization method.",
-            "informational": false
-          },
-          "evidence_traceability": {
-            "value": "pass",
-            "evidence": "Description matches implementation: references core theory files and script functionality.",
-            "informational": false
-          },
-          "dependency_transparency": {
-            "value": "pass",
-            "evidence": "The dependencies (numpy, pandas, scipy) are explicitly declared and described.",
-            "informational": false
-          },
-          "risk_review": {
-            "value": "pass",
-            "evidence": "No evidence of credential exfiltration, live trading, or exclusionary features found in the material.",
-            "informational": false
-          }
-        },
-        "verification_note": "Validation against reference notebook mentioned; tests included.",
-        "blocking_reasons": []
-      },
-      "last_evaluation_id": "gauss314/skills:skills/portfolio/SKILL.md|sha256:0ad591366259bc637522536c14a1f0f0|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-01T05:23:14.719225+08:00"
-    },
-    {
-      "skill_id": "gauss314/skills:skills/primary/SKILL.md",
-      "name": "primary",
-      "url": "https://github.com/gauss314/skills/blob/HEAD/skills/primary/SKILL.md",
-      "repo_url": "https://github.com/gauss314/skills",
-      "author": "gauss314",
-      "summary_zh": "提供Primary交易平台的API接入服务，支持阿根廷期货期权市场的行情查询、账户管理和实盘交易操作。适用于需直接接入Matba ROFEX市场的开发者。",
-      "skill_type": "guideline",
-      "example_requests": [
-        "获取DLR/JUN26期货的实时买卖价和最新成交价",
-        "在模拟账户中买入10份DLR/JUN26期货合约"
-      ],
-      "key_features": [
-        "支持期货、期权、股票等多元金融产品交易",
-        "提供REST与WebSocket双接口",
-        "包含账户风险与持仓查询"
-      ],
-      "main_category": {
-        "id": "finance",
-        "name": "金融与投资"
-      },
-      "candidate_domains": [],
-      "tags": [
-        "金融API",
-        "交易系统"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [],
-      "limitations": "仅限阿根廷市场；未声明非Python环境支持；需自行申请交易所账户",
-      "license": null,
-      "status": "excluded",
-      "reason_codes": [
-        "LIVE_TRADING"
-      ],
-      "first_seen": "2026-09-30T12:30:27+00:00",
-      "last_checked": "2026-10-01T05:23:48.695421+08:00",
-      "content_changed_at": null,
-      "content_fingerprint": "sha256:c798e1fd12b1d25938e852d99dd406bf",
-      "source_type": "community_list",
-      "upstream_status": "ok",
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
-      "evaluation_rules_version": "1.3.0",
-      "quality_summary": {
-        "review_status": "single_pass",
-        "checks": {
-          "scope_match": {
-            "value": "fail",
-            "evidence": "材料描述交易API，主分类为金融与投资；但文档显示可发送实盘下单指令，包含不可分割的实盘下单核心功能，符合LIVE_TRADING硬性排除标准",
-            "informational": false
-          },
-          "purpose_clarity": {
-            "value": "pass",
-            "evidence": "材料明确说明该API用于操作阿根廷期货期权市场，支持期货、期权、股票、债券等交易功能，并提供行情、账户查询等具体服务",
-            "informational": false
-          },
-          "instruction_completeness": {
-            "value": "pass",
-            "evidence": "文档详细列出认证、行情获取、订单管理、风险API等操作步骤与示例代码，核心功能均有明确说明",
-            "informational": false
-          },
-          "evidence_traceability": {
-            "value": "pass",
-            "evidence": "材料功能描述与代码示例一致，如行情接口、订单发送等关键功能均有对应说明",
-            "informational": false
-          },
-          "dependency_transparency": {
-            "value": "fail",
-            "evidence": "材料要求使用Python的requests库和websocket库，但未声明最低版本或环境要求，且未说明非Python平台的可用性",
-            "informational": false
-          },
-          "risk_review": {
-            "value": "fail",
-            "evidence": "检测到文档包含实盘交易指令发送功能（如脚本示例中place_order.py），属于不可分割的实盘下单核心功能",
-            "informational": false
-          }
-        },
-        "verification_note": "文档提供Python脚本示例，但未包含功能验证或质量保证说明；代码仅做演示且需用户自行测试",
-        "blocking_reasons": []
-      },
-      "last_evaluation_id": "gauss314/skills:skills/primary/SKILL.md|sha256:c798e1fd12b1d25938e852d99dd406bf|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-01T05:23:48.679905+08:00"
-    },
-    {
-      "skill_id": "gauss314/skills:skills/simplywallst/SKILL.md",
-      "name": "simplywallst",
-      "url": "https://github.com/gauss314/skills/blob/HEAD/skills/simplywallst/SKILL.md",
-      "repo_url": "https://github.com/gauss314/skills",
-      "author": "gauss314",
-      "summary_zh": "脚本工具，用于通过内部API从SimplyWallSt提取全球股票财务数据，支持Snowflake评分、股息分析和公司详情查询，适用于股票研究和筛选。",
-      "skill_type": "tool_script",
-      "example_requests": [
-        "获取阿根廷Galicia银行（GGAL）的完整财务数据",
-        "下载所有阿根廷股票代码列表"
-      ],
-      "key_features": [
-        "使用内部API无需注册或密钥",
-        "支持120000+全球股票覆盖90+市场",
-        "提供股息历史和未来预测数据"
-      ],
-      "main_category": {
-        "id": "finance",
-        "name": "金融与投资"
-      },
-      "candidate_domains": [],
-      "tags": [
-        "股票研究",
-        "数据提取",
-        "财务分析"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [
-        "requests"
-      ],
-      "limitations": "Depende de una API interna no documentada; actualización de datos diaria pero sin validación externa; snapshot inicial tarda ~10 min.",
-      "license": null,
-      "status": "candidate",
-      "reason_codes": [],
-      "first_seen": "2026-09-30T12:30:27+00:00",
-      "last_checked": "2026-10-01T05:24:21.390464+08:00",
-      "content_changed_at": null,
-      "content_fingerprint": "sha256:b912d3048fca0e65921ed8ead3b7cc81",
-      "source_type": "community_list",
-      "upstream_status": "ok",
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
-      "evaluation_rules_version": "1.3.0",
-      "quality_summary": {
-        "review_status": "single_pass",
-        "checks": {
-          "scope_match": {
-            "value": "pass",
-            "evidence": "Material relacionado con la extracción de datos financieros de acciones globales, cubre research y estrategias de inversión (fecha). Línea clave: 'Data financiera de 120K+ stocks globales' (línea 3).",
-            "informational": false
-          },
-          "purpose_clarity": {
-            "value": "pass",
-            "evidence": "Describe concretamente la obtención de datos financieros (snowflake scores, valuation, dividend analysis) mediante un script para análisis de acciones. Ejemplos de uso definidos (líneas 39-65).",
-            "informational": false
-          },
-          "instruction_completeness": {
-            "value": "unknown",
-            "evidence": "SKILL.md incluye comandos básicos, pero references/REFERENCE.md prometido como 'documentación completa' no está disponible para verificar si resuelve incertidumbres clave (p.ej., manejo de errores o estructura de datos).",
-            "informational": false
-          },
-          "evidence_traceability": {
-            "value": "pass",
-            "evidence": "El uso de endpoints internos es explicitado (línea 17). La cobertura de mercados y características declaradas coincide con los ejemplos de scripts (líneas 89-101 vs. uso en líneas 41-64).",
-            "informational": false
-          },
-          "dependency_transparency": {
-            "value": "pass",
-            "evidence": "Declara pip install requests (línea 26) y requiere rate limiting manual (línea 19). No se mencionan otras dependencias críticas para el funcionamiento básico.",
-            "informational": false
-          },
-          "risk_review": {
-            "value": "unknown",
-            "evidence": "Usa una API interna no pública; términos de servicio pueden prohibirlo. Aunque avisa (línea 17), el riesgo legal requiere verificación externa.",
-            "informational": false
-          }
-        },
-        "verification_note": "Proporciona ejemplos de salida para GGAL (líneas 131-154), pero sin datos reales de muestra o verificación externa.",
-        "blocking_reasons": [
-          "领域检查：Actualización diaria declarada (línea 96), pero no especifica fecha de datos actuales ni fuentes primarias. No promete ganancias explícitamente, pero la calidad del snapshot sin verificación (p.ej., discrepancia 54K vs 78K en líneas 194-205) puede afectar decisiones."
-        ]
-      },
-      "last_evaluation_id": "gauss314/skills:skills/simplywallst/SKILL.md|sha256:b912d3048fca0e65921ed8ead3b7cc81|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-01T05:24:21.373646+08:00"
-    },
-    {
-      "skill_id": "gauss314/skills:skills/yahoo-finance/SKILL.md",
-      "name": "yahoo-finance",
-      "url": "https://github.com/gauss314/skills/blob/HEAD/skills/yahoo-finance/SKILL.md",
-      "repo_url": "https://github.com/gauss314/skills",
-      "author": "gauss314",
-      "summary_zh": "通过HTTP请求直接访问Yahoo Finance非官方API，提供股票、ETF、加密货币等金融产品的历史价格、实时报价、基本面及期权数据检索能力；适用于金融市场数据分析与研究场景。",
-      "skill_type": "tool_script",
-      "example_requests": [
-        "获取Apple公司(AAPL)过去一年的历史价格数据",
-        "批量获取AAPL、MSFT和GOOGL的实时报价与基本面数据"
-      ],
-      "key_features": [
-        "支持多种金融产品数据：股票、ETF、加密货币",
-        "包含历史图表、实时报价和基本面端点",
-        "提供批量获取脚本支持多标的处理和速率控制"
-      ],
-      "main_category": {
-        "id": "finance",
-        "name": "金融与投资"
-      },
-      "candidate_domains": [],
-      "tags": [
-        "金融市场数据",
-        "数据抓取",
-        "投资研究辅助"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [],
-      "limitations": "非官方端点可能不稳定；需设置用户代理并进行请求限速；部分端点需凭证；支持的数据时间和市场范围部分未说明",
-      "license": null,
-      "status": "candidate",
-      "reason_codes": [],
-      "first_seen": "2026-09-30T12:30:27+00:00",
-      "last_checked": "2026-10-01T05:25:34.784525+08:00",
-      "content_changed_at": null,
-      "content_fingerprint": "sha256:892d73bff266654627e90976d931a039",
-      "source_type": "community_list",
-      "upstream_status": "ok",
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
-      "evaluation_rules_version": "1.3.0",
-      "quality_summary": {
-        "review_status": "single_pass",
-        "checks": {
-          "scope_match": {
-            "value": "fail",
-            "evidence": "该技能属于Yahoo金融API非官方客户端，材料中明确指出提供历史价格、盘前和盘中市场行情数据、基本面分析及期权数据获取功能（第9行）。根据金融与投资分类的范围（宏观、股票、期货、大宗商品及研究和策略辅助），该技能的目标是获取金融市场数据，属于金融领域。但根据硬性排除标准，LIVE_TRADING（包含不可分割的实盘下单核心功能）为主要排除项。材料中无实盘下单功能的描述，但提供了行情和基本面数据获取的功能。材料中提到数据用于研究而非交易（仅获取数据，未执行交易订单）。因此，无需排除。材料证据不支持排除条件中的实盘下单核心功能。",
-            "informational": false
-          },
-          "purpose_clarity": {
-            "value": "pass",
-            "evidence": "文档提供明确的端点访问方法（例如第80行历史OHLCV数据、第103行报价、第115行基本面数据等），包含具体代码示例和应用场景（如使用批次抓取工具实现多标的获取和使用速度控制）。材料第9行描述为”访问股票、ETF、加密货币、外汇、债券、指数、期权、基本面和新闻数据”，这些都属于金融分析和研究的应用领域。",
-            "informational": false
-          },
-          "instruction_completeness": {
-            "value": "pass",
-            "evidence": "SKILL.md包含API调用方法（例如代码块第918行虚拟机服务端话术参考点历史图表），并提供详细的CAIM工作结构（如文档在350行处下代码以繁荣粮格式描述文档结构）。具体脚本如batch_fetch.py等脚本描述定位（155行至176行列表和应用示例），重要的依赖项目和认证过程（第288安全入口认证）有清晰说明。",
-            "informational": false
-          },
-          "evidence_traceability": {
-            "value": "pass",
-            "evidence": "材料中的描述与链接的一致性和设计目标相符。标题Yahoo金融——非官方API（第7行）后包含相同API操作方法。详细文档API_REFERENCE.md被引用多次（第27至29行，236行），实操方法如代码块INTERACTION_LACK在URL示例篇之中涉及稳定性和步骤。",
-            "informational": false
-          },
-          "dependency_transparency": {
-            "value": "unknown",
-            "evidence": "材料指出需要使用Python的requests库（第45行示例中导入），但未明确列出其他依赖。第262行提到使用其他第三方库可能导致出错，说明脚本可能需要特定环境和版本。由于多个脚本都可能存在隐式依赖，这对用户判断造成障碍，因此定义为关键信息缺口。",
-            "informational": false
-          },
-          "risk_review": {
-            "value": "unknown",
-            "evidence": "输入中提及依赖可能存在安全漏洞问题（262行处输出时由机器报刊语Remarkete user-agent造成阻塞），可能不从信任源加载，具体问题未讨论详细。自定义321自控脚本是否安全也未知。",
-            "informational": false
-          }
-        },
-        "verification_note": "脚本中包含代码测试示例（例如第184行的批量抓取测试命令），可使用命令运行真实库码以测试脚本，但由于材料未提供调用示例结果有效性的验证标准，验证方式尚不完整。",
-        "blocking_reasons": []
-      },
-      "last_evaluation_id": "gauss314/skills:skills/yahoo-finance/SKILL.md|sha256:892d73bff266654627e90976d931a039|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-01T05:25:34.768868+08:00"
-    },
-    {
-      "skill_id": "gauss314/skills:skills/tradingview/SKILL.md",
-      "name": "tradingview",
-      "url": "https://github.com/gauss314/skills/blob/HEAD/skills/tradingview/SKILL.md",
-      "repo_url": "https://github.com/gauss314/skills",
-      "author": "gauss314",
-      "summary_zh": "通过非官方 API 从 TradingView 获取全球市场的实时行情、技术指标、财务数据和新闻，适用于金融数据采集与初步分析",
-      "skill_type": "tool_script",
-      "example_requests": [
-        "获取阿根廷股市前30只股票的报价",
-        "查询苹果公司的最新分析师评级"
-      ],
-      "key_features": [
-        "无需 API 密钥访问 TradingView 内部API",
-        "支持全球10万+股票、5万+加密货币",
-        "预计算技术指标与分析师评级"
-      ],
-      "main_category": {
-        "id": "finance",
-        "name": "金融与投资"
-      },
-      "candidate_domains": [],
-      "tags": [
-        "市场数据",
-        "金融分析"
-      ],
-      "platform_declared": null,
-      "dependencies_declared": [],
-      "limitations": "数据延迟约15分钟；部分端点请求频率受限；非官方API可能变更",
-      "license": null,
-      "status": "candidate",
-      "reason_codes": [],
-      "first_seen": "2026-09-30T12:30:27+00:00",
-      "last_checked": "2026-10-01T05:25:41.688826+08:00",
-      "content_changed_at": null,
-      "content_fingerprint": "sha256:bb1ee31eae0b05aa8da5f4768e9924a4",
-      "source_type": "community_list",
-      "upstream_status": "ok",
-      "needs_review": false,
-      "review_note": null,
-      "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
-      "evaluation_rules_version": "1.3.0",
-      "quality_summary": {
-        "review_status": "single_pass",
-        "checks": {
-          "scope_match": {
-            "value": "pass",
-            "evidence": "Skill 属于金融与投资领域，无 hard_exclusions 排除项",
-            "informational": false
-          },
-          "purpose_clarity": {
-            "value": "pass",
-            "evidence": "明确解决市场数据获取问题，支持股票、加密货币等金融工具的扫描、报价、新闻及技术指标获取",
-            "informational": false
-          },
-          "instruction_completeness": {
-            "value": "pass",
-            "evidence": "提供命令行使用示例、参数说明及参考文档目录，足以理解核心功能",
-            "informational": false
-          },
-          "evidence_traceability": {
-            "value": "pass",
-            "evidence": "介绍与内容一致",
-            "informational": false
-          },
-          "dependency_transparency": {
-            "value": "unknown",
-            "evidence": "未明确声明特殊依赖，但涉及 Python 脚本执行，需注意环境要求",
-            "informational": true
-          },
-          "risk_review": {
-            "value": "unknown",
-            "evidence": "使用非官方 API，可能违反服务条款，但无凭据外传等违规行为",
-            "informational": false
-          }
-        },
-        "verification_note": "需通过外部验证确认 API 可用性",
-        "blocking_reasons": []
-      },
-      "last_evaluation_id": "gauss314/skills:skills/tradingview/SKILL.md|sha256:bb1ee31eae0b05aa8da5f4768e9924a4|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-01T05:25:41.678103+08:00"
     },
     {
       "skill_id": "tradermonty/claude-trading-skills:skills/market-news-analyst/SKILL.md",
@@ -109062,8 +106663,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-15",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -113093,8 +110699,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-15",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -324734,18 +322345,6 @@
         "from": "candidate"
       },
       {
-        "skill_id": "gauss314/skills:skills/data912/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-29",
-        "from": "recommended"
-      },
-      {
-        "skill_id": "gauss314/skills:skills/sec-data/SKILL.md",
-        "reason": "用户收藏",
-        "added_at": "2026-09-29",
-        "from": "recommended"
-      },
-      {
         "skill_id": "thousandcents/futures-research:SKILL.md",
         "reason": "用户收藏",
         "added_at": "2026-09-29",
@@ -324852,24 +322451,6 @@
         "from": "recommended",
         "reason": "用户收藏",
         "skill_id": "skillmedev/skills:skills/second-brain/SKILL.md"
-      },
-      {
-        "added_at": "2026-10-07",
-        "from": "recommended",
-        "reason": "用户收藏",
-        "skill_id": "gauss314/skills:skills/backtesting/SKILL.md"
-      },
-      {
-        "added_at": "2026-10-07",
-        "from": "recommended",
-        "reason": "用户收藏",
-        "skill_id": "gauss314/skills:skills/finnhub/SKILL.md"
-      },
-      {
-        "added_at": "2026-10-07",
-        "from": "recommended",
-        "reason": "用户收藏",
-        "skill_id": "gauss314/skills:skills/marketscreener/SKILL.md"
       },
       {
         "added_at": "2026-10-07",
@@ -325158,6 +322739,102 @@
         "from": "recommended",
         "reason": "用户收藏",
         "skill_id": "nexu-io/open-design:plugins/_official/examples/pm-spec/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-15",
+        "from": "recommended",
+        "reason": "用户收藏",
+        "skill_id": "anbeime/skill:antinet-agentteams/skills/doc-parse/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-15",
+        "from": "candidate",
+        "reason": "用户收藏",
+        "skill_id": "gauss314/skills:skills/cafci/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-15",
+        "from": "recommended",
+        "reason": "用户收藏",
+        "skill_id": "nexu-io/open-design:skills/imagen/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-15",
+        "from": "candidate",
+        "reason": "用户收藏",
+        "skill_id": "skillmedev/skills:skills/competitive-moat/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-15",
+        "from": "candidate",
+        "reason": "用户收藏",
+        "skill_id": "skillmedev/skills:skills/economic-analysis/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-15",
+        "from": "candidate",
+        "reason": "用户收藏",
+        "skill_id": "skillmedev/skills:skills/engagement-reply-drafter/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-15",
+        "from": "candidate",
+        "reason": "用户收藏",
+        "skill_id": "skillmedev/skills:skills/expert-interview/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-15",
+        "from": "candidate",
+        "reason": "用户收藏",
+        "skill_id": "skillmedev/skills:skills/explain-plan-reader/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-15",
+        "from": "candidate",
+        "reason": "用户收藏",
+        "skill_id": "skillmedev/skills:skills/fact-checker/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-15",
+        "from": "candidate",
+        "reason": "用户收藏",
+        "skill_id": "skillmedev/skills:skills/feature-flags/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-15",
+        "from": "candidate",
+        "reason": "用户收藏",
+        "skill_id": "skillmedev/skills:skills/hashtag-strategist/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-15",
+        "from": "candidate",
+        "reason": "用户收藏",
+        "skill_id": "skillmedev/skills:skills/kubernetes-basics/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-15",
+        "from": "candidate",
+        "reason": "用户收藏",
+        "skill_id": "skillmedev/skills:skills/language-learning/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-15",
+        "from": "candidate",
+        "reason": "用户收藏",
+        "skill_id": "skillmedev/skills:skills/language-version-migrator/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-15",
+        "from": "candidate",
+        "reason": "用户收藏",
+        "skill_id": "skillmedev/skills:skills/launch-day-runbook/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-15",
+        "from": "candidate",
+        "reason": "用户收藏",
+        "skill_id": "skillmedev/skills:skills/retirement-projection/SKILL.md"
       }
     ]
   },
@@ -332800,6 +330477,11 @@
         "skill_id": "findscripter/everything-skills:09-verticals/legal-policy-drafter/SKILL.md",
         "reason": "存量黑名单过滤；批次 topic-filter-20261015-policybrief；命中：公共政策简报、企业制度与高管决策公文",
         "added_at": "2026-10-15"
+      },
+      {
+        "added_at": "2026-10-15",
+        "reason": "用户屏蔽/删除",
+        "skill_id": "skillmedev/skills:skills/power-bi-dax/SKILL.md"
       }
     ],
     "blocked_topics": [
@@ -335845,6 +333527,251 @@
         "expires_at": "2027-03-14",
         "reason": "用户暂不关注",
         "skill_id": "nexu-io/open-design:skills/d3-visualization/SKILL.md",
+        "snoozed_at": "2026-10-15"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-14",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/agent-orchestration/SKILL.md",
+        "snoozed_at": "2026-10-15"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-14",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/causal-inference/SKILL.md",
+        "snoozed_at": "2026-10-15"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-14",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/claims-verifier/SKILL.md",
+        "snoozed_at": "2026-10-15"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-14",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/cold-email-deliverability/SKILL.md",
+        "snoozed_at": "2026-10-15"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-14",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/conflict-resolution/SKILL.md",
+        "snoozed_at": "2026-10-15"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-14",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/contract-test-writer/SKILL.md",
+        "snoozed_at": "2026-10-15"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-14",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/coverage-gap-finder/SKILL.md",
+        "snoozed_at": "2026-10-15"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-14",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/crisis-comms-external/SKILL.md",
+        "snoozed_at": "2026-10-15"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-14",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/deep-research/SKILL.md",
+        "snoozed_at": "2026-10-15"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-14",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/differentiated-instruction/SKILL.md",
+        "snoozed_at": "2026-10-15"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-14",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/docker-compose-wizard/SKILL.md",
+        "snoozed_at": "2026-10-15"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-14",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/due-diligence-checklist/SKILL.md",
+        "snoozed_at": "2026-10-15"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-14",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/e2e-scenario-author/SKILL.md",
+        "snoozed_at": "2026-10-15"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-14",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/emergency-fund-planner/SKILL.md",
+        "snoozed_at": "2026-10-15"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-14",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/experiment-tracking/SKILL.md",
+        "snoozed_at": "2026-10-15"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-14",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/financial-statement-builder/SKILL.md",
+        "snoozed_at": "2026-10-15"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-14",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/idempotency-enforcer/SKILL.md",
+        "snoozed_at": "2026-10-15"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-14",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/interview-debrief-synthesizer/SKILL.md",
+        "snoozed_at": "2026-10-15"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-14",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/jtbd-extractor/SKILL.md",
+        "snoozed_at": "2026-10-15"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-14",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/launch-plan-sequencer/SKILL.md",
+        "snoozed_at": "2026-10-15"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-14",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/moodboard-builder/SKILL.md",
+        "snoozed_at": "2026-10-15"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-14",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/mutation-test-runner/SKILL.md",
+        "snoozed_at": "2026-10-15"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-14",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/pagination-and-sync-engineer/SKILL.md",
+        "snoozed_at": "2026-10-15"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-14",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/postmortem-writer/SKILL.md",
+        "snoozed_at": "2026-10-15"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-14",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/resume-reviewer/SKILL.md",
+        "snoozed_at": "2026-10-15"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-14",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/revenue-modeling/SKILL.md",
+        "snoozed_at": "2026-10-15"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-14",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/salary-negotiation/SKILL.md",
+        "snoozed_at": "2026-10-15"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-14",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/screencast-capture/SKILL.md",
+        "snoozed_at": "2026-10-15"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-14",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/secrets-hygiene/SKILL.md",
+        "snoozed_at": "2026-10-15"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-14",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/sermon-writer/SKILL.md",
+        "snoozed_at": "2026-10-15"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-14",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/skill-description-writer/SKILL.md",
+        "snoozed_at": "2026-10-15"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-14",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/skill-tester/SKILL.md",
+        "snoozed_at": "2026-10-15"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-14",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/sleep-optimizer/SKILL.md",
+        "snoozed_at": "2026-10-15"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-14",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/soc2-evidence-helper/SKILL.md",
+        "snoozed_at": "2026-10-15"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-14",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/social-content-calendar/SKILL.md",
         "snoozed_at": "2026-10-15"
       }
     ]

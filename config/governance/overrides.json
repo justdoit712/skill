@@ -7637,6 +7637,11 @@
       "skill_id": "findscripter/everything-skills:09-verticals/legal-policy-drafter/SKILL.md",
       "reason": "存量黑名单过滤；批次 topic-filter-20261015-policybrief；命中：公共政策简报、企业制度与高管决策公文",
       "added_at": "2026-10-15"
+    },
+    {
+      "added_at": "2026-10-15",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "skillmedev/skills:skills/power-bi-dax/SKILL.md"
     }
   ],
   "blocked_topics": [

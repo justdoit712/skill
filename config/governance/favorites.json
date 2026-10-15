@@ -148,18 +148,6 @@
       "from": "candidate"
     },
     {
-      "skill_id": "gauss314/skills:skills/data912/SKILL.md",
-      "reason": "用户收藏",
-      "added_at": "2026-09-29",
-      "from": "recommended"
-    },
-    {
-      "skill_id": "gauss314/skills:skills/sec-data/SKILL.md",
-      "reason": "用户收藏",
-      "added_at": "2026-09-29",
-      "from": "recommended"
-    },
-    {
       "skill_id": "thousandcents/futures-research:SKILL.md",
       "reason": "用户收藏",
       "added_at": "2026-09-29",
@@ -266,24 +254,6 @@
       "from": "recommended",
       "reason": "用户收藏",
       "skill_id": "skillmedev/skills:skills/second-brain/SKILL.md"
-    },
-    {
-      "added_at": "2026-10-07",
-      "from": "recommended",
-      "reason": "用户收藏",
-      "skill_id": "gauss314/skills:skills/backtesting/SKILL.md"
-    },
-    {
-      "added_at": "2026-10-07",
-      "from": "recommended",
-      "reason": "用户收藏",
-      "skill_id": "gauss314/skills:skills/finnhub/SKILL.md"
-    },
-    {
-      "added_at": "2026-10-07",
-      "from": "recommended",
-      "reason": "用户收藏",
-      "skill_id": "gauss314/skills:skills/marketscreener/SKILL.md"
     },
     {
       "added_at": "2026-10-07",
@@ -572,6 +542,102 @@
       "from": "recommended",
       "reason": "用户收藏",
       "skill_id": "nexu-io/open-design:plugins/_official/examples/pm-spec/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-15",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "anbeime/skill:antinet-agentteams/skills/doc-parse/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-15",
+      "from": "candidate",
+      "reason": "用户收藏",
+      "skill_id": "gauss314/skills:skills/cafci/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-15",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "nexu-io/open-design:skills/imagen/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-15",
+      "from": "candidate",
+      "reason": "用户收藏",
+      "skill_id": "skillmedev/skills:skills/competitive-moat/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-15",
+      "from": "candidate",
+      "reason": "用户收藏",
+      "skill_id": "skillmedev/skills:skills/economic-analysis/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-15",
+      "from": "candidate",
+      "reason": "用户收藏",
+      "skill_id": "skillmedev/skills:skills/engagement-reply-drafter/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-15",
+      "from": "candidate",
+      "reason": "用户收藏",
+      "skill_id": "skillmedev/skills:skills/expert-interview/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-15",
+      "from": "candidate",
+      "reason": "用户收藏",
+      "skill_id": "skillmedev/skills:skills/explain-plan-reader/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-15",
+      "from": "candidate",
+      "reason": "用户收藏",
+      "skill_id": "skillmedev/skills:skills/fact-checker/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-15",
+      "from": "candidate",
+      "reason": "用户收藏",
+      "skill_id": "skillmedev/skills:skills/feature-flags/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-15",
+      "from": "candidate",
+      "reason": "用户收藏",
+      "skill_id": "skillmedev/skills:skills/hashtag-strategist/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-15",
+      "from": "candidate",
+      "reason": "用户收藏",
+      "skill_id": "skillmedev/skills:skills/kubernetes-basics/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-15",
+      "from": "candidate",
+      "reason": "用户收藏",
+      "skill_id": "skillmedev/skills:skills/language-learning/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-15",
+      "from": "candidate",
+      "reason": "用户收藏",
+      "skill_id": "skillmedev/skills:skills/language-version-migrator/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-15",
+      "from": "candidate",
+      "reason": "用户收藏",
+      "skill_id": "skillmedev/skills:skills/launch-day-runbook/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-15",
+      "from": "candidate",
+      "reason": "用户收藏",
+      "skill_id": "skillmedev/skills:skills/retirement-projection/SKILL.md"
     }
   ]
 }

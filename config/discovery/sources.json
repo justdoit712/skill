@@ -234,7 +234,13 @@
         "社区合集，需展开",
         "同库含交易执行技能，不能全库收录",
         "不将调用官方数据接口误称为官方技能"
-      ]
+      ],
+      "exclusion": {
+        "excluded": true,
+        "reason_code": "OUT_OF_SCOPE",
+        "decided_at": "2026-10-15",
+        "note": "用户要求加入黑名单，整库排除。"
+      }
     },
     {
       "id": "market_news_analyst",
