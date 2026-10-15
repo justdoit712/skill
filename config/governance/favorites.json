@@ -566,6 +566,12 @@
       "from": "recommended",
       "reason": "用户收藏",
       "skill_id": "othmanadi/planning-with-files:skills/i18n/planning-with-files-zht/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-15",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/pm-spec/SKILL.md"
     }
   ]
 }

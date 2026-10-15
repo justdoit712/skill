@@ -2054,6 +2054,69 @@
       "reason": "用户暂不关注",
       "skill_id": "vercel-labs/skills:.factory/workflows/pr-labeling/skills/pr-labeling/SKILL.md",
       "snoozed_at": "2026-10-14"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-14",
+      "reason": "用户暂不关注",
+      "skill_id": "nexu-io/open-design:plugins/_official/atoms/figma-extract/SKILL.md",
+      "snoozed_at": "2026-10-15"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-14",
+      "reason": "用户暂不关注",
+      "skill_id": "nexu-io/open-design:plugins/_official/atoms/rewrite-plan/SKILL.md",
+      "snoozed_at": "2026-10-15"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-14",
+      "reason": "用户暂不关注",
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/od-plugin-publish-github/SKILL.md",
+      "snoozed_at": "2026-10-15"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-14",
+      "reason": "用户暂不关注",
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/team-okrs/SKILL.md",
+      "snoozed_at": "2026-10-15"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-14",
+      "reason": "用户暂不关注",
+      "skill_id": "nexu-io/open-design:plugins/_official/scenarios/od-design-refine/SKILL.md",
+      "snoozed_at": "2026-10-15"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-14",
+      "reason": "用户暂不关注",
+      "skill_id": "nexu-io/open-design:plugins/_official/scenarios/od-nextjs-export/SKILL.md",
+      "snoozed_at": "2026-10-15"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-14",
+      "reason": "用户暂不关注",
+      "skill_id": "nexu-io/open-design:plugins/_official/scenarios/od-react-export/SKILL.md",
+      "snoozed_at": "2026-10-15"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-14",
+      "reason": "用户暂不关注",
+      "skill_id": "nexu-io/open-design:plugins/_official/scenarios/od-vue-export/SKILL.md",
+      "snoozed_at": "2026-10-15"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-14",
+      "reason": "用户暂不关注",
+      "skill_id": "nexu-io/open-design:skills/d3-visualization/SKILL.md",
+      "snoozed_at": "2026-10-15"
     }
   ]
 }
