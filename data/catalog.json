@@ -4,9 +4,9 @@
   "generated_at": "2026-10-09T21:10:54.373701+08:00",
   "counts": {
     "recommended": 610,
-    "candidate": 1269,
+    "candidate": 1261,
     "manual": 84,
-    "excluded": 1714
+    "excluded": 1722
   },
   "entries": [
     {
@@ -24837,8 +24837,10 @@
       "dependencies_declared": [],
       "limitations": "挑战和会员转换之间的关系需依赖后端模型实现",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-10-01T08:40:24.773249+08:00",
       "content_changed_at": null,
@@ -155642,9 +155644,10 @@
       "dependencies_declared": [],
       "limitations": "不包含埋点实施或单页CRO改稿，需用户自备实验平台与数据追踪工具",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-09T14:09:37.017609+08:00",
@@ -155730,9 +155733,10 @@
       "dependencies_declared": [],
       "limitations": "不提供已上线实验的中途调参或纯归因分析功能",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-09T14:09:59.825964+08:00",
@@ -157604,9 +157608,10 @@
       "dependencies_declared": [],
       "limitations": "不适用于实时数据、统计显著性检验、跨设备身份打通、超大规模数据或多币种场景。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-09T14:16:52.618282+08:00",
@@ -159366,9 +159371,10 @@
       "dependencies_declared": [],
       "limitations": "不涉及注册/登录流程、弹窗策略、整页文案重写、埋点统计或代码实现",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-09T14:29:48.935315+08:00",
@@ -159458,9 +159464,10 @@
       ],
       "limitations": null,
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-09T14:30:03.341650+08:00",
@@ -167575,9 +167582,10 @@
       ],
       "limitations": "不适用于落地页优化、注册后引导或非注册类表单",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-09T15:19:29.773718+08:00",
@@ -168915,9 +168923,10 @@
       ],
       "limitations": "不适用于注册/落地页转化或独立的长期邮件培育序列",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-09T16:56:47.359824+08:00",
@@ -332701,6 +332710,46 @@
         "skill_id": "aurora-ember-bio-lab/splatstudio:plugins/spec/examples/create-live-artifact-ops/SKILL.md",
         "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
         "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/gym-transformation-challenge/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-cro；命中：商业广告与营销推广（转化率优化/CRO/漏斗转化）",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:05-business/ab-test-designer/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-cro；命中：商业广告与营销推广（转化率优化/CRO/漏斗转化）",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:05-business/ab-test-setup-gates/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-cro；命中：商业广告与营销推广（转化率优化/CRO/漏斗转化）",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:05-business/campaign-attribution-analytics/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-cro；命中：商业广告与营销推广（转化率优化/CRO/漏斗转化）",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:05-business/conversion-rate-optimizer/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-cro；命中：商业广告与营销推广（转化率优化/CRO/漏斗转化）",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:05-business/cro-revenue-advisor/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-cro；命中：商业广告与营销推广（转化率优化/CRO/漏斗转化）",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:05-business/signup-flow-cro/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-cro；命中：商业广告与营销推广（转化率优化/CRO/漏斗转化）",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:05-business/user-onboarding-optimizer/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-cro；命中：商业广告与营销推广（转化率优化/CRO/漏斗转化）",
+        "added_at": "2026-10-15"
       }
     ],
     "blocked_topics": [
@@ -332720,7 +332769,7 @@
       },
       {
         "name": "商业广告与营销推广",
-        "description": "主要用于商业广告投放、广告法与违禁词合规、广告文案与创意生成、社交媒体广告视频与配乐制作、营销策划、SEO、获客或用户增长。保留通用技术写作与普通音视频处理工具。",
+        "description": "主要用于商业广告投放、广告法与违禁词合规、广告文案与创意生成、社交媒体广告视频与配乐制作、营销策划、SEO、获客或用户增长、转化率优化（CRO）、营销与注册漏斗转化、客户/会员转化活动设计、投放渠道归因与 A/B 增长实验。保留通用技术写作、普通音视频处理工具、系统性能测试与财务指标分析。",
         "keywords": [
           "商业广告",
           "广告文案",
@@ -332741,7 +332790,15 @@
           "growth hacking",
           "ad copy",
           "ad creative",
-          "advertising"
+          "advertising",
+          "CRO",
+          "转化率优化",
+          "转化漏斗",
+          "客户转化",
+          "会员转化",
+          "conversion rate",
+          "funnel optimization",
+          "signup-flow"
         ],
         "local_match": {
           "names": [
@@ -332821,14 +332878,22 @@
             "生成营销截图",
             "基于 Playwright 生成营销用途截图",
             "生成营销用途截图",
-            "营销截图生成技能入口"
+            "营销截图生成技能入口",
+            "转化率优化",
+            "客户转化",
+            "会员转化",
+            "转化漏斗",
+            "注册流程转化"
           ],
           "preserve_phrases": [
             "开源软件",
             "前端组件",
             "代码审计",
             "open source",
-            "ui library"
+            "ui library",
+            "现金转化率",
+            "格式转换",
+            "数据转换"
           ]
         }
       },
