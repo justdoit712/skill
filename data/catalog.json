@@ -3,10 +3,10 @@
   "rules_version": "1.3.0",
   "generated_at": "2026-10-09T21:10:54.373701+08:00",
   "counts": {
-    "recommended": 663,
-    "candidate": 1429,
+    "recommended": 631,
+    "candidate": 1300,
     "manual": 84,
-    "excluded": 1501
+    "excluded": 1662
   },
   "entries": [
     {
@@ -7709,9 +7709,10 @@
       "dependencies_declared": [],
       "limitations": "高度依赖特定的Stitch平台和MCP工具生态，通用性受限；需要访问特定API密钥和项目ID。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-29T10:32:22.938914+08:00",
@@ -7763,12 +7764,7 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "google-labs-code/stitch-skills:plugins/stitch-design/skills/manage-design-system/SKILL.md|sha256:5ce0b8adb5261e8a926fc0942d679cda|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-29T10:32:22.935723+08:00",
-      "snooze": {
-        "snoozed_at": "2026-09-29",
-        "expires_at": "2027-02-26",
-        "reason": "用户暂不关注"
-      }
+      "evaluated_at": "2026-09-29T10:32:22.935723+08:00"
     },
     {
       "skill_id": "google-labs-code/stitch-skills:plugins/stitch-utilities/skills/enhance-prompt/SKILL.md",
@@ -7801,9 +7797,10 @@
       "dependencies_declared": [],
       "limitations": "主要依赖于Stitch文档和设计系统的可用性，若缺乏DESIGN.md则需手动补充信息。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-29T10:33:17.122538+08:00",
@@ -7855,12 +7852,7 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "google-labs-code/stitch-skills:plugins/stitch-utilities/skills/enhance-prompt/SKILL.md|sha256:ccb200c798072438b642b1fa6a5c5155|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-29T10:33:17.119365+08:00",
-      "snooze": {
-        "snoozed_at": "2026-09-29",
-        "expires_at": "2027-02-26",
-        "reason": "用户暂不关注"
-      }
+      "evaluated_at": "2026-09-29T10:33:17.119365+08:00"
     },
     {
       "skill_id": "google-labs-code/stitch-skills:plugins/stitch-design/skills/upload-to-stitch/SKILL.md",
@@ -8083,9 +8075,10 @@
       ],
       "limitations": "高度依赖Google Stitch平台及其AI Agent能力；设计风格主观性强（'Taste'），可能不适用于所有品牌调性；需人工或Agent严格遵循反模式列表。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-29T10:35:05.644732+08:00",
@@ -8137,12 +8130,7 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "google-labs-code/stitch-skills:plugins/stitch-utilities/skills/taste-design/SKILL.md|sha256:e425fdb7ab250764f6229c48941f97e2|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-29T10:35:05.641519+08:00",
-      "snooze": {
-        "snoozed_at": "2026-09-29",
-        "expires_at": "2027-02-26",
-        "reason": "用户暂不关注"
-      }
+      "evaluated_at": "2026-09-29T10:35:05.641519+08:00"
     },
     {
       "skill_id": "supabase/agent-skills:skills/supabase/SKILL.md",
@@ -19550,9 +19538,10 @@
       "dependencies_declared": [],
       "limitations": "仅适用于设计原型评审，已明确排除开发实现验证功能",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-10-01T08:18:10.992115+08:00",
@@ -19637,9 +19626,10 @@
       "dependencies_declared": [],
       "limitations": "未说明依赖特定设计软件或交付平台，通用教材模板适用阅读。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-10-01T08:19:23.602431+08:00",
@@ -25301,9 +25291,10 @@
       ],
       "limitations": "未声明具体软件依赖",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-10-01T08:41:45.769368+08:00",
@@ -32651,9 +32642,10 @@
       "dependencies_declared": [],
       "limitations": "需自行定义产品的激活里程碑和用户旅程，未提供具体产品模板。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-10-02T13:13:55.393088+08:00",
@@ -45600,9 +45592,10 @@
       ],
       "limitations": "未明确说明非CSS环境下的实现细节；依赖具体代码实现",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-01T05:29:19.719552+08:00",
@@ -51379,8 +51372,10 @@
       "dependencies_declared": [],
       "limitations": "纯指南无代码产出；字体授权、字形覆盖等仅列为评估标准，需用户自行核实；断点机制与完整品牌手册分别委托给 responsive-spec、brand-guidelines 等配套技能，本材料未证明这些配套技能可用。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-02T07:31:44.151003+08:00",
       "content_changed_at": null,
@@ -51431,12 +51426,7 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/typography-system/SKILL.md|sha256:15aa95fe8351efc63d2379994ea5ff1d|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-02T07:31:44.139782+08:00",
-      "snooze": {
-        "snoozed_at": "2026-10-07",
-        "expires_at": "2027-03-06",
-        "reason": "用户暂不关注"
-      }
+      "evaluated_at": "2026-10-02T07:31:44.139782+08:00"
     },
     {
       "skill_id": "skillmedev/skills:skills/usability-test-plan/SKILL.md",
@@ -51748,8 +51738,10 @@
       "dependencies_declared": [],
       "limitations": "材料未声明适用平台与依赖；审计依赖输入的字符串清单及上下文，团队若无清单需先提取；法律/受监管文案仅标记不改写；升级路由引用的 error-message-writer、onboarding-copy、push-notification-copy、design-critique 等其他技能内容未包含在本材料中。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-02T07:35:58.717284+08:00",
       "content_changed_at": null,
@@ -51800,12 +51792,7 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/ux-writing-audit/SKILL.md|sha256:4a2ccbfb6db4aa1fac8f19bd7cad6960|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-02T07:35:58.703195+08:00",
-      "snooze": {
-        "snoozed_at": "2026-10-07",
-        "expires_at": "2027-03-06",
-        "reason": "用户暂不关注"
-      }
+      "evaluated_at": "2026-10-02T07:35:58.703195+08:00"
     },
     {
       "skill_id": "skillmedev/skills:skills/vercel-firewall-and-botid/SKILL.md",
@@ -52300,8 +52287,10 @@
       "dependencies_declared": [],
       "limitations": "仅覆盖视觉层级单一维度，不含可用性与工艺的完整设计评审（材料建议转用 design-critique），也不构建底层字体系统（建议配 typography-system）；方法论无外部数据来源或实测验证。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-02T07:41:23.929345+08:00",
       "content_changed_at": null,
@@ -52352,12 +52341,7 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/visual-hierarchy/SKILL.md|sha256:578e6b2c89c565d8507386374c8e6ccc|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-02T07:41:23.918738+08:00",
-      "snooze": {
-        "snoozed_at": "2026-10-07",
-        "expires_at": "2027-03-06",
-        "reason": "用户暂不关注"
-      }
+      "evaluated_at": "2026-10-02T07:41:23.918738+08:00"
     },
     {
       "skill_id": "skillmedev/skills:skills/weather-climate/SKILL.md",
@@ -56499,9 +56483,10 @@
       "dependencies_declared": [],
       "limitations": "未说明运行环境及依赖；本地预览服务需额外启动；部分功能依赖外部脚本（如 preview-server）；未说明是否支持中文以外语言的界面生成；无明确版本兼容性说明",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-08T09:38:50.955912+08:00",
@@ -96231,9 +96216,10 @@
       "dependencies_declared": [],
       "limitations": "仅输出HTML/CSS原型，不包含交互逻辑或后端功能；依赖设计系统组件（color, typography等）但未指定具体实现。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-08T14:41:33.003058+08:00",
@@ -96499,9 +96485,10 @@
       "dependencies_declared": [],
       "limitations": "未声明是否支持 Android 设备框架；未说明如何适配不同设计系统 token 的映射细节",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-08T14:55:18.033845+08:00",
@@ -97211,9 +97198,10 @@
       ],
       "limitations": "依赖外部文件（DESIGN.md、template.html）未明确是否随仓库提供；未说明运行环境或工具链；仅支持HTML单文件输出，不支持动态后端集成。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-08T15:00:07.452553+08:00",
@@ -97836,8 +97824,10 @@
       "dependencies_declared": [],
       "limitations": "依赖上游 OD 运行时环境及工具链，未声明具体平台兼容性",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-03T21:03:49.990882+08:00",
       "content_changed_at": null,
@@ -97888,12 +97878,7 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "nexu-io/open-design:plugins/_official/atoms/direction-picker/SKILL.md|sha256:9e24489a0b8be69986e517cfc0abdd07|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-03T21:03:49.976431+08:00",
-      "snooze": {
-        "snoozed_at": "2026-10-14",
-        "expires_at": "2027-03-13",
-        "reason": "用户暂不关注"
-      }
+      "evaluated_at": "2026-10-03T21:03:49.976431+08:00"
     },
     {
       "skill_id": "nexu-io/open-design:plugins/_official/atoms/figma-extract/SKILL.md",
@@ -97933,8 +97918,10 @@
       ],
       "limitations": "需要有效的 Figma OAuth token；不支持的节点类型会被记录但不处理。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-03T21:04:28.530986+08:00",
       "content_changed_at": null,
@@ -97985,12 +97972,7 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "nexu-io/open-design:plugins/_official/atoms/figma-extract/SKILL.md|sha256:9828c1d256b933019509a271802885ce|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-03T21:04:28.518069+08:00",
-      "snooze": {
-        "snoozed_at": "2026-10-15",
-        "expires_at": "2027-03-14",
-        "reason": "用户暂不关注"
-      }
+      "evaluated_at": "2026-10-03T21:04:28.518069+08:00"
     },
     {
       "skill_id": "nexu-io/open-design:plugins/_official/atoms/patch-edit/SKILL.md",
@@ -98580,9 +98562,10 @@
       "dependencies_declared": [],
       "limitations": "依赖用户提供的HTML文件或粘贴代码；未说明是否需DESIGN.md主题文件；未指定运行环境或工具链；仅支持单文件输出，不处理多文件项目。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-08T15:05:21.455377+08:00",
@@ -99307,9 +99290,10 @@
       "dependencies_declared": [],
       "limitations": "仅限单屏设计，不支持多页面流程或动态交互；依赖设计系统变量配置；无外部图像支持。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-08T15:31:51.313308+08:00",
@@ -100493,8 +100477,10 @@
       "dependencies_declared": [],
       "limitations": "仅适用于 OpenDesign 产物，需配合 OpenDesign 环境使用",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-03T21:55:00.514509+08:00",
       "content_changed_at": null,
@@ -100545,12 +100531,7 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "nexu-io/open-design:plugins/_official/scenarios/od-design-refine/SKILL.md|sha256:ebbe0310f75921810900ce7e5f782741|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-03T21:55:00.499573+08:00",
-      "snooze": {
-        "snoozed_at": "2026-10-15",
-        "expires_at": "2027-03-14",
-        "reason": "用户暂不关注"
-      }
+      "evaluated_at": "2026-10-03T21:55:00.499573+08:00"
     },
     {
       "skill_id": "nexu-io/open-design:plugins/_official/scenarios/od-default/SKILL.md",
@@ -100584,9 +100565,10 @@
       "dependencies_declared": [],
       "limitations": "仅作为系统内部默认插件，不直接暴露给终端用户；依赖 OpenDesign 框架的上下文与工具链支持。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-08T15:45:25.003917+08:00",
@@ -100872,9 +100854,10 @@
       "dependencies_declared": [],
       "limitations": "依赖 open-design daemon 环境，作为内部场景插件需要主项目支持",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-03T21:55:34.552730+08:00",
@@ -101674,9 +101657,10 @@
       "dependencies_declared": [],
       "limitations": "未明确说明所需前端框架或库；移动端兼容性依赖于开发者对响应式规则的实现；部分高级动画可能需JavaScript支持。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-08T15:51:17.987686+08:00",
@@ -104033,8 +104017,10 @@
       "dependencies_declared": [],
       "limitations": "SKILL.md 本身不包含使用步骤或内容，需用户自行安装上游 bundle 才能使用完整功能；未声明运行环境与依赖",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-08T17:14:18.164072+08:00",
       "content_changed_at": null,
@@ -104472,9 +104458,10 @@
       "dependencies_declared": [],
       "limitations": "当前仅为目录条目，实际功能需依赖上游仓库 gstack，缺少具体执行步骤和资源细节",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-08T17:16:26.769531+08:00",
@@ -104559,8 +104546,10 @@
       "dependencies_declared": [],
       "limitations": "缺少具体操作步骤和模板结构说明；需依赖上游仓库完整工作流，未明示运行环境和依赖。",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-08T17:16:29.457600+08:00",
       "content_changed_at": null,
@@ -104681,9 +104670,10 @@
       "dependencies_declared": [],
       "limitations": "实际工作流依赖上游仓库gstack，当前SKILL.md未提供完整执行细节或资产路径，需额外访问上游获取。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-08T17:16:48.170320+08:00",
@@ -105338,8 +105328,10 @@
       "dependencies_declared": [],
       "limitations": "缺少具体使用步骤和示例，依赖上游仓库完整资产，运行条件不透明",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-08T17:18:21.209359+08:00",
       "content_changed_at": null,
@@ -105428,9 +105420,10 @@
       ],
       "limitations": "未说明是否支持移动端或响应式场景；GSAP 为可选依赖但未说明其必要性；未提供可运行示例或验收标准",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-08T17:17:59.859770+08:00",
@@ -106676,8 +106669,10 @@
       "dependencies_declared": [],
       "limitations": "缺乏具体操作步骤和环境要求说明，依赖上游仓库完整文档；未提供独立执行所需的所有资源。",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-08T17:21:13.577305+08:00",
       "content_changed_at": null,
@@ -106762,8 +106757,10 @@
       "dependencies_declared": [],
       "limitations": "缺少具体执行步骤和规则模板，需依赖上游仓库完整资产；未说明运行环境要求。",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-08T17:21:32.324350+08:00",
       "content_changed_at": null,
@@ -106848,9 +106845,10 @@
       "dependencies_declared": [],
       "limitations": "需依赖上游 figma/skills 仓库中的完整实现；未说明运行环境、API 认证或兼容性要求。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-08T17:21:40.542626+08:00",
@@ -106935,8 +106933,10 @@
       "dependencies_declared": [],
       "limitations": "技能本身为 catalog entry，不包含实际实现；用户需安装上游 bundle 才能使用，依赖信息未在此声明",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-08T17:21:46.258268+08:00",
       "content_changed_at": null,
@@ -107197,8 +107197,10 @@
       "dependencies_declared": [],
       "limitations": "依赖上游仓库中的完整资产和脚本，未明确运行环境和依赖细节；需自行安装并查阅上游README。",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-08T17:22:25.073457+08:00",
       "content_changed_at": null,
@@ -107283,8 +107285,10 @@
       "dependencies_declared": [],
       "limitations": "缺乏具体操作指导、示例代码或配置模板，依赖外部上游仓库完整内容，当前材料不足以独立使用。",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-08T17:22:30.557978+08:00",
       "content_changed_at": null,
@@ -109869,9 +109873,10 @@
       "dependencies_declared": [],
       "limitations": "缺少具体评分规则和执行流程说明，需依赖上游完整工作流；未明确运行环境要求",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-08T19:06:41.289263+08:00",
@@ -109957,8 +109962,10 @@
       "dependencies_declared": [],
       "limitations": "缺少具体规则内容展示，需依赖上游仓库获取完整信息；未说明是否支持自动化集成或代码生成",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-08T19:06:47.131589+08:00",
       "content_changed_at": null,
@@ -110223,9 +110230,10 @@
       "dependencies_declared": [],
       "limitations": "未说明是否需要特定渲染环境或工具链支持；缺少对多平台兼容性的说明。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-08T19:07:45.485755+08:00",
@@ -110670,9 +110678,10 @@
       ],
       "limitations": "依赖外部 STANDARDS.md 文件提供具体数值（如 easing 曲线、持续时间表），若缺失则无法执行完整审查；未说明是否兼容移动端或非 Web 平台。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-08T19:09:11.597867+08:00",
@@ -111207,9 +111216,10 @@
       "dependencies_declared": [],
       "limitations": "缺少具体执行步骤和操作细节，需依赖上游完整技能包才能运行；未说明所需环境或工具。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-08T19:11:36.877772+08:00",
@@ -111639,10 +111649,11 @@
       "dependencies_declared": [],
       "limitations": "缺少具体规则内容，需依赖上游仓库；未说明运行环境要求。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
         "INCOMPLETE_INSTRUCTIONS",
-        "MISSING_DEPENDENCY"
+        "MISSING_DEPENDENCY",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-08T19:13:31.038061+08:00",
@@ -112444,8 +112455,10 @@
       "dependencies_declared": [],
       "limitations": "依赖外部指南文件，实际审查能力受限于 guidelines.md 的覆盖范围；未提供具体规则示例",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-03T22:38:25.488937+08:00",
       "content_changed_at": null,
@@ -170045,8 +170058,10 @@
       ],
       "limitations": "不适用于纯代码实现、文案校对或无设计稿的需求讨论；Figma拉取依赖连接器可用性。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T01:38:51.219959+08:00",
       "content_changed_at": null,
@@ -170611,9 +170626,10 @@
       ],
       "limitations": "不适用于手写生产代码、实现交互动效或替代真人评审",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-09T17:03:17.893838+08:00",
@@ -170797,10 +170813,11 @@
       ],
       "limitations": "仅适用于 UI 图标设计，不适合非 UI 资产",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
         "NEEDS_VERIFICATION",
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-09T17:04:13.986629+08:00",
@@ -172221,9 +172238,10 @@
       ],
       "limitations": "不适用于长篇营销文案、纯视觉设计或后端文案逻辑实现",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-09T17:08:10.723914+08:00",
@@ -235052,9 +235070,10 @@
       "dependencies_declared": [],
       "limitations": "角色固定不可自定义；轮次和评分阈值有默认限制",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-04T17:59:14.957527+08:00",
@@ -235138,8 +235157,10 @@
       "dependencies_declared": [],
       "limitations": "空令牌集仅发出警告，需后续处理",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-04T17:59:41.729811+08:00",
       "content_changed_at": null,
@@ -235303,9 +235324,10 @@
       "dependencies_declared": [],
       "limitations": "仅当用户明确请求时可用，禁止主动触发；方向数量严格限制在3-5个且必须互斥。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-04T18:00:11.958169+08:00",
@@ -235476,8 +235498,10 @@
       "dependencies_declared": [],
       "limitations": "依赖有效Figma OAuth token；不支持节点类型会被记录但不处理。",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-04T18:01:05.018164+08:00",
       "content_changed_at": null,
@@ -237966,8 +237990,10 @@
       ],
       "limitations": "仅适用于已有设计制品的改进，不用于创建新制品；要求小步迭代，不引入未经要求的新设计语言",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-04T18:58:45.099512+08:00",
       "content_changed_at": null,
@@ -238060,8 +238086,10 @@
       ],
       "limitations": "依赖特定的OD框架及原子组件运行；需要Figma OAuth授权才能提取文件。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-04T18:58:58.171328+08:00",
       "content_changed_at": null,
@@ -239481,9 +239509,10 @@
       ],
       "limitations": "当前无关联的 GitHub 仓库、本地代码或 Figma 文件；设计系统在发布前无法被其他项目使用",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-04T19:10:19.432831+08:00",
@@ -240352,8 +240381,10 @@
       "dependencies_declared": [],
       "limitations": "未声明具体的OpenDesign环境依赖版本及配置要求",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-04T19:14:38.747716+08:00",
       "content_changed_at": null,
@@ -241512,9 +241543,10 @@
       ],
       "limitations": "本文件仅为目录索引条目，实际参考材料与脚本需安装上游仓库包才能使用；未明确所需的具体代理框架或运行环境。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "MISSING_DEPENDENCY"
+        "MISSING_DEPENDENCY",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-04T19:20:49.933482+08:00",
@@ -241964,9 +241996,10 @@
       ],
       "limitations": "当前文档仅为目录索引，实际工作流、资产和脚本需安装上游仓库才能使用",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INCOMPLETE_INSTRUCTIONS"
+        "INCOMPLETE_INSTRUCTIONS",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-04T19:24:14.039512+08:00",
@@ -242052,10 +242085,11 @@
       ],
       "limitations": "当前材料仅为目录索引，不包含实际的技能内容、模板或操作指南，需依赖外部上游仓库才能执行。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
         "INCOMPLETE_INSTRUCTIONS",
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-04T19:24:59.858055+08:00",
@@ -242143,9 +242177,10 @@
       ],
       "limitations": "本条目仅为目录广告，缺乏实际工作流步骤、规则或脚本，需依赖外部上游仓库才能运行",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INCOMPLETE_INSTRUCTIONS"
+        "INCOMPLETE_INSTRUCTIONS",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-04T19:25:01.311464+08:00",
@@ -242856,8 +242891,10 @@
       ],
       "limitations": "依赖已有界面或设计产物，不适用于从零开始的布局设计；需配合现有设计系统。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-04T19:27:50.464453+08:00",
       "content_changed_at": null,
@@ -244251,8 +244288,10 @@
       ],
       "limitations": "本文件仅为目录条目，实际资产、脚本和参考内容需安装上游仓库 bundle 才能运行",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-04T19:33:39.327257+08:00",
       "content_changed_at": null,
@@ -244338,10 +244377,11 @@
       ],
       "limitations": "本条目仅为目录索引，不包含实际的 Code Connect 工作流步骤或脚本，需依赖外部上游仓库",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
         "INCOMPLETE_INSTRUCTIONS",
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-04T19:33:45.810891+08:00",
@@ -244430,8 +244470,10 @@
       ],
       "limitations": "本条目仅为目录索引与触发器，完整执行依赖安装上游仓库的资产与脚本",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-04T19:34:13.908931+08:00",
       "content_changed_at": null,
@@ -244518,9 +244560,10 @@
       ],
       "limitations": "仅作为目录索引条目，缺乏实际操作步骤与具体依赖说明，需跳转至上游仓库获取完整内容",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INCOMPLETE_INSTRUCTIONS"
+        "INCOMPLETE_INSTRUCTIONS",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-04T19:34:34.072186+08:00",
@@ -244880,10 +244923,11 @@
       ],
       "limitations": "材料本身不包含 Figma 插件 API 的具体使用方法或脚本内容，需完全依赖安装外部上游仓库；未明确声明 Figma 运行环境要求。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
         "INCOMPLETE_INSTRUCTIONS",
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-04T19:35:50.888822+08:00",
@@ -247749,8 +247793,10 @@
       ],
       "limitations": "工作流第8步依赖未提供的 references/checklist.md 文件进行最终验证。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-04T19:50:06.765038+08:00",
       "content_changed_at": null,
@@ -248704,9 +248750,10 @@
       "dependencies_declared": [],
       "limitations": "当前材料仅为目录条目，缺少实际技能内容，需依赖并安装上游 bundle 才能运行。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INCOMPLETE_INSTRUCTIONS"
+        "INCOMPLETE_INSTRUCTIONS",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-04T19:54:03.209558+08:00",
@@ -248795,9 +248842,10 @@
       ],
       "limitations": "强依赖于 Google Stitch 的语义理解能力；设计规则具有强烈的主观偏好（如禁用特定字体和布局）。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-04T19:54:23.217292+08:00",
@@ -249120,9 +249168,10 @@
       ],
       "limitations": "材料本身仅为目录条目，未包含实际的 UI 约束规则，需前往上游仓库获取完整内容。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INCOMPLETE_INSTRUCTIONS"
+        "INCOMPLETE_INSTRUCTIONS",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-04T19:55:36.600407+08:00",
@@ -249900,8 +249949,10 @@
       ],
       "limitations": "依赖本地 references/guidelines.md 文件，若缺失则需依赖网络请求获取上游版本。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-04T19:57:42.624135+08:00",
       "content_changed_at": null,
@@ -252353,8 +252404,10 @@
       ],
       "limitations": "依赖特定的插件管道环境（如 OD_MAX_DEVLOOP_ITERATIONS 变量），缺乏独立运行的具体配置说明；审查结果依赖执行者的主观判断或模型能力，无自动化量化验收标准。",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-04T20:53:15.575679+08:00",
       "content_changed_at": null,
@@ -252445,8 +252498,10 @@
       ],
       "limitations": "依赖特定的上游原子输出或截图输入，且需配合 daemon runner 运行；未提供独立安装或通用CLI使用说明。",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-04T20:53:32.037820+08:00",
       "content_changed_at": null,
@@ -252623,8 +252678,10 @@
       ],
       "limitations": "依赖特定的 Open Design 运行时环境及工具链，缺乏独立运行说明。",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-04T20:54:39.727736+08:00",
       "content_changed_at": null,
@@ -252713,8 +252770,10 @@
       ],
       "limitations": "作为 open-design-app 框架的原子插件运行，依赖特定的 daemon 和 OAuth 路由机制，可能无法独立使用。",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-04T20:55:40.580373+08:00",
       "content_changed_at": null,
@@ -253334,8 +253393,10 @@
       "dependencies_declared": [],
       "limitations": "仅支持HTML格式产物评审；依赖AI代理环境解析<artifact>标签及执行工作流；未提供自动化测试或代码级验证机制。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-04T21:03:48.237538+08:00",
       "content_changed_at": null,
@@ -255305,8 +255366,10 @@
       "dependencies_declared": [],
       "limitations": "依赖OpenDesign平台但未说明具体要求",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-05T06:24:55.452496+08:00",
       "content_changed_at": null,
@@ -255390,8 +255453,10 @@
       "dependencies_declared": [],
       "limitations": "依赖Figma OAuth连接器和具体实现细节未说明",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-05T06:25:05.798513+08:00",
       "content_changed_at": null,
@@ -256163,8 +256228,10 @@
       "dependencies_declared": [],
       "limitations": "需要浏览器自动化工具支持，Shader/运行时捕获可能不完整",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-05T06:26:32.234299+08:00",
       "content_changed_at": null,
@@ -256248,8 +256315,10 @@
       "dependencies_declared": [],
       "limitations": "需要设计基础知识和Tailwind CSS等前端技术理解",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-05T06:30:27.495265+08:00",
       "content_changed_at": null,
@@ -257534,8 +257603,10 @@
       "dependencies_declared": [],
       "limitations": "未明确OpenDesign artifact的具体格式和依赖要求",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-05T06:33:48.413257+08:00",
       "content_changed_at": null,
@@ -258116,8 +258187,10 @@
       "dependencies_declared": [],
       "limitations": "需要安装上游技能包，具体内容和使用方法未在材料中说明",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-05T06:34:36.247559+08:00",
       "content_changed_at": null,
@@ -258623,8 +258696,10 @@
       "dependencies_declared": [],
       "limitations": "需要安装上游bundle才能使用完整功能，当前文档缺少具体操作指导",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-05T06:36:26.185574+08:00",
       "content_changed_at": null,
@@ -259066,8 +259141,10 @@
       "dependencies_declared": [],
       "limitations": "需要上游gstack仓库的完整资源才能使用",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-05T06:37:36.793551+08:00",
       "content_changed_at": null,
@@ -259143,9 +259220,10 @@
       "dependencies_declared": [],
       "limitations": "材料极度缺乏，无法了解技能具体功能和用法",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-05T06:37:38.557851+08:00",
@@ -259266,9 +259344,10 @@
       "dependencies_declared": [],
       "limitations": "需要访问外部仓库获取完整实现",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INCOMPLETE_INSTRUCTIONS"
+        "INCOMPLETE_INSTRUCTIONS",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-05T06:37:48.415833+08:00",
@@ -259833,8 +259912,10 @@
       ],
       "limitations": "需要已有设计产物作为基础，不改变核心布局",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-05T06:38:38.231160+08:00",
       "content_changed_at": null,
@@ -260007,10 +260088,11 @@
       "dependencies_declared": [],
       "limitations": "需要访问上游仓库获取完整实现，当前材料缺乏具体操作指导",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
         "INCOMPLETE_INSTRUCTIONS",
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-05T06:38:49.682800+08:00",
@@ -261246,9 +261328,10 @@
       "dependencies_declared": [],
       "limitations": "缺少具体操作说明，依赖上游仓库提供完整信息",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INCOMPLETE_INSTRUCTIONS"
+        "INCOMPLETE_INSTRUCTIONS",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-05T06:40:17.598661+08:00",
@@ -261333,9 +261416,10 @@
       "dependencies_declared": [],
       "limitations": "缺少具体使用指导，需要安装上游仓库才能使用",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INCOMPLETE_INSTRUCTIONS"
+        "INCOMPLETE_INSTRUCTIONS",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-05T06:40:27.295027+08:00",
@@ -261420,10 +261504,11 @@
       "dependencies_declared": [],
       "limitations": "需要访问上游仓库获取完整实现，当前材料仅提供基本介绍",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
         "INCOMPLETE_INSTRUCTIONS",
-        "MISSING_DEPENDENCY"
+        "MISSING_DEPENDENCY",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-05T06:40:40.154576+08:00",
@@ -261508,9 +261593,10 @@
       "dependencies_declared": [],
       "limitations": "仅提供上游链接，缺少具体实现和使用说明",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INCOMPLETE_INSTRUCTIONS"
+        "INCOMPLETE_INSTRUCTIONS",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-05T06:40:41.070980+08:00",
@@ -261587,10 +261673,11 @@
       "dependencies_declared": [],
       "limitations": "缺乏具体实现细节，仅提供外部链接",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
         "INCOMPLETE_INSTRUCTIONS",
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-05T06:40:52.946000+08:00",
@@ -261846,8 +261933,10 @@
       "dependencies_declared": [],
       "limitations": "需要安装上游bundle，缺少具体使用方法和示例",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-05T06:41:08.211438+08:00",
       "content_changed_at": null,
@@ -264858,9 +264947,10 @@
       ],
       "limitations": "若缺少参考证据（截图、URL 等），仅能基于 brief 生成合约，可能影响准确度",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-05T07:11:46.651522+08:00",
@@ -265856,10 +265946,11 @@
       ],
       "limitations": "核心工作流、脚本及资源位于外部上游仓库，本材料仅为目录入口，无法独立运行。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
         "INCOMPLETE_INSTRUCTIONS",
-        "MISSING_DEPENDENCY"
+        "MISSING_DEPENDENCY",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-05T07:37:18.355003+08:00",
@@ -266203,9 +266294,10 @@
       ],
       "limitations": "依赖 Google Stitch 平台访问权限",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-05T07:46:48.495091+08:00",
@@ -266292,11 +266384,12 @@
       ],
       "limitations": "核心约束内容未包含在本材料中，需安装上游仓库",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
         "INCOMPLETE_INSTRUCTIONS",
         "MISSING_DEPENDENCY",
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-05T07:57:12.108489+08:00",
@@ -267115,9 +267208,10 @@
       ],
       "limitations": "核心审查规则依赖于外部文件 references/guidelines.md，当前材料未提供该文件内容，无法验证规则完整性。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "NEEDS_VERIFICATION"
+        "NEEDS_VERIFICATION",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-05T08:09:44.854587+08:00",
@@ -269615,9 +269709,10 @@
       "dependencies_declared": [],
       "limitations": "依赖特定的守护进程（daemon）和CLI环境，具体运行条件未明确说明；角色固定为v1版本，不可自定义。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-05T09:21:47.221027+08:00",
@@ -269703,9 +269798,10 @@
       "dependencies_declared": [],
       "limitations": "材料未说明运行环境、编程语言依赖或平台兼容性；未提供具体的使用示例或验证方法。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-05T09:21:55.042873+08:00",
@@ -269877,9 +269973,10 @@
       "dependencies_declared": [],
       "limitations": "仅当用户明确请求方向比较时触发，不主动提供选项。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-05T09:22:12.168477+08:00",
@@ -269967,9 +270064,10 @@
       ],
       "limitations": "材料未说明对Figma节点类型的完整支持情况，仅提及会记录不支持的节点。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-05T09:22:31.097627+08:00",
@@ -270576,9 +270674,10 @@
       "dependencies_declared": [],
       "limitations": "仅适用于HTML制品评审；未声明具体运行环境或依赖；评分依赖评审者的主观判断。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-05T09:24:41.646866+08:00",
@@ -275105,8 +275204,10 @@
       "dependencies_declared": [],
       "limitations": "本文件仅为目录入口，实际参考资料与脚本需安装上游仓库完整包后方可使用。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-05T13:05:51.977585+08:00",
       "content_changed_at": null,
@@ -275632,8 +275733,10 @@
       "dependencies_declared": [],
       "limitations": "当前 SKILL.md 仅为目录入口，实际执行逻辑和资产位于上游仓库，需额外安装才能使用。",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-05T13:09:51.171106+08:00",
       "content_changed_at": null,
@@ -276572,8 +276675,10 @@
       "dependencies_declared": [],
       "limitations": "缺少具体的提示词模板或执行脚本，需依赖外部上游仓库资源才能完整运行。",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-05T13:12:43.359495+08:00",
       "content_changed_at": null,
@@ -277686,8 +277791,10 @@
       "dependencies_declared": [],
       "limitations": "材料本身仅为元数据或索引，缺乏实际操作步骤，需依赖外部上游仓库资源。",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-05T13:16:26.968151+08:00",
       "content_changed_at": null,
@@ -280679,10 +280786,11 @@
       ],
       "limitations": "严重依赖外部上游仓库的具体资产和脚本，自身缺乏独立的可执行内容或详细标准。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
         "INCOMPLETE_INSTRUCTIONS",
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-05T13:31:08.518386+08:00",
@@ -280767,9 +280875,10 @@
       "dependencies_declared": [],
       "limitations": "当前 SKILL.md 仅为索引，不包含具体设计规则内容，需访问上游仓库才能使用。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-05T13:31:17.629087+08:00",
@@ -281024,9 +281133,10 @@
       "dependencies_declared": [],
       "limitations": "依赖上游仓库中的 references/checklist.md 进行最终验证，但该文件未在材料中直接展示；主要针对桌面端设计场景。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-05T13:33:29.564328+08:00",
@@ -281964,9 +282074,10 @@
       ],
       "limitations": "强依赖于 Google Stitch 平台的语义理解能力；主要面向 Web 和 Desktop 端的界面设计。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-05T13:38:26.877203+08:00",
@@ -282297,10 +282408,11 @@
       ],
       "limitations": "当前材料仅为目录条目，缺少实际的 UI 约束规则内容，需依赖上游仓库。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
         "INCOMPLETE_INSTRUCTIONS",
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-05T13:39:25.106281+08:00",
@@ -285975,9 +286087,10 @@
       "dependencies_declared": [],
       "limitations": "仅适用于用户显式请求比较方向的设计规划场景，不适用于其他情况。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-05T23:53:40.991150+08:00",
@@ -286065,8 +286178,10 @@
       ],
       "limitations": "依赖特定的 Open Design Daemon 平台，非独立可用；需要有效的 Figma OAuth 权限。",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-05T23:54:34.134442+08:00",
       "content_changed_at": null,
@@ -288447,9 +288562,10 @@
       "dependencies_declared": [],
       "limitations": "未说明是否适配特定前端框架或设计系统；仅提供通用设计原则，实际落地需结合具体技术栈；未提供自动化校验工具或插件集成方案。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-10-08T09:33:34.780886+08:00",
@@ -291551,8 +291667,10 @@
       "dependencies_declared": [],
       "limitations": "依赖 OpenDesign 系统，未说明具体平台兼容性。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-08T21:08:28.877126+08:00",
       "content_changed_at": null,
@@ -291639,9 +291757,10 @@
       ],
       "limitations": "依赖插件层提供的OAuth和文件选择界面，未说明具体运行环境。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-08T21:08:48.838154+08:00",
@@ -292934,9 +293053,10 @@
       "dependencies_declared": [],
       "limitations": "依赖本地git凭证或认证的GitHub CLI；GitHub连接器未配置；草稿状态的设计系统无法被其他项目使用。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-08T21:33:21.024372+08:00",
@@ -293021,9 +293141,10 @@
       "dependencies_declared": [],
       "limitations": "依赖外部引用文件（如references/目录），部分功能需用户确认（如删除文件）",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-08T21:33:52.399817+08:00",
@@ -293888,9 +294009,10 @@
       "dependencies_declared": [],
       "limitations": "未说明最大迭代次数，且依赖于'OpenDesign artifact'的存在。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-08T21:43:17.280691+08:00",
@@ -294481,8 +294603,10 @@
       "dependencies_declared": [],
       "limitations": "仅作为目录条目，具体内容需访问上游仓库获取；未提供实质性指导材料。",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-08T21:47:05.541746+08:00",
       "content_changed_at": null,
@@ -295002,8 +295126,10 @@
       "dependencies_declared": [],
       "limitations": "核心功能与用法需查阅上游仓库，当前材料未提供完整说明。",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-08T21:58:04.670066+08:00",
       "content_changed_at": null,
@@ -295371,9 +295497,10 @@
       "dependencies_declared": [],
       "limitations": "审查依赖于未提供的 [STANDARDS.md](STANDARDS.md) 文件以获取精确值；专注于动画代码，不审查非动画代码。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-08T22:15:06.723014+08:00",
@@ -295973,9 +296100,10 @@
       "dependencies_declared": [],
       "limitations": "功能依赖上游仓库的完整工作流和资产，本条目仅为目录入口。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-08T22:24:35.539633+08:00",
@@ -296064,9 +296192,10 @@
       ],
       "limitations": "仅适用于Google Stitch平台，输出为DESIGN.md文件，不包含设计实现代码。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-08T22:24:50.032519+08:00",
@@ -296398,8 +296527,10 @@
       "dependencies_declared": [],
       "limitations": "依赖外部上游仓库，未在材料中提供具体约束内容。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-08T22:28:32.035627+08:00",
       "content_changed_at": null,
@@ -297299,9 +297430,10 @@
       "dependencies_declared": [],
       "limitations": "缺少具体使用说明，需依赖上游仓库内容。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INCOMPLETE_INSTRUCTIONS"
+        "INCOMPLETE_INSTRUCTIONS",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-08T22:37:13.255457+08:00",
@@ -297386,8 +297518,10 @@
       "dependencies_declared": [],
       "limitations": "依赖本地文件 references/guidelines.md；仅审查规则符合度，不执行功能测试。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-08T22:37:48.729552+08:00",
       "content_changed_at": null,
@@ -297907,9 +298041,10 @@
       "dependencies_declared": [],
       "limitations": "仅评审HTML产物，依赖内部或用户提供的代码/设计文件；评分依赖人工或代理对具体元素的识别。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-08T22:44:42.248884+08:00",
@@ -299243,9 +299378,10 @@
       ],
       "limitations": "必须依赖外部 DESIGN.md 获取设计规范；只能生成基于固定模板的 HTML 页面；颜色输入受严格语法限制。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-08T23:52:31.797853+08:00",
@@ -299513,9 +299649,10 @@
       "dependencies_declared": [],
       "limitations": "依赖大语言模型的上下文理解与生成能力；未提供具体品牌设计系统或令牌的接入指引；审查结果为主观定性描述，缺乏量化指标。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-09T00:07:25.076732+08:00",
@@ -299880,8 +300017,10 @@
       ],
       "limitations": "依赖特定运行时环境变量与设计系统文件；仅作为AI代理规划阶段的决策规则，不直接输出设计稿或代码。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-09T00:10:43.033854+08:00",
       "content_changed_at": null,
@@ -299969,8 +300108,10 @@
       ],
       "limitations": "依赖特定 od 框架与 OAuth 路由机制；未提供独立运行脚本或环境配置指南。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-09T00:12:16.200097+08:00",
       "content_changed_at": null,
@@ -300595,9 +300736,10 @@
       "dependencies_declared": [],
       "limitations": "仅支持HTML格式设计稿/原型评审；需人工或AI提供具体文件/代码片段；评分依赖执行者对设计细节的识别能力。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-09T00:23:41.848412+08:00",
@@ -302541,8 +302683,10 @@
       "dependencies_declared": [],
       "limitations": "缺乏具体实现代码或详细操作指引；未说明支持平台和依赖项。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-09T01:28:09.572990+08:00",
       "content_changed_at": null,
@@ -303482,8 +303626,10 @@
       "dependencies_declared": [],
       "limitations": "需要能够评估页面脚本和检查 Canvas/WebGL 状态的浏览器环境；部分高级特性（如着色器源码拦截）依赖特定工具支持。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-09T01:29:50.072484+08:00",
       "content_changed_at": null,
@@ -303991,11 +304137,12 @@
       "dependencies_declared": [],
       "limitations": "依赖references/未提供文件；核心规则需外部加载实现",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
         "INCOMPLETE_INSTRUCTIONS",
         "UNRESOLVED_UNKNOWN",
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-09T01:38:46.091888+08:00",
@@ -304836,8 +304983,10 @@
       "dependencies_declared": [],
       "limitations": "依赖OpenDesign格式未定义规范细节（引用第14行），平台兼容性不明",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-09T01:47:47.732956+08:00",
       "content_changed_at": null,
@@ -305919,9 +306068,10 @@
       ],
       "limitations": "当前材料仅为目录入口，核心功能与参考内容依赖外部仓库",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INCOMPLETE_INSTRUCTIONS"
+        "INCOMPLETE_INSTRUCTIONS",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-09T01:58:03.546329+08:00",
@@ -306268,9 +306418,10 @@
       "dependencies_declared": [],
       "limitations": "需手动安装上游bundle才能使用，无具体模板或字段定义，无法独立执行",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-09T02:09:31.975081+08:00",
@@ -306750,9 +306901,10 @@
       ],
       "limitations": "技能文档仅提供上游链接，缺少本地具体指导",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INCOMPLETE_INSTRUCTIONS"
+        "INCOMPLETE_INSTRUCTIONS",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-09T02:10:40.551157+08:00",
@@ -307157,9 +307309,10 @@
       ],
       "limitations": "未说明是否支持移动端、是否需特定框架环境，GSAP依赖未声明为必选",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-09T02:11:04.212214+08:00",
@@ -307244,9 +307397,10 @@
       "dependencies_declared": [],
       "limitations": "需手动安装上游仓库才能使用完整功能，本技能仅作目录入口，无独立可执行内容",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-09T02:11:09.399957+08:00",
@@ -308684,8 +308838,10 @@
       "dependencies_declared": [],
       "limitations": "需手动安装上游Figma技能包才能使用，当前材料无具体执行细节",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-09T02:12:56.210857+08:00",
       "content_changed_at": null,
@@ -311650,8 +311806,10 @@
       "dependencies_declared": [],
       "limitations": "核心有缺口，需进一步取得上游资料",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-09T02:38:59.934569+08:00",
       "content_changed_at": null,
@@ -311992,9 +312150,10 @@
       "dependencies_declared": [],
       "limitations": "需要用户提供明确参考依据，未包含设计系统库依赖说明",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-09T02:45:19.328417+08:00",
@@ -312333,8 +312492,10 @@
       "dependencies_declared": [],
       "limitations": "依赖未提供的外部资源 [STANDARDS.md] 和外部哲学资料；审设仅为 web 桌面用户。",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-09T02:48:14.796565+08:00",
       "content_changed_at": null,
@@ -313328,9 +313489,10 @@
       "dependencies_declared": [],
       "limitations": "核心约束规则未提供，需依赖上游未明确源代码",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INCOMPLETE_INSTRUCTIONS"
+        "INCOMPLETE_INSTRUCTIONS",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-09T02:59:37.193633+08:00",
@@ -313676,9 +313838,10 @@
       "dependencies_declared": [],
       "limitations": "仅为目录条目，需安装上游资源才能使用完整功能",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INCOMPLETE_INSTRUCTIONS"
+        "INCOMPLETE_INSTRUCTIONS",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-09T03:00:03.687993+08:00",
@@ -314245,9 +314408,10 @@
       "dependencies_declared": [],
       "limitations": "未声明运行环境依赖，无法判断是否支持非桌面环境或无文件系统访问的平台",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-09T03:03:51.246314+08:00",
@@ -315016,9 +315180,10 @@
       "dependencies_declared": [],
       "limitations": "要求输入为HTML工件，不支持非HTML格式；评分需人工分析具体元素，无法自动执行；未声明运行环境依赖",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-09T03:05:44.943883+08:00",
@@ -315363,9 +315528,10 @@
       "dependencies_declared": [],
       "limitations": "仅提供HTML原型模板，不包含后端逻辑、用户数据存储或真实交互功能",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-09T03:06:40.493602+08:00",
@@ -316679,8 +316845,10 @@
       "dependencies_declared": [],
       "limitations": "未提供具体验收示例，迭代次数上限需自行控制",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-09T03:19:11.321474+08:00",
       "content_changed_at": null,
@@ -316764,8 +316932,10 @@
       "dependencies_declared": [],
       "limitations": "依赖特定的输入格式，需要配合其他工具使用",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-09T03:19:14.469537+08:00",
       "content_changed_at": null,
@@ -316934,8 +317104,10 @@
       "dependencies_declared": [],
       "limitations": "依赖外部环境变量和工具，未说明兼容平台",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-09T03:19:38.037195+08:00",
       "content_changed_at": null,
@@ -317019,9 +317191,10 @@
       "dependencies_declared": [],
       "limitations": "需要Figma OAuth token和文件访问权限，不支持所有节点类型时记录在meta.json中",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-09T03:20:00.703295+08:00",
@@ -317623,8 +317796,10 @@
       "dependencies_declared": [],
       "limitations": "仅支持HTML设计作品评审，需要具体元素证据支持评分",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-09T03:22:59.633799+08:00",
       "content_changed_at": null,
@@ -320518,9 +320693,10 @@
       "dependencies_declared": [],
       "limitations": "未明确声明所有依赖或平台兼容性。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-09T18:35:51.798437+08:00",
@@ -320864,8 +321040,10 @@
       "dependencies_declared": [],
       "limitations": "未说明具体依赖或运行环境",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-09T18:45:47.782924+08:00",
       "content_changed_at": null,
@@ -320948,9 +321126,10 @@
       "dependencies_declared": [],
       "limitations": "未明确说明依赖项和运行环境",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-09T18:46:10.304739+08:00",
@@ -322252,9 +322431,10 @@
       "dependencies_declared": [],
       "limitations": "未明确说明依赖的工具或运行环境",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-09T18:58:49.367781+08:00",
@@ -322429,9 +322609,10 @@
       "dependencies_declared": [],
       "limitations": "未指定特殊工具、运行环境或依赖。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-09T18:59:46.580296+08:00",
@@ -331437,6 +331618,811 @@
         "skill_id": "aurora-ember-bio-lab/splatstudio:plugins/spec/examples/export-nextjs-handoff/SKILL.md",
         "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
         "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "google-labs-code/stitch-skills:plugins/stitch-design/skills/manage-design-system/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "google-labs-code/stitch-skills:plugins/stitch-utilities/skills/enhance-prompt/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "google-labs-code/stitch-skills:plugins/stitch-utilities/skills/taste-design/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/design-critique/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/design-handoff-doc/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/icon-system/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/onboarding-copy/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/animation-system/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/typography-system/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/ux-writing-audit/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/visual-hierarchy/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "fslong520/aiskill:qiaomu-design/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "nexu-io/open-design:design-templates/gamified-app/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "nexu-io/open-design:design-templates/mobile-app/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "nexu-io/open-design:design-templates/waitlist-page/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "nexu-io/open-design:plugins/_official/atoms/direction-picker/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "nexu-io/open-design:plugins/_official/atoms/figma-extract/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "nexu-io/open-design:plugins/_official/examples/critique/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "nexu-io/open-design:plugins/_official/examples/mobile-app/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "nexu-io/open-design:plugins/_official/scenarios/od-design-refine/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "nexu-io/open-design:plugins/_official/scenarios/od-default/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "nexu-io/open-design:plugins/_official/scenarios/od-new-generation/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "nexu-io/open-design:plugins/community/agent-skill-principal-ui-ux-architect-motion-choreographer-awwwards-tier-mqu4mbbj/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "nexu-io/open-design:skills/color-expert/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "nexu-io/open-design:skills/design-consultation/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "nexu-io/open-design:skills/design-md/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "nexu-io/open-design:skills/design-review/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "nexu-io/open-design:skills/enhance-prompt/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "nexu-io/open-design:skills/emilkowalski-motion/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "nexu-io/open-design:skills/figma-code-connect-components/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "nexu-io/open-design:skills/figma-create-design-system-rules/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "nexu-io/open-design:skills/figma-create-new-file/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "nexu-io/open-design:skills/figma-generate-design/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "nexu-io/open-design:skills/figma-use/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "nexu-io/open-design:skills/flutter-animating-apps/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "nexu-io/open-design:skills/plan-design-review/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "nexu-io/open-design:skills/platform-design/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "nexu-io/open-design:skills/reference-design-contract/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "nexu-io/open-design:skills/review-animations/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "nexu-io/open-design:skills/stitch-loop/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "nexu-io/open-design:skills/ui-skills/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "nexu-io/open-design:skills/web-design-guidelines/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:06-creative/design-critique/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:06-creative/google-stitch-ui-prompting/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:06-creative/iconsax-icon-library/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:06-creative/ux-microcopy-writer/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "jalbarrang/open-design:plugins/_official/atoms/critique-theater/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "jalbarrang/open-design:plugins/_official/atoms/design-extract/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "jalbarrang/open-design:plugins/_official/atoms/direction-picker/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "jalbarrang/open-design:plugins/_official/atoms/figma-extract/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "jalbarrang/open-design:plugins/_official/scenarios/od-design-refine/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "jalbarrang/open-design:plugins/_official/scenarios/od-figma-migration/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "jalbarrang/open-design:plugins/community/design-system-source-context-mr0bb87z/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "jalbarrang/open-design:plugins/spec/examples/refine-critique-loop/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "jalbarrang/open-design:skills/color-expert/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "jalbarrang/open-design:skills/design-consultation/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "jalbarrang/open-design:skills/design-md/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "jalbarrang/open-design:skills/design-review/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "jalbarrang/open-design:skills/emilkowalski-motion/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "jalbarrang/open-design:skills/figma-create-design-system-rules/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "jalbarrang/open-design:skills/figma-code-connect-components/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "jalbarrang/open-design:skills/figma-create-new-file/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "jalbarrang/open-design:skills/figma-generate-design/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "jalbarrang/open-design:skills/figma-use/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "jalbarrang/open-design:skills/reference-design-contract/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "jalbarrang/open-design:skills/stitch-loop/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "jalbarrang/open-design:skills/stitch-skill/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "jalbarrang/open-design:skills/ui-skills/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "jalbarrang/open-design:skills/web-design-guidelines/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "hiktan44/open-design-app:plugins/_official/atoms/critique-theater/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "hiktan44/open-design-app:plugins/_official/atoms/design-extract/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "hiktan44/open-design-app:plugins/_official/atoms/direction-picker/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "hiktan44/open-design-app:plugins/_official/atoms/figma-extract/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "hiktan44/open-design-app:plugins/_official/examples/critique/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "hiktan44/open-design-app:plugins/_official/scenarios/od-design-refine/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "hiktan44/open-design-app:plugins/_official/scenarios/od-figma-migration/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "hiktan44/open-design-app:plugins/_official/scenarios/od-web-effect-extractor/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "hiktan44/open-design-app:plugins/community/agent-skill-principal-ui-ux-architect-motion-choreographer-awwwards-tier-mqu4mbbj/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "hiktan44/open-design-app:plugins/spec/examples/refine-critique-loop/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "hiktan44/open-design-app:skills/apple-hig/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "hiktan44/open-design-app:skills/color-expert/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "hiktan44/open-design-app:skills/design-consultation/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "hiktan44/open-design-app:skills/design-md/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "hiktan44/open-design-app:skills/design-review/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "hiktan44/open-design-app:skills/emilkowalski-motion/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "hiktan44/open-design-app:skills/enhance-prompt/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "hiktan44/open-design-app:skills/figma-code-connect-components/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "hiktan44/open-design-app:skills/figma-create-design-system-rules/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "hiktan44/open-design-app:skills/figma-generate-design/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "hiktan44/open-design-app:skills/figma-create-new-file/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "hiktan44/open-design-app:skills/figma-implement-design/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "hiktan44/open-design-app:skills/figma-use/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "hiktan44/open-design-app:skills/reference-design-contract/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "hiktan44/open-design-app:skills/stitch-loop/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "hiktan44/open-design-app:skills/stitch-skill/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "hiktan44/open-design-app:skills/ui-skills/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "hiktan44/open-design-app:skills/web-design-guidelines/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "anjon771/open-degine:plugins/_official/atoms/critique-theater/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "anjon771/open-degine:plugins/_official/atoms/design-extract/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "anjon771/open-degine:plugins/_official/atoms/direction-picker/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "anjon771/open-degine:plugins/_official/atoms/figma-extract/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "anjon771/open-degine:plugins/_official/examples/critique/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "anjon771/open-degine:skills/color-expert/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "anjon771/open-degine:skills/design-md/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "anjon771/open-degine:skills/enhance-prompt/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "anjon771/open-degine:skills/figma-code-connect-components/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "anjon771/open-degine:skills/plan-design-review/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "anjon771/open-degine:skills/platform-design/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "anjon771/open-degine:skills/reference-design-contract/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "anjon771/open-degine:skills/stitch-skill/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "anjon771/open-degine:skills/ui-skills/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "moussakhalale-lang/open-design:plugins/_official/atoms/direction-picker/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "moussakhalale-lang/open-design:plugins/_official/atoms/figma-extract/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/dark-mode-design/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "moussakhalale-lang/open-design:plugins/_official/scenarios/od-design-refine/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "moussakhalale-lang/open-design:plugins/_official/scenarios/od-figma-migration/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "moussakhalale-lang/open-design:plugins/community/design-system-source-context-mr0bb87z/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "moussakhalale-lang/open-design:plugins/community/hallmark/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "moussakhalale-lang/open-design:plugins/spec/examples/refine-critique-loop/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "moussakhalale-lang/open-design:skills/apple-hig/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "moussakhalale-lang/open-design:skills/color-expert/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "moussakhalale-lang/open-design:skills/review-animations/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "moussakhalale-lang/open-design:skills/stitch-loop/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "moussakhalale-lang/open-design:skills/stitch-skill/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "moussakhalale-lang/open-design:skills/ui-skills/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "moussakhalale-lang/open-design:skills/wpds/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "moussakhalale-lang/open-design:skills/web-design-guidelines/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "techtrader86/open-design-zunobot:design-templates/critique/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "techtrader86/open-design-zunobot:design-templates/waitlist-page/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "techtrader86/open-design-zunobot:plugins/_official/atoms/critique-theater/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "techtrader86/open-design-zunobot:plugins/_official/atoms/direction-picker/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "techtrader86/open-design-zunobot:plugins/_official/atoms/figma-extract/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "techtrader86/open-design-zunobot:plugins/_official/examples/critique/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "techtrader86/open-design-zunobot:plugins/_official/scenarios/od-design-refine/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "techtrader86/open-design-zunobot:plugins/_official/scenarios/od-web-effect-extractor/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "techtrader86/open-design-zunobot:plugins/community/hallmark/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "techtrader86/open-design-zunobot:plugins/spec/examples/refine-critique-loop/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "techtrader86/open-design-zunobot:skills/color-expert/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "techtrader86/open-design-zunobot:skills/design-md/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "techtrader86/open-design-zunobot:skills/design-consultation/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "techtrader86/open-design-zunobot:skills/emilkowalski-motion/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "techtrader86/open-design-zunobot:skills/enhance-prompt/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "techtrader86/open-design-zunobot:skills/figma-create-new-file/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "techtrader86/open-design-zunobot:skills/plan-design-review/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "techtrader86/open-design-zunobot:skills/reference-design-contract/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "techtrader86/open-design-zunobot:skills/review-animations/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "techtrader86/open-design-zunobot:skills/ui-skills/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "techtrader86/open-design-zunobot:skills/ui-ux-pro-max/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "techtrader86/open-design-zunobot:skills/web-design-guidelines/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "aurora-ember-bio-lab/splatstudio:design-templates/critique/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "aurora-ember-bio-lab/splatstudio:design-templates/gamified-app/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "aurora-ember-bio-lab/splatstudio:plugins/_official/atoms/critique-theater/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "aurora-ember-bio-lab/splatstudio:plugins/_official/atoms/design-extract/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "aurora-ember-bio-lab/splatstudio:plugins/_official/atoms/direction-picker/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "aurora-ember-bio-lab/splatstudio:plugins/_official/atoms/figma-extract/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "aurora-ember-bio-lab/splatstudio:plugins/_official/examples/critique/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "aurora-ember-bio-lab/splatstudio:plugins/_official/examples/waitlist-page/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "aurora-ember-bio-lab/splatstudio:plugins/_official/scenarios/od-design-refine/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "aurora-ember-bio-lab/splatstudio:plugins/_official/scenarios/od-figma-migration/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "aurora-ember-bio-lab/splatstudio:plugins/community/design-system-source-context-mr0bb87z/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "aurora-ember-bio-lab/splatstudio:plugins/community/hallmark/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+        "added_at": "2026-10-15"
       }
     ],
     "blocked_topics": [
@@ -332561,6 +333547,33 @@
           "Web动画",
           "frontend"
         ]
+      },
+      {
+        "name": "UI/UX 界面设计与设计规范",
+        "description": "主要用于 Web 与移动端 UI/UX 界面设计、界面规范审查（如 web-design-guidelines、Vercel Web Interface Guidelines）、UI 设计系统与设计令牌（Design Tokens、图标系统、排版规范、动效规范）、界面走查与视觉层级评审、Figma 界面布局与设计套件（UI Kit、原型模板）。保留非界面的纯产品规划类技能（如 PRD 需求文档、商业模式分析、竞品调研、用户访谈、OKR 目标管理）、后端与 API 架构设计、通用技术文档排版以及多模态图像生成。",
+        "keywords": [
+          "UI设计",
+          "UX设计",
+          "UI/UX",
+          "界面设计",
+          "UI审查",
+          "UI走查",
+          "设计规范",
+          "设计系统",
+          "设计令牌",
+          "视觉层级",
+          "图标系统",
+          "排版规范",
+          "界面走查",
+          "UI合规",
+          "Figma",
+          "UI原型",
+          "UI套件",
+          "web-design-guidelines",
+          "design-system",
+          "design-tokens",
+          "ui-kit"
+        ]
       }
     ]
   },
@@ -333169,28 +334182,7 @@
         "days": 150,
         "expires_at": "2027-02-26",
         "reason": "用户暂不关注",
-        "skill_id": "google-labs-code/stitch-skills:plugins/stitch-design/skills/manage-design-system/SKILL.md",
-        "snoozed_at": "2026-09-29"
-      },
-      {
-        "days": 150,
-        "expires_at": "2027-02-26",
-        "reason": "用户暂不关注",
-        "skill_id": "google-labs-code/stitch-skills:plugins/stitch-utilities/skills/enhance-prompt/SKILL.md",
-        "snoozed_at": "2026-09-29"
-      },
-      {
-        "days": 150,
-        "expires_at": "2027-02-26",
-        "reason": "用户暂不关注",
         "skill_id": "google-labs-code/stitch-skills:plugins/stitch-utilities/skills/site-md/SKILL.md",
-        "snoozed_at": "2026-09-29"
-      },
-      {
-        "days": 150,
-        "expires_at": "2027-02-26",
-        "reason": "用户暂不关注",
-        "skill_id": "google-labs-code/stitch-skills:plugins/stitch-utilities/skills/taste-design/SKILL.md",
         "snoozed_at": "2026-09-29"
       },
       {
@@ -334184,13 +335176,6 @@
         "days": 150,
         "expires_at": "2027-03-06",
         "reason": "用户暂不关注",
-        "skill_id": "skillmedev/skills:skills/typography-system/SKILL.md",
-        "snoozed_at": "2026-10-07"
-      },
-      {
-        "days": 150,
-        "expires_at": "2027-03-06",
-        "reason": "用户暂不关注",
         "skill_id": "skillmedev/skills:skills/usability-test-plan/SKILL.md",
         "snoozed_at": "2026-10-07"
       },
@@ -334199,20 +335184,6 @@
         "expires_at": "2027-03-06",
         "reason": "用户暂不关注",
         "skill_id": "skillmedev/skills:skills/user-persona/SKILL.md",
-        "snoozed_at": "2026-10-07"
-      },
-      {
-        "days": 150,
-        "expires_at": "2027-03-06",
-        "reason": "用户暂不关注",
-        "skill_id": "skillmedev/skills:skills/ux-writing-audit/SKILL.md",
-        "snoozed_at": "2026-10-07"
-      },
-      {
-        "days": 150,
-        "expires_at": "2027-03-06",
-        "reason": "用户暂不关注",
-        "skill_id": "skillmedev/skills:skills/visual-hierarchy/SKILL.md",
         "snoozed_at": "2026-10-07"
       },
       {
@@ -334450,13 +335421,6 @@
         "days": 150,
         "expires_at": "2027-03-13",
         "reason": "用户暂不关注",
-        "skill_id": "nexu-io/open-design:plugins/_official/atoms/direction-picker/SKILL.md",
-        "snoozed_at": "2026-10-14"
-      },
-      {
-        "days": 150,
-        "expires_at": "2027-03-13",
-        "reason": "用户暂不关注",
         "skill_id": "nexu-io/open-design:plugins/_official/atoms/token-map/SKILL.md",
         "snoozed_at": "2026-10-14"
       },
@@ -334485,13 +335449,6 @@
         "days": 150,
         "expires_at": "2027-03-14",
         "reason": "用户暂不关注",
-        "skill_id": "nexu-io/open-design:plugins/_official/atoms/figma-extract/SKILL.md",
-        "snoozed_at": "2026-10-15"
-      },
-      {
-        "days": 150,
-        "expires_at": "2027-03-14",
-        "reason": "用户暂不关注",
         "skill_id": "nexu-io/open-design:plugins/_official/atoms/rewrite-plan/SKILL.md",
         "snoozed_at": "2026-10-15"
       },
@@ -334507,13 +335464,6 @@
         "expires_at": "2027-03-14",
         "reason": "用户暂不关注",
         "skill_id": "nexu-io/open-design:plugins/_official/examples/team-okrs/SKILL.md",
-        "snoozed_at": "2026-10-15"
-      },
-      {
-        "days": 150,
-        "expires_at": "2027-03-14",
-        "reason": "用户暂不关注",
-        "skill_id": "nexu-io/open-design:plugins/_official/scenarios/od-design-refine/SKILL.md",
         "snoozed_at": "2026-10-15"
       },
       {
