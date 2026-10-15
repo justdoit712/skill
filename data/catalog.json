@@ -3,10 +3,10 @@
   "rules_version": "1.3.0",
   "generated_at": "2026-10-09T21:10:54.373701+08:00",
   "counts": {
-    "recommended": 610,
-    "candidate": 1261,
+    "recommended": 604,
+    "candidate": 1258,
     "manual": 84,
-    "excluded": 1722
+    "excluded": 1731
   },
   "entries": [
     {
@@ -19186,8 +19186,10 @@
       "dependencies_declared": [],
       "limitations": "未声明外部工具或数据源；方法依赖用户提供的选项、权重、概率和约束信息，若输入不足会影响结论质量。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-29T14:50:20.338253+08:00",
       "content_changed_at": null,
@@ -19238,12 +19240,7 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/decision-making/SKILL.md|sha256:98a6b466711eafec0f827ee6a32e26c1|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-29T14:50:20.334712+08:00",
-      "snooze": {
-        "snoozed_at": "2026-10-02",
-        "expires_at": "2027-03-01",
-        "reason": "用户暂不关注"
-      }
+      "evaluated_at": "2026-09-29T14:50:20.334712+08:00"
     },
     {
       "skill_id": "skillmedev/skills:skills/deep-research/SKILL.md",
@@ -21786,9 +21783,10 @@
       "dependencies_declared": [],
       "limitations": "依赖财务和法律审查；不提供预算编制或月度结算支持",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-10-01T08:25:12.050631+08:00",
@@ -33086,8 +33084,10 @@
       "dependencies_declared": [],
       "limitations": "纯文本写作指南，无自动化工具或代码；事实与数据需使用者自行提供；引用同仓库其他技能用于分流，但本材料未包含其内容；未声明平台与依赖信息。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-29T19:37:49.348816+08:00",
       "content_changed_at": null,
@@ -33138,12 +33138,7 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/one-pager-designer/SKILL.md|sha256:b18f93df71198242c07c107285eff3b6|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-29T19:37:49.345302+08:00",
-      "snooze": {
-        "snoozed_at": "2026-10-02",
-        "expires_at": "2027-03-01",
-        "reason": "用户暂不关注"
-      }
+      "evaluated_at": "2026-09-29T19:37:49.345302+08:00"
     },
     {
       "skill_id": "skillmedev/skills:skills/pagination-and-sync-engineer/SKILL.md",
@@ -34176,9 +34171,10 @@
       "dependencies_declared": [],
       "limitations": "仅为撰写指南，不自动生成简报或提供数据；法律、法规相关问题需律师审查。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-10-02T13:15:47.848572+08:00",
@@ -186255,8 +186251,10 @@
       ],
       "limitations": "高度依赖用户提供的会议材料（议程、幻灯片等），无材料时只能生成带占位符的草稿；明确声明不覆盖书面决议（written consent）的专门流程。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T11:07:56.156419+08:00",
       "content_changed_at": null,
@@ -188538,9 +188536,10 @@
       ],
       "limitations": "需配合regulatory-policy-diff使用作为上游输入；不替代制度责任人的审批与应用动作；无法核实规则生效状态时需人工确认；单次只处理一个缺口、一份制度",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T11:13:44.535999+08:00",
@@ -191601,8 +191600,10 @@
       ],
       "limitations": "依赖用户提供的'院内上下文'（如CLAUDE.md）获取手册存放位置和州补充清单；不审批改动、不替代律师决策；涉及法律引文时需人工核实",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T11:19:39.405272+08:00",
       "content_changed_at": null,
@@ -196819,8 +196820,10 @@
       "dependencies_declared": [],
       "limitations": "未说明如何连接邮件/日历/IM/CLM/CRM等外部系统；不提供法律意见，不做正式判例法检索，不替代律师审阅",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T11:30:01.307651+08:00",
       "content_changed_at": null,
@@ -197366,8 +197369,10 @@
       "dependencies_declared": [],
       "limitations": "产出仅为草案模板，不构成法律意见，须经合格律师/法务定稿；源模板以欧美法域为背景，中国大陆等法域需按当地法规改写",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T11:30:51.192970+08:00",
       "content_changed_at": null,
@@ -332750,6 +332755,51 @@
         "skill_id": "findscripter/everything-skills:05-business/user-onboarding-optimizer/SKILL.md",
         "reason": "存量黑名单过滤；批次 topic-filter-20261015-cro；命中：商业广告与营销推广（转化率优化/CRO/漏斗转化）",
         "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/policy-brief/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-policybrief；命中：公共政策简报、企业制度与高管决策公文",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/one-pager-designer/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-policybrief；命中：公共政策简报、企业制度与高管决策公文",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/decision-making/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-policybrief；命中：公共政策简报、企业制度与高管决策公文",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:09-verticals/board-minutes-drafter/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-policybrief；命中：公共政策简报、企业制度与高管决策公文",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/expense-policy/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-policybrief；命中：公共政策简报、企业制度与高管决策公文",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:09-verticals/employee-handbook-update-diff/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-policybrief；命中：公共政策简报、企业制度与高管决策公文",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:09-verticals/compliance-policy-redraft/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-policybrief；命中：公共政策简报、企业制度与高管决策公文",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:09-verticals/legal-briefing-generator/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-policybrief；命中：公共政策简报、企业制度与高管决策公文",
+        "added_at": "2026-10-15"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:09-verticals/legal-policy-drafter/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261015-policybrief；命中：公共政策简报、企业制度与高管决策公文",
+        "added_at": "2026-10-15"
       }
     ],
     "blocked_topics": [
@@ -333948,6 +333998,54 @@
           "QBR",
           "SOW"
         ]
+      },
+      {
+        "name": "公共政策简报、企业制度与高管决策公文",
+        "description": "主要用于面向政府高官、企事业单位董事会、投资人或专业委员会的政策简报（Policy Brief）、高管决策一页纸备忘录（One-Pager）、董事会及委员会会议纪要、企业内部行政与财务制度起草（费用报销政策、员工手册修订）、合规政策制度改写提案，以及日常法务情报简报。保留纯技术领域的安全策略与访问控制（IAM Policy、CSP、网络策略、Terraform策略）、基础设施SRE错误预算策略（Error Budget）、技术架构设计文档以及开源许可证合规。",
+        "keywords": [
+          "政策简报",
+          "决策简报",
+          "智库简报",
+          "高管决策",
+          "董事会纪要",
+          "员工手册",
+          "报销制度",
+          "费用政策",
+          "规章制度",
+          "法务简报",
+          "policy-brief",
+          "one-pager-designer",
+          "board-minutes",
+          "employee-handbook",
+          "expense-policy",
+          "decision-memo"
+        ],
+        "local_match": {
+          "names": [
+            "policy-brief",
+            "one-pager-designer",
+            "board-minutes-drafter",
+            "expense-policy"
+          ],
+          "purpose_phrases": [
+            "政策简报",
+            "向部长、董事会或委员会汇报的公文场景",
+            "一页纸决策简报",
+            "董事会及专门委员会会议纪要草稿",
+            "企业内部费用报销与审批政策文档",
+            "员工手册变更影响分析",
+            "法务情报简报"
+          ],
+          "preserve_phrases": [
+            "IAM",
+            "CSP",
+            "网络策略",
+            "错误预算",
+            "Terraform",
+            "云安全",
+            "开源许可证"
+          ]
+        }
       }
     ]
   },
@@ -334969,13 +335067,6 @@
         "days": 150,
         "expires_at": "2027-03-01",
         "reason": "用户暂不关注",
-        "skill_id": "skillmedev/skills:skills/decision-making/SKILL.md",
-        "snoozed_at": "2026-10-02"
-      },
-      {
-        "days": 150,
-        "expires_at": "2027-03-01",
-        "reason": "用户暂不关注",
         "skill_id": "skillmedev/skills:skills/eng-status-rollup/SKILL.md",
         "snoozed_at": "2026-10-02"
       },
@@ -335110,13 +335201,6 @@
         "expires_at": "2027-03-01",
         "reason": "用户暂不关注",
         "skill_id": "skillmedev/skills:skills/oncall-handoff/SKILL.md",
-        "snoozed_at": "2026-10-02"
-      },
-      {
-        "days": 150,
-        "expires_at": "2027-03-01",
-        "reason": "用户暂不关注",
-        "skill_id": "skillmedev/skills:skills/one-pager-designer/SKILL.md",
         "snoozed_at": "2026-10-02"
       },
       {
