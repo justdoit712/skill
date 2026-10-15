@@ -6487,6 +6487,811 @@
       "skill_id": "aurora-ember-bio-lab/splatstudio:plugins/spec/examples/export-nextjs-handoff/SKILL.md",
       "reason": "存量黑名单过滤；批次 topic-filter-20261015-frontend；命中：前端开发与 Web 界面工程",
       "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "google-labs-code/stitch-skills:plugins/stitch-design/skills/manage-design-system/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "google-labs-code/stitch-skills:plugins/stitch-utilities/skills/enhance-prompt/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "google-labs-code/stitch-skills:plugins/stitch-utilities/skills/taste-design/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/design-critique/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/design-handoff-doc/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/icon-system/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/onboarding-copy/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/animation-system/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/typography-system/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/ux-writing-audit/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/visual-hierarchy/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "fslong520/aiskill:qiaomu-design/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:design-templates/gamified-app/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:design-templates/mobile-app/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:design-templates/waitlist-page/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/atoms/direction-picker/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/atoms/figma-extract/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/critique/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/mobile-app/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/scenarios/od-design-refine/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/scenarios/od-default/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/scenarios/od-new-generation/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/community/agent-skill-principal-ui-ux-architect-motion-choreographer-awwwards-tier-mqu4mbbj/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/color-expert/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/design-consultation/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/design-md/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/design-review/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/enhance-prompt/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/emilkowalski-motion/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/figma-code-connect-components/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/figma-create-design-system-rules/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/figma-create-new-file/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/figma-generate-design/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/figma-use/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/flutter-animating-apps/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/plan-design-review/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/platform-design/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/reference-design-contract/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/review-animations/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/stitch-loop/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/ui-skills/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/web-design-guidelines/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:06-creative/design-critique/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:06-creative/google-stitch-ui-prompting/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:06-creative/iconsax-icon-library/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:06-creative/ux-microcopy-writer/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:plugins/_official/atoms/critique-theater/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:plugins/_official/atoms/design-extract/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:plugins/_official/atoms/direction-picker/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:plugins/_official/atoms/figma-extract/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:plugins/_official/scenarios/od-design-refine/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:plugins/_official/scenarios/od-figma-migration/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:plugins/community/design-system-source-context-mr0bb87z/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:plugins/spec/examples/refine-critique-loop/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:skills/color-expert/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:skills/design-consultation/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:skills/design-md/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:skills/design-review/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:skills/emilkowalski-motion/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:skills/figma-create-design-system-rules/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:skills/figma-code-connect-components/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:skills/figma-create-new-file/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:skills/figma-generate-design/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:skills/figma-use/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:skills/reference-design-contract/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:skills/stitch-loop/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:skills/stitch-skill/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:skills/ui-skills/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:skills/web-design-guidelines/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:plugins/_official/atoms/critique-theater/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:plugins/_official/atoms/design-extract/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:plugins/_official/atoms/direction-picker/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:plugins/_official/atoms/figma-extract/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:plugins/_official/examples/critique/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:plugins/_official/scenarios/od-design-refine/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:plugins/_official/scenarios/od-figma-migration/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:plugins/_official/scenarios/od-web-effect-extractor/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:plugins/community/agent-skill-principal-ui-ux-architect-motion-choreographer-awwwards-tier-mqu4mbbj/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:plugins/spec/examples/refine-critique-loop/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:skills/apple-hig/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:skills/color-expert/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:skills/design-consultation/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:skills/design-md/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:skills/design-review/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:skills/emilkowalski-motion/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:skills/enhance-prompt/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:skills/figma-code-connect-components/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:skills/figma-create-design-system-rules/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:skills/figma-generate-design/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:skills/figma-create-new-file/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:skills/figma-implement-design/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:skills/figma-use/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:skills/reference-design-contract/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:skills/stitch-loop/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:skills/stitch-skill/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:skills/ui-skills/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:skills/web-design-guidelines/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "anjon771/open-degine:plugins/_official/atoms/critique-theater/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "anjon771/open-degine:plugins/_official/atoms/design-extract/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "anjon771/open-degine:plugins/_official/atoms/direction-picker/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "anjon771/open-degine:plugins/_official/atoms/figma-extract/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "anjon771/open-degine:plugins/_official/examples/critique/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "anjon771/open-degine:skills/color-expert/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "anjon771/open-degine:skills/design-md/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "anjon771/open-degine:skills/enhance-prompt/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "anjon771/open-degine:skills/figma-code-connect-components/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "anjon771/open-degine:skills/plan-design-review/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "anjon771/open-degine:skills/platform-design/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "anjon771/open-degine:skills/reference-design-contract/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "anjon771/open-degine:skills/stitch-skill/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "anjon771/open-degine:skills/ui-skills/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:plugins/_official/atoms/direction-picker/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:plugins/_official/atoms/figma-extract/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/dark-mode-design/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:plugins/_official/scenarios/od-design-refine/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:plugins/_official/scenarios/od-figma-migration/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:plugins/community/design-system-source-context-mr0bb87z/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:plugins/community/hallmark/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:plugins/spec/examples/refine-critique-loop/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:skills/apple-hig/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:skills/color-expert/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:skills/review-animations/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:skills/stitch-loop/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:skills/stitch-skill/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:skills/ui-skills/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:skills/wpds/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:skills/web-design-guidelines/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:design-templates/critique/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:design-templates/waitlist-page/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:plugins/_official/atoms/critique-theater/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:plugins/_official/atoms/direction-picker/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:plugins/_official/atoms/figma-extract/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:plugins/_official/examples/critique/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:plugins/_official/scenarios/od-design-refine/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:plugins/_official/scenarios/od-web-effect-extractor/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:plugins/community/hallmark/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:plugins/spec/examples/refine-critique-loop/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:skills/color-expert/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:skills/design-md/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:skills/design-consultation/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:skills/emilkowalski-motion/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:skills/enhance-prompt/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:skills/figma-create-new-file/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:skills/plan-design-review/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:skills/reference-design-contract/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:skills/review-animations/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:skills/ui-skills/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:skills/ui-ux-pro-max/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:skills/web-design-guidelines/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "aurora-ember-bio-lab/splatstudio:design-templates/critique/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "aurora-ember-bio-lab/splatstudio:design-templates/gamified-app/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "aurora-ember-bio-lab/splatstudio:plugins/_official/atoms/critique-theater/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "aurora-ember-bio-lab/splatstudio:plugins/_official/atoms/design-extract/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "aurora-ember-bio-lab/splatstudio:plugins/_official/atoms/direction-picker/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "aurora-ember-bio-lab/splatstudio:plugins/_official/atoms/figma-extract/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "aurora-ember-bio-lab/splatstudio:plugins/_official/examples/critique/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "aurora-ember-bio-lab/splatstudio:plugins/_official/examples/waitlist-page/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "aurora-ember-bio-lab/splatstudio:plugins/_official/scenarios/od-design-refine/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "aurora-ember-bio-lab/splatstudio:plugins/_official/scenarios/od-figma-migration/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "aurora-ember-bio-lab/splatstudio:plugins/community/design-system-source-context-mr0bb87z/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "aurora-ember-bio-lab/splatstudio:plugins/community/hallmark/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
+      "added_at": "2026-10-15"
     }
   ],
   "blocked_topics": [
@@ -7610,6 +8415,33 @@
         "设计交付",
         "Web动画",
         "frontend"
+      ]
+    },
+    {
+      "name": "UI/UX 界面设计与设计规范",
+      "description": "主要用于 Web 与移动端 UI/UX 界面设计、界面规范审查（如 web-design-guidelines、Vercel Web Interface Guidelines）、UI 设计系统与设计令牌（Design Tokens、图标系统、排版规范、动效规范）、界面走查与视觉层级评审、Figma 界面布局与设计套件（UI Kit、原型模板）。保留非界面的纯产品规划类技能（如 PRD 需求文档、商业模式分析、竞品调研、用户访谈、OKR 目标管理）、后端与 API 架构设计、通用技术文档排版以及多模态图像生成。",
+      "keywords": [
+        "UI设计",
+        "UX设计",
+        "UI/UX",
+        "界面设计",
+        "UI审查",
+        "UI走查",
+        "设计规范",
+        "设计系统",
+        "设计令牌",
+        "视觉层级",
+        "图标系统",
+        "排版规范",
+        "界面走查",
+        "UI合规",
+        "Figma",
+        "UI原型",
+        "UI套件",
+        "web-design-guidelines",
+        "design-system",
+        "design-tokens",
+        "ui-kit"
       ]
     }
   ]

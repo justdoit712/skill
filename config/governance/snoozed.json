@@ -603,28 +603,7 @@
       "days": 150,
       "expires_at": "2027-02-26",
       "reason": "用户暂不关注",
-      "skill_id": "google-labs-code/stitch-skills:plugins/stitch-design/skills/manage-design-system/SKILL.md",
-      "snoozed_at": "2026-09-29"
-    },
-    {
-      "days": 150,
-      "expires_at": "2027-02-26",
-      "reason": "用户暂不关注",
-      "skill_id": "google-labs-code/stitch-skills:plugins/stitch-utilities/skills/enhance-prompt/SKILL.md",
-      "snoozed_at": "2026-09-29"
-    },
-    {
-      "days": 150,
-      "expires_at": "2027-02-26",
-      "reason": "用户暂不关注",
       "skill_id": "google-labs-code/stitch-skills:plugins/stitch-utilities/skills/site-md/SKILL.md",
-      "snoozed_at": "2026-09-29"
-    },
-    {
-      "days": 150,
-      "expires_at": "2027-02-26",
-      "reason": "用户暂不关注",
-      "skill_id": "google-labs-code/stitch-skills:plugins/stitch-utilities/skills/taste-design/SKILL.md",
       "snoozed_at": "2026-09-29"
     },
     {
@@ -1618,13 +1597,6 @@
       "days": 150,
       "expires_at": "2027-03-06",
       "reason": "用户暂不关注",
-      "skill_id": "skillmedev/skills:skills/typography-system/SKILL.md",
-      "snoozed_at": "2026-10-07"
-    },
-    {
-      "days": 150,
-      "expires_at": "2027-03-06",
-      "reason": "用户暂不关注",
       "skill_id": "skillmedev/skills:skills/usability-test-plan/SKILL.md",
       "snoozed_at": "2026-10-07"
     },
@@ -1633,20 +1605,6 @@
       "expires_at": "2027-03-06",
       "reason": "用户暂不关注",
       "skill_id": "skillmedev/skills:skills/user-persona/SKILL.md",
-      "snoozed_at": "2026-10-07"
-    },
-    {
-      "days": 150,
-      "expires_at": "2027-03-06",
-      "reason": "用户暂不关注",
-      "skill_id": "skillmedev/skills:skills/ux-writing-audit/SKILL.md",
-      "snoozed_at": "2026-10-07"
-    },
-    {
-      "days": 150,
-      "expires_at": "2027-03-06",
-      "reason": "用户暂不关注",
-      "skill_id": "skillmedev/skills:skills/visual-hierarchy/SKILL.md",
       "snoozed_at": "2026-10-07"
     },
     {
@@ -1884,13 +1842,6 @@
       "days": 150,
       "expires_at": "2027-03-13",
       "reason": "用户暂不关注",
-      "skill_id": "nexu-io/open-design:plugins/_official/atoms/direction-picker/SKILL.md",
-      "snoozed_at": "2026-10-14"
-    },
-    {
-      "days": 150,
-      "expires_at": "2027-03-13",
-      "reason": "用户暂不关注",
       "skill_id": "nexu-io/open-design:plugins/_official/atoms/token-map/SKILL.md",
       "snoozed_at": "2026-10-14"
     },
@@ -1919,13 +1870,6 @@
       "days": 150,
       "expires_at": "2027-03-14",
       "reason": "用户暂不关注",
-      "skill_id": "nexu-io/open-design:plugins/_official/atoms/figma-extract/SKILL.md",
-      "snoozed_at": "2026-10-15"
-    },
-    {
-      "days": 150,
-      "expires_at": "2027-03-14",
-      "reason": "用户暂不关注",
       "skill_id": "nexu-io/open-design:plugins/_official/atoms/rewrite-plan/SKILL.md",
       "snoozed_at": "2026-10-15"
     },
@@ -1941,13 +1885,6 @@
       "expires_at": "2027-03-14",
       "reason": "用户暂不关注",
       "skill_id": "nexu-io/open-design:plugins/_official/examples/team-okrs/SKILL.md",
-      "snoozed_at": "2026-10-15"
-    },
-    {
-      "days": 150,
-      "expires_at": "2027-03-14",
-      "reason": "用户暂不关注",
-      "skill_id": "nexu-io/open-design:plugins/_official/scenarios/od-design-refine/SKILL.md",
       "snoozed_at": "2026-10-15"
     },
     {
