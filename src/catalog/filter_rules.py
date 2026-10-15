@@ -9,9 +9,18 @@ import re
 from typing import Any
 
 
-DEFAULT_FILTER_RULES_PATH = "config/governance/filter-rules.json"
+DEFAULT_FILTER_RULES_PATH = "config/governance/overrides.json"
 ALLOWED_TOP_KEYS = frozenset(
-    {"filter_rules_version", "blocked_topics", "source", "note", "description", "_comment"}
+    {
+        "filter_rules_version",
+        "overrides_version",
+        "manual_exclusions",
+        "blocked_topics",
+        "source",
+        "note",
+        "description",
+        "_comment",
+    }
 )
 ALLOWED_TOPIC_KEYS = frozenset(
     {"name", "description", "note", "_comment", "keywords", "local_match"}
@@ -25,13 +34,13 @@ TOPIC_RESULTS = frozenset({"match", "no_match", "unknown"})
 def validate_filter_rules(data: Any) -> list[str]:
     """名称必填、范围说明及关键词/本地匹配条件可选；旧的关键词/标签配置必须明确迁移。"""
     if not isinstance(data, dict):
-        return ["filter-rules 根结构必须是 JSON 对象"]
+        return ["主题屏蔽/黑名单配置根结构必须是 JSON 对象"]
     errors: list[str] = []
     if "discovery" in data or "evaluation" in data:
         errors.append("旧 discovery/evaluation 规则已停用，请迁移到 blocked_topics 主题列表")
     unknown = set(data) - ALLOWED_TOP_KEYS - {"discovery", "evaluation"}
     if unknown:
-        errors.append(f"filter-rules 包含未识别的顶层键：{', '.join(sorted(unknown))}")
+        errors.append(f"主题屏蔽配置包含未识别的顶层键：{', '.join(sorted(unknown))}")
     if "filter_rules_version" in data and (
         not isinstance(data["filter_rules_version"], str) or not data["filter_rules_version"].strip()
     ):
@@ -526,12 +535,27 @@ def load_filter_rules(path: str | Path = DEFAULT_FILTER_RULES_PATH) -> FilterRul
     """加载主题配置；文件不存在时返回空规则，非法配置明确报错。"""
     file_path = Path(path)
     if not file_path.exists():
-        if "governance" not in file_path.parts:
-            alternate = file_path.parent / "governance" / file_path.name
-        else:
-            alternate = file_path.parent.parent / file_path.name
-        if alternate.exists():
-            file_path = alternate
+        # 若传入旧路径 filter-rules.json，兼容回退至同一层级的 overrides.json
+        if file_path.name == "filter-rules.json":
+            override_candidate = file_path.parent / "overrides.json"
+            if override_candidate.exists():
+                file_path = override_candidate
+            else:
+                override_alt = (
+                    file_path.parent / "governance" / "overrides.json"
+                    if "governance" not in file_path.parts
+                    else file_path.parent.parent / "overrides.json"
+                )
+                if override_alt.exists():
+                    file_path = override_alt
+
+        if not file_path.exists():
+            if "governance" not in file_path.parts:
+                alternate = file_path.parent / "governance" / file_path.name
+            else:
+                alternate = file_path.parent.parent / file_path.name
+            if alternate.exists():
+                file_path = alternate
     if not file_path.exists():
         return FilterRules()
     try:

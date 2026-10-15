@@ -65,7 +65,12 @@ def load_all_config(config_dir: str | Path = "config") -> dict:
     overrides_cfg = load_overrides(overrides_file)
 
     filter_rules_file = _resolve_config_file(base, "filter-rules.json", "governance")
-    filter_rules_cfg = load_filter_rules(filter_rules_file)
+    if filter_rules_file.exists():
+        filter_rules_cfg = load_filter_rules(filter_rules_file)
+    elif "blocked_topics" in overrides_cfg:
+        filter_rules_cfg = FilterRules(overrides_cfg)
+    else:
+        filter_rules_cfg = load_filter_rules(overrides_file)
 
     snooze_cfg = load_snooze(_resolve_config_file(base, "snoozed.json", "governance"))
     sources_file = _resolve_config_file(base, "sources.json", "discovery")

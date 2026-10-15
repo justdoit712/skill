@@ -60,7 +60,11 @@ def validate_overrides(data: dict, known_skill_ids: set[str] | None = None) -> l
     if "manual_picks" in data:
         errors.append("overrides.json 包含已废弃字段 manual_picks，请迁移至 favorites.json")
     if "keyword_exclusions" in data:
-        errors.append("overrides.json 包含已废弃字段 keyword_exclusions，请迁移至 filter-rules.json")
+        errors.append("overrides.json 包含已废弃字段 keyword_exclusions，请迁移至 blocked_topics")
+
+    if "blocked_topics" in data:
+        from .filter_rules import validate_filter_rules
+        errors.extend(validate_filter_rules(data))
 
     version = data.get("overrides_version")
     if not version:
