@@ -7552,6 +7552,46 @@
       "skill_id": "aurora-ember-bio-lab/splatstudio:plugins/spec/examples/create-live-artifact-ops/SKILL.md",
       "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
       "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/gym-transformation-challenge/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-cro；命中：商业广告与营销推广（转化率优化/CRO/漏斗转化）",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/ab-test-designer/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-cro；命中：商业广告与营销推广（转化率优化/CRO/漏斗转化）",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/ab-test-setup-gates/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-cro；命中：商业广告与营销推广（转化率优化/CRO/漏斗转化）",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/campaign-attribution-analytics/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-cro；命中：商业广告与营销推广（转化率优化/CRO/漏斗转化）",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/conversion-rate-optimizer/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-cro；命中：商业广告与营销推广（转化率优化/CRO/漏斗转化）",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/cro-revenue-advisor/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-cro；命中：商业广告与营销推广（转化率优化/CRO/漏斗转化）",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/signup-flow-cro/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-cro；命中：商业广告与营销推广（转化率优化/CRO/漏斗转化）",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/user-onboarding-optimizer/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-cro；命中：商业广告与营销推广（转化率优化/CRO/漏斗转化）",
+      "added_at": "2026-10-15"
     }
   ],
   "blocked_topics": [
@@ -7571,7 +7611,7 @@
     },
     {
       "name": "商业广告与营销推广",
-      "description": "主要用于商业广告投放、广告法与违禁词合规、广告文案与创意生成、社交媒体广告视频与配乐制作、营销策划、SEO、获客或用户增长。保留通用技术写作与普通音视频处理工具。",
+      "description": "主要用于商业广告投放、广告法与违禁词合规、广告文案与创意生成、社交媒体广告视频与配乐制作、营销策划、SEO、获客或用户增长、转化率优化（CRO）、营销与注册漏斗转化、客户/会员转化活动设计、投放渠道归因与 A/B 增长实验。保留通用技术写作、普通音视频处理工具、系统性能测试与财务指标分析。",
       "keywords": [
         "商业广告",
         "广告文案",
@@ -7592,7 +7632,15 @@
         "growth hacking",
         "ad copy",
         "ad creative",
-        "advertising"
+        "advertising",
+        "CRO",
+        "转化率优化",
+        "转化漏斗",
+        "客户转化",
+        "会员转化",
+        "conversion rate",
+        "funnel optimization",
+        "signup-flow"
       ],
       "local_match": {
         "names": [
@@ -7672,14 +7720,22 @@
           "生成营销截图",
           "基于 Playwright 生成营销用途截图",
           "生成营销用途截图",
-          "营销截图生成技能入口"
+          "营销截图生成技能入口",
+          "转化率优化",
+          "客户转化",
+          "会员转化",
+          "转化漏斗",
+          "注册流程转化"
         ],
         "preserve_phrases": [
           "开源软件",
           "前端组件",
           "代码审计",
           "open source",
-          "ui library"
+          "ui library",
+          "现金转化率",
+          "格式转换",
+          "数据转换"
         ]
       }
     },
