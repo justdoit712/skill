@@ -179,13 +179,17 @@ export function createSkillCard(entry, overridesState, currentTab = "recommended
       '<button type="button" class="btn-action btn-block" data-action="block" data-id="' + escapeHtml(sid) + '" title="屏蔽并移入黑名单">🚫 屏蔽</button>';
   }
 
+  const authorHtml = entry.author
+    ? '<p class="by"><span class="author-label">by</span> <span class="author-name">' + escapeHtml(entry.author) + '</span></p>'
+    : '';
+
   li.innerHTML =
     '<div class="card-head">' +
       '<h3><a href="' + escapeHtml(entry.url || "#") + '" target="_blank" rel="noopener noreferrer">' +
       escapeHtml(entry.name) + "</a></h3>" +
       '<div class="card-actions">' + actionsHtml + '</div>' +
     '</div>' +
-    '<p class="by">' + escapeHtml(entry.author || "") + "</p>" +
+    authorHtml +
     '<p class="sum">' + escapeHtml(text(entry.summary_zh) || "（暂无中文简述）") + "</p>" +
     examplesHtml +
     featuresHtml +
