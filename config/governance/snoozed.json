@@ -579,20 +579,6 @@
       "reason": "用户暂不关注"
     },
     {
-      "skill_id": "skillmedev/skills:skills/agency-monthly-report/SKILL.md",
-      "snoozed_at": "2026-09-29",
-      "expires_at": "2027-02-26",
-      "days": 150,
-      "reason": "用户暂不关注"
-    },
-    {
-      "skill_id": "skillmedev/skills:skills/agency-qbr-upsell/SKILL.md",
-      "snoozed_at": "2026-09-29",
-      "expires_at": "2027-02-26",
-      "days": 150,
-      "reason": "用户暂不关注"
-    },
-    {
       "days": 150,
       "expires_at": "2027-02-26",
       "reason": "用户暂不关注",
@@ -680,13 +666,6 @@
       "days": 150,
       "expires_at": "2027-03-01",
       "reason": "用户暂不关注",
-      "skill_id": "skillmedev/skills:skills/escalation-summary/SKILL.md",
-      "snoozed_at": "2026-10-02"
-    },
-    {
-      "days": 150,
-      "expires_at": "2027-03-01",
-      "reason": "用户暂不关注",
       "skill_id": "skillmedev/skills:skills/fiction-scene-writer/SKILL.md",
       "snoozed_at": "2026-10-02"
     },
@@ -695,13 +674,6 @@
       "expires_at": "2027-03-01",
       "reason": "用户暂不关注",
       "skill_id": "skillmedev/skills:skills/fitness-program/SKILL.md",
-      "snoozed_at": "2026-10-02"
-    },
-    {
-      "days": 150,
-      "expires_at": "2027-03-01",
-      "reason": "用户暂不关注",
-      "skill_id": "skillmedev/skills:skills/freelance-positioning/SKILL.md",
       "snoozed_at": "2026-10-02"
     },
     {
@@ -939,13 +911,6 @@
       "days": 150,
       "expires_at": "2027-03-01",
       "reason": "用户暂不关注",
-      "skill_id": "skillmedev/skills:skills/lifecycle-journey-map/SKILL.md",
-      "snoozed_at": "2026-10-02"
-    },
-    {
-      "days": 150,
-      "expires_at": "2027-03-01",
-      "reason": "用户暂不关注",
       "skill_id": "skillmedev/skills:skills/linear-workflow/SKILL.md",
       "snoozed_at": "2026-10-02"
     },
@@ -1135,13 +1100,6 @@
       "days": 150,
       "expires_at": "2027-03-01",
       "reason": "用户暂不关注",
-      "skill_id": "skillmedev/skills:skills/kb-article-writer/SKILL.md",
-      "snoozed_at": "2026-10-02"
-    },
-    {
-      "days": 150,
-      "expires_at": "2027-03-01",
-      "reason": "用户暂不关注",
       "skill_id": "skillmedev/skills:skills/meal-planner/SKILL.md",
       "snoozed_at": "2026-10-02"
     },
@@ -1282,21 +1240,7 @@
       "days": 150,
       "expires_at": "2027-03-01",
       "reason": "用户暂不关注",
-      "skill_id": "skillmedev/skills:skills/raise-your-rates-playbook/SKILL.md",
-      "snoozed_at": "2026-10-02"
-    },
-    {
-      "days": 150,
-      "expires_at": "2027-03-01",
-      "reason": "用户暂不关注",
       "skill_id": "skillmedev/skills:skills/rate-limit-handler/SKILL.md",
-      "snoozed_at": "2026-10-02"
-    },
-    {
-      "days": 150,
-      "expires_at": "2027-03-01",
-      "reason": "用户暂不关注",
-      "skill_id": "skillmedev/skills:skills/refund-deescalation/SKILL.md",
       "snoozed_at": "2026-10-02"
     },
     {
@@ -1331,13 +1275,6 @@
       "days": 150,
       "expires_at": "2027-03-01",
       "reason": "用户暂不关注",
-      "skill_id": "skillmedev/skills:skills/retainer-pricing-calculator/SKILL.md",
-      "snoozed_at": "2026-10-02"
-    },
-    {
-      "days": 150,
-      "expires_at": "2027-03-01",
-      "reason": "用户暂不关注",
       "skill_id": "skillmedev/skills:skills/runbook-writer/SKILL.md",
       "snoozed_at": "2026-10-02"
     },
@@ -1360,13 +1297,6 @@
       "expires_at": "2027-03-06",
       "reason": "用户暂不关注",
       "skill_id": "getsentry/skills:skills/secret-serialization/SKILL.md",
-      "snoozed_at": "2026-10-07"
-    },
-    {
-      "days": 150,
-      "expires_at": "2027-03-06",
-      "reason": "用户暂不关注",
-      "skill_id": "skillmedev/skills:skills/client-comms-cadence/SKILL.md",
       "snoozed_at": "2026-10-07"
     },
     {
@@ -1401,13 +1331,6 @@
       "days": 150,
       "expires_at": "2027-03-06",
       "reason": "用户暂不关注",
-      "skill_id": "skillmedev/skills:skills/prospect-list-builder/SKILL.md",
-      "snoozed_at": "2026-10-07"
-    },
-    {
-      "days": 150,
-      "expires_at": "2027-03-06",
-      "reason": "用户暂不关注",
       "skill_id": "skillmedev/skills:skills/prototype-spec/SKILL.md",
       "snoozed_at": "2026-10-07"
     },
@@ -1423,13 +1346,6 @@
       "expires_at": "2027-03-06",
       "reason": "用户暂不关注",
       "skill_id": "skillmedev/skills:skills/resume-writer/SKILL.md",
-      "snoozed_at": "2026-10-07"
-    },
-    {
-      "days": 150,
-      "expires_at": "2027-03-06",
-      "reason": "用户暂不关注",
-      "skill_id": "skillmedev/skills:skills/scope-creep-defense/SKILL.md",
       "snoozed_at": "2026-10-07"
     },
     {

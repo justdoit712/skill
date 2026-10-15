@@ -7292,6 +7292,266 @@
       "skill_id": "aurora-ember-bio-lab/splatstudio:plugins/community/hallmark/SKILL.md",
       "reason": "存量黑名单过滤；批次 topic-filter-20261015-uidesign；命中：UI/UX 界面设计与设计规范",
       "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/agency-monthly-report/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/agency-qbr-upsell/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/client-status-reporting/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/csat-root-cause/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/customer-analytics/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/customer-success-qbr/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/demo-script/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/escalation-summary/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/expansion-revenue/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/freelance-positioning/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/kb-article-writer/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/lifecycle-journey-map/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/prospect-list-builder/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/raise-your-rates-playbook/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/refund-deescalation/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/retainer-economics-calculator/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/retainer-pricing-calculator/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/revenue-operations/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/sales-enablement-kit/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/sales-proposal-writer/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/scope-creep-defense/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/client-churn-save/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/client-comms-cadence/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/local-referral-engine/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/local-unit-economics/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/contract-proposal-writer/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/customer-escalation-packager/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/customer-health-scorer/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/customer-research-synthesizer/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/customer-response-drafter/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/ib-deal-tracker/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/lead-form-cro/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/ma-buyer-list/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/ma-playbook/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/pe-dd-checklist/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/sales-call-summary/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/support-ticket-triage/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/weekly-external-call-brief/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:07-productivity/deal-pipeline-tracker/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:07-productivity/salesforce-automation/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:07-productivity/support-kb-article-writer/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:09-verticals/client-performance-report/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:09-verticals/client-review-prep/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:09-verticals/contract-playbook-review/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:09-verticals/deal-closing-checklist/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:09-verticals/vendor-agreement-status-checker/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "jalbarrang/open-design:plugins/spec/examples/create-live-artifact-ops/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:plugins/spec/examples/create-live-artifact-ops/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "anjon771/open-degine:plugins/spec/examples/create-live-artifact-ops/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "moussakhalale-lang/open-design:plugins/spec/examples/create-live-artifact-ops/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "techtrader86/open-design-zunobot:plugins/spec/examples/create-live-artifact-ops/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "aurora-ember-bio-lab/splatstudio:plugins/spec/examples/create-live-artifact-ops/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-clientops；命中：客户沟通、商业销售与顾问交付",
+      "added_at": "2026-10-15"
     }
   ],
   "blocked_topics": [
@@ -8442,6 +8702,37 @@
         "design-system",
         "design-tokens",
         "ui-kit"
+      ]
+    },
+    {
+      "name": "客户沟通、商业销售与顾问交付",
+      "description": "主要用于自由职业者与咨询顾问的对客沟通与交付（客户周报、客户状态报告、Retainer 预留金与定价测算、提价谈判手册、定位声明）、客户业务复盘与汇报（QBR 季度业务回顾、客户复盘会议准备、客户业绩报告）、B2B 销售与商务提案（销售提案与 SOW 撰写、销售演示脚本、潜客线索名单管理）、客户服务与客诉支持（愤怒客户安抚与退款降级、工单升级摘要、客服帮助中心与知识库文章沉淀、客户满意度 CSAT/NPS 归因分析），以及客户成功与生命周期运营。保留纯软件工程架构中的客户端开发（API Client、HTTP Client、Redis Client、客户端 SDK）、基础设施运维状态页、通用团队协作与研发管理。",
+      "keywords": [
+        "客户沟通",
+        "客户周报",
+        "客户状态报告",
+        "客户汇报",
+        "客户提案",
+        "客户成功",
+        "客户服务",
+        "客户满意度",
+        "客户留存",
+        "客诉处理",
+        "退款处理",
+        "销售提案",
+        "销售线索",
+        "潜在客户",
+        "自由职业定价",
+        "预留金",
+        "保留金",
+        "工单分诊",
+        "client-status",
+        "client-reporting",
+        "customer-success",
+        "sales-proposal",
+        "retainer",
+        "QBR",
+        "SOW"
       ]
     }
   ]
