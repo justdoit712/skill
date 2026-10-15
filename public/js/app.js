@@ -91,7 +91,8 @@ const el = {
   confirmModalSkillName: document.getElementById("confirm-modal-skill-name"),
   btnCloseConfirmModal: document.getElementById("btn-close-confirm-modal"),
   btnCancelConfirm: document.getElementById("btn-cancel-confirm"),
-  btnSubmitConfirm: document.getElementById("btn-submit-confirm")
+  btnSubmitConfirm: document.getElementById("btn-submit-confirm"),
+  btnThemeToggle: document.getElementById("btn-theme-toggle")
 };
 
 /**
@@ -282,6 +283,17 @@ el.tabRec.addEventListener("click", () => setTab("recommended"));
 el.tabCand.addEventListener("click", () => setTab("candidate"));
 el.tabManual.addEventListener("click", () => setTab("manual"));
 if (el.tabFind) el.tabFind.addEventListener("click", () => setTab("find"));
+
+if (el.btnThemeToggle) {
+  el.btnThemeToggle.addEventListener("click", () => {
+    const current = document.documentElement.getAttribute("data-theme") || "dark";
+    const next = current === "dark" ? "light" : "dark";
+    document.documentElement.setAttribute("data-theme", next);
+    try {
+      localStorage.setItem("skill_theme", next);
+    } catch (e) {}
+  });
+}
 
 // 初始化确认弹窗控制器
 const confirmModalController = initConfirmModal(el);
