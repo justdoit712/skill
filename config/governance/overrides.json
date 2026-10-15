@@ -7592,6 +7592,51 @@
       "skill_id": "findscripter/everything-skills:05-business/user-onboarding-optimizer/SKILL.md",
       "reason": "存量黑名单过滤；批次 topic-filter-20261015-cro；命中：商业广告与营销推广（转化率优化/CRO/漏斗转化）",
       "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/policy-brief/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-policybrief；命中：公共政策简报、企业制度与高管决策公文",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/one-pager-designer/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-policybrief；命中：公共政策简报、企业制度与高管决策公文",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/decision-making/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-policybrief；命中：公共政策简报、企业制度与高管决策公文",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:09-verticals/board-minutes-drafter/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-policybrief；命中：公共政策简报、企业制度与高管决策公文",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/expense-policy/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-policybrief；命中：公共政策简报、企业制度与高管决策公文",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:09-verticals/employee-handbook-update-diff/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-policybrief；命中：公共政策简报、企业制度与高管决策公文",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:09-verticals/compliance-policy-redraft/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-policybrief；命中：公共政策简报、企业制度与高管决策公文",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:09-verticals/legal-briefing-generator/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-policybrief；命中：公共政策简报、企业制度与高管决策公文",
+      "added_at": "2026-10-15"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:09-verticals/legal-policy-drafter/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261015-policybrief；命中：公共政策简报、企业制度与高管决策公文",
+      "added_at": "2026-10-15"
     }
   ],
   "blocked_topics": [
@@ -8790,6 +8835,54 @@
         "QBR",
         "SOW"
       ]
+    },
+    {
+      "name": "公共政策简报、企业制度与高管决策公文",
+      "description": "主要用于面向政府高官、企事业单位董事会、投资人或专业委员会的政策简报（Policy Brief）、高管决策一页纸备忘录（One-Pager）、董事会及委员会会议纪要、企业内部行政与财务制度起草（费用报销政策、员工手册修订）、合规政策制度改写提案，以及日常法务情报简报。保留纯技术领域的安全策略与访问控制（IAM Policy、CSP、网络策略、Terraform策略）、基础设施SRE错误预算策略（Error Budget）、技术架构设计文档以及开源许可证合规。",
+      "keywords": [
+        "政策简报",
+        "决策简报",
+        "智库简报",
+        "高管决策",
+        "董事会纪要",
+        "员工手册",
+        "报销制度",
+        "费用政策",
+        "规章制度",
+        "法务简报",
+        "policy-brief",
+        "one-pager-designer",
+        "board-minutes",
+        "employee-handbook",
+        "expense-policy",
+        "decision-memo"
+      ],
+      "local_match": {
+        "names": [
+          "policy-brief",
+          "one-pager-designer",
+          "board-minutes-drafter",
+          "expense-policy"
+        ],
+        "purpose_phrases": [
+          "政策简报",
+          "向部长、董事会或委员会汇报的公文场景",
+          "一页纸决策简报",
+          "董事会及专门委员会会议纪要草稿",
+          "企业内部费用报销与审批政策文档",
+          "员工手册变更影响分析",
+          "法务情报简报"
+        ],
+        "preserve_phrases": [
+          "IAM",
+          "CSP",
+          "网络策略",
+          "错误预算",
+          "Terraform",
+          "云安全",
+          "开源许可证"
+        ]
+      }
     }
   ]
 }
