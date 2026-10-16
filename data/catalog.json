@@ -3,10 +3,10 @@
   "rules_version": "1.3.0",
   "generated_at": "2026-10-09T21:10:54.373701+08:00",
   "counts": {
-    "recommended": 592,
-    "candidate": 1209,
+    "recommended": 584,
+    "candidate": 1207,
     "manual": 94,
-    "excluded": 1753
+    "excluded": 1763
   },
   "entries": [
     {
@@ -42161,8 +42161,10 @@
       ],
       "limitations": "本技能只产出规格与设计决策，不写合成代码、不执行渲染，实际导出依赖 remotion-video-production 技能包中的配套技能；平台时长与安全区数值会随平台更新漂移，材料要求使用前核对官方创作者文档。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-10-02T06:48:46.624345+08:00",
       "content_changed_at": null,
@@ -42213,12 +42215,7 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/social-video-formatter/SKILL.md|sha256:e8cb1379bdcf9ba8ba93ab7e603b654b|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-02T06:48:46.614277+08:00",
-      "snooze": {
-        "snoozed_at": "2026-10-07",
-        "expires_at": "2027-03-06",
-        "reason": "用户暂不关注"
-      }
+      "evaluated_at": "2026-10-02T06:48:46.614277+08:00"
     },
     {
       "skill_id": "skillmedev/skills:skills/space-earth-science/SKILL.md",
@@ -46668,8 +46665,10 @@
       "dependencies_declared": [],
       "limitations": "仅产出结构层（节拍表、章节清单、张力曲线），不写场景正文、文风或非虚构提案（分别交给 Fiction Scene Writer、Ghostwriter、Book Proposal）；需作者提供前提、类型、篇幅与已定节拍等输入；结构百分比仅为参考而非硬性规则；未声明运行环境与依赖。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-02T06:54:09.877034+08:00",
       "content_changed_at": null,
@@ -46720,12 +46719,7 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/story-structure-architect/SKILL.md|sha256:87a06bbbe8bff15cd00ed04734ce178d|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-02T06:54:09.867258+08:00",
-      "snooze": {
-        "snoozed_at": "2026-10-07",
-        "expires_at": "2027-03-06",
-        "reason": "用户暂不关注"
-      }
+      "evaluated_at": "2026-10-02T06:54:09.867258+08:00"
     },
     {
       "skill_id": "skillmedev/skills:skills/strangler-fig-planner/SKILL.md",
@@ -112178,8 +112172,10 @@
       "dependencies_declared": [],
       "limitations": "未说明是否需语音合成工具支持；未提及故事库更新机制或版权归属；依赖用户输入格式（如'3、7'）的精确识别。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-08T19:19:01.880850+08:00",
       "content_changed_at": null,
@@ -116617,8 +116613,10 @@
       ],
       "limitations": "依赖外部参考文档（如 references/three-body-settings.md）和资产目录（assets/）方可完整运行；Suno API为可选依赖，若启用需额外配置；未说明对生成式AI模型（如图像/语音生成后端）的具体要求或替代方案",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-03T23:04:10.676870+08:00",
       "content_changed_at": null,
@@ -116810,8 +116808,10 @@
       ],
       "limitations": "依赖本地Python环境与指定库；需用户准备输入目录结构；未说明是否支持云部署或Web界面；部分参考文件（如references/agent-prompts.md）未在材料中提供具体内容",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-03T23:04:48.023709+08:00",
       "content_changed_at": null,
@@ -116997,8 +116997,10 @@
       ],
       "limitations": "依赖外部API（如Suno、Coze Bot），部分功能需配置API密钥；未说明运行环境要求，可能影响兼容性。",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-08T19:30:58.401261+08:00",
       "content_changed_at": null,
@@ -117282,8 +117284,10 @@
       ],
       "limitations": "依赖Coze Bot API进行视觉分析，需用户自行配置API Key；Suno音乐生成为可选功能，无API Key时使用占位实现；所有脚本需本地Python环境执行，未声明Web服务或跨平台GUI支持",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-03T23:06:13.589505+08:00",
       "content_changed_at": null,
@@ -216582,8 +216586,10 @@
       "dependencies_declared": [],
       "limitations": "依赖未声明的语音合成或语速控制能力；引用的故事库文件（story-collection.md）未提供，无法验证内容完整性",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T15:02:07.899524+08:00",
       "content_changed_at": null,
@@ -221217,8 +221223,10 @@
       ],
       "limitations": "依赖未开源的 scripts/ 下各生成与检测脚本，实际功能需这些脚本存在才能运行；未说明是否支持非Python环境或云部署",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T15:11:42.800453+08:00",
       "content_changed_at": null,
@@ -221404,8 +221412,10 @@
       ],
       "limitations": "依赖外部 API（Coze、Suno）且需配置密钥；部分功能在 API 不可用时降级为占位实现；未说明视频分辨率、时长或格式限制",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T15:12:07.047063+08:00",
       "content_changed_at": null,
@@ -221503,7 +221513,8 @@
       "status": "excluded",
       "reason_codes": [
         "CREDENTIAL_EXFILTRATION",
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T15:12:26.795609+08:00",
@@ -330621,6 +330632,61 @@
         "added_at": "2026-10-16",
         "reason": "人工核准：命中主题「商业数据叙事与高管故事化汇报」",
         "skill_id": "skillmedev/skills:skills/data-story/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-16",
+        "reason": "人工核准：命中主题「自媒体短视频二创与AI做号剪辑流水线」",
+        "skill_id": "anbeime/skill:skills/three-body-video-creator/three-body-video-creator/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-16",
+        "reason": "人工核准：命中主题「自媒体短视频二创与AI做号剪辑流水线」",
+        "skill_id": "anbeime/skill:skills/video-creation-collaborator/video-creation-collaborator/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-16",
+        "reason": "人工核准：命中主题「自媒体短视频二创与AI做号剪辑流水线」",
+        "skill_id": "anbeime/skill:skills/video-recreation/video-recreation/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-16",
+        "reason": "人工核准：命中主题「自媒体短视频二创与AI做号剪辑流水线」",
+        "skill_id": "anbeime/skill:skills/video-creation-suite/video-creation-suite/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-16",
+        "reason": "人工核准：命中主题「自媒体短视频二创与AI做号剪辑流水线」",
+        "skill_id": "ganmu191/aigc:skills/video-creation-collaborator/video-creation-collaborator/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-16",
+        "reason": "人工核准：命中主题「自媒体短视频二创与AI做号剪辑流水线」",
+        "skill_id": "ganmu191/aigc:skills/video-creation-suite/video-creation-suite/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-16",
+        "reason": "人工核准：命中主题「自媒体短视频二创与AI做号剪辑流水线」",
+        "skill_id": "ganmu191/aigc:skills/video-recreation/video-recreation/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-16",
+        "reason": "人工核准：命中主题「自媒体短视频二创与AI做号剪辑流水线」",
+        "skill_id": "anbeime/skill:skills/bedtime-story/bedtime-story/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-16",
+        "reason": "人工核准：命中主题「自媒体短视频二创与AI做号剪辑流水线」",
+        "skill_id": "ganmu191/aigc:skills/bedtime-story/bedtime-story/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-16",
+        "reason": "人工核准：命中主题「自媒体短视频二创与AI做号剪辑流水线」",
+        "skill_id": "skillmedev/skills:skills/story-structure-architect/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-16",
+        "reason": "人工核准：命中主题「自媒体短视频二创与AI做号剪辑流水线」",
+        "skill_id": "skillmedev/skills:skills/social-video-formatter/SKILL.md"
       }
     ],
     "blocked_topics": [
@@ -332010,6 +332076,74 @@
             "ETL"
           ]
         }
+      },
+      {
+        "name": "自媒体短视频二创与AI做号剪辑流水线",
+        "description": "主要涵盖面向抖音、快手、B站、小红书、TikTok 等社交自媒体平台的短视频自动化生产、文娱/影视/科幻特定 IP 二创出片工作流、多智能体协同剪辑（剧本台词-分镜生图-TTS配音-MoviePy拼装成片-平台合规质检）、数字人电商带货短视频与批量做号模板，以及长篇网文剧本大纲生成、儿童睡前故事与社交竖屏画幅重构裁切。不包含纯底层音视频网络与流媒体协议（WebRTC、RTSP、HLS、RTMP）、通用底层多媒体处理库与命令行工具（FFmpeg 脚本工具、OpenCV 机器视觉算法、PIL/Pillow 图像库）、前端动效与编程化视频渲染引擎（Remotion 代码视频、Canvas/WebGL 动画）。",
+        "keywords": [
+          "短视频二创",
+          "自媒体出片",
+          "做号剪辑",
+          "三体视频",
+          "多智能体视频创作",
+          "带货短视频",
+          "数字人口播",
+          "分镜合成",
+          "视频二创",
+          "睡前故事",
+          "剧本结构",
+          "竖屏视频",
+          "video-creation",
+          "video-recreation",
+          "three-body-video",
+          "social-video-formatter",
+          "story-structure",
+          "bedtime-story"
+        ],
+        "local_match": {
+          "names": [
+            "three-body-video-creator",
+            "video-creation-collaborator",
+            "video-recreation",
+            "video-creation-suite",
+            "bedtime-story",
+            "story-structure-architect",
+            "social-video-formatter",
+            "digital-avatar-shopping-video",
+            "dream-video-prompt-generator",
+            "agentkit-multimedia-shopping",
+            "pet-commerce-creator",
+            "historical-science-video-prod",
+            "historical-interview-scripts"
+          ],
+          "purpose_phrases": [
+            "面向《三体》IP的短视频自动化创作",
+            "自媒体创作者的视频二创",
+            "短视频多智能体协同工作流",
+            "视频原创、二次创作与分析",
+            "数字人口播带货短视频",
+            "电商带货场景生成数字人短视频",
+            "制作多模态短视频",
+            "批量生成萌宠带货短视频",
+            "历史名人虚构访谈短视频文案",
+            "专为3-12岁儿童设计的睡前故事",
+            "为长篇小说或剧本设计宏观结构骨架",
+            "将已剪辑完成的视频按 TikTok、Reels、Shorts",
+            "适合成片需要竖屏化或多平台格式化分发的场景"
+          ],
+          "preserve_phrases": [
+            "WebRTC",
+            "RTSP",
+            "HLS",
+            "RTMP",
+            "FFmpeg",
+            "OpenCV",
+            "Remotion",
+            "流媒体",
+            "编解码",
+            "计算机视觉"
+          ]
+        }
       }
     ]
   },
@@ -333346,13 +333480,6 @@
         "days": 150,
         "expires_at": "2027-03-06",
         "reason": "用户暂不关注",
-        "skill_id": "skillmedev/skills:skills/social-video-formatter/SKILL.md",
-        "snoozed_at": "2026-10-07"
-      },
-      {
-        "days": 150,
-        "expires_at": "2027-03-06",
-        "reason": "用户暂不关注",
         "skill_id": "skillmedev/skills:skills/speech-writer/SKILL.md",
         "snoozed_at": "2026-10-07"
       },
@@ -333403,13 +333530,6 @@
         "expires_at": "2027-03-06",
         "reason": "用户暂不关注",
         "skill_id": "skillmedev/skills:skills/stock-photo-api/SKILL.md",
-        "snoozed_at": "2026-10-07"
-      },
-      {
-        "days": 150,
-        "expires_at": "2027-03-06",
-        "reason": "用户暂不关注",
-        "skill_id": "skillmedev/skills:skills/story-structure-architect/SKILL.md",
         "snoozed_at": "2026-10-07"
       },
       {
