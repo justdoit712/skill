@@ -3,10 +3,10 @@
   "rules_version": "1.3.0",
   "generated_at": "2026-10-09T21:10:54.373701+08:00",
   "counts": {
-    "recommended": 572,
-    "candidate": 1190,
+    "recommended": 567,
+    "candidate": 1185,
     "manual": 94,
-    "excluded": 1792
+    "excluded": 1802
   },
   "entries": [
     {
@@ -7296,9 +7296,10 @@
       ],
       "limitations": "高度依赖特定的构建上下文（compile_commands.json 或 Cargo.toml）和外部工具链；MCP 不可用时部分高级发现降级；AArch64 汇编分析标记为实验性。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-29T10:30:11.705293+08:00",
@@ -7350,12 +7351,7 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "trailofbits/skills:plugins/zeroize-audit/skills/zeroize-audit/SKILL.md|sha256:b0a6c227817f9702d5168105c85977bb|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-29T10:30:11.702295+08:00",
-      "snooze": {
-        "snoozed_at": "2026-09-29",
-        "expires_at": "2027-02-26",
-        "reason": "用户暂不关注"
-      }
+      "evaluated_at": "2026-09-29T10:30:11.702295+08:00"
     },
     {
       "skill_id": "google-labs-code/stitch-skills:plugins/stitch-build/skills/react-components/SKILL.md",
@@ -53667,9 +53663,10 @@
       "dependencies_declared": [],
       "limitations": "依赖上游仓库实现（如脚本引擎），未说明具体运行环境；转换规则基于预设映射表（reference.md），未说明动态适配能力；仅限C++代码块，不支持其他语言。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-08T09:38:19.812491+08:00",
@@ -127301,8 +127298,10 @@
       "dependencies_declared": [],
       "limitations": "需具备C工具链（gcc/clang、make、valgrind等）；不适用于C++/Rust、纯语法问题或无C环境场景；嵌入式环境下应优先使用静态/内存池分配而非动态分配",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-03T23:42:08.479095+08:00",
       "content_changed_at": null,
@@ -128967,9 +128966,10 @@
       "dependencies_declared": [],
       "limitations": "需要用户具备一定的 C++ 基础知识；未详细说明所有工具的安装和配置",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-09T13:13:37.500496+08:00",
@@ -131923,9 +131923,10 @@
       ],
       "limitations": "仅适用于 C/C++ 调试，需要特定版本的 GDB 和 Python 支持，以及 Linux 系统",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-09T13:20:37.133499+08:00",
@@ -169713,8 +169714,10 @@
       ],
       "limitations": "仅适用于 UE5.x C++ 开发，不适用于纯蓝图项目、UE5 之前版本或非 Unreal 引擎；输出代码需在目标 UE 版本与平台实测验证，不能替代专家评审。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T02:03:24.541084+08:00",
       "content_changed_at": null,
@@ -177167,8 +177170,10 @@
       ],
       "limitations": "不适用于内核驱动/模块、托管语言（Java/C#/Python/Go/Rust）以及无libc的裸机/嵌入式代码。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T10:45:18.795792+08:00",
       "content_changed_at": null,
@@ -178589,8 +178594,10 @@
       ],
       "limitations": "高熵加密固件需转向硬件提取或寻找解密逻辑；本技能输出仅作研究参考，不替代针对具体环境的验证与专家复核。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T10:49:21.002865+08:00",
       "content_changed_at": null,
@@ -182327,9 +182334,10 @@
       ],
       "limitations": "对目标代码库只读；Rust 的 PoC 仅支持部分缺陷类别；AArch64 汇编分析为实验性，结论需人工复核。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T11:01:10.480307+08:00",
@@ -183249,8 +183257,10 @@
       "dependencies_declared": [],
       "limitations": "本技能输出不能替代真机验证、测试与专家评审，务必在目标硬件上回归；缺少目标平台或协议参数等关键输入时需先澄清。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T11:05:04.003717+08:00",
       "content_changed_at": null,
@@ -330889,6 +330899,56 @@
         "skill_id": "findscripter/everything-skills:06-creative/unity-game-developer/SKILL.md",
         "reason": "存量黑名单过滤；批次 topic-filter-20261016-dotnet；命中：C# 与 .NET 技术栈应用开发",
         "added_at": "2026-10-16"
+      },
+      {
+        "added_at": "2026-10-16",
+        "reason": "人工核准：命中主题「C与C++系统编程、嵌入式硬件与底层固件」",
+        "skill_id": "findscripter/everything-skills:02-engineering/c-language-pro/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-16",
+        "reason": "人工核准：命中主题「C与C++系统编程、嵌入式硬件与底层固件」",
+        "skill_id": "findscripter/everything-skills:08-security/c-cpp-security-review/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-16",
+        "reason": "人工核准：命中主题「C与C++系统编程、嵌入式硬件与底层固件」",
+        "skill_id": "findscripter/everything-skills:09-verticals/arm-cortex-firmware-expert/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-16",
+        "reason": "人工核准：命中主题「C与C++系统编程、嵌入式硬件与底层固件」",
+        "skill_id": "findscripter/everything-skills:08-security/firmware-reverse-analyst/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-16",
+        "reason": "人工核准：命中主题「C与C++系统编程、嵌入式硬件与底层固件」",
+        "skill_id": "findscripter/everything-skills:02-engineering/gdb-debugging-cli/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-16",
+        "reason": "人工核准：命中主题「C与C++系统编程、嵌入式硬件与底层固件」",
+        "skill_id": "findscripter/everything-skills:02-engineering/cpp-modern-pro/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-16",
+        "reason": "人工核准：命中主题「C与C++系统编程、嵌入式硬件与底层固件」",
+        "skill_id": "fslong520/aiskill:oi风格/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-16",
+        "reason": "人工核准：命中主题「C与C++系统编程、嵌入式硬件与底层固件」",
+        "skill_id": "findscripter/everything-skills:08-security/zeroize-audit/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-16",
+        "reason": "人工核准：命中主题「C与C++系统编程、嵌入式硬件与底层固件」",
+        "skill_id": "trailofbits/skills:plugins/zeroize-audit/skills/zeroize-audit/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-16",
+        "reason": "人工核准：命中主题「C与C++系统编程、嵌入式硬件与底层固件」",
+        "skill_id": "findscripter/everything-skills:06-creative/unreal-engine-cpp/SKILL.md"
       }
     ],
     "blocked_topics": [
@@ -332467,6 +332527,63 @@
             "Rust"
           ]
         }
+      },
+      {
+        "name": "C与C++系统编程、嵌入式硬件与底层固件",
+        "description": "主要涵盖专用于 C/C++（C99/C11/现代C++）语言的底层系统编程、手动内存管理、指针安全、嵌入式单片机与硬件驱动开发（STM32、ARM Cortex-M、RTOS）、固件逆向与提取，以及 C/C++ 专属工具链调试（GDB、Valgrind、Clang-tidy 内存排查）与游戏引擎 C++ 架构。不包含高级应用层编程语言（Python、TypeScript、Go、Rust、Java）、调用了底层 C++ 运行时的 AI 本地推理部署（如 llama.cpp、vLLM 引擎配置），以及通用的多语言代码规范与架构对照工具。",
+        "keywords": [
+          "C语言",
+          "C99",
+          "C11",
+          "C++",
+          "嵌入式C",
+          "单片机固件",
+          "STM32",
+          "ARM Cortex",
+          "GDB调试",
+          "Valgrind",
+          "指针安全",
+          "内存泄漏C",
+          "c-language",
+          "cpp",
+          "firmware"
+        ],
+        "local_match": {
+          "names": [
+            "c-language-pro",
+            "c-cpp-security-review",
+            "arm-cortex-firmware-expert",
+            "firmware-reverse-analyst",
+            "gdb-debugging-cli",
+            "cpp-modern-pro",
+            "c-review",
+            "modern-cpp",
+            "unreal-engine-cpp",
+            "oi风格"
+          ],
+          "purpose_phrases": [
+            "专为C99/C11系统/嵌入式/高性能代码设计",
+            "针对原生C/C++代码的内存安全",
+            "ARM Cortex-M 系列单片机",
+            "IoT 及嵌入式设备固件提取",
+            "用于 C/C++ 程序崩溃、死锁等问题的调试工具",
+            "现代 C++ RAII 与 STL 惯用法",
+            "扫描文档中的C++代码块，并自动转换为信息学奥林匹克竞赛风格",
+            "为 Unreal Engine 5.x 提供 C++ 开发规范"
+          ],
+          "preserve_phrases": [
+            "llama.cpp",
+            "Python",
+            "TypeScript",
+            "JavaScript",
+            "Rust",
+            "Go",
+            "Docker",
+            "Kubernetes",
+            "大模型推理",
+            "Web全栈"
+          ]
+        }
       }
     ]
   },
@@ -333069,13 +333186,6 @@
         "expires_at": "2027-02-26",
         "reason": "用户暂不关注",
         "skill_id": "supabase/agent-skills:skills/supabase/SKILL.md",
-        "snoozed_at": "2026-09-29"
-      },
-      {
-        "days": 150,
-        "expires_at": "2027-02-26",
-        "reason": "用户暂不关注",
-        "skill_id": "trailofbits/skills:plugins/zeroize-audit/skills/zeroize-audit/SKILL.md",
         "snoozed_at": "2026-09-29"
       },
       {
