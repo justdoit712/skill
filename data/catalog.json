@@ -3,10 +3,10 @@
   "rules_version": "1.3.0",
   "generated_at": "2026-10-09T21:10:54.373701+08:00",
   "counts": {
-    "recommended": 584,
-    "candidate": 1207,
+    "recommended": 575,
+    "candidate": 1192,
     "manual": 94,
-    "excluded": 1763
+    "excluded": 1787
   },
   "entries": [
     {
@@ -111445,8 +111445,10 @@
       ],
       "limitations": "依赖外部工具如InfiniteTalk进行最终视频生成，需配合其他Skill使用；未明确说明是否需要GPU或第三方API密钥；部分脚本路径未提供实际文件内容。",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-08T19:17:59.509013+08:00",
       "content_changed_at": null,
@@ -112086,8 +112088,10 @@
       "dependencies_declared": [],
       "limitations": "依赖用户上传参考图和选择偏好，无法全自动处理；未说明对不同AI绘图模型（如DALL·E、MidJourney、Stable Diffusion）的适配差异；不生成实际图片，仅输出提示词",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-03T22:43:21.028327+08:00",
       "content_changed_at": null,
@@ -112731,8 +112735,10 @@
       ],
       "limitations": "需首次手动登录X保存会话；X长文发布需X Premium订阅；视频上传有平台时长限制（常规140秒，Premium 60分钟）；所有操作依赖本地Chrome浏览器实例",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-03T22:46:01.478645+08:00",
       "content_changed_at": null,
@@ -113103,9 +113109,10 @@
       ],
       "limitations": "实际音频与视频生成依赖外部技术集成方案，未提供具体实现代码或接口配置；知识库初始化需手动建立分类索引。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-08T19:20:20.609501+08:00",
@@ -113283,9 +113290,10 @@
       "dependencies_declared": [],
       "limitations": "依赖外部AI视频/音乐/绘画工具（如即梦、Suno），未说明具体接入方式与权限要求；知识库与参考文档未随SKILL.md提供，需额外获取",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-08T19:21:15.360588+08:00",
@@ -113837,9 +113845,10 @@
       ],
       "limitations": "依赖大模型调用，需确保API可用；未说明对不同语言或风格的支持程度；缺少对生成内容准确性的验证机制",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-08T19:23:03.853257+08:00",
@@ -113933,9 +113942,10 @@
       ],
       "limitations": "依赖多个外部工具（Suno、AI绘画、InfiniteTalk）协同工作；未提供完整示例输出文件；需手动配置环境与参数；仅支持9:16竖屏格式。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-08T19:23:35.899806+08:00",
@@ -114218,9 +114228,10 @@
       ],
       "limitations": "部分平台发布需手动操作（如小红书图文上传）；依赖外部账号登录状态；可能存在反爬虫机制影响采集效果；部分内容需人工审核以确保合规性。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-08T19:24:07.274621+08:00",
@@ -114769,9 +114780,10 @@
       ],
       "limitations": "需在 Obsidian 环境中使用，部分功能依赖特定版本；非 Obsidian 用户价值有限；未说明是否需额外插件或 API 支持。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-08T19:25:13.195512+08:00",
@@ -114859,8 +114871,10 @@
       "dependencies_declared": [],
       "limitations": "未说明具体执行环境或依赖工具，需用户自行集成至支持JSON Canvas的应用（如Obsidian）。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-08T19:25:24.329963+08:00",
       "content_changed_at": null,
@@ -114949,8 +114963,10 @@
       "dependencies_declared": [],
       "limitations": "依赖 Obsidian 应用及 Bases 社区插件；Map 视图需额外安装 Maps 插件（L390）；公式中 Duration 类型运算有特殊限制（L229–L242）",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-03T22:55:40.139807+08:00",
       "content_changed_at": null,
@@ -115035,9 +115051,10 @@
       "dependencies_declared": [],
       "limitations": "未说明是否兼容所有Obsidian版本；未提及对插件或主题的依赖；缺少对性能或渲染限制的说明。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-08T19:25:35.138722+08:00",
@@ -115503,8 +115520,10 @@
       ],
       "limitations": "必须配置COZE API凭证；禁止使用本地视频处理库（如moviepy）；依赖网络API稳定性；仅支持9:16竖屏视频输出。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-08T19:26:22.443965+08:00",
       "content_changed_at": null,
@@ -115861,8 +115880,10 @@
       ],
       "limitations": "未明确说明图像生成所依赖的模型或服务（如Stable Diffusion），可能影响跨平台兼容性；需用户自行准备或配置背景音乐资源；仅提供脚本调用方式，未展示完整代码实现。",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-08T19:28:36.893991+08:00",
       "content_changed_at": null,
@@ -116899,9 +116920,10 @@
       "dependencies_declared": [],
       "limitations": "每日仅限生成3个视频；需依赖COZE平台API，具体接入方式未说明；部分参考文档缺失，无法验证格式规范；超限后需关注公众号获取完整服务。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-08T19:30:28.911388+08:00",
@@ -117748,8 +117770,10 @@
       ],
       "limitations": "除微信公众号外，其他平台需手动配置接口和认证信息；部分功能依赖外部服务可用性；未提供完整代码实现细节。",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-08T19:32:43.936153+08:00",
       "content_changed_at": null,
@@ -117835,9 +117859,10 @@
       "dependencies_declared": [],
       "limitations": "未说明是否依赖外部AI模型或特定平台；缺少对实际执行环境的描述；资源文件（如note_templates.md）未提供，无法验证其完整性。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-08T19:33:17.237205+08:00",
@@ -173339,7 +173364,8 @@
       "status": "excluded",
       "reason_codes": [
         "NOT_STANDALONE_DIRECTION",
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-09T17:15:54.369612+08:00",
@@ -173430,9 +173456,10 @@
       ],
       "limitations": "不适用于非 Obsidian 数据库或 Dataview 插件查询；地图视图依赖 Maps 插件",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-09T17:15:48.564469+08:00",
@@ -216501,8 +216528,10 @@
       "dependencies_declared": [],
       "limitations": "依赖用户上传人物参考图，且需配合外部AI图像生成工具使用；未说明兼容的具体模型",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T15:01:55.616883+08:00",
       "content_changed_at": null,
@@ -217131,8 +217160,10 @@
       ],
       "limitations": "需手动首次登录保存会话；视频时长受X平台限制（普通用户140秒，Premium 60分钟）；长文发布需X Premium订阅",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T15:03:00.379333+08:00",
       "content_changed_at": null,
@@ -218293,9 +218324,10 @@
       ],
       "limitations": "依赖大模型生成，需用户提供准确的核心科学结论；输出适配即梦平台，可能限制其他平台兼容性",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T15:05:19.643365+08:00",
@@ -219216,7 +219248,8 @@
       "status": "excluded",
       "reason_codes": [
         "CREDENTIAL_EXFILTRATION",
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T15:07:15.317760+08:00",
@@ -219302,8 +219335,10 @@
       "dependencies_declared": [],
       "limitations": "仅提供格式规范与示例，不包含自动生成代码或图形界面工具；用户需手动编写或调用其他工具生成JSON",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T15:07:31.287915+08:00",
       "content_changed_at": null,
@@ -219388,8 +219423,10 @@
       "dependencies_declared": [],
       "limitations": "依赖 Obsidian 的 Bases 功能（可能需社区插件），地图视图需额外安装 Maps 插件；未说明兼容性版本",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T15:07:36.448547+08:00",
       "content_changed_at": null,
@@ -219474,8 +219511,10 @@
       "dependencies_declared": [],
       "limitations": "仅提供语法参考，未包含解析器、验证工具或自动化生成脚本；实际渲染效果依赖 Obsidian 或兼容解析器",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T15:07:47.746974+08:00",
       "content_changed_at": null,
@@ -330687,6 +330726,136 @@
         "added_at": "2026-10-16",
         "reason": "人工核准：命中主题「自媒体短视频二创与AI做号剪辑流水线」",
         "skill_id": "skillmedev/skills:skills/social-video-formatter/SKILL.md"
+      },
+      {
+        "skill_id": "anbeime/skill:skills/obsidian-skills-integrated/SKILL.md",
+        "reason": "屏蔽所有Obsidian相关技能",
+        "added_at": "2026-10-16"
+      },
+      {
+        "skill_id": "anbeime/skill:skills/obsidian-skills-integrated/json-canvas/SKILL.md",
+        "reason": "屏蔽所有Obsidian相关技能",
+        "added_at": "2026-10-16"
+      },
+      {
+        "skill_id": "anbeime/skill:skills/obsidian-skills-integrated/obsidian-bases/SKILL.md",
+        "reason": "屏蔽所有Obsidian相关技能",
+        "added_at": "2026-10-16"
+      },
+      {
+        "skill_id": "anbeime/skill:skills/obsidian-skills-integrated/obsidian-markdown/SKILL.md",
+        "reason": "屏蔽所有Obsidian相关技能",
+        "added_at": "2026-10-16"
+      },
+      {
+        "skill_id": "ganmu191/aigc:skills/obsidian-skills-integrated/SKILL.md",
+        "reason": "屏蔽所有Obsidian相关技能",
+        "added_at": "2026-10-16"
+      },
+      {
+        "skill_id": "ganmu191/aigc:skills/obsidian-skills-integrated/json-canvas/SKILL.md",
+        "reason": "屏蔽所有Obsidian相关技能",
+        "added_at": "2026-10-16"
+      },
+      {
+        "skill_id": "ganmu191/aigc:skills/obsidian-skills-integrated/obsidian-bases/SKILL.md",
+        "reason": "屏蔽所有Obsidian相关技能",
+        "added_at": "2026-10-16"
+      },
+      {
+        "skill_id": "ganmu191/aigc:skills/obsidian-skills-integrated/obsidian-markdown/SKILL.md",
+        "reason": "屏蔽所有Obsidian相关技能",
+        "added_at": "2026-10-16"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:07-productivity/obsidian-clipper-templates/SKILL.md",
+        "reason": "屏蔽所有Obsidian相关技能",
+        "added_at": "2026-10-16"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:07-productivity/obsidian-bases-builder/SKILL.md",
+        "reason": "屏蔽所有Obsidian相关技能",
+        "added_at": "2026-10-16"
+      },
+      {
+        "skill_id": "anbeime/skill:skills/agentkit-multimedia-shopping/agentkit-multimedia-shopping/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261016-video-commerce；命中：短视频带货、自媒体矩阵与电商内容生成",
+        "added_at": "2026-10-16"
+      },
+      {
+        "skill_id": "anbeime/skill:skills/atutun-xhs-cover/atutun-xhs-cover/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261016-video-commerce；命中：短视频带货、自媒体矩阵与电商内容生成",
+        "added_at": "2026-10-16"
+      },
+      {
+        "skill_id": "anbeime/skill:skills/content-creation-publisher/baoyu-post-to-x/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261016-video-commerce；命中：短视频带货、自媒体矩阵与电商内容生成",
+        "added_at": "2026-10-16"
+      },
+      {
+        "skill_id": "anbeime/skill:skills/digital-avatar-shopping-video/digital-avatar-shopping-video/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261016-video-commerce；命中：短视频带货、自媒体矩阵与电商内容生成",
+        "added_at": "2026-10-16"
+      },
+      {
+        "skill_id": "anbeime/skill:skills/dream-video-prompt-generator/dream-video-prompt-generator/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261016-video-commerce；命中：短视频带货、自媒体矩阵与电商内容生成",
+        "added_at": "2026-10-16"
+      },
+      {
+        "skill_id": "anbeime/skill:skills/historical-science-video-prod/historical-science-video-prod/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261016-video-commerce；命中：短视频带货、自媒体矩阵与电商内容生成",
+        "added_at": "2026-10-16"
+      },
+      {
+        "skill_id": "anbeime/skill:skills/infinitetalk-shopping-avatar/infinitetalk-shopping-avatar/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261016-video-commerce；命中：短视频带货、自媒体矩阵与电商内容生成",
+        "added_at": "2026-10-16"
+      },
+      {
+        "skill_id": "anbeime/skill:skills/intelligent-content-system/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261016-video-commerce；命中：短视频带货、自媒体矩阵与电商内容生成",
+        "added_at": "2026-10-16"
+      },
+      {
+        "skill_id": "anbeime/skill:skills/pet-commerce-creator/pet-commerce-creator/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261016-video-commerce；命中：短视频带货、自媒体矩阵与电商内容生成",
+        "added_at": "2026-10-16"
+      },
+      {
+        "skill_id": "anbeime/skill:skills/product-video-creator/product-video-creator/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261016-video-commerce；命中：短视频带货、自媒体矩阵与电商内容生成",
+        "added_at": "2026-10-16"
+      },
+      {
+        "skill_id": "anbeime/skill:skills/video-creation-pro/video-creation-pro/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261016-video-commerce；命中：短视频带货、自媒体矩阵与电商内容生成",
+        "added_at": "2026-10-16"
+      },
+      {
+        "skill_id": "anbeime/skill:skills/wechatsync-publisher/wechatsync-publisher/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261016-video-commerce；命中：短视频带货、自媒体矩阵与电商内容生成",
+        "added_at": "2026-10-16"
+      },
+      {
+        "skill_id": "anbeime/skill:skills/xiaohongshu-makeup/xiaohongshu-makeup/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261016-video-commerce；命中：短视频带货、自媒体矩阵与电商内容生成",
+        "added_at": "2026-10-16"
+      },
+      {
+        "skill_id": "ganmu191/aigc:skills/atutun-xhs-cover/atutun-xhs-cover/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261016-video-commerce；命中：短视频带货、自媒体矩阵与电商内容生成",
+        "added_at": "2026-10-16"
+      },
+      {
+        "skill_id": "ganmu191/aigc:skills/content-creation-publisher/baoyu-post-to-x/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261016-video-commerce；命中：短视频带货、自媒体矩阵与电商内容生成",
+        "added_at": "2026-10-16"
+      },
+      {
+        "skill_id": "ganmu191/aigc:skills/historical-science-video-prod/historical-science-video-prod/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261016-video-commerce；命中：短视频带货、自媒体矩阵与电商内容生成",
+        "added_at": "2026-10-16"
       }
     ],
     "blocked_topics": [
@@ -332078,9 +332247,16 @@
         }
       },
       {
-        "name": "自媒体短视频二创与AI做号剪辑流水线",
-        "description": "主要涵盖面向抖音、快手、B站、小红书、TikTok 等社交自媒体平台的短视频自动化生产、文娱/影视/科幻特定 IP 二创出片工作流、多智能体协同剪辑（剧本台词-分镜生图-TTS配音-MoviePy拼装成片-平台合规质检）、数字人电商带货短视频与批量做号模板，以及长篇网文剧本大纲生成、儿童睡前故事与社交竖屏画幅重构裁切。不包含纯底层音视频网络与流媒体协议（WebRTC、RTSP、HLS、RTMP）、通用底层多媒体处理库与命令行工具（FFmpeg 脚本工具、OpenCV 机器视觉算法、PIL/Pillow 图像库）、前端动效与编程化视频渲染引擎（Remotion 代码视频、Canvas/WebGL 动画）。",
+        "name": "短视频带货、自媒体矩阵与电商内容生成",
+        "description": "主要涵盖面向抖音、快手、B站、小红书、TikTok 等社交自媒体平台的短视频电商带货（萌宠/美妆/女装/商品带货全流程、数字人口播带货视频生成、即梦/InfiniteTalk五幕带货提示词、爆款视频拆解与商品营销视频自动合成）、自媒体多智能体出片流水线与矩阵号自动化运营、特定IP二创切片出片、爆款小红书图文笔记与引流封面生成，以及自媒体跨平台自动发布与分发。不包含纯底层音视频网络与流媒体协议（WebRTC、RTSP、HLS、RTMP）、通用底层多媒体处理库与命令行工具（FFmpeg 脚本工具、OpenCV 机器视觉算法、PIL/Pillow 图像库、格式转换与压缩）、前端动效与编程化视频渲染引擎（Remotion 代码视频、Framer Motion、Canvas/WebGL 动画），以及通用TTS语音合成与代码文档排版工具。",
         "keywords": [
+          "短视频带货",
+          "电商短视频",
+          "电商带货",
+          "数字人带货",
+          "口播带货",
+          "自媒体矩阵",
+          "矩阵号",
           "短视频二创",
           "自媒体出片",
           "做号剪辑",
@@ -332090,6 +332266,10 @@
           "数字人口播",
           "分镜合成",
           "视频二创",
+          "小红书爆款",
+          "小红书带货",
+          "阿囤囤",
+          "自媒体多平台发布",
           "睡前故事",
           "剧本结构",
           "竖屏视频",
@@ -332098,33 +332278,56 @@
           "three-body-video",
           "social-video-formatter",
           "story-structure",
-          "bedtime-story"
+          "bedtime-story",
+          "pet-commerce",
+          "e-commerce video"
         ],
         "local_match": {
           "names": [
-            "three-body-video-creator",
+            "pet-commerce-creator",
+            "product-video-creator",
+            "infinitetalk-shopping-avatar",
+            "video-creation-pro",
             "video-creation-collaborator",
-            "video-recreation",
             "video-creation-suite",
+            "video-recreation",
+            "three-body-video-creator",
+            "agentkit-multimedia-shopping",
+            "digital-avatar-shopping-video",
+            "dream-video-prompt-generator",
+            "atutun-xhs-cover",
+            "xiaohongshu-makeup",
+            "historical-science-video-prod",
+            "historical-interview-scripts",
             "bedtime-story",
             "story-structure-architect",
             "social-video-formatter",
-            "digital-avatar-shopping-video",
-            "dream-video-prompt-generator",
-            "agentkit-multimedia-shopping",
-            "pet-commerce-creator",
-            "historical-science-video-prod",
-            "historical-interview-scripts"
+            "intelligent-content-system",
+            "wechatsync-publisher",
+            "baoyu-post-to-x"
           ],
           "purpose_phrases": [
+            "面向萌宠类电商短视频创作者",
+            "批量生成萌宠带货短视频",
+            "将商品信息自动转化为完整营销视频",
+            "电商与自媒体创作者制作商品短视频",
+            "为电商数字人带货视频生成",
+            "数字人口播带货短视频",
+            "电商带货场景生成数字人短视频",
+            "制作多模态短视频",
+            "生成符合阿囤囤风格的小红书爆款封面",
+            "阿囤囤风格",
+            "为美妆护肤产品生成小红书爆款笔记",
+            "自媒体创作者和电商运营",
             "面向《三体》IP的短视频自动化创作",
             "自媒体创作者的视频二创",
             "短视频多智能体协同工作流",
             "视频原创、二次创作与分析",
-            "数字人口播带货短视频",
-            "电商带货场景生成数字人短视频",
-            "制作多模态短视频",
-            "批量生成萌宠带货短视频",
+            "智能内容创作与发布系统",
+            "从网页采集、智能配图、小红书图文生成到微信、小红书",
+            "自媒体创作者提供从选题筛选、AI生成内容到多平台一键发布",
+            "规避反自动化检测",
+            "自动化生成历史科学类3分钟科普短视频",
             "历史名人虚构访谈短视频文案",
             "专为3-12岁儿童设计的睡前故事",
             "为长篇小说或剧本设计宏观结构骨架",
@@ -332139,9 +332342,46 @@
             "FFmpeg",
             "OpenCV",
             "Remotion",
+            "Framer Motion",
             "流媒体",
             "编解码",
-            "计算机视觉"
+            "计算机视觉",
+            "格式转换",
+            "视频压缩",
+            "语音合成",
+            "音色克隆",
+            "TTS"
+          ]
+        }
+      },
+      {
+        "name": "Obsidian 笔记与生态",
+        "description": "主要用于 Obsidian 笔记软件的专属语法（双链、Callout）、模板、Web Clipper、Bases 数据库或 JSON Canvas 白板画布。保留通用的个人知识库（PKM）与通用的纯 Markdown 写作工具。",
+        "keywords": [
+          "Obsidian",
+          "json-canvas",
+          "obsidian-markdown",
+          "obsidian-bases",
+          "obsidian-clipper",
+          "Obsidian插件"
+        ],
+        "local_match": {
+          "names": [
+            "obsidian-skills-integrated",
+            "json-canvas",
+            "obsidian-bases",
+            "obsidian-markdown",
+            "obsidian-clipper-templates",
+            "obsidian-bases-builder"
+          ],
+          "purpose_phrases": [
+            "为Obsidian用户",
+            "Obsidian专属语法",
+            "JSON Canvas",
+            "Obsidian Web Clipper",
+            "Obsidian Bases",
+            "Obsidian 笔记",
+            "Obsidian 中编写"
           ]
         }
       }
