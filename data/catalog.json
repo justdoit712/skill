@@ -3,10 +3,10 @@
   "rules_version": "1.3.0",
   "generated_at": "2026-10-09T21:10:54.373701+08:00",
   "counts": {
-    "recommended": 600,
-    "candidate": 1222,
+    "recommended": 595,
+    "candidate": 1209,
     "manual": 94,
-    "excluded": 1732
+    "excluded": 1750
   },
   "entries": [
     {
@@ -15346,8 +15346,10 @@
       "dependencies_declared": [],
       "limitations": "仅适用于 ClickHouse 分析型负载，不适用于 Postgres/MySQL 等行存 OLTP 数据库。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-29T14:11:06.544361+08:00",
       "content_changed_at": null,
@@ -15398,12 +15400,7 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/clickhouse-analytics/SKILL.md|sha256:5ce070320590bfcc01843974a082283a|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-29T14:11:06.541861+08:00",
-      "snooze": {
-        "snoozed_at": "2026-10-02",
-        "expires_at": "2027-03-01",
-        "reason": "用户暂不关注"
-      }
+      "evaluated_at": "2026-09-29T14:11:06.541861+08:00"
     },
     {
       "skill_id": "skillmedev/skills:skills/client-status-reporting/SKILL.md",
@@ -18209,8 +18206,10 @@
       ],
       "limitations": "默认以 dbt 为落地框架，未声明具体数据库、平台版本或 CI 系统；阈值示例需按业务场景调整。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-29T14:45:35.610190+08:00",
       "content_changed_at": null,
@@ -18261,12 +18260,7 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/data-quality/SKILL.md|sha256:d7c65a239f96cc4b33e7b7bc717d21ff|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-29T14:45:35.606185+08:00",
-      "snooze": {
-        "snoozed_at": "2026-10-02",
-        "expires_at": "2027-03-01",
-        "reason": "用户暂不关注"
-      }
+      "evaluated_at": "2026-09-29T14:45:35.606185+08:00"
     },
     {
       "skill_id": "skillmedev/skills:skills/data-room-builder/SKILL.md",
@@ -42349,9 +42343,10 @@
       "dependencies_declared": [],
       "limitations": "未提供Spark环境搭建说明，所有阈值（如广播上限）需根据实际集群资源调整。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-10-02T13:28:55.788926+08:00",
@@ -138907,9 +138902,10 @@
       "dependencies_declared": [],
       "limitations": "未声明特殊工具、运行环境或依赖",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-09T13:36:14.380788+08:00",
@@ -142667,9 +142663,10 @@
       "dependencies_declared": [],
       "limitations": "不适用于简单 cron/shell 或非 Airflow 技术栈",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-09T13:42:54.025445+08:00",
@@ -142757,9 +142754,10 @@
       "dependencies_declared": [],
       "limitations": "不适用于实时流处理、毫秒级低延迟调度或非数据工作流",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-09T13:42:38.082724+08:00",
@@ -143224,9 +143222,10 @@
       ],
       "limitations": "需要 Python 3.10+ 和 PyArrow 16+",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-09T13:44:22.986674+08:00",
@@ -143332,9 +143331,10 @@
       ],
       "limitations": "不适用于纯探索性数据分析、不含管道的 ML 建模、无法访问数据源或存储系统的场景。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-09T13:44:41.683098+08:00",
@@ -143433,9 +143433,10 @@
       ],
       "limitations": "需要对数据源有访问权限，并有权修改校验规则或schema。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-09T13:44:45.005393+08:00",
@@ -143529,9 +143530,10 @@
       ],
       "limitations": "未详细说明依赖版本和其他特殊运行条件",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-09T13:45:00.695913+08:00",
@@ -143907,9 +143909,10 @@
       "dependencies_declared": [],
       "limitations": "不适用于小数据量、单纯调度编排或与正确性无关的纯算力问题。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-09T13:45:23.592134+08:00",
@@ -144196,9 +144199,10 @@
       ],
       "limitations": "不适用于实时流处理、非 dbt 的 ETL 编排或纯 SQL 即席查询",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-09T13:46:06.385022+08:00",
@@ -144295,8 +144299,10 @@
       ],
       "limitations": "仅适用于已部署dbt和数据仓库的环境；不适合即席查询或无源数据访问权限的场景",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T00:18:52.814048+08:00",
       "content_changed_at": null,
@@ -145139,8 +145145,10 @@
       ],
       "limitations": "不适用于超出内存的数据处理；需要用户理解表达式式 API 与惰性求值模型",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T00:22:17.458294+08:00",
       "content_changed_at": null,
@@ -145896,9 +145904,10 @@
       "dependencies_declared": [],
       "limitations": "需具备 Snowflake 账号与相应权限；示例需根据实际 schema 调整；输出需进一步验证测试。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-09T13:49:32.066146+08:00",
@@ -145990,8 +145999,10 @@
       "dependencies_declared": [],
       "limitations": "不适用于非 Spark 引擎（如 Flink、Trino、pandas）；需 Spark UI 或执行计划等可观测信息支持诊断；配置需根据实际集群与数据特征调整，不可照搬模板。",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T00:26:08.131589+08:00",
       "content_changed_at": null,
@@ -146556,8 +146567,10 @@
       ],
       "limitations": "不适用于中小型内存数组或关系型/表格数据；频繁随机小写或多写场景需外部协调机制；consolidate_metadata在频繁更新时可能陈旧",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T00:27:32.046501+08:00",
       "content_changed_at": null,
@@ -316231,9 +316244,10 @@
       "dependencies_declared": [],
       "limitations": "不适用于OLTP/高频点写、事务强一致或非ClickHouse库（如PostgreSQL/MySQL等）",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-08T00:38:44+00:00",
       "last_checked": "2026-10-09T13:44:15.529801+08:00",
@@ -330496,6 +330510,101 @@
         "added_at": "2026-10-16",
         "reason": "人工核准：命中主题「文件入口安检与URL合规扫描」",
         "skill_id": "ganmu191/aigc:antinet-agentteams/skills/security-scan/SKILL.md"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/clickhouse-analytics/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261016-bigdata；命中：大数据工程、分布式计算与数据管道",
+        "added_at": "2026-10-16"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/data-quality/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261016-bigdata；命中：大数据工程、分布式计算与数据管道",
+        "added_at": "2026-10-16"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/spark-jobs/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261016-bigdata；命中：大数据工程、分布式计算与数据管道",
+        "added_at": "2026-10-16"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:02-engineering/scala-pro/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261016-bigdata；命中：大数据工程、分布式计算与数据管道",
+        "added_at": "2026-10-16"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:07-productivity/clickhouse-analytics-io/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261016-bigdata；命中：大数据工程、分布式计算与数据管道",
+        "added_at": "2026-10-16"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:03-data/airflow-dag-patterns/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261016-bigdata；命中：大数据工程、分布式计算与数据管道",
+        "added_at": "2026-10-16"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:03-data/airflow-dag-builder/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261016-bigdata；命中：大数据工程、分布式计算与数据管道",
+        "added_at": "2026-10-16"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:03-data/dask-distributed-dataframes/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261016-bigdata；命中：大数据工程、分布式计算与数据管道",
+        "added_at": "2026-10-16"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:03-data/data-pipeline-engineer/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261016-bigdata；命中：大数据工程、分布式计算与数据管道",
+        "added_at": "2026-10-16"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:03-data/data-quality-frameworks/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261016-bigdata；命中：大数据工程、分布式计算与数据管道",
+        "added_at": "2026-10-16"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:03-data/data-quality-validator/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261016-bigdata；命中：大数据工程、分布式计算与数据管道",
+        "added_at": "2026-10-16"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:03-data/data-throughput-accelerator/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261016-bigdata；命中：大数据工程、分布式计算与数据管道",
+        "added_at": "2026-10-16"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:03-data/dbt-transformation-modeler/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261016-bigdata；命中：大数据工程、分布式计算与数据管道",
+        "added_at": "2026-10-16"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:03-data/dbt-transformation-patterns/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261016-bigdata；命中：大数据工程、分布式计算与数据管道",
+        "added_at": "2026-10-16"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:03-data/polars-dataframe/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261016-bigdata；命中：大数据工程、分布式计算与数据管道",
+        "added_at": "2026-10-16"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:03-data/snowflake-development/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261016-bigdata；命中：大数据工程、分布式计算与数据管道",
+        "added_at": "2026-10-16"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:03-data/spark-job-optimization/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261016-bigdata；命中：大数据工程、分布式计算与数据管道",
+        "added_at": "2026-10-16"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:03-data/zarr-chunked-arrays/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261016-bigdata；命中：大数据工程、分布式计算与数据管道",
+        "added_at": "2026-10-16"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:03-data/clickhouse-analytics-io/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261016-bigdata；命中：大数据工程、分布式计算与数据管道",
+        "added_at": "2026-10-16"
       }
     ],
     "blocked_topics": [
@@ -331783,6 +331892,70 @@
             "codeql"
           ]
         }
+      },
+      {
+        "name": "大数据工程、分布式计算与数据管道",
+        "description": "主要用于大规模数据分布式计算与性能调优（Apache Spark、PySpark、Dask、Polars分布式管道）、工业级数据调度编排与工作流管理（Apache Airflow、DAG设计）、数据仓库与分析工程建模（dbt数据转换、增量同步、分层建模）、OLAP分析型数仓设计与查询调优（ClickHouse、Snowflake）、分布式科学数组计算（Zarr），以及数据质量测试与校验框架（Great Expectations、dbt test）。保留收藏夹精选技能（如 Kafka 流式管道）、常规关系型/文档型单机数据库（PostgreSQL、MySQL、SQLite、MongoDB、Redis）、通用数据可视化图表以及基础日常数据提取。",
+        "keywords": [
+          "Spark",
+          "PySpark",
+          "Apache Spark",
+          "Airflow",
+          "dbt",
+          "ClickHouse",
+          "Snowflake",
+          "Dask",
+          "Polars",
+          "Zarr",
+          "数据管道",
+          "数据流水线",
+          "分布式计算",
+          "数据倾斜",
+          "数据质量",
+          "数据仓库",
+          "数仓建模",
+          "ETL",
+          "ELT",
+          "OLAP"
+        ],
+        "local_match": {
+          "names": [
+            "spark-jobs",
+            "spark-job-optimization",
+            "airflow-dag-builder",
+            "airflow-dag-patterns",
+            "dbt-transformation-modeler",
+            "dbt-transformation-patterns",
+            "dask-distributed-dataframes",
+            "clickhouse-analytics",
+            "clickhouse-analytics-io",
+            "snowflake-development",
+            "data-pipeline-engineer"
+          ],
+          "purpose_phrases": [
+            "PySpark作业性能调优指南",
+            "Apache Spark 作业的系统性性能调优方案",
+            "使用 Apache Airflow 编排数据管道",
+            "用于 dbt 数据转换建模",
+            "使用 Dask 进行超内存数据的分布式计算",
+            "ClickHouse 数据分析表的设计指南",
+            "ClickHouse查询优化与分析",
+            "Snowflake 数据开发规范",
+            "用于设计批处理/流式数据管道",
+            "用于大规模数据导入/回填/ETL等场景下的吞吐加速",
+            "设计分层数据质量检查与 dbt/CI 落地流程"
+          ],
+          "preserve_phrases": [
+            "Kafka",
+            "PostgreSQL",
+            "MySQL",
+            "SQLite",
+            "MongoDB",
+            "Redis",
+            "数据可视化",
+            "架构图"
+          ]
+        }
       }
     ]
   },
@@ -332412,13 +332585,6 @@
         "days": 150,
         "expires_at": "2027-03-01",
         "reason": "用户暂不关注",
-        "skill_id": "skillmedev/skills:skills/clickhouse-analytics/SKILL.md",
-        "snoozed_at": "2026-10-02"
-      },
-      {
-        "days": 150,
-        "expires_at": "2027-03-01",
-        "reason": "用户暂不关注",
         "skill_id": "skillmedev/skills:skills/code-review-checklist/SKILL.md",
         "snoozed_at": "2026-10-02"
       },
@@ -332777,13 +332943,6 @@
         "expires_at": "2027-03-01",
         "reason": "用户暂不关注",
         "skill_id": "skillmedev/skills:skills/data-drift-monitor/SKILL.md",
-        "snoozed_at": "2026-10-02"
-      },
-      {
-        "days": 150,
-        "expires_at": "2027-03-01",
-        "reason": "用户暂不关注",
-        "skill_id": "skillmedev/skills:skills/data-quality/SKILL.md",
         "snoozed_at": "2026-10-02"
       },
       {
