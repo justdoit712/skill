@@ -638,13 +638,6 @@
       "days": 150,
       "expires_at": "2027-03-01",
       "reason": "用户暂不关注",
-      "skill_id": "skillmedev/skills:skills/data-story/SKILL.md",
-      "snoozed_at": "2026-10-02"
-    },
-    {
-      "days": 150,
-      "expires_at": "2027-03-01",
-      "reason": "用户暂不关注",
       "skill_id": "skillmedev/skills:skills/error-budget-policy/SKILL.md",
       "snoozed_at": "2026-10-02"
     },

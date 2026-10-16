@@ -7747,6 +7747,21 @@
       "skill_id": "findscripter/everything-skills:03-data/clickhouse-analytics-io/SKILL.md",
       "reason": "存量黑名单过滤；批次 topic-filter-20261016-bigdata；命中：大数据工程、分布式计算与数据管道",
       "added_at": "2026-10-16"
+    },
+    {
+      "added_at": "2026-10-16",
+      "reason": "人工核准：命中主题「商业数据叙事与高管故事化汇报」",
+      "skill_id": "anbeime/skill:skills/data-storytelling/data-storytelling/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-16",
+      "reason": "人工核准：命中主题「商业数据叙事与高管故事化汇报」",
+      "skill_id": "ganmu191/aigc:skills/data-storytelling/data-storytelling/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-16",
+      "reason": "人工核准：命中主题「商业数据叙事与高管故事化汇报」",
+      "skill_id": "skillmedev/skills:skills/data-story/SKILL.md"
     }
   ],
   "blocked_topics": [
@@ -9096,6 +9111,44 @@
           "Redis",
           "数据可视化",
           "架构图"
+        ]
+      }
+    },
+    {
+      "name": "商业数据叙事与高管故事化汇报",
+      "description": "主要涵盖将数据分析结果转化为面向高管、管理层或投资人的故事化包装、商业叙事框架（如 Setup-Conflict-Resolution、Problem-Solution 故事大纲）、述职演说与演示文稿大纲模板。不包含真正的编程数据分析、统计计算、SQL 生成、数据清洗或基础图表库绘制工具。",
+      "keywords": [
+        "数据叙事",
+        "数据故事",
+        "故事化汇报",
+        "商业数据叙事",
+        "data-storytelling",
+        "高管沟通汇报",
+        "data-story",
+        "data-storyteller"
+      ],
+      "local_match": {
+        "names": [
+          "data-story",
+          "data-storytelling",
+          "data-storyteller"
+        ],
+        "purpose_phrases": [
+          "数据叙事方法",
+          "将分析结果转化为高管",
+          "设定-冲突-解决",
+          "四段式叙述",
+          "面向决策的四段式",
+          "非技术受众清晰传达洞察"
+        ],
+        "preserve_phrases": [
+          "数据清洗",
+          "统计建模",
+          "机器学习",
+          "量化回测",
+          "SQL查询",
+          "数据工程",
+          "ETL"
         ]
       }
     }
