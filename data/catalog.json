@@ -3,10 +3,10 @@
   "rules_version": "1.3.0",
   "generated_at": "2026-10-09T21:10:54.373701+08:00",
   "counts": {
-    "recommended": 575,
-    "candidate": 1192,
+    "recommended": 574,
+    "candidate": 1191,
     "manual": 94,
-    "excluded": 1787
+    "excluded": 1789
   },
   "entries": [
     {
@@ -54330,9 +54330,10 @@
       ],
       "limitations": "依赖外部工具如 LibreOffice 进行公式重算；未说明具体版本兼容性；仅限于文件级操作，不包含云端协作或 API 集成功能。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-08T09:39:00.821695+08:00",
@@ -124784,8 +124785,10 @@
       ],
       "limitations": "需手动配置LibreOffice以支持recalc.py；openpyxl不自动计算公式值；大文件需特殊模式处理；不适用于.docx/.pptx或纯文本需求。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-08T19:52:28.014462+08:00",
       "content_changed_at": null,
@@ -330856,6 +330859,16 @@
         "skill_id": "ganmu191/aigc:skills/historical-science-video-prod/historical-science-video-prod/SKILL.md",
         "reason": "存量黑名单过滤；批次 topic-filter-20261016-video-commerce；命中：短视频带货、自媒体矩阵与电商内容生成",
         "added_at": "2026-10-16"
+      },
+      {
+        "added_at": "2026-10-16",
+        "reason": "人工核准屏蔽：与官方已收录 anthropics/skills:skills/xlsx 重复",
+        "skill_id": "findscripter/everything-skills:01-documents/xlsx-spreadsheet-authoring/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-16",
+        "reason": "人工核准屏蔽：与官方已收录 anthropics/skills:skills/xlsx 重复",
+        "skill_id": "fslong520/aiskill:xlsx/SKILL.md"
       }
     ],
     "blocked_topics": [
