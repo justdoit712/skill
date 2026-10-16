@@ -3,10 +3,10 @@
   "rules_version": "1.3.0",
   "generated_at": "2026-10-09T21:10:54.373701+08:00",
   "counts": {
-    "recommended": 574,
-    "candidate": 1191,
+    "recommended": 572,
+    "candidate": 1190,
     "manual": 94,
-    "excluded": 1789
+    "excluded": 1792
   },
   "entries": [
     {
@@ -126178,8 +126178,10 @@
       "dependencies_declared": [],
       "limitations": "不适用于非 Avalonia 技术栈、后端服务或纯运维场景；不替代实际编译、测试与专家评审。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-03T23:39:37.980463+08:00",
       "content_changed_at": null,
@@ -130261,9 +130263,10 @@
       "dependencies_declared": [],
       "limitations": "未声明特殊工具或运行环境依赖",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-09T13:16:45.567655+08:00",
@@ -169518,8 +169521,10 @@
       "dependencies_declared": [],
       "limitations": "未明确声明依赖项，需自行具备基础C#和Unity操作能力",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-09T17:08:15.713652+08:00",
       "content_changed_at": null,
@@ -330869,6 +330874,21 @@
         "added_at": "2026-10-16",
         "reason": "人工核准屏蔽：与官方已收录 anthropics/skills:skills/xlsx 重复",
         "skill_id": "fslong520/aiskill:xlsx/SKILL.md"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:02-engineering/avalonia-zafiro-desktop/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261016-dotnet；命中：C# 与 .NET 技术栈应用开发",
+        "added_at": "2026-10-16"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:02-engineering/dotnet-backend-patterns/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261016-dotnet；命中：C# 与 .NET 技术栈应用开发",
+        "added_at": "2026-10-16"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:06-creative/unity-game-developer/SKILL.md",
+        "reason": "存量黑名单过滤；批次 topic-filter-20261016-dotnet；命中：C# 与 .NET 技术栈应用开发",
+        "added_at": "2026-10-16"
       }
     ],
     "blocked_topics": [
@@ -332395,6 +332415,56 @@
             "Obsidian Bases",
             "Obsidian 笔记",
             "Obsidian 中编写"
+          ]
+        }
+      },
+      {
+        "name": "C# 与 .NET 技术栈应用开发",
+        "description": "主要用于 C# 语言、.NET 运行时及生态相关的应用开发与架构设计，涵盖基于 Avalonia UI、WPF、WinUI、MAUI 的桌面客户端开发，ASP.NET Core Web API 后端服务、EF Core / Dapper 数据访问与 .NET 架构模式，以及基于 C# 的 Unity 游戏开发与脚本优化。保留多语言通用云原生工具（如支持多语言的 Azure Functions、跨语言 Copilot SDK）、通用算法与代码重构工具。",
+        "keywords": [
+          "C#",
+          "csharp",
+          ".NET",
+          "dotnet",
+          "Avalonia",
+          "Avalonia UI",
+          "Zafiro",
+          "WPF",
+          "WinUI",
+          "MAUI",
+          "ASP.NET",
+          "ASP.NET Core",
+          "EF Core",
+          "Entity Framework",
+          "Dapper",
+          "Unity",
+          "Unity 6",
+          "game-dev",
+          "Blazor"
+        ],
+        "local_match": {
+          "names": [
+            "avalonia-zafiro-desktop",
+            "dotnet-backend-patterns",
+            "unity-game-developer"
+          ],
+          "purpose_phrases": [
+            "使用 Avalonia UI",
+            "Avalonia UI + Zafiro",
+            "Avalonia ViewModel",
+            "适用于 .NET 后端开发",
+            ".NET 后端开发的模式和最佳实践",
+            "ASP.NET Core",
+            "Unity 6 LTS游戏开发的指导",
+            "Unity游戏开发"
+          ],
+          "preserve_phrases": [
+            "Azure Functions",
+            "Copilot SDK",
+            "Node.js",
+            "Python",
+            "Go",
+            "Rust"
           ]
         }
       }
