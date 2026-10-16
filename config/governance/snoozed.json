@@ -624,13 +624,6 @@
       "days": 150,
       "expires_at": "2027-03-01",
       "reason": "用户暂不关注",
-      "skill_id": "skillmedev/skills:skills/clickhouse-analytics/SKILL.md",
-      "snoozed_at": "2026-10-02"
-    },
-    {
-      "days": 150,
-      "expires_at": "2027-03-01",
-      "reason": "用户暂不关注",
       "skill_id": "skillmedev/skills:skills/code-review-checklist/SKILL.md",
       "snoozed_at": "2026-10-02"
     },
@@ -989,13 +982,6 @@
       "expires_at": "2027-03-01",
       "reason": "用户暂不关注",
       "skill_id": "skillmedev/skills:skills/data-drift-monitor/SKILL.md",
-      "snoozed_at": "2026-10-02"
-    },
-    {
-      "days": 150,
-      "expires_at": "2027-03-01",
-      "reason": "用户暂不关注",
-      "skill_id": "skillmedev/skills:skills/data-quality/SKILL.md",
       "snoozed_at": "2026-10-02"
     },
     {

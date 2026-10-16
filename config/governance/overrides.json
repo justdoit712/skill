@@ -7652,6 +7652,101 @@
       "added_at": "2026-10-16",
       "reason": "人工核准：命中主题「文件入口安检与URL合规扫描」",
       "skill_id": "ganmu191/aigc:antinet-agentteams/skills/security-scan/SKILL.md"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/clickhouse-analytics/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261016-bigdata；命中：大数据工程、分布式计算与数据管道",
+      "added_at": "2026-10-16"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/data-quality/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261016-bigdata；命中：大数据工程、分布式计算与数据管道",
+      "added_at": "2026-10-16"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/spark-jobs/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261016-bigdata；命中：大数据工程、分布式计算与数据管道",
+      "added_at": "2026-10-16"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:02-engineering/scala-pro/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261016-bigdata；命中：大数据工程、分布式计算与数据管道",
+      "added_at": "2026-10-16"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:07-productivity/clickhouse-analytics-io/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261016-bigdata；命中：大数据工程、分布式计算与数据管道",
+      "added_at": "2026-10-16"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:03-data/airflow-dag-patterns/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261016-bigdata；命中：大数据工程、分布式计算与数据管道",
+      "added_at": "2026-10-16"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:03-data/airflow-dag-builder/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261016-bigdata；命中：大数据工程、分布式计算与数据管道",
+      "added_at": "2026-10-16"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:03-data/dask-distributed-dataframes/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261016-bigdata；命中：大数据工程、分布式计算与数据管道",
+      "added_at": "2026-10-16"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:03-data/data-pipeline-engineer/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261016-bigdata；命中：大数据工程、分布式计算与数据管道",
+      "added_at": "2026-10-16"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:03-data/data-quality-frameworks/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261016-bigdata；命中：大数据工程、分布式计算与数据管道",
+      "added_at": "2026-10-16"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:03-data/data-quality-validator/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261016-bigdata；命中：大数据工程、分布式计算与数据管道",
+      "added_at": "2026-10-16"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:03-data/data-throughput-accelerator/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261016-bigdata；命中：大数据工程、分布式计算与数据管道",
+      "added_at": "2026-10-16"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:03-data/dbt-transformation-modeler/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261016-bigdata；命中：大数据工程、分布式计算与数据管道",
+      "added_at": "2026-10-16"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:03-data/dbt-transformation-patterns/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261016-bigdata；命中：大数据工程、分布式计算与数据管道",
+      "added_at": "2026-10-16"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:03-data/polars-dataframe/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261016-bigdata；命中：大数据工程、分布式计算与数据管道",
+      "added_at": "2026-10-16"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:03-data/snowflake-development/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261016-bigdata；命中：大数据工程、分布式计算与数据管道",
+      "added_at": "2026-10-16"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:03-data/spark-job-optimization/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261016-bigdata；命中：大数据工程、分布式计算与数据管道",
+      "added_at": "2026-10-16"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:03-data/zarr-chunked-arrays/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261016-bigdata；命中：大数据工程、分布式计算与数据管道",
+      "added_at": "2026-10-16"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:03-data/clickhouse-analytics-io/SKILL.md",
+      "reason": "存量黑名单过滤；批次 topic-filter-20261016-bigdata；命中：大数据工程、分布式计算与数据管道",
+      "added_at": "2026-10-16"
     }
   ],
   "blocked_topics": [
@@ -8937,6 +9032,70 @@
           "智能合约审计",
           "semgrep",
           "codeql"
+        ]
+      }
+    },
+    {
+      "name": "大数据工程、分布式计算与数据管道",
+      "description": "主要用于大规模数据分布式计算与性能调优（Apache Spark、PySpark、Dask、Polars分布式管道）、工业级数据调度编排与工作流管理（Apache Airflow、DAG设计）、数据仓库与分析工程建模（dbt数据转换、增量同步、分层建模）、OLAP分析型数仓设计与查询调优（ClickHouse、Snowflake）、分布式科学数组计算（Zarr），以及数据质量测试与校验框架（Great Expectations、dbt test）。保留收藏夹精选技能（如 Kafka 流式管道）、常规关系型/文档型单机数据库（PostgreSQL、MySQL、SQLite、MongoDB、Redis）、通用数据可视化图表以及基础日常数据提取。",
+      "keywords": [
+        "Spark",
+        "PySpark",
+        "Apache Spark",
+        "Airflow",
+        "dbt",
+        "ClickHouse",
+        "Snowflake",
+        "Dask",
+        "Polars",
+        "Zarr",
+        "数据管道",
+        "数据流水线",
+        "分布式计算",
+        "数据倾斜",
+        "数据质量",
+        "数据仓库",
+        "数仓建模",
+        "ETL",
+        "ELT",
+        "OLAP"
+      ],
+      "local_match": {
+        "names": [
+          "spark-jobs",
+          "spark-job-optimization",
+          "airflow-dag-builder",
+          "airflow-dag-patterns",
+          "dbt-transformation-modeler",
+          "dbt-transformation-patterns",
+          "dask-distributed-dataframes",
+          "clickhouse-analytics",
+          "clickhouse-analytics-io",
+          "snowflake-development",
+          "data-pipeline-engineer"
+        ],
+        "purpose_phrases": [
+          "PySpark作业性能调优指南",
+          "Apache Spark 作业的系统性性能调优方案",
+          "使用 Apache Airflow 编排数据管道",
+          "用于 dbt 数据转换建模",
+          "使用 Dask 进行超内存数据的分布式计算",
+          "ClickHouse 数据分析表的设计指南",
+          "ClickHouse查询优化与分析",
+          "Snowflake 数据开发规范",
+          "用于设计批处理/流式数据管道",
+          "用于大规模数据导入/回填/ETL等场景下的吞吐加速",
+          "设计分层数据质量检查与 dbt/CI 落地流程"
+        ],
+        "preserve_phrases": [
+          "Kafka",
+          "PostgreSQL",
+          "MySQL",
+          "SQLite",
+          "MongoDB",
+          "Redis",
+          "数据可视化",
+          "架构图"
         ]
       }
     }
