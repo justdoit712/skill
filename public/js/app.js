@@ -607,7 +607,7 @@ function openSpecialModal(type) {
     }
   } else if (type === "proto") {
     if (el.specialModalIcon) el.specialModalIcon.textContent = "📐";
-    if (el.specialModalTitle) el.specialModalTitle.textContent = "Web 交互原型与看板模板库";
+    if (el.specialModalTitle) el.specialModalTitle.textContent = "Web 交互原型与看板模板库 (199 款)";
     if (specialDataCache.proto) {
       currentSpecialList = specialDataCache.proto.entries || [];
       renderSpecialGallery(currentSpecialList);
