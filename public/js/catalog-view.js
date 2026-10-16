@@ -77,6 +77,65 @@ export function qualityBlock(entry) {
   return '<details class="review-box"><summary>筛选依据' + escapeHtml(status) + '</summary>' + rows.join("") + '<p>基于所提供材料评估，未经功能实测。</p></details>';
 }
 
+export function getCategoryIcon(catId, catName) {
+  const combined = (String(catId || '') + ' ' + String(catName || '')).toLowerCase();
+  if (combined.includes('design') || combined.includes('产品') || combined.includes('设计') || combined.includes('style') || combined.includes('ui')) return '🎨';
+  if (combined.includes('data') || combined.includes('数据') || combined.includes('分析') || combined.includes('finance')) return '📊';
+  if (combined.includes('dev') || combined.includes('研发') || combined.includes('工程') || combined.includes('code') || combined.includes('tool')) return '⚡';
+  if (combined.includes('doc') || combined.includes('文档') || combined.includes('写作') || combined.includes('coauthor')) return '📝';
+  if (combined.includes('workflow') || combined.includes('工作流') || combined.includes('自动化') || combined.includes('auto')) return '⚙️';
+  if (combined.includes('media') || combined.includes('音视频') || combined.includes('ppt') || combined.includes('presentation')) return '🎬';
+  return '📦';
+}
+
+/**
+ * 渲染侧边抽屉完整详情内容。
+ */
+export function renderDrawerContent(entry, overridesState, currentTab = "recommended") {
+  if (!entry) return "";
+  const sid = entry.skill_id;
+  const picked = isPicked(overridesState, sid);
+
+  let examplesHtml = "";
+  if ((entry.example_requests || []).length) {
+    const reqItems = entry.example_requests.map(req => {
+      return '<div class="drawer-example-item"><code>' + escapeHtml(req) + '</code></div>';
+    }).join("");
+    examplesHtml = '<div class="drawer-section"><h4>💡 示例请求</h4><div class="drawer-examples-list">' + reqItems + '</div></div>';
+  }
+
+  let featuresHtml = "";
+  if ((entry.key_features || []).length) {
+    const featItems = entry.key_features.map(feat => {
+      return '<li class="drawer-feature-item">' + escapeHtml(feat) + '</li>';
+    }).join("");
+    featuresHtml = '<div class="drawer-section"><h4>✨ 亮点特性</h4><ul class="drawer-features-list">' + featItems + '</ul></div>';
+  }
+
+  const metaRows = [];
+  if (text(entry.platform_declared)) metaRows.push('<tr><th>运行平台</th><td>' + escapeHtml(entry.platform_declared) + '</td></tr>');
+  if ((entry.dependencies_declared || []).length) {
+    metaRows.push('<tr><th>依赖声明</th><td>' + escapeHtml(entry.dependencies_declared.join("、")) + '</td></tr>');
+  }
+  if (text(entry.limitations)) metaRows.push('<tr><th>使用限制</th><td>' + escapeHtml(entry.limitations) + '</td></tr>');
+  if (text(entry.license)) metaRows.push('<tr><th>开源许可</th><td>' + escapeHtml(entry.license) + '</td></tr>');
+  if (text(entry.first_seen)) metaRows.push('<tr><th>首次发现</th><td>' + escapeHtml(entry.first_seen.slice(0, 10)) + '</td></tr>');
+  if (text(entry.last_checked)) metaRows.push('<tr><th>最近检查</th><td>' + escapeHtml(entry.last_checked.slice(0, 10)) + '</td></tr>');
+  if (text(entry.content_changed_at)) metaRows.push('<tr><th>内容变更</th><td>' + escapeHtml(entry.content_changed_at.slice(0, 10)) + '</td></tr>');
+
+  const metaTable = metaRows.length ? '<div class="drawer-section"><h4>📋 元数据与环境</h4><table class="drawer-meta-table"><tbody>' + metaRows.join("") + '</tbody></table></div>' : '';
+
+  return '<div class="drawer-summary-box"><p class="drawer-summary-text">' +
+    escapeHtml(text(entry.summary_zh) || "（暂无中文简述）") + '</p></div>' +
+    featuresHtml +
+    examplesHtml +
+    '<div class="drawer-section"><h4>🛡️ 评估依据与复核</h4>' +
+    reviewBlock(entry) +
+    qualityBlock(entry) +
+    '</div>' +
+    metaTable;
+}
+
 /**
  * 创建单张技能卡片 DOM 节点。
  */
@@ -85,8 +144,11 @@ export function createSkillCard(entry, overridesState, currentTab = "recommended
   const picked = isPicked(overridesState, sid);
   const li = document.createElement("li");
   li.className = "card";
+  li.setAttribute("data-sid", sid);
 
   const cat = entry.main_category ? entry.main_category.name : "未分类";
+  const icon = getCategoryIcon(entry.main_category?.id, cat);
+
   const bits = ['<span class="tag tag-cat">' + escapeHtml(cat) + "</span>"];
   if (entry.skill_type && SKILL_TYPE_LABELS[entry.skill_type]) {
     bits.push('<span class="tag tag-type tag-type-' + escapeHtml(entry.skill_type) + '">' +
@@ -96,76 +158,22 @@ export function createSkillCard(entry, overridesState, currentTab = "recommended
     bits.push('<span class="tag tag-manual">收藏</span>');
   }
   if (entry.needs_review) {
-    bits.push('<span class="tag tag-review">内容已变化，待复核' +
-      (entry.status === "recommended" ? "（推荐状态待复核）" : "（已降级）") + "</span>");
+    bits.push('<span class="tag tag-review">待复核</span>');
   }
   if (entry.status === "candidate" && !entry.needs_review && !picked) {
     bits.push('<span class="tag tag-cand">候选</span>');
   }
-  if (entry.source_type) {
-    bits.push('<span class="tag">' + escapeHtml(entry.source_type) + "</span>");
-  }
-  (entry.tags || []).forEach(t => {
-    bits.push('<span class="tag">' + escapeHtml(t) + "</span>");
-  });
-
-  const meta = [];
-  if (text(entry.platform_declared)) meta.push("平台：" + escapeHtml(entry.platform_declared));
-  if ((entry.dependencies_declared || []).length) {
-    meta.push("依赖：" + escapeHtml(entry.dependencies_declared.join("、")));
-  }
-  if (text(entry.limitations)) meta.push("限制：" + escapeHtml(entry.limitations));
-  if (text(entry.license)) meta.push("许可：" + escapeHtml(entry.license));
-
-  let examplesHtml = "";
-  if ((entry.example_requests || []).length) {
-    const reqItems = entry.example_requests.map(req => {
-      return '<span class="example-item">' + escapeHtml(req) + '</span>';
-    }).join("");
-    examplesHtml = '<div class="card-examples"><span class="example-label">示例请求：</span>' + reqItems + '</div>';
-  }
 
   let featuresHtml = "";
   if ((entry.key_features || []).length) {
-    const featItems = entry.key_features.map(feat => {
-      return '<span class="feature-item">' + escapeHtml(feat) + '</span>';
-    }).join("");
-    featuresHtml = '<div class="card-features"><span class="feature-label">亮点：</span>' + featItems + '</div>';
-  }
-
-  let manualHtml = "";
-  if (picked) {
-    const note = overridesState.stagedPicks[sid] || entry.manual_note || overridesState.baselinePicks[sid] || {};
-    manualHtml += '<p class="detail manual">收藏理由：' + escapeHtml(note.reason || "人工收藏") +
-      (note.added_at ? '（' + escapeHtml(note.added_at) + '）' : '') + '</p>';
-    if (entry.content_changed_at) {
-      manualHtml += '<p class="detail changed">上游内容已变化（' + escapeHtml(entry.content_changed_at.slice(0, 10)) + '），尚未复核；本条为人工收藏，程序不会自动重评。</p>';
-    }
-    const autoExcluded = entry.status === "excluded" || (note.auto_status === "excluded");
-    if (autoExcluded) {
-      const reasons = (entry.reason_codes || []).join("、");
-      manualHtml += '<p class="detail warning-box">程序判定为排除项' + (reasons ? '（' + escapeHtml(reasons) + '）' : '') + '，本条为人工收藏，请自行确认风险。</p>';
-    } else if (entry.status === "processing_failure") {
-      manualHtml += '<p class="detail warning-box">评估未完成。</p>';
-    }
-    if (entry.upstream_status && entry.upstream_status !== "ok") {
-      manualHtml += '<p class="detail warning-box">上游不可访问' + (entry.last_checked ? '（' + escapeHtml(entry.last_checked.slice(0, 10)) + '）' : '') + '。</p>';
-    }
-  }
-
-  const dates = [];
-  if (text(entry.first_seen)) dates.push("首次发现 " + escapeHtml(entry.first_seen.slice(0, 10)));
-  if (text(entry.last_checked)) dates.push("最近检查 " + escapeHtml(entry.last_checked.slice(0, 10)));
-  if (text(entry.content_changed_at)) dates.push("内容变更 " + escapeHtml(entry.content_changed_at.slice(0, 10)));
-  if (text(entry.upstream_status) && entry.upstream_status !== "ok") {
-    dates.push("上游状态 " + escapeHtml(entry.upstream_status));
+    const feat = entry.key_features[0];
+    featuresHtml = '<div class="card-features"><span class="feature-item" title="' + escapeHtml(entry.key_features.join("；")) + '">✨ ' + escapeHtml(feat) + '</span></div>';
   }
 
   const favBtnClass = picked ? "btn-action btn-fav is-active" : "btn-action btn-fav";
   const favBtnText = picked ? "★ 已收藏" : "★ 收藏";
   const ownedBtn = '<button type="button" class="btn-action btn-owned" data-action="owned" data-id="' + escapeHtml(sid) + '" title="标记为已收录（需二次确认，从目录与查找中隐藏，0 Token 跳过）">标为已收录</button>';
 
-  // 仅收藏区展示“标为已收录”（点击需二次确认）；推荐与候选区展示收藏、暂不看、屏蔽
   let actionsHtml = "";
   if (currentTab === "manual") {
     actionsHtml =
@@ -180,27 +188,31 @@ export function createSkillCard(entry, overridesState, currentTab = "recommended
   }
 
   const authorHtml = entry.author
-    ? '<p class="by"><span class="author-label">by</span> <span class="author-name">' + escapeHtml(entry.author) + '</span></p>'
+    ? '<p class="by"><span class="author-label">by</span> <span class="author-name">@' + escapeHtml(entry.author) + '</span></p>'
     : '';
 
   li.innerHTML =
     '<div class="card-head">' +
-      '<h3><a href="' + escapeHtml(entry.url || "#") + '" target="_blank" rel="noopener noreferrer">' +
-      escapeHtml(entry.name) + "</a></h3>" +
+      '<div class="card-brand">' +
+        '<span class="card-cat-icon" aria-hidden="true">' + icon + '</span>' +
+        '<div class="card-title-group">' +
+          '<h3 class="card-title"><a href="' + escapeHtml(entry.url || "#") + '" target="_blank" rel="noopener noreferrer" data-prevent-drawer="true">' +
+          escapeHtml(entry.name) + "</a></h3>" +
+          authorHtml +
+        '</div>' +
+      '</div>' +
       '<div class="card-actions">' + actionsHtml + '</div>' +
     '</div>' +
-    authorHtml +
-    '<p class="sum">' + escapeHtml(text(entry.summary_zh) || "（暂无中文简述）") + "</p>" +
-    examplesHtml +
+    '<p class="sum" title="' + escapeHtml(text(entry.summary_zh) || "") + '">' + escapeHtml(text(entry.summary_zh) || "（暂无中文简述）") + "</p>" +
     featuresHtml +
-    '<p class="tags">' + bits.join("") + "</p>" +
-    (meta.length ? '<p class="detail">' + meta.join(" · ") + "</p>" : "") +
-    manualHtml +
-    (entry.needs_review ? '<p class="detail review">待复核：' +
-      escapeHtml(entry.review_note || "上游内容已变化，等待复核。") + "</p>" : "") +
-    reviewBlock(entry) +
-    qualityBlock(entry) +
-    (dates.length ? '<p class="dates">' + dates.join(" · ") + "</p>" : "");
+    '<div class="card-foot">' +
+      '<div class="tags">' + bits.join("") + '</div>' +
+      '<button type="button" class="btn-card-detail" data-action="open-detail" data-id="' + escapeHtml(sid) + '">详情 ↗</button>' +
+    '</div>' +
+    '<div class="card-collapsible-details" hidden>' +
+      reviewBlock(entry) +
+      qualityBlock(entry) +
+    '</div>';
 
   return li;
 }
