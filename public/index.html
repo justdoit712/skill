@@ -35,11 +35,7 @@
       </div>
     </div>
     <h1>Skills 导航目录</h1>
-    <p class="lede">公开的 AI Agent Skills 导航。只收录名称、原始链接、中文简述、分类与评估依据，点进去直达上游原仓库。</p>
-    <div class="disclaimer-callout">
-      <span class="disclaimer-icon">🛡️</span>
-      <p class="disclaimer">纯静态中立索引：不下载、不镜像、不安装、不启用任何技能包代码。条目基于客观材料评估，未经功能实测，被收录不等于可用或绝对安全。</p>
-    </div>
+    <p class="lede">公开中立的 AI Agent 优质技能索引库 · 点击卡片直达原仓库，探索 1,480+ 款精选技能包</p>
   </div>
 </header>
 
@@ -63,6 +59,48 @@
         <span>🔍 定向查找</span>
         <span id="count-find" class="tab-badge">0</span>
       </button>
+    </div>
+
+    <!-- Special Skills 紧凑入口与展开列表 -->
+    <div class="special-menu-wrap">
+      <button id="btn-special-menu" class="btn-special-menu" type="button" aria-expanded="false" aria-haspopup="true" title="点击展开特色专区主题列表">
+        <span class="special-sparkle">✨</span>
+        <span class="special-btn-text">特色专区</span>
+        <span class="special-badge">2 个主题</span>
+        <span class="special-chevron">▾</span>
+      </button>
+
+      <div id="special-dropdown" class="special-dropdown" hidden>
+        <div class="special-dropdown-head">
+          <span class="special-dropdown-title">特色专区主题 (Special Themes)</span>
+          <span class="special-dropdown-sub">独立收录 · 0 Token 抓取</span>
+        </div>
+        <div class="special-dropdown-list">
+          <div class="special-dropdown-item" id="item-special-style" role="button" tabindex="0">
+            <div class="special-item-icon">🎨</div>
+            <div class="special-item-info">
+              <div class="special-item-header">
+                <span class="special-item-title">UI 视觉设计规范与调色板</span>
+                <span class="special-item-tag">74 款</span>
+              </div>
+              <p class="special-item-desc">极简白 · 极光微光 · 瑞士网格 · 赛博终端 · 黑金奢华，包含规范与完整色值</p>
+            </div>
+            <span class="special-item-arrow">↗</span>
+          </div>
+
+          <div class="special-dropdown-item" id="item-special-proto" role="button" tabindex="0">
+            <div class="special-item-icon">📐</div>
+            <div class="special-item-info">
+              <div class="special-item-header">
+                <span class="special-item-title">Web 交互原型与看板模板</span>
+                <span class="special-item-tag">1,212 款</span>
+              </div>
+              <p class="special-item-desc">admin 仪表盘 · 业务数据大屏 · 3栏文档 · 单页产品 · SaaS 营销落地页规范</p>
+            </div>
+            <span class="special-item-arrow">↗</span>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -110,6 +148,50 @@
 
 
 </main>
+
+<!-- 侧边详情抽屉 (Detail Drawer) -->
+<aside id="detail-drawer" class="detail-drawer" aria-hidden="true">
+  <div id="drawer-backdrop" class="drawer-backdrop"></div>
+  <div class="drawer-panel" role="dialog" aria-modal="true" aria-labelledby="drawer-title">
+    <div class="drawer-header">
+      <div class="drawer-title-row">
+        <div class="drawer-brand">
+          <span id="drawer-icon" class="drawer-icon">📦</span>
+          <h3 id="drawer-title" class="drawer-title">技能详情</h3>
+        </div>
+        <button id="btn-close-drawer" class="drawer-close-btn" type="button" aria-label="关闭详情">&times;</button>
+      </div>
+      <p id="drawer-by" class="drawer-by"></p>
+    </div>
+    <div id="drawer-body" class="drawer-body"></div>
+    <div id="drawer-footer" class="drawer-footer">
+      <div id="drawer-actions" class="drawer-actions"></div>
+      <a id="drawer-repo-link" href="#" target="_blank" rel="noopener noreferrer" class="btn-drawer-gh">在 GitHub 打开 ↗</a>
+    </div>
+  </div>
+</aside>
+
+<!-- 特色专区画廊弹窗 (Special Skills Modal) -->
+<div id="special-modal" class="modal-overlay" hidden>
+  <div class="modal-content special-modal-content" role="dialog" aria-modal="true">
+    <div class="modal-head">
+      <div class="special-modal-title-wrap">
+        <span id="special-modal-icon" class="special-modal-icon">🎨</span>
+        <h3 id="special-modal-title">特色专区</h3>
+      </div>
+      <button id="btn-close-special-modal" class="modal-close" aria-label="关闭">&times;</button>
+    </div>
+    <div class="modal-body special-modal-body">
+      <div class="special-search-row">
+        <input id="special-q" type="search" placeholder="在专区中快速检索风格、标签或关键词..." autocomplete="off">
+      </div>
+      <div id="special-modal-list" class="special-grid-list"></div>
+    </div>
+    <div class="modal-actions">
+      <button id="btn-close-special-bottom" class="btn-secondary">关闭</button>
+    </div>
+  </div>
+</div>
 
 <!-- 底部悬浮同步栏 -->
 <aside id="sync-bar" class="sync-bar" hidden>
