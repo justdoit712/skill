@@ -603,13 +603,6 @@
       "days": 150,
       "expires_at": "2027-02-26",
       "reason": "用户暂不关注",
-      "skill_id": "trailofbits/skills:plugins/zeroize-audit/skills/zeroize-audit/SKILL.md",
-      "snoozed_at": "2026-09-29"
-    },
-    {
-      "days": 150,
-      "expires_at": "2027-02-26",
-      "reason": "用户暂不关注",
       "skill_id": "getsentry/skills:skills/create-branch/SKILL.md",
       "snoozed_at": "2026-09-29"
     },
