@@ -7947,6 +7947,16 @@
       "skill_id": "ganmu191/aigc:skills/historical-science-video-prod/historical-science-video-prod/SKILL.md",
       "reason": "存量黑名单过滤；批次 topic-filter-20261016-video-commerce；命中：短视频带货、自媒体矩阵与电商内容生成",
       "added_at": "2026-10-16"
+    },
+    {
+      "added_at": "2026-10-16",
+      "reason": "人工核准屏蔽：与官方已收录 anthropics/skills:skills/xlsx 重复",
+      "skill_id": "findscripter/everything-skills:01-documents/xlsx-spreadsheet-authoring/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-16",
+      "reason": "人工核准屏蔽：与官方已收录 anthropics/skills:skills/xlsx 重复",
+      "skill_id": "fslong520/aiskill:xlsx/SKILL.md"
     }
   ],
   "blocked_topics": [
