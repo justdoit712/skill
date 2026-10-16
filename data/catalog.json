@@ -3,10 +3,10 @@
   "rules_version": "1.3.0",
   "generated_at": "2026-10-09T21:10:54.373701+08:00",
   "counts": {
-    "recommended": 602,
+    "recommended": 600,
     "candidate": 1222,
     "manual": 94,
-    "excluded": 1730
+    "excluded": 1732
   },
   "entries": [
     {
@@ -111062,8 +111062,10 @@
       ],
       "limitations": "依赖本地黑名单和规则库，需定期更新；无法识别文件类型时直接拒绝",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-03T22:40:05.784954+08:00",
       "content_changed_at": null,
@@ -215379,8 +215381,10 @@
       ],
       "limitations": "依赖本地黑名单和许可规则库，若库缺失或损坏将触发全拒策略；不支持在线更新规则",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T14:54:32.740636+08:00",
       "content_changed_at": null,
@@ -330482,6 +330486,16 @@
         "added_at": "2026-10-15",
         "reason": "用户屏蔽/删除",
         "skill_id": "skillmedev/skills:skills/power-bi-dax/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-16",
+        "reason": "人工核准：命中主题「文件入口安检与URL合规扫描」",
+        "skill_id": "anbeime/skill:antinet-agentteams/skills/security-scan/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-16",
+        "reason": "人工核准：命中主题「文件入口安检与URL合规扫描」",
+        "skill_id": "ganmu191/aigc:antinet-agentteams/skills/security-scan/SKILL.md"
       }
     ],
     "blocked_topics": [
@@ -331726,6 +331740,47 @@
             "Terraform",
             "云安全",
             "开源许可证"
+          ]
+        }
+      },
+      {
+        "name": "文件入口安检与URL合规扫描",
+        "description": "主要涵盖用于文件上传入口安检、URL黑名单比对、文档格式与MIME类型合规拦截的前置守卫工具。不包含代码静态审计、依赖漏洞检测或网络安全渗透测试工具。",
+        "keywords": [
+          "文件安检",
+          "入口安检",
+          "URL黑名单",
+          "域名黑名单",
+          "格式合规审查",
+          "文件类型探测",
+          "上传安检",
+          "安全关卡",
+          "security-scan",
+          "upload-security",
+          "file-sanitizer",
+          "url-blacklist"
+        ],
+        "local_match": {
+          "names": [
+            "security-scan"
+          ],
+          "purpose_phrases": [
+            "对进入系统的文件或URL执行安全",
+            "文件或URL执行安全与合规扫描",
+            "输出通过/拒绝判定",
+            "文档处理系统的入口安检",
+            "文件类型探测",
+            "黑名单域名",
+            "OA许可规则"
+          ],
+          "preserve_phrases": [
+            "静态代码分析",
+            "代码审计",
+            "漏洞挖掘",
+            "依赖安全",
+            "智能合约审计",
+            "semgrep",
+            "codeql"
           ]
         }
       }
