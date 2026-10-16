@@ -1331,13 +1331,6 @@
       "days": 150,
       "expires_at": "2027-03-06",
       "reason": "用户暂不关注",
-      "skill_id": "skillmedev/skills:skills/social-video-formatter/SKILL.md",
-      "snoozed_at": "2026-10-07"
-    },
-    {
-      "days": 150,
-      "expires_at": "2027-03-06",
-      "reason": "用户暂不关注",
       "skill_id": "skillmedev/skills:skills/speech-writer/SKILL.md",
       "snoozed_at": "2026-10-07"
     },
@@ -1388,13 +1381,6 @@
       "expires_at": "2027-03-06",
       "reason": "用户暂不关注",
       "skill_id": "skillmedev/skills:skills/stock-photo-api/SKILL.md",
-      "snoozed_at": "2026-10-07"
-    },
-    {
-      "days": 150,
-      "expires_at": "2027-03-06",
-      "reason": "用户暂不关注",
-      "skill_id": "skillmedev/skills:skills/story-structure-architect/SKILL.md",
       "snoozed_at": "2026-10-07"
     },
     {

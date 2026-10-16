@@ -7762,6 +7762,61 @@
       "added_at": "2026-10-16",
       "reason": "人工核准：命中主题「商业数据叙事与高管故事化汇报」",
       "skill_id": "skillmedev/skills:skills/data-story/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-16",
+      "reason": "人工核准：命中主题「自媒体短视频二创与AI做号剪辑流水线」",
+      "skill_id": "anbeime/skill:skills/three-body-video-creator/three-body-video-creator/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-16",
+      "reason": "人工核准：命中主题「自媒体短视频二创与AI做号剪辑流水线」",
+      "skill_id": "anbeime/skill:skills/video-creation-collaborator/video-creation-collaborator/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-16",
+      "reason": "人工核准：命中主题「自媒体短视频二创与AI做号剪辑流水线」",
+      "skill_id": "anbeime/skill:skills/video-recreation/video-recreation/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-16",
+      "reason": "人工核准：命中主题「自媒体短视频二创与AI做号剪辑流水线」",
+      "skill_id": "anbeime/skill:skills/video-creation-suite/video-creation-suite/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-16",
+      "reason": "人工核准：命中主题「自媒体短视频二创与AI做号剪辑流水线」",
+      "skill_id": "ganmu191/aigc:skills/video-creation-collaborator/video-creation-collaborator/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-16",
+      "reason": "人工核准：命中主题「自媒体短视频二创与AI做号剪辑流水线」",
+      "skill_id": "ganmu191/aigc:skills/video-creation-suite/video-creation-suite/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-16",
+      "reason": "人工核准：命中主题「自媒体短视频二创与AI做号剪辑流水线」",
+      "skill_id": "ganmu191/aigc:skills/video-recreation/video-recreation/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-16",
+      "reason": "人工核准：命中主题「自媒体短视频二创与AI做号剪辑流水线」",
+      "skill_id": "anbeime/skill:skills/bedtime-story/bedtime-story/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-16",
+      "reason": "人工核准：命中主题「自媒体短视频二创与AI做号剪辑流水线」",
+      "skill_id": "ganmu191/aigc:skills/bedtime-story/bedtime-story/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-16",
+      "reason": "人工核准：命中主题「自媒体短视频二创与AI做号剪辑流水线」",
+      "skill_id": "skillmedev/skills:skills/story-structure-architect/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-16",
+      "reason": "人工核准：命中主题「自媒体短视频二创与AI做号剪辑流水线」",
+      "skill_id": "skillmedev/skills:skills/social-video-formatter/SKILL.md"
     }
   ],
   "blocked_topics": [
@@ -9149,6 +9204,74 @@
           "SQL查询",
           "数据工程",
           "ETL"
+        ]
+      }
+    },
+    {
+      "name": "自媒体短视频二创与AI做号剪辑流水线",
+      "description": "主要涵盖面向抖音、快手、B站、小红书、TikTok 等社交自媒体平台的短视频自动化生产、文娱/影视/科幻特定 IP 二创出片工作流、多智能体协同剪辑（剧本台词-分镜生图-TTS配音-MoviePy拼装成片-平台合规质检）、数字人电商带货短视频与批量做号模板，以及长篇网文剧本大纲生成、儿童睡前故事与社交竖屏画幅重构裁切。不包含纯底层音视频网络与流媒体协议（WebRTC、RTSP、HLS、RTMP）、通用底层多媒体处理库与命令行工具（FFmpeg 脚本工具、OpenCV 机器视觉算法、PIL/Pillow 图像库）、前端动效与编程化视频渲染引擎（Remotion 代码视频、Canvas/WebGL 动画）。",
+      "keywords": [
+        "短视频二创",
+        "自媒体出片",
+        "做号剪辑",
+        "三体视频",
+        "多智能体视频创作",
+        "带货短视频",
+        "数字人口播",
+        "分镜合成",
+        "视频二创",
+        "睡前故事",
+        "剧本结构",
+        "竖屏视频",
+        "video-creation",
+        "video-recreation",
+        "three-body-video",
+        "social-video-formatter",
+        "story-structure",
+        "bedtime-story"
+      ],
+      "local_match": {
+        "names": [
+          "three-body-video-creator",
+          "video-creation-collaborator",
+          "video-recreation",
+          "video-creation-suite",
+          "bedtime-story",
+          "story-structure-architect",
+          "social-video-formatter",
+          "digital-avatar-shopping-video",
+          "dream-video-prompt-generator",
+          "agentkit-multimedia-shopping",
+          "pet-commerce-creator",
+          "historical-science-video-prod",
+          "historical-interview-scripts"
+        ],
+        "purpose_phrases": [
+          "面向《三体》IP的短视频自动化创作",
+          "自媒体创作者的视频二创",
+          "短视频多智能体协同工作流",
+          "视频原创、二次创作与分析",
+          "数字人口播带货短视频",
+          "电商带货场景生成数字人短视频",
+          "制作多模态短视频",
+          "批量生成萌宠带货短视频",
+          "历史名人虚构访谈短视频文案",
+          "专为3-12岁儿童设计的睡前故事",
+          "为长篇小说或剧本设计宏观结构骨架",
+          "将已剪辑完成的视频按 TikTok、Reels、Shorts",
+          "适合成片需要竖屏化或多平台格式化分发的场景"
+        ],
+        "preserve_phrases": [
+          "WebRTC",
+          "RTSP",
+          "HLS",
+          "RTMP",
+          "FFmpeg",
+          "OpenCV",
+          "Remotion",
+          "流媒体",
+          "编解码",
+          "计算机视觉"
         ]
       }
     }
