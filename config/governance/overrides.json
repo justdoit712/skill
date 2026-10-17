@@ -8557,9 +8557,93 @@
       "skill_id": "moussakhalale-lang/open-design:skills/ai-music-album/SKILL.md",
       "reason": "用户屏蔽/删除（AI音乐创作、歌词编写与编曲方案）",
       "added_at": "2026-10-18"
+    },
+    {
+      "skill_id": "cat-xierluo/legal-skills:skills/env-doctor/SKILL.md",
+      "reason": "用户屏蔽/删除（macOS 专属环境配置与苹果生态开发）",
+      "added_at": "2026-10-18"
+    },
+    {
+      "skill_id": "cat-xierluo/legal-skills:skills/apple-smart-schedule/SKILL.md",
+      "reason": "用户屏蔽/删除（macOS 专属环境配置与苹果生态开发）",
+      "added_at": "2026-10-18"
+    },
+    {
+      "skill_id": "trailofbits/skills:plugins/claude-in-chrome-troubleshooting/skills/chrome-mcp-troubleshooting/SKILL.md",
+      "reason": "用户屏蔽/删除（macOS 专属环境配置与苹果生态开发）",
+      "added_at": "2026-10-18"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:02-engineering/swiftui-liquid-glass/SKILL.md",
+      "reason": "用户屏蔽/删除（macOS 专属环境配置与苹果生态开发）",
+      "added_at": "2026-10-18"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:02-engineering/swiftui-best-practices/SKILL.md",
+      "reason": "用户屏蔽/删除（macOS 专属环境配置与苹果生态开发）",
+      "added_at": "2026-10-18"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:06-creative/apple-hig-advisor/SKILL.md",
+      "reason": "用户屏蔽/删除（macOS 专属环境配置与苹果生态开发）",
+      "added_at": "2026-10-18"
     }
   ],
   "blocked_topics": [
+    {
+      "name": "macOS 专属环境配置与苹果生态专属开发（macOS & Apple Ecosystem）",
+      "description": "主要用于强绑定 macOS 本地操作系统的开发环境体检与配置维护（如 Homebrew、LaunchAgents 守护进程、macOS PATH/shell rc 环境管理）、macOS 原生桌面系统服务与自动化（如通过 AppleScript 控制 macOS 苹果日历、备忘录）、macOS 平台专属客户端冲突与环境诊断（如 Claude.app 冲突修复），以及针对 iOS / macOS 原生平台的 SwiftUI 客户端代码开发与 Apple HIG 人机界面设计规范。明确排除并保留：跨平台通用的 Windows / Linux 系统开发环境（如 Docker、WSL、通用的 Python / Node.js 跨平台工程）、跨平台通用的 Web 前端开发与 Chrome 扩展、跨平台通用的 Git 门禁与代码审查规范。",
+      "keywords": [
+        "macOS",
+        "Mac OS",
+        "Homebrew",
+        "LaunchAgents",
+        "AppleScript",
+        "苹果日历",
+        "Apple HIG",
+        "HIG规范",
+        "SwiftUI",
+        "env-doctor",
+        "apple-smart-schedule",
+        "apple-hig-advisor"
+      ],
+      "local_match": {
+        "names": [
+          "env-doctor",
+          "apple-smart-schedule",
+          "chrome-mcp-troubleshooting",
+          "swiftui-liquid-glass",
+          "swiftui-best-practices",
+          "apple-hig-advisor",
+          "apple-hig",
+          "expo-skill-eval",
+          "swiftui-design",
+          "ios-swiftui-developer"
+        ],
+        "purpose_phrases": [
+          "macOS 本地开发环境",
+          "macOS 苹果日历",
+          "macOS 环境中 MCP",
+          "macOS 平台",
+          "Homebrew",
+          "LaunchAgents",
+          "AppleScript",
+          "SwiftUI",
+          "苹果生态系统中设计和审计界面",
+          "Apple 人机界面指南",
+          "Apple HIG",
+          "符合HIG规范"
+        ],
+        "preserve_phrases": [
+          "Windows",
+          "Docker",
+          "跨平台",
+          "Linux 通用",
+          "Web 前端",
+          "代码审查"
+        ]
+      }
+    },
     {
       "name": "商业叙事与品牌故事构建（Brand Storytelling & Narrative）",
       "description": "主要用于将商业项目、产品介绍、创业经历或商业演讲套用经典好莱坞或编剧叙事模型（如英雄之旅、皮克斯故事法则、SCQA 冲突模型）进行情感包装与品牌故事策划。明确排除并保留：基于 Diátaxis 框架的软件技术文档与操作指南编写（如 documentation-writer）、系统架构图与技术流程设计（如 diagram-maker）、技术事故复盘与工程根因分析（如 postmortem-writer）、代码工程编写与质量门禁，以及通用文本去 AI 机械味工具（如 zero-slop）。",

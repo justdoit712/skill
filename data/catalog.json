@@ -3,10 +3,10 @@
   "rules_version": "1.3.0",
   "generated_at": "2026-10-09T21:10:54.373701+08:00",
   "counts": {
-    "recommended": 519,
-    "candidate": 1109,
+    "recommended": 517,
+    "candidate": 1105,
     "manual": 111,
-    "excluded": 1909
+    "excluded": 1915
   },
   "entries": [
     {
@@ -3530,14 +3530,16 @@
         ],
         "terms": []
       },
-      "status": "recommended",
+      "status": "excluded",
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
       "flags": [
         "NO_DOMAIN_TERM_MATCH"
       ],
-      "reason_codes": [],
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "limitations": "仅适用于 macOS；不能同时使用 Claude.app 和 Claude Code 的浏览器自动化；需要用户手动执行命令并重启 Chrome 和 Claude Code；多个 Chrome 配置文件或会话可能导致冲突。",
       "evaluation_rules_version": "1.0.1",
       "first_seen": "2026-09-20T16:59:36+00:00",
@@ -3553,12 +3555,7 @@
       "example_requests": [
         "“macOS 环境中 MCP 工具连接失败或不稳定”"
       ],
-      "key_features": [],
-      "snooze": {
-        "snoozed_at": "2026-09-24",
-        "expires_at": "2027-02-21",
-        "reason": "用户暂不关注"
-      }
+      "key_features": []
     },
     {
       "skill_id": "trailofbits/skills:plugins/code-improver/skills/code-improver/SKILL.md",
@@ -58990,8 +58987,10 @@
       ],
       "limitations": "仅限 macOS 平台；无法在 Windows/Android/Linux/iPhone 直接运行；截图解析依赖本地视觉能力（未说明具体实现，但强调‘本地完成’）；提醒事项的查/改/删功能需额外安装 remindctl",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-02T12:26:30.306500+08:00",
       "content_changed_at": null,
@@ -59042,12 +59041,7 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "cat-xierluo/legal-skills:skills/apple-smart-schedule/SKILL.md|sha256:5911da96cf8ffe2c79e7b3d03af3c908|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-02T12:26:30.292014+08:00",
-      "snooze": {
-        "snoozed_at": "2026-10-13",
-        "expires_at": "2027-03-12",
-        "reason": "用户暂不关注"
-      }
+      "evaluated_at": "2026-10-02T12:26:30.292014+08:00"
     },
     {
       "skill_id": "cat-xierluo/legal-skills:skills/case-dashboard/SKILL.md",
@@ -60317,9 +60311,10 @@
       ],
       "limitations": "仅适用于 macOS 本地环境，不用于单个项目依赖、CI 环境或 Linux 服务器初始化；脚本源码未在材料中展示。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-08T13:59:33.212392+08:00",
@@ -140254,9 +140249,10 @@
       ],
       "limitations": "不适用于自定义模糊堆砌、跨平台框架或纯后端任务。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-09T13:37:25.394664+08:00",
@@ -140346,9 +140342,10 @@
       "dependencies_declared": [],
       "limitations": "不适用于完整App工程搭建、跨平台框架、纯后端任务；只做静态建议，不涉及真机/模拟器运行、性能压测、自动化测试等执行类验证",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-09T13:37:10.984525+08:00",
@@ -167450,9 +167447,10 @@
       ],
       "limitations": "不适用于跨平台Web/Android设计，不替代真机实测",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-09T16:58:39.727231+08:00",
@@ -331857,9 +331855,93 @@
         "skill_id": "moussakhalale-lang/open-design:skills/ai-music-album/SKILL.md",
         "reason": "用户屏蔽/删除（AI音乐创作、歌词编写与编曲方案）",
         "added_at": "2026-10-18"
+      },
+      {
+        "skill_id": "cat-xierluo/legal-skills:skills/env-doctor/SKILL.md",
+        "reason": "用户屏蔽/删除（macOS 专属环境配置与苹果生态开发）",
+        "added_at": "2026-10-18"
+      },
+      {
+        "skill_id": "cat-xierluo/legal-skills:skills/apple-smart-schedule/SKILL.md",
+        "reason": "用户屏蔽/删除（macOS 专属环境配置与苹果生态开发）",
+        "added_at": "2026-10-18"
+      },
+      {
+        "skill_id": "trailofbits/skills:plugins/claude-in-chrome-troubleshooting/skills/chrome-mcp-troubleshooting/SKILL.md",
+        "reason": "用户屏蔽/删除（macOS 专属环境配置与苹果生态开发）",
+        "added_at": "2026-10-18"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:02-engineering/swiftui-liquid-glass/SKILL.md",
+        "reason": "用户屏蔽/删除（macOS 专属环境配置与苹果生态开发）",
+        "added_at": "2026-10-18"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:02-engineering/swiftui-best-practices/SKILL.md",
+        "reason": "用户屏蔽/删除（macOS 专属环境配置与苹果生态开发）",
+        "added_at": "2026-10-18"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:06-creative/apple-hig-advisor/SKILL.md",
+        "reason": "用户屏蔽/删除（macOS 专属环境配置与苹果生态开发）",
+        "added_at": "2026-10-18"
       }
     ],
     "blocked_topics": [
+      {
+        "name": "macOS 专属环境配置与苹果生态专属开发（macOS & Apple Ecosystem）",
+        "description": "主要用于强绑定 macOS 本地操作系统的开发环境体检与配置维护（如 Homebrew、LaunchAgents 守护进程、macOS PATH/shell rc 环境管理）、macOS 原生桌面系统服务与自动化（如通过 AppleScript 控制 macOS 苹果日历、备忘录）、macOS 平台专属客户端冲突与环境诊断（如 Claude.app 冲突修复），以及针对 iOS / macOS 原生平台的 SwiftUI 客户端代码开发与 Apple HIG 人机界面设计规范。明确排除并保留：跨平台通用的 Windows / Linux 系统开发环境（如 Docker、WSL、通用的 Python / Node.js 跨平台工程）、跨平台通用的 Web 前端开发与 Chrome 扩展、跨平台通用的 Git 门禁与代码审查规范。",
+        "keywords": [
+          "macOS",
+          "Mac OS",
+          "Homebrew",
+          "LaunchAgents",
+          "AppleScript",
+          "苹果日历",
+          "Apple HIG",
+          "HIG规范",
+          "SwiftUI",
+          "env-doctor",
+          "apple-smart-schedule",
+          "apple-hig-advisor"
+        ],
+        "local_match": {
+          "names": [
+            "env-doctor",
+            "apple-smart-schedule",
+            "chrome-mcp-troubleshooting",
+            "swiftui-liquid-glass",
+            "swiftui-best-practices",
+            "apple-hig-advisor",
+            "apple-hig",
+            "expo-skill-eval",
+            "swiftui-design",
+            "ios-swiftui-developer"
+          ],
+          "purpose_phrases": [
+            "macOS 本地开发环境",
+            "macOS 苹果日历",
+            "macOS 环境中 MCP",
+            "macOS 平台",
+            "Homebrew",
+            "LaunchAgents",
+            "AppleScript",
+            "SwiftUI",
+            "苹果生态系统中设计和审计界面",
+            "Apple 人机界面指南",
+            "Apple HIG",
+            "符合HIG规范"
+          ],
+          "preserve_phrases": [
+            "Windows",
+            "Docker",
+            "跨平台",
+            "Linux 通用",
+            "Web 前端",
+            "代码审查"
+          ]
+        }
+      },
       {
         "name": "商业叙事与品牌故事构建（Brand Storytelling & Narrative）",
         "description": "主要用于将商业项目、产品介绍、创业经历或商业演讲套用经典好莱坞或编剧叙事模型（如英雄之旅、皮克斯故事法则、SCQA 冲突模型）进行情感包装与品牌故事策划。明确排除并保留：基于 Diátaxis 框架的软件技术文档与操作指南编写（如 documentation-writer）、系统架构图与技术流程设计（如 diagram-maker）、技术事故复盘与工程根因分析（如 postmortem-writer）、代码工程编写与质量门禁，以及通用文本去 AI 机械味工具（如 zero-slop）。",
@@ -334565,13 +334647,6 @@
         "reason": "用户暂不关注"
       },
       {
-        "skill_id": "trailofbits/skills:plugins/claude-in-chrome-troubleshooting/skills/chrome-mcp-troubleshooting/SKILL.md",
-        "snoozed_at": "2026-09-24",
-        "expires_at": "2027-02-21",
-        "days": 150,
-        "reason": "用户暂不关注"
-      },
-      {
         "skill_id": "trailofbits/skills:plugins/firebase-apk-scanner/skills/firebase-apk-scanner/SKILL.md",
         "snoozed_at": "2026-09-24",
         "expires_at": "2027-02-21",
@@ -335962,13 +336037,6 @@
         "expires_at": "2027-03-12",
         "reason": "用户暂不关注",
         "skill_id": "cat-xierluo/legal-skills:skills/agent-email/SKILL.md",
-        "snoozed_at": "2026-10-13"
-      },
-      {
-        "days": 150,
-        "expires_at": "2027-03-12",
-        "reason": "用户暂不关注",
-        "skill_id": "cat-xierluo/legal-skills:skills/apple-smart-schedule/SKILL.md",
         "snoozed_at": "2026-10-13"
       },
       {

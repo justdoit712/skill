@@ -33,13 +33,6 @@
       "reason": "用户暂不关注"
     },
     {
-      "skill_id": "trailofbits/skills:plugins/claude-in-chrome-troubleshooting/skills/chrome-mcp-troubleshooting/SKILL.md",
-      "snoozed_at": "2026-09-24",
-      "expires_at": "2027-02-21",
-      "days": 150,
-      "reason": "用户暂不关注"
-    },
-    {
       "skill_id": "trailofbits/skills:plugins/firebase-apk-scanner/skills/firebase-apk-scanner/SKILL.md",
       "snoozed_at": "2026-09-24",
       "expires_at": "2027-02-21",
@@ -1430,13 +1423,6 @@
       "expires_at": "2027-03-12",
       "reason": "用户暂不关注",
       "skill_id": "cat-xierluo/legal-skills:skills/agent-email/SKILL.md",
-      "snoozed_at": "2026-10-13"
-    },
-    {
-      "days": 150,
-      "expires_at": "2027-03-12",
-      "reason": "用户暂不关注",
-      "skill_id": "cat-xierluo/legal-skills:skills/apple-smart-schedule/SKILL.md",
       "snoozed_at": "2026-10-13"
     },
     {
