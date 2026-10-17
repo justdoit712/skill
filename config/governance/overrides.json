@@ -8277,9 +8277,86 @@
       "skill_id": "findscripter/everything-skills:08-security/laravel-security-audit/SKILL.md",
       "reason": "存量黑名单过滤；命中：PHP 与 Web 后端开发（PHP/Laravel/Symfony）",
       "added_at": "2026-10-17"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:02-engineering/electron-desktop-development/SKILL.md",
+      "reason": "用户屏蔽/删除（PC 电脑桌面端应用开发）",
+      "added_at": "2026-10-17"
+    },
+    {
+      "skill_id": "anbeime/skill:skills/web-to-app/web-to-app/SKILL.md",
+      "reason": "用户屏蔽/删除（PC 电脑桌面端应用开发）",
+      "added_at": "2026-10-17"
+    },
+    {
+      "skill_id": "ganmu191/aigc:skills/web-to-app/web-to-app/SKILL.md",
+      "reason": "用户屏蔽/删除（PC 电脑桌面端应用开发）",
+      "added_at": "2026-10-17"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/export-download-debugging/SKILL.md",
+      "reason": "用户屏蔽/删除（PC 电脑桌面端应用开发）",
+      "added_at": "2026-10-17"
+    },
+    {
+      "skill_id": "hiktan44/open-design-app:skills/export-download-debugging/SKILL.md",
+      "reason": "用户屏蔽/删除（PC 电脑桌面端应用开发）",
+      "added_at": "2026-10-17"
+    },
+    {
+      "skill_id": "anjon771/open-degine:skills/export-download-debugging/SKILL.md",
+      "reason": "用户屏蔽/删除（PC 电脑桌面端应用开发）",
+      "added_at": "2026-10-17"
     }
   ],
   "blocked_topics": [
+    {
+      "name": "PC 电脑桌面端应用开发",
+      "description": "主要用于 Windows、macOS 及 Linux PC 电脑桌面客户端软件开发、GUI界面构建、桌面安装包打包与分发。涵盖基于 Electron、Tauri、Qt/PyQt、PySide、Tkinter、WPF 的桌面应用开发、窗口与多进程 IPC 通信、客户端自动更新（auto-updater）及安装包生成（.exe、.dmg、NSIS）。明确排除并保留：纯浏览器端 Web 前端开发（React/Vue/CSS）、通用全栈后端服务、PCB 硬件电路设计、通用代码门禁测试。",
+      "keywords": [
+        "桌面应用",
+        "桌面端",
+        "桌面客户端",
+        "PC客户端",
+        "PC软件",
+        "Electron",
+        "Tauri",
+        "PyQt",
+        "PySide",
+        "Tkinter",
+        "desktop-app",
+        "desktop application",
+        "electron-builder",
+        "web-to-app"
+      ],
+      "local_match": {
+        "names": [
+          "electron-desktop-development",
+          "web-to-app",
+          "export-download-debugging",
+          "tauri-desktop"
+        ],
+        "purpose_phrases": [
+          "构建安全、可分发的跨平台 Electron 桌面应用",
+          "将任意网页URL一键打包为跨平台原生桌面应用",
+          "一键打包为跨平台原生桌面应用",
+          "打包为跨平台原生桌面应用",
+          "轻量级桌面端产品",
+          "Electron 桌面应用",
+          "桌面应用"
+        ],
+        "preserve_phrases": [
+          "PCB",
+          "KiCad",
+          "硬件",
+          "元器件",
+          "Web前端",
+          "浏览器端",
+          "后端服务",
+          "代码审查"
+        ]
+      }
+    },
     {
       "name": "企业内部财务与全面预算（FP&A）",
       "description": "主要用于企业内部财务全面预算编制、经营分析预测（FP&A）、财务三张表联动建模（Three-Statement Model）、内部现金流压力测试与支出预算归因分析（Budget Variance）。明确排除并保留：公开市场上市公司投资研究与标的估值分析（如 DCF 现金流折现估值模型、美股深度研究、首次覆盖报告）、通用电子表格代码库（openpyxl、pandas 数据清洗）、金融量化与衍生品定价算法。",
