@@ -8452,6 +8452,16 @@
       "skill_id": "anjon771/open-degine:plugins/_official/examples/video-shortform/SKILL.md",
       "reason": "用户屏蔽/删除（AI短剧、动态漫画与视频分镜创作）",
       "added_at": "2026-10-17"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/support-ticket-reply/SKILL.md",
+      "reason": "用户屏蔽/删除（客户服务、客诉处理与工单回复）",
+      "added_at": "2026-10-17"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/ai-customer-support/SKILL.md",
+      "reason": "用户屏蔽/删除（客户服务、客诉处理与工单回复）",
+      "added_at": "2026-10-17"
     }
   ],
   "blocked_topics": [
@@ -10828,6 +10838,45 @@
           "WebRTC",
           "格式转换",
           "视频压缩"
+        ]
+      }
+    },
+    {
+      "name": "客户服务、客诉处理与工单回复（Customer Support & Ticketing）",
+      "description": "主要用于面向企业、SaaS、电商的客户支持与售后服务（如起草客服工单回复、一次性问题解决结构、愤怒客户安抚与退款谈判、工单升级与分诊、帮助中心客服话术）。明确排除并保留：产品经理与设计师从客户反馈中提炼需求与用户画像（user-persona）、企业内部技术工单与 Bug 排查工具、底层消息通道与平台 API 集成（如 WhatsApp/邮件服务）。",
+      "keywords": [
+        "客服工单",
+        "工单回复",
+        "客户支持",
+        "客户服务",
+        "客诉处理",
+        "退款沟通",
+        "support-ticket",
+        "ticket-reply",
+        "customer-support",
+        "helpdesk",
+        "refund-deescalation"
+      ],
+      "local_match": {
+        "names": [
+          "support-ticket-reply",
+          "ai-customer-support",
+          "refund-deescalation",
+          "ticket-triage"
+        ],
+        "purpose_phrases": [
+          "客服工单回复",
+          "一次性解决为目标的客服",
+          "回复客户咨询、投诉",
+          "AI 客户支持自动化方案",
+          "客户支持自动化"
+        ],
+        "preserve_phrases": [
+          "用户画像",
+          "user-persona",
+          "RAG",
+          "API 集成",
+          "消息通信"
         ]
       }
     }
