@@ -3,10 +3,10 @@
   "rules_version": "1.3.0",
   "generated_at": "2026-10-09T21:10:54.373701+08:00",
   "counts": {
-    "recommended": 555,
-    "candidate": 1158,
+    "recommended": 551,
+    "candidate": 1154,
     "manual": 94,
-    "excluded": 1841
+    "excluded": 1849
   },
   "entries": [
     {
@@ -103504,8 +103504,10 @@
       "dependencies_declared": [],
       "limitations": "需依赖 fal.ai 平台，具体运行条件（如API调用方式、账号要求、成本）未说明；技能本身为索引条目，完整流程需跳转 upstream bundle",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-08T17:19:05.663725+08:00",
       "content_changed_at": null,
@@ -114036,8 +114038,10 @@
       ],
       "limitations": "需预先下载约30GB模型权重；依赖高显存GPU；生成速度较慢（每秒5-10秒）；输入需清晰人脸区域。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-08T19:23:38.049090+08:00",
       "content_changed_at": null,
@@ -114128,8 +114132,10 @@
       ],
       "limitations": "需预下载约30GB模型权重；依赖高显存GPU（推荐16GB+），低显存需手动启用量化/卸载；生成速度较慢（约5–10秒/秒视频）；输入需清晰人脸区域与16kHz音频",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-03T22:51:47.730073+08:00",
       "content_changed_at": null,
@@ -218549,8 +218555,10 @@
       ],
       "limitations": "需下载约30GB模型权重；推荐16GB+ GPU显存；输入需含清晰人脸；生成速度受硬件性能影响",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T15:05:44.068966+08:00",
       "content_changed_at": null,
@@ -218644,8 +218652,10 @@
       ],
       "limitations": "需下载约30GB模型权重；依赖高显存GPU（推荐16GB+）；输入需含清晰人脸；生成速度较慢（1秒视频需5-10秒）",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T15:06:02.282752+08:00",
       "content_changed_at": null,
@@ -241270,10 +241280,11 @@
       ],
       "limitations": "仅作为目录索引条目，不包含实际的脚本、工作流或配置文件，需依赖外部仓库；未说明fal.ai的API密钥等关键依赖。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
         "INCOMPLETE_INSTRUCTIONS",
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-04T19:30:24.932284+08:00",
@@ -258361,9 +258372,10 @@
       "dependencies_declared": [],
       "limitations": "需要访问上游仓库获取完整功能和使用说明",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INCOMPLETE_INSTRUCTIONS"
+        "INCOMPLETE_INSTRUCTIONS",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-05T06:39:26.933045+08:00",
@@ -274846,8 +274858,10 @@
       "dependencies_declared": [],
       "limitations": "材料本身不包含具体执行脚本或详细参数说明，需依赖上游仓库获取完整功能。",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-05T13:14:03.657646+08:00",
       "content_changed_at": null,
@@ -331182,6 +331196,46 @@
         "skill_id": "findscripter/everything-skills:09-verticals/merger-accretion-dilution-model/SKILL.md",
         "reason": "用户屏蔽/删除（企业内部财务与全面预算）",
         "added_at": "2026-10-17"
+      },
+      {
+        "skill_id": "anbeime/skill:skills/infinitetalk/SKILL.md",
+        "reason": "存量黑名单过滤；命中：AI 数字人、虚拟主播与唇形同步（Talking Head）",
+        "added_at": "2026-10-17"
+      },
+      {
+        "skill_id": "anbeime/skill:skills/infinitetalk/infinitetalk/SKILL.md",
+        "reason": "存量黑名单过滤；命中：AI 数字人、虚拟主播与唇形同步（Talking Head）",
+        "added_at": "2026-10-17"
+      },
+      {
+        "skill_id": "ganmu191/aigc:skills/infinitetalk/SKILL.md",
+        "reason": "存量黑名单过滤；命中：AI 数字人、虚拟主播与唇形同步（Talking Head）",
+        "added_at": "2026-10-17"
+      },
+      {
+        "skill_id": "ganmu191/aigc:skills/infinitetalk/infinitetalk/SKILL.md",
+        "reason": "存量黑名单过滤；命中：AI 数字人、虚拟主播与唇形同步（Talking Head）",
+        "added_at": "2026-10-17"
+      },
+      {
+        "skill_id": "jalbarrang/open-design:skills/fal-lip-sync/SKILL.md",
+        "reason": "存量黑名单过滤；命中：AI 数字人、虚拟主播与唇形同步（Talking Head）",
+        "added_at": "2026-10-17"
+      },
+      {
+        "skill_id": "hiktan44/open-design-app:skills/fal-lip-sync/SKILL.md",
+        "reason": "存量黑名单过滤；命中：AI 数字人、虚拟主播与唇形同步（Talking Head）",
+        "added_at": "2026-10-17"
+      },
+      {
+        "skill_id": "nexu-io/open-design:skills/fal-lip-sync/SKILL.md",
+        "reason": "存量黑名单过滤；命中：AI 数字人、虚拟主播与唇形同步（Talking Head）",
+        "added_at": "2026-10-17"
+      },
+      {
+        "skill_id": "anjon771/open-degine:skills/fal-lip-sync/SKILL.md",
+        "reason": "存量黑名单过滤；命中：AI 数字人、虚拟主播与唇形同步（Talking Head）",
+        "added_at": "2026-10-17"
       }
     ],
     "blocked_topics": [
@@ -333031,6 +333085,43 @@
             "企业财务",
             "代码审查",
             "技术文档"
+          ]
+        }
+      },
+      {
+        "name": "AI 数字人、虚拟主播与唇形同步（Talking Head）",
+        "description": "主要用于通过单张人像图或视频结合音频，生成唇形同步（Lip-Sync）、面部表情、头部与肢体动作驱动的数字人播报视频、虚拟主播及说话人视频（涵盖 InfiniteTalk、SadTalker、LivePortrait、Wav2Lip、fal-lip-sync 等模型与工作流）。保留纯音频信号处理、通用音视频命令行工具（FFmpeg 脚本工具）、计算机视觉基础库（OpenCV 图像算法）以及 WebRTC 流媒体协议传输。",
+        "keywords": [
+          "数字人",
+          "虚拟主播",
+          "口型同步",
+          "唇形同步",
+          "语音驱动视频",
+          "音频驱动",
+          "talking-head",
+          "lip-sync",
+          "infinitetalk",
+          "digital-avatar"
+        ],
+        "local_match": {
+          "names": [
+            "infinitetalk",
+            "fal-lip-sync"
+          ],
+          "purpose_phrases": [
+            "生成唇形/动作/姿态同步的说话视频",
+            "自媒体数字人播报",
+            "虚拟主播",
+            "生成唇形与表情同步的说话视频",
+            "唇形同步",
+            "语音驱动视频"
+          ],
+          "preserve_phrases": [
+            "FFmpeg",
+            "MoviePy",
+            "WebRTC",
+            "格式转换",
+            "计算机视觉"
           ]
         }
       }
