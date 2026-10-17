@@ -4,9 +4,9 @@
   "generated_at": "2026-10-09T21:10:54.373701+08:00",
   "counts": {
     "recommended": 525,
-    "candidate": 1131,
+    "candidate": 1130,
     "manual": 112,
-    "excluded": 1880
+    "excluded": 1881
   },
   "entries": [
     {
@@ -56378,9 +56378,10 @@
       ],
       "limitations": "仅适配 openKylin 3.0 UKUI 面环境；蓝牙断开功能受限于上游实现；部分硬件不支持特性（如键盘锁提示）报错非脚本问题；多屏缩放可能受限于服务端限制。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-08T09:41:53.487908+08:00",
@@ -331713,9 +331714,48 @@
         "skill_id": "fslong520/aiskill:搬题姬/SKILL.md",
         "reason": "用户屏蔽/删除（应试题库与试卷资料批量归档）",
         "added_at": "2026-10-17"
+      },
+      {
+        "skill_id": "fslong520/aiskill:系统控制/SKILL.md",
+        "reason": "用户屏蔽/删除（openKylin 开放麒麟系统控制）",
+        "added_at": "2026-10-17"
       }
     ],
     "blocked_topics": [
+      {
+        "name": "特定国产操作系统与桌面控制（openKylin / UKUI）",
+        "description": "主要用于特定国产操作系统发行版（如 openKylin 开放麒麟、UKUI 桌面环境）的桌面设置与硬件命令行控制（涵盖音量/亮度/触控/电源/网络/蓝牙等特定系统 D-Bus 服务封装）。明确排除并保留：跨平台通用的 Linux 运维与自动化工具（如 Docker、Kubernetes、Shell 脚本自动化、通用 Linux 性能分析）、跨平台代码开发与门禁测试。",
+        "keywords": [
+          "openKylin",
+          "UKUI",
+          "开放麒麟",
+          "麒麟系统",
+          "麒麟操作系统",
+          "ukui-bluetooth"
+        ],
+        "local_match": {
+          "names": [
+            "系统控制",
+            "openkylin-control",
+            "ukui-sysctl"
+          ],
+          "purpose_phrases": [
+            "openKylin UKUI",
+            "openKylin 3.0",
+            "openKylin",
+            "UKUI 桌面",
+            "开放麒麟"
+          ],
+          "preserve_phrases": [
+            "Docker",
+            "Kubernetes",
+            "通用的 Linux",
+            "跨平台",
+            "Shell 脚本",
+            "代码审查"
+          ]
+        }
+      },
       {
         "name": "企业公关与品牌舆情监测（PR & Media Monitoring）",
         "description": "主要用于企业公关与品牌传播团队（PR & Corporate Communications）进行全网新闻与社交媒体的品牌提及监控、舆情情感分析与负面预警、每日媒体摘要简报生成，以及突发事件（如数据泄露、服务中断、客户投诉）的危机公关外部沟通响应与声明模版。明确排除并保留：金融与投资领域公开市场情绪分析（如 x-research 围绕股票/公司/市场的推特情绪研究）、多媒体音频/视频/图像文件工程处理（如 media-processor 格式转码与压缩、多媒体生成工作流），以及软件工程领域的代码审查（如 Git Pull Request / PR 审查与合并自动化工具）。",
