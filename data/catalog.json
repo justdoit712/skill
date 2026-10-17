@@ -4,9 +4,9 @@
   "generated_at": "2026-10-09T21:10:54.373701+08:00",
   "counts": {
     "recommended": 524,
-    "candidate": 1125,
+    "candidate": 1124,
     "manual": 112,
-    "excluded": 1887
+    "excluded": 1888
   },
   "entries": [
     {
@@ -269703,9 +269703,10 @@
       "dependencies_declared": [],
       "limitations": "依赖特定平台CLI分发器与外部AI视频模型；单轮仅支持单镜头生成；需严格匹配项目元数据参数。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-05T12:01:23.582361+08:00",
@@ -331751,6 +331752,11 @@
         "skill_id": "skillmedev/skills:skills/fiction-scene-writer/SKILL.md",
         "reason": "用户屏蔽/删除（网络文学与虚构小说创作）",
         "added_at": "2026-10-17"
+      },
+      {
+        "skill_id": "anjon771/open-degine:plugins/_official/examples/video-shortform/SKILL.md",
+        "reason": "用户屏蔽/删除（AI短剧、动态漫画与视频分镜创作）",
+        "added_at": "2026-10-17"
       }
     ],
     "blocked_topics": [
@@ -334086,6 +334092,47 @@
             "代码评审",
             "算法竞赛日常练习",
             "LeetCode"
+          ]
+        }
+      },
+      {
+        "name": "AI短剧、动态漫画与视频分镜创作（Seedance/即梦/微短剧）",
+        "description": "主要用于面向短剧、微短剧、短视频平台的动态漫画分镜、小说改剧本镜头清单、文生视频平台（如 Seedance、即梦、可灵 Kling）的专用分镜脚本与分幕提示词生成。保留纯底层音视频工程工具（如 FFmpeg、Remotion 编程视频、WebRTC、视频压缩与转码），以及通用长篇纯文学小说创作引导。",
+        "keywords": [
+          "Seedance",
+          "seedence",
+          "短剧",
+          "微短剧",
+          "动态漫画",
+          "分镜脚本",
+          "分镜生成",
+          "即梦",
+          "小说改漫画",
+          "漫剧",
+          "短剧剧本",
+          "镜头清单"
+        ],
+        "local_match": {
+          "names": [
+            "雀漫",
+            "雀影",
+            "video-shortform",
+            "create-video-storyboard"
+          ],
+          "purpose_phrases": [
+            "将小说转换为 Seedance",
+            "动态漫画分镜脚本",
+            "微型三幕结构",
+            "微短剧",
+            "短剧前期策划",
+            "适合成片需要竖屏化"
+          ],
+          "preserve_phrases": [
+            "FFmpeg",
+            "Remotion",
+            "WebRTC",
+            "格式转换",
+            "视频压缩"
           ]
         }
       }
