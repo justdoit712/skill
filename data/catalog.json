@@ -4,9 +4,9 @@
   "generated_at": "2026-10-09T21:10:54.373701+08:00",
   "counts": {
     "recommended": 525,
-    "candidate": 1130,
+    "candidate": 1126,
     "manual": 112,
-    "excluded": 1881
+    "excluded": 1885
   },
   "entries": [
     {
@@ -55816,9 +55816,10 @@
       ],
       "limitations": "依赖外部 imageGenerate 工具，其可用性、质量与成本未说明；需用户确认剧本再生成插画，存在交互延迟；无回测/数据验证机制",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-08T09:40:46.091623+08:00",
@@ -56279,9 +56280,10 @@
       "dependencies_declared": [],
       "limitations": "未说明具体AI绘图模型或API调用方式；依赖项目内已有角色设定与插画记录；部分功能（如自动判断文字层）需结合AI绘图工具实现，非独立执行能力。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-08T09:41:37.436786+08:00",
@@ -56737,9 +56739,10 @@
       "dependencies_declared": [],
       "limitations": "引用的详细文档（动态漫画定义、技术规格、故事结构规范、创作规范、检查清单）未在材料中提供；实际效果依赖 Seedance 2.0 平台。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-08T13:56:51.233274+08:00",
@@ -57095,9 +57098,10 @@
       ],
       "limitations": "依赖外部图像生成工具；未说明是否支持本地部署或离线运行；萌点组合基于已有库，无法自由扩展新类型；仅生成Prompt或调用工具，不包含图像编辑/后期功能",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-08T09:42:22.268777+08:00",
@@ -331719,6 +331723,26 @@
         "skill_id": "fslong520/aiskill:系统控制/SKILL.md",
         "reason": "用户屏蔽/删除（openKylin 开放麒麟系统控制）",
         "added_at": "2026-10-17"
+      },
+      {
+        "skill_id": "fslong520/aiskill:漫语/SKILL.md",
+        "reason": "存量黑名单过滤；命中：短视频带货、自媒体矩阵与电商内容生成",
+        "added_at": "2026-10-17"
+      },
+      {
+        "skill_id": "fslong520/aiskill:雀漫/SKILL.md",
+        "reason": "存量黑名单过滤；命中：短视频带货、自媒体矩阵与电商内容生成",
+        "added_at": "2026-10-17"
+      },
+      {
+        "skill_id": "fslong520/aiskill:风语绘/SKILL.md",
+        "reason": "存量黑名单过滤；命中：短视频带货、自媒体矩阵与电商内容生成",
+        "added_at": "2026-10-17"
+      },
+      {
+        "skill_id": "fslong520/aiskill:笔痕/SKILL.md",
+        "reason": "存量黑名单过滤；命中：短视频带货、自媒体矩阵与电商内容生成",
+        "added_at": "2026-10-17"
       }
     ],
     "blocked_topics": [
@@ -333544,7 +333568,12 @@
           "story-structure",
           "bedtime-story",
           "pet-commerce",
-          "e-commerce video"
+          "e-commerce video",
+          "四格漫画",
+          "动态漫画",
+          "分镜脚本",
+          "小说转漫画",
+          "小说改编"
         ],
         "local_match": {
           "names": [
@@ -333568,7 +333597,12 @@
             "social-video-formatter",
             "intelligent-content-system",
             "wechatsync-publisher",
-            "baoyu-post-to-x"
+            "baoyu-post-to-x",
+            "漫语",
+            "雀漫",
+            "风语绘",
+            "笔痕",
+            "笔记手账"
           ],
           "purpose_phrases": [
             "面向萌宠类电商短视频创作者",
@@ -333596,7 +333630,11 @@
             "专为3-12岁儿童设计的睡前故事",
             "为长篇小说或剧本设计宏观结构骨架",
             "将已剪辑完成的视频按 TikTok、Reels、Shorts",
-            "适合成片需要竖屏化或多平台格式化分发的场景"
+            "适合成片需要竖屏化或多平台格式化分发的场景",
+            "将长篇小说或主题转化为具有哲理深度的四格漫画",
+            "将小说转换为 Seedance",
+            "情绪金句插画卡片创作助手",
+            "为小说章节自动生成风格统一"
           ],
           "preserve_phrases": [
             "WebRTC",

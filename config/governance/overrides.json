@@ -8417,6 +8417,26 @@
       "skill_id": "fslong520/aiskill:系统控制/SKILL.md",
       "reason": "用户屏蔽/删除（openKylin 开放麒麟系统控制）",
       "added_at": "2026-10-17"
+    },
+    {
+      "skill_id": "fslong520/aiskill:漫语/SKILL.md",
+      "reason": "存量黑名单过滤；命中：短视频带货、自媒体矩阵与电商内容生成",
+      "added_at": "2026-10-17"
+    },
+    {
+      "skill_id": "fslong520/aiskill:雀漫/SKILL.md",
+      "reason": "存量黑名单过滤；命中：短视频带货、自媒体矩阵与电商内容生成",
+      "added_at": "2026-10-17"
+    },
+    {
+      "skill_id": "fslong520/aiskill:风语绘/SKILL.md",
+      "reason": "存量黑名单过滤；命中：短视频带货、自媒体矩阵与电商内容生成",
+      "added_at": "2026-10-17"
+    },
+    {
+      "skill_id": "fslong520/aiskill:笔痕/SKILL.md",
+      "reason": "存量黑名单过滤；命中：短视频带货、自媒体矩阵与电商内容生成",
+      "added_at": "2026-10-17"
     }
   ],
   "blocked_topics": [
@@ -10242,7 +10262,12 @@
         "story-structure",
         "bedtime-story",
         "pet-commerce",
-        "e-commerce video"
+        "e-commerce video",
+        "四格漫画",
+        "动态漫画",
+        "分镜脚本",
+        "小说转漫画",
+        "小说改编"
       ],
       "local_match": {
         "names": [
@@ -10266,7 +10291,12 @@
           "social-video-formatter",
           "intelligent-content-system",
           "wechatsync-publisher",
-          "baoyu-post-to-x"
+          "baoyu-post-to-x",
+          "漫语",
+          "雀漫",
+          "风语绘",
+          "笔痕",
+          "笔记手账"
         ],
         "purpose_phrases": [
           "面向萌宠类电商短视频创作者",
@@ -10294,7 +10324,11 @@
           "专为3-12岁儿童设计的睡前故事",
           "为长篇小说或剧本设计宏观结构骨架",
           "将已剪辑完成的视频按 TikTok、Reels、Shorts",
-          "适合成片需要竖屏化或多平台格式化分发的场景"
+          "适合成片需要竖屏化或多平台格式化分发的场景",
+          "将长篇小说或主题转化为具有哲理深度的四格漫画",
+          "将小说转换为 Seedance",
+          "情绪金句插画卡片创作助手",
+          "为小说章节自动生成风格统一"
         ],
         "preserve_phrases": [
           "WebRTC",
