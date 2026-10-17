@@ -1317,13 +1317,6 @@
       "days": 150,
       "expires_at": "2027-03-06",
       "reason": "用户暂不关注",
-      "skill_id": "skillmedev/skills:skills/spreadsheet-model-builder/SKILL.md",
-      "snoozed_at": "2026-10-07"
-    },
-    {
-      "days": 150,
-      "expires_at": "2027-03-06",
-      "reason": "用户暂不关注",
       "skill_id": "skillmedev/skills:skills/sprint-planning/SKILL.md",
       "snoozed_at": "2026-10-07"
     },

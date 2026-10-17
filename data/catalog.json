@@ -3,10 +3,10 @@
   "rules_version": "1.3.0",
   "generated_at": "2026-10-09T21:10:54.373701+08:00",
   "counts": {
-    "recommended": 556,
-    "candidate": 1163,
+    "recommended": 555,
+    "candidate": 1158,
     "manual": 94,
-    "excluded": 1835
+    "excluded": 1841
   },
   "entries": [
     {
@@ -42506,8 +42506,10 @@
       "dependencies_declared": [],
       "limitations": "不适用于 SaaS 收入逻辑、完整 FP&A 运营模型、个人或部门预算、现金时序或 GAAP 报表构建（另有专门技能）；仅提供结构规范，不实现具体计算逻辑。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-10-02T13:29:29.657839+08:00",
       "content_changed_at": null,
@@ -42558,12 +42560,7 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/spreadsheet-model-builder/SKILL.md|sha256:a87585141bbc3c6ed21aab30bed339e6|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-02T13:29:29.639268+08:00",
-      "snooze": {
-        "snoozed_at": "2026-10-07",
-        "expires_at": "2027-03-06",
-        "reason": "用户暂不关注"
-      }
+      "evaluated_at": "2026-10-02T13:29:29.639268+08:00"
     },
     {
       "skill_id": "skillmedev/skills:skills/sprint-planning/SKILL.md",
@@ -44369,9 +44366,10 @@
       "dependencies_declared": [],
       "limitations": "未指定建模工具（如Excel或专业软件），依赖用户自行实现模型结构",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-01T08:32:29.519207+08:00",
@@ -155090,9 +155088,10 @@
       ],
       "limitations": "需自备底层量价/人头数据，无法自动生成；不提供审计或合规结论；仅解释已发生差异，不做预测。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-09T14:15:33.242631+08:00",
@@ -158257,9 +158256,10 @@
       ],
       "limitations": "不适用于从零搭建模型或抓取原始数据",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-09T14:37:12.453250+08:00",
@@ -196658,9 +196658,10 @@
       "dependencies_declared": [],
       "limitations": "不适用于LBO/DCF估值、单公司财务建模或法律尽调；需用户自行输入交易数据；未声明具体平台兼容性细节。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T11:33:52.701498+08:00",
@@ -206545,9 +206546,10 @@
       ],
       "limitations": "不适用于从零设计模型版式、估值（DCF/LBO）建模或纯数据录入。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T12:03:09.900515+08:00",
@@ -331150,9 +331152,91 @@
         "skill_id": "skillmedev/skills:skills/grant-prospect-researcher/SKILL.md",
         "reason": "存量黑名单过滤；命中：非营利组织、公益募捐与资助申报",
         "added_at": "2026-10-17"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/fpa-model/SKILL.md",
+        "reason": "用户屏蔽/删除（企业内部财务与全面预算）",
+        "added_at": "2026-10-17"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:05-business/budget-variance-analysis/SKILL.md",
+        "reason": "用户屏蔽/删除（企业内部财务与全面预算）",
+        "added_at": "2026-10-17"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:09-verticals/three-statement-model/SKILL.md",
+        "reason": "用户屏蔽/删除（企业内部财务与全面预算）",
+        "added_at": "2026-10-17"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:05-business/financial-model-updater/SKILL.md",
+        "reason": "用户屏蔽/删除（企业内部财务与全面预算）",
+        "added_at": "2026-10-17"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/spreadsheet-model-builder/SKILL.md",
+        "reason": "用户屏蔽/删除（企业内部财务与全面预算）",
+        "added_at": "2026-10-17"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:09-verticals/merger-accretion-dilution-model/SKILL.md",
+        "reason": "用户屏蔽/删除（企业内部财务与全面预算）",
+        "added_at": "2026-10-17"
       }
     ],
     "blocked_topics": [
+      {
+        "name": "企业内部财务与全面预算（FP&A）",
+        "description": "主要用于企业内部财务全面预算编制、经营分析预测（FP&A）、财务三张表联动建模（Three-Statement Model）、内部现金流压力测试与支出预算归因分析（Budget Variance）。明确排除并保留：公开市场上市公司投资研究与标的估值分析（如 DCF 现金流折现估值模型、美股深度研究、首次覆盖报告）、通用电子表格代码库（openpyxl、pandas 数据清洗）、金融量化与衍生品定价算法。",
+        "keywords": [
+          "FP&A",
+          "fpa",
+          "全面预算",
+          "财务预算",
+          "经营分析",
+          "三表模型",
+          "现金流压力测试",
+          "financial-planning",
+          "budget-variance",
+          "three-statement-model",
+          "fpa-model"
+        ],
+        "local_match": {
+          "names": [
+            "fpa-model",
+            "budget-variance-analysis",
+            "three-statement-model",
+            "financial-model-updater",
+            "spreadsheet-model-builder",
+            "merger-accretion-dilution-model"
+          ],
+          "purpose_phrases": [
+            "FP&A运营模型",
+            "基于驱动因素的FP&A",
+            "预算与实际差异",
+            "三表勾稽",
+            "财务三张表联动",
+            "现金流压力测试",
+            "年度财务计划模型",
+            "财务模型的数据",
+            "构建可审计电子表格模型"
+          ],
+          "preserve_phrases": [
+            "DCF",
+            "dcf-valuation",
+            "DCF估值",
+            "现金流折现",
+            "标的研究",
+            "内在价值",
+            "股票研究",
+            "上市公司估值",
+            "openpyxl",
+            "pandas",
+            "期权定价",
+            "量化策略"
+          ]
+        }
+      },
       {
         "name": "公司治理与董事会管理",
         "description": "主要用于企业董事会与股东大会会议筹备、董事会材料包（Board Pack）编制、董事会书面决议（Written Consent）起草、董事会高风险审议流程、高管对抗式演练及幕僚长（Chief of Staff）决策协调。保留工程团队内部技术周报汇总（如 eng-status-rollup）、通用会议音视频转写工具、开发团队敏捷站会记录工具。",
@@ -334265,13 +334349,6 @@
         "expires_at": "2027-03-06",
         "reason": "用户暂不关注",
         "skill_id": "skillmedev/skills:skills/speech-writer/SKILL.md",
-        "snoozed_at": "2026-10-07"
-      },
-      {
-        "days": 150,
-        "expires_at": "2027-03-06",
-        "reason": "用户暂不关注",
-        "skill_id": "skillmedev/skills:skills/spreadsheet-model-builder/SKILL.md",
         "snoozed_at": "2026-10-07"
       },
       {
