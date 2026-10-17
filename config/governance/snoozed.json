@@ -1485,13 +1485,6 @@
       "days": 150,
       "expires_at": "2027-03-12",
       "reason": "用户暂不关注",
-      "skill_id": "fslong520/aiskill:GESP作业/SKILL.md",
-      "snoozed_at": "2026-10-13"
-    },
-    {
-      "days": 150,
-      "expires_at": "2027-03-12",
-      "reason": "用户暂不关注",
       "skill_id": "fslong520/aiskill:docx/SKILL.md",
       "snoozed_at": "2026-10-13"
     },
@@ -1500,20 +1493,6 @@
       "expires_at": "2027-03-12",
       "reason": "用户暂不关注",
       "skill_id": "fslong520/aiskill:math-analysis/SKILL.md",
-      "snoozed_at": "2026-10-13"
-    },
-    {
-      "days": 150,
-      "expires_at": "2027-03-12",
-      "reason": "用户暂不关注",
-      "skill_id": "fslong520/aiskill:命题工坊/SKILL.md",
-      "snoozed_at": "2026-10-13"
-    },
-    {
-      "days": 150,
-      "expires_at": "2027-03-12",
-      "reason": "用户暂不关注",
-      "skill_id": "fslong520/aiskill:搬题姬/SKILL.md",
       "snoozed_at": "2026-10-13"
     },
     {
@@ -1808,13 +1787,6 @@
       "expires_at": "2027-03-14",
       "reason": "用户暂不关注",
       "skill_id": "skillmedev/skills:skills/docker-compose-wizard/SKILL.md",
-      "snoozed_at": "2026-10-15"
-    },
-    {
-      "days": 150,
-      "expires_at": "2027-03-14",
-      "reason": "用户暂不关注",
-      "skill_id": "skillmedev/skills:skills/due-diligence-checklist/SKILL.md",
       "snoozed_at": "2026-10-15"
     },
     {

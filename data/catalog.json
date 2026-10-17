@@ -3,10 +3,10 @@
   "rules_version": "1.3.0",
   "generated_at": "2026-10-09T21:10:54.373701+08:00",
   "counts": {
-    "recommended": 529,
-    "candidate": 1140,
+    "recommended": 526,
+    "candidate": 1134,
     "manual": 112,
-    "excluded": 1867
+    "excluded": 1876
   },
   "entries": [
     {
@@ -19854,9 +19854,10 @@
       "dependencies_declared": [],
       "limitations": "依赖用户自行获取原始数据/访谈资源，无回测功能",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-10-01T08:20:43.749565+08:00",
@@ -19908,12 +19909,7 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/due-diligence-checklist/SKILL.md|sha256:cb300f0d9557e4481fa1404f612e88a7|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-01T08:20:43.738921+08:00",
-      "snooze": {
-        "snoozed_at": "2026-10-15",
-        "expires_at": "2027-03-14",
-        "reason": "用户暂不关注"
-      }
+      "evaluated_at": "2026-10-01T08:20:43.738921+08:00"
     },
     {
       "skill_id": "skillmedev/skills:skills/eda-playbook/SKILL.md",
@@ -45262,8 +45258,10 @@
       "dependencies_declared": [],
       "limitations": "仅适用于投资者报告撰写，不适用于内部团队或其他利益相关者的更新；未提及数据自动获取功能",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-01T08:48:28.512292+08:00",
       "content_changed_at": null,
@@ -52761,8 +52759,10 @@
       "dependencies_declared": [],
       "limitations": "需要用户提供具体的知识点、班级名和日期才能生成；依赖LLM对复杂审计规则（如选项重排）的准确执行能力。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-02T11:58:57.291900+08:00",
       "content_changed_at": null,
@@ -52813,12 +52813,7 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "fslong520/aiskill:GESP作业/SKILL.md|sha256:315873e84ef8b4ea6bc86cb3a76636c9|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-02T11:58:57.281676+08:00",
-      "snooze": {
-        "snoozed_at": "2026-10-13",
-        "expires_at": "2027-03-12",
-        "reason": "用户暂不关注"
-      }
+      "evaluated_at": "2026-10-02T11:58:57.281676+08:00"
     },
     {
       "skill_id": "fslong520/aiskill:cosprompt/SKILL.md",
@@ -53505,9 +53500,10 @@
       "dependencies_declared": [],
       "limitations": "未说明运行环境与依赖细节，可能因缺少 poppler 或 urlgo 等工具导致无法执行；仅限于GESP真题，不支持其他考试类型。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-08T09:38:06.590598+08:00",
@@ -54725,8 +54721,10 @@
       "dependencies_declared": [],
       "limitations": "依赖使用者具备OI/CSP知识背景；未提供自动化实现，需人工执行指南；不包含题目自动校验或评测功能",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-02T12:10:46.007308+08:00",
       "content_changed_at": null,
@@ -54777,12 +54775,7 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "fslong520/aiskill:命题工坊/SKILL.md|sha256:81f4ecfe982ae3ad0ed79891fd410e93|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-02T12:10:45.997683+08:00",
-      "snooze": {
-        "snoozed_at": "2026-10-13",
-        "expires_at": "2027-03-12",
-        "reason": "用户暂不关注"
-      }
+      "evaluated_at": "2026-10-02T12:10:45.997683+08:00"
     },
     {
       "skill_id": "fslong520/aiskill:图片姬/SKILL.md",
@@ -55088,9 +55081,10 @@
       "dependencies_declared": [],
       "limitations": "模块文档未在材料中提供，实际执行效果依赖未展示的 modules/ 和 references/ 文件；未声明具体运行环境或工具版本。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-08T13:55:55.800387+08:00",
@@ -55278,8 +55272,10 @@
       ],
       "limitations": "依赖外部工具与网络访问；未说明具体系统兼容性；生成题包需人工审核部分环节（如等级判定、数据质量）",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-08T09:39:52.815852+08:00",
       "content_changed_at": null,
@@ -55330,12 +55326,7 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "fslong520/aiskill:搬题姬/SKILL.md|sha256:396d75db937fa529d0492c9eff0bdc95|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-08T09:39:52.811852+08:00",
-      "snooze": {
-        "snoozed_at": "2026-10-13",
-        "expires_at": "2027-03-12",
-        "reason": "用户暂不关注"
-      }
+      "evaluated_at": "2026-10-08T09:39:52.811852+08:00"
     },
     {
       "skill_id": "fslong520/aiskill:撸树人/SKILL.md",
@@ -159230,9 +159221,10 @@
       ],
       "limitations": "只读不改，不生成新 deck 或财务建模；需要完整 deck 才能发挥跨页对账价值；视觉 QC 需人工查看页面，纯文本抽取无法发现重叠、溢出等问题",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T01:04:47.018567+08:00",
@@ -188659,9 +188651,10 @@
       ],
       "limitations": "不做重要性临界判断（由律师拍板）；不谈判陈述与保证；不替代批量AI审阅（高量条款抽取移交Luminance/Kira）；需要连接VDR MCP才能拉取索引。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T11:18:07.256948+08:00",
@@ -331655,9 +331648,97 @@
         "skill_id": "skillmedev/skills:skills/marketing-attribution/SKILL.md",
         "reason": "存量黑名单过滤；命中：商业广告与营销推广",
         "added_at": "2026-10-17"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/investor-update-writer/SKILL.md",
+        "reason": "用户屏蔽/删除（投资者关系与创业投融资）",
+        "added_at": "2026-10-17"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/due-diligence-checklist/SKILL.md",
+        "reason": "用户屏蔽/删除（投资者关系与创业投融资）",
+        "added_at": "2026-10-17"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:05-business/ib-deck-quality-check/SKILL.md",
+        "reason": "用户屏蔽/删除（投资者关系与创业投融资）",
+        "added_at": "2026-10-17"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:09-verticals/diligence-issue-extractor/SKILL.md",
+        "reason": "用户屏蔽/删除（投资者关系与创业投融资）",
+        "added_at": "2026-10-17"
       }
     ],
     "blocked_topics": [
+      {
+        "name": "投资者关系与创业投融资（Investor Relations & Startup Fundraising）",
+        "description": "主要用于初创企业与机构向投资者（VC/天使/PE/机构股东）进行投后定期经营更新（Investor Updates）、融资路演与推介演示文稿质检（Pitch Deck Review）、投资尽职调查风险清单（Due Diligence Checklist）、虚拟数据室（Data Room/VDR）文件提取，以及融资轮次条款（Term Sheet、SAFE协议）沟通。明确排除并保留：公开市场二级证券投资研究与标的估值（如 DCF 估值、美股研报分析、首次覆盖报告、SEC 10-K/10-Q 披露文件解析）、理财顾问与财富管理资产配置建议、二级市场量化交易与资金流追踪（institutional-flow-tracker）、产研技术团队内部项目干系人汇报（stakeholder-update）。",
+        "keywords": [
+          "投资者关系",
+          "投资者报告",
+          "投后汇报",
+          "投资更新",
+          "融资路演",
+          "尽职调查",
+          "investor-update",
+          "investor update",
+          "pitch deck",
+          "pitch-deck",
+          "fundraising",
+          "due diligence",
+          "due-diligence",
+          "data room",
+          "data-room",
+          "term sheet",
+          "safe note"
+        ],
+        "local_match": {
+          "names": [
+            "investor-update-writer",
+            "ib-deck-quality-check",
+            "due-diligence-checklist",
+            "diligence-issue-extractor",
+            "fundraising-narrative",
+            "vc-pitch-email",
+            "pitch-practice-coach",
+            "safe-vs-priced-round",
+            "fundraise-closing-mechanics",
+            "fundraise-readiness-audit",
+            "fundraise-team-hiring",
+            "investor-targeting",
+            "investor-materials-builder",
+            "data-room-builder",
+            "term-sheet-explainer"
+          ],
+          "purpose_phrases": [
+            "投资者更新报告",
+            "创始人向投资者汇报",
+            "pitch deck",
+            "投资尽职调查",
+            "并购数据室",
+            "VDR",
+            "尽调清单",
+            "融资故事",
+            "风投邮件",
+            "term sheet"
+          ],
+          "preserve_phrases": [
+            "us-stock-analysis",
+            "stakeholder-update",
+            "investment-proposal-builder",
+            "dcf-valuation",
+            "initiating-coverage-report",
+            "institutional-flow-tracker",
+            "octagon",
+            "SEC 10-K",
+            "上市公司",
+            "二级市场",
+            "个股分析",
+            "股票研究"
+          ]
+        }
+      },
       {
         "name": "企业高管顾问与战略咨询（C-Suite Advisory）",
         "description": "主要用于大模型扮演企业 C-Level 虚拟高管角色（如 CDO 首席数据官、CAIO 首席AI官、VPE 研发副总裁、COO 首席运营官、CPO 首席产品官）进行宏观战略咨询、高层治理决策推演（如裁员/关停艰难决策）、高管团队招聘路线及企业愿景规划。明确排除并保留：具体软件工程技术设计与选型工具（如 database-design-advisor 数据库建模、index-advisor 索引调优）、前端人机交互界面规范指南（如 apple-hig-advisor）、具体代码实现与架构审查工具。",
@@ -335177,13 +335258,6 @@
         "days": 150,
         "expires_at": "2027-03-12",
         "reason": "用户暂不关注",
-        "skill_id": "fslong520/aiskill:GESP作业/SKILL.md",
-        "snoozed_at": "2026-10-13"
-      },
-      {
-        "days": 150,
-        "expires_at": "2027-03-12",
-        "reason": "用户暂不关注",
         "skill_id": "fslong520/aiskill:docx/SKILL.md",
         "snoozed_at": "2026-10-13"
       },
@@ -335192,20 +335266,6 @@
         "expires_at": "2027-03-12",
         "reason": "用户暂不关注",
         "skill_id": "fslong520/aiskill:math-analysis/SKILL.md",
-        "snoozed_at": "2026-10-13"
-      },
-      {
-        "days": 150,
-        "expires_at": "2027-03-12",
-        "reason": "用户暂不关注",
-        "skill_id": "fslong520/aiskill:命题工坊/SKILL.md",
-        "snoozed_at": "2026-10-13"
-      },
-      {
-        "days": 150,
-        "expires_at": "2027-03-12",
-        "reason": "用户暂不关注",
-        "skill_id": "fslong520/aiskill:搬题姬/SKILL.md",
         "snoozed_at": "2026-10-13"
       },
       {
@@ -335500,13 +335560,6 @@
         "expires_at": "2027-03-14",
         "reason": "用户暂不关注",
         "skill_id": "skillmedev/skills:skills/docker-compose-wizard/SKILL.md",
-        "snoozed_at": "2026-10-15"
-      },
-      {
-        "days": 150,
-        "expires_at": "2027-03-14",
-        "reason": "用户暂不关注",
-        "skill_id": "skillmedev/skills:skills/due-diligence-checklist/SKILL.md",
         "snoozed_at": "2026-10-15"
       },
       {
