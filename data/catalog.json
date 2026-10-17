@@ -4,9 +4,9 @@
   "generated_at": "2026-10-09T21:10:54.373701+08:00",
   "counts": {
     "recommended": 529,
-    "candidate": 1141,
+    "candidate": 1140,
     "manual": 112,
-    "excluded": 1866
+    "excluded": 1867
   },
   "entries": [
     {
@@ -45866,9 +45866,10 @@
       "dependencies_declared": [],
       "limitations": "实践依赖外部工具组合（CRM、MTA、测试环境搭建等）",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-01T08:56:36.953781+08:00",
@@ -331649,6 +331650,11 @@
         "skill_id": "findscripter/everything-skills:00-meta/hard-call-advisor/SKILL.md",
         "reason": "用户屏蔽/删除（企业高管顾问与战略咨询）",
         "added_at": "2026-10-17"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/marketing-attribution/SKILL.md",
+        "reason": "存量黑名单过滤；命中：商业广告与营销推广",
+        "added_at": "2026-10-17"
       }
     ],
     "blocked_topics": [
@@ -331959,7 +331965,8 @@
             "product-marketing-copywriter",
             "screenshots-marketing",
             "stock-photo-finder",
-            "viral-video-copywriting"
+            "viral-video-copywriting",
+            "marketing-attribution"
           ],
           "purpose_phrases": [
             "扫描绝对化用语并依据执法指南判定",
@@ -332029,7 +332036,10 @@
             "客户转化",
             "会员转化",
             "转化漏斗",
-            "注册流程转化"
+            "注册流程转化",
+            "营销归因",
+            "评估渠道效果与预算分配决策",
+            "不同归因模型的适用场景与限制"
           ],
           "preserve_phrases": [
             "开源软件",
