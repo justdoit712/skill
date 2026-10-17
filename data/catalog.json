@@ -4,9 +4,9 @@
   "generated_at": "2026-10-09T21:10:54.373701+08:00",
   "counts": {
     "recommended": 524,
-    "candidate": 1122,
+    "candidate": 1121,
     "manual": 112,
-    "excluded": 1890
+    "excluded": 1891
   },
   "entries": [
     {
@@ -33934,9 +33934,10 @@
       ],
       "limitations": "不包含定价、命名和客户文案，定位声明仅为内部对齐工具，需配合其他技能生成对外内容。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-10-02T13:16:33.398484+08:00",
@@ -331769,6 +331770,11 @@
         "skill_id": "findscripter/everything-skills:05-business/ai-customer-support/SKILL.md",
         "reason": "用户屏蔽/删除（客户服务、客诉处理与工单回复）",
         "added_at": "2026-10-17"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/positioning-statement/SKILL.md",
+        "reason": "存量黑名单过滤；命中：商业化与产品定价",
+        "added_at": "2026-10-17"
       }
     ],
     "blocked_topics": [
@@ -332191,7 +332197,8 @@
             "productized-service-designer",
             "unit-economics-analyzer",
             "micro-saas-launcher",
-            "competitive-analysis"
+            "competitive-analysis",
+            "positioning-statement"
           ],
           "purpose_phrases": [
             "为产品设定或调整定价",
@@ -332200,7 +332207,10 @@
             "商业模式画布",
             "服务转化为固定价格的产品化服务",
             "单位经济模型",
-            "竞品分析与市场定位"
+            "竞品分析与市场定位",
+            "定位声明",
+            "产品定位",
+            "April Dunford"
           ],
           "preserve_phrases": [
             "期权定价",
