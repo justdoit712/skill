@@ -3,10 +3,10 @@
   "rules_version": "1.3.0",
   "generated_at": "2026-10-09T21:10:54.373701+08:00",
   "counts": {
-    "recommended": 567,
-    "candidate": 1185,
+    "recommended": 559,
+    "candidate": 1169,
     "manual": 94,
-    "excluded": 1802
+    "excluded": 1826
   },
   "entries": [
     {
@@ -34310,9 +34310,10 @@
       "dependencies_declared": [],
       "limitations": "未声明依赖或适用平台；不适用于详细 SaaS 阶梯设计、健身房前端优惠或单位经济验证，需转用其他技能。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-29T20:05:15.486684+08:00",
@@ -35039,8 +35040,10 @@
       ],
       "limitations": "依赖相邻技能提供的定位和定价输入；未说明工具或运行环境；示例中的价格和转化率数据未提供外部来源。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-30T08:43:17.235890+08:00",
       "content_changed_at": null,
@@ -35091,12 +35094,7 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/productized-service-designer/SKILL.md|sha256:ab26be412db5f5a87e92921dd53e3a33|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-30T08:43:17.231861+08:00",
-      "snooze": {
-        "snoozed_at": "2026-10-02",
-        "expires_at": "2027-03-01",
-        "reason": "用户暂不关注"
-      }
+      "evaluated_at": "2026-09-30T08:43:17.231861+08:00"
     },
     {
       "skill_id": "skillmedev/skills:skills/prompt-engineer/SKILL.md",
@@ -38913,8 +38911,10 @@
       "dependencies_declared": [],
       "limitations": "未提供具体行业数据、模板文件或自动化生成工具；定价数字仍需用户基于自身客户价值验证。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-30T09:44:53.723894+08:00",
       "content_changed_at": null,
@@ -38965,12 +38965,7 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/saas-pricing/SKILL.md|sha256:567254e6d295cdf1d3eb0f079a903f2b|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-30T09:44:53.721741+08:00",
-      "snooze": {
-        "snoozed_at": "2026-10-02",
-        "expires_at": "2027-03-01",
-        "reason": "用户暂不关注"
-      }
+      "evaluated_at": "2026-09-30T09:44:53.721741+08:00"
     },
     {
       "skill_id": "skillmedev/skills:skills/rust-patterns/SKILL.md",
@@ -108696,9 +108691,10 @@
       "dependencies_declared": [],
       "limitations": "缺少详细使用说明和依赖项声明，需自行安装上游技能包并配置API访问权限",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-08T19:11:21.028096+08:00",
@@ -109483,9 +109479,10 @@
       "dependencies_declared": [],
       "limitations": "缺少具体使用步骤和依赖说明，需自行安装上游技能包；未提供本地运行或 API 调用细节。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-08T19:13:55.701895+08:00",
@@ -116732,8 +116729,10 @@
       ],
       "limitations": "需自行下载模型权重；音色克隆效果依赖参考音频质量；情感适配准确性取决于文本分析模块，未说明其验证方式；流式生成产生临时片段需合并。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-03T23:04:14.949978+08:00",
       "content_changed_at": null,
@@ -151499,9 +151498,10 @@
       ],
       "limitations": "仅支持本地硬件音频，默认不含电话/WebRTC 远程接入；需自行准备 API Key 与硬件设备索引",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-09T14:01:11.339234+08:00",
@@ -155178,8 +155178,10 @@
       "dependencies_declared": [],
       "limitations": "不验证真实市场需求、不做详细财务预测（P&L）、不做法律实体结构设计、无法预判运营执行瓶颈",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T00:53:22.165125+08:00",
       "content_changed_at": null,
@@ -156200,9 +156202,10 @@
       "dependencies_declared": [],
       "limitations": "不包含纯财务建模、市场规模测算或产品功能实现，需结合其他技能使用。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-09T14:20:46.189295+08:00",
@@ -157778,9 +157781,10 @@
       ],
       "limitations": "需自行准备 Stripe 账户与测试环境；未覆盖非订阅型或非数字产品场景。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-09T14:32:43.181534+08:00",
@@ -161070,9 +161074,10 @@
       ],
       "limitations": "未明确说明平台兼容性或运行环境要求",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-09T15:07:48.225682+08:00",
@@ -162519,9 +162524,10 @@
       ],
       "limitations": null,
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-09T15:11:40.904281+08:00",
@@ -207180,9 +207186,10 @@
       ],
       "limitations": "需要用户提供高质量的客户级原始数据（聚合数据会掩盖问题）；不适用于无复购概念的一次性交易业务或个人理财。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T12:05:11.040306+08:00",
@@ -220712,9 +220719,10 @@
       ],
       "limitations": "依赖微软Edge TTS服务的非官方接口，首次使用需联网下载语音包，不支持自定义音色克隆，情感控制仅通过预设音色实现",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T15:10:40.159603+08:00",
@@ -221187,8 +221195,10 @@
       ],
       "limitations": "依赖外部模型权重文件，需额外下载；音色克隆效果受参考音频质量影响；情感适配依赖文本情绪分析准确性",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T15:11:28.498650+08:00",
       "content_changed_at": null,
@@ -246386,9 +246396,10 @@
       ],
       "limitations": "自身不包含实际执行代码或提示词，需依赖并安装上游仓库 bundle。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INCOMPLETE_INSTRUCTIONS"
+        "INCOMPLETE_INSTRUCTIONS",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-04T19:54:00.809326+08:00",
@@ -247058,9 +247069,10 @@
       ],
       "limitations": "本身仅为目录广告条目，缺少实际执行逻辑、配置步骤和 API 凭证说明，需依赖外部上游仓库。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INCOMPLETE_INSTRUCTIONS"
+        "INCOMPLETE_INSTRUCTIONS",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-04T19:55:54.609306+08:00",
@@ -263576,11 +263588,12 @@
       ],
       "limitations": "核心工作流依赖外部仓库安装，未提供具体参数配置说明，需额外查阅上游文档",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
         "INCOMPLETE_INSTRUCTIONS",
         "MISSING_DEPENDENCY",
-        "NEEDS_VERIFICATION"
+        "NEEDS_VERIFICATION",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-05T07:28:07.340533+08:00",
@@ -264379,10 +264392,11 @@
       ],
       "limitations": "实际功能依赖上游仓库 bundle，本文件仅为目录入口；未声明 API 密钥等运行条件。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
         "INCOMPLETE_INSTRUCTIONS",
-        "MISSING_DEPENDENCY"
+        "MISSING_DEPENDENCY",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-05T08:00:28.557637+08:00",
@@ -279624,9 +279638,10 @@
       ],
       "limitations": "当前材料仅为目录条目，缺乏实际执行脚本或提示词细节，需依赖上游仓库补充。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INCOMPLETE_INSTRUCTIONS"
+        "INCOMPLETE_INSTRUCTIONS",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-05T13:38:11.365571+08:00",
@@ -280399,8 +280414,10 @@
       ],
       "limitations": "未提供具体的 API 调用参数和代码示例，需依赖上游 bundle。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-05T13:39:44.887871+08:00",
       "content_changed_at": null,
@@ -293740,8 +293757,10 @@
       "dependencies_declared": [],
       "limitations": "需要安装上游仓库才能运行完整工作流。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-08T22:23:39.822715+08:00",
       "content_changed_at": null,
@@ -294601,8 +294620,10 @@
       "dependencies_declared": [],
       "limitations": "主要限制",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-08T22:31:49.188548+08:00",
       "content_changed_at": null,
@@ -310721,8 +310742,10 @@
       "dependencies_declared": [],
       "limitations": "无法独立使用技能，必须安装上游仓库依赖",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-09T02:55:32.580473+08:00",
       "content_changed_at": null,
@@ -330949,9 +330972,180 @@
         "added_at": "2026-10-16",
         "reason": "人工核准：命中主题「C与C++系统编程、嵌入式硬件与底层固件」",
         "skill_id": "findscripter/everything-skills:06-creative/unreal-engine-cpp/SKILL.md"
+      },
+      {
+        "skill_id": "nexu-io/open-design:skills/speech/SKILL.md",
+        "reason": "屏蔽AI语音合成与配音（TTS）",
+        "added_at": "2026-10-16"
+      },
+      {
+        "skill_id": "nexu-io/open-design:skills/venice-audio-speech/SKILL.md",
+        "reason": "屏蔽AI语音合成与配音（TTS）",
+        "added_at": "2026-10-16"
+      },
+      {
+        "skill_id": "anbeime/skill:skills/tts-voice-synthesis/SKILL.md",
+        "reason": "屏蔽AI语音合成与配音（TTS）",
+        "added_at": "2026-10-16"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:04-ai/pipecat-voice-assistant/SKILL.md",
+        "reason": "屏蔽AI语音合成与配音（TTS）",
+        "added_at": "2026-10-16"
+      },
+      {
+        "skill_id": "ganmu191/aigc:skills/qwen3-tts-local/qwen3-tts-local/SKILL.md",
+        "reason": "屏蔽AI语音合成与配音（TTS）",
+        "added_at": "2026-10-16"
+      },
+      {
+        "skill_id": "ganmu191/aigc:skills/tts-voice-synthesis/SKILL.md",
+        "reason": "屏蔽AI语音合成与配音（TTS）",
+        "added_at": "2026-10-16"
+      },
+      {
+        "skill_id": "jalbarrang/open-design:skills/speech/SKILL.md",
+        "reason": "屏蔽AI语音合成与配音（TTS）",
+        "added_at": "2026-10-16"
+      },
+      {
+        "skill_id": "jalbarrang/open-design:skills/venice-audio-speech/SKILL.md",
+        "reason": "屏蔽AI语音合成与配音（TTS）",
+        "added_at": "2026-10-16"
+      },
+      {
+        "skill_id": "hiktan44/open-design-app:skills/speech/SKILL.md",
+        "reason": "屏蔽AI语音合成与配音（TTS）",
+        "added_at": "2026-10-16"
+      },
+      {
+        "skill_id": "hiktan44/open-design-app:skills/venice-audio-speech/SKILL.md",
+        "reason": "屏蔽AI语音合成与配音（TTS）",
+        "added_at": "2026-10-16"
+      },
+      {
+        "skill_id": "anjon771/open-degine:skills/speech/SKILL.md",
+        "reason": "屏蔽AI语音合成与配音（TTS）",
+        "added_at": "2026-10-16"
+      },
+      {
+        "skill_id": "anjon771/open-degine:skills/venice-audio-speech/SKILL.md",
+        "reason": "屏蔽AI语音合成与配音（TTS）",
+        "added_at": "2026-10-16"
+      },
+      {
+        "skill_id": "moussakhalale-lang/open-design:skills/speech/SKILL.md",
+        "reason": "屏蔽AI语音合成与配音（TTS）",
+        "added_at": "2026-10-16"
+      },
+      {
+        "skill_id": "moussakhalale-lang/open-design:skills/venice-audio-speech/SKILL.md",
+        "reason": "屏蔽AI语音合成与配音（TTS）",
+        "added_at": "2026-10-16"
+      },
+      {
+        "skill_id": "techtrader86/open-design-zunobot:skills/speech/SKILL.md",
+        "reason": "屏蔽AI语音合成与配音（TTS）",
+        "added_at": "2026-10-16"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/pricing-strategy/SKILL.md",
+        "reason": "用户屏蔽/删除（商业化与产品定价）",
+        "added_at": "2026-10-17"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/productized-service-designer/SKILL.md",
+        "reason": "用户屏蔽/删除（商业化与产品定价）",
+        "added_at": "2026-10-17"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/saas-pricing/SKILL.md",
+        "reason": "用户屏蔽/删除（商业化与产品定价）",
+        "added_at": "2026-10-17"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:05-business/business-model-canvas-architect/SKILL.md",
+        "reason": "用户屏蔽/删除（商业化与产品定价）",
+        "added_at": "2026-10-17"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:05-business/competitive-analysis/SKILL.md",
+        "reason": "用户屏蔽/删除（商业化与产品定价）",
+        "added_at": "2026-10-17"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:05-business/digital-product-monetization/SKILL.md",
+        "reason": "用户屏蔽/删除（商业化与产品定价）",
+        "added_at": "2026-10-17"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:05-business/micro-saas-launcher/SKILL.md",
+        "reason": "用户屏蔽/删除（商业化与产品定价）",
+        "added_at": "2026-10-17"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:05-business/pricing-strategy/SKILL.md",
+        "reason": "用户屏蔽/删除（商业化与产品定价）",
+        "added_at": "2026-10-17"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:09-verticals/unit-economics-analyzer/SKILL.md",
+        "reason": "用户屏蔽/删除（商业化与产品定价）",
+        "added_at": "2026-10-17"
       }
     ],
     "blocked_topics": [
+      {
+        "name": "商业化与产品定价",
+        "description": "主要用于产品商业化定价、SaaS三层套餐与计费结构设计、价格档位测算、商业模式画布、服务产品化变现。明确排除并保留：金融量化投资资产定价（如期权理论定价、债券久期估值、股票重估）、云计算基础设施与系统资源成本测算（如云账单优化、Token消耗测算、容量性能模型）。",
+        "keywords": [
+          "产品定价",
+          "SaaS定价",
+          "商业化变现",
+          "收费模式",
+          "价格策略",
+          "商业模式画布",
+          "单位经济模型",
+          "pricing-strategy",
+          "saas-pricing",
+          "monetization"
+        ],
+        "local_match": {
+          "names": [
+            "pricing-strategy",
+            "saas-pricing",
+            "digital-product-monetization",
+            "business-model-canvas-architect",
+            "productized-service-designer",
+            "unit-economics-analyzer",
+            "micro-saas-launcher",
+            "competitive-analysis"
+          ],
+          "purpose_phrases": [
+            "为产品设定或调整定价",
+            "设计 SaaS 定价模型",
+            "数字产品变现",
+            "商业模式画布",
+            "服务转化为固定价格的产品化服务",
+            "单位经济模型",
+            "竞品分析与市场定位"
+          ],
+          "preserve_phrases": [
+            "期权定价",
+            "Black-Scholes",
+            "希腊值",
+            "债券定价",
+            "利率互换",
+            "量化选股",
+            "资产定价",
+            "云资源成本",
+            "Token成本",
+            "微服务",
+            "AWS",
+            "Kubernetes"
+          ]
+        }
+      },
       {
         "name": "手机 App",
         "description": "主要用于手机应用开发、发布或运营，含 Android、iOS、Expo、App Store。",
@@ -332584,6 +332778,38 @@
             "Web全栈"
           ]
         }
+      },
+      {
+        "name": "AI 语音合成与配音（TTS）",
+        "description": "主要用于文本转语音（Text-to-Speech / TTS）、声音克隆、AI 角色配音、有声读物生成或多模态语音朗读。保留普通的音频格式转码、静音裁剪等纯信号处理工具。",
+        "keywords": [
+          "TTS",
+          "text-to-speech",
+          "语音合成",
+          "文本转语音",
+          "声音克隆",
+          "音色克隆",
+          "voice-synthesis",
+          "voice-clone",
+          "Edge-TTS"
+        ],
+        "local_match": {
+          "names": [
+            "tts-voice-synthesis",
+            "qwen3-tts-local",
+            "speech",
+            "venice-audio-speech",
+            "pipecat-voice-assistant"
+          ],
+          "purpose_phrases": [
+            "文本转换为高质量语音",
+            "TTS技能",
+            "文本转语音",
+            "音色克隆",
+            "文本到语音的高质量合成",
+            "Edge-TTS"
+          ]
+        }
       }
     ]
   },
@@ -333752,13 +333978,6 @@
         "days": 150,
         "expires_at": "2027-03-01",
         "reason": "用户暂不关注",
-        "skill_id": "skillmedev/skills:skills/productized-service-designer/SKILL.md",
-        "snoozed_at": "2026-10-02"
-      },
-      {
-        "days": 150,
-        "expires_at": "2027-03-01",
-        "reason": "用户暂不关注",
         "skill_id": "skillmedev/skills:skills/prompt-engineer/SKILL.md",
         "snoozed_at": "2026-10-02"
       },
@@ -333823,13 +334042,6 @@
         "expires_at": "2027-03-01",
         "reason": "用户暂不关注",
         "skill_id": "skillmedev/skills:skills/runbook-writer/SKILL.md",
-        "snoozed_at": "2026-10-02"
-      },
-      {
-        "days": 150,
-        "expires_at": "2027-03-01",
-        "reason": "用户暂不关注",
-        "skill_id": "skillmedev/skills:skills/saas-pricing/SKILL.md",
         "snoozed_at": "2026-10-02"
       },
       {

@@ -1163,13 +1163,6 @@
       "days": 150,
       "expires_at": "2027-03-01",
       "reason": "用户暂不关注",
-      "skill_id": "skillmedev/skills:skills/productized-service-designer/SKILL.md",
-      "snoozed_at": "2026-10-02"
-    },
-    {
-      "days": 150,
-      "expires_at": "2027-03-01",
-      "reason": "用户暂不关注",
       "skill_id": "skillmedev/skills:skills/prompt-engineer/SKILL.md",
       "snoozed_at": "2026-10-02"
     },
@@ -1234,13 +1227,6 @@
       "expires_at": "2027-03-01",
       "reason": "用户暂不关注",
       "skill_id": "skillmedev/skills:skills/runbook-writer/SKILL.md",
-      "snoozed_at": "2026-10-02"
-    },
-    {
-      "days": 150,
-      "expires_at": "2027-03-01",
-      "reason": "用户暂不关注",
-      "skill_id": "skillmedev/skills:skills/saas-pricing/SKILL.md",
       "snoozed_at": "2026-10-02"
     },
     {
