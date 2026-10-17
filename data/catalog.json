@@ -3,10 +3,10 @@
   "rules_version": "1.3.0",
   "generated_at": "2026-10-09T21:10:54.373701+08:00",
   "counts": {
-    "recommended": 559,
-    "candidate": 1169,
+    "recommended": 556,
+    "candidate": 1164,
     "manual": 94,
-    "excluded": 1826
+    "excluded": 1834
   },
   "entries": [
     {
@@ -43410,9 +43410,10 @@
       "dependencies_declared": [],
       "limitations": "仅限营利公司董事会管理（非利机构需适应）",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-01T05:32:34.023072+08:00",
@@ -46104,9 +46105,10 @@
       "dependencies_declared": [],
       "limitations": "引用的同仓库配套技能（board-management、impact-report-builder、grant-prospect-researcher、donor-communications）未提供，其数据口径无法核验；示例组织数据为虚构演示；明确不构成法律意见。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-01T09:01:07.622103+08:00",
@@ -118942,8 +118944,10 @@
       ],
       "limitations": "仅适用于高风险、多视角冲突决策；低风险或单视角决策会拖慢节奏；依赖 LLM 多次调用能力；未说明具体平台兼容性。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-08T19:35:33.292578+08:00",
       "content_changed_at": null,
@@ -120046,9 +120050,10 @@
       ],
       "limitations": "依赖用户输入质量；未说明脚本运行环境；不替代事实核查；仅适用于计划层面审查，非实时监控或执行工具。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-08T19:38:25.508062+08:00",
@@ -170879,8 +170884,10 @@
       "dependencies_declared": [],
       "limitations": "不替做 deck 制作、纯财务建模或汇报材料排版，需配合 board-deck-builder、cfo-financial-advisor 等相关技能使用；不适用于内部团队周会或友好型进度同步场景",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T02:15:31.449030+08:00",
       "content_changed_at": null,
@@ -184114,9 +184121,10 @@
       ],
       "limitations": "不判断某行为是否依法必须经董事会批准，不替代重大交易的外部律师复核，不负责传阅或追踪回签。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T11:08:32.905767+08:00",
@@ -317478,8 +317486,10 @@
       "dependencies_declared": [],
       "limitations": "未明确说明依赖的特殊工具或运行环境",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-08T00:38:44+00:00",
       "last_checked": "2026-10-09T17:12:09.393780+08:00",
       "content_changed_at": null,
@@ -317567,9 +317577,10 @@
       "dependencies_declared": [],
       "limitations": "未声明特殊工具、运行环境或依赖，但依赖于其他技能和文件。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-08T00:38:44+00:00",
       "last_checked": "2026-10-09T17:12:11.747410+08:00",
@@ -331092,9 +331103,96 @@
         "skill_id": "findscripter/everything-skills:09-verticals/unit-economics-analyzer/SKILL.md",
         "reason": "用户屏蔽/删除（商业化与产品定价）",
         "added_at": "2026-10-17"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/board-management/SKILL.md",
+        "reason": "用户屏蔽/删除（公司治理与董事会管理）",
+        "added_at": "2026-10-17"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/nonprofit-board-pack/SKILL.md",
+        "reason": "用户屏蔽/删除（公司治理与董事会管理）",
+        "added_at": "2026-10-17"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:00-meta/boardroom-deliberation/SKILL.md",
+        "reason": "用户屏蔽/删除（公司治理与董事会管理）",
+        "added_at": "2026-10-17"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:00-meta/executive-adversarial-mentor/SKILL.md",
+        "reason": "用户屏蔽/删除（公司治理与董事会管理）",
+        "added_at": "2026-10-17"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:07-productivity/board-prep-orchestrator/SKILL.md",
+        "reason": "用户屏蔽/删除（公司治理与董事会管理）",
+        "added_at": "2026-10-17"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:07-productivity/chief-of-staff-orchestrator/SKILL.md",
+        "reason": "用户屏蔽/删除（公司治理与董事会管理）",
+        "added_at": "2026-10-17"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:07-productivity/chief-of-staff-ops/SKILL.md",
+        "reason": "用户屏蔽/删除（公司治理与董事会管理）",
+        "added_at": "2026-10-17"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:09-verticals/board-written-consent-drafter/SKILL.md",
+        "reason": "用户屏蔽/删除（公司治理与董事会管理）",
+        "added_at": "2026-10-17"
       }
     ],
     "blocked_topics": [
+      {
+        "name": "公司治理与董事会管理",
+        "description": "主要用于企业董事会与股东大会会议筹备、董事会材料包（Board Pack）编制、董事会书面决议（Written Consent）起草、董事会高风险审议流程、高管对抗式演练及幕僚长（Chief of Staff）决策协调。保留工程团队内部技术周报汇总（如 eng-status-rollup）、通用会议音视频转写工具、开发团队敏捷站会记录工具。",
+        "keywords": [
+          "董事会",
+          "董事会会议",
+          "股东大会",
+          "股东会",
+          "公司治理",
+          "高管会议",
+          "board-management",
+          "board-meeting",
+          "board-pack",
+          "boardroom",
+          "written-consent",
+          "chief-of-staff"
+        ],
+        "local_match": {
+          "names": [
+            "board-management",
+            "nonprofit-board-pack",
+            "board-prep-orchestrator",
+            "board-written-consent-drafter",
+            "boardroom-deliberation",
+            "executive-adversarial-mentor",
+            "chief-of-staff-ops",
+            "chief-of-staff-orchestrator"
+          ],
+          "purpose_phrases": [
+            "董事会会议管理",
+            "董事会材料包",
+            "董事会书面决议",
+            "董事会会议包",
+            "模拟董事会脚本",
+            "董事会备忘录",
+            "召开董事会"
+          ],
+          "preserve_phrases": [
+            "工程团队",
+            "代码开发",
+            "音频转写",
+            "离线转写",
+            "技术汇报",
+            "engineering status"
+          ]
+        }
+      },
       {
         "name": "商业化与产品定价",
         "description": "主要用于产品商业化定价、SaaS三层套餐与计费结构设计、价格档位测算、商业模式画布、服务产品化变现。明确排除并保留：金融量化投资资产定价（如期权理论定价、债券久期估值、股票重估）、云计算基础设施与系统资源成本测算（如云账单优化、Token消耗测算、容量性能模型）。",
