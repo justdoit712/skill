@@ -3,10 +3,10 @@
   "rules_version": "1.3.0",
   "generated_at": "2026-10-09T21:10:54.373701+08:00",
   "counts": {
-    "recommended": 545,
-    "candidate": 1150,
-    "manual": 94,
-    "excluded": 1859
+    "recommended": 530,
+    "candidate": 1146,
+    "manual": 112,
+    "excluded": 1860
   },
   "entries": [
     {
@@ -43065,8 +43065,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-17",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -43286,7 +43291,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/big-purchase-decision/SKILL.md|sha256:db195ab6d500acba51788a9d58f925dc|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-01T05:31:27.048570+08:00"
+      "evaluated_at": "2026-10-01T05:31:27.048570+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-17",
+        "expires_at": "2027-03-16",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/bloodwork-explainer/SKILL.md",
@@ -43331,8 +43341,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-17",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -44202,8 +44217,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-17",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -44292,8 +44312,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-17",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -111831,8 +111856,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-17",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -112051,7 +112081,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "anbeime/skill:skills/article-illustrator/article-illustrator/SKILL.md|sha256:4d05e8b2c33de14220f8462c140d7ab6|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-08T19:18:51.389486+08:00"
+      "evaluated_at": "2026-10-08T19:18:51.389486+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-17",
+        "expires_at": "2027-03-16",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "anbeime/skill:skills/atutun-xhs-cover/atutun-xhs-cover/SKILL.md",
@@ -112325,7 +112360,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "anbeime/skill:skills/chrome-automation/chrome-automation/SKILL.md|sha256:33eecfb4ca5a9a5aff3573cea3fa12cf|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-03T22:44:41.728191+08:00"
+      "evaluated_at": "2026-10-03T22:44:41.728191+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-17",
+        "expires_at": "2027-03-16",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "anbeime/skill:skills/content-creation-publisher/SKILL.md",
@@ -112881,7 +112921,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "anbeime/skill:skills/content-creation-publisher/baoyu-url-to-markdown/SKILL.md|sha256:c2e4b2d7e742ff3d05b9e2a1b0278bc1|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-03T22:46:27.284435+08:00"
+      "evaluated_at": "2026-10-03T22:46:27.284435+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-17",
+        "expires_at": "2027-03-16",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "anbeime/skill:skills/content-research-writer/SKILL.md",
@@ -116132,7 +116177,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "anbeime/skill:skills/qiaomu-x-article-publisher/qiaomu-x-article-publisher-github/SKILL.md|sha256:4d5020a49478ca071374f2d5ca7213cd|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-03T23:01:23.958225+08:00"
+      "evaluated_at": "2026-10-03T23:01:23.958225+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-17",
+        "expires_at": "2027-03-16",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "anbeime/skill:skills/qwen3-asr-assistant/qwen3-asr-assistant/SKILL.md",
@@ -116412,7 +116462,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "anbeime/skill:skills/remotion-video-enhancer/remotion-video-enhancer/SKILL.md|sha256:2dcabc587c350dd01a56a49fcf08fd68|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-08T19:30:01.533010+08:00"
+      "evaluated_at": "2026-10-08T19:30:01.533010+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-17",
+        "expires_at": "2027-03-16",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "anbeime/skill:skills/stock-analysis/stock-analysis/SKILL.md",
@@ -116553,8 +116608,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-17",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -117227,8 +117287,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-17",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -118456,7 +118521,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "haoruilee/awesome-agent-native-services:.skills/add-to-awesome-list/SKILL.md|sha256:39dd3386d6fdcd378cc4d61ab8fb7bdd|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-03T23:10:56.952210+08:00"
+      "evaluated_at": "2026-10-03T23:10:56.952210+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-17",
+        "expires_at": "2027-03-16",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "haoruilee/awesome-agent-native-services:.skills/find-agent-service/SKILL.md",
@@ -118914,7 +118984,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "findscripter/everything-skills:00-meta/algorithm-first-discipline/SKILL.md|sha256:6c2544604e6c82a0ff73068b3e4be192|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-03T23:13:07.922881+08:00"
+      "evaluated_at": "2026-10-03T23:13:07.922881+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-17",
+        "expires_at": "2027-03-16",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "findscripter/everything-skills:00-meta/boardroom-deliberation/SKILL.md",
@@ -119054,8 +119129,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-17",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -119235,8 +119315,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-17",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -119601,8 +119686,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-17",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -120429,8 +120519,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-17",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -120916,7 +121011,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "findscripter/everything-skills:00-meta/invariant-guard-correctness/SKILL.md|sha256:9be386e583dad8e5931fa289f3ecc0f4|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-08T19:41:08.695333+08:00"
+      "evaluated_at": "2026-10-08T19:41:08.695333+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-17",
+        "expires_at": "2027-03-16",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "findscripter/everything-skills:00-meta/kaizen-continuous-improvement/SKILL.md",
@@ -120964,8 +121064,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-17",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -121650,7 +121755,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "findscripter/everything-skills:00-meta/oss-contribution-hunter/SKILL.md|sha256:d1f0c0d7a1ead60296fae2838ce14c2f|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-03T23:26:32.907395+08:00"
+      "evaluated_at": "2026-10-03T23:26:32.907395+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-17",
+        "expires_at": "2027-03-16",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "findscripter/everything-skills:00-meta/parallel-agent-dispatch/SKILL.md",
@@ -121916,7 +122026,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "findscripter/everything-skills:00-meta/premortem-plan-challenger/SKILL.md|sha256:464d2f3b9a1e3a77dd180f1748dad20c|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-03T23:27:39.526507+08:00"
+      "evaluated_at": "2026-10-03T23:27:39.526507+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-17",
+        "expires_at": "2027-03-16",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "findscripter/everything-skills:00-meta/query-decomposition-search/SKILL.md",
@@ -122426,8 +122541,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-17",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -122606,8 +122726,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-17",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -123231,7 +123356,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "findscripter/everything-skills:01-documents/doc-coauthoring/SKILL.md|sha256:9d4ebb34cda4263166437d949413adf3|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-08T19:47:10.884377+08:00"
+      "evaluated_at": "2026-10-08T19:47:10.884377+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-17",
+        "expires_at": "2027-03-16",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "findscripter/everything-skills:01-documents/doc-to-math-spec/SKILL.md",
@@ -123324,7 +123454,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "findscripter/everything-skills:01-documents/doc-to-math-spec/SKILL.md|sha256:25d234cdc0db99c948e3a4d800567ef8|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-03T23:32:57.339411+08:00"
+      "evaluated_at": "2026-10-03T23:32:57.339411+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-17",
+        "expires_at": "2027-03-16",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "findscripter/everything-skills:01-documents/docs-architect/SKILL.md",
@@ -123980,7 +124115,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "findscripter/everything-skills:01-documents/openapi-doc-generator/SKILL.md|sha256:3a661962f41cb2512873a594ea2765f8|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-03T23:34:25.709421+08:00"
+      "evaluated_at": "2026-10-03T23:34:25.709421+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-17",
+        "expires_at": "2027-03-16",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "findscripter/everything-skills:01-documents/pdf-form-filler/SKILL.md",
@@ -124363,7 +124503,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "findscripter/everything-skills:01-documents/professional-proofreader/SKILL.md|sha256:e96ffb3f6c349174bcb579bea1ed5225|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-08T19:50:52.486381+08:00"
+      "evaluated_at": "2026-10-08T19:50:52.486381+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-17",
+        "expires_at": "2027-03-16",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "findscripter/everything-skills:01-documents/technical-reference-builder/SKILL.md",
@@ -125074,8 +125219,10 @@
       ],
       "limitations": "不适用于无 diff 可评审、仅需正向确认或纯格式化场景；不能替代深度安全审计或常规质量评审",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-03T23:37:48.215071+08:00",
       "content_changed_at": null,
@@ -127043,8 +127190,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-17",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -129175,8 +129327,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-17",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -129357,8 +129514,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-17",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -129856,7 +130018,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "findscripter/everything-skills:02-engineering/discord-bot-architect/SKILL.md|sha256:61c9d51c7fde307ea35f5e2301dba13d|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-03T23:47:15.256456+08:00"
+      "evaluated_at": "2026-10-03T23:47:15.256456+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-17",
+        "expires_at": "2027-03-16",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "findscripter/everything-skills:02-engineering/distributed-tracing/SKILL.md",
@@ -130419,7 +130586,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "findscripter/everything-skills:02-engineering/dwarf-debug-format-expert/SKILL.md|sha256:2cf848c54f91420acab0af5613cce65d|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-03T23:48:08.463391+08:00"
+      "evaluated_at": "2026-10-03T23:48:08.463391+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-17",
+        "expires_at": "2027-03-16",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "findscripter/everything-skills:02-engineering/drizzle-orm-expert/SKILL.md",
@@ -131531,7 +131703,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "findscripter/everything-skills:02-engineering/fp-ts-pragmatic-guide/SKILL.md|sha256:b9ef5e46ea5d735f333d5091d236d456|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-03T23:50:23.792578+08:00"
+      "evaluated_at": "2026-10-03T23:50:23.792578+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-17",
+        "expires_at": "2027-03-16",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "findscripter/everything-skills:02-engineering/fp-ts-refactor/SKILL.md",
@@ -132178,7 +132355,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "findscripter/everything-skills:02-engineering/git-hooks-automation/SKILL.md|sha256:f7e7de6db52e8039d01581f0949f3ca6|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-03T23:51:17.219033+08:00"
+      "evaluated_at": "2026-10-03T23:51:17.219033+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-17",
+        "expires_at": "2027-03-16",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "findscripter/everything-skills:02-engineering/git-worktrees-workflow/SKILL.md",
@@ -133804,8 +133986,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-17",
+        "reason": "用户收藏",
+        "from": "recommended",
+        "auto_status": "recommended"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -134707,7 +134894,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "findscripter/everything-skills:02-engineering/lambdatest-cross-framework-testing/SKILL.md|sha256:8000f751746ac8dd50f2abce48e67e87|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-03T23:55:47.332044+08:00"
+      "evaluated_at": "2026-10-03T23:55:47.332044+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-17",
+        "expires_at": "2027-03-16",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "findscripter/everything-skills:02-engineering/laravel-app-specialist/SKILL.md",
@@ -136195,7 +136387,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "findscripter/everything-skills:02-engineering/nestjs-expert/SKILL.md|sha256:79018ee450567d89f2d122164b691215|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-03T23:59:47.706183+08:00"
+      "evaluated_at": "2026-10-03T23:59:47.706183+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-17",
+        "expires_at": "2027-03-16",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "findscripter/everything-skills:02-engineering/nextjs-supabase-auth/SKILL.md",
@@ -322990,6 +323187,114 @@
         "from": "candidate",
         "reason": "用户收藏",
         "skill_id": "skillmedev/skills:skills/retirement-projection/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-17",
+        "from": "recommended",
+        "reason": "用户收藏",
+        "skill_id": "anbeime/skill:skills/antinet-security-scan/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-17",
+        "from": "recommended",
+        "reason": "用户收藏",
+        "skill_id": "anbeime/skill:skills/tailored-resume-generator/tailored-resume-generator/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-17",
+        "from": "recommended",
+        "reason": "用户收藏",
+        "skill_id": "anbeime/skill:skills/video-transcript-downloader/video-transcript-downloader/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-17",
+        "from": "recommended",
+        "reason": "用户收藏",
+        "skill_id": "findscripter/everything-skills:00-meta/bullet-point-structurer/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-17",
+        "from": "recommended",
+        "reason": "用户收藏",
+        "skill_id": "findscripter/everything-skills:00-meta/caveman-compressed-mode/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-17",
+        "from": "recommended",
+        "reason": "用户收藏",
+        "skill_id": "findscripter/everything-skills:00-meta/context-budget-audit/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-17",
+        "from": "recommended",
+        "reason": "用户收藏",
+        "skill_id": "findscripter/everything-skills:00-meta/four-voice-decision-council/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-17",
+        "from": "recommended",
+        "reason": "用户收藏",
+        "skill_id": "findscripter/everything-skills:00-meta/kaizen-continuous-improvement/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-17",
+        "from": "recommended",
+        "reason": "用户收藏",
+        "skill_id": "findscripter/everything-skills:01-documents/audio-to-markdown-transcriber/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-17",
+        "from": "recommended",
+        "reason": "用户收藏",
+        "skill_id": "findscripter/everything-skills:01-documents/beautiful-prose-stylist/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-17",
+        "from": "recommended",
+        "reason": "用户收藏",
+        "skill_id": "findscripter/everything-skills:02-engineering/bug-hunter/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-17",
+        "from": "recommended",
+        "reason": "用户收藏",
+        "skill_id": "findscripter/everything-skills:02-engineering/database-design-advisor/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-17",
+        "from": "recommended",
+        "reason": "用户收藏",
+        "skill_id": "findscripter/everything-skills:02-engineering/ddd-context-mapping/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-17",
+        "from": "recommended",
+        "reason": "用户收藏",
+        "skill_id": "findscripter/everything-skills:02-engineering/java-modern-pro/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-17",
+        "from": "candidate",
+        "reason": "用户收藏",
+        "skill_id": "skillmedev/skills:skills/bloodwork-explainer/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-17",
+        "from": "candidate",
+        "reason": "用户收藏",
+        "skill_id": "skillmedev/skills:skills/deep-work-planner/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-17",
+        "from": "candidate",
+        "reason": "用户收藏",
+        "skill_id": "skillmedev/skills:skills/finance-fx/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-17",
+        "from": "candidate",
+        "reason": "用户收藏",
+        "skill_id": "tradermonty/claude-trading-skills:skills/market-news-analyst/SKILL.md"
       }
     ]
   },
@@ -331302,6 +331607,11 @@
         "skill_id": "anjon771/open-degine:skills/export-download-debugging/SKILL.md",
         "reason": "用户屏蔽/删除（PC 电脑桌面端应用开发）",
         "added_at": "2026-10-17"
+      },
+      {
+        "added_at": "2026-10-17",
+        "reason": "用户屏蔽/删除",
+        "skill_id": "findscripter/everything-skills:02-engineering/adversarial-code-reviewer/SKILL.md"
       }
     ],
     "blocked_topics": [
@@ -335262,6 +335572,153 @@
         "reason": "用户暂不关注",
         "skill_id": "skillmedev/skills:skills/social-content-calendar/SKILL.md",
         "snoozed_at": "2026-10-15"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-16",
+        "reason": "用户暂不关注",
+        "skill_id": "anbeime/skill:skills/article-illustrator/article-illustrator/SKILL.md",
+        "snoozed_at": "2026-10-17"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-16",
+        "reason": "用户暂不关注",
+        "skill_id": "anbeime/skill:skills/chrome-automation/chrome-automation/SKILL.md",
+        "snoozed_at": "2026-10-17"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-16",
+        "reason": "用户暂不关注",
+        "skill_id": "anbeime/skill:skills/content-creation-publisher/baoyu-url-to-markdown/SKILL.md",
+        "snoozed_at": "2026-10-17"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-16",
+        "reason": "用户暂不关注",
+        "skill_id": "anbeime/skill:skills/qiaomu-x-article-publisher/qiaomu-x-article-publisher-github/SKILL.md",
+        "snoozed_at": "2026-10-17"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-16",
+        "reason": "用户暂不关注",
+        "skill_id": "anbeime/skill:skills/remotion-video-enhancer/remotion-video-enhancer/SKILL.md",
+        "snoozed_at": "2026-10-17"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-16",
+        "reason": "用户暂不关注",
+        "skill_id": "findscripter/everything-skills:00-meta/algorithm-first-discipline/SKILL.md",
+        "snoozed_at": "2026-10-17"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-16",
+        "reason": "用户暂不关注",
+        "skill_id": "findscripter/everything-skills:00-meta/invariant-guard-correctness/SKILL.md",
+        "snoozed_at": "2026-10-17"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-16",
+        "reason": "用户暂不关注",
+        "skill_id": "findscripter/everything-skills:00-meta/oss-contribution-hunter/SKILL.md",
+        "snoozed_at": "2026-10-17"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-16",
+        "reason": "用户暂不关注",
+        "skill_id": "findscripter/everything-skills:00-meta/premortem-plan-challenger/SKILL.md",
+        "snoozed_at": "2026-10-17"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-16",
+        "reason": "用户暂不关注",
+        "skill_id": "findscripter/everything-skills:01-documents/doc-coauthoring/SKILL.md",
+        "snoozed_at": "2026-10-17"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-16",
+        "reason": "用户暂不关注",
+        "skill_id": "findscripter/everything-skills:01-documents/doc-to-math-spec/SKILL.md",
+        "snoozed_at": "2026-10-17"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-16",
+        "reason": "用户暂不关注",
+        "skill_id": "findscripter/everything-skills:01-documents/openapi-doc-generator/SKILL.md",
+        "snoozed_at": "2026-10-17"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-16",
+        "reason": "用户暂不关注",
+        "skill_id": "findscripter/everything-skills:01-documents/professional-proofreader/SKILL.md",
+        "snoozed_at": "2026-10-17"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-16",
+        "reason": "用户暂不关注",
+        "skill_id": "findscripter/everything-skills:02-engineering/discord-bot-architect/SKILL.md",
+        "snoozed_at": "2026-10-17"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-16",
+        "reason": "用户暂不关注",
+        "skill_id": "findscripter/everything-skills:02-engineering/dwarf-debug-format-expert/SKILL.md",
+        "snoozed_at": "2026-10-17"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-16",
+        "reason": "用户暂不关注",
+        "skill_id": "findscripter/everything-skills:02-engineering/fp-ts-pragmatic-guide/SKILL.md",
+        "snoozed_at": "2026-10-17"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-16",
+        "reason": "用户暂不关注",
+        "skill_id": "findscripter/everything-skills:02-engineering/git-hooks-automation/SKILL.md",
+        "snoozed_at": "2026-10-17"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-16",
+        "reason": "用户暂不关注",
+        "skill_id": "findscripter/everything-skills:02-engineering/lambdatest-cross-framework-testing/SKILL.md",
+        "snoozed_at": "2026-10-17"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-16",
+        "reason": "用户暂不关注",
+        "skill_id": "findscripter/everything-skills:02-engineering/nestjs-expert/SKILL.md",
+        "snoozed_at": "2026-10-17"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-16",
+        "reason": "用户暂不关注",
+        "skill_id": "haoruilee/awesome-agent-native-services:.skills/add-to-awesome-list/SKILL.md",
+        "snoozed_at": "2026-10-17"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-16",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/big-purchase-decision/SKILL.md",
+        "snoozed_at": "2026-10-17"
       }
     ]
   },

@@ -638,6 +638,114 @@
       "from": "candidate",
       "reason": "用户收藏",
       "skill_id": "skillmedev/skills:skills/retirement-projection/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-17",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "anbeime/skill:skills/antinet-security-scan/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-17",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "anbeime/skill:skills/tailored-resume-generator/tailored-resume-generator/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-17",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "anbeime/skill:skills/video-transcript-downloader/video-transcript-downloader/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-17",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "findscripter/everything-skills:00-meta/bullet-point-structurer/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-17",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "findscripter/everything-skills:00-meta/caveman-compressed-mode/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-17",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "findscripter/everything-skills:00-meta/context-budget-audit/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-17",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "findscripter/everything-skills:00-meta/four-voice-decision-council/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-17",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "findscripter/everything-skills:00-meta/kaizen-continuous-improvement/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-17",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "findscripter/everything-skills:01-documents/audio-to-markdown-transcriber/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-17",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "findscripter/everything-skills:01-documents/beautiful-prose-stylist/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-17",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "findscripter/everything-skills:02-engineering/bug-hunter/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-17",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "findscripter/everything-skills:02-engineering/database-design-advisor/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-17",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "findscripter/everything-skills:02-engineering/ddd-context-mapping/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-17",
+      "from": "recommended",
+      "reason": "用户收藏",
+      "skill_id": "findscripter/everything-skills:02-engineering/java-modern-pro/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-17",
+      "from": "candidate",
+      "reason": "用户收藏",
+      "skill_id": "skillmedev/skills:skills/bloodwork-explainer/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-17",
+      "from": "candidate",
+      "reason": "用户收藏",
+      "skill_id": "skillmedev/skills:skills/deep-work-planner/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-17",
+      "from": "candidate",
+      "reason": "用户收藏",
+      "skill_id": "skillmedev/skills:skills/finance-fx/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-17",
+      "from": "candidate",
+      "reason": "用户收藏",
+      "skill_id": "tradermonty/claude-trading-skills:skills/market-news-analyst/SKILL.md"
     }
   ]
 }

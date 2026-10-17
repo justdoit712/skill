@@ -1977,6 +1977,153 @@
       "reason": "用户暂不关注",
       "skill_id": "skillmedev/skills:skills/social-content-calendar/SKILL.md",
       "snoozed_at": "2026-10-15"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-16",
+      "reason": "用户暂不关注",
+      "skill_id": "anbeime/skill:skills/article-illustrator/article-illustrator/SKILL.md",
+      "snoozed_at": "2026-10-17"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-16",
+      "reason": "用户暂不关注",
+      "skill_id": "anbeime/skill:skills/chrome-automation/chrome-automation/SKILL.md",
+      "snoozed_at": "2026-10-17"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-16",
+      "reason": "用户暂不关注",
+      "skill_id": "anbeime/skill:skills/content-creation-publisher/baoyu-url-to-markdown/SKILL.md",
+      "snoozed_at": "2026-10-17"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-16",
+      "reason": "用户暂不关注",
+      "skill_id": "anbeime/skill:skills/qiaomu-x-article-publisher/qiaomu-x-article-publisher-github/SKILL.md",
+      "snoozed_at": "2026-10-17"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-16",
+      "reason": "用户暂不关注",
+      "skill_id": "anbeime/skill:skills/remotion-video-enhancer/remotion-video-enhancer/SKILL.md",
+      "snoozed_at": "2026-10-17"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-16",
+      "reason": "用户暂不关注",
+      "skill_id": "findscripter/everything-skills:00-meta/algorithm-first-discipline/SKILL.md",
+      "snoozed_at": "2026-10-17"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-16",
+      "reason": "用户暂不关注",
+      "skill_id": "findscripter/everything-skills:00-meta/invariant-guard-correctness/SKILL.md",
+      "snoozed_at": "2026-10-17"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-16",
+      "reason": "用户暂不关注",
+      "skill_id": "findscripter/everything-skills:00-meta/oss-contribution-hunter/SKILL.md",
+      "snoozed_at": "2026-10-17"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-16",
+      "reason": "用户暂不关注",
+      "skill_id": "findscripter/everything-skills:00-meta/premortem-plan-challenger/SKILL.md",
+      "snoozed_at": "2026-10-17"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-16",
+      "reason": "用户暂不关注",
+      "skill_id": "findscripter/everything-skills:01-documents/doc-coauthoring/SKILL.md",
+      "snoozed_at": "2026-10-17"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-16",
+      "reason": "用户暂不关注",
+      "skill_id": "findscripter/everything-skills:01-documents/doc-to-math-spec/SKILL.md",
+      "snoozed_at": "2026-10-17"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-16",
+      "reason": "用户暂不关注",
+      "skill_id": "findscripter/everything-skills:01-documents/openapi-doc-generator/SKILL.md",
+      "snoozed_at": "2026-10-17"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-16",
+      "reason": "用户暂不关注",
+      "skill_id": "findscripter/everything-skills:01-documents/professional-proofreader/SKILL.md",
+      "snoozed_at": "2026-10-17"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-16",
+      "reason": "用户暂不关注",
+      "skill_id": "findscripter/everything-skills:02-engineering/discord-bot-architect/SKILL.md",
+      "snoozed_at": "2026-10-17"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-16",
+      "reason": "用户暂不关注",
+      "skill_id": "findscripter/everything-skills:02-engineering/dwarf-debug-format-expert/SKILL.md",
+      "snoozed_at": "2026-10-17"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-16",
+      "reason": "用户暂不关注",
+      "skill_id": "findscripter/everything-skills:02-engineering/fp-ts-pragmatic-guide/SKILL.md",
+      "snoozed_at": "2026-10-17"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-16",
+      "reason": "用户暂不关注",
+      "skill_id": "findscripter/everything-skills:02-engineering/git-hooks-automation/SKILL.md",
+      "snoozed_at": "2026-10-17"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-16",
+      "reason": "用户暂不关注",
+      "skill_id": "findscripter/everything-skills:02-engineering/lambdatest-cross-framework-testing/SKILL.md",
+      "snoozed_at": "2026-10-17"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-16",
+      "reason": "用户暂不关注",
+      "skill_id": "findscripter/everything-skills:02-engineering/nestjs-expert/SKILL.md",
+      "snoozed_at": "2026-10-17"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-16",
+      "reason": "用户暂不关注",
+      "skill_id": "haoruilee/awesome-agent-native-services:.skills/add-to-awesome-list/SKILL.md",
+      "snoozed_at": "2026-10-17"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-16",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/big-purchase-decision/SKILL.md",
+      "snoozed_at": "2026-10-17"
     }
   ]
 }

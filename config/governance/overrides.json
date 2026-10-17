@@ -8307,6 +8307,11 @@
       "skill_id": "anjon771/open-degine:skills/export-download-debugging/SKILL.md",
       "reason": "用户屏蔽/删除（PC 电脑桌面端应用开发）",
       "added_at": "2026-10-17"
+    },
+    {
+      "added_at": "2026-10-17",
+      "reason": "用户屏蔽/删除",
+      "skill_id": "findscripter/everything-skills:02-engineering/adversarial-code-reviewer/SKILL.md"
     }
   ],
   "blocked_topics": [
