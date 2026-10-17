@@ -4,8 +4,8 @@
   "generated_at": "2026-10-09T21:10:54.373701+08:00",
   "counts": {
     "recommended": 517,
-    "candidate": 1105,
-    "manual": 111,
+    "candidate": 1062,
+    "manual": 154,
     "excluded": 1915
   },
   "entries": [
@@ -34615,7 +34615,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/product-analytics/SKILL.md|sha256:e6924b0dd304bdf0a5bdece409e4a4dd|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-30T08:35:47.232847+08:00"
+      "evaluated_at": "2026-09-30T08:35:47.232847+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-17",
+        "expires_at": "2027-03-16",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/product-demo-director/SKILL.md",
@@ -35489,8 +35494,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-17",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -42757,8 +42767,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-17",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -43493,8 +43508,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-17",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -44102,8 +44122,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-17",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -45160,8 +45185,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-17",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -45419,8 +45449,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-17",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -45767,8 +45802,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-17",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -46849,8 +46889,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-17",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -47130,8 +47175,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-17",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -47710,7 +47760,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/tax-optimization/SKILL.md|sha256:dc475256533b36102659b24c731df185|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-02T07:10:05.901688+08:00"
+      "evaluated_at": "2026-10-02T07:10:05.901688+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-17",
+        "expires_at": "2027-03-16",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/tech-debt-prioritizer/SKILL.md",
@@ -50461,7 +50516,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/weekly-review/SKILL.md|sha256:b1e142b8bda12a05c99343cdcd53d553|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-02T07:46:22.624247+08:00"
+      "evaluated_at": "2026-10-02T07:46:22.624247+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-17",
+        "expires_at": "2027-03-16",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "skillmedev/skills:skills/white-space-analysis/SKILL.md",
@@ -51113,7 +51173,12 @@
         ]
       },
       "last_evaluation_id": "skillmedev/skills:skills/zone-2-cardio-plan/SKILL.md|sha256:9c3eead5fb9c430d300ac35768e2ae80|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-02T07:50:48.299954+08:00"
+      "evaluated_at": "2026-10-02T07:50:48.299954+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-17",
+        "expires_at": "2027-03-16",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "sdcxb/codem:src/core/skills/code-review/SKILL.md",
@@ -51201,7 +51266,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "sdcxb/codem:src/core/skills/code-review/SKILL.md|sha256:042343d6b4e1bded66f366ae91df605c|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-08T09:36:37.125567+08:00"
+      "evaluated_at": "2026-10-08T09:36:37.125567+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-17",
+        "expires_at": "2027-03-16",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "sdcxb/codem:src/core/skills/archify/SKILL.md",
@@ -51440,8 +51510,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-17",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -51814,8 +51889,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-17",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -52936,8 +53016,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-17",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -53221,8 +53306,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-17",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -54516,8 +54606,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-17",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -54801,8 +54896,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-17",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -55170,8 +55270,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-17",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -55353,8 +55458,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-17",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -55580,7 +55690,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "fslong520/aiskill:析题/SKILL.md|sha256:3936454f58b07ed57641d7d1e7fcd4c9|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-08T09:40:16.382509+08:00"
+      "evaluated_at": "2026-10-08T09:40:16.382509+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-17",
+        "expires_at": "2027-03-16",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "fslong520/aiskill:格知/SKILL.md",
@@ -55671,7 +55786,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "fslong520/aiskill:格知/SKILL.md|sha256:5738f5fae8570b2f47d8a7cc3198de6e|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-08T09:40:30.097341+08:00"
+      "evaluated_at": "2026-10-08T09:40:30.097341+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-17",
+        "expires_at": "2027-03-16",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "fslong520/aiskill:格语/SKILL.md",
@@ -55762,7 +55882,12 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "fslong520/aiskill:格语/SKILL.md|sha256:2974ba42efe66d237cde01999519642e|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-08T09:40:34.369930+08:00"
+      "evaluated_at": "2026-10-08T09:40:34.369930+08:00",
+      "snooze": {
+        "snoozed_at": "2026-10-18",
+        "expires_at": "2027-03-17",
+        "reason": "用户暂不关注"
+      }
     },
     {
       "skill_id": "fslong520/aiskill:漫语/SKILL.md",
@@ -56005,8 +56130,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-17",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -56095,8 +56225,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-17",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -56186,8 +56321,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-17",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -56644,8 +56784,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-17",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -57002,8 +57147,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-17",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -57184,8 +57334,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-17",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -57273,8 +57428,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-17",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -57364,8 +57524,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-17",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -57453,8 +57618,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-17",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -57547,8 +57717,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-17",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -57728,8 +57903,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-17",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -57915,8 +58095,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-17",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -58002,8 +58187,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-17",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -58091,8 +58281,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-17",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -58181,8 +58376,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-17",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -58270,8 +58470,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-17",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -58360,8 +58565,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-17",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -58451,8 +58661,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-17",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -58540,8 +58755,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-17",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -58629,8 +58849,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-17",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -58716,8 +58941,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-17",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -58809,8 +59039,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-17",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -59726,8 +59961,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-18",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -60233,8 +60473,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-18",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -89976,8 +90221,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-17",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -92038,8 +92288,13 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": false,
-      "manual_note": null,
+      "manual_pick": true,
+      "manual_note": {
+        "added_at": "2026-10-17",
+        "reason": "用户收藏",
+        "from": "candidate",
+        "auto_status": "candidate"
+      },
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -323293,6 +323548,264 @@
         "from": "candidate",
         "reason": "用户收藏",
         "skill_id": "tradermonty/claude-trading-skills:skills/market-news-analyst/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-18",
+        "from": "candidate",
+        "reason": "用户收藏",
+        "skill_id": "cat-xierluo/legal-skills:skills/de-ai-polish/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-18",
+        "from": "candidate",
+        "reason": "用户收藏",
+        "skill_id": "cat-xierluo/legal-skills:skills/git-batch-commit/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-17",
+        "from": "candidate",
+        "reason": "用户收藏",
+        "skill_id": "fslong520/aiskill:cron/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-17",
+        "from": "candidate",
+        "reason": "用户收藏",
+        "skill_id": "fslong520/aiskill:ian-xiaohei-illustrations/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-17",
+        "from": "candidate",
+        "reason": "用户收藏",
+        "skill_id": "fslong520/aiskill:公众号写手/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-17",
+        "from": "candidate",
+        "reason": "用户收藏",
+        "skill_id": "fslong520/aiskill:图片姬/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-17",
+        "from": "candidate",
+        "reason": "用户收藏",
+        "skill_id": "fslong520/aiskill:技能诊所/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-17",
+        "from": "candidate",
+        "reason": "用户收藏",
+        "skill_id": "fslong520/aiskill:撸树人/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-17",
+        "from": "candidate",
+        "reason": "用户收藏",
+        "skill_id": "fslong520/aiskill:盯盘助手/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-17",
+        "from": "candidate",
+        "reason": "用户收藏",
+        "skill_id": "fslong520/aiskill:破晓/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-17",
+        "from": "candidate",
+        "reason": "用户收藏",
+        "skill_id": "fslong520/aiskill:穷尽调试/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-17",
+        "from": "candidate",
+        "reason": "用户收藏",
+        "skill_id": "fslong520/aiskill:见自己/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-17",
+        "from": "candidate",
+        "reason": "用户收藏",
+        "skill_id": "iflytek/skillhub:builtin-skills/skills/diagram-maker/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-17",
+        "from": "candidate",
+        "reason": "用户收藏",
+        "skill_id": "othmanadi/planning-with-files:.factory/skills/planning-with-files/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-17",
+        "from": "candidate",
+        "reason": "用户收藏",
+        "skill_id": "sdcxb/codem:src/core/skills/find-simplifications/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-17",
+        "from": "candidate",
+        "reason": "用户收藏",
+        "skill_id": "sdcxb/codem:src/core/skills/prompt-optimization/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-17",
+        "from": "candidate",
+        "reason": "用户收藏",
+        "skill_id": "skillmedev/skills:skills/budget-builder/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-17",
+        "from": "candidate",
+        "reason": "用户收藏",
+        "skill_id": "skillmedev/skills:skills/database-schema/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-17",
+        "from": "candidate",
+        "reason": "用户收藏",
+        "skill_id": "skillmedev/skills:skills/investment-basics/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-17",
+        "from": "candidate",
+        "reason": "用户收藏",
+        "skill_id": "skillmedev/skills:skills/life-coach/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-17",
+        "from": "candidate",
+        "reason": "用户收藏",
+        "skill_id": "skillmedev/skills:skills/longevity-protocol/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-17",
+        "from": "candidate",
+        "reason": "用户收藏",
+        "skill_id": "skillmedev/skills:skills/public-data-api-picker/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-17",
+        "from": "candidate",
+        "reason": "用户收藏",
+        "skill_id": "skillmedev/skills:skills/sql-query-optimizer/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-17",
+        "from": "candidate",
+        "reason": "用户收藏",
+        "skill_id": "skillmedev/skills:skills/strength-training-plan/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-17",
+        "from": "candidate",
+        "reason": "用户收藏",
+        "skill_id": "skillmedev/skills:skills/supabase-expert/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-17",
+        "from": "candidate",
+        "reason": "用户收藏",
+        "skill_id": "weaxs/stock-analysis-plugin:skills/bottom-volume/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-17",
+        "from": "candidate",
+        "reason": "用户收藏",
+        "skill_id": "weaxs/stock-analysis-plugin:skills/box-oscillation/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-17",
+        "from": "candidate",
+        "reason": "用户收藏",
+        "skill_id": "weaxs/stock-analysis-plugin:skills/bull-trend/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-17",
+        "from": "candidate",
+        "reason": "用户收藏",
+        "skill_id": "weaxs/stock-analysis-plugin:skills/chan-theory/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-17",
+        "from": "candidate",
+        "reason": "用户收藏",
+        "skill_id": "weaxs/stock-analysis-plugin:skills/dragon-head/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-17",
+        "from": "candidate",
+        "reason": "用户收藏",
+        "skill_id": "weaxs/stock-analysis-plugin:skills/emotion-cycle/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-17",
+        "from": "candidate",
+        "reason": "用户收藏",
+        "skill_id": "weaxs/stock-analysis-plugin:skills/expectation-repricing/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-17",
+        "from": "candidate",
+        "reason": "用户收藏",
+        "skill_id": "weaxs/stock-analysis-plugin:skills/hot-theme/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-17",
+        "from": "candidate",
+        "reason": "用户收藏",
+        "skill_id": "weaxs/stock-analysis-plugin:skills/ma-crossover/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-17",
+        "from": "candidate",
+        "reason": "用户收藏",
+        "skill_id": "weaxs/stock-analysis-plugin:skills/market-review/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-17",
+        "from": "candidate",
+        "reason": "用户收藏",
+        "skill_id": "weaxs/stock-analysis-plugin:skills/one-yang-three-yin/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-17",
+        "from": "candidate",
+        "reason": "用户收藏",
+        "skill_id": "weaxs/stock-analysis-plugin:skills/shrink-pullback/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-17",
+        "from": "candidate",
+        "reason": "用户收藏",
+        "skill_id": "weaxs/stock-analysis-plugin:skills/stock-analysis/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-17",
+        "from": "candidate",
+        "reason": "用户收藏",
+        "skill_id": "weaxs/stock-analysis-plugin:skills/stock-screener/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-17",
+        "from": "candidate",
+        "reason": "用户收藏",
+        "skill_id": "weaxs/stock-analysis-plugin:skills/strategy-backtest/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-17",
+        "from": "candidate",
+        "reason": "用户收藏",
+        "skill_id": "weaxs/stock-analysis-plugin:skills/volume-breakout/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-17",
+        "from": "candidate",
+        "reason": "用户收藏",
+        "skill_id": "weaxs/stock-analysis-plugin:skills/wave-theory/SKILL.md"
+      },
+      {
+        "added_at": "2026-10-17",
+        "from": "candidate",
+        "reason": "用户收藏",
+        "skill_id": "weaxs/stock-analysis-plugin:skills/wisburg-research/SKILL.md"
       }
     ]
   },
@@ -336646,6 +337159,62 @@
         "expires_at": "2027-03-16",
         "reason": "用户暂不关注",
         "skill_id": "skillmedev/skills:skills/big-purchase-decision/SKILL.md",
+        "snoozed_at": "2026-10-17"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-16",
+        "reason": "用户暂不关注",
+        "skill_id": "fslong520/aiskill:析题/SKILL.md",
+        "snoozed_at": "2026-10-17"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-16",
+        "reason": "用户暂不关注",
+        "skill_id": "fslong520/aiskill:格知/SKILL.md",
+        "snoozed_at": "2026-10-17"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-17",
+        "reason": "用户暂不关注",
+        "skill_id": "fslong520/aiskill:格语/SKILL.md",
+        "snoozed_at": "2026-10-18"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-16",
+        "reason": "用户暂不关注",
+        "skill_id": "sdcxb/codem:src/core/skills/code-review/SKILL.md",
+        "snoozed_at": "2026-10-17"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-16",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/product-analytics/SKILL.md",
+        "snoozed_at": "2026-10-17"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-16",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/tax-optimization/SKILL.md",
+        "snoozed_at": "2026-10-17"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-16",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/weekly-review/SKILL.md",
+        "snoozed_at": "2026-10-17"
+      },
+      {
+        "days": 150,
+        "expires_at": "2027-03-16",
+        "reason": "用户暂不关注",
+        "skill_id": "skillmedev/skills:skills/zone-2-cardio-plan/SKILL.md",
         "snoozed_at": "2026-10-17"
       }
     ]

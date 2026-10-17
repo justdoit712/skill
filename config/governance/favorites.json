@@ -740,6 +740,264 @@
       "from": "candidate",
       "reason": "用户收藏",
       "skill_id": "tradermonty/claude-trading-skills:skills/market-news-analyst/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-18",
+      "from": "candidate",
+      "reason": "用户收藏",
+      "skill_id": "cat-xierluo/legal-skills:skills/de-ai-polish/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-18",
+      "from": "candidate",
+      "reason": "用户收藏",
+      "skill_id": "cat-xierluo/legal-skills:skills/git-batch-commit/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-17",
+      "from": "candidate",
+      "reason": "用户收藏",
+      "skill_id": "fslong520/aiskill:cron/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-17",
+      "from": "candidate",
+      "reason": "用户收藏",
+      "skill_id": "fslong520/aiskill:ian-xiaohei-illustrations/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-17",
+      "from": "candidate",
+      "reason": "用户收藏",
+      "skill_id": "fslong520/aiskill:公众号写手/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-17",
+      "from": "candidate",
+      "reason": "用户收藏",
+      "skill_id": "fslong520/aiskill:图片姬/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-17",
+      "from": "candidate",
+      "reason": "用户收藏",
+      "skill_id": "fslong520/aiskill:技能诊所/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-17",
+      "from": "candidate",
+      "reason": "用户收藏",
+      "skill_id": "fslong520/aiskill:撸树人/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-17",
+      "from": "candidate",
+      "reason": "用户收藏",
+      "skill_id": "fslong520/aiskill:盯盘助手/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-17",
+      "from": "candidate",
+      "reason": "用户收藏",
+      "skill_id": "fslong520/aiskill:破晓/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-17",
+      "from": "candidate",
+      "reason": "用户收藏",
+      "skill_id": "fslong520/aiskill:穷尽调试/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-17",
+      "from": "candidate",
+      "reason": "用户收藏",
+      "skill_id": "fslong520/aiskill:见自己/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-17",
+      "from": "candidate",
+      "reason": "用户收藏",
+      "skill_id": "iflytek/skillhub:builtin-skills/skills/diagram-maker/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-17",
+      "from": "candidate",
+      "reason": "用户收藏",
+      "skill_id": "othmanadi/planning-with-files:.factory/skills/planning-with-files/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-17",
+      "from": "candidate",
+      "reason": "用户收藏",
+      "skill_id": "sdcxb/codem:src/core/skills/find-simplifications/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-17",
+      "from": "candidate",
+      "reason": "用户收藏",
+      "skill_id": "sdcxb/codem:src/core/skills/prompt-optimization/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-17",
+      "from": "candidate",
+      "reason": "用户收藏",
+      "skill_id": "skillmedev/skills:skills/budget-builder/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-17",
+      "from": "candidate",
+      "reason": "用户收藏",
+      "skill_id": "skillmedev/skills:skills/database-schema/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-17",
+      "from": "candidate",
+      "reason": "用户收藏",
+      "skill_id": "skillmedev/skills:skills/investment-basics/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-17",
+      "from": "candidate",
+      "reason": "用户收藏",
+      "skill_id": "skillmedev/skills:skills/life-coach/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-17",
+      "from": "candidate",
+      "reason": "用户收藏",
+      "skill_id": "skillmedev/skills:skills/longevity-protocol/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-17",
+      "from": "candidate",
+      "reason": "用户收藏",
+      "skill_id": "skillmedev/skills:skills/public-data-api-picker/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-17",
+      "from": "candidate",
+      "reason": "用户收藏",
+      "skill_id": "skillmedev/skills:skills/sql-query-optimizer/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-17",
+      "from": "candidate",
+      "reason": "用户收藏",
+      "skill_id": "skillmedev/skills:skills/strength-training-plan/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-17",
+      "from": "candidate",
+      "reason": "用户收藏",
+      "skill_id": "skillmedev/skills:skills/supabase-expert/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-17",
+      "from": "candidate",
+      "reason": "用户收藏",
+      "skill_id": "weaxs/stock-analysis-plugin:skills/bottom-volume/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-17",
+      "from": "candidate",
+      "reason": "用户收藏",
+      "skill_id": "weaxs/stock-analysis-plugin:skills/box-oscillation/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-17",
+      "from": "candidate",
+      "reason": "用户收藏",
+      "skill_id": "weaxs/stock-analysis-plugin:skills/bull-trend/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-17",
+      "from": "candidate",
+      "reason": "用户收藏",
+      "skill_id": "weaxs/stock-analysis-plugin:skills/chan-theory/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-17",
+      "from": "candidate",
+      "reason": "用户收藏",
+      "skill_id": "weaxs/stock-analysis-plugin:skills/dragon-head/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-17",
+      "from": "candidate",
+      "reason": "用户收藏",
+      "skill_id": "weaxs/stock-analysis-plugin:skills/emotion-cycle/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-17",
+      "from": "candidate",
+      "reason": "用户收藏",
+      "skill_id": "weaxs/stock-analysis-plugin:skills/expectation-repricing/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-17",
+      "from": "candidate",
+      "reason": "用户收藏",
+      "skill_id": "weaxs/stock-analysis-plugin:skills/hot-theme/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-17",
+      "from": "candidate",
+      "reason": "用户收藏",
+      "skill_id": "weaxs/stock-analysis-plugin:skills/ma-crossover/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-17",
+      "from": "candidate",
+      "reason": "用户收藏",
+      "skill_id": "weaxs/stock-analysis-plugin:skills/market-review/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-17",
+      "from": "candidate",
+      "reason": "用户收藏",
+      "skill_id": "weaxs/stock-analysis-plugin:skills/one-yang-three-yin/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-17",
+      "from": "candidate",
+      "reason": "用户收藏",
+      "skill_id": "weaxs/stock-analysis-plugin:skills/shrink-pullback/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-17",
+      "from": "candidate",
+      "reason": "用户收藏",
+      "skill_id": "weaxs/stock-analysis-plugin:skills/stock-analysis/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-17",
+      "from": "candidate",
+      "reason": "用户收藏",
+      "skill_id": "weaxs/stock-analysis-plugin:skills/stock-screener/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-17",
+      "from": "candidate",
+      "reason": "用户收藏",
+      "skill_id": "weaxs/stock-analysis-plugin:skills/strategy-backtest/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-17",
+      "from": "candidate",
+      "reason": "用户收藏",
+      "skill_id": "weaxs/stock-analysis-plugin:skills/volume-breakout/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-17",
+      "from": "candidate",
+      "reason": "用户收藏",
+      "skill_id": "weaxs/stock-analysis-plugin:skills/wave-theory/SKILL.md"
+    },
+    {
+      "added_at": "2026-10-17",
+      "from": "candidate",
+      "reason": "用户收藏",
+      "skill_id": "weaxs/stock-analysis-plugin:skills/wisburg-research/SKILL.md"
     }
   ]
 }

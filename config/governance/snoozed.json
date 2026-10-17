@@ -2033,6 +2033,62 @@
       "reason": "用户暂不关注",
       "skill_id": "skillmedev/skills:skills/big-purchase-decision/SKILL.md",
       "snoozed_at": "2026-10-17"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-16",
+      "reason": "用户暂不关注",
+      "skill_id": "fslong520/aiskill:析题/SKILL.md",
+      "snoozed_at": "2026-10-17"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-16",
+      "reason": "用户暂不关注",
+      "skill_id": "fslong520/aiskill:格知/SKILL.md",
+      "snoozed_at": "2026-10-17"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-17",
+      "reason": "用户暂不关注",
+      "skill_id": "fslong520/aiskill:格语/SKILL.md",
+      "snoozed_at": "2026-10-18"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-16",
+      "reason": "用户暂不关注",
+      "skill_id": "sdcxb/codem:src/core/skills/code-review/SKILL.md",
+      "snoozed_at": "2026-10-17"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-16",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/product-analytics/SKILL.md",
+      "snoozed_at": "2026-10-17"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-16",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/tax-optimization/SKILL.md",
+      "snoozed_at": "2026-10-17"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-16",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/weekly-review/SKILL.md",
+      "snoozed_at": "2026-10-17"
+    },
+    {
+      "days": 150,
+      "expires_at": "2027-03-16",
+      "reason": "用户暂不关注",
+      "skill_id": "skillmedev/skills:skills/zone-2-cardio-plan/SKILL.md",
+      "snoozed_at": "2026-10-17"
     }
   ]
 }
