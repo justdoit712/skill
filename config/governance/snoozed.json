@@ -572,13 +572,6 @@
       "reason": "用户暂不关注"
     },
     {
-      "skill_id": "skillmedev/skills:skills/1on1-agenda/SKILL.md",
-      "snoozed_at": "2026-09-29",
-      "expires_at": "2027-02-26",
-      "days": 150,
-      "reason": "用户暂不关注"
-    },
-    {
       "days": 150,
       "expires_at": "2027-02-26",
       "reason": "用户暂不关注",
@@ -919,13 +912,6 @@
       "expires_at": "2027-03-01",
       "reason": "用户暂不关注",
       "skill_id": "skillmedev/skills:skills/localization-guide/SKILL.md",
-      "snoozed_at": "2026-10-02"
-    },
-    {
-      "days": 150,
-      "expires_at": "2027-03-01",
-      "reason": "用户暂不关注",
-      "skill_id": "skillmedev/skills:skills/meeting-notes-to-actions/SKILL.md",
       "snoozed_at": "2026-10-02"
     },
     {
@@ -1310,13 +1296,6 @@
       "days": 150,
       "expires_at": "2027-03-06",
       "reason": "用户暂不关注",
-      "skill_id": "skillmedev/skills:skills/sprint-planning/SKILL.md",
-      "snoozed_at": "2026-10-07"
-    },
-    {
-      "days": 150,
-      "expires_at": "2027-03-06",
-      "reason": "用户暂不关注",
       "skill_id": "skillmedev/skills:skills/sev-triage/SKILL.md",
       "snoozed_at": "2026-10-07"
     },
@@ -1570,13 +1549,6 @@
       "expires_at": "2027-03-13",
       "reason": "用户暂不关注",
       "skill_id": "iflytek/skillhub:.agents/skills/api-and-namespace-design/SKILL.md",
-      "snoozed_at": "2026-10-14"
-    },
-    {
-      "days": 150,
-      "expires_at": "2027-03-13",
-      "reason": "用户暂不关注",
-      "skill_id": "iflytek/skillhub:builtin-skills/skills/daily-standup-journal/SKILL.md",
       "snoozed_at": "2026-10-14"
     },
     {

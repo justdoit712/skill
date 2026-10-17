@@ -8487,6 +8487,36 @@
       "skill_id": "findscripter/everything-skills:05-business/international-expansion-strategy/SKILL.md",
       "reason": "用户屏蔽/删除（产品战略与市场机会分析）",
       "added_at": "2026-10-17"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/sprint-retro-facilitator/SKILL.md",
+      "reason": "用户屏蔽/删除（会议主持引导、议程规范与敏捷复盘仪式）",
+      "added_at": "2026-10-17"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/sprint-planning/SKILL.md",
+      "reason": "用户屏蔽/删除（会议主持引导、议程规范与敏捷复盘仪式）",
+      "added_at": "2026-10-17"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/1on1-agenda/SKILL.md",
+      "reason": "用户屏蔽/删除（会议主持引导、议程规范与敏捷复盘仪式）",
+      "added_at": "2026-10-17"
+    },
+    {
+      "skill_id": "iflytek/skillhub:builtin-skills/skills/daily-standup-journal/SKILL.md",
+      "reason": "用户屏蔽/删除（会议主持引导、议程规范与敏捷复盘仪式）",
+      "added_at": "2026-10-17"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:07-productivity/office-hours-facilitator/SKILL.md",
+      "reason": "用户屏蔽/删除（会议主持引导、议程规范与敏捷复盘仪式）",
+      "added_at": "2026-10-17"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/meeting-notes-to-actions/SKILL.md",
+      "reason": "用户屏蔽/删除（会议主持引导、议程规范与敏捷复盘仪式）",
+      "added_at": "2026-10-17"
     }
   ],
   "blocked_topics": [
@@ -10957,6 +10987,71 @@
           "RAG",
           "API 集成",
           "消息通信"
+        ]
+      }
+    },
+    {
+      "name": "会议主持引导、议程规范与敏捷复盘仪式（Meeting Facilitation & Agile Ceremonies）",
+      "description": "主要用于常规办公、团队行政与研发团队日常会议的主持引导（Meeting Facilitation）、议程时间盒设计（Meeting Agenda & Timeboxing）、敏捷研发仪式流程（Sprint Retro 迭代复盘、Daily Standup 每日站会、Sprint Planning 规划会议、经理与员工 1:1 双向反馈议程）、会议发言与引导规则（反指责原则 Blameless Rules、静默头脑风暴、破冰与投票），以及常规行政会议纪要整理与行动项落地跟进模版。明确排除并保留：线上生产事故事后故障分析与根因复盘（如 SRE Postmortem、事故报告、故障应急响应）、技术方案与架构设计的需求与设计评审（如 RFC 技术方案评审、PRD 规范）、代码工程领域的代码审查（如 Git PR / Code Review 审查与自动化合并），以及视频会议软件底层的开发者 API/SDK 集成与音视频会议机器人开发（如 Zoom SDK、Meeting Bot Builder、WebRTC 流媒体开发）。",
+      "keywords": [
+        "会议主持",
+        "会议议程",
+        "时间盒",
+        "敏捷复盘",
+        "Sprint回顾",
+        "Sprint复盘",
+        "Sprint规划",
+        "每日站会",
+        "站会",
+        "1on1",
+        "1:1",
+        "双向反馈",
+        "头脑风暴",
+        "行动项",
+        "meeting-facilitator",
+        "meeting-agenda",
+        "sprint-retro",
+        "sprint-planning",
+        "daily-standup"
+      ],
+      "local_match": {
+        "names": [
+          "sprint-retro-facilitator",
+          "sprint-planning",
+          "1on1-agenda",
+          "meeting-agenda",
+          "daily-standup-journal",
+          "office-hours-facilitator",
+          "meeting-notes-to-actions",
+          "meeting-note-summarizer"
+        ],
+        "purpose_phrases": [
+          "Sprint回顾主持",
+          "Sprint复盘",
+          "Sprint规划",
+          "1:1 提供滚动共享议程",
+          "每日站会",
+          "时间盒议程",
+          "会议记录转换为",
+          "反指责规则",
+          "行动项跟踪",
+          "结构化的Sprint回顾"
+        ],
+        "preserve_phrases": [
+          "Postmortem",
+          "事故事后分析",
+          "故障复盘",
+          "SRE",
+          "RFC",
+          "PRD",
+          "Code Review",
+          "代码审查",
+          "Zoom",
+          "WebRTC",
+          "Meeting SDK",
+          "Meeting Bot",
+          "API",
+          "SDK"
         ]
       }
     }

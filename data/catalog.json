@@ -3,10 +3,10 @@
   "rules_version": "1.3.0",
   "generated_at": "2026-10-09T21:10:54.373701+08:00",
   "counts": {
-    "recommended": 524,
-    "candidate": 1118,
+    "recommended": 520,
+    "candidate": 1116,
     "manual": 111,
-    "excluded": 1895
+    "excluded": 1901
   },
   "entries": [
     {
@@ -11544,8 +11544,10 @@
       "dependencies_declared": [],
       "limitations": "未说明具体文档工具或协作平台；主要面向经理-下属 1:1，不适用于一般会议议程、正式绩效评审或单条反馈撰写。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-29T11:35:31.601588+08:00",
       "content_changed_at": null,
@@ -11596,12 +11598,7 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/1on1-agenda/SKILL.md|sha256:52fbc02876c27c4c7a23e728c0b3c2c7|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-29T11:35:31.600177+08:00",
-      "snooze": {
-        "snoozed_at": "2026-09-29",
-        "expires_at": "2027-02-26",
-        "reason": "用户暂不关注"
-      }
+      "evaluated_at": "2026-09-29T11:35:31.600177+08:00"
     },
     {
       "skill_id": "thousandcents/futures-research:SKILL.md",
@@ -30368,8 +30365,10 @@
       "dependencies_declared": [],
       "limitations": "相对日期（如'周五'）仅在已知会议日期时才能换算为具体日期；笔记过于简略时仅返回可提取内容；不适用于会前议程准备或工程工单生成（材料指明需用其他技能）；未声明平台与依赖。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-09-29T18:54:24.726915+08:00",
       "content_changed_at": null,
@@ -30420,12 +30419,7 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/meeting-notes-to-actions/SKILL.md|sha256:268b5fe3b580df853e969481590f16a5|1.3.0|1.0.0",
-      "evaluated_at": "2026-09-29T18:54:24.724908+08:00",
-      "snooze": {
-        "snoozed_at": "2026-10-02",
-        "expires_at": "2027-03-01",
-        "reason": "用户暂不关注"
-      }
+      "evaluated_at": "2026-09-29T18:54:24.724908+08:00"
     },
     {
       "skill_id": "skillmedev/skills:skills/messaging-hierarchy/SKILL.md",
@@ -42576,8 +42570,10 @@
       "dependencies_declared": [],
       "limitations": "纯方法论指导，无自动化执行；未集成具体项目管理工具；效果依赖团队执行。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-10-02T13:29:47.213685+08:00",
       "content_changed_at": null,
@@ -42628,12 +42624,7 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/sprint-planning/SKILL.md|sha256:fe1c39a5ffc861e5c9ecfc400f95f96c|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-02T13:29:47.170940+08:00",
-      "snooze": {
-        "snoozed_at": "2026-10-07",
-        "expires_at": "2027-03-06",
-        "reason": "用户暂不关注"
-      }
+      "evaluated_at": "2026-10-02T13:29:47.170940+08:00"
     },
     {
       "skill_id": "skillmedev/skills:skills/sprint-retro-facilitator/SKILL.md",
@@ -42666,9 +42657,10 @@
       "dependencies_declared": [],
       "limitations": "不适用于事故事后分析（应使用postmortem-writer），不适用于慢性团队功能障碍（使用team-health-check），最多3个行动项，需严格控制时间盒。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-10-02T13:30:19.427008+08:00",
@@ -89795,8 +89787,10 @@
       "dependencies_declared": [],
       "limitations": "仅基于当前对话上下文生成内容，不具备长期记忆或跨会话数据分析能力；不自动集成日历或任务系统。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-03T09:08:40.103443+08:00",
       "content_changed_at": null,
@@ -89847,12 +89841,7 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "iflytek/skillhub:builtin-skills/skills/daily-standup-journal/SKILL.md|sha256:d48abadb5a7f0070749e7470ef8380a5|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-03T09:08:40.091573+08:00",
-      "snooze": {
-        "snoozed_at": "2026-10-14",
-        "expires_at": "2027-03-13",
-        "reason": "用户暂不关注"
-      }
+      "evaluated_at": "2026-10-03T09:08:40.091573+08:00"
     },
     {
       "skill_id": "iflytek/skillhub:builtin-skills/skills/decision-matrix/SKILL.md",
@@ -173785,9 +173774,10 @@
       ],
       "limitations": "不适用于答案明确的小问题或纯执行类任务",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-09T17:16:06.381736+08:00",
@@ -331783,6 +331773,36 @@
         "skill_id": "findscripter/everything-skills:05-business/international-expansion-strategy/SKILL.md",
         "reason": "用户屏蔽/删除（产品战略与市场机会分析）",
         "added_at": "2026-10-17"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/sprint-retro-facilitator/SKILL.md",
+        "reason": "用户屏蔽/删除（会议主持引导、议程规范与敏捷复盘仪式）",
+        "added_at": "2026-10-17"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/sprint-planning/SKILL.md",
+        "reason": "用户屏蔽/删除（会议主持引导、议程规范与敏捷复盘仪式）",
+        "added_at": "2026-10-17"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/1on1-agenda/SKILL.md",
+        "reason": "用户屏蔽/删除（会议主持引导、议程规范与敏捷复盘仪式）",
+        "added_at": "2026-10-17"
+      },
+      {
+        "skill_id": "iflytek/skillhub:builtin-skills/skills/daily-standup-journal/SKILL.md",
+        "reason": "用户屏蔽/删除（会议主持引导、议程规范与敏捷复盘仪式）",
+        "added_at": "2026-10-17"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:07-productivity/office-hours-facilitator/SKILL.md",
+        "reason": "用户屏蔽/删除（会议主持引导、议程规范与敏捷复盘仪式）",
+        "added_at": "2026-10-17"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/meeting-notes-to-actions/SKILL.md",
+        "reason": "用户屏蔽/删除（会议主持引导、议程规范与敏捷复盘仪式）",
+        "added_at": "2026-10-17"
       }
     ],
     "blocked_topics": [
@@ -334255,6 +334275,71 @@
             "消息通信"
           ]
         }
+      },
+      {
+        "name": "会议主持引导、议程规范与敏捷复盘仪式（Meeting Facilitation & Agile Ceremonies）",
+        "description": "主要用于常规办公、团队行政与研发团队日常会议的主持引导（Meeting Facilitation）、议程时间盒设计（Meeting Agenda & Timeboxing）、敏捷研发仪式流程（Sprint Retro 迭代复盘、Daily Standup 每日站会、Sprint Planning 规划会议、经理与员工 1:1 双向反馈议程）、会议发言与引导规则（反指责原则 Blameless Rules、静默头脑风暴、破冰与投票），以及常规行政会议纪要整理与行动项落地跟进模版。明确排除并保留：线上生产事故事后故障分析与根因复盘（如 SRE Postmortem、事故报告、故障应急响应）、技术方案与架构设计的需求与设计评审（如 RFC 技术方案评审、PRD 规范）、代码工程领域的代码审查（如 Git PR / Code Review 审查与自动化合并），以及视频会议软件底层的开发者 API/SDK 集成与音视频会议机器人开发（如 Zoom SDK、Meeting Bot Builder、WebRTC 流媒体开发）。",
+        "keywords": [
+          "会议主持",
+          "会议议程",
+          "时间盒",
+          "敏捷复盘",
+          "Sprint回顾",
+          "Sprint复盘",
+          "Sprint规划",
+          "每日站会",
+          "站会",
+          "1on1",
+          "1:1",
+          "双向反馈",
+          "头脑风暴",
+          "行动项",
+          "meeting-facilitator",
+          "meeting-agenda",
+          "sprint-retro",
+          "sprint-planning",
+          "daily-standup"
+        ],
+        "local_match": {
+          "names": [
+            "sprint-retro-facilitator",
+            "sprint-planning",
+            "1on1-agenda",
+            "meeting-agenda",
+            "daily-standup-journal",
+            "office-hours-facilitator",
+            "meeting-notes-to-actions",
+            "meeting-note-summarizer"
+          ],
+          "purpose_phrases": [
+            "Sprint回顾主持",
+            "Sprint复盘",
+            "Sprint规划",
+            "1:1 提供滚动共享议程",
+            "每日站会",
+            "时间盒议程",
+            "会议记录转换为",
+            "反指责规则",
+            "行动项跟踪",
+            "结构化的Sprint回顾"
+          ],
+          "preserve_phrases": [
+            "Postmortem",
+            "事故事后分析",
+            "故障复盘",
+            "SRE",
+            "RFC",
+            "PRD",
+            "Code Review",
+            "代码审查",
+            "Zoom",
+            "WebRTC",
+            "Meeting SDK",
+            "Meeting Bot",
+            "API",
+            "SDK"
+          ]
+        }
       }
     ]
   },
@@ -334832,13 +334917,6 @@
         "reason": "用户暂不关注"
       },
       {
-        "skill_id": "skillmedev/skills:skills/1on1-agenda/SKILL.md",
-        "snoozed_at": "2026-09-29",
-        "expires_at": "2027-02-26",
-        "days": 150,
-        "reason": "用户暂不关注"
-      },
-      {
         "days": 150,
         "expires_at": "2027-02-26",
         "reason": "用户暂不关注",
@@ -335179,13 +335257,6 @@
         "expires_at": "2027-03-01",
         "reason": "用户暂不关注",
         "skill_id": "skillmedev/skills:skills/localization-guide/SKILL.md",
-        "snoozed_at": "2026-10-02"
-      },
-      {
-        "days": 150,
-        "expires_at": "2027-03-01",
-        "reason": "用户暂不关注",
-        "skill_id": "skillmedev/skills:skills/meeting-notes-to-actions/SKILL.md",
         "snoozed_at": "2026-10-02"
       },
       {
@@ -335570,13 +335641,6 @@
         "days": 150,
         "expires_at": "2027-03-06",
         "reason": "用户暂不关注",
-        "skill_id": "skillmedev/skills:skills/sprint-planning/SKILL.md",
-        "snoozed_at": "2026-10-07"
-      },
-      {
-        "days": 150,
-        "expires_at": "2027-03-06",
-        "reason": "用户暂不关注",
         "skill_id": "skillmedev/skills:skills/sev-triage/SKILL.md",
         "snoozed_at": "2026-10-07"
       },
@@ -335830,13 +335894,6 @@
         "expires_at": "2027-03-13",
         "reason": "用户暂不关注",
         "skill_id": "iflytek/skillhub:.agents/skills/api-and-namespace-design/SKILL.md",
-        "snoozed_at": "2026-10-14"
-      },
-      {
-        "days": 150,
-        "expires_at": "2027-03-13",
-        "reason": "用户暂不关注",
-        "skill_id": "iflytek/skillhub:builtin-skills/skills/daily-standup-journal/SKILL.md",
         "snoozed_at": "2026-10-14"
       },
       {
