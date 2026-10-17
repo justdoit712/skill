@@ -8367,9 +8367,67 @@
       "skill_id": "findscripter/everything-skills:09-verticals/diligence-issue-extractor/SKILL.md",
       "reason": "用户屏蔽/删除（投资者关系与创业投融资）",
       "added_at": "2026-10-17"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/media-monitor/SKILL.md",
+      "reason": "用户屏蔽/删除（企业公关与品牌舆情监测）",
+      "added_at": "2026-10-17"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/crisis-comms-external/SKILL.md",
+      "reason": "用户屏蔽/删除（企业公关与品牌舆情监测）",
+      "added_at": "2026-10-17"
     }
   ],
   "blocked_topics": [
+    {
+      "name": "企业公关与品牌舆情监测（PR & Media Monitoring）",
+      "description": "主要用于企业公关与品牌传播团队（PR & Corporate Communications）进行全网新闻与社交媒体的品牌提及监控、舆情情感分析与负面预警、每日媒体摘要简报生成，以及突发事件（如数据泄露、服务中断、客户投诉）的危机公关外部沟通响应与声明模版。明确排除并保留：金融与投资领域公开市场情绪分析（如 x-research 围绕股票/公司/市场的推特情绪研究）、多媒体音频/视频/图像文件工程处理（如 media-processor 格式转码与压缩、多媒体生成工作流），以及软件工程领域的代码审查（如 Git Pull Request / PR 审查与合并自动化工具）。",
+      "keywords": [
+        "公关",
+        "舆情",
+        "舆情监测",
+        "舆情预警",
+        "品牌监测",
+        "危机公关",
+        "媒体摘要",
+        "新闻稿",
+        "media-monitor",
+        "crisis-comms",
+        "press-release",
+        "brand-sentiment",
+        "media-monitoring"
+      ],
+      "local_match": {
+        "names": [
+          "media-monitor",
+          "crisis-comms-external",
+          "press-release-writer"
+        ],
+        "purpose_phrases": [
+          "舆情监测报告",
+          "品牌监测",
+          "负面舆情预警",
+          "危机事件外部沟通",
+          "新闻和社交媒体中的品牌提及",
+          "公关响应"
+        ],
+        "preserve_phrases": [
+          "x-research",
+          "media-processor",
+          "media-generation",
+          "pull request",
+          "pr-review",
+          "pr-improver",
+          "pr-labeling",
+          "pr-feedback",
+          "github-pr",
+          "代码审查",
+          "股票",
+          "市场事件"
+        ]
+      }
+    },
     {
       "name": "投资者关系与创业投融资（Investor Relations & Startup Fundraising）",
       "description": "主要用于初创企业与机构向投资者（VC/天使/PE/机构股东）进行投后定期经营更新（Investor Updates）、融资路演与推介演示文稿质检（Pitch Deck Review）、投资尽职调查风险清单（Due Diligence Checklist）、虚拟数据室（Data Room/VDR）文件提取，以及融资轮次条款（Term Sheet、SAFE协议）沟通。明确排除并保留：公开市场二级证券投资研究与标的估值（如 DCF 估值、美股研报分析、首次覆盖报告、SEC 10-K/10-Q 披露文件解析）、理财顾问与财富管理资产配置建议、二级市场量化交易与资金流追踪（institutional-flow-tracker）、产研技术团队内部项目干系人汇报（stakeholder-update）。",
