@@ -3,10 +3,10 @@
   "rules_version": "1.3.0",
   "generated_at": "2026-10-09T21:10:54.373701+08:00",
   "counts": {
-    "recommended": 520,
-    "candidate": 1115,
+    "recommended": 519,
+    "candidate": 1114,
     "manual": 111,
-    "excluded": 1902
+    "excluded": 1904
   },
   "entries": [
     {
@@ -86515,8 +86515,10 @@
       ],
       "limitations": "不支持行内算术、分项加总、日期顺序等高级核对逻辑，超出五类检查项的问题不会被发现。",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-02T10:09:51+00:00",
       "last_checked": "2026-10-08T11:18:44.924177+08:00",
       "content_changed_at": null,
@@ -187081,8 +187083,10 @@
       "dependencies_declared": [],
       "limitations": "材料声明输出不能替代环境特定的验证、测试或专家审查；部分详细内容需参考外部文件（decision-frameworks.md、edge-cases.md、communication-templates.md），本文件未提供完整内容。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T11:14:59.158881+08:00",
       "content_changed_at": null,
@@ -331809,6 +331813,16 @@
         "skill_id": "iflytek/skillhub:builtin-skills/skills/storytelling-advisor/SKILL.md",
         "reason": "用户屏蔽/删除（商业叙事与品牌故事构建）",
         "added_at": "2026-10-17"
+      },
+      {
+        "skill_id": "chenqg618/compliance-skills:skills/trade-doc-consistency-free/SKILL.md",
+        "reason": "用户屏蔽/删除（外贸进出口、海关报关与单证合规）",
+        "added_at": "2026-10-18"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:09-verticals/customs-trade-compliance/SKILL.md",
+        "reason": "用户屏蔽/删除（外贸进出口、海关报关与单证合规）",
+        "added_at": "2026-10-18"
       }
     ],
     "blocked_topics": [
@@ -334386,6 +334400,52 @@
             "Meeting Bot",
             "API",
             "SDK"
+          ]
+        }
+      },
+      {
+        "name": "外贸进出口、海关报关与单证合规（International Trade & Customs）",
+        "description": "主要用于国际贸易、进出口通关与跨境单证审校业务（如海关报关单审查、HS/HTS编码归类、商业发票/装箱单/提单字段一致性校验、信用证不符点核对、Incoterms贸易术语审计、关税优化与受限方筛查）。明确排除并保留：国内企业增值税发票与日常对账报销、软件多语言与国际化（i18n）、证券市场上市公司财报与业绩电话会分析（SEC 10-K/10-Q、Octagon等投研工具）。",
+        "keywords": [
+          "外贸单证",
+          "进出口单证",
+          "海关报关",
+          "进出口合规",
+          "装箱单",
+          "商业发票",
+          "海运提单",
+          "信用证",
+          "单单一致",
+          "不符点",
+          "关税优化",
+          "HS归类",
+          "Incoterms",
+          "trade-doc",
+          "customs-compliance",
+          "bill-of-lading"
+        ],
+        "local_match": {
+          "names": [
+            "trade-doc-consistency-free",
+            "customs-trade-compliance",
+            "trade-doc-verifier",
+            "customs-declarant"
+          ],
+          "purpose_phrases": [
+            "外贸单据之间关键字段",
+            "商业发票、装箱单、提单",
+            "海关报关与关税合规",
+            "HS/HTS/TARIC归类",
+            "进出口单证",
+            "信用证审单"
+          ],
+          "preserve_phrases": [
+            "i18n",
+            "财报",
+            "增值税发票",
+            "报销单",
+            "Octagon",
+            "SEC 10-K"
           ]
         }
       }
