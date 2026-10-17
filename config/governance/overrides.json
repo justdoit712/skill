@@ -8587,6 +8587,81 @@
       "skill_id": "findscripter/everything-skills:06-creative/apple-hig-advisor/SKILL.md",
       "reason": "用户屏蔽/删除（macOS 专属环境配置与苹果生态开发）",
       "added_at": "2026-10-18"
+    },
+    {
+      "skill_id": "cat-xierluo/legal-skills:skills/handdrawn-article-illustrator/SKILL.md",
+      "reason": "用户屏蔽/删除（微信公众号内容创作、排版配图与多平台分发）",
+      "added_at": "2026-10-18"
+    },
+    {
+      "skill_id": "fslong520/aiskill:公众号写手/SKILL.md",
+      "reason": "用户屏蔽/删除（微信公众号内容创作、排版配图与多平台分发）",
+      "added_at": "2026-10-18"
+    },
+    {
+      "skill_id": "fslong520/aiskill:撸树人/SKILL.md",
+      "reason": "用户屏蔽/删除（微信公众号内容创作、排版配图与多平台分发）",
+      "added_at": "2026-10-18"
+    },
+    {
+      "skill_id": "anbeime/skill:skills/content-creation-publisher/SKILL.md",
+      "reason": "用户屏蔽/删除（微信公众号内容创作、排版配图与多平台分发）",
+      "added_at": "2026-10-18"
+    },
+    {
+      "skill_id": "anbeime/skill:skills/content-creation-publisher/article-illustrator/SKILL.md",
+      "reason": "用户屏蔽/删除（微信公众号内容创作、排版配图与多平台分发）",
+      "added_at": "2026-10-18"
+    },
+    {
+      "skill_id": "anbeime/skill:skills/content-creation-publisher/baoyu-post-to-wechat/SKILL.md",
+      "reason": "用户屏蔽/删除（微信公众号内容创作、排版配图与多平台分发）",
+      "added_at": "2026-10-18"
+    },
+    {
+      "skill_id": "anbeime/skill:skills/article-illustrator/article-illustrator/SKILL.md",
+      "reason": "用户屏蔽/删除（微信公众号内容创作、排版配图与多平台分发）",
+      "added_at": "2026-10-18"
+    },
+    {
+      "skill_id": "anbeime/skill:skills/wechat-hotspot-publisher/wechat-hotspot-publisher/SKILL.md",
+      "reason": "用户屏蔽/删除（微信公众号内容创作、排版配图与多平台分发）",
+      "added_at": "2026-10-18"
+    },
+    {
+      "skill_id": "ganmu191/aigc:skills/content-creation-publisher/SKILL.md",
+      "reason": "用户屏蔽/删除（微信公众号内容创作、排版配图与多平台分发）",
+      "added_at": "2026-10-18"
+    },
+    {
+      "skill_id": "ganmu191/aigc:skills/content-creation-publisher/article-illustrator/SKILL.md",
+      "reason": "用户屏蔽/删除（微信公众号内容创作、排版配图与多平台分发）",
+      "added_at": "2026-10-18"
+    },
+    {
+      "skill_id": "ganmu191/aigc:skills/content-creation-publisher/baoyu-post-to-wechat/SKILL.md",
+      "reason": "用户屏蔽/删除（微信公众号内容创作、排版配图与多平台分发）",
+      "added_at": "2026-10-18"
+    },
+    {
+      "skill_id": "ganmu191/aigc:skills/article-illustrator/article-illustrator/SKILL.md",
+      "reason": "用户屏蔽/删除（微信公众号内容创作、排版配图与多平台分发）",
+      "added_at": "2026-10-18"
+    },
+    {
+      "skill_id": "ganmu191/aigc:skills/intelligent-content-system/SKILL.md",
+      "reason": "用户屏蔽/删除（微信公众号内容创作、排版配图与多平台分发）",
+      "added_at": "2026-10-18"
+    },
+    {
+      "skill_id": "ganmu191/aigc:skills/wechat-hotspot-publisher/wechat-hotspot-publisher/SKILL.md",
+      "reason": "用户屏蔽/删除（微信公众号内容创作、排版配图与多平台分发）",
+      "added_at": "2026-10-18"
+    },
+    {
+      "skill_id": "ganmu191/aigc:skills/wechatsync-publisher/wechatsync-publisher/SKILL.md",
+      "reason": "用户屏蔽/删除（微信公众号内容创作、排版配图与多平台分发）",
+      "added_at": "2026-10-18"
     }
   ],
   "blocked_topics": [
@@ -11309,6 +11384,63 @@
           "语音合成",
           "音频转码",
           "格式转换"
+        ]
+      }
+    },
+    {
+      "name": "微信公众号内容创作、排版配图与多平台分发（WeChat Official Account Content, Layout & Publishing）",
+      "description": "主要用于微信公众号及自媒体长文的内容撰写（如公众号推文、网文配图、科普导流文章）、公众号图文排版与SVG/手绘配图生成（如 handdrawn-article-illustrator、svg-article-illustrator、宫格长图）、公众号草稿同步与一键发布（如 post-to-wechat、wechatsync）、微信公众号热点追踪与涨粉运营策略（如 wechat-official-account-growth）。明确排除并保留：通用的 Markdown 文档与静态网站渲染（如 VitePress、Docusaurus）、通用代码审查与 Git 版本控制、跨平台通用的软件工程技术文档规范（如 Diátaxis、PRD、API 规范）、通用的数据可视化图表库（如 Mermaid、ECharts）。",
+      "keywords": [
+        "微信公众号",
+        "公众号",
+        "公众号文章",
+        "公众号推文",
+        "公众号排版",
+        "公众号配图",
+        "微信文章",
+        "微信排版",
+        "公众号发布",
+        "微信公众号运营",
+        "wechat-official-account",
+        "post-to-wechat",
+        "wechatsync",
+        "article-illustrator"
+      ],
+      "local_match": {
+        "names": [
+          "handdrawn-article-illustrator",
+          "article-illustrator",
+          "svg-article-illustrator",
+          "baoyu-post-to-wechat",
+          "wechat-hotspot-publisher",
+          "wechatsync-publisher",
+          "wechat-official-account-growth",
+          "wechat-article-fetch",
+          "content-creation-publisher",
+          "intelligent-content-system",
+          "公众号写手",
+          "撸树人"
+        ],
+        "purpose_phrases": [
+          "微信公众号",
+          "公众号文章",
+          "公众号推文",
+          "公众号草稿",
+          "发布至微信公众号",
+          "一键发布至微信公众号",
+          "公众号配图",
+          "微信公众号文章",
+          "微信公众号运营"
+        ],
+        "preserve_phrases": [
+          "VitePress",
+          "Docusaurus",
+          "代码审查",
+          "PRD",
+          "API规范",
+          "技术文档",
+          "Mermaid",
+          "ECharts"
         ]
       }
     }

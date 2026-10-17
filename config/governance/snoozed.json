@@ -1891,13 +1891,6 @@
       "days": 150,
       "expires_at": "2027-03-16",
       "reason": "用户暂不关注",
-      "skill_id": "anbeime/skill:skills/article-illustrator/article-illustrator/SKILL.md",
-      "snoozed_at": "2026-10-17"
-    },
-    {
-      "days": 150,
-      "expires_at": "2027-03-16",
-      "reason": "用户暂不关注",
       "skill_id": "anbeime/skill:skills/chrome-automation/chrome-automation/SKILL.md",
       "snoozed_at": "2026-10-17"
     },

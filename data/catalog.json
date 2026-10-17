@@ -3,10 +3,10 @@
   "rules_version": "1.3.0",
   "generated_at": "2026-10-09T21:10:54.373701+08:00",
   "counts": {
-    "recommended": 517,
-    "candidate": 1062,
-    "manual": 154,
-    "excluded": 1915
+    "recommended": 515,
+    "candidate": 1057,
+    "manual": 152,
+    "excluded": 1924
   },
   "entries": [
     {
@@ -54593,9 +54593,10 @@
       "dependencies_declared": [],
       "limitations": "未说明具体平台兼容性或运行环境；依赖 Read/Write/Edit/Bash 工具，但未指明实现方式；缺乏回测/验证机制，需用户自行执行检查。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-08T09:39:09.242863+08:00",
@@ -54606,13 +54607,8 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": true,
-      "manual_note": {
-        "added_at": "2026-10-17",
-        "reason": "用户收藏",
-        "from": "candidate",
-        "auto_status": "candidate"
-      },
+      "manual_pick": false,
+      "manual_note": null,
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -55445,9 +55441,10 @@
       "dependencies_declared": [],
       "limitations": "未说明具体运行环境或模型依赖；输出为文本+配图提示，不包含自动发布或排版功能；依赖用户输入素材质量与反馈精度。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-08T09:39:56.198967+08:00",
@@ -55458,13 +55455,8 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": true,
-      "manual_note": {
-        "added_at": "2026-10-17",
-        "reason": "用户收藏",
-        "from": "candidate",
-        "auto_status": "candidate"
-      },
+      "manual_pick": false,
+      "manual_note": null,
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -60839,9 +60831,10 @@
       ],
       "limitations": "依赖宿主环境具备内置图像生成功能；默认不调用外部API；需用户明确请求才启用本地预览或API实验路线；压缩后图像可能因尺寸限制影响细节表现。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-08T10:25:04.857849+08:00",
@@ -112262,8 +112255,10 @@
       "dependencies_declared": [],
       "limitations": "未说明图像生成的具体实现方式（如是否依赖第三方API），也未提供对非Markdown格式的支持情况。风格选择依赖于未提供的 references/style-guide.md 文件。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-08T19:18:51.399987+08:00",
       "content_changed_at": null,
@@ -112314,12 +112309,7 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "anbeime/skill:skills/article-illustrator/article-illustrator/SKILL.md|sha256:4d05e8b2c33de14220f8462c140d7ab6|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-08T19:18:51.389486+08:00",
-      "snooze": {
-        "snoozed_at": "2026-10-17",
-        "expires_at": "2027-03-16",
-        "reason": "用户暂不关注"
-      }
+      "evaluated_at": "2026-10-08T19:18:51.389486+08:00"
     },
     {
       "skill_id": "anbeime/skill:skills/atutun-xhs-cover/atutun-xhs-cover/SKILL.md",
@@ -112638,8 +112628,10 @@
       ],
       "limitations": "依赖Chrome浏览器进行CDP操作；部分功能需手动登录账号；未明确说明图像生成所依赖的AI服务；存在频率限制和反爬机制风险。",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-08T19:19:25.982737+08:00",
       "content_changed_at": null,
@@ -112726,9 +112718,10 @@
       "dependencies_declared": [],
       "limitations": "依赖图像生成能力，未说明具体实现方式；未声明是否支持多语言或非Markdown格式输入。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-08T19:19:23.998678+08:00",
@@ -112912,8 +112905,10 @@
       ],
       "limitations": "API方法需微信公众号认证资质及AppID/AppSecret；浏览器方法依赖Chrome登录态且速度较慢；图文模式不支持主题切换与评论控制；Markdown转换依赖外部技能。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-03T22:45:55.073966+08:00",
       "content_changed_at": null,
@@ -117985,7 +117980,8 @@
       "reason_codes": [
         "CREDENTIAL_EXFILTRATION",
         "UNRESOLVED_UNKNOWN",
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-08T19:32:40.700253+08:00",
@@ -216944,8 +216940,10 @@
       "dependencies_declared": [],
       "limitations": "依赖未声明的图像生成能力；引用的 style-guide.md 和 terminology.md 未提供，影响风格一致性实现",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T15:01:50.976640+08:00",
       "content_changed_at": null,
@@ -217305,7 +217303,8 @@
       "status": "excluded",
       "reason_codes": [
         "NEEDS_VERIFICATION",
-        "TOPIC_FILTERED"
+        "TOPIC_FILTERED",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T15:02:26.555890+08:00",
@@ -217392,8 +217391,10 @@
       "dependencies_declared": [],
       "limitations": "依赖未声明的图像生成能力；需访问references/style-guide.md但该文件未提供，可能影响风格一致性实现",
       "license": null,
-      "status": "candidate",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T15:02:30.895086+08:00",
       "content_changed_at": null,
@@ -217570,7 +217571,8 @@
       "license": null,
       "status": "excluded",
       "reason_codes": [
-        "TOPIC_FILTERED"
+        "TOPIC_FILTERED",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T15:02:51.376945+08:00",
@@ -219213,7 +219215,8 @@
         "NOT_STANDALONE_DIRECTION",
         "OUT_OF_SCOPE",
         "INSUFFICIENT_EVIDENCE",
-        "TOPIC_FILTERED"
+        "TOPIC_FILTERED",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T15:06:08.223129+08:00",
@@ -222619,7 +222622,8 @@
       "reason_codes": [
         "OUT_OF_SCOPE",
         "NOT_STANDALONE_DIRECTION",
-        "TOPIC_FILTERED"
+        "TOPIC_FILTERED",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T15:13:23.269143+08:00",
@@ -222709,7 +222713,8 @@
         "INCOMPLETE_INSTRUCTIONS",
         "MISSING_DEPENDENCY",
         "NEEDS_VERIFICATION",
-        "TOPIC_FILTERED"
+        "TOPIC_FILTERED",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T15:13:33.749320+08:00",
@@ -323577,12 +323582,6 @@
         "added_at": "2026-10-17",
         "from": "candidate",
         "reason": "用户收藏",
-        "skill_id": "fslong520/aiskill:公众号写手/SKILL.md"
-      },
-      {
-        "added_at": "2026-10-17",
-        "from": "candidate",
-        "reason": "用户收藏",
         "skill_id": "fslong520/aiskill:图片姬/SKILL.md"
       },
       {
@@ -323590,12 +323589,6 @@
         "from": "candidate",
         "reason": "用户收藏",
         "skill_id": "fslong520/aiskill:技能诊所/SKILL.md"
-      },
-      {
-        "added_at": "2026-10-17",
-        "from": "candidate",
-        "reason": "用户收藏",
-        "skill_id": "fslong520/aiskill:撸树人/SKILL.md"
       },
       {
         "added_at": "2026-10-17",
@@ -332398,6 +332391,81 @@
         "skill_id": "findscripter/everything-skills:06-creative/apple-hig-advisor/SKILL.md",
         "reason": "用户屏蔽/删除（macOS 专属环境配置与苹果生态开发）",
         "added_at": "2026-10-18"
+      },
+      {
+        "skill_id": "cat-xierluo/legal-skills:skills/handdrawn-article-illustrator/SKILL.md",
+        "reason": "用户屏蔽/删除（微信公众号内容创作、排版配图与多平台分发）",
+        "added_at": "2026-10-18"
+      },
+      {
+        "skill_id": "fslong520/aiskill:公众号写手/SKILL.md",
+        "reason": "用户屏蔽/删除（微信公众号内容创作、排版配图与多平台分发）",
+        "added_at": "2026-10-18"
+      },
+      {
+        "skill_id": "fslong520/aiskill:撸树人/SKILL.md",
+        "reason": "用户屏蔽/删除（微信公众号内容创作、排版配图与多平台分发）",
+        "added_at": "2026-10-18"
+      },
+      {
+        "skill_id": "anbeime/skill:skills/content-creation-publisher/SKILL.md",
+        "reason": "用户屏蔽/删除（微信公众号内容创作、排版配图与多平台分发）",
+        "added_at": "2026-10-18"
+      },
+      {
+        "skill_id": "anbeime/skill:skills/content-creation-publisher/article-illustrator/SKILL.md",
+        "reason": "用户屏蔽/删除（微信公众号内容创作、排版配图与多平台分发）",
+        "added_at": "2026-10-18"
+      },
+      {
+        "skill_id": "anbeime/skill:skills/content-creation-publisher/baoyu-post-to-wechat/SKILL.md",
+        "reason": "用户屏蔽/删除（微信公众号内容创作、排版配图与多平台分发）",
+        "added_at": "2026-10-18"
+      },
+      {
+        "skill_id": "anbeime/skill:skills/article-illustrator/article-illustrator/SKILL.md",
+        "reason": "用户屏蔽/删除（微信公众号内容创作、排版配图与多平台分发）",
+        "added_at": "2026-10-18"
+      },
+      {
+        "skill_id": "anbeime/skill:skills/wechat-hotspot-publisher/wechat-hotspot-publisher/SKILL.md",
+        "reason": "用户屏蔽/删除（微信公众号内容创作、排版配图与多平台分发）",
+        "added_at": "2026-10-18"
+      },
+      {
+        "skill_id": "ganmu191/aigc:skills/content-creation-publisher/SKILL.md",
+        "reason": "用户屏蔽/删除（微信公众号内容创作、排版配图与多平台分发）",
+        "added_at": "2026-10-18"
+      },
+      {
+        "skill_id": "ganmu191/aigc:skills/content-creation-publisher/article-illustrator/SKILL.md",
+        "reason": "用户屏蔽/删除（微信公众号内容创作、排版配图与多平台分发）",
+        "added_at": "2026-10-18"
+      },
+      {
+        "skill_id": "ganmu191/aigc:skills/content-creation-publisher/baoyu-post-to-wechat/SKILL.md",
+        "reason": "用户屏蔽/删除（微信公众号内容创作、排版配图与多平台分发）",
+        "added_at": "2026-10-18"
+      },
+      {
+        "skill_id": "ganmu191/aigc:skills/article-illustrator/article-illustrator/SKILL.md",
+        "reason": "用户屏蔽/删除（微信公众号内容创作、排版配图与多平台分发）",
+        "added_at": "2026-10-18"
+      },
+      {
+        "skill_id": "ganmu191/aigc:skills/intelligent-content-system/SKILL.md",
+        "reason": "用户屏蔽/删除（微信公众号内容创作、排版配图与多平台分发）",
+        "added_at": "2026-10-18"
+      },
+      {
+        "skill_id": "ganmu191/aigc:skills/wechat-hotspot-publisher/wechat-hotspot-publisher/SKILL.md",
+        "reason": "用户屏蔽/删除（微信公众号内容创作、排版配图与多平台分发）",
+        "added_at": "2026-10-18"
+      },
+      {
+        "skill_id": "ganmu191/aigc:skills/wechatsync-publisher/wechatsync-publisher/SKILL.md",
+        "reason": "用户屏蔽/删除（微信公众号内容创作、排版配图与多平台分发）",
+        "added_at": "2026-10-18"
       }
     ],
     "blocked_topics": [
@@ -335122,6 +335190,63 @@
             "格式转换"
           ]
         }
+      },
+      {
+        "name": "微信公众号内容创作、排版配图与多平台分发（WeChat Official Account Content, Layout & Publishing）",
+        "description": "主要用于微信公众号及自媒体长文的内容撰写（如公众号推文、网文配图、科普导流文章）、公众号图文排版与SVG/手绘配图生成（如 handdrawn-article-illustrator、svg-article-illustrator、宫格长图）、公众号草稿同步与一键发布（如 post-to-wechat、wechatsync）、微信公众号热点追踪与涨粉运营策略（如 wechat-official-account-growth）。明确排除并保留：通用的 Markdown 文档与静态网站渲染（如 VitePress、Docusaurus）、通用代码审查与 Git 版本控制、跨平台通用的软件工程技术文档规范（如 Diátaxis、PRD、API 规范）、通用的数据可视化图表库（如 Mermaid、ECharts）。",
+        "keywords": [
+          "微信公众号",
+          "公众号",
+          "公众号文章",
+          "公众号推文",
+          "公众号排版",
+          "公众号配图",
+          "微信文章",
+          "微信排版",
+          "公众号发布",
+          "微信公众号运营",
+          "wechat-official-account",
+          "post-to-wechat",
+          "wechatsync",
+          "article-illustrator"
+        ],
+        "local_match": {
+          "names": [
+            "handdrawn-article-illustrator",
+            "article-illustrator",
+            "svg-article-illustrator",
+            "baoyu-post-to-wechat",
+            "wechat-hotspot-publisher",
+            "wechatsync-publisher",
+            "wechat-official-account-growth",
+            "wechat-article-fetch",
+            "content-creation-publisher",
+            "intelligent-content-system",
+            "公众号写手",
+            "撸树人"
+          ],
+          "purpose_phrases": [
+            "微信公众号",
+            "公众号文章",
+            "公众号推文",
+            "公众号草稿",
+            "发布至微信公众号",
+            "一键发布至微信公众号",
+            "公众号配图",
+            "微信公众号文章",
+            "微信公众号运营"
+          ],
+          "preserve_phrases": [
+            "VitePress",
+            "Docusaurus",
+            "代码审查",
+            "PRD",
+            "API规范",
+            "技术文档",
+            "Mermaid",
+            "ECharts"
+          ]
+        }
       }
     ]
   },
@@ -337013,13 +337138,6 @@
         "reason": "用户暂不关注",
         "skill_id": "skillmedev/skills:skills/social-content-calendar/SKILL.md",
         "snoozed_at": "2026-10-15"
-      },
-      {
-        "days": 150,
-        "expires_at": "2027-03-16",
-        "reason": "用户暂不关注",
-        "skill_id": "anbeime/skill:skills/article-illustrator/article-illustrator/SKILL.md",
-        "snoozed_at": "2026-10-17"
       },
       {
         "days": 150,
