@@ -4,9 +4,9 @@
   "generated_at": "2026-10-09T21:10:54.373701+08:00",
   "counts": {
     "recommended": 524,
-    "candidate": 1121,
-    "manual": 112,
-    "excluded": 1891
+    "candidate": 1118,
+    "manual": 111,
+    "excluded": 1895
   },
   "entries": [
     {
@@ -20028,9 +20028,10 @@
       "dependencies_declared": [],
       "limitations": "需要用户提供市场结构证据与部分数据输入，定性分析框架未涉及具体数据工具",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-10-01T08:22:30.482538+08:00",
@@ -20041,13 +20042,8 @@
       "needs_review": false,
       "review_note": null,
       "pending_review": null,
-      "manual_pick": true,
-      "manual_note": {
-        "added_at": "2026-10-15",
-        "reason": "用户收藏",
-        "from": "candidate",
-        "auto_status": "candidate"
-      },
+      "manual_pick": false,
+      "manual_note": null,
       "evaluation_rules_version": "1.3.0",
       "quality_summary": {
         "review_status": "single_pass",
@@ -26992,9 +26988,10 @@
       "dependencies_declared": [],
       "limitations": "依赖原始逐字稿；不足5名参与者时结果仅为方向性；情感/社交维度缺失需标注为研究缺口",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-24T09:09:16+00:00",
       "last_checked": "2026-10-01T08:49:06.619328+08:00",
@@ -27046,12 +27043,7 @@
         "blocking_reasons": []
       },
       "last_evaluation_id": "skillmedev/skills:skills/jtbd-extractor/SKILL.md|sha256:0c3a0190e6c433f1f18aa779a3fb7499|1.3.0|pool-business-v1",
-      "evaluated_at": "2026-10-01T08:49:06.607239+08:00",
-      "snooze": {
-        "snoozed_at": "2026-10-15",
-        "expires_at": "2027-03-14",
-        "reason": "用户暂不关注"
-      }
+      "evaluated_at": "2026-10-01T08:49:06.607239+08:00"
     },
     {
       "skill_id": "skillmedev/skills:skills/kafka-pipelines/SKILL.md",
@@ -50520,9 +50512,10 @@
       ],
       "limitations": "需要客户证据，否则所有 job 必须标记为假设；不替代竞争情报、市场规模测算或原始访谈 JTBD 提取；未声明数据来源和工具。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-09-30T12:30:27+00:00",
       "last_checked": "2026-10-02T07:47:14.150170+08:00",
@@ -316761,9 +316754,10 @@
       "dependencies_declared": [],
       "limitations": "不包含具体国家法规细节或实时数据，需用户自行补充本地信息；不包含翻译执行或跨境物流操作指南。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-08T00:38:44+00:00",
       "last_checked": "2026-10-09T14:45:49.823101+08:00",
@@ -323123,12 +323117,6 @@
         "from": "candidate",
         "reason": "用户收藏",
         "skill_id": "skillmedev/skills:skills/competitive-moat/SKILL.md"
-      },
-      {
-        "added_at": "2026-10-15",
-        "from": "candidate",
-        "reason": "用户收藏",
-        "skill_id": "skillmedev/skills:skills/economic-analysis/SKILL.md"
       },
       {
         "added_at": "2026-10-15",
@@ -331775,9 +331763,80 @@
         "skill_id": "skillmedev/skills:skills/positioning-statement/SKILL.md",
         "reason": "存量黑名单过滤；命中：商业化与产品定价",
         "added_at": "2026-10-17"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/white-space-analysis/SKILL.md",
+        "reason": "用户屏蔽/删除（产品战略与市场机会分析）",
+        "added_at": "2026-10-17"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/jtbd-extractor/SKILL.md",
+        "reason": "用户屏蔽/删除（产品战略与市场机会分析）",
+        "added_at": "2026-10-17"
+      },
+      {
+        "skill_id": "skillmedev/skills:skills/economic-analysis/SKILL.md",
+        "reason": "用户屏蔽/删除（产品战略与市场机会分析）",
+        "added_at": "2026-10-17"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:05-business/international-expansion-strategy/SKILL.md",
+        "reason": "用户屏蔽/删除（产品战略与市场机会分析）",
+        "added_at": "2026-10-17"
       }
     ],
     "blocked_topics": [
+      {
+        "name": "产品战略与市场机会分析（Market Strategy & White-Space Analysis）",
+        "description": "主要用于产品战略规划与宏观商业机会分析、市场空白区挖掘（White-Space Analysis）、JTBD 需求提取与推力分析（Jobs To Be Done）、微观经济框架与商业决策敏感度测算，以及出海/跨国市场拓展（GTM/本地化/国际扩张策略）。明确排除并保留：具体软件工程技术规格与 PRD 需求转换（如将业务需求转为 API 规范、技术方案 RFC）、具体 UI/UX 前端交互与界面设计、二级市场上市公司招股书与披露文件分析（如 SEC S-1/10-K/Octagon 研报）、代码编写与质量门禁。",
+        "keywords": [
+          "白空间",
+          "市场空白",
+          "市场机会",
+          "产品战略",
+          "商业决策",
+          "市场进入",
+          "国际扩张",
+          "出海战略",
+          "JTBD",
+          "white-space",
+          "market-entry",
+          "economic-analysis",
+          "expansion-strategy"
+        ],
+        "local_match": {
+          "names": [
+            "white-space-analysis",
+            "jtbd-extractor",
+            "economic-analysis",
+            "international-expansion-strategy",
+            "customer-research-synthesizer",
+            "andreessen-vc-lens"
+          ],
+          "purpose_phrases": [
+            "市场或产品白空间",
+            "识别并验证市场或产品白空间",
+            "Jobs To Be Done",
+            "微观经济框架分析企业决策",
+            "国际市场进入",
+            "国际扩张",
+            "市场打分排序",
+            "市场进入模式"
+          ],
+          "preserve_phrases": [
+            "octagon",
+            "SEC",
+            "S-1",
+            "10-K",
+            "美股",
+            "PRD",
+            "API规范",
+            "RFC",
+            "代码审查",
+            "前端组件"
+          ]
+        }
+      },
       {
         "name": "网络文学与虚构小说创作（Fiction & Novel Writing）",
         "description": "主要用于网络小说、穿越历史、玄幻修真等虚构文学作品的内容创作、章节正文生成、大纲与情节设计、场景描写与潜台词对话构建、世界观与架空科技树设定，以及手稿多轮审校润色。明确排除并保留：技术与软件工程需求与设计文档编写（如 PRD 需求文档、API 架构规范、技术方案 RFC）、通用语言语法校对与技术文档打磨、严肃学术论文与商业分析研究写作。",
@@ -336016,13 +336075,6 @@
         "expires_at": "2027-03-14",
         "reason": "用户暂不关注",
         "skill_id": "skillmedev/skills:skills/interview-debrief-synthesizer/SKILL.md",
-        "snoozed_at": "2026-10-15"
-      },
-      {
-        "days": 150,
-        "expires_at": "2027-03-14",
-        "reason": "用户暂不关注",
-        "skill_id": "skillmedev/skills:skills/jtbd-extractor/SKILL.md",
         "snoozed_at": "2026-10-15"
       },
       {
