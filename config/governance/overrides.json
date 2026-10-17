@@ -8182,6 +8182,11 @@
       "skill_id": "findscripter/everything-skills:09-verticals/board-written-consent-drafter/SKILL.md",
       "reason": "用户屏蔽/删除（公司治理与董事会管理）",
       "added_at": "2026-10-17"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/grant-prospect-researcher/SKILL.md",
+      "reason": "存量黑名单过滤；命中：非营利组织、公益募捐与资助申报",
+      "added_at": "2026-10-17"
     }
   ],
   "blocked_topics": [
@@ -9945,6 +9950,40 @@
           "音色克隆",
           "文本到语音的高质量合成",
           "Edge-TTS"
+        ]
+      }
+    },
+    {
+      "name": "非营利组织、公益募捐与资助申报",
+      "description": "主要用于非营利组织（NPO/NGO）日常运营、公益基金会资助匹配、美国IRS 990税表申报分析、捐赠人募捐（Fundraising）与资助申请书（Grant Proposal）撰写。不排除通用的企业财报分析、税务审计或常规文档写作。",
+      "keywords": [
+        "非营利组织",
+        "基金会",
+        "资助申请",
+        "公益募捐",
+        "Form 990",
+        "990税表",
+        "grant",
+        "grants",
+        "fundraising",
+        "nonprofit",
+        "philanthropy",
+        "donor"
+      ],
+      "local_match": {
+        "names": [
+          "grant-prospect-researcher"
+        ],
+        "purpose_phrases": [
+          "为非营利组织匹配基金会资助者",
+          "撰写资助申请书前的资质筛选",
+          "资助申请",
+          "990税务表"
+        ],
+        "preserve_phrases": [
+          "企业财务",
+          "代码审查",
+          "技术文档"
         ]
       }
     }
