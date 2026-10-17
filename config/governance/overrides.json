@@ -8377,6 +8377,41 @@
       "skill_id": "skillmedev/skills:skills/crisis-comms-external/SKILL.md",
       "reason": "用户屏蔽/删除（企业公关与品牌舆情监测）",
       "added_at": "2026-10-17"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/ml-feature-engineering/SKILL.md",
+      "reason": "用户屏蔽/删除（传统机器学习建模与特征工程）",
+      "added_at": "2026-10-17"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:03-data/scikit-learn-ml/SKILL.md",
+      "reason": "用户屏蔽/删除（传统机器学习建模与特征工程）",
+      "added_at": "2026-10-17"
+    },
+    {
+      "skill_id": "fslong520/aiskill:mdgesp/SKILL.md",
+      "reason": "用户屏蔽/删除（应试题库与试卷资料批量归档）",
+      "added_at": "2026-10-17"
+    },
+    {
+      "skill_id": "fslong520/aiskill:GESP作业/SKILL.md",
+      "reason": "用户屏蔽/删除（应试题库与试卷资料批量归档）",
+      "added_at": "2026-10-17"
+    },
+    {
+      "skill_id": "fslong520/aiskill:命题工坊/SKILL.md",
+      "reason": "用户屏蔽/删除（应试题库与试卷资料批量归档）",
+      "added_at": "2026-10-17"
+    },
+    {
+      "skill_id": "fslong520/aiskill:备课/SKILL.md",
+      "reason": "用户屏蔽/删除（应试题库与试卷资料批量归档）",
+      "added_at": "2026-10-17"
+    },
+    {
+      "skill_id": "fslong520/aiskill:搬题姬/SKILL.md",
+      "reason": "用户屏蔽/删除（应试题库与试卷资料批量归档）",
+      "added_at": "2026-10-17"
     }
   ],
   "blocked_topics": [
@@ -10523,6 +10558,98 @@
           "OpenAPI",
           "PostgreSQL",
           "MySQL"
+        ]
+      }
+    },
+    {
+      "name": "传统机器学习建模与特征工程",
+      "description": "主要用于经典机器学习（如 Scikit-Learn、XGBoost、LightGBM、CatBoost）算法开发、结构化/表格数据建模、特征工程设计（特征衍生、高基数类别编码、防数据泄漏流程）、超参调优与交叉验证。保留通用的日常数据处理与统计分析（Pandas、SQL、Excel 清洗、数据可视化），以及大语言模型应用开发（LLM Prompt 工程、Agent 编排、RAG 向量检索）。",
+      "keywords": [
+        "特征工程",
+        "feature-engineering",
+        "scikit-learn",
+        "sklearn",
+        "XGBoost",
+        "LightGBM",
+        "CatBoost",
+        "分类编码",
+        "数据泄漏",
+        "超参调优",
+        "模型训练",
+        "交叉验证"
+      ],
+      "local_match": {
+        "names": [
+          "ml-feature-engineering",
+          "scikit-learn-ml",
+          "tabular-ml"
+        ],
+        "purpose_phrases": [
+          "机器学习特征工程指南",
+          "防泄漏流程",
+          "分类编码选择",
+          "构建经典机器学习模型",
+          "特征验证标准"
+        ],
+        "preserve_phrases": [
+          "Pandas",
+          "SQL",
+          "数据可视化",
+          "Prompt",
+          "Agent",
+          "RAG"
+        ]
+      }
+    },
+    {
+      "name": "应试题库与试卷资料批量归档",
+      "description": "主要用于各类考级、升学、职业资格考试（如 GESP、CSP、软考、考研、公考、四六级、少儿编程等级考试等）的特定试题/真题定向抓取与下载、试卷 PDF/Word 题目解析与答案校验、以及题库结构化打包归档工具。保留通用的文档工程与转换工具（如通用 PDF/Word/Excel 处理、通用 Markdown/JSON 转换）、通用代码库分析与技术测评、以及通用教学大纲或教案编写辅助工具。",
+      "keywords": [
+        "GESP",
+        "等级考试",
+        "真题",
+        "题库",
+        "历年真题",
+        "试卷",
+        "试题提取",
+        "刷题",
+        "考级",
+        "考研",
+        "公考",
+        "四六级",
+        "question-bank",
+        "exam-papers"
+      ],
+      "local_match": {
+        "names": [
+          "mdgesp",
+          "gesp-exam",
+          "exam-papers",
+          "question-bank",
+          "test-paper-parser",
+          "exam-crawler"
+        ],
+        "purpose_phrases": [
+          "用于自动化处理 GESP",
+          "从官网下载PDF",
+          "提取全文、校验流程图",
+          "考试真题",
+          "历年真题",
+          "真题并生成标准格式",
+          "批量处理多套GESP",
+          "生成标准化 Markdown/JSON/答案文件结构",
+          "试题抽取",
+          "题库归档",
+          "试卷解析"
+        ],
+        "preserve_phrases": [
+          "通用PDF处理",
+          "通用文档转换",
+          "Markdown解析",
+          "教学大纲",
+          "代码评审",
+          "算法竞赛日常练习",
+          "LeetCode"
         ]
       }
     }
