@@ -8437,9 +8437,68 @@
       "skill_id": "fslong520/aiskill:笔痕/SKILL.md",
       "reason": "存量黑名单过滤；命中：短视频带货、自媒体矩阵与电商内容生成",
       "added_at": "2026-10-17"
+    },
+    {
+      "skill_id": "fslong520/aiskill:墨染天工/SKILL.md",
+      "reason": "用户屏蔽/删除（网络文学与虚构小说创作）",
+      "added_at": "2026-10-17"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/fiction-scene-writer/SKILL.md",
+      "reason": "用户屏蔽/删除（网络文学与虚构小说创作）",
+      "added_at": "2026-10-17"
     }
   ],
   "blocked_topics": [
+    {
+      "name": "网络文学与虚构小说创作（Fiction & Novel Writing）",
+      "description": "主要用于网络小说、穿越历史、玄幻修真等虚构文学作品的内容创作、章节正文生成、大纲与情节设计、场景描写与潜台词对话构建、世界观与架空科技树设定，以及手稿多轮审校润色。明确排除并保留：技术与软件工程需求与设计文档编写（如 PRD 需求文档、API 架构规范、技术方案 RFC）、通用语言语法校对与技术文档打磨、严肃学术论文与商业分析研究写作。",
+      "keywords": [
+        "小说创作",
+        "网络小说",
+        "网文",
+        "穿越小说",
+        "架空历史",
+        "小说大纲",
+        "小说写作",
+        "章节生成",
+        "fiction-writer",
+        "fiction-writing",
+        "novel-writing",
+        "story-writing",
+        "manuscript"
+      ],
+      "local_match": {
+        "names": [
+          "墨染天工",
+          "fiction-scene-writer",
+          "manuscript-reviser",
+          "story-structure-architect",
+          "screenplay-and-scene-writing",
+          "short-drama-novel-analyze"
+        ],
+        "purpose_phrases": [
+          "架空历史小说创作",
+          "小说正文与设定文档",
+          "生成单个小说场景",
+          "长篇小说或剧本设计",
+          "小说章节或场景做二稿",
+          "小说创作",
+          "虚构小说"
+        ],
+        "preserve_phrases": [
+          "PRD",
+          "需求文档",
+          "架构设计",
+          "RFC",
+          "技术文档",
+          "代码审查",
+          "API规范",
+          "学术论文",
+          "研报"
+        ]
+      }
+    },
     {
       "name": "特定国产操作系统与桌面控制（openKylin / UKUI）",
       "description": "主要用于特定国产操作系统发行版（如 openKylin 开放麒麟、UKUI 桌面环境）的桌面设置与硬件命令行控制（涵盖音量/亮度/触控/电源/网络/蓝牙等特定系统 D-Bus 服务封装）。明确排除并保留：跨平台通用的 Linux 运维与自动化工具（如 Docker、Kubernetes、Shell 脚本自动化、通用 Linux 性能分析）、跨平台代码开发与门禁测试。",
