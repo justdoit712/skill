@@ -3,10 +3,10 @@
   "rules_version": "1.3.0",
   "generated_at": "2026-10-09T21:10:54.373701+08:00",
   "counts": {
-    "recommended": 530,
-    "candidate": 1146,
+    "recommended": 529,
+    "candidate": 1141,
     "manual": 112,
-    "excluded": 1860
+    "excluded": 1866
   },
   "entries": [
     {
@@ -120602,9 +120602,10 @@
       "dependencies_declared": [],
       "limitations": "仅适用于不可逆、高风险决策，不适用于常规运营或可逆试错场景；不替代法律、财务或合规专业意见",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-08T19:40:01.462261+08:00",
@@ -141967,9 +141968,10 @@
       "dependencies_declared": [],
       "limitations": "未声明具体的运行环境或依赖",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-09T13:40:50.657779+08:00",
@@ -143285,8 +143287,10 @@
       "dependencies_declared": [],
       "limitations": "不覆盖schema设计、可观测性、查询优化、RAG/ML平台等战术工程实现；不替代法律审查。",
       "license": null,
-      "status": "recommended",
-      "reason_codes": [],
+      "status": "excluded",
+      "reason_codes": [
+        "MANUAL_EXCLUDED"
+      ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-04T00:15:02.193811+08:00",
       "content_changed_at": null,
@@ -148467,9 +148471,10 @@
       "dependencies_declared": [],
       "limitations": "未提供脚本运行环境说明；仅覆盖战略决策，不含战术实现；监管信息基于 2026 年现状，需后续法律确认。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-09T13:55:51.727357+08:00",
@@ -172028,9 +172033,10 @@
       ],
       "limitations": "不适用于纯财务建模、人事政策或技术架构决策。",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-09T17:13:21.706334+08:00",
@@ -172122,9 +172128,10 @@
       ],
       "limitations": "不处理功能级工作、需求文档撰写、单个功能的优先级排序细节",
       "license": null,
-      "status": "candidate",
+      "status": "excluded",
       "reason_codes": [
-        "INSUFFICIENT_EVIDENCE"
+        "INSUFFICIENT_EVIDENCE",
+        "MANUAL_EXCLUDED"
       ],
       "first_seen": "2026-10-03T00:47:51+00:00",
       "last_checked": "2026-10-09T17:13:40.754837+08:00",
@@ -331612,9 +331619,89 @@
         "added_at": "2026-10-17",
         "reason": "用户屏蔽/删除",
         "skill_id": "findscripter/everything-skills:02-engineering/adversarial-code-reviewer/SKILL.md"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:03-data/chief-data-officer-advisor/SKILL.md",
+        "reason": "用户屏蔽/删除（企业高管顾问与战略咨询）",
+        "added_at": "2026-10-17"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:04-ai/chief-ai-officer-advisor/SKILL.md",
+        "reason": "用户屏蔽/删除（企业高管顾问与战略咨询）",
+        "added_at": "2026-10-17"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:02-engineering/vp-engineering-advisor/SKILL.md",
+        "reason": "用户屏蔽/删除（企业高管顾问与战略咨询）",
+        "added_at": "2026-10-17"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:07-productivity/coo-operations-advisor/SKILL.md",
+        "reason": "用户屏蔽/删除（企业高管顾问与战略咨询）",
+        "added_at": "2026-10-17"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:07-productivity/cpo-product-advisor/SKILL.md",
+        "reason": "用户屏蔽/删除（企业高管顾问与战略咨询）",
+        "added_at": "2026-10-17"
+      },
+      {
+        "skill_id": "findscripter/everything-skills:00-meta/hard-call-advisor/SKILL.md",
+        "reason": "用户屏蔽/删除（企业高管顾问与战略咨询）",
+        "added_at": "2026-10-17"
       }
     ],
     "blocked_topics": [
+      {
+        "name": "企业高管顾问与战略咨询（C-Suite Advisory）",
+        "description": "主要用于大模型扮演企业 C-Level 虚拟高管角色（如 CDO 首席数据官、CAIO 首席AI官、VPE 研发副总裁、COO 首席运营官、CPO 首席产品官）进行宏观战略咨询、高层治理决策推演（如裁员/关停艰难决策）、高管团队招聘路线及企业愿景规划。明确排除并保留：具体软件工程技术设计与选型工具（如 database-design-advisor 数据库建模、index-advisor 索引调优）、前端人机交互界面规范指南（如 apple-hig-advisor）、具体代码实现与架构审查工具。",
+        "keywords": [
+          "首席数据官",
+          "首席AI官",
+          "研发副总裁",
+          "首席运营官",
+          "首席产品官",
+          "CDO",
+          "CAIO",
+          "VPE",
+          "COO",
+          "CPO",
+          "高管顾问",
+          "战略顾问",
+          "C-Suite",
+          "c-level",
+          "chief-data-officer",
+          "chief-ai-officer"
+        ],
+        "local_match": {
+          "names": [
+            "chief-data-officer-advisor",
+            "chief-ai-officer-advisor",
+            "vp-engineering-advisor",
+            "coo-operations-advisor",
+            "cpo-product-advisor",
+            "hard-call-advisor"
+          ],
+          "purpose_phrases": [
+            "首席数据官级别的战略决策支持",
+            "为创业公司提供 AI 战略决策框架",
+            "为工程副总裁提供",
+            "COO 运营顾问技能",
+            "为规模化公司提供产品愿景制定",
+            "处理高风险、不可逆的艰难决策"
+          ],
+          "preserve_phrases": [
+            "database-design-advisor",
+            "index-advisor",
+            "apple-hig-advisor",
+            "SQL",
+            "数据库设计",
+            "索引调优",
+            "代码审查",
+            "界面规范"
+          ]
+        }
+      },
       {
         "name": "PC 电脑桌面端应用开发",
         "description": "主要用于 Windows、macOS 及 Linux PC 电脑桌面客户端软件开发、GUI界面构建、桌面安装包打包与分发。涵盖基于 Electron、Tauri、Qt/PyQt、PySide、Tkinter、WPF 的桌面应用开发、窗口与多进程 IPC 通信、客户端自动更新（auto-updater）及安装包生成（.exe、.dmg、NSIS）。明确排除并保留：纯浏览器端 Web 前端开发（React/Vue/CSS）、通用全栈后端服务、PCB 硬件电路设计、通用代码门禁测试。",

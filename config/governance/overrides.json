@@ -8312,9 +8312,89 @@
       "added_at": "2026-10-17",
       "reason": "用户屏蔽/删除",
       "skill_id": "findscripter/everything-skills:02-engineering/adversarial-code-reviewer/SKILL.md"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:03-data/chief-data-officer-advisor/SKILL.md",
+      "reason": "用户屏蔽/删除（企业高管顾问与战略咨询）",
+      "added_at": "2026-10-17"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:04-ai/chief-ai-officer-advisor/SKILL.md",
+      "reason": "用户屏蔽/删除（企业高管顾问与战略咨询）",
+      "added_at": "2026-10-17"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:02-engineering/vp-engineering-advisor/SKILL.md",
+      "reason": "用户屏蔽/删除（企业高管顾问与战略咨询）",
+      "added_at": "2026-10-17"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:07-productivity/coo-operations-advisor/SKILL.md",
+      "reason": "用户屏蔽/删除（企业高管顾问与战略咨询）",
+      "added_at": "2026-10-17"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:07-productivity/cpo-product-advisor/SKILL.md",
+      "reason": "用户屏蔽/删除（企业高管顾问与战略咨询）",
+      "added_at": "2026-10-17"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:00-meta/hard-call-advisor/SKILL.md",
+      "reason": "用户屏蔽/删除（企业高管顾问与战略咨询）",
+      "added_at": "2026-10-17"
     }
   ],
   "blocked_topics": [
+    {
+      "name": "企业高管顾问与战略咨询（C-Suite Advisory）",
+      "description": "主要用于大模型扮演企业 C-Level 虚拟高管角色（如 CDO 首席数据官、CAIO 首席AI官、VPE 研发副总裁、COO 首席运营官、CPO 首席产品官）进行宏观战略咨询、高层治理决策推演（如裁员/关停艰难决策）、高管团队招聘路线及企业愿景规划。明确排除并保留：具体软件工程技术设计与选型工具（如 database-design-advisor 数据库建模、index-advisor 索引调优）、前端人机交互界面规范指南（如 apple-hig-advisor）、具体代码实现与架构审查工具。",
+      "keywords": [
+        "首席数据官",
+        "首席AI官",
+        "研发副总裁",
+        "首席运营官",
+        "首席产品官",
+        "CDO",
+        "CAIO",
+        "VPE",
+        "COO",
+        "CPO",
+        "高管顾问",
+        "战略顾问",
+        "C-Suite",
+        "c-level",
+        "chief-data-officer",
+        "chief-ai-officer"
+      ],
+      "local_match": {
+        "names": [
+          "chief-data-officer-advisor",
+          "chief-ai-officer-advisor",
+          "vp-engineering-advisor",
+          "coo-operations-advisor",
+          "cpo-product-advisor",
+          "hard-call-advisor"
+        ],
+        "purpose_phrases": [
+          "首席数据官级别的战略决策支持",
+          "为创业公司提供 AI 战略决策框架",
+          "为工程副总裁提供",
+          "COO 运营顾问技能",
+          "为规模化公司提供产品愿景制定",
+          "处理高风险、不可逆的艰难决策"
+        ],
+        "preserve_phrases": [
+          "database-design-advisor",
+          "index-advisor",
+          "apple-hig-advisor",
+          "SQL",
+          "数据库设计",
+          "索引调优",
+          "代码审查",
+          "界面规范"
+        ]
+      }
+    },
     {
       "name": "PC 电脑桌面端应用开发",
       "description": "主要用于 Windows、macOS 及 Linux PC 电脑桌面客户端软件开发、GUI界面构建、桌面安装包打包与分发。涵盖基于 Electron、Tauri、Qt/PyQt、PySide、Tkinter、WPF 的桌面应用开发、窗口与多进程 IPC 通信、客户端自动更新（auto-updater）及安装包生成（.exe、.dmg、NSIS）。明确排除并保留：纯浏览器端 Web 前端开发（React/Vue/CSS）、通用全栈后端服务、PCB 硬件电路设计、通用代码门禁测试。",
