@@ -8517,9 +8517,56 @@
       "skill_id": "skillmedev/skills:skills/meeting-notes-to-actions/SKILL.md",
       "reason": "用户屏蔽/删除（会议主持引导、议程规范与敏捷复盘仪式）",
       "added_at": "2026-10-17"
+    },
+    {
+      "skill_id": "iflytek/skillhub:builtin-skills/skills/storytelling-advisor/SKILL.md",
+      "reason": "用户屏蔽/删除（商业叙事与品牌故事构建）",
+      "added_at": "2026-10-17"
     }
   ],
   "blocked_topics": [
+    {
+      "name": "商业叙事与品牌故事构建（Brand Storytelling & Narrative）",
+      "description": "主要用于将商业项目、产品介绍、创业经历或商业演讲套用经典好莱坞或编剧叙事模型（如英雄之旅、皮克斯故事法则、SCQA 冲突模型）进行情感包装与品牌故事策划。明确排除并保留：基于 Diátaxis 框架的软件技术文档与操作指南编写（如 documentation-writer）、系统架构图与技术流程设计（如 diagram-maker）、技术事故复盘与工程根因分析（如 postmortem-writer）、代码工程编写与质量门禁，以及通用文本去 AI 机械味工具（如 zero-slop）。",
+      "keywords": [
+        "品牌故事",
+        "商业叙事",
+        "讲故事",
+        "叙事框架",
+        "英雄之旅",
+        "皮克斯公式",
+        "storytelling",
+        "story-spine",
+        "narrative-framework",
+        "brand-story"
+      ],
+      "local_match": {
+        "names": [
+          "storytelling-advisor",
+          "data-storytelling",
+          "data-story"
+        ],
+        "purpose_phrases": [
+          "叙事框架结构化品牌故事",
+          "英雄之旅",
+          "皮克斯公式",
+          "结构化品牌故事",
+          "结构化数据叙事方法"
+        ],
+        "preserve_phrases": [
+          "documentation-writer",
+          "diagram-maker",
+          "postmortem-writer",
+          "zero-slop",
+          "Diátaxis",
+          "技术文档",
+          "API文档",
+          "系统架构",
+          "流程设计",
+          "代码审查"
+        ]
+      }
+    },
     {
       "name": "产品战略与市场机会分析（Market Strategy & White-Space Analysis）",
       "description": "主要用于产品战略规划与宏观商业机会分析、市场空白区挖掘（White-Space Analysis）、JTBD 需求提取与推力分析（Jobs To Be Done）、微观经济框架与商业决策敏感度测算，以及出海/跨国市场拓展（GTM/本地化/国际扩张策略）。明确排除并保留：具体软件工程技术规格与 PRD 需求转换（如将业务需求转为 API 规范、技术方案 RFC）、具体 UI/UX 前端交互与界面设计、二级市场上市公司招股书与披露文件分析（如 SEC S-1/10-K/Octagon 研报）、代码编写与质量门禁。",
