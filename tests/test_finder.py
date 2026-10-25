@@ -124,6 +124,48 @@ class FinderTest(unittest.TestCase):
                 external.assert_not_called()
                 self.assertEqual(report["search"]["candidate_queue"], queue)
 
+    @smoke
+    def test_resumed_owned_candidates_are_filtered_and_counted_once(self):
+        """恢复旧队列后跳过已收录候选，不送入模型评估，且反复消费不重复计数。"""
+        from src.finder.refill import run_rounds
+
+        owned_sid = "owned/repo:SKILL.md"
+        for mixed in (False, True):
+            with self.subTest(mixed=mixed):
+                queue = [{"skill_id": value, "owner": "owned", "repo": "repo", "path": "SKILL.md"}
+                         for value in (owned_sid, "Owned/Repo:SKILL.md")]
+                if mixed:
+                    queue.append({"skill_id": "normal/repo:SKILL.md", "owner": "normal", "repo": "repo", "path": "SKILL.md"})
+                report = {"search": {"current_round": 1,
+                    "rounds_history": [{"phase": "processing", "evaluation_start": 0}],
+                    "candidate_queue": queue, "skipped": []},
+                    "parameters": {"max_rounds": 1}, "evaluations": [], "evaluation_attempts": 0}
+                snapshots = []
+                state = SimpleNamespace(report=report, stop_reason=lambda: None,
+                                        save=lambda: snapshots.append(deepcopy(report)))
+                external = Mock(side_effect=AssertionError("unexpected network/model call"))
+
+                def evaluate(state, batch, *args, **kwargs):
+                    self.assertEqual([c.skill_id for c in batch], ["normal/repo:SKILL.md"])
+                    state.report["search"]["processed_skill_ids"].extend(c.skill_id for c in batch)
+                    return "candidates_exhausted"
+
+                evaluate_mock = Mock(side_effect=evaluate)
+                for _ in range(2):
+                    report["search"]["rounds_history"][-1]["phase"] = "processing"
+                    reason = run_rounds(state, {}, "", external, external, external, external,
+                        evaluate_mock, {owned_sid}, lambda _: None, lambda _: None)
+                    self.assertEqual(reason, "round_limit")
+                    search = snapshots[-1]["search"]
+                    self.assertEqual(search["skipped_owned"], 1)
+                    self.assertEqual(search["skipped_owned_ids"], [owned_sid])
+                    self.assertEqual([s for s in search["skipped"] if s["code"] == "owned"],
+                                     [{"skill_id": owned_sid, "code": "owned"}])
+                    self.assertNotIn(owned_sid, search["processed_skill_ids"])
+                self.assertEqual(evaluate_mock.call_count, int(mixed))
+                external.assert_not_called()
+                self.assertEqual(report["search"]["candidate_queue"], queue)
+
     @patch("src.finder.run.expand_and_collect_candidates")
     @patch("src.finder.run.search_github_repos_for_query")
     @patch("src.finder.run.call_model")

@@ -7,7 +7,7 @@ import re
 import time
 
 from src.shared.models import Candidate
-from src.shared.owned import is_skill_owned
+from src.shared.owned import is_skill_owned, normalize_owned_id
 from src.shared.special_skills import is_special_skill, normalize_special_skill_id
 from .plan import build_reflection_prompt, parse_reflection_queries, PLAN_MAX_OUTPUT_TOKENS
 from .search import schedule_candidates_fairly, _round_robin_merge_repos
@@ -37,6 +37,34 @@ def _record_special_skips(search, skill_ids):
     search["skipped_special"] = len(ids)
     search["skipped"] = skipped + [
         special_records.get(sid, {"skill_id": sid, "code": "special"})
+        for sid in sorted(ids)
+    ]
+
+
+def _safe_normalize_owned_id(sid: str) -> str:
+    try:
+        return normalize_owned_id(sid)
+    except Exception:
+        return str(sid).strip().lower()
+
+
+def _record_owned_skips(search, skill_ids):
+    """新发现与恢复队列共用规范化、去重后的已收录跳过事实。"""
+    ids = {_safe_normalize_owned_id(sid) for sid in search.get("skipped_owned_ids", [])}
+    ids.update(_safe_normalize_owned_id(sid) for sid in skill_ids)
+    skipped = []
+    owned_records = {}
+    for record in search.get("skipped", []):
+        if record.get("code") == "owned":
+            sid = _safe_normalize_owned_id(record["skill_id"])
+            ids.add(sid)
+            owned_records.setdefault(sid, {**record, "skill_id": sid})
+        else:
+            skipped.append(record)
+    search["skipped_owned_ids"] = sorted(ids)
+    search["skipped_owned"] = len(ids)
+    search["skipped"] = skipped + [
+        owned_records.get(sid, {"skill_id": sid, "code": "owned"})
         for sid in sorted(ids)
     ]
 
@@ -319,8 +347,7 @@ def _expand_pending(state, current, expand, owned_ids, sleep, log, max_repos: in
             if is_special_skill(candidate.skill_id, special_ids):
                 _record_special_skips(search, [candidate.skill_id])
             elif is_skill_owned(candidate.skill_id, owned_ids):
-                search.setdefault("skipped_owned_ids", []).append(candidate.skill_id)
-                search.setdefault("skipped", []).append({"skill_id": candidate.skill_id, "code": "owned"})
+                _record_owned_skips(search, [candidate.skill_id])
             else:
                 cand_dict = asdict(candidate)
                 rel_info = score_candidate_relevance(candidate, terms)
@@ -401,8 +428,13 @@ def run_rounds(state, cfg, api_key, transport, search_fn, expand, fetch, evaluat
             _record_special_skips(search, [
                 c["skill_id"] for c in pending if is_special_skill(c["skill_id"], special_ids)
             ])
+            _record_owned_skips(search, [
+                c["skill_id"] for c in pending
+                if not is_special_skill(c["skill_id"], special_ids) and is_skill_owned(c["skill_id"], owned_ids)
+            ])
             queue = [Candidate(**{k: v for k, v in c.items() if k in valid_keys})
-                     for c in pending if not is_special_skill(c["skill_id"], special_ids)]
+                     for c in pending
+                     if not is_special_skill(c["skill_id"], special_ids) and not is_skill_owned(c["skill_id"], owned_ids)]
 
             # 1. 若候选队列为空但有待展开仓库，首先展开一批待展开仓库
             if not queue and any(r["state"] == "pending" for r in search["repository_queue"]):
