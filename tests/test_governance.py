@@ -43,6 +43,79 @@ class GovernanceTest(unittest.TestCase):
     """人工治理规则与收藏保护契约。"""
 
     @smoke
+    def test_retired_reset_recovery_rejects_without_side_effects(self):
+        from src.catalog.local import main
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            record = root / "data/local/state/evaluations/interrupted.json"
+            record.parent.mkdir(parents=True)
+            record.write_text(json.dumps({
+                "status": "needs_recovery", "attempts": 2,
+                "requests": [{"status": "sending"}], "error": "usage_unknown",
+            }), encoding="utf-8")
+            before = {p.relative_to(root): p.read_bytes() for p in root.rglob("*") if p.is_file()}
+            for extra in ([], ["--check"], ["--sync-config"], ["--recover-catalog"], ["--enrich-catalog"]):
+                with self.subTest(extra=extra), patch("builtins.print") as output, \
+                        patch("src.catalog.budget.BudgetLedger.load") as load_ledger, \
+                        patch("src.catalog.local.load_all_config") as load_config:
+                    self.assertEqual(main(["--reset-recovery", *extra], root=root), 2)
+                    load_ledger.assert_not_called()
+                    load_config.assert_not_called()
+                    message = "\n".join(str(call.args[0]) for call in output.call_args_list)
+                    self.assertIn("manage_pool.py resume", message)
+                    self.assertIn("--dry-run", message)
+                    self.assertEqual({p.relative_to(root): p.read_bytes() for p in root.rglob("*") if p.is_file()}, before)
+
+    @smoke
+    def test_resume_preserves_history_and_requires_exclusive_lock(self):
+        from src.catalog.budget import evaluation_filename
+        from src.catalog.maintenance import resume_candidate
+        from src.catalog.pool import CandidatePool, PoolItem, load_pool, save_pool
+        from src.infra.files import LockConflict, file_lock
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            candidate = Candidate("demo/repo:SKILL.md", "demo", "repo", content_fingerprint="sha256:demo")
+            evaluation_id = "demo-evaluation"
+            record_path = root / "data/local/state/evaluations" / evaluation_filename(evaluation_id)
+            record_path.parent.mkdir(parents=True)
+            record = {
+                "evaluation_id": evaluation_id, "skill_id": candidate.skill_id,
+                "content_fingerprint": candidate.content_fingerprint,
+                "status": "needs_recovery", "attempts": 2, "max_attempts": 2,
+                "requests": [{"status": "sending", "request_id": "req-1"}],
+                "usage": {"total_tokens": 123}, "error": "usage_unknown",
+            }
+            record_path.write_text(json.dumps(record), encoding="utf-8")
+            pool_path = root / "data/local/pool.json"
+            save_pool(pool_path, CandidatePool(items=[PoolItem(
+                seq=1, candidate=candidate, status="blocked",
+                block_info={"evaluation_id": evaluation_id},
+            )]))
+            snapshot = lambda: {p.relative_to(root): p.read_bytes() for p in root.rglob("*") if p.is_file()}
+            before = snapshot()
+            kwargs = dict(evaluation_id=evaluation_id, reason="已核对请求", event_id="resume-demo", extra_attempts=1)
+            preview = resume_candidate(root, **kwargs)
+            self.assertTrue(preview["dry_run"])
+            self.assertEqual(snapshot(), before)
+            with file_lock(root / "data/.catalog.lock"):
+                with self.assertRaises(LockConflict):
+                    resume_candidate(root, **kwargs, apply=True)
+            self.assertEqual(snapshot(), before)
+            resume_candidate(root, **kwargs, apply=True)
+            updated = json.loads(record_path.read_text(encoding="utf-8"))
+            for field in ("requests", "usage", "attempts", "error"):
+                self.assertEqual(updated[field], record[field])
+            self.assertEqual(updated["max_attempts"], 3)
+            self.assertEqual(len(updated["resume_history"]), 1)
+            self.assertEqual(updated["resume_history"][0]["event_id"], "resume-demo")
+            self.assertEqual(load_pool(pool_path).items[0].status, "pending")
+            after = snapshot()
+            self.assertTrue(resume_candidate(root, **kwargs, apply=True)["idempotent"])
+            self.assertEqual(snapshot(), after)
+
+    @smoke
     def test_governance_paths_reject_legacy_files_regardless_of_mtime(self):
         """四类加载器、总入口及显式文件参数都不能按时间回退到旧配置。"""
         from src.catalog.config import load_all_config

@@ -577,7 +577,7 @@ def init_local_state(
             report['recovery_blockers'] = blockers
             sample = blockers[0].split('|')[0].split(':')[-1]
             log(f"[安全拦截] 检测到 {len(blockers)} 条上次异常中断时处于发送中的请求（如 {sample}）。")
-            log("为防重复扣费已暂停，请先核对请求记录。--reset-recovery 会清空请求明细和尝试数，后续可能重复计费；详见 docs/运行说明.md 第 5 节。")
+            log("为防重复扣费已暂停，请先核对请求记录，再使用 tools/manage_pool.py resume --evaluation-id <ID> --reason <说明> --dry-run 逐条预览恢复；确认后用 --apply 写入。详见 docs/运行说明.md 第 5 节。")
 
     state = LocalCollection(
         root=root, local=local, settings=settings, cfg=cfg, discover_fn=discover_fn,

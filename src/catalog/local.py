@@ -771,25 +771,15 @@ def main(argv=None, *, root: Path | None = None) -> int:
     parser.add_argument("--enable-normalized-cache", action="store_true", help="启用受限规范化缓存复用（仅在明确验证换行等价且证据完全核验时复用）")
     parser.add_argument("--enable-batch-prioritization", action="store_true", help="启用小批次材料准备与正文分级排序（含 20%% 防饥饿配额）")
     parser.add_argument("--pool-watermark", type=int, help="已弃用的兼容参数；当前按仓库批次与持久化游标推进")
-    parser.add_argument("--reset-recovery", action="store_true", help="批量重置待恢复记录并清空请求明细及尝试数；后续可能重复计费，详见运行说明第 5 节")
+    parser.add_argument("--reset-recovery", action="store_true", help="已停用；请使用 tools/manage_pool.py resume 逐条恢复，详见运行说明第 5 节")
     args = parser.parse_args(argv)
     log = lambda message: print(message, flush=True)
 
     if args.reset_recovery:
-        from .budget import BudgetLedger
-        ledger = BudgetLedger.load(root / 'data' / 'local' / 'state', cap=1, max_attempts=6)
-        count = 0
-        for eid in list(ledger.reserved):
-            rec = ledger.get(eid)
-            if rec and rec.get('status') == 'needs_recovery':
-                rec['status'] = 'reserved'
-                rec['error'] = None
-                rec['requests'] = []
-                rec['attempts'] = 0
-                ledger.save_record(eid, rec)
-                count += 1
-        log(f"已重置 {count} 条上次中断在途的待恢复记录为待评估状态。")
-        return 0
+        log("--reset-recovery 已停用：批量清空会丢失请求历史。本次未修改任何数据。")
+        log('请先核对请求记录，再逐条预览：python tools/manage_pool.py resume --evaluation-id "<ID>" --reason "<恢复原因>" --dry-run')
+        log("确认后将 --dry-run 改为 --apply；恢复会保留历史请求、用量与尝试次数。详见 docs/运行说明.md 第 5 节。")
+        return 2
 
     if args.recover_catalog:
         from .maintenance import recover_completed_results
