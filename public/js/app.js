@@ -103,18 +103,7 @@ const el = {
   drawerBody: document.getElementById("drawer-body"),
   drawerActions: document.getElementById("drawer-actions"),
   drawerRepoLink: document.getElementById("drawer-repo-link"),
-  btnCloseDrawer: document.getElementById("btn-close-drawer"),
-  specialModal: document.getElementById("special-modal"),
-  specialModalIcon: document.getElementById("special-modal-icon"),
-  specialModalTitle: document.getElementById("special-modal-title"),
-  specialModalList: document.getElementById("special-modal-list"),
-  specialQ: document.getElementById("special-q"),
-  btnCloseSpecialModal: document.getElementById("btn-close-special-modal"),
-  btnCloseSpecialBottom: document.getElementById("btn-close-special-bottom"),
-  btnSpecialMenu: document.getElementById("btn-special-menu"),
-  specialDropdown: document.getElementById("special-dropdown"),
-  itemSpecialStyle: document.getElementById("item-special-style"),
-  itemSpecialProto: document.getElementById("item-special-proto")
+  btnCloseDrawer: document.getElementById("btn-close-drawer")
 };
 
 /**
@@ -283,12 +272,8 @@ document.addEventListener("keydown", e => {
   } else if (e.key === "Escape") {
     if (document.activeElement === el.q) {
       el.q?.blur();
-    } else if (el.specialDropdown && !el.specialDropdown.hidden) {
-      if (typeof toggleSpecialMenu === "function") toggleSpecialMenu(false);
     } else if (el.drawer && el.drawer.classList.contains("is-open")) {
       closeDetailDrawer();
-    } else if (el.specialModal && !el.specialModal.hidden) {
-      closeSpecialModal();
     }
   }
 });
@@ -544,166 +529,6 @@ el.list.addEventListener("click", e => {
   const card = e.target.closest(".card");
   if (card && card.getAttribute("data-sid")) {
     openDetailDrawer(card.getAttribute("data-sid"));
-  }
-});
-
-// ==========================================================================
-// 特色专区画廊弹窗 (Special Skills Showcase Modal)
-// ==========================================================================
-const specialDataCache = {
-  style: null,
-  proto: null
-};
-let currentSpecialList = [];
-
-function renderSpecialGallery(list) {
-  if (!el.specialModalList) return;
-  if (!list || !list.length) {
-    el.specialModalList.innerHTML = '<div class="special-empty">没有匹配的条目</div>';
-    return;
-  }
-  el.specialModalList.innerHTML = list.map(item => {
-    const tagsHtml = (item.tags || []).slice(0, 4).map(t => '<span class="special-tag">' + escapeHtml(t) + '</span>').join('');
-    const promptText = (item.example_requests && item.example_requests[0]) || item.summary_zh || '';
-    return '<div class="special-card">' +
-      '<div class="special-card-head">' +
-        '<h4 class="special-card-title">' + escapeHtml(item.name) + '</h4>' +
-        (item.author ? '<span class="special-card-author">@' + escapeHtml(item.author) + '</span>' : '') +
-      '</div>' +
-      '<p class="special-card-sum">' + escapeHtml(item.summary_zh || '') + '</p>' +
-      (item.key_features && item.key_features.length ? '<p class="special-card-feature">✨ ' + escapeHtml(item.key_features[0]) + '</p>' : '') +
-      '<div class="special-card-tags">' + tagsHtml + '</div>' +
-      '<div class="special-card-footer">' +
-        '<button type="button" class="btn-copy-prompt" data-prompt="' + escapeHtml(promptText) + '">📋 复制提示词</button>' +
-        '<a href="' + escapeHtml(item.url || item.repo_url || '#') + '" target="_blank" rel="noopener noreferrer" class="special-link">仓库 ↗</a>' +
-      '</div>' +
-    '</div>';
-  }).join('');
-}
-
-function openSpecialModal(type) {
-  if (!el.specialModal) return;
-  el.specialModal.hidden = false;
-  if (el.specialQ) el.specialQ.value = "";
-
-  if (type === "style") {
-    if (el.specialModalIcon) el.specialModalIcon.textContent = "🎨";
-    if (el.specialModalTitle) el.specialModalTitle.textContent = "UI 视觉设计风格库 (74 款)";
-    if (specialDataCache.style) {
-      currentSpecialList = specialDataCache.style.entries || [];
-      renderSpecialGallery(currentSpecialList);
-    } else {
-      el.specialModalList.innerHTML = '<div class="special-loading">正在载入 UI 设计风格数据…</div>';
-      fetch("data/special-skills/ui-design-style.json")
-        .then(r => r.json())
-        .then(data => {
-          specialDataCache.style = data;
-          currentSpecialList = data.entries || [];
-          renderSpecialGallery(currentSpecialList);
-        })
-        .catch(err => {
-          el.specialModalList.innerHTML = '<div class="special-empty">载入失败：' + escapeHtml(err.message) + '</div>';
-        });
-    }
-  } else if (type === "proto") {
-    if (el.specialModalIcon) el.specialModalIcon.textContent = "📐";
-    if (el.specialModalTitle) el.specialModalTitle.textContent = "Web 交互原型与看板模板库 (199 款)";
-    if (specialDataCache.proto) {
-      currentSpecialList = specialDataCache.proto.entries || [];
-      renderSpecialGallery(currentSpecialList);
-    } else {
-      el.specialModalList.innerHTML = '<div class="special-loading">正在载入 Web 原型模板数据…</div>';
-      fetch("data/special-skills/web-prototype.json")
-        .then(r => r.json())
-        .then(data => {
-          specialDataCache.proto = data;
-          currentSpecialList = data.entries || [];
-          renderSpecialGallery(currentSpecialList);
-        })
-        .catch(err => {
-          el.specialModalList.innerHTML = '<div class="special-empty">载入失败：' + escapeHtml(err.message) + '</div>';
-        });
-    }
-  }
-}
-
-function closeSpecialModal() {
-  if (el.specialModal) el.specialModal.hidden = true;
-}
-
-if (el.specialQ) {
-  el.specialQ.addEventListener("input", e => {
-    const q = e.target.value.trim().toLowerCase();
-    if (!q) {
-      renderSpecialGallery(currentSpecialList);
-      return;
-    }
-    const filtered = currentSpecialList.filter(item => {
-      const haystack = [item.name, item.summary_zh, item.author]
-        .concat(item.tags || [])
-        .concat(item.example_requests || [])
-        .concat(item.key_features || []);
-      return haystack.some(h => h && String(h).toLowerCase().includes(q));
-    });
-    renderSpecialGallery(filtered);
-  });
-}
-
-if (el.specialModalList) {
-  el.specialModalList.addEventListener("click", e => {
-    const btn = e.target.closest(".btn-copy-prompt");
-    if (!btn) return;
-    const prompt = btn.getAttribute("data-prompt");
-    if (!prompt) return;
-    navigator.clipboard.writeText(prompt).then(() => {
-      const orig = btn.textContent;
-      btn.textContent = "✓ 已复制！";
-      setTimeout(() => { btn.textContent = orig; }, 1500);
-    }).catch(() => {
-      showToast("复制失败，请手动选择复制");
-    });
-  });
-}
-
-if (el.btnCloseSpecialModal) el.btnCloseSpecialModal.addEventListener("click", closeSpecialModal);
-if (el.btnCloseSpecialBottom) el.btnCloseSpecialBottom.addEventListener("click", closeSpecialModal);
-
-function toggleSpecialMenu(force) {
-  if (!el.specialDropdown || !el.btnSpecialMenu) return;
-  const isHidden = el.specialDropdown.hidden;
-  const nextOpen = typeof force === "boolean" ? force : isHidden;
-  el.specialDropdown.hidden = !nextOpen;
-  el.btnSpecialMenu.classList.toggle("is-active", nextOpen);
-  el.btnSpecialMenu.setAttribute("aria-expanded", nextOpen ? "true" : "false");
-}
-
-if (el.btnSpecialMenu) {
-  el.btnSpecialMenu.addEventListener("click", e => {
-    e.stopPropagation();
-    toggleSpecialMenu();
-  });
-}
-
-if (el.itemSpecialStyle) {
-  el.itemSpecialStyle.addEventListener("click", () => {
-    toggleSpecialMenu(false);
-    openSpecialModal("style");
-  });
-}
-
-if (el.itemSpecialProto) {
-  el.itemSpecialProto.addEventListener("click", () => {
-    toggleSpecialMenu(false);
-    openSpecialModal("proto");
-  });
-}
-
-// 点击空白区域自动收起特色专区下拉列表
-document.addEventListener("click", e => {
-  if (el.specialDropdown && !el.specialDropdown.hidden) {
-    if (!e.target.closest(".special-menu-wrap")) {
-      toggleSpecialMenu(false);
-    }
   }
 });
 

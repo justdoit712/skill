@@ -84,6 +84,1674 @@
       "name": "writing-guidelines",
       "added_at": "2026-09-26",
       "source_url": "https://github.com/vercel-labs/agent-skills/blob/HEAD/skills/writing-guidelines/SKILL.md"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/caching-strategy/SKILL.md",
+      "name": "caching-strategy",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/SkillMedev/skills/blob/HEAD/skills/caching-strategy/SKILL.md"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/connection-pool-tuner/SKILL.md",
+      "name": "connection-pool-tuner",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/SkillMedev/skills/blob/HEAD/skills/connection-pool-tuner/SKILL.md"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/explain-plan-reader/SKILL.md",
+      "name": "explain-plan-reader",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/SkillMedev/skills/blob/HEAD/skills/explain-plan-reader/SKILL.md"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/index-advisor/SKILL.md",
+      "name": "index-advisor",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/SkillMedev/skills/blob/HEAD/skills/index-advisor/SKILL.md"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/query-rewriter/SKILL.md",
+      "name": "query-rewriter",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/SkillMedev/skills/blob/HEAD/skills/query-rewriter/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/academic-paper/SKILL.md",
+      "name": "academic-paper",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/academic-paper/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/amber-aurora/SKILL.md",
+      "name": "amber-aurora",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/amber-aurora/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/arctic-cool/SKILL.md",
+      "name": "arctic-cool",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/arctic-cool/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/aurora/SKILL.md",
+      "name": "aurora",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/aurora/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/bauhaus/SKILL.md",
+      "name": "bauhaus",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/bauhaus/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/blue-white-chart/SKILL.md",
+      "name": "blue-white-chart",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/blue-white-chart/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/blueprint/SKILL.md",
+      "name": "blueprint",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/blueprint/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/burgundy-premium/SKILL.md",
+      "name": "burgundy-premium",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/burgundy-premium/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/catppuccin-latte/SKILL.md",
+      "name": "catppuccin-latte",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/catppuccin-latte/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/catppuccin-mocha/SKILL.md",
+      "name": "catppuccin-mocha",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/catppuccin-mocha/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/children-warm-orange/SKILL.md",
+      "name": "children-warm-orange",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/children-warm-orange/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/chinese-cream-blossom/SKILL.md",
+      "name": "chinese-cream-blossom",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/chinese-cream-blossom/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/chinese-fresh-trio/SKILL.md",
+      "name": "chinese-fresh-trio",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/chinese-fresh-trio/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/chinese-ink-landscape/SKILL.md",
+      "name": "chinese-ink-landscape",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/chinese-ink-landscape/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/chinese-pastel-spring/SKILL.md",
+      "name": "chinese-pastel-spring",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/chinese-pastel-spring/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/chinese-porcelain-rose/SKILL.md",
+      "name": "chinese-porcelain-rose",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/chinese-porcelain-rose/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/classic-duo-blue/SKILL.md",
+      "name": "classic-duo-blue",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/classic-duo-blue/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/cobalt-sunshine/SKILL.md",
+      "name": "cobalt-sunshine",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/cobalt-sunshine/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/corporate-clean/SKILL.md",
+      "name": "corporate-clean",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/corporate-clean/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/cream-pastel/SKILL.md",
+      "name": "cream-pastel",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/cream-pastel/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/cyberpunk-neon/SKILL.md",
+      "name": "cyberpunk-neon",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/cyberpunk-neon/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/dopamine-clash/SKILL.md",
+      "name": "dopamine-clash",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/dopamine-clash/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/dracula/SKILL.md",
+      "name": "dracula",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/dracula/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/dreamy-pink-gradient/SKILL.md",
+      "name": "dreamy-pink-gradient",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/dreamy-pink-gradient/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/dreamy-romance/SKILL.md",
+      "name": "dreamy-romance",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/dreamy-romance/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/editorial-serif/SKILL.md",
+      "name": "editorial-serif",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/editorial-serif/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/engineering-whiteprint/SKILL.md",
+      "name": "engineering-whiteprint",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/engineering-whiteprint/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/glassmorphism/SKILL.md",
+      "name": "glassmorphism",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/glassmorphism/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/gold-ivory/SKILL.md",
+      "name": "gold-ivory",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/gold-ivory/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/gradient-cosmic/SKILL.md",
+      "name": "gradient-cosmic",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/gradient-cosmic/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/gruvbox-dark/SKILL.md",
+      "name": "gruvbox-dark",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/gruvbox-dark/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/hand-drawn-autumn/SKILL.md",
+      "name": "hand-drawn-autumn",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/hand-drawn-autumn/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/handdrawn-watercolor/SKILL.md",
+      "name": "handdrawn-watercolor",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/handdrawn-watercolor/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/healing-color-card/SKILL.md",
+      "name": "healing-color-card",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/healing-color-card/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/indigo-lotus/SKILL.md",
+      "name": "indigo-lotus",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/indigo-lotus/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/industrial-kaizen/SKILL.md",
+      "name": "industrial-kaizen",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/industrial-kaizen/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/ink-wash-jiangnan/SKILL.md",
+      "name": "ink-wash-jiangnan",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/ink-wash-jiangnan/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/japanese-minimal/SKILL.md",
+      "name": "japanese-minimal",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/japanese-minimal/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/macaron-mist/SKILL.md",
+      "name": "macaron-mist",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/macaron-mist/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/magazine-bold/SKILL.md",
+      "name": "magazine-bold",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/magazine-bold/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/memphis-pop/SKILL.md",
+      "name": "memphis-pop",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/memphis-pop/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/midcentury/SKILL.md",
+      "name": "midcentury",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/midcentury/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/minimal-white/SKILL.md",
+      "name": "minimal-white",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/minimal-white/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/mint-fresh/SKILL.md",
+      "name": "mint-fresh",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/mint-fresh/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/mountain-green-literary/SKILL.md",
+      "name": "mountain-green-literary",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/mountain-green-literary/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/neo-brutalism/SKILL.md",
+      "name": "neo-brutalism",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/neo-brutalism/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/neon-haze/SKILL.md",
+      "name": "neon-haze",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/neon-haze/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/news-broadcast/SKILL.md",
+      "name": "news-broadcast",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/news-broadcast/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/nord/SKILL.md",
+      "name": "nord",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/nord/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/olive-elegant/SKILL.md",
+      "name": "olive-elegant",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/olive-elegant/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/orange-sea/SKILL.md",
+      "name": "orange-sea",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/orange-sea/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/oriental-poetic-illustration/SKILL.md",
+      "name": "oriental-poetic-illustration",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/oriental-poetic-illustration/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/palace-ink-red/SKILL.md",
+      "name": "palace-ink-red",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/palace-ink-red/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/pitch-deck-vc/SKILL.md",
+      "name": "pitch-deck-vc",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/pitch-deck-vc/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/premium-color-blocking/SKILL.md",
+      "name": "premium-color-blocking",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/premium-color-blocking/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/rainbow-gradient/SKILL.md",
+      "name": "rainbow-gradient",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/rainbow-gradient/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/retro-tv/SKILL.md",
+      "name": "retro-tv",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/retro-tv/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/rose-pine/SKILL.md",
+      "name": "rose-pine",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/rose-pine/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/sakura-soft-healing/SKILL.md",
+      "name": "sakura-soft-healing",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/sakura-soft-healing/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/sharp-mono/SKILL.md",
+      "name": "sharp-mono",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/sharp-mono/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/soft-pastel/SKILL.md",
+      "name": "soft-pastel",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/soft-pastel/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/solarized-light/SKILL.md",
+      "name": "solarized-light",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/solarized-light/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/song-rain-poetic/SKILL.md",
+      "name": "song-rain-poetic",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/song-rain-poetic/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/splash-abstract/SKILL.md",
+      "name": "splash-abstract",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/splash-abstract/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/starlight-fireworks/SKILL.md",
+      "name": "starlight-fireworks",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/starlight-fireworks/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/starry-dust/SKILL.md",
+      "name": "starry-dust",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/starry-dust/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/summer-warm-color/SKILL.md",
+      "name": "summer-warm-color",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/summer-warm-color/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/sunset-warm/SKILL.md",
+      "name": "sunset-warm",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/sunset-warm/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/swiss-grid/SKILL.md",
+      "name": "swiss-grid",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/swiss-grid/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/terminal-green/SKILL.md",
+      "name": "terminal-green",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/terminal-green/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/tokyo-night/SKILL.md",
+      "name": "tokyo-night",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/tokyo-night/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/vaporwave/SKILL.md",
+      "name": "vaporwave",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/vaporwave/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/xiaohongshu-white/SKILL.md",
+      "name": "xiaohongshu-white",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/xiaohongshu-white/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/styles/y2k-chrome/SKILL.md",
+      "name": "y2k-chrome",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/styles/y2k-chrome/SKILL.md"
+    },
+    {
+      "skill_id": "anthropics/skills:skills/brand-guidelines/SKILL.md",
+      "name": "brand-guidelines",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/anthropics/skills/blob/HEAD/skills/brand-guidelines/SKILL.md"
+    },
+    {
+      "skill_id": "anthropics/skills:skills/slack-gif-creator/SKILL.md",
+      "name": "slack-gif-creator",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/anthropics/skills/blob/HEAD/skills/slack-gif-creator/SKILL.md"
+    },
+    {
+      "skill_id": "anthropics/skills:skills/theme-factory/SKILL.md",
+      "name": "theme-factory",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/anthropics/skills/blob/HEAD/skills/theme-factory/SKILL.md"
+    },
+    {
+      "skill_id": "cocoafun/open-paper:design-templates/flowai-live-dashboard-template/SKILL.md",
+      "name": "flowai-live-dashboard-template",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/cocoafun/open-paper/blob/HEAD/design-templates/flowai-live-dashboard-template/SKILL.md"
+    },
+    {
+      "skill_id": "cocoafun/open-paper:design-templates/social-media-matrix-tracker-template/SKILL.md",
+      "name": "social-media-matrix-tracker-template",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/cocoafun/open-paper/blob/HEAD/design-templates/social-media-matrix-tracker-template/SKILL.md"
+    },
+    {
+      "skill_id": "cocoafun/open-paper:design-templates/trading-analysis-dashboard-template/SKILL.md",
+      "name": "trading-analysis-dashboard-template",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/cocoafun/open-paper/blob/HEAD/design-templates/trading-analysis-dashboard-template/SKILL.md"
+    },
+    {
+      "skill_id": "cocoafun/open-paper:plugins/_official/examples/flowai-live-dashboard-template/SKILL.md",
+      "name": "flowai-live-dashboard-template",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/cocoafun/open-paper/blob/HEAD/plugins/_official/examples/flowai-live-dashboard-template/SKILL.md"
+    },
+    {
+      "skill_id": "cocoafun/open-paper:plugins/_official/examples/social-media-matrix-tracker-template/SKILL.md",
+      "name": "social-media-matrix-tracker-template",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/cocoafun/open-paper/blob/HEAD/plugins/_official/examples/social-media-matrix-tracker-template/SKILL.md"
+    },
+    {
+      "skill_id": "cocoafun/open-paper:plugins/_official/examples/trading-analysis-dashboard-template/SKILL.md",
+      "name": "trading-analysis-dashboard-template",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/cocoafun/open-paper/blob/HEAD/plugins/_official/examples/trading-analysis-dashboard-template/SKILL.md"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:03-data/html-dashboard-builder/SKILL.md",
+      "name": "html-dashboard-builder",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/findscripter/everything-skills/blob/HEAD/03-data/html-dashboard-builder/SKILL.md"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:05-business/paywall-upgrade-cro/SKILL.md",
+      "name": "paywall-upgrade-cro",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/findscripter/everything-skills/blob/HEAD/05-business/paywall-upgrade-cro/SKILL.md"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:06-creative/brand-guidelines/SKILL.md",
+      "name": "brand-guidelines",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/findscripter/everything-skills/blob/HEAD/06-creative/brand-guidelines/SKILL.md"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:06-creative/slack-gif-creator/SKILL.md",
+      "name": "slack-gif-creator",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/findscripter/everything-skills/blob/HEAD/06-creative/slack-gif-creator/SKILL.md"
+    },
+    {
+      "skill_id": "findscripter/everything-skills:06-creative/theme-factory/SKILL.md",
+      "name": "theme-factory",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/findscripter/everything-skills/blob/HEAD/06-creative/theme-factory/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:design-templates/blog-post/SKILL.md",
+      "name": "blog-post",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/design-templates/blog-post/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:design-templates/clinical-case-report/SKILL.md",
+      "name": "clinical-case-report",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/design-templates/clinical-case-report/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:design-templates/contact-widget/SKILL.md",
+      "name": "contact-widget",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/design-templates/contact-widget/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:design-templates/dashboard/SKILL.md",
+      "name": "dashboard",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/design-templates/dashboard/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:design-templates/dating-web/SKILL.md",
+      "name": "dating-web",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/design-templates/dating-web/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:design-templates/digital-eguide/SKILL.md",
+      "name": "digital-eguide",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/design-templates/digital-eguide/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:design-templates/docs-page/SKILL.md",
+      "name": "docs-page",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/design-templates/docs-page/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:design-templates/finance-report/SKILL.md",
+      "name": "finance-report",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/design-templates/finance-report/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:design-templates/flowai-live-dashboard-template/SKILL.md",
+      "name": "flowai-live-dashboard-template",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/design-templates/flowai-live-dashboard-template/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:design-templates/github-dashboard/SKILL.md",
+      "name": "github-dashboard",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/design-templates/github-dashboard/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:design-templates/hyperframes/SKILL.md",
+      "name": "hyperframes",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/design-templates/hyperframes/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:design-templates/invoice/SKILL.md",
+      "name": "invoice",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/design-templates/invoice/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:design-templates/kami-landing/SKILL.md",
+      "name": "kami-landing",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/design-templates/kami-landing/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:design-templates/kanban-board/SKILL.md",
+      "name": "kanban-board",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/design-templates/kanban-board/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:design-templates/live-artifact/SKILL.md",
+      "name": "live-artifact",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/design-templates/live-artifact/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:design-templates/live-dashboard/SKILL.md",
+      "name": "live-dashboard",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/design-templates/live-dashboard/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:design-templates/meeting-notes/SKILL.md",
+      "name": "meeting-notes",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/design-templates/meeting-notes/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:design-templates/mobile-onboarding/SKILL.md",
+      "name": "mobile-onboarding",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/design-templates/mobile-onboarding/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:design-templates/motion-frames/SKILL.md",
+      "name": "motion-frames",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/design-templates/motion-frames/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:design-templates/open-design-landing-deck/SKILL.md",
+      "name": "open-design-landing-deck",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/design-templates/open-design-landing-deck/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:design-templates/open-design-landing/SKILL.md",
+      "name": "open-design-landing",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/design-templates/open-design-landing/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:design-templates/orbit-general/SKILL.md",
+      "name": "orbit-general",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/design-templates/orbit-general/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:design-templates/orbit-gmail/SKILL.md",
+      "name": "orbit-gmail",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/design-templates/orbit-gmail/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:design-templates/pricing-page/SKILL.md",
+      "name": "pricing-page",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/design-templates/pricing-page/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:design-templates/saas-landing/SKILL.md",
+      "name": "saas-landing",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/design-templates/saas-landing/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:design-templates/social-media-dashboard/SKILL.md",
+      "name": "social-media-dashboard",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/design-templates/social-media-dashboard/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:design-templates/social-media-matrix-tracker-template/SKILL.md",
+      "name": "social-media-matrix-tracker-template",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/design-templates/social-media-matrix-tracker-template/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:design-templates/sprite-animation/SKILL.md",
+      "name": "sprite-animation",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/design-templates/sprite-animation/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:design-templates/trading-analysis-dashboard-template/SKILL.md",
+      "name": "trading-analysis-dashboard-template",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/design-templates/trading-analysis-dashboard-template/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:design-templates/tweaks/SKILL.md",
+      "name": "tweaks",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/design-templates/tweaks/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:design-templates/web-prototype-taste-brutalist/SKILL.md",
+      "name": "web-prototype-taste-brutalist",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/design-templates/web-prototype-taste-brutalist/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:design-templates/web-prototype-taste-editorial/SKILL.md",
+      "name": "web-prototype-taste-editorial",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/design-templates/web-prototype-taste-editorial/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:design-templates/web-prototype-taste-soft/SKILL.md",
+      "name": "web-prototype-taste-soft",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/design-templates/web-prototype-taste-soft/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:design-templates/web-prototype/SKILL.md",
+      "name": "web-prototype",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/design-templates/web-prototype/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:design-templates/webgl-experience/SKILL.md",
+      "name": "webgl-experience",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/design-templates/webgl-experience/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:design-templates/weekly-update/SKILL.md",
+      "name": "weekly-update",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/design-templates/weekly-update/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:design-templates/wireframe-annotated/SKILL.md",
+      "name": "wireframe-annotated",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/design-templates/wireframe-annotated/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:design-templates/wireframe-greybox/SKILL.md",
+      "name": "wireframe-greybox",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/design-templates/wireframe-greybox/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:design-templates/wireframe-mobile-flow/SKILL.md",
+      "name": "wireframe-mobile-flow",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/design-templates/wireframe-mobile-flow/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:design-templates/wireframe-sketch/SKILL.md",
+      "name": "wireframe-sketch",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/design-templates/wireframe-sketch/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:design-templates/worker-visualizer/SKILL.md",
+      "name": "worker-visualizer",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/design-templates/worker-visualizer/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:docs/examples/saas-landing-skill/SKILL.md",
+      "name": "saas-landing-skill",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/docs/examples/saas-landing-skill/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/atoms/discovery-question-form/SKILL.md",
+      "name": "discovery-question-form",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/atoms/discovery-question-form/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/atoms/token-map/SKILL.md",
+      "name": "token-map",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/atoms/token-map/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/article-magazine/SKILL.md",
+      "name": "article-magazine",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/article-magazine/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/blog-post/SKILL.md",
+      "name": "blog-post",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/blog-post/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/card-twitter/SKILL.md",
+      "name": "card-twitter",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/card-twitter/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/card-xiaohongshu/SKILL.md",
+      "name": "card-xiaohongshu",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/card-xiaohongshu/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/clinical-case-report/SKILL.md",
+      "name": "clinical-case-report",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/clinical-case-report/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/dashboard/SKILL.md",
+      "name": "dashboard",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/dashboard/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/data-report/SKILL.md",
+      "name": "data-report",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/data-report/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/dating-web/SKILL.md",
+      "name": "dating-web",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/dating-web/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/design-brief/SKILL.md",
+      "name": "design-brief",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/design-brief/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/digital-eguide/SKILL.md",
+      "name": "digital-eguide",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/digital-eguide/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/docs-page/SKILL.md",
+      "name": "docs-page",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/docs-page/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/finance-report/SKILL.md",
+      "name": "finance-report",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/finance-report/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/flowai-live-dashboard-template/SKILL.md",
+      "name": "flowai-live-dashboard-template",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/flowai-live-dashboard-template/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/frame-data-chart-nyt/SKILL.md",
+      "name": "frame-data-chart-nyt",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/frame-data-chart-nyt/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/frame-flowchart-sticky/SKILL.md",
+      "name": "frame-flowchart-sticky",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/frame-flowchart-sticky/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/frame-glitch-title/SKILL.md",
+      "name": "frame-glitch-title",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/frame-glitch-title/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/frame-light-leak-cinema/SKILL.md",
+      "name": "frame-light-leak-cinema",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/frame-light-leak-cinema/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/frame-liquid-bg-hero/SKILL.md",
+      "name": "frame-liquid-bg-hero",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/frame-liquid-bg-hero/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/frame-logo-outro/SKILL.md",
+      "name": "frame-logo-outro",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/frame-logo-outro/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/frame-macos-notification/SKILL.md",
+      "name": "frame-macos-notification",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/frame-macos-notification/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/github-dashboard/SKILL.md",
+      "name": "github-dashboard",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/github-dashboard/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/hatch-pet/SKILL.md",
+      "name": "hatch-pet",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/hatch-pet/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/hyperframes/SKILL.md",
+      "name": "hyperframes",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/hyperframes/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/invoice/SKILL.md",
+      "name": "invoice",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/invoice/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/kami-landing/SKILL.md",
+      "name": "kami-landing",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/kami-landing/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/kanban-board/SKILL.md",
+      "name": "kanban-board",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/kanban-board/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/live-artifact/SKILL.md",
+      "name": "live-artifact",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/live-artifact/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/live-dashboard/SKILL.md",
+      "name": "live-dashboard",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/live-dashboard/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/meeting-notes/SKILL.md",
+      "name": "meeting-notes",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/meeting-notes/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/mobile-onboarding/SKILL.md",
+      "name": "mobile-onboarding",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/mobile-onboarding/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/mockup-device-3d/SKILL.md",
+      "name": "mockup-device-3d",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/mockup-device-3d/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/motion-frames/SKILL.md",
+      "name": "motion-frames",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/motion-frames/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/open-design-homepage/SKILL.md",
+      "name": "open-design-homepage",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/open-design-homepage/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/open-design-landing-deck/SKILL.md",
+      "name": "open-design-landing-deck",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/open-design-landing-deck/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/open-design-landing/SKILL.md",
+      "name": "open-design-landing",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/open-design-landing/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/orbit-general/SKILL.md",
+      "name": "orbit-general",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/orbit-general/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/orbit-gmail/SKILL.md",
+      "name": "orbit-gmail",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/orbit-gmail/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/pricing-page/SKILL.md",
+      "name": "pricing-page",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/pricing-page/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/resume-modern/SKILL.md",
+      "name": "resume-modern",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/resume-modern/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/saas-landing/SKILL.md",
+      "name": "saas-landing",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/saas-landing/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/social-media-dashboard/SKILL.md",
+      "name": "social-media-dashboard",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/social-media-dashboard/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/social-media-matrix-tracker-template/SKILL.md",
+      "name": "social-media-matrix-tracker-template",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/social-media-matrix-tracker-template/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/social-reddit-card/SKILL.md",
+      "name": "social-reddit-card",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/social-reddit-card/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/social-spotify-card/SKILL.md",
+      "name": "social-spotify-card",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/social-spotify-card/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/social-x-post-card/SKILL.md",
+      "name": "social-x-post-card",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/social-x-post-card/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/sprite-animation/SKILL.md",
+      "name": "sprite-animation",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/sprite-animation/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/trading-analysis-dashboard-template/SKILL.md",
+      "name": "trading-analysis-dashboard-template",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/trading-analysis-dashboard-template/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/tweaks/SKILL.md",
+      "name": "tweaks",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/tweaks/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/velar-luxury-real-estate/SKILL.md",
+      "name": "velar-luxury-real-estate",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/velar-luxury-real-estate/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/vfx-text-cursor/SKILL.md",
+      "name": "vfx-text-cursor",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/vfx-text-cursor/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/video-hyperframes/SKILL.md",
+      "name": "video-hyperframes",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/video-hyperframes/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/web-prototype-taste-brutalist/SKILL.md",
+      "name": "web-prototype-taste-brutalist",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/web-prototype-taste-brutalist/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/web-prototype-taste-editorial/SKILL.md",
+      "name": "web-prototype-taste-editorial",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/web-prototype-taste-editorial/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/web-prototype-taste-soft/SKILL.md",
+      "name": "web-prototype-taste-soft",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/web-prototype-taste-soft/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/web-prototype/SKILL.md",
+      "name": "web-prototype",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/web-prototype/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/webgl-aurora-veil/SKILL.md",
+      "name": "webgl-aurora-veil",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/webgl-aurora-veil/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/webgl-caustic-pool/SKILL.md",
+      "name": "webgl-caustic-pool",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/webgl-caustic-pool/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/webgl-depth-gallery/SKILL.md",
+      "name": "webgl-depth-gallery",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/webgl-depth-gallery/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/webgl-distortion-grain/SKILL.md",
+      "name": "webgl-distortion-grain",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/webgl-distortion-grain/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/webgl-experience/SKILL.md",
+      "name": "webgl-experience",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/webgl-experience/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/webgl-halftone-drift/SKILL.md",
+      "name": "webgl-halftone-drift",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/webgl-halftone-drift/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/webgl-holographic-foil/SKILL.md",
+      "name": "webgl-holographic-foil",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/webgl-holographic-foil/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/webgl-horizontal-parallax/SKILL.md",
+      "name": "webgl-horizontal-parallax",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/webgl-horizontal-parallax/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/webgl-liquid-iridescence/SKILL.md",
+      "name": "webgl-liquid-iridescence",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/webgl-liquid-iridescence/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/webgl-liquid-metal/SKILL.md",
+      "name": "webgl-liquid-metal",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/webgl-liquid-metal/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/webgl-neon-grid/SKILL.md",
+      "name": "webgl-neon-grid",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/webgl-neon-grid/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/webgl-particle-galaxy/SKILL.md",
+      "name": "webgl-particle-galaxy",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/webgl-particle-galaxy/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/webgl-pixel-reveal-gallery/SKILL.md",
+      "name": "webgl-pixel-reveal-gallery",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/webgl-pixel-reveal-gallery/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/webgl-raymarched-hero/SKILL.md",
+      "name": "webgl-raymarched-hero",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/webgl-raymarched-hero/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/webgl-voronoi-cells/SKILL.md",
+      "name": "webgl-voronoi-cells",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/webgl-voronoi-cells/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/weekly-update/SKILL.md",
+      "name": "weekly-update",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/weekly-update/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/wireframe-annotated/SKILL.md",
+      "name": "wireframe-annotated",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/wireframe-annotated/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/wireframe-greybox/SKILL.md",
+      "name": "wireframe-greybox",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/wireframe-greybox/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/wireframe-mobile-flow/SKILL.md",
+      "name": "wireframe-mobile-flow",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/wireframe-mobile-flow/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/wireframe-sketch/SKILL.md",
+      "name": "wireframe-sketch",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/wireframe-sketch/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/examples/worker-visualizer/SKILL.md",
+      "name": "worker-visualizer",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/examples/worker-visualizer/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/video-templates/frame-bold-signal/SKILL.md",
+      "name": "frame-bold-signal",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/video-templates/frame-bold-signal/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/video-templates/frame-build-minimal/SKILL.md",
+      "name": "frame-build-minimal",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/video-templates/frame-build-minimal/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/video-templates/frame-creative-voltage/SKILL.md",
+      "name": "frame-creative-voltage",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/video-templates/frame-creative-voltage/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/video-templates/frame-data-chart-nyt/SKILL.md",
+      "name": "frame-data-chart-nyt",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/video-templates/frame-data-chart-nyt/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/video-templates/frame-data-rollup/SKILL.md",
+      "name": "frame-data-rollup",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/video-templates/frame-data-rollup/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/video-templates/frame-decision-tree/SKILL.md",
+      "name": "frame-decision-tree",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/video-templates/frame-decision-tree/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/video-templates/frame-electric-studio/SKILL.md",
+      "name": "frame-electric-studio",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/video-templates/frame-electric-studio/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/video-templates/frame-glitch-title/SKILL.md",
+      "name": "frame-glitch-title",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/video-templates/frame-glitch-title/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/video-templates/frame-kinetic-type/SKILL.md",
+      "name": "frame-kinetic-type",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/video-templates/frame-kinetic-type/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/video-templates/frame-light-leak-cinema/SKILL.md",
+      "name": "frame-light-leak-cinema",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/video-templates/frame-light-leak-cinema/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/video-templates/frame-liquid-bg-hero/SKILL.md",
+      "name": "frame-liquid-bg-hero",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/video-templates/frame-liquid-bg-hero/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/video-templates/frame-logo-outro/SKILL.md",
+      "name": "frame-logo-outro",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/video-templates/frame-logo-outro/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/video-templates/frame-nyt-graph/SKILL.md",
+      "name": "frame-nyt-graph",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/video-templates/frame-nyt-graph/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/video-templates/frame-pentagram-stat/SKILL.md",
+      "name": "frame-pentagram-stat",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/video-templates/frame-pentagram-stat/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/video-templates/frame-play-mode/SKILL.md",
+      "name": "frame-play-mode",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/video-templates/frame-play-mode/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/video-templates/frame-product-promo-30s/SKILL.md",
+      "name": "frame-product-promo-30s",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/video-templates/frame-product-promo-30s/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/video-templates/frame-product-promo/SKILL.md",
+      "name": "frame-product-promo",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/video-templates/frame-product-promo/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/video-templates/frame-swiss-grid/SKILL.md",
+      "name": "frame-swiss-grid",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/video-templates/frame-swiss-grid/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/video-templates/frame-takram-organic/SKILL.md",
+      "name": "frame-takram-organic",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/video-templates/frame-takram-organic/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/video-templates/frame-vignelli/SKILL.md",
+      "name": "frame-vignelli",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/video-templates/frame-vignelli/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/video-templates/frame-warm-grain/SKILL.md",
+      "name": "frame-warm-grain",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/video-templates/frame-warm-grain/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/_official/video-templates/vfx-text-cursor/SKILL.md",
+      "name": "vfx-text-cursor",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/_official/video-templates/vfx-text-cursor/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/spec/examples/create-hyperframes-launch/SKILL.md",
+      "name": "create-hyperframes-launch",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/spec/examples/create-hyperframes-launch/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/spec/examples/create-prototype-dashboard/SKILL.md",
+      "name": "create-prototype-dashboard",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/spec/examples/create-prototype-dashboard/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:plugins/spec/examples/import-screenshot-to-prototype/SKILL.md",
+      "name": "import-screenshot-to-prototype",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/plugins/spec/examples/import-screenshot-to-prototype/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/article-magazine/SKILL.md",
+      "name": "article-magazine",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/skills/article-magazine/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/brand-guidelines/SKILL.md",
+      "name": "brand-guidelines",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/skills/brand-guidelines/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/brandkit/SKILL.md",
+      "name": "brandkit",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/skills/brandkit/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/brutalist-skill/SKILL.md",
+      "name": "brutalist-skill",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/skills/brutalist-skill/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/card-twitter/SKILL.md",
+      "name": "card-twitter",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/skills/card-twitter/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/card-xiaohongshu/SKILL.md",
+      "name": "card-xiaohongshu",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/skills/card-xiaohongshu/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/data-report/SKILL.md",
+      "name": "data-report",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/skills/data-report/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/design-brief/SKILL.md",
+      "name": "design-brief",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/skills/design-brief/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/faq-page/SKILL.md",
+      "name": "faq-page",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/skills/faq-page/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/frame-data-chart-nyt/SKILL.md",
+      "name": "frame-data-chart-nyt",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/skills/frame-data-chart-nyt/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/frame-flowchart-sticky/SKILL.md",
+      "name": "frame-flowchart-sticky",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/skills/frame-flowchart-sticky/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/frame-glitch-title/SKILL.md",
+      "name": "frame-glitch-title",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/skills/frame-glitch-title/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/frame-light-leak-cinema/SKILL.md",
+      "name": "frame-light-leak-cinema",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/skills/frame-light-leak-cinema/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/frame-liquid-bg-hero/SKILL.md",
+      "name": "frame-liquid-bg-hero",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/skills/frame-liquid-bg-hero/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/frame-logo-outro/SKILL.md",
+      "name": "frame-logo-outro",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/skills/frame-logo-outro/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/frame-macos-notification/SKILL.md",
+      "name": "frame-macos-notification",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/skills/frame-macos-notification/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/gpt-tasteskill/SKILL.md",
+      "name": "gpt-tasteskill",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/skills/gpt-tasteskill/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/hatch-pet/SKILL.md",
+      "name": "hatch-pet",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/skills/hatch-pet/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/login-flow/SKILL.md",
+      "name": "login-flow",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/skills/login-flow/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/minimalist-skill/SKILL.md",
+      "name": "minimalist-skill",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/skills/minimalist-skill/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/mockup-device-3d/SKILL.md",
+      "name": "mockup-device-3d",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/skills/mockup-device-3d/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/output-skill/SKILL.md",
+      "name": "output-skill",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/skills/output-skill/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/paywall-upgrade-cro/SKILL.md",
+      "name": "paywall-upgrade-cro",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/skills/paywall-upgrade-cro/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/redesign-skill/SKILL.md",
+      "name": "redesign-skill",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/skills/redesign-skill/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/release-notes-one-pager/SKILL.md",
+      "name": "release-notes-one-pager",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/skills/release-notes-one-pager/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/resume-modern/SKILL.md",
+      "name": "resume-modern",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/skills/resume-modern/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/slack-gif-creator/SKILL.md",
+      "name": "slack-gif-creator",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/skills/slack-gif-creator/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/social-reddit-card/SKILL.md",
+      "name": "social-reddit-card",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/skills/social-reddit-card/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/social-spotify-card/SKILL.md",
+      "name": "social-spotify-card",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/skills/social-spotify-card/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/social-x-post-card/SKILL.md",
+      "name": "social-x-post-card",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/skills/social-x-post-card/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/soft-skill/SKILL.md",
+      "name": "soft-skill",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/skills/soft-skill/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/taste-skill-v1/SKILL.md",
+      "name": "taste-skill-v1",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/skills/taste-skill-v1/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/taste-skill/SKILL.md",
+      "name": "taste-skill",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/skills/taste-skill/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/theme-factory/SKILL.md",
+      "name": "theme-factory",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/skills/theme-factory/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/vfx-text-cursor/SKILL.md",
+      "name": "vfx-text-cursor",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/skills/vfx-text-cursor/SKILL.md"
+    },
+    {
+      "skill_id": "nexu-io/open-design:skills/video-hyperframes/SKILL.md",
+      "name": "video-hyperframes",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/nexu-io/open-design/blob/HEAD/skills/video-hyperframes/SKILL.md"
+    },
+    {
+      "skill_id": "oooxoxooo/prdcarft:skills/prd-workflow/skills/htmlPrototype/SKILL.md",
+      "name": "htmlPrototype",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/oooxoxooo/prdcarft/blob/HEAD/skills/prd-workflow/skills/htmlPrototype/SKILL.md"
+    },
+    {
+      "skill_id": "sdcxb/codem:src/core/knowledge/skills/products/red-layout-skill/SKILL.md",
+      "name": "red-layout-skill",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/sdcxb/codem/blob/HEAD/src/core/knowledge/skills/products/red-layout-skill/SKILL.md"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/brand-guidelines/SKILL.md",
+      "name": "brand-guidelines",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/skillmedev/skills/blob/HEAD/skills/brand-guidelines/SKILL.md"
+    },
+    {
+      "skill_id": "skillmedev/skills:skills/prototype-spec/SKILL.md",
+      "name": "prototype-spec",
+      "added_at": "2026-10-25",
+      "source_url": "https://github.com/skillmedev/skills/blob/HEAD/skills/prototype-spec/SKILL.md"
     }
   ],
   "source": "docs/产品规范.md#13-已收录名单契约",
