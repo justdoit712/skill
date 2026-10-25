@@ -10,6 +10,7 @@ import json
 from pathlib import Path
 
 from src.infra.files import read_json
+from src.infra.governance_paths import GOVERNANCE_FILES, resolve_governance_path
 from src.infra.model_config import load_model_config
 from src.infra.llm import validate_model_config
 from src.infra.owned import load_owned_config
@@ -22,6 +23,8 @@ from .snooze import load_snooze, validate_snooze
 
 
 def _resolve_config_file(base: Path, filename: str, subfolder: str | None = None) -> Path:
+    if filename in GOVERNANCE_FILES:
+        return resolve_governance_path(base, filename)
     flat = base / filename
     sub = (base / subfolder / filename) if subfolder else flat
     if flat.exists() and sub.exists():
@@ -52,6 +55,8 @@ def load_searches(config_dir: str | Path = "config") -> dict:
 def load_all_config(config_dir: str | Path = "config") -> dict:
     """加载目录流水线运行所需的全部配置字典。"""
     base = Path(config_dir)
+    for filename in GOVERNANCE_FILES:
+        resolve_governance_path(base, filename)
     prescreen_cfg = load_config(base)
     try:
         model_cfg = load_model_config(base)

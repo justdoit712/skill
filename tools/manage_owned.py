@@ -19,6 +19,7 @@ if str(ROOT) not in sys.path:
 
 from src.catalog.maintenance import sync_config_offline
 from src.catalog.store import catalog_session
+from src.infra.governance_paths import GOVERNANCE_FILES, resolve_governance_path
 from src.infra.owned import (
     apply_and_save_owned_patch,
     get_owned_config_path,
@@ -100,6 +101,15 @@ def apply_changes(
     cfg_dir = Path(config_dir)
     data_dir = root / "data"
 
+    try:
+        if cfg_dir.resolve() != (root / "config").resolve():
+            raise ValueError(f"配置根目录必须属于当前项目：{root / 'config'}")
+        for filename in GOVERNANCE_FILES:
+            resolve_governance_path(cfg_dir, filename)
+    except ValueError as exc:
+        log_fn(f"[ERROR] 治理配置路径检查失败：{exc}")
+        return 1
+
     # 使用目录级项目锁保护读取、写入与重建全过程
     try:
         with catalog_session(data_dir, timeout=10):
@@ -149,7 +159,7 @@ def main(argv: list[str] | None = None, root: Path | None = None) -> int:
         "--apply-patch",
         dest="apply_path",
         metavar="PATCH_FILE",
-        help="合并变更包至 config/owned-skills.json 并离线重建索引与页面",
+        help="合并变更包至 config/governance/owned-skills.json 并离线重建索引与页面",
     )
     group.add_argument(
         "--list",
@@ -160,7 +170,7 @@ def main(argv: list[str] | None = None, root: Path | None = None) -> int:
     parser.add_argument(
         "--config-dir",
         default="config",
-        help="配置文件目录（默认：config）",
+        help="相对项目根目录的配置根目录（默认：config；治理文件固定在其 governance 子目录）",
     )
     parser.add_argument(
         "--root",
@@ -170,9 +180,16 @@ def main(argv: list[str] | None = None, root: Path | None = None) -> int:
 
     args = parser.parse_args(argv)
     effective_root = Path(root) if root else Path(args.root)
+    config_dir = Path(args.config_dir)
+    if not config_dir.is_absolute():
+        config_dir = effective_root / config_dir
 
     if args.list:
-        cfg = load_owned_config(args.config_dir)
+        try:
+            cfg = load_owned_config(config_dir)
+        except (OSError, ValueError) as exc:
+            print(f"错误：读取当前配置失败：{exc}")
+            return 1
         items = cfg.get("items", [])
         print(f"当前已收录技能（共 {len(items)} 项）：")
         for it in items:
@@ -180,13 +197,13 @@ def main(argv: list[str] | None = None, root: Path | None = None) -> int:
         return 0
 
     if args.check_path:
-        return check_changes(args.check_path, config_dir=args.config_dir)
+        return check_changes(args.check_path, config_dir=config_dir)
 
     if args.apply_path:
         return apply_changes(
             args.apply_path,
             root_dir=effective_root,
-            config_dir=args.config_dir,
+            config_dir=config_dir,
         )
 
     return 0

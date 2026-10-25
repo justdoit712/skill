@@ -10,6 +10,7 @@ import json
 from pathlib import Path
 import re
 from typing import Any
+from src.infra.governance_paths import require_governance_file
 
 from .favorites import (
     DEFAULT_FAVORITES_PATH,
@@ -24,21 +25,7 @@ SKILL_ID_PATTERN = re.compile(r"^[^/\s]+/[^/\s]+(:[^\s]+)?$")
 
 def load_overrides(path: str | Path = DEFAULT_OVERRIDES_PATH) -> dict:
     """加载 overrides.json，不存在时返回默认结构。"""
-    file_path = Path(path)
-    if file_path.name == "overrides.json":
-        alt = (
-            file_path.parent / "governance" / "overrides.json"
-            if "governance" not in file_path.parts
-            else file_path.parent.parent / "overrides.json"
-        )
-        if file_path.exists() and alt.exists():
-            try:
-                if alt.stat().st_mtime > file_path.stat().st_mtime:
-                    file_path = alt
-            except OSError:
-                pass
-        elif alt.exists() and not file_path.exists():
-            file_path = alt
+    file_path = require_governance_file(path, "overrides.json")
     if not file_path.exists():
         return {
             "overrides_version": "1.0.0",

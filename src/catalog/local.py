@@ -829,7 +829,11 @@ def main(argv=None, *, root: Path | None = None) -> int:
             log(f"同步失败（{type(exc).__name__}）：{exc}")
             return 1
 
-    cfg = load_all_config(root / 'config')
+    try:
+        cfg = load_all_config(root / 'config')
+    except (OSError, ValueError) as exc:
+        log(f"[预检失败] 配置加载失败：{exc}")
+        return 1
     problems = precheck(cfg)
     if not resolve_api_key(cfg.get("model", {})):
         problems.append("缺少模型 API Key")

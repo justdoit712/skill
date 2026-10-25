@@ -12,6 +12,7 @@ import copy
 from contextlib import contextmanager
 from dataclasses import asdict
 import json
+import os
 from pathlib import Path
 import tempfile
 import time
@@ -40,6 +41,116 @@ from src.catalog.filter_rules import (
 
 class GovernanceTest(unittest.TestCase):
     """人工治理规则与收藏保护契约。"""
+
+    @smoke
+    def test_governance_paths_reject_legacy_files_regardless_of_mtime(self):
+        """四类加载器、总入口及显式文件参数都不能按时间回退到旧配置。"""
+        from src.catalog.config import load_all_config
+        from src.catalog.favorites import load_favorites
+        from src.catalog.overrides import load_overrides
+        from src.catalog.snooze import load_snooze
+        from src.infra.governance_paths import GovernancePathError
+        from src.infra.owned import get_owned_config_path, load_owned_config
+
+        cases = (
+            ("favorites.json", load_favorites, {"favorites_version": "1.0.0", "manual_picks": []}),
+            ("overrides.json", load_overrides, {"overrides_version": "1.0.0", "manual_exclusions": []}),
+            ("snoozed.json", load_snooze, {"snooze_version": "1.0.0", "default_snooze_days": 150, "snoozed": []}),
+            ("owned-skills.json", load_owned_config, {"schema_version": "1.0.0", "items": []}),
+        )
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            base = root / "config"
+            (base / "governance").mkdir(parents=True)
+            for name, loader, payload in cases:
+                with self.subTest(filename=name):
+                    target, legacy = base / "governance" / name, base / name
+                    self.assertEqual(loader(target), payload)
+                    target.write_text(json.dumps(payload), encoding="utf-8")
+                    self.assertEqual(loader(target), payload)
+                    if name == "owned-skills.json":
+                        self.assertEqual(get_owned_config_path(base), target)
+                        self.assertEqual(load_owned_config(base), payload)
+                    legacy.write_text(json.dumps(payload), encoding="utf-8")
+                    for old_time in (100, 200, 300):
+                        os.utime(target, (200, 200))
+                        os.utime(legacy, (old_time, old_time))
+                        with self.assertRaisesRegex(GovernancePathError, "路径冲突"):
+                            loader(target)
+                        if name == "overrides.json":
+                            for path in (target, legacy, base / "filter-rules.json"):
+                                with self.assertRaises(GovernancePathError):
+                                    load_filter_rules(path)
+                        with patch("src.catalog.config.load_config") as prescreen:
+                            with self.assertRaises(GovernancePathError):
+                                load_all_config(base)
+                            prescreen.assert_not_called()
+                    target.unlink()
+                    with self.assertRaisesRegex(GovernancePathError, "迁移"):
+                        loader(target)
+                    if name == "overrides.json":
+                        with self.assertRaisesRegex(GovernancePathError, "迁移"):
+                            load_filter_rules(target)
+                    with self.assertRaises(GovernancePathError):
+                        loader(legacy)
+                    legacy.unlink()
+                    self.assertEqual(loader(target), payload)
+
+    @smoke
+    def test_governance_conflicts_do_not_write_config_or_projections(self):
+        """保存、补丁和离线同步不能绕过冲突，也不能写到另一个项目。"""
+        from src.infra.governance_paths import GOVERNANCE_FILES, GovernancePathError
+        from src.infra.owned import apply_and_save_owned_patch, load_owned_config, save_owned_config
+        from tools.manage_owned import apply_changes, main
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            base = root / "config"
+            target = base / "governance" / "owned-skills.json"
+            payload = {"schema_version": "1.0.0", "items": []}
+            patch_payload = {"schema_version": "1.0.0", "changes": [{
+                "skill_id": "demo/repo:SKILL.md", "before": None,
+                "after": {"skill_id": "demo/repo:SKILL.md", "name": "demo", "added_at": "2026-10-25"},
+            }]}
+            patch_file = root / "patch.json"
+            patch_file.write_text(json.dumps(patch_payload), encoding="utf-8")
+            self.assertEqual(save_owned_config(payload, base), target)
+            apply_and_save_owned_patch(patch_payload, target)
+            self.assertEqual(len(load_owned_config(base)["items"]), 1)
+            self.assertFalse((base / "owned-skills.json").exists())
+            with patch("builtins.print"):
+                self.assertEqual(main(["--list", "--root", str(root)]), 0)
+
+            catalog_file, page_file = root / "data/catalog.json", root / "public/data/catalog.json"
+            for file in (catalog_file, page_file):
+                file.parent.mkdir(parents=True, exist_ok=True)
+                file.write_text('{"sentinel": true}', encoding="utf-8")
+            before = {file: file.read_bytes() for file in (target, catalog_file, page_file)}
+            for name in GOVERNANCE_FILES:
+                legacy = base / name
+                legacy.write_text("{}", encoding="utf-8")
+                with self.subTest(filename=name):
+                    with self.assertRaises(GovernancePathError):
+                        sync_config_to_catalog(root)
+                    with patch("tools.manage_owned.sync_config_offline") as rebuild:
+                        self.assertEqual(apply_changes(patch_file, root, base, log_fn=lambda _: None), 1)
+                        rebuild.assert_not_called()
+                    if name == "owned-skills.json":
+                        for destination in (base, target, legacy):
+                            with self.assertRaises(GovernancePathError):
+                                save_owned_config(payload, destination)
+                        with self.assertRaises(GovernancePathError):
+                            apply_and_save_owned_patch(patch_payload, base)
+                        with patch("builtins.print"):
+                            self.assertEqual(main(["--list", "--root", str(root)]), 1)
+                    self.assertEqual({file: file.read_bytes() for file in before}, before)
+                    self.assertEqual(legacy.read_text(encoding="utf-8"), "{}")
+                legacy.unlink()
+
+            with self.assertRaises(GovernancePathError):
+                save_owned_config(payload, root / "custom.json")
+            with self.assertRaises(ValueError):
+                sync_config_to_catalog(root, owned_path=root / "other/config/governance/owned-skills.json")
 
     @smoke
     def test_apply_manual_picks_upgrades_candidate(self):

@@ -151,7 +151,7 @@ def validate_owned_item(raw_item: Any) -> dict[str, Any]:
 
 
 def validate_owned_config(raw_config: Any) -> dict[str, Any]:
-    """校验已收录名单全量配置（config/owned-skills.json）。
+    """校验已收录名单全量配置（config/governance/owned-skills.json）。
 
     规则：
     1. schema_version 必须为 1.0.0；

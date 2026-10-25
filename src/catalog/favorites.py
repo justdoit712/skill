@@ -10,6 +10,7 @@ import json
 from pathlib import Path
 import re
 from typing import Any
+from src.infra.governance_paths import require_governance_file
 
 DEFAULT_FAVORITES_PATH = "config/governance/favorites.json"
 SKILL_ID_PATTERN = re.compile(r"^[^/\s]+/[^/\s]+(:[^\s]+)?$")
@@ -17,21 +18,7 @@ SKILL_ID_PATTERN = re.compile(r"^[^/\s]+/[^/\s]+(:[^\s]+)?$")
 
 def load_favorites(path: str | Path = DEFAULT_FAVORITES_PATH) -> dict:
     """加载 favorites.json，不存在时返回默认空结构。"""
-    file_path = Path(path)
-    if file_path.name == "favorites.json":
-        alt = (
-            file_path.parent / "governance" / "favorites.json"
-            if "governance" not in file_path.parts
-            else file_path.parent.parent / "favorites.json"
-        )
-        if file_path.exists() and alt.exists():
-            try:
-                if alt.stat().st_mtime > file_path.stat().st_mtime:
-                    file_path = alt
-            except OSError:
-                pass
-        elif alt.exists() and not file_path.exists():
-            file_path = alt
+    file_path = require_governance_file(path, "favorites.json")
 
     if not file_path.exists():
         return {

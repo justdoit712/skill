@@ -16,6 +16,7 @@ import json
 from pathlib import Path
 import re
 from typing import Any
+from src.infra.governance_paths import require_governance_file
 
 DEFAULT_SNOOZE_PATH = "config/governance/snoozed.json"
 DEFAULT_SNOOZE_DAYS = 150
@@ -52,17 +53,7 @@ def is_active_snooze(
 
 def load_snooze(path: str | Path = DEFAULT_SNOOZE_PATH) -> dict[str, Any]:
     """加载 snoozed.json，文件不存在时返回安全默认结构。"""
-    file_path = Path(path)
-    if file_path.name == "snoozed.json":
-        alt = file_path.parent / "governance" / "snoozed.json" if "governance" not in file_path.parts else file_path.parent.parent / "snoozed.json"
-        if file_path.exists() and alt.exists():
-            try:
-                if alt.stat().st_mtime > file_path.stat().st_mtime:
-                    file_path = alt
-            except OSError:
-                pass
-        elif alt.exists() and not file_path.exists():
-            file_path = alt
+    file_path = require_governance_file(path, "snoozed.json")
     if not file_path.exists():
         return {
             "snooze_version": "1.0.0",

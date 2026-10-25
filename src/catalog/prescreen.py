@@ -17,6 +17,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 from src.shared.identity import parse_github_url
+from src.infra.governance_paths import GovernancePathError, resolve_governance_path
 from src.shared.versions import STATIC_HEURISTIC_VERSION
 from .models import Candidate, PrescreenResult
 
@@ -317,12 +318,14 @@ def load_config(config_dir: str | Path = "config") -> PrescreenConfig:
     sources = json.loads(_res("sources.json", "discovery").read_text(encoding="utf-8"))
 
     manual_exclusions: set[str] = set()
-    overrides_file = _res("overrides.json", "governance")
+    overrides_file = resolve_governance_path(base, "overrides.json")
     if overrides_file.exists():
         try:
             from .overrides import load_overrides, get_manual_exclusions
             overrides = load_overrides(overrides_file)
             manual_exclusions = get_manual_exclusions(overrides)
+        except GovernancePathError:
+            raise
         except Exception:
             pass
 
@@ -402,7 +405,7 @@ def prescreen(candidate: Candidate, cfg: PrescreenConfig, text: str | None = Non
         return _exclude(
             result,
             "MANUAL_EXCLUDED",
-            "已在 config/overrides.json 中被用户人工排除/删除，直接跳过",
+            "已在 config/governance/overrides.json 中被用户人工排除/删除，直接跳过",
         )
 
     haystack = " ".join(

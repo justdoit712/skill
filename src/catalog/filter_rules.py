@@ -7,6 +7,7 @@ import json
 from pathlib import Path
 import re
 from typing import Any
+from src.infra.governance_paths import require_governance_file, resolve_governance_path
 
 
 DEFAULT_FILTER_RULES_PATH = "config/governance/overrides.json"
@@ -534,28 +535,12 @@ def filter_new_evaluation(
 def load_filter_rules(path: str | Path = DEFAULT_FILTER_RULES_PATH) -> FilterRules:
     """加载主题配置；文件不存在时返回空规则，非法配置明确报错。"""
     file_path = Path(path)
-    if not file_path.exists():
-        # 若传入旧路径 filter-rules.json，兼容回退至同一层级的 overrides.json
-        if file_path.name == "filter-rules.json":
-            override_candidate = file_path.parent / "overrides.json"
-            if override_candidate.exists():
-                file_path = override_candidate
-            else:
-                override_alt = (
-                    file_path.parent / "governance" / "overrides.json"
-                    if "governance" not in file_path.parts
-                    else file_path.parent.parent / "overrides.json"
-                )
-                if override_alt.exists():
-                    file_path = override_alt
-
-        if not file_path.exists():
-            if "governance" not in file_path.parts:
-                alternate = file_path.parent / "governance" / file_path.name
-            else:
-                alternate = file_path.parent.parent / file_path.name
-            if alternate.exists():
-                file_path = alternate
+    if file_path.name == "overrides.json":
+        file_path = require_governance_file(file_path, "overrides.json")
+    elif file_path.name == "filter-rules.json" and not file_path.exists():
+        # 旧规则文件名只映射到标准 overrides；不再读取旧平铺名单。
+        base = file_path.parent.parent if file_path.parent.name == "governance" else file_path.parent
+        file_path = resolve_governance_path(base, "overrides.json")
     if not file_path.exists():
         return FilterRules()
     try:

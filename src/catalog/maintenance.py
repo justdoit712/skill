@@ -8,6 +8,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+from src.infra.governance_paths import require_governance_file, resolve_governance_path
 from typing import Any
 
 import json
@@ -219,22 +220,18 @@ def sync_config_to_catalog(
     root = Path(root_dir)
     data_file = Path(catalog_path) if catalog_path else root / "data" / "catalog.json"
     public_file = Path(public_catalog_path) if public_catalog_path else root / "public" / "data" / "catalog.json"
-    def _res(fname: str, sub: str) -> Path:
-        sub_p = root / "config" / sub / fname
-        flat_p = root / "config" / fname
-        if flat_p.exists() and sub_p.exists():
-            try:
-                return flat_p if flat_p.stat().st_mtime >= sub_p.stat().st_mtime else sub_p
-            except OSError:
-                return flat_p
-        if flat_p.exists():
-            return flat_p
-        return sub_p
+    def _res(filename: str, explicit: str | Path | None) -> Path:
+        target = resolve_governance_path(root / "config", filename)
+        if explicit is not None:
+            supplied = require_governance_file(explicit, filename)
+            if supplied.resolve() != target.resolve():
+                raise ValueError(f"治理配置必须属于当前项目：{target}，收到：{supplied}")
+        return target
 
-    favorites_file = Path(favorites_path) if favorites_path else _res("favorites.json", "governance")
-    overrides_file = Path(overrides_path) if overrides_path else _res("overrides.json", "governance")
-    snooze_file = Path(snoozed_path) if snoozed_path else _res("snoozed.json", "governance")
-    owned_file = Path(owned_path) if owned_path else _res("owned-skills.json", "governance")
+    favorites_file = _res("favorites.json", favorites_path)
+    overrides_file = _res("overrides.json", overrides_path)
+    snooze_file = _res("snoozed.json", snoozed_path)
+    owned_file = _res("owned-skills.json", owned_path)
 
     if not data_file.exists():
         raise FileNotFoundError(f"主索引文件不存在：{data_file}")

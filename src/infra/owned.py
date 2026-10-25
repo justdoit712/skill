@@ -1,7 +1,7 @@
 """已收录配置持久化与基础设施读写适配（src/infra/owned.py）。
 
 职责：
-- 负责 config/owned-skills.json 的安全读取与原子写入；
+- 负责 config/governance/owned-skills.json 的安全读取与原子写入；
 - 文件缺失时优雅降级为空名单（兼容未配置仓库及测试夹具）；
 - 文件内容损坏或格式非法时坚决报错终止，防止错误被静默吞掉；
 - 配合 file_lock 保证变更包合并与保存的排他原子性。
@@ -14,6 +14,7 @@ from pathlib import Path
 from typing import Any
 
 from src.infra.files import file_lock, read_json, write_json_atomic
+from src.infra.governance_paths import require_governance_file, resolve_governance_path
 from src.shared.owned import (
     OWNED_SCHEMA_VERSION,
     apply_owned_patch,
@@ -25,22 +26,11 @@ OWNED_CONFIG_FILENAME = "owned-skills.json"
 
 
 def get_owned_config_path(config_dir: str | Path = "config") -> Path:
-    """获取已收录配置文件路径。"""
+    """获取唯一标准路径；显式文件参数仍须通过路径检查。"""
     p = Path(config_dir)
     if p.name.endswith(".json"):
-        return p
-    sub = p / "governance" / OWNED_CONFIG_FILENAME
-    flat = p / OWNED_CONFIG_FILENAME
-    if flat.exists() and sub.exists():
-        try:
-            return flat if flat.stat().st_mtime >= sub.stat().st_mtime else sub
-        except OSError:
-            return flat
-    if flat.exists():
-        return flat
-    if sub.exists():
-        return sub
-    return sub
+        return require_governance_file(p, OWNED_CONFIG_FILENAME)
+    return resolve_governance_path(p, OWNED_CONFIG_FILENAME)
 
 
 def load_owned_config(
@@ -95,13 +85,13 @@ def apply_and_save_owned_patch(
     timeout: float = 5.0,
 ) -> dict[str, Any]:
     """加锁读取当前配置、应用变更包并原子写回。"""
-    cfg_dir = Path(config_dir)
-    lock_file = cfg_dir / ".owned.lock"
+    target = get_owned_config_path(config_dir)
+    lock_file = target.parent / ".owned.lock"
 
     with file_lock(lock_file, timeout=timeout):
-        current = load_owned_config(cfg_dir)
+        current = load_owned_config(target)
         updated = apply_owned_patch(current, patch_data)
-        save_owned_config(updated, cfg_dir)
+        save_owned_config(updated, target)
         return updated
 
 
