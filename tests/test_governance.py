@@ -43,6 +43,49 @@ class GovernanceTest(unittest.TestCase):
     """人工治理规则与收藏保护契约。"""
 
     @smoke
+    def test_backup_retention_keeps_recent_or_latest_and_limits_deletion(self):
+        from src.catalog.maintenance import prune_pool_backups
+        from src.infra.files import LockConflict, file_lock
+        from tools.manage_pool import main
+
+        now = 2_000_000_000
+        day = 86400
+        for ages, expected in (([1, 6, 7, 8, 20], {0, 1, 2}), ([8, 10, 20], {0}), ([], set())):
+            with self.subTest(ages=ages), tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp)
+                local = root / "data/local"
+                local.mkdir(parents=True)
+                backups = []
+                for i, age in enumerate(ages):
+                    backup = local / f"pool.backup.test_{i}.json"
+                    backup.write_text("{}", encoding="utf-8")
+                    os.utime(backup, (now - age * day, now - age * day))
+                    backups.append(backup)
+                for name in ("pool.json", "state/evaluations/history.json", "state/migrations/resume.json",
+                             "runs/report.json", "nested/pool.backup.old.json", "pool.backup.directory.json/keep.txt"):
+                    path = local / name
+                    path.parent.mkdir(parents=True, exist_ok=True)
+                    path.write_text("keep", encoding="utf-8")
+                snapshot = lambda: {p.relative_to(root): p.read_bytes() for p in root.rglob("*") if p.is_file()}
+                before = snapshot()
+                with patch("src.catalog.maintenance.time.time", return_value=now):
+                    preview = prune_pool_backups(root)
+                    self.assertEqual(set(preview["kept"]), {str(backups[i]) for i in expected})
+                    with patch("tools.manage_pool.ROOT", root), patch("builtins.print"):
+                        self.assertEqual(main(["clean-backups"]), 0)
+                    self.assertEqual(snapshot(), before)
+                    with file_lock(root / "data/.catalog.lock"):
+                        with self.assertRaises(LockConflict):
+                            prune_pool_backups(root, apply=True)
+                    self.assertEqual(snapshot(), before)
+                    result = prune_pool_backups(root, apply=True)
+                    self.assertEqual(result["errors"], [])
+                    self.assertEqual(result["deleted"], preview["expired"])
+                    deleted = {p.relative_to(root) for i, p in enumerate(backups) if i not in expected}
+                    self.assertEqual(snapshot(), {p: data for p, data in before.items() if p not in deleted})
+                    self.assertEqual(prune_pool_backups(root, apply=True)["deleted"], [])
+
+    @smoke
     def test_retired_reset_recovery_rejects_without_side_effects(self):
         from src.catalog.local import main
 
@@ -93,6 +136,9 @@ class GovernanceTest(unittest.TestCase):
                 seq=1, candidate=candidate, status="blocked",
                 block_info={"evaluation_id": evaluation_id},
             )]))
+            old_backup = pool_path.with_name("pool.backup.old.json")
+            old_backup.write_text("{}", encoding="utf-8")
+            os.utime(old_backup, (1, 1))
             snapshot = lambda: {p.relative_to(root): p.read_bytes() for p in root.rglob("*") if p.is_file()}
             before = snapshot()
             kwargs = dict(evaluation_id=evaluation_id, reason="已核对请求", event_id="resume-demo", extra_attempts=1)
@@ -104,6 +150,8 @@ class GovernanceTest(unittest.TestCase):
                     resume_candidate(root, **kwargs, apply=True)
             self.assertEqual(snapshot(), before)
             resume_candidate(root, **kwargs, apply=True)
+            self.assertFalse(old_backup.exists())
+            self.assertEqual(len(list(pool_path.parent.glob("pool.backup.*.json"))), 1)
             updated = json.loads(record_path.read_text(encoding="utf-8"))
             for field in ("requests", "usage", "attempts", "error"):
                 self.assertEqual(updated[field], record[field])

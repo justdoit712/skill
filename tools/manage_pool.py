@@ -18,7 +18,15 @@ ROOT = Path(__file__).resolve().parent.parent
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from src.catalog.maintenance import reconcile_pool, resume_candidate
+from src.catalog.maintenance import prune_pool_backups, reconcile_pool, resume_candidate
+
+
+def report_backup_cleanup(result):
+    cleanup = result.get("backup_cleanup")
+    if cleanup:
+        print(f"过期备份已清理：{len(cleanup['deleted'])} 份；保留：{len(cleanup['kept'])} 份")
+        for error in cleanup["errors"]:
+            print(f"备份清理失败（维护操作已完成）：{error['path']}：{error['error']}", file=sys.stderr)
 
 
 def main(argv=None) -> int:
@@ -44,6 +52,11 @@ def main(argv=None) -> int:
     res_group.add_argument("--dry-run", action="store_true", default=True, help="仅预览恢复操作（默认）")
     res_group.add_argument("--apply", action="store_true", help="应用恢复并在账本中追加记录")
 
+    clean_parser = subparsers.add_parser("clean-backups", help="保留七天内或最新一份备份，清理其余旧备份")
+    clean_group = clean_parser.add_mutually_exclusive_group()
+    clean_group.add_argument("--dry-run", action="store_true", default=True, help="仅预览清理清单（默认）")
+    clean_group.add_argument("--apply", action="store_true", help="删除过期且不是最新一份的备份")
+
     args = parser.parse_args(argv)
 
     if not args.subcommand:
@@ -51,9 +64,15 @@ def main(argv=None) -> int:
         return 1
 
     try:
+        if args.subcommand == "clean-backups":
+            result = prune_pool_backups(ROOT, apply=bool(args.apply))
+            print(json.dumps(result, ensure_ascii=False, indent=2))
+            return 1 if result["errors"] else 0
+
         if args.subcommand == "reconcile":
             apply_mode = bool(args.apply)
             result = reconcile_pool(ROOT, apply=apply_mode)
+            report_backup_cleanup(result)
             mode_desc = "应用模式 (--apply)" if apply_mode else "预览模式 (--dry-run)"
             print(f"[{mode_desc}] 候选池对账完成")
             print(f"可对账记录：{result['reconciled']} 条；待核实记录：{len(result['unverified'])} 条")
@@ -84,6 +103,7 @@ def main(argv=None) -> int:
             )
             mode_desc = "应用模式 (--apply)" if apply_mode else "预览模式 (--dry-run)"
             print(f"[{mode_desc}] 候选恢复操作：")
+            report_backup_cleanup(result)
             print(f"  评估 ID: {result['evaluation_id']}")
             print(f"  恢复事件 ID: {result['event_id']}")
             print(f"  技能 ID: {result['skill_id']} (序号 #{result['seq']})")

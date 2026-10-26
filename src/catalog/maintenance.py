@@ -12,6 +12,7 @@ from src.infra.governance_paths import require_governance_file, resolve_governan
 from typing import Any
 
 import json
+import time
 from .index import CatalogContext, build_catalog
 from .store import catalog_task, write_catalog, recover_catalog_projections
 from .enrich import enrich_entry
@@ -387,6 +388,32 @@ def enrich_catalog(root: Path | str) -> dict[str, Any]:
 
 
 @catalog_task
+def prune_pool_backups(root_dir: str | Path = ".", *, apply: bool = False) -> dict[str, Any]:
+    """保留七天内或最新一份候选池备份；仅清理固定目录中的普通文件。"""
+    local = (Path(root_dir) / "data" / "local").resolve()
+    cutoff = time.time() - 7 * 24 * 60 * 60
+    backups = sorted(
+        ((path.stat().st_mtime, path.name, path)
+         for path in local.glob("pool.backup.*.json")
+         if not path.is_symlink() and path.is_file() and path.resolve().parent == local),
+        reverse=True,
+    )
+    kept, expired, deleted, errors = [], [], [], []
+    for index, (mtime, _, path) in enumerate(backups):
+        if index == 0 or mtime >= cutoff:
+            kept.append(str(path))
+            continue
+        expired.append(str(path))
+        if apply:
+            try:
+                path.unlink()
+                deleted.append(str(path))
+            except OSError as exc:
+                errors.append({"path": str(path), "error": str(exc)})
+    return {"apply": apply, "kept": kept, "expired": expired, "deleted": deleted, "errors": errors}
+
+
+@catalog_task
 def reconcile_pool(root_dir: str | Path = ".", *, apply: bool = False) -> dict[str, Any]:
     """离线对账：精确比对本地候选池与账本记录，对齐异常及已授权恢复状态。
 
@@ -633,6 +660,7 @@ def reconcile_pool(root_dir: str | Path = ".", *, apply: bool = False) -> dict[s
         "manifest_id": manifest_id,
         "manifest_path": manifest_path,
         "recovered_manifests": [str(path) for path, _ in unfinished] if apply else [],
+        "backup_cleanup": prune_pool_backups(root, apply=True) if apply else None,
         "changes": changes,
         "unverified": unverified,
     }
@@ -863,6 +891,7 @@ def resume_candidate(
 
     return {
         "dry_run": False,
+        "backup_cleanup": prune_pool_backups(root, apply=True),
         "idempotent": is_idempotent_replay,
         "manifest_id": manifest_id,
         "manifest_path": str(manifest_file),
